@@ -1,0 +1,33 @@
+[build-system]
+requires = ["hatchling>=1.26"]
+build-backend = "hatchling.build"
+
+[project]
+name = "gnss-simulation-lab"
+version = "0.1.0"
+description = "Reproducible synthetic daily GNSS experiments"
+requires-python = ">=3.11"
+dependencies = [
+  "fastapi>=0.115,<1",
+  "numpy>=2.0,<3",
+  "pydantic>=2.10,<3",
+  "uvicorn>=0.30,<1",
+]
+
+[dependency-groups]
+dev = ["pytest>=8,<10", "httpx>=0.28,<1", "ruff>=0.11,<1"]
+
+[project.scripts]
+gnss-sim = "gnss_sim.cli:main"
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/gnss_sim"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+
+[tool.ruff]
+line-length = 100
+
+[tool.ruff.lint]
+select = ["E4", "E7", "E9", "F", "I"]
