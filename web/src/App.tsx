@@ -25,18 +25,12 @@ type Manifest = {
   dataset_id: string;
   created_at: string;
   status: Status;
-  request: {
-    preset: string;
-    seed: number;
-    count: number;
-    config: { start_date: string; reference_coordinate_mm: Triple };
-  };
-  config_sha256: string;
+  generator_version: string;
+  request: { seed: number; count: number };
   generated_cases: number;
   cases: {
     case_id: string;
     case_seed: number;
-    days: number;
     event_count: number;
   }[];
   error: string | null;
@@ -52,11 +46,15 @@ type CaseInput = {
 };
 type CaseTruth = {
   events: unknown[];
-  background_displacement_mm: Triple[];
-  white_noise_mm: Triple[];
-  ar_noise_mm: Triple[];
-  observation_noise_mm: Triple[];
-  true_coordinate_mm: Triple[];
+  normal_background_mm: Triple[];
+  measurement_noise_mm: Triple[];
+  annual_phase_rad: Triple;
+  semiannual_phase_rad: Triple;
+  component_seeds: {
+    annual_phase: number;
+    semiannual_phase: number;
+    white_noise: number;
+  };
 };
 
 const axisNames = ["N", "E", "U"] as const;
@@ -262,25 +260,17 @@ export default function App() {
             showSymbol: false,
             lineStyle: { width: 2, color: colors.N },
             itemStyle: { color: colors.N },
-            data: caseTruth.background_displacement_mm.map(
+            data: caseTruth.normal_background_mm.map(
               (row) => row[componentAxis],
             ),
           },
           {
-            name: `${axis} 白噪声`,
+            name: `${axis} 测量噪声`,
             type: "line",
             showSymbol: false,
             lineStyle: { width: 1.4, color: colors.E },
             itemStyle: { color: colors.E },
-            data: caseTruth.white_noise_mm.map((row) => row[componentAxis]),
-          },
-          {
-            name: `${axis} AR(1)`,
-            type: "line",
-            showSymbol: false,
-            lineStyle: { width: 1.4, color: colors.U },
-            itemStyle: { color: colors.U },
-            data: caseTruth.ar_noise_mm.map((row) => row[componentAxis]),
+            data: caseTruth.measurement_noise_mm.map((row) => row[componentAxis]),
           },
         ],
       };
@@ -316,15 +306,13 @@ export default function App() {
         .forEach((axis) => {
           const index = axisNames.indexOf(axis);
           series.push({
-            name: `${axis} 无噪声`,
+            name: `${axis} 正常背景`,
             type: "line",
             showSymbol: false,
             smooth: false,
             lineStyle: { width: 1.5, type: "dashed", color: colors[axis] },
             itemStyle: { color: colors[axis] },
-            data: caseTruth.true_coordinate_mm.map(
-              (row) => row[index] - caseInput.reference_coordinate_mm[index],
-            ),
+            data: caseTruth.normal_background_mm.map((row) => row[index]),
           });
         });
     }
@@ -353,7 +341,6 @@ export default function App() {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
-          preset: "normal-p1",
           seed: parsedSeed,
           count: parsedCount,
         }),
@@ -503,7 +490,7 @@ export default function App() {
               <div>
                 <p className="eyebrow">SYNTHETIC DATA / NORMAL-P1</p>
                 <h1>日坐标模拟数据</h1>
-                <p className="subtitle">固定参考坐标 · 180 日窗口</p>
+                <p className="subtitle">固定参考坐标 · 365 日完整年度</p>
               </div>
               <div className="heading-badge">
                 <span className="badge-dot" /> P1 正常序列
@@ -517,7 +504,7 @@ export default function App() {
                 </span>
                 <div>
                   <h2 id="create-title">生成数据集</h2>
-                  <p>正常序列 / 白噪声 + AR(1) + 周期背景</p>
+                  <p>Annual + Semiannual + White noise</p>
                 </div>
               </div>
               <form onSubmit={createDataset} className="create-form">
@@ -558,6 +545,21 @@ export default function App() {
               </form>
             </section>
 
+            <section className="fixed-protocol" aria-label="固定生成参数">
+              <div className="fixed-protocol-heading">
+                <span>LOCKED PROTOCOL / NORMAL-V1</span>
+                <strong>固定生成参数</strong>
+              </div>
+              <dl>
+                <div><dt>长度</dt><dd>365 日</dd></div>
+                <div><dt>起始日期</dt><dd>2025-01-01</dd></div>
+                <div><dt>Annual · N/E/U</dt><dd>2 / 2 / 3 mm</dd></div>
+                <div><dt>Semiannual · N/E/U</dt><dd>1 / 1 / 2 mm</dd></div>
+                <div><dt>White noise · N/E/U</dt><dd>1.5 / 1.5 / 3.0 mm</dd></div>
+              </dl>
+              <p>周期 365.25 日；相位和白噪声由案例 seed 派生。仅 seed 与案例数可调整。</p>
+            </section>
+
             {!detail ? (
               <div className="welcome-empty">
                 <Database size={32} strokeWidth={1.3} />
@@ -571,8 +573,7 @@ export default function App() {
                     <h2>生成批次</h2>
                     <p>
                       {formattedDate(detail.created_at)} · Seed{" "}
-                      {detail.request.seed} · 配置{" "}
-                      {detail.config_sha256.slice(0, 12)}
+                      {detail.request.seed} · {detail.generator_version}
                     </p>
                   </div>
                   <span className={`large-status ${detail.status}`}>
@@ -593,15 +594,13 @@ export default function App() {
                   <div>
                     <small>观测跨度</small>
                     <strong>
-                      180 <em>天</em>
+                      365 <em>天</em>
                     </strong>
                   </div>
                   <div>
                     <small>参考坐标</small>
                     <strong className="reference-stat">
-                      {detail.request.config.reference_coordinate_mm.join(
-                        " / ",
-                      )}{" "}
+                      0 / 0 / 0{" "}
                       <em>mm</em>
                     </strong>
                   </div>
@@ -664,7 +663,7 @@ export default function App() {
                           </span>
                           <span>
                             <strong>{item.case_id}</strong>
-                            <small>180 天 · 0 个事件</small>
+                            <small>365 天 · 0 个事件</small>
                           </span>
                           <ChevronRight size={16} />
                         </button>
@@ -799,7 +798,7 @@ export default function App() {
                                 checked={showTruth}
                                 onChange={() => setShowTruth((old) => !old)}
                               />
-                              无噪声轨迹
+                              正常背景
                             </label>
                           )}
                         </div>
@@ -819,7 +818,7 @@ export default function App() {
                             </strong>
                           </div>
                           <div>
-                            <small>最大三维偏移 D</small>
+                            <small>最大三维偏移 R3D</small>
                             <strong>
                               {valueLabel(
                                 Math.max(...caseInput.spatial_offset_mm),
@@ -837,6 +836,21 @@ export default function App() {
                               : `${caseTruth.events.length} 个事件`}
                           </strong>
                         </div>
+                        <details className="seed-details">
+                          <summary>生成相位与成分 seed（仅用于核对真值）</summary>
+                          <div>
+                            <span>Annual 相位 N/E/U</span>
+                            <code>{caseTruth.annual_phase_rad.map((value) => value.toFixed(3)).join(" / ")} rad</code>
+                          </div>
+                          <div>
+                            <span>Semiannual 相位 N/E/U</span>
+                            <code>{caseTruth.semiannual_phase_rad.map((value) => value.toFixed(3)).join(" / ")} rad</code>
+                          </div>
+                          <div>
+                            <span>成分 seed</span>
+                            <code>{caseTruth.component_seeds.annual_phase} / {caseTruth.component_seeds.semiannual_phase} / {caseTruth.component_seeds.white_noise}</code>
+                          </div>
+                        </details>
                       </>
                     )}
                   </section>

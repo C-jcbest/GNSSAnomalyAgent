@@ -19,6 +19,7 @@ def test_generation_progress_persistence_and_truth_isolation(tmp_path):
                 break
             time.sleep(0.02)
         assert manifest["status"] == "complete"
+        assert manifest["generator_version"] == "normal-v1"
         assert manifest["generated_cases"] == 2
         assert client.get("/api/datasets").json()[0]["dataset_id"] == dataset_id
 
@@ -26,8 +27,15 @@ def test_generation_progress_persistence_and_truth_isolation(tmp_path):
         case_input = client.get(f"/api/datasets/{dataset_id}/cases/case_0001").json()
         truth = client.get(f"/api/datasets/{dataset_id}/cases/case_0001/truth").json()
         assert "events" not in case_input
-        assert "background_displacement_mm" not in case_input
+        assert "normal_background_mm" not in case_input
+        assert "measurement_noise_mm" not in case_input
         assert truth["events"] == []
+        assert "normal_background_mm" in truth
+        assert "measurement_noise_mm" in truth
+        assert "true_coordinate_mm" not in truth
+        assert "ar_noise_mm" not in truth
+        assert "active_motion" not in truth
+        assert len(case_input["dates"]) == 365
         assert path.joinpath("input.json").is_file()
         assert path.joinpath("truth.json").is_file()
         assert client.get(f"/api/datasets/{dataset_id}/cases/../truth").status_code == 404
@@ -39,7 +47,7 @@ def test_same_request_reproduces_persisted_cases(tmp_path):
     first = store.generate_sync(request)
     second = store.generate_sync(request)
     assert first.dataset_id != second.dataset_id
-    assert first.config_sha256 == second.config_sha256
+    assert first.generator_version == second.generator_version == "normal-v1"
     for case_id in ("case_0001", "case_0002"):
         assert store.get_case_input(first.dataset_id, case_id) == store.get_case_input(
             second.dataset_id, case_id
@@ -47,6 +55,17 @@ def test_same_request_reproduces_persisted_cases(tmp_path):
         assert store.get_case_truth(first.dataset_id, case_id) == store.get_case_truth(
             second.dataset_id, case_id
         )
+
+
+def test_old_api_payload_and_dataset_are_not_supported(tmp_path):
+    store = DatasetStore(tmp_path / "generated")
+    legacy = store.root / "sim-20250101-000000-12345678"
+    legacy.mkdir()
+    legacy.joinpath("manifest.json").write_text('{"schema_version":"p1-dataset-v1"}')
+    with TestClient(create_app(store.root, tmp_path / "no-built-web")) as client:
+        assert client.post("/api/datasets", json={"seed": 42, "count": 1, "preset": "normal-p1"}).status_code == 422
+        assert client.get("/api/datasets").json() == []
+        assert client.get(f"/api/datasets/{legacy.name}").status_code == 404
 
 
 def test_learning_documents_are_served_from_canonical_markdown(tmp_path):

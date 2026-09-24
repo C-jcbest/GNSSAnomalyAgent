@@ -1,50 +1,76 @@
-from datetime import timedelta
+from datetime import date, timedelta
 
 import numpy as np
 import pytest
 
-from gnss_sim.generator import generate_normal_case
-from gnss_sim.schemas import SimulationConfig
+from gnss_sim.generator import (
+    ANNUAL_AMPLITUDE_MM,
+    DAYS,
+    PERIOD_DAYS,
+    SEMIANNUAL_AMPLITUDE_MM,
+    START_DATE,
+    WHITE_NOISE_SIGMA_MM,
+    derive_component_seeds,
+    generate_normal_case,
+)
+from gnss_sim.schemas import GenerationRequest
 
 
-def test_same_seed_reproduces_case_and_daily_dates():
-    config = SimulationConfig()
-    first_input, first_truth = generate_normal_case("case_0001", 42, config)
-    second_input, second_truth = generate_normal_case("case_0001", 42, config)
+def test_same_seed_reproduces_365_daily_observations():
+    first_input, first_truth = generate_normal_case("case_0001", 42)
+    second_input, second_truth = generate_normal_case("case_0001", 42)
     assert first_input == second_input
     assert first_truth == second_truth
-    assert len(first_input.dates) == 180
-    assert first_input.dates == [config.start_date + timedelta(days=i) for i in range(180)]
+    assert len(first_input.dates) == DAYS == 365
+    assert first_input.dates == [START_DATE + timedelta(days=i) for i in range(DAYS)]
+    assert first_input.dates[-1] == date(2025, 12, 31)
     assert first_truth.events == []
-    assert not any(first_truth.active_motion)
-    assert not any(first_truth.persistent_offset)
+    assert first_input.reference_coordinate_mm == (0.0, 0.0, 0.0)
 
 
-def test_components_and_fixed_reference_offsets():
-    config = SimulationConfig(reference_coordinate_mm=(1000.0, -500.0, 20.0))
-    case_input, truth = generate_normal_case("case_0001", 5, config)
-    reference = np.asarray(config.reference_coordinate_mm)
+def test_fixed_components_and_reference_offsets():
+    case_input, truth = generate_normal_case("case_0001", 5)
+    reference = np.asarray(case_input.reference_coordinate_mm)
     observed = np.asarray(case_input.observed_coordinate_mm)
-    background = np.asarray(truth.background_displacement_mm)
-    white = np.asarray(truth.white_noise_mm)
-    ar = np.asarray(truth.ar_noise_mm)
-    assert np.allclose(truth.observation_noise_mm, white + ar)
-    assert np.allclose(truth.true_coordinate_mm, reference + background)
-    assert np.allclose(observed, reference + background + white + ar)
+    background = np.asarray(truth.normal_background_mm)
+    noise = np.asarray(truth.measurement_noise_mm)
+    t = np.arange(DAYS)[:, None]
+    expected_background = np.asarray(ANNUAL_AMPLITUDE_MM) * np.sin(
+        2 * np.pi * t / PERIOD_DAYS + truth.annual_phase_rad
+    ) + np.asarray(SEMIANNUAL_AMPLITUDE_MM) * np.sin(
+        4 * np.pi * t / PERIOD_DAYS + truth.semiannual_phase_rad
+    )
+    expected_noise = np.random.default_rng(truth.component_seeds.white_noise).normal(
+        size=(DAYS, 3)
+    ) * np.asarray(WHITE_NOISE_SIGMA_MM)
+    assert np.allclose(background, expected_background)
+    assert np.allclose(noise, expected_noise)
+    assert np.allclose(observed, reference + background + noise)
     assert np.allclose(case_input.displacement_mm, observed - reference)
     assert np.allclose(case_input.horizontal_offset_mm, np.linalg.norm((observed - reference)[:, :2], axis=1))
     assert np.allclose(case_input.spatial_offset_mm, np.linalg.norm(observed - reference, axis=1))
 
 
-def test_noise_free_case_still_has_configurable_seasonal_background():
-    config = SimulationConfig(white_sigma_mm=(0, 0, 0), ar_innovation_sigma_mm=(0, 0, 0))
-    case_input, truth = generate_normal_case("case_0001", 7, config)
-    assert np.allclose(case_input.observed_coordinate_mm, truth.true_coordinate_mm)
-    assert np.any(np.abs(truth.background_displacement_mm) > 0)
-    assert np.allclose(truth.injected_displacement_mm, 0)
+def test_phase_noise_seeds_are_separate_and_recorded():
+    seeds = derive_component_seeds(19)
+    _, truth = generate_normal_case("case_0001", 19)
+    assert truth.component_seeds == seeds
+    assert len({seeds.annual_phase, seeds.semiannual_phase, seeds.white_noise}) == 3
+    assert all(0 <= phase < 2 * np.pi for phase in truth.annual_phase_rad)
+    assert all(0 <= phase < 2 * np.pi for phase in truth.semiannual_phase_rad)
+    _, other_truth = generate_normal_case("case_0001", 20)
+    assert other_truth.normal_background_mm != truth.normal_background_mm
 
 
-@pytest.mark.parametrize("updates", [{"ar_rho": 1}, {"white_sigma_mm": (-1, 1, 1)}, {"seasonal_period_days": 0}])
-def test_invalid_config_rejected(updates):
+@pytest.mark.parametrize(
+    "payload",
+    [
+        {"seed": 42, "count": 1, "preset": "normal-p1"},
+        {"seed": 42, "count": 1, "config": {"days": 180}},
+        {"seed": 42, "count": 1, "days": 90},
+        {"seed": 42, "count": 1, "ar_rho": 0.7},
+    ],
+)
+def test_old_generation_options_are_rejected(payload):
     with pytest.raises(ValueError):
-        SimulationConfig(**updates)
+        GenerationRequest.model_validate(payload)
