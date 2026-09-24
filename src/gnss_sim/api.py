@@ -14,14 +14,14 @@ DOCUMENTS = (
     {"slug": "research-design", "title": "研究问题与实验路线", "file": "01-research-design.md"},
     {"slug": "p1-normal-model", "title": "P1 正常序列模型", "file": "02-p1-normal-model.md"},
     {"slug": "data-and-reproducibility", "title": "数据契约与可复现流程", "file": "03-data-and-reproducibility.md"},
-    {"slug": "planned-methods", "title": "后续异常、检测与评价方法", "file": "04-planned-methods.md"},
+    {"slug": "planned-methods", "title": "P2 单事件生成与后续检测草案", "file": "04-planned-methods.md"},
 )
 
 
 def create_app(data_root: Path | None = None, web_root: Path | None = None) -> FastAPI:
     root = data_root or Path(os.environ.get("GNSS_SIM_DATA_DIR", "data/generated"))
     store = DatasetStore(root)
-    app = FastAPI(title="GNSS Simulation Lab", version="0.1.0")
+    app = FastAPI(title="GNSS Simulation Lab", version="0.2.0")
     app.state.store = store
 
     @app.get("/api/docs")

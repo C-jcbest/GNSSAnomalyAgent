@@ -9,10 +9,10 @@ from uuid import uuid4
 
 import numpy as np
 
-from gnss_sim.generator import GENERATOR_VERSION, generate_normal_case
+from gnss_sim.generator import GENERATOR_VERSION, generate_case
 from gnss_sim.schemas import CaseInput, CaseSummary, CaseTruth, DatasetManifest, GenerationRequest
 
-DATASET_ID_PATTERN = re.compile(r"^normal-v1-\d{8}-\d{6}-[a-f0-9]{8}$")
+DATASET_ID_PATTERN = re.compile(r"^event-v2-\d{8}-\d{6}-[a-f0-9]{8}$")
 
 
 def _write_json(path: Path, value: dict) -> None:
@@ -112,11 +112,13 @@ class DatasetStore:
                         1, dtype=np.uint32
                     )[0]
                 )
-                case_input, truth = generate_normal_case(case_id, case_seed)
+                case_input, truth = generate_case(case_id, case_seed, manifest.request.case_type)
                 case_dir = self._case_dir(manifest.dataset_id, case_id)
                 _write_json(case_dir / "input.json", case_input.model_dump(mode="json"))
                 _write_json(case_dir / "truth.json", truth.model_dump(mode="json"))
-                manifest.cases.append(CaseSummary(case_id=case_id, case_seed=case_seed))
+                manifest.cases.append(
+                    CaseSummary(case_id=case_id, case_seed=case_seed, event_count=len(truth.events))
+                )
                 manifest.generated_cases += 1
                 _write_json(path, manifest.model_dump(mode="json"))
             manifest.status = "complete"

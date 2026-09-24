@@ -14,9 +14,14 @@ from gnss_sim.storage import DatasetStore
 def main() -> None:
     parser = argparse.ArgumentParser(prog="gnss-sim", description="Synthetic daily GNSS lab")
     commands = parser.add_subparsers(dest="command", required=True)
-    generate = commands.add_parser("generate", help="Generate normal P1 cases")
+    generate = commands.add_parser("generate", help="Generate single-event P2 cases")
     generate.add_argument("--seed", type=int, default=20260923)
     generate.add_argument("--count", type=int, default=10)
+    generate.add_argument(
+        "--case-type",
+        choices=("normal", "spike", "step", "slow_trend", "acceleration", "transient_shift"),
+        default="normal",
+    )
     generate.add_argument("--data-dir", type=Path)
     serve = commands.add_parser("serve", help="Serve the local experiment API and built UI")
     serve.add_argument("--host", default="127.0.0.1")
@@ -26,7 +31,7 @@ def main() -> None:
     root = args.data_dir or Path(os.environ.get("GNSS_SIM_DATA_DIR", "data/generated"))
 
     if args.command == "generate":
-        request = GenerationRequest(seed=args.seed, count=args.count)
+        request = GenerationRequest(seed=args.seed, count=args.count, case_type=args.case_type)
         result = DatasetStore(root).generate_sync(request)
         if result.status != "complete":
             parser.exit(1, f"Generation failed: {result.error}\n")

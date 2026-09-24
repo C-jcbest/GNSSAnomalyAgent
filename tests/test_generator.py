@@ -28,6 +28,12 @@ def test_same_seed_reproduces_365_daily_observations():
     assert first_input.reference_coordinate_mm == (0.0, 0.0, 0.0)
 
 
+def test_frozen_controlled_background_parameters():
+    assert ANNUAL_AMPLITUDE_MM == (1.5, 1.5, 2.0)
+    assert SEMIANNUAL_AMPLITUDE_MM == (0.5, 0.5, 1.0)
+    assert WHITE_NOISE_SIGMA_MM == (0.75, 0.75, 1.5)
+
+
 def test_fixed_components_and_reference_offsets():
     case_input, truth = generate_normal_case("case_0001", 5)
     reference = np.asarray(case_input.reference_coordinate_mm)
@@ -58,6 +64,8 @@ def test_phase_noise_seeds_are_separate_and_recorded():
     assert len({seeds.annual_phase, seeds.semiannual_phase, seeds.white_noise}) == 3
     assert all(0 <= phase < 2 * np.pi for phase in truth.annual_phase_rad)
     assert all(0 <= phase < 2 * np.pi for phase in truth.semiannual_phase_rad)
+    assert len(set(truth.annual_phase_rad)) == 3
+    assert len(set(truth.semiannual_phase_rad)) == 3
     _, other_truth = generate_normal_case("case_0001", 20)
     assert other_truth.normal_background_mm != truth.normal_background_mm
 
@@ -74,3 +82,9 @@ def test_phase_noise_seeds_are_separate_and_recorded():
 def test_old_generation_options_are_rejected(payload):
     with pytest.raises(ValueError):
         GenerationRequest.model_validate(payload)
+
+
+def test_generation_count_is_engineering_cap_not_pilot_size():
+    assert GenerationRequest(seed=42, count=76, case_type="normal").count == 76
+    with pytest.raises(ValueError):
+        GenerationRequest(seed=42, count=5001, case_type="normal")

@@ -89,7 +89,7 @@ export default function DocsPage() {
           <h1>实验设计手册</h1>
           <p>从研究问题走到生成公式，再核对数据与复现流程。</p>
         </div>
-        <span className="docs-stage">01 / 当前阶段 P1</span>
+        <span className="docs-stage">02 / 当前阶段 P2</span>
       </div>
 
       <div className="docs-layout">
@@ -123,7 +123,7 @@ export default function DocsPage() {
             <div className="docs-state docs-error" role="alert">{error}</div>
           ) : (
             <>
-              <div className="docs-paper-topline"><span>GNSS SIMULATION LAB</span><span>{selected === "planned-methods" ? "RESEARCH DRAFT · P2–P9" : "METHOD NOTE · P1"}</span></div>
+              <div className="docs-paper-topline"><span>GNSS SIMULATION LAB</span><span>{selected === "p1-normal-model" ? "FROZEN BACKGROUND · P1" : selected === "planned-methods" ? "SINGLE-EVENT PROTOCOL · P2" : "METHOD NOTE · P2"}</span></div>
               <details className="docs-mobile-contents">
                 <summary>本篇目录</summary>
                 {headings.map((item) => <button key={item.id} onClick={() => jumpTo(item.id)}>{item.title}</button>)}

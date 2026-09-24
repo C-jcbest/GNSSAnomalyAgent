@@ -12,7 +12,8 @@ body {
   min-width: 320px;
 }
 button,
-input {
+input,
+select {
   font: inherit;
 }
 button {
@@ -23,7 +24,8 @@ button:disabled {
   opacity: 0.7;
 }
 button:focus-visible,
-input:focus-visible {
+input:focus-visible,
+select:focus-visible {
   outline: 2px solid #147d72;
   outline-offset: 2px;
 }
@@ -311,7 +313,8 @@ input:focus-visible {
   font-size: 10px;
   font-weight: 600;
 }
-.create-form input {
+.create-form input,
+.create-form select {
   width: 112px;
   height: 35px;
   border: 1px solid #bdcec4;
@@ -321,6 +324,10 @@ input:focus-visible {
   color: #243a31;
   font-family: "IBM Plex Mono", monospace;
   font-size: 12px;
+}
+.create-form select {
+  width: 150px;
+  cursor: pointer;
 }
 .create-form label:first-child input {
   width: 130px;
@@ -616,6 +623,44 @@ input:focus-visible {
   flex-wrap: wrap;
   padding: 16px 22px 4px;
 }
+.truth-access {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 10px 22px;
+  border-bottom: 1px solid #edf1ee;
+  color: #718378;
+  font-size: 11px;
+}
+.truth-command {
+  border: 1px solid #a8c9b6;
+  border-radius: 3px;
+  background: #eaf6ee;
+  color: #226a4e;
+  padding: 7px 12px;
+  white-space: nowrap;
+  font-size: 11px;
+  font-weight: 600;
+}
+.truth-command[aria-pressed="true"] { background: #fff; }
+.component-controls { display: flex; align-items: center; gap: 12px; flex-wrap: wrap; }
+.component-toggles { display: flex; flex-wrap: wrap; gap: 8px 11px; }
+.component-toggles label { display: inline-flex; align-items: center; gap: 4px; color: #5e7166; font-size: 10px; cursor: pointer; }
+.component-toggles input { accent-color: #147d72; width: 12px; height: 12px; margin: 0; }
+.component-toggles label span { width: 7px; height: 7px; border-radius: 50%; }
+.event-truth { margin: 0 22px 15px; border: 1px solid #e8d6c8; background: #fffaf6; color: #6e5749; font-size: 11px; }
+.event-truth summary { display: flex; align-items: center; gap: 12px; padding: 11px 13px; cursor: pointer; list-style: none; }
+.event-truth summary::-webkit-details-marker { display: none; }
+.event-truth summary > span:first-child { min-width: 132px; font-weight: 700; color: #8b4f32; }
+.event-truth summary > span:last-child { font-family: "IBM Plex Mono", monospace; white-space: nowrap; }
+.event-track { position: relative; flex: 1; height: 14px; border-radius: 10px; background: linear-gradient(90deg, #f2eae2 0%, #ede8df 100%); }
+.event-band { position: absolute; top: 3px; height: 8px; background: #c5764f; border-radius: 3px; }
+.event-dot { position: absolute; top: 1px; width: 12px; height: 12px; background: #c5764f; border-radius: 50%; transform: translateX(-50%); }
+.event-truth dl { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 0 18px; margin: 0; padding: 2px 14px 12px; border-top: 1px solid #efdfd4; }
+.event-truth dl > div { display: flex; justify-content: space-between; gap: 8px; padding: 7px 0; border-bottom: 1px solid #f0e5dd; }
+.event-truth dt { color: #957b6c; }
+.event-truth dd { margin: 0; color: #684331; font-family: "IBM Plex Mono", monospace; text-align: right; overflow-wrap: anywhere; }
 .segmented {
   display: inline-flex;
   border: 1px solid #dae5dd;
@@ -923,7 +968,8 @@ input:focus-visible {
     grid-template-columns: 1fr 1fr auto;
   }
   .create-form input,
-  .create-form label:first-child input {
+  .create-form label:first-child input,
+  .create-form select {
     width: 100%;
   }
   .stats-row {
@@ -989,6 +1035,7 @@ input:focus-visible {
   .create-form {
     grid-template-columns: 1fr 1fr;
   }
+  .create-form label:first-child { grid-column: 1/-1; }
   .create-form .primary-button {
     grid-column: 1/-1;
   }
@@ -1001,6 +1048,12 @@ input:focus-visible {
   .chart-toolbar {
     gap: 10px;
   }
+  .truth-access { padding: 10px 12px; }
+  .event-truth { margin: 0 12px 12px; }
+  .event-truth summary { flex-wrap: wrap; }
+  .event-truth summary > span:first-child { min-width: 0; }
+  .event-track { min-width: 100%; order: 3; }
+  .event-truth dl { grid-template-columns: 1fr; }
   .axis-toggles {
     gap: 9px;
   }

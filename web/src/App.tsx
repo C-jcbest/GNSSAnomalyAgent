@@ -21,12 +21,50 @@ import DocsPage from "./DocsPage";
 
 type Triple = [number, number, number];
 type Status = "queued" | "running" | "complete" | "failed";
+type CaseType = "normal" | "spike" | "step" | "slow_trend" | "acceleration" | "transient_shift";
+type Axis = "N" | "E" | "U";
+type EventTruth = {
+  event_id: string;
+  type: Exclude<CaseType, "normal">;
+  source: "injected_deformation" | "observation_artifact";
+  axis: Axis;
+  start_index: number;
+  end_index: number;
+  start_date: string;
+  end_date: string;
+  persistent: boolean;
+  parameters: { amplitude_mm?: number; final_offset_mm?: number; duration_days?: number; slope_mm_per_day?: number; sigma_multiplier?: number };
+};
+const caseTypeLabels: Record<CaseType, string> = {
+  normal: "正常", spike: "Spike", step: "Step", slow_trend: "Slow Trend",
+  acceleration: "Acceleration", transient_shift: "Transient Shift",
+};
+type ComponentKey = "background" | "noise" | "deformation" | "artifact" | "observed";
+const componentLabels: Record<ComponentKey, string> = {
+  background: "正常背景", noise: "测量噪声", deformation: "注入形变",
+  artifact: "观测伪差", observed: "最终观测",
+};
+const componentColors: Record<ComponentKey, string> = {
+  background: "#147d72", noise: "#db6b50", deformation: "#7b5da3",
+  artifact: "#ba5b38", observed: "#253b54",
+};
+const parameterLabels: Record<string, string> = {
+  amplitude_mm: "带符号幅值", final_offset_mm: "最终累计偏移",
+  duration_days: "事件时长", slope_mm_per_day: "区间斜率",
+  sigma_multiplier: "噪声标准差倍数",
+};
+function parameterLabel(key: string, value: number) {
+  if (key === "duration_days") return `${value} 日`;
+  if (key === "sigma_multiplier") return `${value}σ`;
+  if (key === "slope_mm_per_day") return `${value.toFixed(4)} mm/日`;
+  return `${value.toFixed(2)} mm`;
+}
 type Manifest = {
   dataset_id: string;
   created_at: string;
   status: Status;
   generator_version: string;
-  request: { seed: number; count: number };
+  request: { seed: number; count: number; case_type: CaseType };
   generated_cases: number;
   cases: {
     case_id: string;
@@ -45,9 +83,11 @@ type CaseInput = {
   spatial_offset_mm: number[];
 };
 type CaseTruth = {
-  events: unknown[];
+  events: EventTruth[];
   normal_background_mm: Triple[];
   measurement_noise_mm: Triple[];
+  injected_deformation_mm: Triple[];
+  observation_artifact_mm: Triple[];
   annual_phase_rad: Triple;
   semiannual_phase_rad: Triple;
   component_seeds: {
@@ -55,6 +95,7 @@ type CaseTruth = {
     semiannual_phase: number;
     white_noise: number;
   };
+  event_seeds: { position: number; shape: number; sign: number } | null;
 };
 
 const axisNames = ["N", "E", "U"] as const;
@@ -98,6 +139,7 @@ export default function App() {
   const [caseTruth, setCaseTruth] = useState<CaseTruth | null>(null);
   const [seed, setSeed] = useState("20260923");
   const [count, setCount] = useState("10");
+  const [caseType, setCaseType] = useState<CaseType>("normal");
   const [submitting, setSubmitting] = useState(false);
   const [error, setError] = useState("");
   const [page, setPage] = useState<"datasets" | "runs" | "docs">("datasets");
@@ -110,6 +152,11 @@ export default function App() {
   });
   const [componentAxis, setComponentAxis] = useState<0 | 1 | 2>(0);
   const [showTruth, setShowTruth] = useState(false);
+  const [truthVisible, setTruthVisible] = useState(false);
+  const [truthLoading, setTruthLoading] = useState(false);
+  const [componentsVisible, setComponentsVisible] = useState<Record<ComponentKey, boolean>>({
+    background: true, noise: true, deformation: true, artifact: true, observed: true,
+  });
   const [dateTarget, setDateTarget] = useState("");
   const [query, setQuery] = useState("");
   const chartRef = useRef<ReactECharts>(null);
@@ -134,6 +181,8 @@ export default function App() {
     setCaseId(null);
     setCaseInput(null);
     setCaseTruth(null);
+    setTruthVisible(false);
+    setView("observed");
     let disposed = false;
     let timer: number | undefined;
     const load = async () => {
@@ -173,19 +222,18 @@ export default function App() {
     ) {
       setCaseInput(null);
       setCaseTruth(null);
+      setTruthVisible(false);
       return;
     }
     let disposed = false;
     setCaseInput(null);
     setCaseTruth(null);
-    Promise.all([
-      api<CaseInput>(`/api/datasets/${selectedId}/cases/${caseId}`),
-      api<CaseTruth>(`/api/datasets/${selectedId}/cases/${caseId}/truth`),
-    ])
-      .then(([input, truth]) => {
+    setTruthVisible(false);
+    setView("observed");
+    api<CaseInput>(`/api/datasets/${selectedId}/cases/${caseId}`)
+      .then((input) => {
         if (!disposed) {
           setCaseInput(input);
-          setCaseTruth(truth);
           setDateTarget(input.dates[0]);
         }
       })
@@ -197,6 +245,24 @@ export default function App() {
     };
   }, [selectedId, caseId, detail?.dataset_id]);
 
+  useEffect(() => {
+    if (!truthVisible || !selectedId || !caseId || !caseInput) {
+      setCaseTruth(null);
+      setTruthLoading(false);
+      return;
+    }
+    let disposed = false;
+    setTruthLoading(true);
+    api<CaseTruth>(`/api/datasets/${selectedId}/cases/${caseId}/truth`)
+      .then((truth) => { if (!disposed) {
+        setCaseTruth(truth);
+        if (truth.events[0]) setComponentAxis(axisNames.indexOf(truth.events[0].axis) as 0 | 1 | 2);
+      } })
+      .catch((cause) => { if (!disposed) { setError(cause.message); setTruthVisible(false); } })
+      .finally(() => { if (!disposed) setTruthLoading(false); });
+    return () => { disposed = true; };
+  }, [truthVisible, selectedId, caseId, caseInput]);
+
   const filteredCases = useMemo(
     () =>
       detail?.cases.filter((item) => item.case_id.includes(query.trim())) ?? [],
@@ -204,7 +270,7 @@ export default function App() {
   );
 
   const chartOption = useMemo<EChartsOption | null>(() => {
-    if (!caseInput || !caseTruth) return null;
+    if (!caseInput || (view === "components" && !caseTruth)) return null;
     const dates = caseInput.dates;
     const base = {
       animation: false,
@@ -251,28 +317,26 @@ export default function App() {
     };
     if (view === "components") {
       const axis = axisNames[componentAxis];
+      const truth = caseTruth!;
+      const componentData: Record<ComponentKey, number[]> = {
+        background: truth.normal_background_mm.map((row) => row[componentAxis]),
+        noise: truth.measurement_noise_mm.map((row) => row[componentAxis]),
+        deformation: truth.injected_deformation_mm.map((row) => row[componentAxis]),
+        artifact: truth.observation_artifact_mm.map((row) => row[componentAxis]),
+        observed: caseInput.observed_coordinate_mm.map((row) => row[componentAxis]),
+      };
       return {
         ...base,
-        series: [
-          {
-            name: `${axis} 背景`,
-            type: "line",
+        series: (Object.keys(componentLabels) as ComponentKey[])
+          .filter((key) => componentsVisible[key])
+          .map((key) => ({
+            name: `${axis} ${componentLabels[key]}`,
+            type: "line" as const,
             showSymbol: false,
-            lineStyle: { width: 2, color: colors.N },
-            itemStyle: { color: colors.N },
-            data: caseTruth.normal_background_mm.map(
-              (row) => row[componentAxis],
-            ),
-          },
-          {
-            name: `${axis} 测量噪声`,
-            type: "line",
-            showSymbol: false,
-            lineStyle: { width: 1.4, color: colors.E },
-            itemStyle: { color: colors.E },
-            data: caseTruth.measurement_noise_mm.map((row) => row[componentAxis]),
-          },
-        ],
+            lineStyle: { width: key === "observed" ? 2.2 : 1.6, color: componentColors[key] },
+            itemStyle: { color: componentColors[key] },
+            data: componentData[key],
+          })),
       };
     }
     const series: LineSeriesOption[] = axisNames
@@ -300,7 +364,7 @@ export default function App() {
         data: caseInput.horizontal_offset_mm,
       });
     }
-    if (showTruth) {
+    if (showTruth && caseTruth) {
       axisNames
         .filter((axis) => visible[axis])
         .forEach((axis) => {
@@ -316,8 +380,27 @@ export default function App() {
           });
         });
     }
+    const event = caseTruth?.events[0];
+    if (event && series.length > 0) {
+      if (event.start_index === event.end_index) {
+        series[0].markLine = {
+          silent: true,
+          symbol: "none",
+          label: { formatter: caseTypeLabels[event.type], color: "#8a4b32" },
+          lineStyle: { color: "#c5754f", type: "dashed", width: 1.5 },
+          data: [{ xAxis: event.start_date }],
+        };
+      } else {
+        series[0].markArea = {
+          silent: true,
+          itemStyle: { color: "rgba(198, 117, 79, 0.13)" },
+          label: { show: false },
+          data: [[{ xAxis: event.start_date }, { xAxis: event.end_date }]],
+        };
+      }
+    }
     return { ...base, series };
-  }, [caseInput, caseTruth, view, visible, showTruth, componentAxis]);
+  }, [caseInput, caseTruth, view, visible, showTruth, componentAxis, componentsVisible]);
 
   async function createDataset(event: React.FormEvent) {
     event.preventDefault();
@@ -329,9 +412,9 @@ export default function App() {
       parsedSeed > 4294967295 ||
       !Number.isInteger(parsedCount) ||
       parsedCount < 1 ||
-      parsedCount > 75
+      parsedCount > 5000
     ) {
-      setError("Seed 范围为 0～4294967295，案例数量为 1～75。");
+      setError("Seed 范围为 0～4294967295，案例数量为 1～5000。");
       return;
     }
     setSubmitting(true);
@@ -343,6 +426,7 @@ export default function App() {
         body: JSON.stringify({
           seed: parsedSeed,
           count: parsedCount,
+          case_type: caseType,
         }),
       });
       setSelectedId(created.dataset_id);
@@ -390,7 +474,7 @@ export default function App() {
           </span>
           <div>
             <strong>GNSS LAB</strong>
-            <small>模拟实验台 / P1</small>
+            <small>模拟实验台 / P2</small>
           </div>
         </div>
         <nav className="main-nav" aria-label="主导航">
@@ -435,7 +519,7 @@ export default function App() {
               </span>
               <span className="dataset-item-meta">
                 {item.generated_cases}/{item.request.count} 例 <i /> Seed{" "}
-                {item.request.seed}
+                {item.request.seed} · {caseTypeLabels[item.request.case_type]}
               </span>
               <span className={`status-pill ${item.status}`}>
                 {statusLabels[item.status]}
@@ -488,12 +572,12 @@ export default function App() {
           <>
             <section className="page-heading">
               <div>
-                <p className="eyebrow">SYNTHETIC DATA / NORMAL-P1</p>
+                <p className="eyebrow">SYNTHETIC DATA / SINGLE-EVENT P2</p>
                 <h1>日坐标模拟数据</h1>
                 <p className="subtitle">固定参考坐标 · 365 日完整年度</p>
               </div>
               <div className="heading-badge">
-                <span className="badge-dot" /> P1 正常序列
+                <span className="badge-dot" /> P2 单事件生成
               </div>
             </section>
 
@@ -504,10 +588,18 @@ export default function App() {
                 </span>
                 <div>
                   <h2 id="create-title">生成数据集</h2>
-                  <p>Annual + Semiannual + White noise</p>
+                  <p>固定背景 + 单轴事件 · 每例最多 1 个事件</p>
                 </div>
               </div>
               <form onSubmit={createDataset} className="create-form">
+                <label>
+                  案例类型
+                  <select value={caseType} onChange={(event) => setCaseType(event.target.value as CaseType)}>
+                    {(Object.keys(caseTypeLabels) as CaseType[]).map((type) => (
+                      <option key={type} value={type}>{caseTypeLabels[type]}</option>
+                    ))}
+                  </select>
+                </label>
                 <label>
                   Seed
                   <input
@@ -524,7 +616,7 @@ export default function App() {
                   <input
                     type="number"
                     min="1"
-                    max="75"
+                    max="5000"
                     step="1"
                     value={count}
                     onChange={(event) => setCount(event.target.value)}
@@ -547,17 +639,17 @@ export default function App() {
 
             <section className="fixed-protocol" aria-label="固定生成参数">
               <div className="fixed-protocol-heading">
-                <span>LOCKED PROTOCOL / NORMAL-V1</span>
+                <span>LOCKED PROTOCOL / EVENT-V2</span>
                 <strong>固定生成参数</strong>
               </div>
               <dl>
                 <div><dt>长度</dt><dd>365 日</dd></div>
                 <div><dt>起始日期</dt><dd>2025-01-01</dd></div>
-                <div><dt>Annual · N/E/U</dt><dd>2 / 2 / 3 mm</dd></div>
-                <div><dt>Semiannual · N/E/U</dt><dd>1 / 1 / 2 mm</dd></div>
-                <div><dt>White noise · N/E/U</dt><dd>1.5 / 1.5 / 3.0 mm</dd></div>
+                <div><dt>Annual · N/E/U</dt><dd>1.5 / 1.5 / 2.0 mm</dd></div>
+                <div><dt>Semiannual · N/E/U</dt><dd>0.5 / 0.5 / 1.0 mm</dd></div>
+                <div><dt>White noise · N/E/U</dt><dd>0.75 / 0.75 / 1.5 mm</dd></div>
               </dl>
-              <p>周期 365.25 日；相位和白噪声由案例 seed 派生。仅 seed 与案例数可调整。</p>
+              <p>固定参数是本实验的受控基准设定；异常形态和幅值由 P2 协议固定。只选择案例类型、seed 与案例数。</p>
             </section>
 
             {!detail ? (
@@ -574,6 +666,7 @@ export default function App() {
                     <p>
                       {formattedDate(detail.created_at)} · Seed{" "}
                       {detail.request.seed} · {detail.generator_version}
+                      {" · "}{caseTypeLabels[detail.request.case_type]}
                     </p>
                   </div>
                   <span className={`large-status ${detail.status}`}>
@@ -606,7 +699,7 @@ export default function App() {
                   </div>
                   <div>
                     <small>注入事件</small>
-                    <strong>0</strong>
+                    <strong>{detail.cases.reduce((sum, item) => sum + item.event_count, 0)}</strong>
                   </div>
                 </div>
                 {(detail.status === "queued" ||
@@ -663,7 +756,7 @@ export default function App() {
                           </span>
                           <span>
                             <strong>{item.case_id}</strong>
-                            <small>365 天 · 0 个事件</small>
+                            <small>365 天 · {item.event_count} 个事件 · {caseTypeLabels[detail.request.case_type]}</small>
                           </span>
                           <ChevronRight size={16} />
                         </button>
@@ -681,12 +774,22 @@ export default function App() {
                         <h2>{caseId || "等待案例"}</h2>
                       </div>
                       <div className="case-tag">
-                        <Check size={14} /> 正常序列
+                        <Check size={14} /> {caseTypeLabels[detail.request.case_type]}
                       </div>
                     </div>
-                    {!caseInput || !caseTruth || !chartOption ? (
+                    {caseInput && <div className="truth-access">
+                      <span>观测输入已加载；真值仅在主动查看后读取。</span>
+                      <button className="truth-command" onClick={() => {
+                        if (truthVisible) { setView("observed"); setShowTruth(false); }
+                        setTruthVisible((old) => !old);
+                      }}
+                        disabled={truthLoading} aria-pressed={truthVisible}>
+                        {truthLoading ? "正在读取真值…" : truthVisible ? "隐藏真值" : "显示真值"}
+                      </button>
+                    </div>}
+                    {!caseInput || !chartOption ? (
                       <div className="chart-loading">
-                        {caseId ? "正在读取曲线…" : "等待案例生成…"}
+                        {!caseInput ? (caseId ? "正在读取曲线…" : "等待案例生成…") : "显示真值后可查看生成成分"}
                       </div>
                     ) : (
                       <>
@@ -731,24 +834,22 @@ export default function App() {
                               ))}
                             </div>
                           ) : (
-                            <div
-                              className="segmented axis-segment"
-                              role="group"
-                              aria-label="成分分量"
-                            >
-                              {axisNames.map((axis, index) => (
-                                <button
-                                  className={
-                                    componentAxis === index ? "active" : ""
-                                  }
-                                  key={axis}
-                                  onClick={() =>
-                                    setComponentAxis(index as 0 | 1 | 2)
-                                  }
-                                >
-                                  {axis}
-                                </button>
-                              ))}
+                            <div className="component-controls">
+                              <div className="segmented axis-segment" role="group" aria-label="成分分量">
+                                {axisNames.map((axis, index) => (
+                                  <button className={componentAxis === index ? "active" : ""}
+                                    key={axis} onClick={() => setComponentAxis(index as 0 | 1 | 2)}>{axis}</button>
+                                ))}
+                              </div>
+                              <div className="component-toggles" role="group" aria-label="显示成分">
+                                {(Object.keys(componentLabels) as ComponentKey[]).map((key) => (
+                                  <label key={key}>
+                                    <input type="checkbox" checked={componentsVisible[key]}
+                                      onChange={() => setComponentsVisible((old) => ({ ...old, [key]: !old[key] }))} />
+                                    <span style={{ background: componentColors[key] }} />{componentLabels[key]}
+                                  </label>
+                                ))}
+                              </div>
                             </div>
                           )}
                         </div>
@@ -791,7 +892,7 @@ export default function App() {
                           >
                             <RotateCcw size={17} />
                           </button>
-                          {view === "observed" && (
+                          {view === "observed" && caseTruth && (
                             <label className="truth-toggle">
                               <input
                                 type="checkbox"
@@ -830,13 +931,31 @@ export default function App() {
                           <span>
                             <Filter size={15} /> 异常标注
                           </span>
-                          <strong>
-                            {caseTruth.events.length === 0
-                              ? "无注入事件"
-                              : `${caseTruth.events.length} 个事件`}
-                          </strong>
+                          <strong>{!caseTruth ? "真值未加载" : caseTruth.events.length === 0 ? "无注入事件" : `${caseTruth.events.length} 个事件`}</strong>
                         </div>
-                        <details className="seed-details">
+                        {caseTruth?.events.map((event) => (
+                          <details className="event-truth" key={event.event_id}>
+                            <summary>
+                              <span>{caseTypeLabels[event.type]} · {event.axis}</span>
+                              <span className="event-track">
+                                <i className={event.start_index === event.end_index ? "event-dot" : "event-band"}
+                                  style={{ left: `${event.start_index / 364 * 100}%`, width: event.start_index === event.end_index ? undefined : `${(event.end_index - event.start_index + 1) / 365 * 100}%` }} />
+                              </span>
+                              <span>Day {event.start_index + 1}{event.end_index > event.start_index ? `–${event.end_index + 1}` : ""}</span>
+                            </summary>
+                            <dl>
+                              <div><dt>类型 / 轴</dt><dd>{caseTypeLabels[event.type]} / {event.axis}</dd></div>
+                              <div><dt>开始</dt><dd>Day {event.start_index + 1} · {event.start_date}</dd></div>
+                              <div><dt>结束</dt><dd>Day {event.end_index + 1} · {event.end_date}</dd></div>
+                              <div><dt>持续 / 保留偏移</dt><dd>{event.end_index - event.start_index + 1} 日 / {event.persistent ? "是" : "否"}</dd></div>
+                              <div><dt>注入来源</dt><dd>{event.source === "injected_deformation" ? "注入形变" : "观测伪差"}</dd></div>
+                              {Object.entries(event.parameters).map(([key, value]) => (
+                                <div key={key}><dt>{parameterLabels[key] || key}</dt><dd>{parameterLabel(key, value)}</dd></div>
+                              ))}
+                            </dl>
+                          </details>
+                        ))}
+                        {caseTruth && <details className="seed-details">
                           <summary>生成相位与成分 seed（仅用于核对真值）</summary>
                           <div>
                             <span>Annual 相位 N/E/U</span>
@@ -850,7 +969,8 @@ export default function App() {
                             <span>成分 seed</span>
                             <code>{caseTruth.component_seeds.annual_phase} / {caseTruth.component_seeds.semiannual_phase} / {caseTruth.component_seeds.white_noise}</code>
                           </div>
-                        </details>
+                          {caseTruth.event_seeds && <div><span>事件 seed · 位置/形态/符号</span><code>{caseTruth.event_seeds.position} / {caseTruth.event_seeds.shape} / {caseTruth.event_seeds.sign}</code></div>}
+                        </details>}
                       </>
                     )}
                   </section>

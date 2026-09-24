@@ -1,43 +1,56 @@
-# 后续异常、检测与评价方法
+# P2 单事件生成与后续检测草案
 
-> 版本：2026-09-24 · **本篇全部为 P2～P9 的研究草案，当前未实现。** 公式用于理解目标形态，幅值、时间、阈值、匹配容差和数据划分尚未冻结；不能将其当作已运行的实验协议或性能结论。
+> 版本：2026-09-24 · **P2 的五种单轴单事件生成规则已实现为 `event-v2`。** 本篇从“多事件与多标签真值”开始的 P3～P9 内容仍是草案；生成正确性不能当成检测性能结论。
 
-## 统一的事件生成视角
+## P2 的目标与边界
 
-沿用 P1 的 365 日、三轴基准序列。设 $d^{(j)}_{t,c}$ 是第 $j$ 个注入形变事件在日期 $t$、分量 $c$ 上的贡献，$a^{(k)}_{t,c}$ 是第 $k$ 个观测伪差贡献。计划中的观测组合式为
+P2 每例选择 `normal` 或五种异常之一。异常例恰好一个事件、一个轴；正常例没有事件。没有多事件、跨轴注入、缺测、难度矩阵、检测器、模型调用或 Agent。索引 $t,s,e$ 从 **0** 开始，区间含两端；`Day 1` 对应索引 0。
+
+在 `event-v2` 的固定正常背景和噪声上，逐元素生成
 
 $$
-O_{t,c}=P_{0,c}+B_{t,c}+\epsilon_{t,c}
-+\underbrace{\sum_j d^{(j)}_{t,c}}_{D^{\mathrm{def}}_{t,c}}
-+\underbrace{\sum_k a^{(k)}_{t,c}}_{A^{\mathrm{art}}_{t,c}}.
+O_{t,c}=P_{0,c}+B_{t,c}+\epsilon_{t,c}+D^{\mathrm{def}}_{t,c}+A^{\mathrm{art}}_{t,c},
+\qquad 0\le t<365,\quad c\in\{N,E,U\}.
 $$
 
-其中 $B_{t,c}$ 是 `normal-v1` 的 annual + semiannual 背景，$\epsilon_{t,c}$ 是白噪声。P1 的 $D^{\mathrm{def}}$ 与 $A^{\mathrm{art}}$ 均为零且不保存为冗余数组；P2 才扩充真值字段。各事件先独立生成和保存贡献，再在相同日期、相同分量上相加；这种设计允许同日、同轴重叠。模拟器记录来源，检测器只观察最终 $O_{t,c}$，不能直接获知哪项贡献造成了曲线变化。
+真值分别保存 `normal_background_mm`、`measurement_noise_mm`、`injected_deformation_mm` 和 `observation_artifact_mm`。正常例的后两项为全零。模拟器的 `source` 只表示注入数组，不是检测器必须判断的现场成因；检测器将来只输出可观察的形态、轴和日期。Step、Slow Trend 和 Acceleration 注入形变；Spike 与 Transient Shift 注入观测伪差。
 
-## 五种计划中的异常形态
+## 五种已冻结的事件形态
 
-下表中的 $s$、$e$ 为起止索引，$A$ 为带符号幅值，$v$ 为速度，$q$ 为加速系数。公式只画出单轴贡献；多轴事件要分别指定幅值。$\mathbf 1[\cdot]$ 是条件成立时为 1、否则为 0 的指示函数。
+下表仅写事件轴 $c$ 的非零贡献；另外两轴始终为零。$\sigma_N=\sigma_E=0.75$ mm、$\sigma_U=1.5$ mm，正负号由独立 `event_sign_seed` 决定。$s$ 是起点、$e$ 是终点。
 
-| 形态 | 候选信号贡献 | 关键语义 |
-| --- | --- | --- |
-| Spike | $A\mathbf 1[t=s]$ | 短时观测偏离后恢复，拟作为观测伪差 |
-| Step | $A\mathbf 1[t\ge s]$ | 从起点突变，之后保留偏移；稳定后的高值不等于持续运动 |
-| Slow Trend | $v\,\operatorname{clip}(t-s,0,e-s)$ | 有限时段持续增加，结束后保留最终位移 |
-| Acceleration | $q\,\operatorname{clip}(t-s,0,e-s)^2$ | 在已有趋势上叠加加速分量；单独记录加速起点 |
-| Transient Shift | $A\mathbf 1[s\le t\le e]$ | 有限时段偏移，结束后恢复到原有背景附近 |
+| 类型 | 非零贡献 | P2 固定参数 | `end_index` 与偏移语义 |
+| --- | --- | --- | --- |
+| Spike | $A^{\mathrm{art}}_{t,c}=A\mathbf1[t=s]$ | 1 日，$\lvert A\rvert=6\sigma_c$ | $e=s$；下一日恢复，`persistent=false` |
+| Step | $D^{\mathrm{def}}_{t,c}=A\mathbf1[t\ge s]$ | 起变 1 日，$\lvert A\rvert=5\sigma_c$ | $e=s$ 是**变化动作**的终点；此后保留偏移，`persistent=true` |
+| Slow Trend | $D^{\mathrm{def}}_{t,c}=M\,\operatorname{clip}((t-s)/89,0,1)$ | 90 日、带符号最终偏移 $\lvert M\rvert=6\sigma_c$ | $e=s+89$；之后保留 $M$，斜率 $v=M/89$ mm/日 |
+| Acceleration | $D^{\mathrm{def}}_{t,c}=M\,[\operatorname{clip}((t-s)/89,0,1)]^2$ | 同为 90 日、$\lvert M\rvert=6\sigma_c$ | $e=s+89$；独立凸形变，之后保留 $M$ |
+| Transient Shift | $A^{\mathrm{art}}_{t,c}=A\mathbf1[s\le t\le e]$ | 14 日、$\lvert A\rvert=5\sigma_c$ | $e=s+13$；$e+1$ 日严格归零，`persistent=false` |
 
-`clip(x,0,L)` 表示把 $x$ 限制在 $0$ 与 $L$ 之间。Step、Slow Trend 和 Acceleration 的公式描述信号形态；究竟注入为模拟真实位移还是观测伪差，应由事件来源字段单独表达，不能让检测结果凭曲线代为裁决。Transient Shift 的首版拟采用矩形脉冲形状，后续若研究渐进恢复需另立定义。当前 P1 没有事件。
+`clip(x,0,1)` 将 $x$ 限制在 0 与 1。Slow Trend 与 Acceleration 具有相同的持续时间和最终偏移，唯一差异是区间内的线性与凸形轨迹。这里的 5σ、6σ 是便于核对生成正确性的 canonical 设定，**不是**现场异常强度或典型滑坡速度。Point/range 形态的研究动机可参见 [VisualTimeAnomaly](https://github.com/mllm-ts/VisualTimeAnomaly)；本项目固定幅值是自己的受控 benchmark 设定，未复用其生成代码或宣称现场真实性。
+
+对应的绝对幅值为：Spike、Slow Trend 终值和 Acceleration 终值在 N/E 为 4.5 mm、U 为 9.0 mm；Step 与 Transient Shift 在 N/E 为 3.75 mm、U 为 7.5 mm。符号可正可负，Slow Trend 与 Acceleration 的 `final_offset_mm` 保存带符号终值。
+
+P2 的事件起点满足 $s\ge60$、终点满足 $e\le304$，即至少保留前后各 60 日上下文。Step/Spike 的 `end_index=s` 表示瞬时变化日期；**不把**后续稳定偏移误标为持续运动。Slow Trend/Acceleration 的活动区间为 $[s,e]$，其后可由 `persistent=true` 与事件参数推导残余偏移，不另外存储逐日状态数组。
+
+## 事件真值与随机数
+
+真值 `events` 使用严格的类型联合，每例长度为 0 或 1。事件统一含 `event_id`、`type`、`source`、`axis`、起止索引/日期和 `persistent`；每类 `parameters` 有各自的类型约束。`event_001` 是 P2 唯一事件 ID。日期必须与 2025 年索引一致。
+
+`case_seed` 的 annual 相位、semiannual 相位和白噪声三路 seed 与旧 P1 派生方式相同。事件另用 `SeedSequence([case_seed, 0x45564E54])` 派生 `position`、`shape`、`sign` 子 seed，记录在真值中。相同 `case_seed` 的 normal/五种事件版本共享**完全相同**的背景与噪声；只有事件贡献改变。`shape` 子流选择轴，幅值由该轴固定的 $\sigma_c$ 决定；起点从满足安全区和事件时长的所有整数位置等概率抽取。
+
+P2 只验证生成器：逐元素等式、独立数组、边界与日期、事件类型、配对背景，以及 N/E/U 的 15 种 canonical 组合。尚无检测运行或模型结果。
 
 ## 多事件与多标签真值
 
-计划用事件列表保存每个事件的类型、轴、时间、来源与参数，再构造按日、轴、类型的指示张量。令 $K$ 为类型集合，
+P3 计划组合已验证的纯事件贡献：$D^{\mathrm{def}}=\sum_j d^{(j)}$、$A^{\mathrm{art}}=\sum_k a^{(k)}$，再在 P4 构造按日、轴、类型的指示张量。令 $K$ 为类型集合，
 
 $$
 Y_{t,c,k}=\mathbf 1\big[\text{日期 }t\text{ 在分量 }c\text{ 上属于类型 }k\text{ 的事件}\big],
 \qquad Y\in\{0,1\}^{365\times3\times |K|}.
 $$
 
-因此一次趋势中的尖峰可以同时拥有 Slow Trend 与 Spike 标签；趋势后期再加速也能同时拥有 Slow Trend 与 Acceleration 标签。计划分别保存“当前是否发生异常运动”与“异常运动结束后是否保留偏移”两个状态，避免把已稳定的残余偏移误称为持续运动。对缺测覆盖事件起点的案例，事件真值与可观测性需分开保存，不能把无法看到的值直接标作正常。
+因此一次趋势中的尖峰可以同时拥有 Slow Trend 与 Spike 标签；趋势后期再加速也能同时拥有 Slow Trend 与 Acceleration 标签。届时需要明确活动区间与残余偏移的评价语义，避免把已稳定的偏移误称为持续运动；是否保存逐日状态由评价需求决定。缺测条件不属于 P2。
 
 ## 数值与视觉方法如何比较
 
@@ -69,4 +82,4 @@ Spike 或 Step 的起点可用预先冻结的日期容差评价；Slow Trend 和
 
 P4 计划先生成约 300 个 Pilot 案例：正常 75、单异常 75、多异常 100、困难 50。四组计数互斥，困难属性仍可与多事件等特征交叉；随机参数由固定 seed 控制。先验证生成形态与标签，再使用人工构造的正确、漏报、误报、错位预测检验评价器。Pilot 属于开发验证，不等于独立最终测试。
 
-之后数值、视觉和固定组合必须使用同一批检测输入，测试真值不得进入提示词、路由、参数选择或工具输出。只有在开发分析显示互补性时才设计 Agent；还需与较强的单方法和固定组合比较，并披露模型请求与总耗时。P1 阶段完全没有这些结果。
+之后数值、视觉和固定组合必须使用同一批检测输入，测试真值不得进入提示词、路由、参数选择或工具输出。只有在开发分析显示互补性时才设计 Agent；还需与较强的单方法和固定组合比较，并披露模型请求与总耗时。P2 尚无这些结果。
