@@ -434,24 +434,35 @@ export default function App() {
           });
         });
     }
-    const event = selectedEvent;
-    if (event && series.length > 0) {
-      if (event.start_index === event.end_index) {
-        series[0].markLine = {
-          silent: true,
-          symbol: "none",
-          label: { show: false },
-          lineStyle: { color: "#c5754f", type: "dashed", width: 1.5 },
-          data: [{ xAxis: event.start_date }],
-        };
-      } else {
-        series[0].markArea = {
-          silent: true,
-          itemStyle: { color: "rgba(198, 117, 79, 0.13)" },
-          label: { show: false },
-          data: [[{ xAxis: event.start_date }, { xAxis: event.end_date }]],
-        };
-      }
+    if (caseTruth && series.length > 0) {
+      const pointEvents = caseTruth.events.filter((event) => event.start_index === event.end_index);
+      const intervalEvents = caseTruth.events.filter((event) => event.start_index !== event.end_index);
+      series[0].markLine = {
+        silent: true,
+        symbol: "none",
+        label: { show: false },
+        data: pointEvents.map((event) => ({
+          xAxis: event.start_date,
+          lineStyle: {
+            color: event.event_id === selectedEventId ? "#aa3e25" : "#b96b46",
+            type: event.type === "spike" ? "dashed" as const : "solid" as const,
+            width: event.event_id === selectedEventId ? 2.5 : 1.4,
+            opacity: selectedEventId && event.event_id !== selectedEventId ? 0.45 : 0.9,
+          },
+        })),
+      };
+      series[0].markArea = {
+        silent: true,
+        label: { show: false },
+        data: intervalEvents.map((event) => [{
+          xAxis: event.start_date,
+          itemStyle: {
+            color: event.event_id === selectedEventId
+              ? "rgba(178, 76, 50, 0.23)"
+              : selectedEventId ? "rgba(185, 107, 70, 0.06)" : "rgba(185, 107, 70, 0.12)",
+          },
+        }, { xAxis: event.end_date }]),
+      };
     }
     return { ...base, series };
   }, [caseInput, caseTruth, view, visible, showTruth, componentAxis, componentsVisible, selectedEventId]);

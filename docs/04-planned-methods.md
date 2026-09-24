@@ -64,7 +64,7 @@ P3 案例由以下模板加独立事件随机流生成，不从五种类型等�
 | S5 `longterm_with_change` | 一个长期事件 + 1～2 Step + 1～2 Spike；至少一个 Spike 在长期活动区间 |
 | S6 `complex_multiaxis` | 一个长期事件 + 1～2 Step + 1～2 Transient Shift + 0～1 Spike；首个 Transient 在长期活动区间 |
 
-`scenario_type` 只在 `truth.json` 中。每个事件保持独立 typed truth，按 `start_index`、同日起点时按 Slow Trend、Acceleration、Step、Transient Shift、Spike 的固定优先级排序，再编号 `event_001` 等。`event_contributions` 按同样顺序保存每个事件的 365×3 数组和注入分量；聚合数组必须分别等于对应事件贡献之和。相同 case seed 的 normal、P2、P3 变体有完全相同的相位、背景和测量噪声。研究人员网页可按轴和事件族筛选时间线、点选事件查看独立贡献；该带真值交互图不作为视觉模型输入。
+`scenario_type` 只在 `truth.json` 中。每个事件保持独立 typed truth，按 `start_index`、同日起点时按 Slow Trend、Acceleration、Step、Transient Shift、Spike 的固定优先级排序，再编号 `event_001` 等。`event_contributions` 按同样顺序保存每个事件的 365×3 数组和注入分量；聚合数组必须分别等于对应事件贡献之和。相同 case seed 的 normal、P2、P3 变体有完全相同的相位、背景和测量噪声。研究人员网页的观测主图默认以浅色区间标记持续事件、竖线标记瞬时事件；时间线可按轴和事件族筛选、点选事件突出区间并查看独立贡献。隐藏标注时主图标记与时间线一同消失。该带真值交互图不作为视觉模型输入。
 
 `DetectionResult` 仅定义未来结果契约：`case_id`、`method`、`status` 和不限长度的预测 `events`。预测项含形态类型、轴列表、起止索引、可选置信度及属性；目前没有检测器或结果。P3 的 54 例均衡场景检查只验生成器与页面，不是 Pilot 或统计性能实验。
 
