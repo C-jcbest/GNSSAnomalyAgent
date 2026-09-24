@@ -1,0 +1,20 @@
+{
+  "seed": 20260922,
+  "workers": 4,
+  "detectors": {
+    "sampling_hours": 24,
+    "max_interpolation_samples": 0,
+    "window": 15,
+    "min_samples": 12,
+    "hampel_threshold": 4.0,
+    "cusum_drift": 0.5,
+    "cusum_threshold": 8.0,
+    "iforest_threshold": 0.62,
+    "iforest_trees": 100
+  },
+  "fixed_detector": "hampel",
+  "model": {"temperature": 0.0, "max_tokens": 3000, "timeout_seconds": 120, "max_requests": 5},
+  "repeats": 1,
+  "capability_file": null,
+  "pilot_note": "180 Beijing-15h daily samples; uncalibrated development pilot; no imputation; no paper-ranking or field-normal truth"
+}

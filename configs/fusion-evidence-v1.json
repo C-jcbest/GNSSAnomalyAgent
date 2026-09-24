@@ -1,0 +1,35 @@
+{
+  "seed": 20260922,
+  "workers": 4,
+  "detectors": {
+    "implementation": "daily-observed-v2",
+    "sampling_hours": 24,
+    "max_interpolation_samples": 0,
+    "window": 15,
+    "min_window_samples": 8,
+    "min_samples": 12,
+    "reset_gap_days": 3,
+    "hampel_threshold": 4.0,
+    "cusum_drift": 0.5,
+    "cusum_threshold": 8.0,
+    "iforest_threshold": 0.62,
+    "iforest_trees": 100
+  },
+  "fixed_detector": "hampel",
+  "visual_protocol": "global-mask-v2",
+  "model": {
+    "name": "qwen3.8-flash",
+    "enable_thinking": false,
+    "temperature": 0.0,
+    "max_tokens": 3000,
+    "timeout_seconds": 120,
+    "max_requests": 2,
+    "attempts_per_call": 2,
+    "retry_delay_seconds": 1.0
+  },
+  "repeats": 3,
+  "capability_file": null,
+  "pilot_note": "Development prompt-only comparison: pure visual, original independent fusion, evidence-constrained independent fusion; injection-only labels, unverified background.",
+  "execution_order": "paired-random-v1",
+  "cache_numerical": true
+}

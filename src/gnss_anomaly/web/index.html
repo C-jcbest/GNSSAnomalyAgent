@@ -1,0 +1,27 @@
+<!doctype html>
+<html lang="zh-CN">
+<head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>GNSS · 实验工作台</title><link rel="stylesheet" href="/style.css"><script src="/app.js" defer></script></head>
+<body>
+<aside class="rail">
+  <a class="brand" href="/" aria-label="GNSS 实验工作台"><svg viewBox="0 0 44 38" aria-hidden="true"><path d="M3 31 16 10 23 20 29 6 41 31M8 31h28M16 10v21M29 6v25"/></svg><span>GNSS<span class="brand-sub">RESEARCH LAB</span></span></a>
+  <div class="rail-label">研究工作区</div>
+  <nav aria-label="主导航"><button class="nav active" data-page="history"><span>01</span> 实验档案</button><button class="nav" data-page="data"><span>02</span> 数据快照</button><button class="nav" data-page="criteria"><span>03</span> 指标标准</button></nav>
+  <div class="rail-note"><span class="dot"></span> 本地离线档案<br><small>观测 → 检测 → 证据<br>GNSS Anomaly Agent</small></div>
+</aside>
+<main>
+  <header class="topline"><span>GNSS 三轴观测 <i>/</i> 每日 15:00 异常定位实验</span><button id="refresh" class="quiet">↻ 刷新档案</button></header>
+  <div id="alert" role="alert" hidden></div>
+  <section id="history-page" class="page">
+    <div class="hero"><div><p class="eyebrow">DAILY 15:00 / EXPERIMENT ARCHIVE</p><h1>日尺度方法能力实验</h1><p class="subtitle">同一北京时间 15:00 日序列上查看数值、视觉与组合方法。先看实验范围与记录状态，再读指标、分组表现和逐例证据。</p></div><div class="hero-mark">N <span>／</span> E <span>／</span> U<small>OBSERVED DAILY SERIES</small></div></div>
+    <section class="protocol" aria-label="实验口径"><div><span class="protocol-index">01 / 输入</span><strong>每日 15:00 · 三轴观测</strong><p>180 天主窗，保留原生缺测；六个来源窗固定分组，原生缺测实验不额外注入缺口。</p></div><div><span class="protocol-index">02 / 方法</span><strong>数值 / 视觉 / 同期并集</strong><p>三种数值方法对照纯视觉；并集复用同例视觉与Hampel结果，不额外调用模型。</p></div><div><span class="protocol-index">03 / 结论边界</span><strong>注入目标 ≠ 现场真值</strong><p>F1只量化注入掩码一致度；无新增注入不等于现场正常，派生案例不是独立来源。</p></div></section>
+    <div id="archive-stats" class="stats"></div>
+    <div class="workspace">
+      <section class="history-list panel"><div class="panel-heading"><h2>运行记录</h2><span id="run-count" class="count"></span></div><p class="hint">默认只列日输入。旧小时结果留档，不参与日实验排序。</p><label class="sr-only" for="search">搜索运行名称</label><input id="search" type="search" placeholder="搜索运行名称…"><label class="sr-only" for="split">筛选数据划分</label><select id="split"><option value="">全部数据划分</option><option value="development">开发集</option><option value="validation">验证集</option><option value="test">测试集</option></select><label class="archive-toggle"><input id="include-hourly" type="checkbox"> 显示历史小时运行</label><div id="run-list" aria-live="polite"></div></section>
+      <section class="detail panel" id="run-detail"><div class="empty">正在读取本地运行记录…</div></section>
+    </div>
+  </section>
+  <section id="data-page" class="page" hidden><div class="hero"><div><p class="eyebrow">OBSERVATION LIBRARY</p><h1>每日 15:00 数据快照</h1><p class="subtitle">默认查看固定时刻日观测的覆盖和缺测；原始小时归档仅供来源追溯，不进入当前方法对比。无标注真实曲线不计算准确率。</p></div></div><div id="data-stats" class="stats"></div><section class="panel data-panel"><div class="panel-heading"><h2>平台数据快照</h2><span class="hint">背景正常性未获现场认证 · 原值与缺测保留</span></div><div class="filters"><label>数据版本<select id="data-version"><option value="prepared">每日 15:00 实验数据</option><option value="raw">原始小时归档（只读）</option></select></label></div><div id="preparation-note" class="notice" hidden></div><div class="table-scroll" id="snapshots"></div></section><section class="panel data-panel" id="snapshot-preview" hidden><h2 id="snapshot-title"></h2><div id="snapshot-export" class="exports"></div><img id="snapshot-image" class="chart" alt="真实快照三轴位移曲线"></section></section>
+  <section id="criteria-page" class="page" hidden><div class="hero"><div><p class="eyebrow">EVALUATION PROTOCOL</p><h1>先约定标准，再解释结果。</h1><p class="subtitle">指标口径、失败处理、比较条件与论文结论的适用边界。</p></div></div><article id="criteria-content" class="panel document"></article></section>
+  <footer>GNSS ANOMALY AGENT <span>可复查的记录 · 可追溯的图表 · 有边界的结论</span></footer>
+</main>
+</body></html>
