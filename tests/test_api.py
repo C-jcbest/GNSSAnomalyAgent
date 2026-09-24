@@ -47,3 +47,22 @@ def test_same_request_reproduces_persisted_cases(tmp_path):
         assert store.get_case_truth(first.dataset_id, case_id) == store.get_case_truth(
             second.dataset_id, case_id
         )
+
+
+def test_learning_documents_are_served_from_canonical_markdown(tmp_path):
+    client = TestClient(create_app(tmp_path / "generated", tmp_path / "no-built-web"))
+    index = client.get("/api/docs")
+    assert index.status_code == 200
+    assert [item["slug"] for item in index.json()] == [
+        "research-design", "p1-normal-model", "data-and-reproducibility", "planned-methods"
+    ]
+    for item in index.json():
+        document = client.get(f"/api/docs/{item['slug']}")
+        assert document.status_code == 200
+        assert document.text.startswith("# ")
+    formula = client.get("/api/docs/p1-normal-model")
+    assert formula.status_code == 200
+    assert "text/plain" in formula.headers["content-type"]
+    assert "B_{t,c}" in formula.text
+    assert "\\sqrt{" in formula.text
+    assert client.get("/api/docs/unknown").status_code == 404

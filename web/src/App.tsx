@@ -4,6 +4,7 @@ import type { EChartsOption } from "echarts";
 import type { LineSeriesOption } from "echarts/charts";
 import {
   Activity,
+  BookOpenText,
   CalendarDays,
   Check,
   ChevronRight,
@@ -16,6 +17,7 @@ import {
   RotateCcw,
   Search,
 } from "lucide-react";
+import DocsPage from "./DocsPage";
 
 type Triple = [number, number, number];
 type Status = "queued" | "running" | "complete" | "failed";
@@ -100,7 +102,7 @@ export default function App() {
   const [count, setCount] = useState("10");
   const [submitting, setSubmitting] = useState(false);
   const [error, setError] = useState("");
-  const [page, setPage] = useState<"datasets" | "runs">("datasets");
+  const [page, setPage] = useState<"datasets" | "runs" | "docs">("datasets");
   const [view, setView] = useState<"observed" | "components">("observed");
   const [visible, setVisible] = useState({
     N: true,
@@ -417,6 +419,12 @@ export default function App() {
           >
             <Layers3 size={17} /> 检测运行
           </button>
+          <button
+            className={page === "docs" ? "active" : ""}
+            onClick={() => setPage("docs")}
+          >
+            <BookOpenText size={17} /> 实验文档
+          </button>
         </nav>
         <div className="sidebar-section-title">
           <span>生成历史</span>
@@ -457,7 +465,7 @@ export default function App() {
         <header className="topbar">
           <div className="breadcrumb">
             实验 /{" "}
-            <strong>{page === "datasets" ? "数据集" : "检测运行"}</strong>
+            <strong>{page === "datasets" ? "数据集" : page === "runs" ? "检测运行" : "实验文档"}</strong>
           </div>
           <div className="topbar-meta">
             <span>日尺度</span>
@@ -474,7 +482,9 @@ export default function App() {
           </div>
         )}
 
-        {page === "runs" ? (
+        {page === "docs" ? (
+          <DocsPage />
+        ) : page === "runs" ? (
           <section className="runs-page">
             <div className="page-heading">
               <div>

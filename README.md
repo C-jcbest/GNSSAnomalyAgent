@@ -17,6 +17,13 @@ uv run gnss-sim serve --port 18765
 
 浏览器打开 `http://127.0.0.1:18765`。若端口已占用，`serve --port <可用端口>` 可使用其他端口。开发时也可在后端使用默认 `8765` 端口的前提下运行 `npm run dev`，前端地址为 `http://127.0.0.1:5173`。
 
+网页顶部的「实验文档」提供章节目录、正文排版和数学公式渲染。后端的 `docs/` 是文档原稿，网页通过 `GET /api/docs` 和 `GET /api/docs/{slug}` 读取同一份 Markdown。阅读顺序：
+
+1. [研究问题与实验路线](docs/01-research-design.md)：名词、研究边界和 P1～P9 的状态。
+2. [P1 正常序列模型](docs/02-p1-normal-model.md)：背景、两类噪声、坐标及 H/D 公式。
+3. [数据契约与可复现流程](docs/03-data-and-reproducibility.md)：输入与真值隔离、seed、文件和 API。
+4. [后续异常、检测与评价方法](docs/04-planned-methods.md)：P2～P9 的待实施草案，不代表现有结果。
+
 CLI 可直接生成：
 
 ```powershell
