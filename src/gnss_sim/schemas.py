@@ -10,6 +10,15 @@ Axis = Literal["N", "E", "U"]
 CaseType = Literal[
     "normal", "spike", "step", "slow_trend", "acceleration", "transient_shift"
 ]
+ScenarioType = Literal[
+    "multi_spike", "change_with_local", "temporary_with_local",
+    "longterm_with_local", "longterm_with_change", "complex_multiaxis",
+]
+SCENARIO_TYPES: tuple[ScenarioType, ...] = (
+    "multi_spike", "change_with_local", "temporary_with_local",
+    "longterm_with_local", "longterm_with_change", "complex_multiaxis",
+)
+GenerationType = CaseType | ScenarioType
 CASE_TYPES: tuple[CaseType, ...] = (
     "normal", "spike", "step", "slow_trend", "acceleration", "transient_shift"
 )
@@ -22,17 +31,17 @@ class StrictModel(BaseModel):
 class GenerationRequest(StrictModel):
     seed: int = Field(ge=0, le=4294967295)
     count: int = Field(ge=1, le=5000)
-    case_type: CaseType | Literal["all"]
+    case_type: GenerationType | Literal["all", "all_scenarios"]
 
     @model_validator(mode="after")
     def validate_mixed_count(self):
-        if self.case_type == "all" and self.count < len(CASE_TYPES):
-            raise ValueError("all requires at least six cases")
+        if self.case_type in ("all", "all_scenarios") and self.count < 6:
+            raise ValueError("mixed generation requires at least six cases")
         return self
 
 
 class CaseInput(StrictModel):
-    schema_version: Literal["event-input-v5"] = "event-input-v5"
+    schema_version: Literal["event-input-v6"] = "event-input-v6"
     case_id: str
     dates: list[date]
     reference_coordinate_mm: AxisVector
@@ -55,7 +64,7 @@ class EventSeeds(StrictModel):
 
 
 class EventBase(StrictModel):
-    event_id: Literal["event_001"]
+    event_id: str = Field(pattern=r"^event_\d{3,}$")
     axis: Axis
     start_index: int = Field(ge=60, le=304)
     end_index: int = Field(ge=60, le=304)
@@ -142,9 +151,16 @@ Event = Annotated[
 ]
 
 
+class EventContribution(StrictModel):
+    event_id: str = Field(pattern=r"^event_\d{3,}$")
+    component: Literal["injected_deformation", "observation_artifact"]
+    values_mm: list[AxisVector]
+
+
 class CaseTruth(StrictModel):
-    schema_version: Literal["event-truth-v5"] = "event-truth-v5"
+    schema_version: Literal["event-truth-v6"] = "event-truth-v6"
     case_id: str
+    scenario_type: ScenarioType | None = None
     normal_background_mm: list[AxisVector]
     measurement_noise_mm: list[AxisVector]
     injected_deformation_mm: list[AxisVector]
@@ -153,24 +169,62 @@ class CaseTruth(StrictModel):
     semiannual_phase_rad: AxisVector
     component_seeds: ComponentSeeds
     event_seeds: EventSeeds | None = None
-    events: list[Event] = Field(default_factory=list, max_length=1)
+    events: list[Event] = Field(default_factory=list)
+    event_contributions: list[EventContribution] = Field(default_factory=list)
+
+    @model_validator(mode="after")
+    def validate_event_links(self):
+        event_ids = [event.event_id for event in self.events]
+        if len(event_ids) != len(set(event_ids)):
+            raise ValueError("event IDs must be unique")
+        if event_ids != [part.event_id for part in self.event_contributions]:
+            raise ValueError("each event requires one ordered contribution")
+        for event, part in zip(self.events, self.event_contributions):
+            if event.source != part.component:
+                raise ValueError("event contribution source mismatch")
+        return self
 
 
 class CaseSummary(StrictModel):
     case_id: str
     case_seed: int
-    case_type: CaseType
-    event_count: int = Field(ge=0, le=1)
+    case_type: GenerationType
+    event_count: int = Field(ge=0)
 
 
 class DatasetManifest(StrictModel):
-    schema_version: Literal["event-dataset-v5"] = "event-dataset-v5"
-    generator_version: Literal["event-v5"] = "event-v5"
+    schema_version: Literal["event-dataset-v6"] = "event-dataset-v6"
+    generator_version: Literal["event-v6"] = "event-v6"
     dataset_id: str
     created_at: datetime
     status: Literal["queued", "running", "complete", "failed"]
     request: GenerationRequest
-    type_counts: dict[CaseType, int]
+    type_counts: dict[GenerationType, int]
     generated_cases: int = 0
     cases: list[CaseSummary] = Field(default_factory=list)
     error: str | None = None
+
+
+class PredictedEvent(StrictModel):
+    prediction_id: str
+    type: Literal["spike", "step", "slow_trend", "acceleration", "transient_shift"]
+    axes: list[Axis] = Field(min_length=1)
+    start_index: int = Field(ge=0, le=364)
+    end_index: int = Field(ge=0, le=364)
+    confidence: float | None = Field(default=None, ge=0, le=1)
+    attributes: dict[str, str | int | float | bool] = Field(default_factory=dict)
+
+    @model_validator(mode="after")
+    def validate_bounds(self):
+        if self.end_index < self.start_index:
+            raise ValueError("end_index precedes start_index")
+        if len(self.axes) != len(set(self.axes)):
+            raise ValueError("axes must be unique")
+        return self
+
+
+class DetectionResult(StrictModel):
+    case_id: str
+    method: str
+    status: Literal["success", "failed"]
+    events: list[PredictedEvent] = Field(default_factory=list)

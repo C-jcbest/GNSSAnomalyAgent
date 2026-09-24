@@ -23,7 +23,9 @@ import DocsPage from "./DocsPage";
 type Triple = [number, number, number];
 type Status = "queued" | "running" | "complete" | "failed";
 type CaseType = "normal" | "spike" | "step" | "slow_trend" | "acceleration" | "transient_shift";
-type GenerationType = CaseType | "all";
+type ScenarioType = "multi_spike" | "change_with_local" | "temporary_with_local" | "longterm_with_local" | "longterm_with_change" | "complex_multiaxis";
+type GenerationType = CaseType | ScenarioType | "all" | "all_scenarios";
+type CaseKind = CaseType | ScenarioType;
 type Axis = "N" | "E" | "U";
 type EventTruth = {
   event_id: string;
@@ -42,7 +44,16 @@ const caseTypeLabels: Record<CaseType, string> = {
   acceleration: "Acceleration", transient_shift: "Transient Shift",
 };
 const caseTypes = Object.keys(caseTypeLabels) as CaseType[];
-const generationTypeLabels: Record<GenerationType, string> = { all: "全部类型", ...caseTypeLabels };
+const scenarioLabels: Record<ScenarioType, string> = {
+  multi_spike: "S1 多 Spike", change_with_local: "S2 Step + 局部",
+  temporary_with_local: "S3 短时 + 局部", longterm_with_local: "S4 长期 + 局部",
+  longterm_with_change: "S5 长期 + 变化点", complex_multiaxis: "S6 跨轴综合",
+};
+const scenarioTypes = Object.keys(scenarioLabels) as ScenarioType[];
+const kindLabels: Record<CaseKind, string> = { ...caseTypeLabels, ...scenarioLabels };
+const generationTypeLabels: Record<GenerationType, string> = {
+  all: "P2 全部类型", all_scenarios: "P3 全部场景", ...kindLabels,
+};
 type ComponentKey = "background" | "noise" | "deformation" | "artifact" | "observed";
 const componentLabels: Record<ComponentKey, string> = {
   background: "正常背景", noise: "测量噪声", deformation: "注入形变",
@@ -67,12 +78,12 @@ type Manifest = {
   status: Status;
   generator_version: string;
   request: { seed: number; count: number; case_type: GenerationType };
-  type_counts: Partial<Record<CaseType, number>>;
+  type_counts: Partial<Record<CaseKind, number>>;
   generated_cases: number;
   cases: {
     case_id: string;
     case_seed: number;
-    case_type: CaseType;
+    case_type: CaseKind;
     event_count: number;
   }[];
   error: string | null;
@@ -87,7 +98,9 @@ type CaseInput = {
   spatial_offset_mm: number[];
 };
 type CaseTruth = {
+  scenario_type: ScenarioType | null;
   events: EventTruth[];
+  event_contributions: { event_id: string; component: "injected_deformation" | "observation_artifact"; values_mm: Triple[] }[];
   normal_background_mm: Triple[];
   measurement_noise_mm: Triple[];
   injected_deformation_mm: Triple[];
@@ -143,7 +156,7 @@ export default function App() {
   const [caseTruth, setCaseTruth] = useState<CaseTruth | null>(null);
   const [seed, setSeed] = useState("20260923");
   const [count, setCount] = useState("20");
-  const [caseType, setCaseType] = useState<GenerationType>("all");
+  const [caseType, setCaseType] = useState<GenerationType>("all_scenarios");
   const [submitting, setSubmitting] = useState(false);
   const [error, setError] = useState("");
   const [page, setPage] = useState<"datasets" | "runs" | "docs">("datasets");
@@ -156,6 +169,9 @@ export default function App() {
   });
   const [componentAxis, setComponentAxis] = useState<0 | 1 | 2>(0);
   const [showTruth, setShowTruth] = useState(false);
+  const [selectedEventId, setSelectedEventId] = useState<string | null>(null);
+  const [eventAxisFilter, setEventAxisFilter] = useState<Axis | "all">("all");
+  const [eventFamilyFilter, setEventFamilyFilter] = useState<"all" | "spike" | "step" | "longterm" | "transient">("all");
   const [truthVisible, setTruthVisible] = useState(true);
   const [truthLoading, setTruthLoading] = useState(false);
   const [componentsVisible, setComponentsVisible] = useState<Record<ComponentKey, boolean>>({
@@ -163,7 +179,7 @@ export default function App() {
   });
   const [dateTarget, setDateTarget] = useState("");
   const [query, setQuery] = useState("");
-  const [expandedGroups, setExpandedGroups] = useState<Partial<Record<CaseType, boolean>>>({});
+  const [expandedGroups, setExpandedGroups] = useState<Partial<Record<CaseKind, boolean>>>({});
   const chartRef = useRef<ReactECharts>(null);
   const dateInputRef = useRef<HTMLInputElement>(null);
 
@@ -186,6 +202,7 @@ export default function App() {
     setCaseId(null);
     setCaseInput(null);
     setCaseTruth(null);
+    setSelectedEventId(null);
     setTruthVisible(true);
     setView("observed");
     setExpandedGroups({});
@@ -234,6 +251,9 @@ export default function App() {
     let disposed = false;
     setCaseInput(null);
     setCaseTruth(null);
+    setSelectedEventId(null);
+    setEventAxisFilter("all");
+    setEventFamilyFilter("all");
     setTruthVisible(true);
     setView("observed");
     api<CaseInput>(`/api/datasets/${selectedId}/cases/${caseId}`)
@@ -275,7 +295,7 @@ export default function App() {
     [detail, query],
   );
   const groupedCases = useMemo(
-    () => caseTypes.map((type) => ({
+    () => ([...caseTypes, ...scenarioTypes] as CaseKind[]).map((type) => ({
       type,
       cases: filteredCases.filter((item) => item.case_type === type),
     })).filter((group) => group.cases.length > 0),
@@ -290,6 +310,13 @@ export default function App() {
       setExpandedGroups((current) => ({ ...current, [selectedCaseType]: true }));
     }
   }, [selectedId, selectedCaseType]);
+
+  const selectedEvent = caseTruth?.events.find((event) => event.event_id === selectedEventId);
+  const filteredEvents = caseTruth?.events.filter((event) =>
+    (eventAxisFilter === "all" || event.axis === eventAxisFilter) &&
+    (eventFamilyFilter === "all" || event.type === eventFamilyFilter ||
+      (eventFamilyFilter === "longterm" && (event.type === "slow_trend" || event.type === "acceleration")) ||
+      (eventFamilyFilter === "transient" && event.type === "transient_shift"))) ?? [];
 
   const chartOption = useMemo<EChartsOption | null>(() => {
     if (!caseInput || (view === "components" && !caseTruth)) return null;
@@ -349,7 +376,7 @@ export default function App() {
       };
       return {
         ...base,
-        series: (Object.keys(componentLabels) as ComponentKey[])
+        series: [ ...(Object.keys(componentLabels) as ComponentKey[])
           .filter((key) => componentsVisible[key])
           .map((key) => ({
             name: `${axis} ${componentLabels[key]}`,
@@ -358,7 +385,12 @@ export default function App() {
             lineStyle: { width: key === "observed" ? 2.2 : 1.6, color: componentColors[key] },
             itemStyle: { color: componentColors[key] },
             data: componentData[key],
-          })),
+          })), ...(selectedEvent ? [{
+            name: `${selectedEvent.event_id} 独立贡献`, type: "line" as const,
+            showSymbol: false, lineStyle: { width: 2.5, color: "#b24c32" },
+            itemStyle: { color: "#b24c32" },
+            data: caseTruth?.event_contributions.find((part) => part.event_id === selectedEventId)?.values_mm.map((row) => row[componentAxis]) ?? [],
+          }] : []) ],
       };
     }
     const series: LineSeriesOption[] = axisNames
@@ -402,13 +434,13 @@ export default function App() {
           });
         });
     }
-    const event = caseTruth?.events[0];
+    const event = selectedEvent;
     if (event && series.length > 0) {
       if (event.start_index === event.end_index) {
         series[0].markLine = {
           silent: true,
           symbol: "none",
-          label: { formatter: caseTypeLabels[event.type], color: "#8a4b32" },
+          label: { show: false },
           lineStyle: { color: "#c5754f", type: "dashed", width: 1.5 },
           data: [{ xAxis: event.start_date }],
         };
@@ -422,7 +454,7 @@ export default function App() {
       }
     }
     return { ...base, series };
-  }, [caseInput, caseTruth, view, visible, showTruth, componentAxis, componentsVisible]);
+  }, [caseInput, caseTruth, view, visible, showTruth, componentAxis, componentsVisible, selectedEventId]);
 
   async function createDataset(event: React.FormEvent) {
     event.preventDefault();
@@ -435,9 +467,9 @@ export default function App() {
       !Number.isInteger(parsedCount) ||
       parsedCount < 1 ||
       parsedCount > 5000 ||
-      (caseType === "all" && parsedCount < 6)
+      ((caseType === "all" || caseType === "all_scenarios") && parsedCount < 6)
     ) {
-      setError(caseType === "all" ? "全部类型至少需要 6 例；Seed 范围为 0～4294967295，案例数量最多 5000。" : "Seed 范围为 0～4294967295，案例数量为 1～5000。");
+      setError(caseType === "all" || caseType === "all_scenarios" ? "混合批次至少需要 6 例；Seed 范围为 0～4294967295，案例数量最多 5000。" : "Seed 范围为 0～4294967295，案例数量为 1～5000。");
       return;
     }
     setSubmitting(true);
@@ -498,7 +530,7 @@ export default function App() {
           </span>
           <div>
             <strong>GNSS LAB</strong>
-            <small>模拟实验台 / P2</small>
+            <small>模拟实验台 / P3</small>
           </div>
         </div>
         <nav className="main-nav" aria-label="主导航">
@@ -596,12 +628,12 @@ export default function App() {
           <>
             <section className="page-heading">
               <div>
-                <p className="eyebrow">SYNTHETIC DATA / SINGLE-EVENT P2</p>
+                <p className="eyebrow">SYNTHETIC DATA / EVENT COMPOSITION P3</p>
                 <h1>日坐标模拟数据</h1>
                 <p className="subtitle">固定参考坐标 · 365 日完整年度</p>
               </div>
               <div className="heading-badge">
-                <span className="badge-dot" /> P2 单事件生成
+                <span className="badge-dot" /> P3 多事件组合
               </div>
             </section>
 
@@ -612,14 +644,14 @@ export default function App() {
                 </span>
                 <div>
                   <h2 id="create-title">生成数据集</h2>
-                  <p>固定背景 + 单轴事件 · 每例最多 1 个事件</p>
+                  <p>固定背景与事件形态 · 六种多事件场景</p>
                 </div>
               </div>
               <form onSubmit={createDataset} className="create-form">
                 <label>
                   案例类型
                   <select value={caseType} onChange={(event) => setCaseType(event.target.value as GenerationType)}>
-                    {(["all", ...caseTypes] as GenerationType[]).map((type) => (
+                    {(["all_scenarios", ...scenarioTypes, "all", ...caseTypes] as GenerationType[]).map((type) => (
                       <option key={type} value={type}>{generationTypeLabels[type]}</option>
                     ))}
                   </select>
@@ -639,7 +671,7 @@ export default function App() {
                   案例数
                   <input
                     type="number"
-                    min={caseType === "all" ? "6" : "1"}
+                    min={caseType === "all" || caseType === "all_scenarios" ? "6" : "1"}
                     max="5000"
                     step="1"
                     value={count}
@@ -660,11 +692,12 @@ export default function App() {
                 </button>
               </form>
               {caseType === "all" && <p className="mix-note">正常 25% · 五类异常各 15% · 余数由 Seed 确定</p>}
+              {caseType === "all_scenarios" && <p className="mix-note">六种 P3 场景均衡分配 · 每例 2～6 个事件</p>}
             </section>
 
             <section className="fixed-protocol" aria-label="固定生成参数">
               <div className="fixed-protocol-heading">
-                <span>LOCKED PROTOCOL / EVENT-V5</span>
+                <span>LOCKED PROTOCOL / EVENT-V6</span>
                 <strong>固定生成参数</strong>
               </div>
               <dl>
@@ -674,7 +707,7 @@ export default function App() {
                 <div><dt>Semiannual · N/E/U</dt><dd>0.25 / 0.25 / 0.5 mm</dd></div>
                 <div><dt>White noise · N/E/U</dt><dd>0.5 / 0.5 / 1.0 mm</dd></div>
               </dl>
-              <p>背景、噪声与事件参数固定；选择“全部类型”可在一个批次中生成六类单事件/正常案例。</p>
+              <p>背景、噪声与事件幅值固定；P3 按场景模板组合，P2 单事件入口保留用于对照。</p>
             </section>
 
             {!detail ? (
@@ -702,8 +735,8 @@ export default function App() {
                   </span>
                 </section>
                 <div className="type-counts" aria-label="计划类型数量">
-                  {caseTypes.filter((type) => detail.type_counts[type]).map((type) => (
-                    <span key={type}>{caseTypeLabels[type]} <strong>{detail.type_counts[type]}</strong></span>
+                  {([...caseTypes, ...scenarioTypes] as CaseKind[]).filter((type) => detail.type_counts[type]).map((type) => (
+                    <span key={type}>{kindLabels[type]} <strong>{detail.type_counts[type]}</strong></span>
                   ))}
                 </div>
                 <div className="stats-row">
@@ -780,7 +813,7 @@ export default function App() {
                         return <div className="case-group" key={type}>
                           <button className="case-group-toggle" aria-expanded={expanded}
                             onClick={() => setExpandedGroups((current) => ({ ...current, [type]: !expanded }))}>
-                            <span>{caseTypeLabels[type]} <small>{cases.length}</small></span>
+                            <span>{kindLabels[type]} <small>{cases.length}</small></span>
                             <ChevronDown size={16} className={expanded ? "expanded" : ""} />
                           </button>
                           {expanded && cases.map((item) => (
@@ -812,7 +845,7 @@ export default function App() {
                         <h2>{caseId || "等待案例"}</h2>
                       </div>
                       <div className="case-tag">
-                        <Check size={14} /> {selectedCaseType ? caseTypeLabels[selectedCaseType] : "等待案例"}
+                        <Check size={14} /> {selectedCaseType ? kindLabels[selectedCaseType] : "等待案例"}
                       </div>
                     </div>
                     {caseInput && <div className="truth-access">
@@ -967,32 +1000,41 @@ export default function App() {
                         </div>
                         <div className="events-line">
                           <span>
-                            <Filter size={15} /> 异常标注
+                            <Filter size={15} /> 事件时间线 {caseTruth?.scenario_type && `· ${scenarioLabels[caseTruth.scenario_type]}`}
                           </span>
                           <strong>{!caseTruth ? truthVisible ? "读取中" : "标注已隐藏" : caseTruth.events.length === 0 ? "无注入事件" : `${caseTruth.events.length} 个事件`}</strong>
                         </div>
-                        {caseTruth?.events.map((event) => (
-                          <details className="event-truth" key={event.event_id}>
-                            <summary>
-                              <span>{caseTypeLabels[event.type]} · {event.axis}</span>
-                              <span className="event-track">
-                                <i className={event.start_index === event.end_index ? "event-dot" : "event-band"}
-                                  style={{ left: `${event.start_index / 364 * 100}%`, width: event.start_index === event.end_index ? undefined : `${(event.end_index - event.start_index + 1) / 365 * 100}%` }} />
-                              </span>
-                              <span>Day {event.start_index + 1}{event.end_index > event.start_index ? `–${event.end_index + 1}` : ""}</span>
-                            </summary>
+                        {caseTruth && caseTruth.events.length > 0 && <>
+                          <div className="timeline-filters" aria-label="事件筛选">
+                            <div className="segmented" role="group" aria-label="按轴筛选">
+                              {(["all", ...axisNames] as const).map((axis) => <button key={axis} className={eventAxisFilter === axis ? "active" : ""} onClick={() => { setEventAxisFilter(axis); setSelectedEventId(null); }}>{axis === "all" ? "全部轴" : axis}</button>)}
+                            </div>
+                            <div className="segmented" role="group" aria-label="按事件族筛选">
+                              {([ ["all", "全部"], ["spike", "Spike"], ["step", "Step"], ["longterm", "长期"], ["transient", "短时"] ] as const).map(([value, label]) => <button key={value} className={eventFamilyFilter === value ? "active" : ""} onClick={() => { setEventFamilyFilter(value); setSelectedEventId(null); }}>{label}</button>)}
+                            </div>
+                          </div>
+                          <div className="event-timeline">
+                            {filteredEvents.map((event) => <button key={event.event_id} className={`timeline-row ${selectedEventId === event.event_id ? "active" : ""} ${selectedEventId && selectedEventId !== event.event_id ? "dimmed" : ""}`} onClick={() => {
+                              setSelectedEventId(selectedEventId === event.event_id ? null : event.event_id);
+                              setComponentAxis(axisNames.indexOf(event.axis) as 0 | 1 | 2);
+                            }} aria-pressed={selectedEventId === event.event_id}>
+                              <span className="timeline-label"><b>{event.event_id}</b> {caseTypeLabels[event.type]} · {event.axis}</span>
+                              <span className="event-track"><i className={event.start_index === event.end_index ? "event-dot" : "event-band"} style={{ left: `${event.start_index / 364 * 100}%`, width: event.start_index === event.end_index ? undefined : `${(event.end_index - event.start_index + 1) / 365 * 100}%` }} /></span>
+                              <span className="timeline-days">{event.start_index + 1}{event.end_index > event.start_index ? `–${event.end_index + 1}` : ""}</span>
+                            </button>)}
+                            {filteredEvents.length === 0 && <p className="list-empty">当前筛选下没有事件</p>}
+                          </div>
+                          {selectedEvent && <div className="event-inspector">
+                            <div className="inspector-heading"><strong>{selectedEvent.event_id} · {caseTypeLabels[selectedEvent.type]} · {selectedEvent.axis}</strong><button onClick={() => setView("components")}>查看独立贡献</button></div>
                             <dl>
-                              <div><dt>类型 / 轴</dt><dd>{caseTypeLabels[event.type]} / {event.axis}</dd></div>
-                              <div><dt>开始</dt><dd>Day {event.start_index + 1} · {event.start_date}</dd></div>
-                              <div><dt>结束</dt><dd>Day {event.end_index + 1} · {event.end_date}</dd></div>
-                              <div><dt>持续 / 保留偏移</dt><dd>{event.end_index - event.start_index + 1} 日 / {event.persistent ? "是" : "否"}</dd></div>
-                              <div><dt>注入来源</dt><dd>{event.source === "injected_deformation" ? "注入形变" : "观测伪差"}</dd></div>
-                              {Object.entries(event.parameters).map(([key, value]) => (
-                                <div key={key}><dt>{parameterLabels[key] || key}</dt><dd>{parameterLabel(key, value)}</dd></div>
-                              ))}
+                              <div><dt>开始</dt><dd>Day {selectedEvent.start_index + 1} · {selectedEvent.start_date}</dd></div>
+                              <div><dt>结束</dt><dd>Day {selectedEvent.end_index + 1} · {selectedEvent.end_date}</dd></div>
+                              <div><dt>持续 / 保留偏移</dt><dd>{selectedEvent.end_index - selectedEvent.start_index + 1} 日 / {selectedEvent.persistent ? "是" : "否"}</dd></div>
+                              <div><dt>注入来源</dt><dd>{selectedEvent.source === "injected_deformation" ? "注入形变" : "观测伪差"}</dd></div>
+                              {Object.entries(selectedEvent.parameters).map(([key, value]) => <div key={key}><dt>{parameterLabels[key] || key}</dt><dd>{parameterLabel(key, value)}</dd></div>)}
                             </dl>
-                          </details>
-                        ))}
+                          </div>}
+                        </>}
                         {caseTruth && <details className="seed-details">
                           <summary>生成相位与成分 seed（仅用于核对真值）</summary>
                           <div>

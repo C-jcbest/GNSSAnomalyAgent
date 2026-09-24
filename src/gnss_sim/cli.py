@@ -14,12 +14,14 @@ from gnss_sim.storage import DatasetStore
 def main() -> None:
     parser = argparse.ArgumentParser(prog="gnss-sim", description="Synthetic daily GNSS lab")
     commands = parser.add_subparsers(dest="command", required=True)
-    generate = commands.add_parser("generate", help="Generate single-event P2 cases")
+    generate = commands.add_parser("generate", help="Generate P2 events or P3 scenarios")
     generate.add_argument("--seed", type=int, default=20260923)
     generate.add_argument("--count", type=int, default=20)
     generate.add_argument(
         "--case-type",
-        choices=("all", "normal", "spike", "step", "slow_trend", "acceleration", "transient_shift"),
+        choices=("all", "all_scenarios", "normal", "spike", "step", "slow_trend", "acceleration", "transient_shift",
+                 "multi_spike", "change_with_local", "temporary_with_local", "longterm_with_local",
+                 "longterm_with_change", "complex_multiaxis"),
         default="all",
     )
     generate.add_argument("--data-dir", type=Path)

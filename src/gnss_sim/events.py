@@ -1,4 +1,4 @@
-"""Pure, single-axis P2 event profiles. Indices are zero-based and inclusive."""
+"""Pure, single-axis event profiles. Indices are zero-based and inclusive."""
 
 from __future__ import annotations
 

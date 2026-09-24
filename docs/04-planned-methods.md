@@ -1,12 +1,12 @@
-# P2 单事件生成与后续检测草案
+# P2 事件与 P3 场景协议
 
-> 版本：2026-09-24 · **P2 的五种单轴单事件生成规则沿用至 `event-v5`。** 本篇从“多事件与多标签真值”开始的 P3～P9 内容仍是草案；生成正确性不能当成检测性能结论。
+> 版本：2026-09-24 · `event-v6` 沿用 P2 的五种事件公式与幅值，新增 P3 多事件场景。P4 及检测方法仍是草案；生成正确性不是检测性能结论。
 
 ## P2 的目标与边界
 
 P2 每例选择 `normal` 或五种异常之一。异常例恰好一个事件、一个轴；正常例没有事件。没有多事件、跨轴注入、缺测、难度矩阵、检测器、模型调用或 Agent。索引 $t,s,e$ 从 **0** 开始，区间含两端；`Day 1` 对应索引 0。
 
-在 `event-v5` 的固定正常背景和噪声上，逐元素生成
+在 `event-v6` 的固定正常背景和噪声上，P2 逐元素生成
 
 $$
 O_{t,c}=P_{0,c}+B_{t,c}+\epsilon_{t,c}+D^{\mathrm{def}}_{t,c}+A^{\mathrm{art}}_{t,c},
@@ -35,7 +35,7 @@ P2 的事件起点满足 $s\ge60$、终点满足 $e\le304$，即至少保留前�
 
 ## 事件真值与随机数
 
-真值 `events` 使用严格的类型联合，每例长度为 0 或 1。事件统一含 `event_id`、`type`、`source`、`axis`、起止索引/日期和 `persistent`；每类 `parameters` 有各自的类型约束。`event_001` 是 P2 唯一事件 ID。日期必须与 2025 年索引一致。
+真值 `events` 使用严格的类型联合；P2 正常例长度为 0，单事件例长度为 1。事件统一含 `event_id`、`type`、`source`、`axis`、起止索引/日期和 `persistent`；每类 `parameters` 有各自的类型约束。日期必须与 2025 年索引一致。
 
 `case_seed` 的 annual 相位、semiannual 相位和白噪声三路 seed 与旧 P1 派生方式相同。事件另用 `SeedSequence([case_seed, 0x45564E54])` 派生 `position`、`shape`、`sign` 子 seed，记录在真值中。相同 `case_seed` 的 normal/五种事件版本共享**完全相同**的背景与噪声；只有事件贡献改变。`shape` 子流选择轴，幅值直接取本节冻结的绝对 mm 参数；起点从满足安全区和事件时长的所有整数位置等概率抽取。
 
@@ -43,16 +43,39 @@ P2 只验证生成器：逐元素等式、独立数组、边界与日期、事�
 
 一次 `case_type=all` 请求可把正常与五类异常放入同一批次；每个案例的生成公式和单事件约束不变。混合比例正常 25%、五类异常各 15%，仅便于在工作台逐类核查，不作为 P4 Pilot 分层或方法性能评价的抽样协议。具体余数与顺序见[数据契约](03-data-and-reproducibility.md)。
 
-## 多事件与多标签真值
+## P3 多事件场景
 
-P3 计划组合已验证的纯事件贡献：$D^{\mathrm{def}}=\sum_j d^{(j)}$、$A^{\mathrm{art}}=\sum_k a^{(k)}$，再在 P4 构造按日、轴、类型的指示张量。令 $K$ 为类型集合，
+P3 不改变背景、噪声或上表的事件函数和绝对毫米幅值，只将已验证的贡献相加：
+
+$$
+O_{t,c}=P_{0,c}+B_{t,c}+\epsilon_{t,c}
++\sum_{j\in\mathrm{deformation}}d^{(j)}_{t,c}
++\sum_{k\in\mathrm{artifact}}a^{(k)}_{t,c}.
+$$
+
+P3 案例由以下模板加独立事件随机流生成，不从五种类型等概率逐个抽样。每例有 2～6 个事件；Slow Trend 和 Acceleration 合计最多一个，Step 最多两个，Transient Shift 最多两个，Spike 最多四个。所有事件仍在索引 60～304 内；多个 Spike 起点至少相隔 7 日，多个 Step 至少相隔 45 日，Transient Shift 互不重叠。局部事件可以落在长期事件区间。S6 至少涉及两个轴，其他模板允许同轴或跨轴。
+
+| 场景 | 组成 |
+| --- | --- |
+| S1 `multi_spike` | 2～4 Spike |
+| S2 `change_with_local` | 1～2 Step + 1～3 Spike |
+| S3 `temporary_with_local` | 1～2 Transient Shift + 1～3 Spike |
+| S4 `longterm_with_local` | 一个 Slow Trend 或 Acceleration + 1～3 Spike；至少一个 Spike 在长期活动区间 |
+| S5 `longterm_with_change` | 一个长期事件 + 1～2 Step + 1～2 Spike；至少一个 Spike 在长期活动区间 |
+| S6 `complex_multiaxis` | 一个长期事件 + 1～2 Step + 1～2 Transient Shift + 0～1 Spike；首个 Transient 在长期活动区间 |
+
+`scenario_type` 只在 `truth.json` 中。每个事件保持独立 typed truth，按 `start_index`、同日起点时按 Slow Trend、Acceleration、Step、Transient Shift、Spike 的固定优先级排序，再编号 `event_001` 等。`event_contributions` 按同样顺序保存每个事件的 365×3 数组和注入分量；聚合数组必须分别等于对应事件贡献之和。相同 case seed 的 normal、P2、P3 变体有完全相同的相位、背景和测量噪声。研究人员网页可按轴和事件族筛选时间线、点选事件查看独立贡献；该带真值交互图不作为视觉模型输入。
+
+`DetectionResult` 仅定义未来结果契约：`case_id`、`method`、`status` 和不限长度的预测 `events`。预测项含形态类型、轴列表、起止索引、可选置信度及属性；目前没有检测器或结果。P3 的 54 例均衡场景检查只验生成器与页面，不是 Pilot 或统计性能实验。
+
+P4 再构造按日、轴、类型的指示张量。令 $K$ 为类型集合，
 
 $$
 Y_{t,c,k}=\mathbf 1\big[\text{日期 }t\text{ 在分量 }c\text{ 上属于类型 }k\text{ 的事件}\big],
 \qquad Y\in\{0,1\}^{365\times3\times |K|}.
 $$
 
-因此一次趋势中的尖峰可以同时拥有 Slow Trend 与 Spike 标签；趋势后期再加速也能同时拥有 Slow Trend 与 Acceleration 标签。届时需要明确活动区间与残余偏移的评价语义，避免把已稳定的偏移误称为持续运动；是否保存逐日状态由评价需求决定。缺测条件不属于 P2。
+因此一次趋势中的尖峰可以同时拥有 Slow Trend 与 Spike 标签。P3 不组合 Slow Trend 与 Acceleration；未来若研究阶段转换，应另立模型。P4 需明确活动区间与残余偏移的评价语义，避免把已稳定的偏移误称为持续运动；是否保存逐日状态由评价需求决定。缺测尚未实现。
 
 ## 数值与视觉方法如何比较
 

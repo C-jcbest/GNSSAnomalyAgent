@@ -20,7 +20,7 @@ def test_generation_progress_persistence_and_truth_isolation(tmp_path):
                 break
             time.sleep(0.02)
         assert manifest["status"] == "complete"
-        assert manifest["generator_version"] == "event-v5"
+        assert manifest["generator_version"] == "event-v6"
         assert manifest["generated_cases"] == 2
         assert manifest["type_counts"] == {"slow_trend": 2}
         assert all(item["case_type"] == "slow_trend" for item in manifest["cases"])
@@ -56,7 +56,7 @@ def test_same_request_reproduces_persisted_cases(tmp_path):
     first = store.generate_sync(request)
     second = store.generate_sync(request)
     assert first.dataset_id != second.dataset_id
-    assert first.generator_version == second.generator_version == "event-v5"
+    assert first.generator_version == second.generator_version == "event-v6"
     for case_id in ("case_0001", "case_0002"):
         assert store.get_case_input(first.dataset_id, case_id) == store.get_case_input(
             second.dataset_id, case_id
@@ -136,6 +136,9 @@ def test_old_api_payload_and_dataset_are_not_supported(tmp_path):
     old_batch = store.root / "event-v4-20250101-000000-12345678"
     old_batch.mkdir()
     old_batch.joinpath("manifest.json").write_text('{"schema_version":"event-dataset-v4"}')
+    prior_batch = store.root / "event-v5-20250101-000000-12345678"
+    prior_batch.mkdir()
+    prior_batch.joinpath("manifest.json").write_text('{"schema_version":"event-dataset-v5"}')
     with TestClient(create_app(store.root, tmp_path / "no-built-web")) as client:
         assert client.post("/api/datasets", json={"seed": 42, "count": 1}).status_code == 422
         assert client.post("/api/datasets", json={"seed": 42, "count": 1, "case_type": "normal", "preset": "normal-p1"}).status_code == 422
@@ -146,6 +149,7 @@ def test_old_api_payload_and_dataset_are_not_supported(tmp_path):
         assert client.get(f"/api/datasets/{former.name}").status_code == 404
         assert client.get(f"/api/datasets/{superseded.name}").status_code == 404
         assert client.get(f"/api/datasets/{old_batch.name}").status_code == 404
+        assert client.get(f"/api/datasets/{prior_batch.name}").status_code == 404
 
 
 def test_learning_documents_are_served_from_canonical_markdown(tmp_path):

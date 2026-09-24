@@ -13,32 +13,35 @@ import numpy as np
 from gnss_sim.generator import GENERATOR_VERSION, generate_case
 from gnss_sim.schemas import (
     CASE_TYPES,
+    SCENARIO_TYPES,
     CaseInput,
     CaseSummary,
     CaseTruth,
-    CaseType,
     DatasetManifest,
     GenerationRequest,
+    GenerationType,
 )
 
-DATASET_ID_PATTERN = re.compile(r"^event-v5-\d{8}-\d{6}-[a-f0-9]{8}$")
+DATASET_ID_PATTERN = re.compile(r"^event-v6-\d{8}-\d{6}-[a-f0-9]{8}$")
 MIX_PERCENTAGES = (25, 15, 15, 15, 15, 15)
 
 
-def allocate_case_types(request: GenerationRequest) -> list[CaseType]:
-    if request.case_type != "all":
+def allocate_case_types(request: GenerationRequest) -> list[GenerationType]:
+    if request.case_type not in ("all", "all_scenarios"):
         return [request.case_type] * request.count
 
     rng = np.random.default_rng(np.random.SeedSequence([request.seed, 0x4D4958]))
-    quotas = np.asarray(MIX_PERCENTAGES) * request.count / 100
+    types = SCENARIO_TYPES if request.case_type == "all_scenarios" else CASE_TYPES
+    percentages = (100 / len(types),) * len(types) if request.case_type == "all_scenarios" else MIX_PERCENTAGES
+    quotas = np.asarray(percentages) * request.count / 100
     counts = np.maximum(1, np.floor(quotas).astype(int))
     tie_rank = {int(value): rank for rank, value in enumerate(rng.permutation(len(CASE_TYPES)))}
     remainder_order = sorted(
-        range(len(CASE_TYPES)), key=lambda index: (-(quotas[index] - counts[index]), tie_rank[index])
+        range(len(types)), key=lambda index: (-(quotas[index] - counts[index]), tie_rank[index])
     )
     for index in remainder_order[: request.count - int(counts.sum())]:
         counts[index] += 1
-    assigned = [case_type for case_type, count in zip(CASE_TYPES, counts) for _ in range(count)]
+    assigned = [case_type for case_type, count in zip(types, counts) for _ in range(count)]
     rng.shuffle(assigned)
     return assigned
 
@@ -122,7 +125,7 @@ class DatasetStore:
             created_at=created_at,
             status="queued",
             request=request,
-            type_counts={kind: assigned_types.count(kind) for kind in CASE_TYPES if kind in assigned_types},
+            type_counts={kind: assigned_types.count(kind) for kind in (*CASE_TYPES, *SCENARIO_TYPES) if kind in assigned_types},
         )
         _write_json(self._dataset_dir(dataset_id) / "manifest.json", manifest.model_dump(mode="json"))
         return manifest

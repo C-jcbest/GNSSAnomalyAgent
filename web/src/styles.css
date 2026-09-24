@@ -701,18 +701,28 @@ select:focus-visible {
 .component-toggles label { display: inline-flex; align-items: center; gap: 4px; color: #5e7166; font-size: 10px; cursor: pointer; }
 .component-toggles input { accent-color: #147d72; width: 12px; height: 12px; margin: 0; }
 .component-toggles label span { width: 7px; height: 7px; border-radius: 50%; }
-.event-truth { margin: 0 22px 15px; border: 1px solid #e8d6c8; background: #fffaf6; color: #6e5749; font-size: 11px; }
-.event-truth summary { display: flex; align-items: center; gap: 12px; padding: 11px 13px; cursor: pointer; list-style: none; }
-.event-truth summary::-webkit-details-marker { display: none; }
-.event-truth summary > span:first-child { min-width: 132px; font-weight: 700; color: #8b4f32; }
-.event-truth summary > span:last-child { font-family: "IBM Plex Mono", monospace; white-space: nowrap; }
 .event-track { position: relative; flex: 1; height: 14px; border-radius: 10px; background: linear-gradient(90deg, #f2eae2 0%, #ede8df 100%); }
 .event-band { position: absolute; top: 3px; height: 8px; background: #c5764f; border-radius: 3px; }
 .event-dot { position: absolute; top: 1px; width: 12px; height: 12px; background: #c5764f; border-radius: 50%; transform: translateX(-50%); }
-.event-truth dl { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 0 18px; margin: 0; padding: 2px 14px 12px; border-top: 1px solid #efdfd4; }
-.event-truth dl > div { display: flex; justify-content: space-between; gap: 8px; padding: 7px 0; border-bottom: 1px solid #f0e5dd; }
-.event-truth dt { color: #957b6c; }
-.event-truth dd { margin: 0; color: #684331; font-family: "IBM Plex Mono", monospace; text-align: right; overflow-wrap: anywhere; }
+.timeline-filters { display: flex; flex-wrap: wrap; gap: 8px; padding: 12px 22px; }
+.timeline-filters .segmented { display: flex; flex-wrap: wrap; max-width: 100%; }
+.event-timeline { margin: 0 22px 16px; border-top: 1px solid #e4e9e5; border-bottom: 1px solid #e4e9e5; }
+.timeline-row { display: grid; grid-template-columns: minmax(125px, 175px) minmax(80px, 1fr) 58px; align-items: center; gap: 12px; width: 100%; min-height: 42px; padding: 6px 10px; border: 0; border-bottom: 1px solid #eef1ee; background: transparent; color: #364842; text-align: left; cursor: pointer; transition: opacity .15s, background .15s; }
+.timeline-row:last-child { border-bottom: 0; }
+.timeline-row:hover, .timeline-row.active { background: #e9f2ef; }
+.timeline-row.dimmed { opacity: .42; }
+.timeline-label { overflow: hidden; white-space: nowrap; text-overflow: ellipsis; font-size: 12px; }
+.timeline-label b { margin-right: 5px; color: #63736c; font-family: "IBM Plex Mono", monospace; font-size: 10px; }
+.timeline-days { font-family: "IBM Plex Mono", monospace; font-size: 11px; text-align: right; }
+.event-timeline .event-track { width: 100%; background: #edf1ec; }
+.event-inspector { margin: 0 22px 18px; padding: 12px 14px; border-left: 3px solid #b24c32; background: #f9f5f1; }
+.inspector-heading { display: flex; justify-content: space-between; gap: 12px; align-items: center; margin-bottom: 8px; }
+.inspector-heading strong { font-size: 12px; }
+.inspector-heading button { border: 0; background: none; color: #a34c32; font-size: 12px; cursor: pointer; }
+.event-inspector dl { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 6px 18px; margin: 0; }
+.event-inspector dl div { display: flex; justify-content: space-between; gap: 8px; font-size: 11px; }
+.event-inspector dt { color: #82796f; }
+.event-inspector dd { margin: 0; font-family: "IBM Plex Mono", monospace; text-align: right; overflow-wrap: anywhere; }
 .segmented {
   display: inline-flex;
   border: 1px solid #dae5dd;
@@ -1101,11 +1111,14 @@ select:focus-visible {
     gap: 10px;
   }
   .truth-access { padding: 10px 12px; }
-  .event-truth { margin: 0 12px 12px; }
-  .event-truth summary { flex-wrap: wrap; }
-  .event-truth summary > span:first-child { min-width: 0; }
-  .event-track { min-width: 100%; order: 3; }
-  .event-truth dl { grid-template-columns: 1fr; }
+  .event-track { min-width: 100%; }
+  .timeline-filters { padding: 10px 12px; }
+  .event-timeline, .event-inspector { margin-left: 12px; margin-right: 12px; }
+  .timeline-row { grid-template-columns: minmax(0, 1fr) auto; gap: 6px; padding: 8px 6px; }
+  .timeline-label { font-size: 11px; }
+  .timeline-row .event-track { grid-column: 1 / -1; grid-row: 2; }
+  .timeline-days { grid-column: 2; grid-row: 1; }
+  .event-inspector dl { grid-template-columns: 1fr; }
   .axis-toggles {
     gap: 9px;
   }

@@ -4,10 +4,18 @@ from datetime import date, timedelta
 
 import numpy as np
 
-from gnss_sim import events
-from gnss_sim.schemas import CaseInput, CaseTruth, CaseType, ComponentSeeds, EventSeeds
+from gnss_sim import events, scenarios
+from gnss_sim.schemas import (
+    SCENARIO_TYPES,
+    CaseInput,
+    CaseTruth,
+    ComponentSeeds,
+    EventContribution,
+    EventSeeds,
+    GenerationType,
+)
 
-GENERATOR_VERSION = "event-v5"
+GENERATOR_VERSION = "event-v6"
 START_DATE = date(2025, 1, 1)
 DAYS = 365
 PERIOD_DAYS = 365.25
@@ -15,13 +23,7 @@ REFERENCE_COORDINATE_MM = (0.0, 0.0, 0.0)
 ANNUAL_AMPLITUDE_MM = (1.0, 1.0, 1.5)
 SEMIANNUAL_AMPLITUDE_MM = (0.25, 0.25, 0.5)
 WHITE_NOISE_SIGMA_MM = (0.5, 0.5, 1.0)
-EVENT_MAGNITUDE_MM = {
-    "spike": (4.5, 4.5, 9.0),
-    "step": (3.75, 3.75, 7.5),
-    "slow_trend": (4.5, 4.5, 9.0),
-    "acceleration": (4.5, 4.5, 9.0),
-    "transient_shift": (3.75, 3.75, 7.5),
-}
+EVENT_MAGNITUDE_MM = scenarios.MAGNITUDES_MM
 
 
 def derive_component_seeds(case_seed: int) -> ComponentSeeds:
@@ -40,7 +42,7 @@ def derive_event_seeds(case_seed: int) -> EventSeeds:
 
 
 def generate_case(
-    case_id: str, case_seed: int, case_type: CaseType
+    case_id: str, case_seed: int, case_type: GenerationType
 ) -> tuple[CaseInput, CaseTruth]:
     seeds = derive_component_seeds(case_seed)
     annual_phase = np.random.default_rng(seeds.annual_phase).uniform(0, 2 * np.pi, size=3)
@@ -63,35 +65,25 @@ def generate_case(
     injected_deformation_mm = np.zeros((DAYS, 3), dtype=float)
     observation_artifact_mm = np.zeros((DAYS, 3), dtype=float)
     event_seeds = None
-    event_truth = []
+    placed = []
     if case_type != "normal":
         event_seeds = derive_event_seeds(case_seed)
-        shape_rng = np.random.default_rng(event_seeds.shape)
-        axis = ("N", "E", "U")[int(shape_rng.integers(0, 3))]
-        magnitude = EVENT_MAGNITUDE_MM[case_type][("N", "E", "U").index(axis)]
-        duration = (
-            events.TREND_DURATION
-            if case_type in ("slow_trend", "acceleration")
-            else events.TRANSIENT_DURATION if case_type == "transient_shift" else 1
-        )
-        last_start = events.SAFE_END - duration + 1
-        start = int(np.random.default_rng(event_seeds.position).integers(events.SAFE_START, last_start + 1))
-        sign = 1 if np.random.default_rng(event_seeds.sign).integers(0, 2) else -1
-        if case_type == "spike":
-            contribution, event = events.make_spike(dates, axis, start, sign * magnitude)
-        elif case_type == "step":
-            contribution, event = events.make_step(dates, axis, start, sign * magnitude)
-        elif case_type == "slow_trend":
-            contribution, event = events.make_slow_trend(dates, axis, start, sign * magnitude)
-        elif case_type == "acceleration":
-            contribution, event = events.make_acceleration(dates, axis, start, sign * magnitude)
+        if case_type in SCENARIO_TYPES:
+            placed = scenarios.generate_scenario_events(dates, case_type, event_seeds)
         else:
-            contribution, event = events.make_transient_shift(dates, axis, start, sign * magnitude)
-        event_truth = [event]
+            shape_rng = np.random.default_rng(event_seeds.shape)
+            axis = ("N", "E", "U")[int(shape_rng.integers(0, 3))]
+            magnitude = EVENT_MAGNITUDE_MM[case_type][("N", "E", "U").index(axis)]
+            duration = scenarios.DURATIONS[case_type]
+            last_start = events.SAFE_END - duration + 1
+            start = int(np.random.default_rng(event_seeds.position).integers(events.SAFE_START, last_start + 1))
+            sign = 1 if np.random.default_rng(event_seeds.sign).integers(0, 2) else -1
+            placed = [scenarios.MAKERS[case_type](dates, axis, start, sign * magnitude)]
+    for contribution, event in placed:
         if event.source == "injected_deformation":
-            injected_deformation_mm = contribution
+            injected_deformation_mm += contribution
         else:
-            observation_artifact_mm = contribution
+            observation_artifact_mm += contribution
     observed_coordinate_mm = (
         reference_coordinate_mm
         + normal_background_mm
@@ -112,6 +104,7 @@ def generate_case(
     )
     truth = CaseTruth(
         case_id=case_id,
+        scenario_type=case_type if case_type in SCENARIO_TYPES else None,
         normal_background_mm=normal_background_mm.tolist(),
         measurement_noise_mm=measurement_noise_mm.tolist(),
         injected_deformation_mm=injected_deformation_mm.tolist(),
@@ -120,7 +113,12 @@ def generate_case(
         semiannual_phase_rad=tuple(semiannual_phase),
         component_seeds=seeds,
         event_seeds=event_seeds,
-        events=event_truth,
+        events=[event for _, event in placed],
+        event_contributions=[EventContribution(
+            event_id=event.event_id,
+            component=event.source,
+            values_mm=contribution.tolist(),
+        ) for contribution, event in placed],
     )
     return case_input, truth
 
