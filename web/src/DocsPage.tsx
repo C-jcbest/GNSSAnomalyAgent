@@ -20,6 +20,9 @@ function headingsFrom(markdown: string): Heading[] {
 }
 
 async function readResponse(response: Response): Promise<string> {
+  if (response.status === 404) {
+    throw new Error("文档接口返回 404。请重启本地后端服务，再刷新页面。");
+  }
   if (!response.ok) throw new Error(`文档读取失败 (${response.status})`);
   return response.text();
 }
