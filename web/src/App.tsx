@@ -639,14 +639,14 @@ export default function App() {
 
             <section className="fixed-protocol" aria-label="固定生成参数">
               <div className="fixed-protocol-heading">
-                <span>LOCKED PROTOCOL / EVENT-V2</span>
+                <span>LOCKED PROTOCOL / EVENT-V3</span>
                 <strong>固定生成参数</strong>
               </div>
               <dl>
                 <div><dt>长度</dt><dd>365 日</dd></div>
                 <div><dt>起始日期</dt><dd>2025-01-01</dd></div>
-                <div><dt>Annual · N/E/U</dt><dd>1.5 / 1.5 / 2.0 mm</dd></div>
-                <div><dt>Semiannual · N/E/U</dt><dd>0.5 / 0.5 / 1.0 mm</dd></div>
+                <div><dt>Annual · N/E/U</dt><dd>1.0 / 1.0 / 1.5 mm</dd></div>
+                <div><dt>Semiannual · N/E/U</dt><dd>0.25 / 0.25 / 0.5 mm</dd></div>
                 <div><dt>White noise · N/E/U</dt><dd>0.75 / 0.75 / 1.5 mm</dd></div>
               </dl>
               <p>固定参数是本实验的受控基准设定；异常形态和幅值由 P2 协议固定。只选择案例类型、seed 与案例数。</p>

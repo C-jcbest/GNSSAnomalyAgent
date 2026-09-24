@@ -29,8 +29,8 @@ def test_same_seed_reproduces_365_daily_observations():
 
 
 def test_frozen_controlled_background_parameters():
-    assert ANNUAL_AMPLITUDE_MM == (1.5, 1.5, 2.0)
-    assert SEMIANNUAL_AMPLITUDE_MM == (0.5, 0.5, 1.0)
+    assert ANNUAL_AMPLITUDE_MM == (1.0, 1.0, 1.5)
+    assert SEMIANNUAL_AMPLITUDE_MM == (0.25, 0.25, 0.5)
     assert WHITE_NOISE_SIGMA_MM == (0.75, 0.75, 1.5)
 
 

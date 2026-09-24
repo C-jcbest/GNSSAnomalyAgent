@@ -12,7 +12,7 @@ import numpy as np
 from gnss_sim.generator import GENERATOR_VERSION, generate_case
 from gnss_sim.schemas import CaseInput, CaseSummary, CaseTruth, DatasetManifest, GenerationRequest
 
-DATASET_ID_PATTERN = re.compile(r"^event-v2-\d{8}-\d{6}-[a-f0-9]{8}$")
+DATASET_ID_PATTERN = re.compile(r"^event-v3-\d{8}-\d{6}-[a-f0-9]{8}$")
 
 
 def _write_json(path: Path, value: dict) -> None:

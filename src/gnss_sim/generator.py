@@ -7,13 +7,13 @@ import numpy as np
 from gnss_sim import events
 from gnss_sim.schemas import CaseInput, CaseTruth, CaseType, ComponentSeeds, EventSeeds
 
-GENERATOR_VERSION = "event-v2"
+GENERATOR_VERSION = "event-v3"
 START_DATE = date(2025, 1, 1)
 DAYS = 365
 PERIOD_DAYS = 365.25
 REFERENCE_COORDINATE_MM = (0.0, 0.0, 0.0)
-ANNUAL_AMPLITUDE_MM = (1.5, 1.5, 2.0)
-SEMIANNUAL_AMPLITUDE_MM = (0.5, 0.5, 1.0)
+ANNUAL_AMPLITUDE_MM = (1.0, 1.0, 1.5)
+SEMIANNUAL_AMPLITUDE_MM = (0.25, 0.25, 0.5)
 WHITE_NOISE_SIGMA_MM = (0.75, 0.75, 1.5)
 
 

@@ -1,6 +1,6 @@
 # 研究问题与实验路线
 
-> 版本：2026-09-24 · 当前统一生成协议为 `event-v2`，含正常背景和 P2 单事件。P3～P9 是研究路线；目前没有检测器或性能结果。
+> 版本：2026-09-24 · 当前统一生成协议为 `event-v3`，含正常背景和 P2 单事件。P3～P9 是研究路线；目前没有检测器或性能结果。
 
 ## 摘要
 
@@ -25,7 +25,7 @@ P1 的职责是提供一个**固定、可复现的正常背景**，不是研究�
 
 ## 为什么固定这个背景
 
-GNSS 时间序列研究常把 annual 和 semiannual 项作为周期信号，参见 [Khazraei & Amiri-Simkooei, *Geophysical Journal International*, 2020](https://academic.oup.com/gji/article/224/1/257/5911580)。当前 annual 1.5/1.5/2.0 mm、semiannual 0.5/0.5/1.0 mm 和白噪声标准差 0.75/0.75/1.5 mm（均按 N/E/U）是本实验为异常可辨识性选取的 **controlled benchmark setting**，并非直接照搬该论文的参数表。
+GNSS 时间序列研究常把 annual 和 semiannual 项作为周期信号，参见 [Khazraei & Amiri-Simkooei, *Geophysical Journal International*, 2020](https://academic.oup.com/gji/article/224/1/257/5911580)。当前 annual 1.0/1.0/1.5 mm、semiannual 0.25/0.25/0.5 mm 和白噪声标准差 0.75/0.75/1.5 mm（均按 N/E/U）是本实验为异常可辨识性选取的 **controlled benchmark setting**，并非直接照搬该论文的参数表。
 
 引用用于说明**周期项结构**，这组固定数值不代表任何具体现场的精度。参考研究还包含线性速度、offset 与 flicker noise；当前基准不采用它们。尤其不加入 secular deformation，避免正常组先含有与后续 Slow Trend 混淆的线性变化。若后续要研究相关噪声或不同时间窗，应建立单独 robustness 条件并留出可比较的版本。
 
@@ -33,8 +33,8 @@ GNSS 时间序列研究常把 annual 和 semiannual 项作为周期信号，参�
 
 | 阶段 | 目标 | 状态 |
 | --- | --- | --- |
-| P1 | 365 日固定正常背景、输入与真值隔离、可复现生成及交互浏览 | 已纳入 `event-v2` |
-| P2 | 五种单轴单事件注入、typed truth、独立贡献与交互核查 | 已实现；`event-v2` |
+| P1 | 365 日固定正常背景、输入与真值隔离、可复现生成及交互浏览 | 已纳入 `event-v3` |
+| P2 | 五种单轴单事件注入、typed truth、独立贡献与交互核查 | 已实现；`event-v3` |
 | P3 | 多事件叠加、趋势中的尖峰/加速、跨轴组合 | 未实现 |
 | P4 | 300 例 Pilot、多标签真值、手工预测校验评价器 | 未实现 |
 | P5～P7 | 数值、独立视觉、固定组合与统一批量评价 | 未实现 |

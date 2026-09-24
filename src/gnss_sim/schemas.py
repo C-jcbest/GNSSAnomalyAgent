@@ -23,7 +23,7 @@ class GenerationRequest(StrictModel):
 
 
 class CaseInput(StrictModel):
-    schema_version: Literal["event-input-v2"] = "event-input-v2"
+    schema_version: Literal["event-input-v3"] = "event-input-v3"
     case_id: str
     dates: list[date]
     reference_coordinate_mm: AxisVector
@@ -135,7 +135,7 @@ Event = Annotated[
 
 
 class CaseTruth(StrictModel):
-    schema_version: Literal["event-truth-v2"] = "event-truth-v2"
+    schema_version: Literal["event-truth-v3"] = "event-truth-v3"
     case_id: str
     normal_background_mm: list[AxisVector]
     measurement_noise_mm: list[AxisVector]
@@ -155,8 +155,8 @@ class CaseSummary(StrictModel):
 
 
 class DatasetManifest(StrictModel):
-    schema_version: Literal["event-dataset-v2"] = "event-dataset-v2"
-    generator_version: Literal["event-v2"] = "event-v2"
+    schema_version: Literal["event-dataset-v3"] = "event-dataset-v3"
+    generator_version: Literal["event-v3"] = "event-v3"
     dataset_id: str
     created_at: datetime
     status: Literal["queued", "running", "complete", "failed"]
