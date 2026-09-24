@@ -23,7 +23,7 @@ class GenerationRequest(StrictModel):
 
 
 class CaseInput(StrictModel):
-    schema_version: Literal["event-input-v3"] = "event-input-v3"
+    schema_version: Literal["event-input-v4"] = "event-input-v4"
     case_id: str
     dates: list[date]
     reference_coordinate_mm: AxisVector
@@ -69,7 +69,6 @@ class EventBase(StrictModel):
 class SpikeParameters(StrictModel):
     duration_days: Literal[1]
     amplitude_mm: float
-    sigma_multiplier: Literal[6]
 
 
 class StepParameters(StrictModel):
@@ -135,7 +134,7 @@ Event = Annotated[
 
 
 class CaseTruth(StrictModel):
-    schema_version: Literal["event-truth-v3"] = "event-truth-v3"
+    schema_version: Literal["event-truth-v4"] = "event-truth-v4"
     case_id: str
     normal_background_mm: list[AxisVector]
     measurement_noise_mm: list[AxisVector]
@@ -155,8 +154,8 @@ class CaseSummary(StrictModel):
 
 
 class DatasetManifest(StrictModel):
-    schema_version: Literal["event-dataset-v3"] = "event-dataset-v3"
-    generator_version: Literal["event-v3"] = "event-v3"
+    schema_version: Literal["event-dataset-v4"] = "event-dataset-v4"
+    generator_version: Literal["event-v4"] = "event-v4"
     dataset_id: str
     created_at: datetime
     status: Literal["queued", "running", "complete", "failed"]

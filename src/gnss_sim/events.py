@@ -47,7 +47,7 @@ def make_spike(dates: list[date], axis: Axis, start: int, amplitude_mm: float):
     contribution[start, AXIS_INDEX[axis]] = amplitude_mm
     return contribution, SpikeEvent(
         **fields, type="spike", source="observation_artifact", persistent=False,
-        parameters=SpikeParameters(duration_days=1, amplitude_mm=amplitude_mm, sigma_multiplier=6),
+        parameters=SpikeParameters(duration_days=1, amplitude_mm=amplitude_mm),
     )
 
 

@@ -7,14 +7,21 @@ import numpy as np
 from gnss_sim import events
 from gnss_sim.schemas import CaseInput, CaseTruth, CaseType, ComponentSeeds, EventSeeds
 
-GENERATOR_VERSION = "event-v3"
+GENERATOR_VERSION = "event-v4"
 START_DATE = date(2025, 1, 1)
 DAYS = 365
 PERIOD_DAYS = 365.25
 REFERENCE_COORDINATE_MM = (0.0, 0.0, 0.0)
 ANNUAL_AMPLITUDE_MM = (1.0, 1.0, 1.5)
 SEMIANNUAL_AMPLITUDE_MM = (0.25, 0.25, 0.5)
-WHITE_NOISE_SIGMA_MM = (0.75, 0.75, 1.5)
+WHITE_NOISE_SIGMA_MM = (0.5, 0.5, 1.0)
+EVENT_MAGNITUDE_MM = {
+    "spike": (4.5, 4.5, 9.0),
+    "step": (3.75, 3.75, 7.5),
+    "slow_trend": (4.5, 4.5, 9.0),
+    "acceleration": (4.5, 4.5, 9.0),
+    "transient_shift": (3.75, 3.75, 7.5),
+}
 
 
 def derive_component_seeds(case_seed: int) -> ComponentSeeds:
@@ -61,7 +68,7 @@ def generate_case(
         event_seeds = derive_event_seeds(case_seed)
         shape_rng = np.random.default_rng(event_seeds.shape)
         axis = ("N", "E", "U")[int(shape_rng.integers(0, 3))]
-        sigma = WHITE_NOISE_SIGMA_MM[("N", "E", "U").index(axis)]
+        magnitude = EVENT_MAGNITUDE_MM[case_type][("N", "E", "U").index(axis)]
         duration = (
             events.TREND_DURATION
             if case_type in ("slow_trend", "acceleration")
@@ -71,15 +78,15 @@ def generate_case(
         start = int(np.random.default_rng(event_seeds.position).integers(events.SAFE_START, last_start + 1))
         sign = 1 if np.random.default_rng(event_seeds.sign).integers(0, 2) else -1
         if case_type == "spike":
-            contribution, event = events.make_spike(dates, axis, start, sign * 6 * sigma)
+            contribution, event = events.make_spike(dates, axis, start, sign * magnitude)
         elif case_type == "step":
-            contribution, event = events.make_step(dates, axis, start, sign * 5 * sigma)
+            contribution, event = events.make_step(dates, axis, start, sign * magnitude)
         elif case_type == "slow_trend":
-            contribution, event = events.make_slow_trend(dates, axis, start, sign * 6 * sigma)
+            contribution, event = events.make_slow_trend(dates, axis, start, sign * magnitude)
         elif case_type == "acceleration":
-            contribution, event = events.make_acceleration(dates, axis, start, sign * 6 * sigma)
+            contribution, event = events.make_acceleration(dates, axis, start, sign * magnitude)
         else:
-            contribution, event = events.make_transient_shift(dates, axis, start, sign * 5 * sigma)
+            contribution, event = events.make_transient_shift(dates, axis, start, sign * magnitude)
         event_truth = [event]
         if event.source == "injected_deformation":
             injected_deformation_mm = contribution

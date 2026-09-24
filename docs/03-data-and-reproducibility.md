@@ -1,13 +1,13 @@
 # 数据契约与可复现流程
 
-> 版本：2026-09-24 · 本篇描述 P2 `event-v3` 的磁盘文件、seed 树和本地 API。旧数据契约不在新接口中兼容或迁移。
+> 版本：2026-09-24 · 本篇描述 P2 `event-v4` 的磁盘文件、seed 树和本地 API。旧数据契约不在新接口中兼容或迁移。
 
 ## 输入与真值分层
 
 每次请求创建一个数据集目录：
 
 ```text
-data/generated/event-v3-<timestamp>-<suffix>/
+data/generated/event-v4-<timestamp>-<suffix>/
 ├── manifest.json
 └── cases/
     └── case_0001/
@@ -15,7 +15,7 @@ data/generated/event-v3-<timestamp>-<suffix>/
         └── truth.json
 ```
 
-`manifest.json` 记录 `generator_version="event-v3"`、请求的 seed/数量/案例类型、各案例 seed 和事件数、进度与状态。`input.json` 是未来检测器允许读取的唯一案例文件。`truth.json` 是模拟器教学与事后评价用的独立文件；正式检测不得读取其背景、噪声、事件或相位。所有生成数据默认被 `.gitignore` 排除。
+`manifest.json` 记录 `generator_version="event-v4"`、请求的 seed/数量/案例类型、各案例 seed 和事件数、进度与状态。`input.json` 是未来检测器允许读取的唯一案例文件。`truth.json` 是模拟器教学与事后评价用的独立文件；正式检测不得读取其背景、噪声、事件或相位。所有生成数据默认被 `.gitignore` 排除。
 
 ## 字段与数学含义
 
@@ -65,7 +65,7 @@ dataset_seed
 
 `case_type` 必填，可选 `normal`、`spike`、`step`、`slow_trend`、`acceleration`、`transient_shift`。`count` 的 1～5000 是防止误操作的**工程上限**，不是 Pilot 科学参数。旧两字段请求及 `preset`、`config`、`days`、AR 参数等字段返回 422；没有迁移层。服务先记录 `queued` manifest，后台逐例生成并更新进度，最终状态为 `complete` 或 `failed`。
 
-- `GET /api/datasets`：列出当前 `event-v3` 批次。
+- `GET /api/datasets`：列出当前 `event-v4` 批次。
 - `GET /api/datasets/{id}`：读取进度、版本及案例清单。
 - `GET /api/datasets/{id}/cases/{case_id}`：读取检测输入。
 - `GET /api/datasets/{id}/cases/{case_id}/truth`：仅供教学与评价读取真值。
@@ -74,4 +74,4 @@ CLI 使用同一逻辑：`uv run gnss-sim generate --seed 42 --count 20 --case-t
 
 ## 版本与旧产物
 
-旧 `sim-*`、`normal-v1-*`、`event-v1-*` 与 `event-v2-*` 目录不进入新批次列表，也不能经新 API 读取。新目录名与 manifest 明示 `event-v3`；数据格式分别为 `event-input-v3`、`event-truth-v3`、`event-dataset-v3`。自动测试覆盖日期、五种事件贡献、逐元素组合、H/R3D、配对背景、真值隔离及旧请求拒绝；工程自检不等于检测性能结论。
+旧 `sim-*`、`normal-v1-*` 及 `event-v1-*` 至 `event-v3-*` 目录不进入新批次列表，也不能经新 API 读取。新目录名与 manifest 明示 `event-v4`；数据格式分别为 `event-input-v4`、`event-truth-v4`、`event-dataset-v4`。自动测试覆盖日期、五种事件贡献、逐元素组合、H/R3D、配对背景、真值隔离及旧请求拒绝；工程自检不等于检测性能结论。

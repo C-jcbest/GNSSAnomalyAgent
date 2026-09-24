@@ -33,7 +33,7 @@ type EventTruth = {
   start_date: string;
   end_date: string;
   persistent: boolean;
-  parameters: { amplitude_mm?: number; final_offset_mm?: number; duration_days?: number; slope_mm_per_day?: number; sigma_multiplier?: number };
+  parameters: { amplitude_mm?: number; final_offset_mm?: number; duration_days?: number; slope_mm_per_day?: number };
 };
 const caseTypeLabels: Record<CaseType, string> = {
   normal: "正常", spike: "Spike", step: "Step", slow_trend: "Slow Trend",
@@ -51,11 +51,9 @@ const componentColors: Record<ComponentKey, string> = {
 const parameterLabels: Record<string, string> = {
   amplitude_mm: "带符号幅值", final_offset_mm: "最终累计偏移",
   duration_days: "事件时长", slope_mm_per_day: "区间斜率",
-  sigma_multiplier: "噪声标准差倍数",
 };
 function parameterLabel(key: string, value: number) {
   if (key === "duration_days") return `${value} 日`;
-  if (key === "sigma_multiplier") return `${value}σ`;
   if (key === "slope_mm_per_day") return `${value.toFixed(4)} mm/日`;
   return `${value.toFixed(2)} mm`;
 }
@@ -639,7 +637,7 @@ export default function App() {
 
             <section className="fixed-protocol" aria-label="固定生成参数">
               <div className="fixed-protocol-heading">
-                <span>LOCKED PROTOCOL / EVENT-V3</span>
+                <span>LOCKED PROTOCOL / EVENT-V4</span>
                 <strong>固定生成参数</strong>
               </div>
               <dl>
@@ -647,7 +645,7 @@ export default function App() {
                 <div><dt>起始日期</dt><dd>2025-01-01</dd></div>
                 <div><dt>Annual · N/E/U</dt><dd>1.0 / 1.0 / 1.5 mm</dd></div>
                 <div><dt>Semiannual · N/E/U</dt><dd>0.25 / 0.25 / 0.5 mm</dd></div>
-                <div><dt>White noise · N/E/U</dt><dd>0.75 / 0.75 / 1.5 mm</dd></div>
+                <div><dt>White noise · N/E/U</dt><dd>0.5 / 0.5 / 1.0 mm</dd></div>
               </dl>
               <p>固定参数是本实验的受控基准设定；异常形态和幅值由 P2 协议固定。只选择案例类型、seed 与案例数。</p>
             </section>

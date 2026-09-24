@@ -13,8 +13,8 @@ from gnss_sim.events import (
 )
 from gnss_sim.generator import (
     DAYS,
+    EVENT_MAGNITUDE_MM,
     START_DATE,
-    WHITE_NOISE_SIGMA_MM,
     derive_event_seeds,
     generate_case,
     generate_normal_case,
@@ -23,6 +23,27 @@ from gnss_sim.schemas import CaseTruth
 
 DATES = [START_DATE + timedelta(days=i) for i in range(DAYS)]
 TYPES = ("spike", "step", "slow_trend", "acceleration", "transient_shift")
+
+
+def test_event_magnitudes_are_frozen_in_mm():
+    assert EVENT_MAGNITUDE_MM == {
+        "spike": (4.5, 4.5, 9.0),
+        "step": (3.75, 3.75, 7.5),
+        "slow_trend": (4.5, 4.5, 9.0),
+        "acceleration": (4.5, 4.5, 9.0),
+        "transient_shift": (3.75, 3.75, 7.5),
+    }
+
+
+@pytest.mark.parametrize("case_type", TYPES)
+def test_event_amplitude_does_not_depend_on_noise_sigma(monkeypatch, case_type):
+    _, original = generate_case("case_0001", 42, case_type)
+    monkeypatch.setattr("gnss_sim.generator.WHITE_NOISE_SIGMA_MM", (0.1, 0.1, 0.2))
+    _, changed_noise = generate_case("case_0001", 42, case_type)
+    assert changed_noise.events == original.events
+    assert changed_noise.injected_deformation_mm == original.injected_deformation_mm
+    assert changed_noise.observation_artifact_mm == original.observation_artifact_mm
+    assert changed_noise.measurement_noise_mm != original.measurement_noise_mm
 
 
 @pytest.mark.parametrize("axis", ("N", "E", "U"))
@@ -170,21 +191,22 @@ def test_all_15_generated_type_axis_combinations(case_type, axis):
         truth.observation_artifact_mm
     )
     profile = contribution[:, column]
-    sigma = WHITE_NOISE_SIGMA_MM[column]
+    magnitude = EVENT_MAGNITUDE_MM[case_type][column]
     assert np.count_nonzero(profile) > 0
     if case_type == "spike":
         assert np.count_nonzero(profile) == 1
-        assert abs(profile[event.start_index]) == 6 * sigma
+        assert abs(profile[event.start_index]) == magnitude
+        assert "sigma_multiplier" not in event.parameters.model_dump()
         assert event.parameters.duration_days == 1
     elif case_type == "step":
-        assert abs(profile[-1]) == 5 * sigma
+        assert abs(profile[-1]) == magnitude
         assert event.parameters.duration_days == 1
         assert np.all(profile[event.start_index:] == profile[-1])
     elif case_type in ("slow_trend", "acceleration"):
-        assert abs(profile[-1]) == 6 * sigma
+        assert abs(profile[-1]) == magnitude
         assert event.end_index - event.start_index + 1 == 90
     else:
-        assert abs(profile[event.start_index]) == 5 * sigma
+        assert abs(profile[event.start_index]) == magnitude
         assert event.parameters.duration_days == 14
         assert np.count_nonzero(profile) == 14
         assert profile[event.end_index + 1] == 0

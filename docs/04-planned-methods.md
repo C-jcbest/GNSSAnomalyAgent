@@ -1,12 +1,12 @@
 # P2 单事件生成与后续检测草案
 
-> 版本：2026-09-24 · **P2 的五种单轴单事件生成规则已实现为 `event-v3`。** 本篇从“多事件与多标签真值”开始的 P3～P9 内容仍是草案；生成正确性不能当成检测性能结论。
+> 版本：2026-09-24 · **P2 的五种单轴单事件生成规则已实现为 `event-v4`。** 本篇从“多事件与多标签真值”开始的 P3～P9 内容仍是草案；生成正确性不能当成检测性能结论。
 
 ## P2 的目标与边界
 
 P2 每例选择 `normal` 或五种异常之一。异常例恰好一个事件、一个轴；正常例没有事件。没有多事件、跨轴注入、缺测、难度矩阵、检测器、模型调用或 Agent。索引 $t,s,e$ 从 **0** 开始，区间含两端；`Day 1` 对应索引 0。
 
-在 `event-v3` 的固定正常背景和噪声上，逐元素生成
+在 `event-v4` 的固定正常背景和噪声上，逐元素生成
 
 $$
 O_{t,c}=P_{0,c}+B_{t,c}+\epsilon_{t,c}+D^{\mathrm{def}}_{t,c}+A^{\mathrm{art}}_{t,c},
@@ -17,17 +17,17 @@ $$
 
 ## 五种已冻结的事件形态
 
-下表仅写事件轴 $c$ 的非零贡献；另外两轴始终为零。$\sigma_N=\sigma_E=0.75$ mm、$\sigma_U=1.5$ mm，正负号由独立 `event_sign_seed` 决定。$s$ 是起点、$e$ 是终点。
+下表仅写事件轴 $c$ 的非零贡献；另外两轴始终为零。正负号由独立 `event_sign_seed` 决定。$s$ 是起点、$e$ 是终点。事件幅值是固定的绝对毫米值，与当前测量噪声标准差 $(0.5,0.5,1.0)$ mm 无换算关系。
 
 | 类型 | 非零贡献 | P2 固定参数 | `end_index` 与偏移语义 |
 | --- | --- | --- | --- |
-| Spike | $A^{\mathrm{art}}_{t,c}=A\mathbf1[t=s]$ | 1 日，$\lvert A\rvert=6\sigma_c$ | $e=s$；下一日恢复，`persistent=false` |
-| Step | $D^{\mathrm{def}}_{t,c}=A\mathbf1[t\ge s]$ | 起变 1 日，$\lvert A\rvert=5\sigma_c$ | $e=s$ 是**变化动作**的终点；此后保留偏移，`persistent=true` |
-| Slow Trend | $D^{\mathrm{def}}_{t,c}=M\,\operatorname{clip}((t-s)/89,0,1)$ | 90 日、带符号最终偏移 $\lvert M\rvert=6\sigma_c$ | $e=s+89$；之后保留 $M$，斜率 $v=M/89$ mm/日 |
-| Acceleration | $D^{\mathrm{def}}_{t,c}=M\,[\operatorname{clip}((t-s)/89,0,1)]^2$ | 同为 90 日、$\lvert M\rvert=6\sigma_c$ | $e=s+89$；独立凸形变，之后保留 $M$ |
-| Transient Shift | $A^{\mathrm{art}}_{t,c}=A\mathbf1[s\le t\le e]$ | 14 日、$\lvert A\rvert=5\sigma_c$ | $e=s+13$；$e+1$ 日严格归零，`persistent=false` |
+| Spike | $A^{\mathrm{art}}_{t,c}=A\mathbf1[t=s]$ | 1 日；$\lvert A\rvert$：N/E 4.5 mm，U 9.0 mm | $e=s$；下一日恢复，`persistent=false` |
+| Step | $D^{\mathrm{def}}_{t,c}=A\mathbf1[t\ge s]$ | 起变 1 日；$\lvert A\rvert$：N/E 3.75 mm，U 7.5 mm | $e=s$ 是**变化动作**的终点；此后保留偏移，`persistent=true` |
+| Slow Trend | $D^{\mathrm{def}}_{t,c}=M\,\operatorname{clip}((t-s)/89,0,1)$ | 90 日；$\lvert M\rvert$：N/E 4.5 mm，U 9.0 mm | $e=s+89$；之后保留 $M$，斜率 $v=M/89$ mm/日 |
+| Acceleration | $D^{\mathrm{def}}_{t,c}=M\,[\operatorname{clip}((t-s)/89,0,1)]^2$ | 90 日；$\lvert M\rvert$：N/E 4.5 mm，U 9.0 mm | $e=s+89$；独立凸形变，之后保留 $M$ |
+| Transient Shift | $A^{\mathrm{art}}_{t,c}=A\mathbf1[s\le t\le e]$ | 14 日；$\lvert A\rvert$：N/E 3.75 mm，U 7.5 mm | $e=s+13$；$e+1$ 日严格归零，`persistent=false` |
 
-`clip(x,0,1)` 将 $x$ 限制在 0 与 1。Slow Trend 与 Acceleration 具有相同的持续时间和最终偏移，唯一差异是区间内的线性与凸形轨迹。这里的 5σ、6σ 是便于核对生成正确性的 canonical 设定，**不是**现场异常强度或典型滑坡速度。Point/range 形态的研究动机可参见 [VisualTimeAnomaly](https://github.com/mllm-ts/VisualTimeAnomaly)；本项目固定幅值是自己的受控 benchmark 设定，未复用其生成代码或宣称现场真实性。
+`clip(x,0,1)` 将 $x$ 限制在 0 与 1。Slow Trend 与 Acceleration 具有相同的持续时间和最终偏移，唯一差异是区间内的线性与凸形轨迹。这些绝对幅值只用于清楚核对生成正确性，**不是**现场异常强度或典型滑坡速度。Point/range 形态的研究动机可参见 [VisualTimeAnomaly](https://github.com/mllm-ts/VisualTimeAnomaly)；本项目固定幅值是自己的受控 benchmark 设定，未复用其生成代码或宣称现场真实性。
 
 对应的绝对幅值为：Spike、Slow Trend 终值和 Acceleration 终值在 N/E 为 4.5 mm、U 为 9.0 mm；Step 与 Transient Shift 在 N/E 为 3.75 mm、U 为 7.5 mm。符号可正可负，Slow Trend 与 Acceleration 的 `final_offset_mm` 保存带符号终值。
 
@@ -37,7 +37,7 @@ P2 的事件起点满足 $s\ge60$、终点满足 $e\le304$，即至少保留前�
 
 真值 `events` 使用严格的类型联合，每例长度为 0 或 1。事件统一含 `event_id`、`type`、`source`、`axis`、起止索引/日期和 `persistent`；每类 `parameters` 有各自的类型约束。`event_001` 是 P2 唯一事件 ID。日期必须与 2025 年索引一致。
 
-`case_seed` 的 annual 相位、semiannual 相位和白噪声三路 seed 与旧 P1 派生方式相同。事件另用 `SeedSequence([case_seed, 0x45564E54])` 派生 `position`、`shape`、`sign` 子 seed，记录在真值中。相同 `case_seed` 的 normal/五种事件版本共享**完全相同**的背景与噪声；只有事件贡献改变。`shape` 子流选择轴，幅值由该轴固定的 $\sigma_c$ 决定；起点从满足安全区和事件时长的所有整数位置等概率抽取。
+`case_seed` 的 annual 相位、semiannual 相位和白噪声三路 seed 与旧 P1 派生方式相同。事件另用 `SeedSequence([case_seed, 0x45564E54])` 派生 `position`、`shape`、`sign` 子 seed，记录在真值中。相同 `case_seed` 的 normal/五种事件版本共享**完全相同**的背景与噪声；只有事件贡献改变。`shape` 子流选择轴，幅值直接取本节冻结的绝对 mm 参数；起点从满足安全区和事件时长的所有整数位置等概率抽取。
 
 P2 只验证生成器：逐元素等式、独立数组、边界与日期、事件类型、配对背景，以及 N/E/U 的 15 种 canonical 组合。尚无检测运行或模型结果。
 

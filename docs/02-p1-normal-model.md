@@ -1,6 +1,6 @@
 # P1 正常序列模型
 
-> 版本：2026-09-24 · 下列正常背景是 `event-v3` 的固定组成部分。365 日、参数和噪声类别全部固定；网页仅选择案例类型、seed 与案例数。
+> 版本：2026-09-24 · 下列正常背景是 `event-v4` 的固定组成部分。365 日、参数和噪声类别全部固定；网页仅选择案例类型、seed 与案例数。
 
 ## 固定坐标与时间网格
 
@@ -31,7 +31,7 @@ Annual/semiannual 周期项结构可参见 [Khazraei & Amiri-Simkooei (2020)](ht
 
 $$
 \epsilon_{t,c}\sim\mathcal N(0,\sigma_c^2),\qquad
-(\sigma_N,\sigma_E,\sigma_U)=(0.75,0.75,1.5)\ \mathrm{mm}.
+(\sigma_N,\sigma_E,\sigma_U)=(0.5,0.5,1.0)\ \mathrm{mm}.
 $$
 
 P1 不含 AR(1)、flicker noise 或其他相关噪声，也没有线性速度。用 $D^{\mathrm{def}}_{t,c}$ 表示注入形变、$A^{\mathrm{art}}_{t,c}$ 表示观测伪差，则 P1 中两者恒为零；P2 才定义具体事件及贡献。
@@ -64,6 +64,6 @@ $$
 | --- | ---: | ---: | ---: |
 | Annual 幅值 | 1.0 mm | 1.0 mm | 1.5 mm |
 | Semiannual 幅值 | 0.25 mm | 0.25 mm | 0.5 mm |
-| 白噪声标准差 | 0.75 mm | 0.75 mm | 1.5 mm |
+| 白噪声标准差 | 0.5 mm | 0.5 mm | 1.0 mm |
 
 网页“观测位移”展示 $\Delta_N,\Delta_E,\Delta_U$，可叠加 H 或显示正常背景；“生成成分”按轴展示 $B$ 与 $\epsilon$。背景、相位和 seed 视图只用于理解模拟器，不能馈入未来的检测算法。缩放、日期定位和悬停读数不修改数据。

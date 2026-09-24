@@ -32,14 +32,14 @@ CLI 可直接生成：
 uv run gnss-sim generate --seed 20260923 --count 10 --case-type slow_trend
 ```
 
-`data/generated/` 保存数据集 manifest、`cases/<case_id>/input.json` 与单独的 `truth.json`，默认不入 Git。输入只有日期、固定参考坐标、三轴观测及其确定性派生量；背景、噪声、相位、事件与注入贡献仅在真值文件中。相同主 seed、案例序号、类型与生成器版本产生相同案例内容，批次 ID 和创建时间不要求相同。旧 `normal-v1` 与 `event-v2` 等批次不再由新接口读取。
+`data/generated/` 保存数据集 manifest、`cases/<case_id>/input.json` 与单独的 `truth.json`，默认不入 Git。输入只有日期、固定参考坐标、三轴观测及其确定性派生量；背景、噪声、相位、事件与注入贡献仅在真值文件中。相同主 seed、案例序号、类型与生成器版本产生相同案例内容，批次 ID 和创建时间不要求相同。旧版本批次不再由新接口读取。
 
 ## 已实现口径
 
-- `generator_version = "event-v3"`；固定 2025 年的 365 个连续日观测，参考坐标为 `(0,0,0) mm`。
-- Annual 幅值 N/E/U 为 `1.0/1.0/1.5 mm`，semiannual 为 `0.25/0.25/0.5 mm`，周期分母 `365.25` 日；各轴相位由案例 seed 独立派生。白噪声标准差仍为 `0.75/0.75/1.5 mm`。周期结构参考 GNSS 时间序列文献，这组数值是本实验为异常可辨识性采用的受控 benchmark 设定，不代表现场精度，也不宣称全部来自参考论文。
+- `generator_version = "event-v4"`；固定 2025 年的 365 个连续日观测，参考坐标为 `(0,0,0) mm`。
+- Annual 幅值 N/E/U 为 `1.0/1.0/1.5 mm`，semiannual 为 `0.25/0.25/0.5 mm`，周期分母 `365.25` 日；各轴相位由案例 seed 独立派生。白噪声标准差为 `0.5/0.5/1.0 mm`。周期结构参考 GNSS 时间序列文献，这组数值是本实验为异常可辨识性采用的受控 benchmark 设定，不代表现场精度，也不宣称全部来自参考论文。
 - `observed = P0 + normal_background + measurement_noise`；无 AR(1)、flicker noise 或 secular deformation。H 与 R3D 分别是观测坐标相对 P0 的水平和三维偏移模长，并非累计路程。
-- `case_type` 从 normal 与五类事件中选择；每例最多一个单轴事件。同一 case seed 的不同类型共享完全相同的背景/噪声，事件使用独立 seed。网页点击「显示真值」后才读取事件和生成成分。
+- `case_type` 从 normal 与五类事件中选择；每例最多一个单轴事件。Spike、Slow Trend 终值和 Acceleration 终值的绝对幅值为 N/E 4.5 mm、U 9.0 mm；Step 和 Transient Shift 为 N/E 3.75 mm、U 7.5 mm，不随噪声标准差变化。同一 case seed 的不同类型共享完全相同的背景/噪声，事件使用独立 seed。网页点击「显示真值」后才读取事件和生成成分。
 - `POST /api/datasets` 只接受 `seed`、`count`、`case_type`，不兼容旧两字段请求或旧数据格式。
 
 运行 `uv run pytest` 和 `uv run ruff check .` 验证。关键决定记录在[项目状态](docs/project-status.md)。P3～P9 按阶段另行实施，每阶段验收后暂停。
