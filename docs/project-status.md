@@ -1,6 +1,13 @@
 # 项目状态与关键决定
 
-## 2026-09-24 · P2 噪声与事件幅值解耦（当前 `event-v4`）
+## 2026-09-24 · P2 混合批次与默认标注（当前 `event-v5`）
+
+- 类型：需求变更、状态。一次生成历史现在可包含 normal 与五类单轴单事件案例；`case_type=all` 固定目标比例为正常 25%、各异常 15%，至少 6 例。小批次先保每类 1 例，再按最大余数分配，平局与顺序由独立 dataset seed 命名空间决定。这是工作台检查比例，不是 P4 Pilot 配额；每例的背景、噪声和五种事件公式沿用 `event-v4`。
+- 契约：升为 `event-v5` / `event-*-v5`。manifest 保存计划 `type_counts`，案例摘要保存 `case_type`；前端由摘要按类型折叠，无需为分组读取 truth。研究人员选择案例后默认从独立 truth 接口加载事件标注，可隐藏；正式检测器仍只能读取 input。新 API 不读取旧版本数据，未编写迁移层。具体字段与 seed 规则见[数据契约](03-data-and-reproducibility.md)。
+- 清理：模拟工作树 `data/generated` 中 32 项旧批次与检查产物（约 127 MB）已送入 Windows 回收站，随后重建空目录；该工作树没有独立的 `runs` 或 `artifacts` 目录。清理后重新生成 20 例和网页提交的 6 例 `event-v5` 混合批次，页面生成历史仅显示这两条新批次。
+- 验收：57 项 pytest、Ruff 与前端构建通过。20 例批次为 normal 5、五类事件各 3；6 例批次每类各 1。网页检查了生成、进度、混合历史、按类型折叠、默认 Spike 标线和事件时间线，以及窄屏布局。相同 seed 与案例序号在混合/单类型批次中的背景和噪声逐值一致。进度轮询遇到 Windows 短暂 manifest 文件锁时会重试。本项仅验收数据组织与研究人员界面，不产生检测结果。
+
+## 2026-09-24 · P2 噪声与事件幅值解耦（历史 `event-v4`）
 
 - 类型：纠正、决定。固定 annual 幅值 N/E/U 为 1.0/1.0/1.5 mm、semiannual 为 0.25/0.25/0.5 mm；白噪声标准差由 0.75/0.75/1.5 mm 降至 **0.5/0.5/1.0 mm**。五类事件保留先前的绝对幅值：Spike、Slow Trend 终值、Acceleration 终值为 N/E 4.5 mm、U 9.0 mm；Step、Transient Shift 为 N/E 3.75 mm、U 7.5 mm。未来不得用当前噪声 σ 动态换算事件幅值，或把 `sigma_multiplier` 写入 P2 真值。以上均是受控 benchmark 参数，不代表现场 GNSS 精度。
 - 范围：生成器、typed truth、输入/真值/manifest 版本、网页固定协议、测试及实验文档均升为 `event-v4`；旧数据不迁移、不兼容。365 日日网格、独立相位与事件 seed、五种单轴单事件公式保持不变。正式协议见 [正常背景](02-p1-normal-model.md)、[P2 事件](04-planned-methods.md) 和 [数据契约](03-data-and-reproducibility.md)。

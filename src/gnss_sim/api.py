@@ -21,7 +21,7 @@ DOCUMENTS = (
 def create_app(data_root: Path | None = None, web_root: Path | None = None) -> FastAPI:
     root = data_root or Path(os.environ.get("GNSS_SIM_DATA_DIR", "data/generated"))
     store = DatasetStore(root)
-    app = FastAPI(title="GNSS Simulation Lab", version="0.2.0")
+    app = FastAPI(title="GNSS Simulation Lab", version="0.3.0")
     app.state.store = store
 
     @app.get("/api/docs")

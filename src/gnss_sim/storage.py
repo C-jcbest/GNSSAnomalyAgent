@@ -2,6 +2,7 @@ from __future__ import annotations
 
 import json
 import re
+import time
 from concurrent.futures import ThreadPoolExecutor
 from datetime import datetime, timezone
 from pathlib import Path
@@ -10,9 +11,36 @@ from uuid import uuid4
 import numpy as np
 
 from gnss_sim.generator import GENERATOR_VERSION, generate_case
-from gnss_sim.schemas import CaseInput, CaseSummary, CaseTruth, DatasetManifest, GenerationRequest
+from gnss_sim.schemas import (
+    CASE_TYPES,
+    CaseInput,
+    CaseSummary,
+    CaseTruth,
+    CaseType,
+    DatasetManifest,
+    GenerationRequest,
+)
 
-DATASET_ID_PATTERN = re.compile(r"^event-v4-\d{8}-\d{6}-[a-f0-9]{8}$")
+DATASET_ID_PATTERN = re.compile(r"^event-v5-\d{8}-\d{6}-[a-f0-9]{8}$")
+MIX_PERCENTAGES = (25, 15, 15, 15, 15, 15)
+
+
+def allocate_case_types(request: GenerationRequest) -> list[CaseType]:
+    if request.case_type != "all":
+        return [request.case_type] * request.count
+
+    rng = np.random.default_rng(np.random.SeedSequence([request.seed, 0x4D4958]))
+    quotas = np.asarray(MIX_PERCENTAGES) * request.count / 100
+    counts = np.maximum(1, np.floor(quotas).astype(int))
+    tie_rank = {int(value): rank for rank, value in enumerate(rng.permutation(len(CASE_TYPES)))}
+    remainder_order = sorted(
+        range(len(CASE_TYPES)), key=lambda index: (-(quotas[index] - counts[index]), tie_rank[index])
+    )
+    for index in remainder_order[: request.count - int(counts.sum())]:
+        counts[index] += 1
+    assigned = [case_type for case_type, count in zip(CASE_TYPES, counts) for _ in range(count)]
+    rng.shuffle(assigned)
+    return assigned
 
 
 def _write_json(path: Path, value: dict) -> None:
@@ -25,6 +53,11 @@ def _write_json(path: Path, value: dict) -> None:
 
 
 def _read_json(path: Path) -> dict:
+    for _ in range(4):
+        try:
+            return json.loads(path.read_text(encoding="utf-8"))
+        except PermissionError:
+            time.sleep(0.01)
     return json.loads(path.read_text(encoding="utf-8"))
 
 
@@ -83,11 +116,13 @@ class DatasetStore:
     def _new_manifest(self, request: GenerationRequest) -> DatasetManifest:
         created_at = datetime.now(timezone.utc)
         dataset_id = f"{GENERATOR_VERSION}-{created_at:%Y%m%d-%H%M%S}-{uuid4().hex[:8]}"
+        assigned_types = allocate_case_types(request)
         manifest = DatasetManifest(
             dataset_id=dataset_id,
             created_at=created_at,
             status="queued",
             request=request,
+            type_counts={kind: assigned_types.count(kind) for kind in CASE_TYPES if kind in assigned_types},
         )
         _write_json(self._dataset_dir(dataset_id) / "manifest.json", manifest.model_dump(mode="json"))
         return manifest
@@ -105,19 +140,24 @@ class DatasetStore:
         manifest.status = "running"
         _write_json(path, manifest.model_dump(mode="json"))
         try:
-            for index in range(manifest.request.count):
+            for index, case_type in enumerate(allocate_case_types(manifest.request)):
                 case_id = f"case_{index + 1:04d}"
                 case_seed = int(
                     np.random.SeedSequence([manifest.request.seed, index]).generate_state(
                         1, dtype=np.uint32
                     )[0]
                 )
-                case_input, truth = generate_case(case_id, case_seed, manifest.request.case_type)
+                case_input, truth = generate_case(case_id, case_seed, case_type)
                 case_dir = self._case_dir(manifest.dataset_id, case_id)
                 _write_json(case_dir / "input.json", case_input.model_dump(mode="json"))
                 _write_json(case_dir / "truth.json", truth.model_dump(mode="json"))
                 manifest.cases.append(
-                    CaseSummary(case_id=case_id, case_seed=case_seed, event_count=len(truth.events))
+                    CaseSummary(
+                        case_id=case_id,
+                        case_seed=case_seed,
+                        case_type=case_type,
+                        event_count=len(truth.events),
+                    )
                 )
                 manifest.generated_cases += 1
                 _write_json(path, manifest.model_dump(mode="json"))

@@ -1,13 +1,13 @@
 # 数据契约与可复现流程
 
-> 版本：2026-09-24 · 本篇描述 P2 `event-v4` 的磁盘文件、seed 树和本地 API。旧数据契约不在新接口中兼容或迁移。
+> 版本：2026-09-24 · 本篇描述 P2 `event-v5` 的磁盘文件、seed 树和本地 API。旧数据契约不在新接口中兼容或迁移。
 
 ## 输入与真值分层
 
 每次请求创建一个数据集目录：
 
 ```text
-data/generated/event-v4-<timestamp>-<suffix>/
+data/generated/event-v5-<timestamp>-<suffix>/
 ├── manifest.json
 └── cases/
     └── case_0001/
@@ -15,7 +15,7 @@ data/generated/event-v4-<timestamp>-<suffix>/
         └── truth.json
 ```
 
-`manifest.json` 记录 `generator_version="event-v4"`、请求的 seed/数量/案例类型、各案例 seed 和事件数、进度与状态。`input.json` 是未来检测器允许读取的唯一案例文件。`truth.json` 是模拟器教学与事后评价用的独立文件；正式检测不得读取其背景、噪声、事件或相位。所有生成数据默认被 `.gitignore` 排除。
+`manifest.json` 记录 `generator_version="event-v5"`、请求的 seed/数量/案例类型、计划类型数量 `type_counts`、各案例的 `case_type`/seed/事件数、进度与状态。一个批次可以同时包含六种案例类型，但每个异常案例仍恰好一个单轴事件。`input.json` 是未来检测器允许读取的唯一案例文件。`truth.json` 是模拟器教学与事后评价用的独立文件；正式检测不得读取其背景、噪声、事件或相位。所有生成数据默认被 `.gitignore` 排除。
 
 ## 字段与数学含义
 
@@ -55,23 +55,25 @@ dataset_seed
 
 前三个整数子 seed 保存在 `component_seeds`。事件三路子 seed 由独立的 `SeedSequence([case_seed, 0x45564E54])` 派生并保存在 `event_seeds`。相同案例 seed 的 normal 与任一事件版本，其背景和噪声数组逐值相同。**相同数据集 seed、案例序号、案例类型和 `generator_version`** 产生相同的输入与真值内容。批次 ID、创建时间不同，因此整个 manifest 不逐字相同。
 
+`case_type=all` 时，六类的目标比例依次为正常 25%，Spike、Step、Slow Trend、Acceleration、Transient Shift 各 15%。至少生成 6 例。设总数为 $n$、类型目标比例为 $p_k$，先置 $n_k=\max(1,\lfloor np_k\rfloor)$，再将剩余名额按 $np_k-n_k$ 从大到小分配；余数相同由独立的 `SeedSequence([dataset_seed, 0x4D4958])` 决定先后，最后使用同一独立流打散案例顺序。这个批次分配流不影响各案例的背景、噪声或事件 seed。例如 20 例恰好为正常 5 例、五类异常各 3 例。比例只是 P2 检查工作台的便利设置，不代表自然发生率或 P4 Pilot 配额。
+
 ## API 与生成流程
 
 `POST /api/datasets` 的请求体严格只有三个字段，例如：
 
 ```json
-{"seed":42,"count":20,"case_type":"slow_trend"}
+{"seed":42,"count":20,"case_type":"all"}
 ```
 
-`case_type` 必填，可选 `normal`、`spike`、`step`、`slow_trend`、`acceleration`、`transient_shift`。`count` 的 1～5000 是防止误操作的**工程上限**，不是 Pilot 科学参数。旧两字段请求及 `preset`、`config`、`days`、AR 参数等字段返回 422；没有迁移层。服务先记录 `queued` manifest，后台逐例生成并更新进度，最终状态为 `complete` 或 `failed`。
+`case_type` 必填，可选 `all`、`normal`、`spike`、`step`、`slow_trend`、`acceleration`、`transient_shift`。单类型请求的 `count` 为 1～5000，`all` 为 6～5000；5000 是防误操作的**工程上限**，不是 Pilot 科学参数。旧两字段请求及 `preset`、`config`、`days`、AR 参数等字段返回 422；没有迁移层。服务先记录 `queued` manifest 和计划类型数量，后台逐例生成并更新进度，最终状态为 `complete` 或 `failed`。
 
-- `GET /api/datasets`：列出当前 `event-v4` 批次。
+- `GET /api/datasets`：列出当前 `event-v5` 批次。
 - `GET /api/datasets/{id}`：读取进度、版本及案例清单。
 - `GET /api/datasets/{id}/cases/{case_id}`：读取检测输入。
 - `GET /api/datasets/{id}/cases/{case_id}/truth`：仅供教学与评价读取真值。
 
-CLI 使用同一逻辑：`uv run gnss-sim generate --seed 42 --count 20 --case-type slow_trend`。网页允许选择案例类型、seed 和数量；固定模型参数以只读卡片展示。网页先获取案例 `input.json`；研究人员点击「显示真值」后才请求 `/truth`，事件带和生成成分只在该状态展示。生成过程不访问平台或模型 API。
+CLI 使用同一逻辑：`uv run gnss-sim generate --seed 42 --count 20 --case-type all`。网页允许选择案例类型、seed 和数量；固定模型参数以只读区域展示。左侧每次生成历史对应一个批次，案例按 manifest 中的类型折叠。研究人员选择案例后，网页分别请求观测输入和独立真值，默认展示事件带与标注，可主动隐藏；生成成分只由真值接口提供。此交互图不作为正式视觉模型输入，未来检测器不能持有真值存储。生成过程不访问平台或模型 API。
 
 ## 版本与旧产物
 
-旧 `sim-*`、`normal-v1-*` 及 `event-v1-*` 至 `event-v3-*` 目录不进入新批次列表，也不能经新 API 读取。新目录名与 manifest 明示 `event-v4`；数据格式分别为 `event-input-v4`、`event-truth-v4`、`event-dataset-v4`。自动测试覆盖日期、五种事件贡献、逐元素组合、H/R3D、配对背景、真值隔离及旧请求拒绝；工程自检不等于检测性能结论。
+旧 `sim-*`、`normal-v1-*` 及 `event-v1-*` 至 `event-v4-*` 目录已从本地实验工作树清理，也不由新 API 读取。新目录名与 manifest 明示 `event-v5`；数据格式分别为 `event-input-v5`、`event-truth-v5`、`event-dataset-v5`。自动测试覆盖日期、五种事件贡献、逐元素组合、H/R3D、配对背景、混合分配、真值隔离及旧请求拒绝；工程自检不等于检测性能结论。

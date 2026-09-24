@@ -7,6 +7,7 @@ import {
   BookOpenText,
   CalendarDays,
   Check,
+  ChevronDown,
   ChevronRight,
   Crosshair,
   Database,
@@ -22,6 +23,7 @@ import DocsPage from "./DocsPage";
 type Triple = [number, number, number];
 type Status = "queued" | "running" | "complete" | "failed";
 type CaseType = "normal" | "spike" | "step" | "slow_trend" | "acceleration" | "transient_shift";
+type GenerationType = CaseType | "all";
 type Axis = "N" | "E" | "U";
 type EventTruth = {
   event_id: string;
@@ -39,6 +41,8 @@ const caseTypeLabels: Record<CaseType, string> = {
   normal: "正常", spike: "Spike", step: "Step", slow_trend: "Slow Trend",
   acceleration: "Acceleration", transient_shift: "Transient Shift",
 };
+const caseTypes = Object.keys(caseTypeLabels) as CaseType[];
+const generationTypeLabels: Record<GenerationType, string> = { all: "全部类型", ...caseTypeLabels };
 type ComponentKey = "background" | "noise" | "deformation" | "artifact" | "observed";
 const componentLabels: Record<ComponentKey, string> = {
   background: "正常背景", noise: "测量噪声", deformation: "注入形变",
@@ -62,11 +66,13 @@ type Manifest = {
   created_at: string;
   status: Status;
   generator_version: string;
-  request: { seed: number; count: number; case_type: CaseType };
+  request: { seed: number; count: number; case_type: GenerationType };
+  type_counts: Partial<Record<CaseType, number>>;
   generated_cases: number;
   cases: {
     case_id: string;
     case_seed: number;
+    case_type: CaseType;
     event_count: number;
   }[];
   error: string | null;
@@ -136,8 +142,8 @@ export default function App() {
   const [caseInput, setCaseInput] = useState<CaseInput | null>(null);
   const [caseTruth, setCaseTruth] = useState<CaseTruth | null>(null);
   const [seed, setSeed] = useState("20260923");
-  const [count, setCount] = useState("10");
-  const [caseType, setCaseType] = useState<CaseType>("normal");
+  const [count, setCount] = useState("20");
+  const [caseType, setCaseType] = useState<GenerationType>("all");
   const [submitting, setSubmitting] = useState(false);
   const [error, setError] = useState("");
   const [page, setPage] = useState<"datasets" | "runs" | "docs">("datasets");
@@ -150,13 +156,14 @@ export default function App() {
   });
   const [componentAxis, setComponentAxis] = useState<0 | 1 | 2>(0);
   const [showTruth, setShowTruth] = useState(false);
-  const [truthVisible, setTruthVisible] = useState(false);
+  const [truthVisible, setTruthVisible] = useState(true);
   const [truthLoading, setTruthLoading] = useState(false);
   const [componentsVisible, setComponentsVisible] = useState<Record<ComponentKey, boolean>>({
     background: true, noise: true, deformation: true, artifact: true, observed: true,
   });
   const [dateTarget, setDateTarget] = useState("");
   const [query, setQuery] = useState("");
+  const [expandedGroups, setExpandedGroups] = useState<Partial<Record<CaseType, boolean>>>({});
   const chartRef = useRef<ReactECharts>(null);
   const dateInputRef = useRef<HTMLInputElement>(null);
 
@@ -179,8 +186,9 @@ export default function App() {
     setCaseId(null);
     setCaseInput(null);
     setCaseTruth(null);
-    setTruthVisible(false);
+    setTruthVisible(true);
     setView("observed");
+    setExpandedGroups({});
     let disposed = false;
     let timer: number | undefined;
     const load = async () => {
@@ -220,13 +228,13 @@ export default function App() {
     ) {
       setCaseInput(null);
       setCaseTruth(null);
-      setTruthVisible(false);
+      setTruthVisible(true);
       return;
     }
     let disposed = false;
     setCaseInput(null);
     setCaseTruth(null);
-    setTruthVisible(false);
+    setTruthVisible(true);
     setView("observed");
     api<CaseInput>(`/api/datasets/${selectedId}/cases/${caseId}`)
       .then((input) => {
@@ -266,6 +274,22 @@ export default function App() {
       detail?.cases.filter((item) => item.case_id.includes(query.trim())) ?? [],
     [detail, query],
   );
+  const groupedCases = useMemo(
+    () => caseTypes.map((type) => ({
+      type,
+      cases: filteredCases.filter((item) => item.case_type === type),
+    })).filter((group) => group.cases.length > 0),
+    [filteredCases],
+  );
+  const selectedCaseType = detail?.dataset_id === selectedId
+    ? detail.cases.find((item) => item.case_id === caseId)?.case_type
+    : undefined;
+
+  useEffect(() => {
+    if (selectedCaseType) {
+      setExpandedGroups((current) => ({ ...current, [selectedCaseType]: true }));
+    }
+  }, [selectedId, selectedCaseType]);
 
   const chartOption = useMemo<EChartsOption | null>(() => {
     if (!caseInput || (view === "components" && !caseTruth)) return null;
@@ -410,9 +434,10 @@ export default function App() {
       parsedSeed > 4294967295 ||
       !Number.isInteger(parsedCount) ||
       parsedCount < 1 ||
-      parsedCount > 5000
+      parsedCount > 5000 ||
+      (caseType === "all" && parsedCount < 6)
     ) {
-      setError("Seed 范围为 0～4294967295，案例数量为 1～5000。");
+      setError(caseType === "all" ? "全部类型至少需要 6 例；Seed 范围为 0～4294967295，案例数量最多 5000。" : "Seed 范围为 0～4294967295，案例数量为 1～5000。");
       return;
     }
     setSubmitting(true);
@@ -429,6 +454,7 @@ export default function App() {
       });
       setSelectedId(created.dataset_id);
       setPage("datasets");
+      setQuery("");
       await refreshList();
     } catch (cause) {
       setError((cause as Error).message);
@@ -517,7 +543,7 @@ export default function App() {
               </span>
               <span className="dataset-item-meta">
                 {item.generated_cases}/{item.request.count} 例 <i /> Seed{" "}
-                {item.request.seed} · {caseTypeLabels[item.request.case_type]}
+                {item.request.seed} · {generationTypeLabels[item.request.case_type]}
               </span>
               <span className={`status-pill ${item.status}`}>
                 {statusLabels[item.status]}
@@ -592,9 +618,9 @@ export default function App() {
               <form onSubmit={createDataset} className="create-form">
                 <label>
                   案例类型
-                  <select value={caseType} onChange={(event) => setCaseType(event.target.value as CaseType)}>
-                    {(Object.keys(caseTypeLabels) as CaseType[]).map((type) => (
-                      <option key={type} value={type}>{caseTypeLabels[type]}</option>
+                  <select value={caseType} onChange={(event) => setCaseType(event.target.value as GenerationType)}>
+                    {(["all", ...caseTypes] as GenerationType[]).map((type) => (
+                      <option key={type} value={type}>{generationTypeLabels[type]}</option>
                     ))}
                   </select>
                 </label>
@@ -613,7 +639,7 @@ export default function App() {
                   案例数
                   <input
                     type="number"
-                    min="1"
+                    min={caseType === "all" ? "6" : "1"}
                     max="5000"
                     step="1"
                     value={count}
@@ -633,11 +659,12 @@ export default function App() {
                   <span>{submitting ? "提交中" : "开始生成"}</span>
                 </button>
               </form>
+              {caseType === "all" && <p className="mix-note">正常 25% · 五类异常各 15% · 余数由 Seed 确定</p>}
             </section>
 
             <section className="fixed-protocol" aria-label="固定生成参数">
               <div className="fixed-protocol-heading">
-                <span>LOCKED PROTOCOL / EVENT-V4</span>
+                <span>LOCKED PROTOCOL / EVENT-V5</span>
                 <strong>固定生成参数</strong>
               </div>
               <dl>
@@ -647,7 +674,7 @@ export default function App() {
                 <div><dt>Semiannual · N/E/U</dt><dd>0.25 / 0.25 / 0.5 mm</dd></div>
                 <div><dt>White noise · N/E/U</dt><dd>0.5 / 0.5 / 1.0 mm</dd></div>
               </dl>
-              <p>固定参数是本实验的受控基准设定；异常形态和幅值由 P2 协议固定。只选择案例类型、seed 与案例数。</p>
+              <p>背景、噪声与事件参数固定；选择“全部类型”可在一个批次中生成六类单事件/正常案例。</p>
             </section>
 
             {!detail ? (
@@ -664,7 +691,7 @@ export default function App() {
                     <p>
                       {formattedDate(detail.created_at)} · Seed{" "}
                       {detail.request.seed} · {detail.generator_version}
-                      {" · "}{caseTypeLabels[detail.request.case_type]}
+                      {" · "}{generationTypeLabels[detail.request.case_type]}
                     </p>
                   </div>
                   <span className={`large-status ${detail.status}`}>
@@ -674,6 +701,11 @@ export default function App() {
                     {statusLabels[detail.status]}
                   </span>
                 </section>
+                <div className="type-counts" aria-label="计划类型数量">
+                  {caseTypes.filter((type) => detail.type_counts[type]).map((type) => (
+                    <span key={type}>{caseTypeLabels[type]} <strong>{detail.type_counts[type]}</strong></span>
+                  ))}
+                </div>
                 <div className="stats-row">
                   <div>
                     <small>案例进度</small>
@@ -743,22 +775,30 @@ export default function App() {
                       />
                     </label>
                     <div className="case-list">
-                      {filteredCases.map((item, index) => (
-                        <button
-                          className={`case-row ${caseId === item.case_id ? "selected" : ""}`}
-                          key={item.case_id}
-                          onClick={() => setCaseId(item.case_id)}
-                        >
-                          <span className="case-index">
-                            {String(index + 1).padStart(2, "0")}
-                          </span>
-                          <span>
-                            <strong>{item.case_id}</strong>
-                            <small>365 天 · {item.event_count} 个事件 · {caseTypeLabels[detail.request.case_type]}</small>
-                          </span>
-                          <ChevronRight size={16} />
-                        </button>
-                      ))}
+                      {groupedCases.map(({ type, cases }) => {
+                        const expanded = Boolean(query.trim()) || Boolean(expandedGroups[type]);
+                        return <div className="case-group" key={type}>
+                          <button className="case-group-toggle" aria-expanded={expanded}
+                            onClick={() => setExpandedGroups((current) => ({ ...current, [type]: !expanded }))}>
+                            <span>{caseTypeLabels[type]} <small>{cases.length}</small></span>
+                            <ChevronDown size={16} className={expanded ? "expanded" : ""} />
+                          </button>
+                          {expanded && cases.map((item) => (
+                            <button
+                              className={`case-row ${caseId === item.case_id ? "selected" : ""}`}
+                              key={item.case_id}
+                              onClick={() => setCaseId(item.case_id)}
+                            >
+                              <span className="case-index">{item.case_id.slice(-4)}</span>
+                              <span>
+                                <strong>{item.case_id}</strong>
+                                <small>365 天 · {item.event_count} 个事件</small>
+                              </span>
+                              <ChevronRight size={16} />
+                            </button>
+                          ))}
+                        </div>;
+                      })}
                       {filteredCases.length === 0 && (
                         <p className="list-empty">没有匹配的案例</p>
                       )}
@@ -772,22 +812,22 @@ export default function App() {
                         <h2>{caseId || "等待案例"}</h2>
                       </div>
                       <div className="case-tag">
-                        <Check size={14} /> {caseTypeLabels[detail.request.case_type]}
+                        <Check size={14} /> {selectedCaseType ? caseTypeLabels[selectedCaseType] : "等待案例"}
                       </div>
                     </div>
                     {caseInput && <div className="truth-access">
-                      <span>观测输入已加载；真值仅在主动查看后读取。</span>
+                      <span>{truthVisible ? caseTruth ? "事件标注已显示" : "正在读取事件标注…" : "事件标注已隐藏"}</span>
                       <button className="truth-command" onClick={() => {
                         if (truthVisible) { setView("observed"); setShowTruth(false); }
                         setTruthVisible((old) => !old);
                       }}
                         disabled={truthLoading} aria-pressed={truthVisible}>
-                        {truthLoading ? "正在读取真值…" : truthVisible ? "隐藏真值" : "显示真值"}
+                        {truthLoading ? "读取中…" : truthVisible ? "隐藏标注" : "显示标注"}
                       </button>
                     </div>}
                     {!caseInput || !chartOption ? (
                       <div className="chart-loading">
-                        {!caseInput ? (caseId ? "正在读取曲线…" : "等待案例生成…") : "显示真值后可查看生成成分"}
+                        {!caseInput ? (caseId ? "正在读取曲线…" : "等待案例生成…") : "正在读取生成成分…"}
                       </div>
                     ) : (
                       <>
@@ -929,7 +969,7 @@ export default function App() {
                           <span>
                             <Filter size={15} /> 异常标注
                           </span>
-                          <strong>{!caseTruth ? "真值未加载" : caseTruth.events.length === 0 ? "无注入事件" : `${caseTruth.events.length} 个事件`}</strong>
+                          <strong>{!caseTruth ? truthVisible ? "读取中" : "标注已隐藏" : caseTruth.events.length === 0 ? "无注入事件" : `${caseTruth.events.length} 个事件`}</strong>
                         </div>
                         {caseTruth?.events.map((event) => (
                           <details className="event-truth" key={event.event_id}>

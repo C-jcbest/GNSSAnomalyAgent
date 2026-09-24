@@ -16,11 +16,11 @@ def main() -> None:
     commands = parser.add_subparsers(dest="command", required=True)
     generate = commands.add_parser("generate", help="Generate single-event P2 cases")
     generate.add_argument("--seed", type=int, default=20260923)
-    generate.add_argument("--count", type=int, default=10)
+    generate.add_argument("--count", type=int, default=20)
     generate.add_argument(
         "--case-type",
-        choices=("normal", "spike", "step", "slow_trend", "acceleration", "transient_shift"),
-        default="normal",
+        choices=("all", "normal", "spike", "step", "slow_trend", "acceleration", "transient_shift"),
+        default="all",
     )
     generate.add_argument("--data-dir", type=Path)
     serve = commands.add_parser("serve", help="Serve the local experiment API and built UI")

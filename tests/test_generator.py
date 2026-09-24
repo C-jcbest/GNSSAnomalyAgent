@@ -86,5 +86,8 @@ def test_old_generation_options_are_rejected(payload):
 
 def test_generation_count_is_engineering_cap_not_pilot_size():
     assert GenerationRequest(seed=42, count=76, case_type="normal").count == 76
+    assert GenerationRequest(seed=42, count=6, case_type="all").count == 6
+    with pytest.raises(ValueError):
+        GenerationRequest(seed=42, count=5, case_type="all")
     with pytest.raises(ValueError):
         GenerationRequest(seed=42, count=5001, case_type="normal")

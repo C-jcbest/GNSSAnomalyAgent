@@ -268,6 +268,7 @@ select:focus-visible {
 }
 .create-band {
   display: flex;
+  flex-wrap: wrap;
   align-items: center;
   justify-content: space-between;
   gap: 22px;
@@ -331,6 +332,13 @@ select:focus-visible {
 }
 .create-form label:first-child input {
   width: 130px;
+}
+.mix-note {
+  flex-basis: 100%;
+  margin: -8px 0 0;
+  color: #547268;
+  font-size: 11px;
+  text-align: right;
 }
 .fixed-protocol {
   margin: -15px 0 28px;
@@ -419,6 +427,27 @@ select:focus-visible {
   font-size: 11px;
   margin: 6px 0 0;
   overflow-wrap: anywhere;
+}
+.type-counts {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin: -3px 0 15px;
+}
+.type-counts span {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  border: 1px solid #dce8e0;
+  background: #f8fbf8;
+  color: #52695c;
+  border-radius: 3px;
+  padding: 5px 8px;
+  font-size: 10px;
+}
+.type-counts strong {
+  color: #1e6858;
+  font-family: "IBM Plex Mono", monospace;
 }
 .large-status {
   display: flex;
@@ -551,6 +580,29 @@ select:focus-visible {
   max-height: 520px;
   overflow: auto;
 }
+.case-group-toggle {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  border: 0;
+  border-bottom: 1px solid #e6ede8;
+  background: #f3f7f4;
+  color: #34554a;
+  padding: 10px 13px;
+  text-align: left;
+  font-size: 11px;
+  font-weight: 600;
+}
+.case-group-toggle:hover { background: #eaf2eb; }
+.case-group-toggle small {
+  margin-left: 5px;
+  color: #718c7b;
+  font-family: "IBM Plex Mono", monospace;
+  font-size: 10px;
+}
+.case-group-toggle svg { transition: transform .18s ease; }
+.case-group-toggle svg.expanded { transform: rotate(180deg); }
 .case-row {
   display: flex;
   align-items: center;
@@ -993,15 +1045,15 @@ select:focus-visible {
     margin-bottom: 12px;
   }
   .case-list {
-    display: flex;
+    display: block;
     overflow: auto;
-    max-height: none;
+    max-height: 320px;
   }
   .case-row {
-    min-width: 160px;
-    width: auto;
-    border-right: 1px solid #edf1ee;
+    min-width: 0;
+    width: 100%;
   }
+  .mix-note { margin-top: 0; text-align: left; }
   .case-detail {
     min-height: 520px;
   }

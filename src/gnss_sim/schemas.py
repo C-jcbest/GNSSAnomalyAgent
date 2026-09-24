@@ -10,6 +10,9 @@ Axis = Literal["N", "E", "U"]
 CaseType = Literal[
     "normal", "spike", "step", "slow_trend", "acceleration", "transient_shift"
 ]
+CASE_TYPES: tuple[CaseType, ...] = (
+    "normal", "spike", "step", "slow_trend", "acceleration", "transient_shift"
+)
 
 
 class StrictModel(BaseModel):
@@ -19,11 +22,17 @@ class StrictModel(BaseModel):
 class GenerationRequest(StrictModel):
     seed: int = Field(ge=0, le=4294967295)
     count: int = Field(ge=1, le=5000)
-    case_type: CaseType
+    case_type: CaseType | Literal["all"]
+
+    @model_validator(mode="after")
+    def validate_mixed_count(self):
+        if self.case_type == "all" and self.count < len(CASE_TYPES):
+            raise ValueError("all requires at least six cases")
+        return self
 
 
 class CaseInput(StrictModel):
-    schema_version: Literal["event-input-v4"] = "event-input-v4"
+    schema_version: Literal["event-input-v5"] = "event-input-v5"
     case_id: str
     dates: list[date]
     reference_coordinate_mm: AxisVector
@@ -134,7 +143,7 @@ Event = Annotated[
 
 
 class CaseTruth(StrictModel):
-    schema_version: Literal["event-truth-v4"] = "event-truth-v4"
+    schema_version: Literal["event-truth-v5"] = "event-truth-v5"
     case_id: str
     normal_background_mm: list[AxisVector]
     measurement_noise_mm: list[AxisVector]
@@ -150,16 +159,18 @@ class CaseTruth(StrictModel):
 class CaseSummary(StrictModel):
     case_id: str
     case_seed: int
+    case_type: CaseType
     event_count: int = Field(ge=0, le=1)
 
 
 class DatasetManifest(StrictModel):
-    schema_version: Literal["event-dataset-v4"] = "event-dataset-v4"
-    generator_version: Literal["event-v4"] = "event-v4"
+    schema_version: Literal["event-dataset-v5"] = "event-dataset-v5"
+    generator_version: Literal["event-v5"] = "event-v5"
     dataset_id: str
     created_at: datetime
     status: Literal["queued", "running", "complete", "failed"]
     request: GenerationRequest
+    type_counts: dict[CaseType, int]
     generated_cases: int = 0
     cases: list[CaseSummary] = Field(default_factory=list)
     error: str | None = None

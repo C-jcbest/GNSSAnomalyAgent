@@ -3,8 +3,8 @@
 - 优先中文回答和编写文档。本分支只使用合成的日尺度 N/E/U 数据，不读取旧项目的平台快照、标签或运行产物。
 - 分阶段实施：P1 正常序列，P2 单异常，P3 多异常，P4 Pilot 与真值校验；每阶段验收后暂停。先比较数值与视觉方法，再依据证据考虑 Agent，不预设方法优劣。
 - 始终将检测输入与模拟真值分开保存。检测主输出可描述可观察形态、分量和日期区间，不凭曲线声称仪器故障、真实坡体形变或滑坡成因。
-- `event-v4` 固定背景：2025 年 365 日、P0=(0,0,0) mm、annual/semiannual 幅值 1.0/1.0/1.5 与 0.25/0.25/0.5 mm、365.25 日周期、白噪声标准差 0.5/0.5/1.0 mm。五类事件幅值固定为绝对 mm，不能由当前噪声 σ 动态换算；不得再将 `sigma_multiplier` 作为 P2 truth 字段。数值是受控 benchmark 设定，不代表现场精度；不加 AR(1)、secular deformation 或兼容层。
-- P2 只生成正常或五类**单轴单事件**案例：Spike/Transient Shift 注入 observation_artifact，Step/Slow Trend/Acceleration 注入 injected_deformation。同一 case_seed 的六种变体背景/噪声完全相同。接口必填 case_type，固定事件参数不得开放给用户；P3 才考虑叠加和跨轴。真值按需加载；P2 不实现检测器、难度矩阵、缺测或 Agent。正式定义见 `docs/04-planned-methods.md`。
+- `event-v5` 固定背景：2025 年 365 日、P0=(0,0,0) mm、annual/semiannual 幅值 1.0/1.0/1.5 与 0.25/0.25/0.5 mm、365.25 日周期、白噪声标准差 0.5/0.5/1.0 mm。五类事件幅值固定为绝对 mm，不能由当前噪声 σ 动态换算；不得再将 `sigma_multiplier` 作为 P2 truth 字段。数值是受控 benchmark 设定，不代表现场精度；不加 AR(1)、secular deformation 或兼容层。
+- P2 每例仍只生成正常或五类**单轴单事件**案例：Spike/Transient Shift 注入 observation_artifact，Step/Slow Trend/Acceleration 注入 injected_deformation。同一 case_seed 的六种变体背景/噪声完全相同。接口 `case_type=all` 将六类放入同一批次，按正常 25%、五类异常各 15% 分配；这只是检查用混合比例，不是 P4 Pilot 方案。固定事件参数不得开放给用户；P3 才考虑叠加和跨轴。研究人员网页默认读取独立真值并显示异常标注，未来检测器仍只能读取 input；P2 不实现检测器、难度矩阵、缺测或 Agent。正式定义见 `docs/04-planned-methods.md`。
 - 全部位移使用毫米；H 与 R3D 是相对于固定初始坐标的偏移模长，不是路径长度。R3D 不与未来注入形变 D 混用。模拟参数只是实验设定，不能宣称代表现场 GNSS 精度。
 - 生成的数据、真值、凭据、模型原始响应和运行产物默认不入 Git。网页仅访问本地实验目录，不自动连接平台或模型 API。
 - `docs/` 是实验说明原稿，网页从后端文档接口读取。实现新阶段或修改公式、字段、评价口径时，同步更新相应文档及阶段状态；草案与已实现内容明确区分。

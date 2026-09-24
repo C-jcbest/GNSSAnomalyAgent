@@ -7,7 +7,7 @@ import numpy as np
 from gnss_sim import events
 from gnss_sim.schemas import CaseInput, CaseTruth, CaseType, ComponentSeeds, EventSeeds
 
-GENERATOR_VERSION = "event-v4"
+GENERATOR_VERSION = "event-v5"
 START_DATE = date(2025, 1, 1)
 DAYS = 365
 PERIOD_DAYS = 365.25
