@@ -157,7 +157,8 @@ def test_learning_documents_are_served_from_canonical_markdown(tmp_path):
     index = client.get("/api/docs")
     assert index.status_code == 200
     assert [item["slug"] for item in index.json()] == [
-        "research-design", "p1-normal-model", "data-and-reproducibility", "planned-methods"
+        "research-design", "p1-normal-model", "data-and-reproducibility", "planned-methods",
+        "p4-pilot-evaluator",
     ]
     for item in index.json():
         document = client.get(f"/api/docs/{item['slug']}")

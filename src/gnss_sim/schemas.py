@@ -207,7 +207,7 @@ class DatasetManifest(StrictModel):
 
 class PredictedEvent(StrictModel):
     prediction_id: str
-    type: Literal["spike", "step", "slow_trend", "acceleration", "transient_shift"]
+    type: Literal["spike", "step", "slow_trend", "acceleration", "transient_shift"] | None = None
     axes: list[Axis] = Field(min_length=1)
     start_index: int = Field(ge=0, le=364)
     end_index: int = Field(ge=0, le=364)

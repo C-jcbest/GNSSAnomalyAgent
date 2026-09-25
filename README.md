@@ -1,6 +1,6 @@
 # GNSS 模拟实验台
 
-独立的纯模拟日尺度 N/E/U 实验线。P1 固定背景、P2 五种单事件和 P3 六场景多事件组合已实现，可浏览曲线、事件时间线和逐事件贡献。没有真实 GNSS 数据、检测运行或 Agent。
+独立的纯模拟日尺度 N/E/U 实验线。P1～P3 生成器及 P4 固定 Pilot、事件评价器已实现。没有真实 GNSS 数据、检测运行或 Agent。
 
 ## 启动
 
@@ -25,14 +25,18 @@ uv run gnss-sim serve --port 18765
 2. [P1 正常序列模型](docs/02-p1-normal-model.md)：annual/semiannual 背景、白噪声、坐标及 H/R3D 公式。
 3. [数据契约与可复现流程](docs/03-data-and-reproducibility.md)：输入与真值隔离、seed、文件和 API。
 4. [P2 事件与 P3 场景协议](docs/04-planned-methods.md)：五种事件公式、六种场景及后续检测草案。
+5. [P4 固定 Pilot 与事件评价协议](docs/05-p4-pilot-evaluator.md)：300 例配额、真值视图、匹配及指标。
 
 CLI 可直接生成：
 
 ```powershell
 uv run gnss-sim generate --seed 20260924 --count 54 --case-type all_scenarios
+uv run gnss-sim pilot --seed 20260925
 ```
 
 `data/generated/` 保存数据集 manifest、`cases/<case_id>/input.json` 与单独的 `truth.json`，默认不入 Git。输入只有日期、固定参考坐标、三轴观测及其确定性派生量；背景、噪声、相位、事件与注入贡献仅在真值文件中。相同主 seed、案例序号、类型与生成器版本产生相同案例内容，批次 ID 和创建时间不要求相同。旧版本批次不再由新接口读取。
+
+`data/pilots/pilot-v1/` 是独立固定的 300 例开发集；再次运行 `pilot` 只校验，不重抽。未来方法统一读取这里的 `input.json`，以 `DetectionResult` JSONL 交给 `uv run gnss-sim evaluate --predictions predictions.jsonl --method METHOD --out report.json` 评价。方法失败或缺少输出保留在分母中。
 
 ## 已实现口径
 
@@ -43,4 +47,4 @@ uv run gnss-sim generate --seed 20260924 --count 54 --case-type all_scenarios
 - 网页按类型折叠案例，并默认从独立真值接口读取和显示事件标注；事件时间线可筛选、选择和查看独立贡献。该视图只供研究人员核查，不作为未来视觉方法的输入。
 - `POST /api/datasets` 只接受 `seed`、`count`、`case_type`，不兼容旧两字段请求或旧数据格式。
 
-运行 `uv run pytest` 和 `uv run ruff check .` 验证。关键决定记录在[项目状态](docs/project-status.md)。P4～P9 按阶段另行实施，每阶段验收后暂停。
+运行 `uv run pytest` 和 `uv run ruff check .` 验证。关键决定记录在[项目状态](docs/project-status.md)。P4 验收后暂停，P5 再开发检测方法。

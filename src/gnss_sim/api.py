@@ -15,6 +15,7 @@ DOCUMENTS = (
     {"slug": "p1-normal-model", "title": "P1 正常序列模型", "file": "02-p1-normal-model.md"},
     {"slug": "data-and-reproducibility", "title": "数据契约与可复现流程", "file": "03-data-and-reproducibility.md"},
     {"slug": "planned-methods", "title": "P2 事件与 P3 场景协议", "file": "04-planned-methods.md"},
+    {"slug": "p4-pilot-evaluator", "title": "P4 固定 Pilot 与事件评价", "file": "05-p4-pilot-evaluator.md"},
 )
 
 

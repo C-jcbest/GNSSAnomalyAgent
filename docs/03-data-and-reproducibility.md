@@ -1,6 +1,6 @@
 # 数据契约与可复现流程
 
-> 版本：2026-09-24 · 本篇描述 P2/P3 `event-v6` 的磁盘文件、seed 树和本地 API。旧数据契约不在新接口中兼容或迁移。
+> 版本：2026-09-25 · 本篇描述 P2/P3 `event-v6` 的临时批次文件、seed 树和本地 API。P4 固定数据另见 [Pilot 协议](05-p4-pilot-evaluator.md)。
 
 ## 输入与真值分层
 
@@ -60,6 +60,8 @@ dataset_seed
 `case_type=all` 时，六类的目标比例依次为正常 25%，Spike、Step、Slow Trend、Acceleration、Transient Shift 各 15%。至少生成 6 例。设总数为 $n$、类型目标比例为 $p_k$，先置 $n_k=\max(1,\lfloor np_k\rfloor)$，再将剩余名额按 $np_k-n_k$ 从大到小分配；余数相同由独立的 `SeedSequence([dataset_seed, 0x4D4958])` 决定先后，最后使用同一独立流打散案例顺序。这个批次分配流不影响各案例的背景、噪声或事件 seed。例如 20 例恰好为正常 5 例、五类异常各 3 例。比例只是 P2 检查工作台的便利设置，不代表自然发生率或 P4 Pilot 配额。
 
 `case_type=all_scenarios` 时按同一确定性余数规则在六种 P3 场景间**均衡**分配，至少 6 例；54 例每场景 9 例。这只是生成器验收集合，不代表自然发生率。也可直接指定一个场景生成同类案例。
+
+P4 不使用上述网页批次。`uv run gnss-sim pilot --seed 20260925` 在 `data/pilots/pilot-v1/` 固定 300 例、每例 `input.json`/`truth.json` 分层存放、manifest 与 summary 单独保存。分层 seed 只针对预定的类型、轴、符号和场景；输出哈希及真值核查见 [P4 协议](05-p4-pilot-evaluator.md)。
 
 ## API 与生成流程
 
