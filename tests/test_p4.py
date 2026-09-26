@@ -1,198 +1,145 @@
-from copy import deepcopy
-from datetime import timedelta
+import json
 
 import pytest
+from affiliation.generics import convert_vector_to_events
+from affiliation.metrics import pr_from_events
 
 from gnss_sim.evaluation import (
-    aggregate_cases,
-    evaluate_case,
+    _point_case,
+    _point_vector,
+    _range_case,
+    _range_vector,
+    evaluate_pilot,
     load_results_jsonl,
-    match_events,
-    temporal_iou,
 )
 from gnss_sim.generator import generate_case
-from gnss_sim.labels import event_masks
 from gnss_sim.pilot import _planned_cases, _single_metadata, generate_pilot, verify_pilot
-from gnss_sim.schemas import DetectionResult, PredictedEvent
+from gnss_sim.schemas import CaseTruth, PointResult, RangeResult
 
 
 def truth(kind):
     return generate_case("case_0001", 42, kind)[1]
 
 
-def prediction(event, start=None, end=None, axis=None, prediction_id="pred_001",
-               predicted_type=None):
-    return PredictedEvent(
-        prediction_id=prediction_id, axes=[axis or event.axis],
-        start_index=event.start_index if start is None else start,
-        end_index=event.end_index if end is None else end, type=predicted_type,
-    )
+def point_result(case_id="case_0001", status="success", **axes):
+    return PointResult(case_id=case_id, method="fixture", status=status,
+                       predictions={axis: axes.get(axis, []) for axis in ("N", "E", "U")})
 
 
-def score(case_truth, events, group="single", status="success"):
-    return evaluate_case(case_truth, DetectionResult(
-        case_id=case_truth.case_id, method="fixture", status=status, events=events), group)
+def range_result(case_id="case_0001", status="success", **axes):
+    return RangeResult(case_id=case_id, method="fixture", status=status,
+                       predictions={axis: axes.get(axis, []) for axis in ("N", "E", "U")})
 
 
-@pytest.mark.parametrize("kind,delta,expected", [
-    ("spike", 0, (1, 0, 0)), ("spike", 1, (1, 0, 0)),
-    ("spike", 2, (0, 1, 1)), ("step", 3, (1, 0, 0)),
-    ("step", 4, (0, 1, 1)),
-])
-def test_point_tolerances(kind, delta, expected):
+def test_strict_task_specific_result_schemas():
+    assert point_result(N=[0, 364]).predictions.N == [0, 364]
+    assert range_result(E=[[0, 0], [363, 364]]).predictions.E == [(0, 0), (363, 364)]
+    for bad in (-1, 365, 1.5, True, "3"):
+        with pytest.raises(ValueError):
+            point_result(N=[bad])
+    for interval in ([1, 0], [-1, 2], [0, 365], [1.5, 2], [1]):
+        with pytest.raises(ValueError):
+            range_result(N=[interval])
+    with pytest.raises(ValueError):
+        PointResult(case_id="case_0001", method="fixture", status="success",
+                    predictions={"N": [], "E": []})
+    with pytest.raises(ValueError):
+        PointResult(case_id="case_0001", method="fixture", status="success",
+                    predictions={"N": [], "E": [], "U": [], "X": []})
+    with pytest.raises(ValueError):
+        PointResult(case_id="case_0001", method="fixture", status="success",
+                    predictions={"N": [], "E": [], "U": []}, events=[])
+
+
+@pytest.mark.parametrize("kind", ["spike", "step"])
+def test_point_task_requires_exact_day_for_spike_and_step(kind):
     case_truth = truth(kind)
     event = case_truth.events[0]
-    case = score(case_truth, [prediction(event, event.start_index + delta,
-                                          event.start_index + delta)])
-    assert (case["tp"], case["fp"], case["fn"]) == expected
+    exact = _point_case(case_truth, point_result(**{event.axis: [event.start_index]}))
+    off_by_one = _point_case(case_truth, point_result(**{event.axis: [event.start_index + 1]}))
+    assert exact[:3] == (1, 0, 0)
+    assert off_by_one[:3] == (0, 1, 1)
+    if kind == "step":
+        assert _point_vector([event.start_index]).count(1) == 1
 
 
-@pytest.mark.parametrize("days,expected", [(54, (1, 0, 0)), (36, (0, 1, 1))])
-def test_interval_iou_threshold(days, expected):
-    case_truth = truth("slow_trend")
-    event = case_truth.events[0]
-    case = score(case_truth, [prediction(event, event.end_index - days + 1,
-                                          event.end_index)])
-    assert (case["tp"], case["fp"], case["fn"]) == expected
-    assert temporal_iou(100, 189, 136, 189) == pytest.approx(0.6)
-
-
-@pytest.mark.parametrize("kind", ["slow_trend", "acceleration", "transient_shift"])
-def test_interval_types_share_rule(kind):
-    case_truth = truth(kind)
-    event = case_truth.events[0]
-    assert score(case_truth, [prediction(event)])["tp"] == 1
-    assert score(case_truth, [prediction(event, event.start_index,
-                                          event.start_index)])["tp"] == 0
-
-
-def test_prediction_type_is_ignored_but_shape_is_required():
-    case_truth = truth("step")
-    event = case_truth.events[0]
-    assert score(case_truth, [prediction(event, predicted_type="spike")])["tp"] == 1
-    assert score(case_truth, [prediction(event, event.start_index,
-                                          event.start_index + 3)])["tp"] == 0
-
-
-def test_strict_axis_and_extra_prediction():
+def test_point_vectors_deduplicate_and_keep_axes_separate():
     case_truth = truth("spike")
     event = case_truth.events[0]
     wrong = next(axis for axis in ("N", "E", "U") if axis != event.axis)
-    assert (score(case_truth, [prediction(event, axis=wrong)])["tp"],
-            score(case_truth, [prediction(event, axis=wrong)])["fp"]) == (0, 1)
-    multi_axis = prediction(event).model_copy(update={"axes": ["N", "E", "U"]})
-    assert score(case_truth, [multi_axis])["fn"] == 1
-    assert score(case_truth, [prediction(event), prediction(event, prediction_id="pred_002")])[
-        "fp"] == 1
+    duplicate = _point_case(case_truth, point_result(**{
+        event.axis: [event.start_index, event.start_index]}))
+    wrong_axis = _point_case(case_truth, point_result(**{wrong: [event.start_index]}))
+    assert duplicate[:3] == (1, 0, 0)
+    assert wrong_axis[:3] == (0, 1, 1)
 
 
-def test_one_prediction_cannot_cover_two_truth_events():
-    case_truth = truth("spike").model_copy(deep=True)
-    duplicate = case_truth.events[0].model_copy(update={"event_id": "event_002"})
-    part = case_truth.event_contributions[0].model_copy(update={"event_id": "event_002"})
-    case_truth.events.append(duplicate)
-    case_truth.event_contributions.append(part)
-    case = score(case_truth, [prediction(case_truth.events[0])], "multi")
-    assert (case["tp"], case["fp"], case["fn"]) == (1, 0, 1)
-
-
-def test_matching_prioritizes_cardinality_then_quality():
-    case_truth = truth("spike").model_copy(deep=True)
-    first_event = case_truth.events[0]
-    other = first_event.model_copy(update={
-        "event_id": "event_002", "start_index": first_event.start_index + 1,
-        "end_index": first_event.end_index + 1,
-        "start_date": first_event.start_date + timedelta(days=1),
-        "end_date": first_event.end_date + timedelta(days=1),
-    })
-    case_truth.events.append(other)
-    first = prediction(first_event, first_event.start_index, first_event.start_index)
-    second = prediction(first_event, first_event.start_index - 1, first_event.start_index - 1,
-                        prediction_id="pred_002")
-    pairs = match_events(case_truth, [first, second])
-    assert len(pairs) == 2
-    case = score(case_truth, [first, second], "multi")
-    assert case["onset_error_sum_days"] == 2
-
-
-def test_order_and_id_invariance():
-    case_truth = truth("complex_multiaxis")
-    predictions = [prediction(event, prediction_id=f"pred_{i:03d}")
-                   for i, event in enumerate(case_truth.events)]
-    baseline = score(case_truth, predictions, "multi")
-    changed = deepcopy(case_truth)
-    changed.events.reverse()
-    changed.event_contributions.reverse()
-    for index, event in enumerate(changed.events):
-        event.event_id = changed.event_contributions[index].event_id = f"event_{index + 101:03d}"
-    reordered = [item.model_copy(update={"prediction_id": f"renamed_{i}"})
-                 for i, item in enumerate(reversed(predictions))]
-    comparison = score(changed, reordered, "multi")
-    assert {key: baseline[key] for key in ("tp", "fp", "fn", "onset_error_sum_days",
-                                            "interval_iou_sum", "interval_end_error_sum_days")} == {
-        key: comparison[key] for key in ("tp", "fp", "fn", "onset_error_sum_days",
-                                          "interval_iou_sum", "interval_end_error_sum_days")}
-
-
-def test_normal_far_and_failure_denominators():
-    normal = truth("normal")
-    event = truth("spike").events[0]
-    clean = score(normal, [], "normal")
-    alarm = score(normal, [prediction(event)], "normal")
-    failed_normal = score(normal, [], "normal", "failed")
-    missed = score(truth("spike"), [], "single", "failed")
-    report = aggregate_cases([clean, alarm, failed_normal, missed])
-    assert report["normal_far"] == 0.5
-    assert report["fp_per_normal"] == 0.5
-    assert report["normal_failure_rate"] == pytest.approx(1 / 3)
-    assert report["execution_success_rate"] == 0.5
-    assert (report["tp"], report["fp"], report["fn"]) == (0, 1, 1)
-
-
-def test_micro_metrics_and_onset_mae():
-    case_truth = truth("step")
-    event = case_truth.events[0]
-    hit = score(case_truth, [prediction(event, event.start_index + 2,
-                                        event.start_index + 2)])
-    miss = score(case_truth, [], "single")
-    report = aggregate_cases([hit, miss])
-    assert (report["event_precision"], report["event_recall"], report["event_f1"]) == (
-        1, 0.5, pytest.approx(2 / 3))
-    assert report["onset_mae_days"] == 2
-
-
-def test_interval_secondary_and_multi_completeness():
+def test_point_task_ignores_range_truth_and_counts_negative_axis_alarm():
     case_truth = truth("slow_trend")
     event = case_truth.events[0]
-    full = score(case_truth, [prediction(event)], "multi")
-    missing = score(case_truth, [], "multi")
-    report = aggregate_cases([full, missing])
-    assert report["interval_mean_iou"] == 1
-    assert report["interval_end_mae_days"] == 0
-    assert report["multi_mean_case_recall"] == 0.5
-    assert report["multi_complete_case_rate"] == 0.5
-    extra = score(case_truth, [prediction(event), prediction(event,
-                  prediction_id="pred_002")], "multi")
-    assert aggregate_cases([extra])["multi_complete_case_rate"] == 0
+    result = _point_case(case_truth, point_result(**{event.axis: [event.start_index]}))
+    assert result == (0, 1, 0, 3, 1)
 
 
-def test_active_and_effect_masks():
-    case_truth = truth("step")
-    active, effect = event_masks(case_truth)
+def test_range_vectors_are_inclusive_and_merge_on_binary_grid():
+    vector = _range_vector([(10, 10), (12, 15), (14, 18)])
+    assert vector[10] == vector[12] == vector[18] == 1
+    assert vector[9] == vector[11] == vector[19] == 0
+    assert convert_vector_to_events(vector) == [(10, 11), (12, 19)]
+
+
+@pytest.mark.parametrize("kind", ["slow_trend", "acceleration", "transient_shift"])
+def test_range_task_scores_all_interval_truth_types(kind):
+    case_truth = truth(kind)
     event = case_truth.events[0]
-    column = ("N", "E", "U").index(event.axis)
-    assert active.sum() == 1 and active[event.start_index, column]
-    assert effect[event.start_index:, column].all()
+    scores, _, _ = _range_case(case_truth, range_result(**{
+        event.axis: [[event.start_index, event.end_index]]}))
+    assert scores == pytest.approx([(1.0, 1.0, 1.0)])
+
+
+def test_range_task_calls_upstream_affiliation_with_same_vectors():
     case_truth = truth("slow_trend")
-    active, effect = event_masks(case_truth)
     event = case_truth.events[0]
-    column = ("N", "E", "U").index(event.axis)
-    assert active[:, column].sum() == 90
-    assert not active[event.end_index + 1, column]
-    assert effect[event.end_index + 1, column]
+    predicted = (event.start_index + 10, event.end_index)
+    scores, _, _ = _range_case(case_truth, range_result(**{event.axis: [predicted]}))
+    upstream = pr_from_events(
+        convert_vector_to_events(_range_vector([predicted])),
+        convert_vector_to_events(_range_vector([(event.start_index, event.end_index)])),
+        Trange=(0, 365),
+    )
+    p, r, f1 = scores[0]
+    assert p == pytest.approx(upstream["precision"])
+    assert r == pytest.approx(upstream["recall"])
+    assert f1 == pytest.approx(2 * p * r / (p + r))
 
 
-def test_fixed_plan_has_only_metadata_stratification():
+def test_range_task_ignores_point_truth_and_counts_negative_axis_alarm():
+    case_truth = truth("spike")
+    event = case_truth.events[0]
+    scores, negative, alarms = _range_case(case_truth, range_result(**{
+        event.axis: [[event.start_index, event.start_index]]}))
+    assert scores == [] and (negative, alarms) == (3, 1)
+
+
+def test_empty_and_failed_range_prediction_score_zero_on_positive_axis():
+    case_truth = truth("slow_trend")
+    event = case_truth.events[0]
+    assert _range_case(case_truth, range_result())[0] == [(0, 0, 0)]
+    failed = range_result(status="failed", **{
+        event.axis: [[event.start_index, event.end_index]]})
+    assert _range_case(case_truth, failed)[0] == [(0, 0, 0)]
+    assert _range_case(case_truth, None)[0] == [(0, 0, 0)]
+
+
+def test_failed_point_prediction_becomes_false_negative_not_false_alarm():
+    case_truth = truth("spike")
+    event = case_truth.events[0]
+    failed = point_result(status="failed", **{event.axis: [event.start_index]})
+    assert _point_case(case_truth, failed) == (0, 0, 1, 0, 0)
+    assert _point_case(case_truth, None) == (0, 0, 1, 0, 0)
+
+
+def test_fixed_plan_is_unchanged_and_stratifies_only_on_metadata():
     planned = list(_planned_cases(20260925))
     assert len(planned) == 300
     assert [kind for kind, *_ in planned].count("normal") == 30
@@ -206,7 +153,7 @@ def pilot_directory(tmp_path_factory):
     return generate_pilot(tmp_path_factory.mktemp("p4") / "pilots", 20260925)
 
 
-def test_pilot_freeze_and_truth_validation(pilot_directory):
+def test_pilot_files_and_generator_are_still_frozen(pilot_directory):
     manifest = verify_pilot(pilot_directory)
     assert len(manifest["cases"]) == 300
     assert generate_pilot(pilot_directory.parent, 20260925) == pilot_directory
@@ -214,27 +161,106 @@ def test_pilot_freeze_and_truth_validation(pilot_directory):
         generate_pilot(pilot_directory.parent, 20260926)
 
 
-def test_missing_results_are_failures_in_all_denominators(pilot_directory):
-    from gnss_sim.evaluation import evaluate_pilot
-
-    report = evaluate_pilot(pilot_directory, [], "fixture")
-    summary = report["summary"]
-    assert summary["cases"] == 300
-    assert summary["execution_success_rate"] == 0
-    assert summary["normal_failure_rate"] == 1
-    assert summary["normal_far"] is None
-    assert summary["event_recall"] == 0
-    assert summary["multi_complete_case_rate"] == 0
+def _pilot_truth(directory, entry):
+    return CaseTruth.model_validate_json(
+        (directory / "cases" / entry["case_id"] / "truth.json").read_bytes())
 
 
-def test_invalid_jsonl_line_is_reported_and_missing_case_fails(tmp_path, pilot_directory):
-    path = tmp_path / "predictions.jsonl"
-    path.write_text('{"case_id":"case_0001","method":"fixture","status":"success","events":[]}'
-                    "\n{broken JSON\n", encoding="utf-8")
-    results, errors = load_results_jsonl(path)
-    assert len(results) == 1 and errors == [{"line": 2, "error": "JSONDecodeError"}]
-    from gnss_sim.evaluation import evaluate_pilot
+def test_point_report_micro_counts_far_and_fixed_failure_denominator(pilot_directory):
+    manifest = verify_pilot(pilot_directory)
+    normal = manifest["cases"][0]
+    spike = next(entry for entry in manifest["cases"] if entry["case_type"] == "spike")
+    point = _pilot_truth(pilot_directory, spike).events[0]
+    gt_points = sum(len({event.start_index for event in _pilot_truth(pilot_directory, entry).events
+                         if event.axis == axis and event.type in ("spike", "step")})
+                    for entry in manifest["cases"] for axis in ("N", "E", "U"))
+    report = evaluate_pilot(pilot_directory, [
+        point_result(normal["case_id"], N=[5]),
+        point_result(spike["case_id"], **{point.axis: [point.start_index]}),
+    ], "fixture", "point")
+    assert set(report) == {"task", "precision", "recall", "f1", "far",
+                           "execution_success_rate"}
+    assert report["precision"] == 0.5
+    assert report["recall"] == pytest.approx(1 / gt_points)
+    assert report["f1"] == pytest.approx(2 / (2 + 1 + gt_points - 1))
+    assert report["far"] == pytest.approx(1 / 5)
+    assert report["execution_success_rate"] == pytest.approx(2 / 300)
 
-    summary = evaluate_pilot(pilot_directory, results, "fixture")["summary"]
-    assert summary["execution_success_rate"] == pytest.approx(1 / 300)
-    assert summary["normal_failure_rate"] == pytest.approx(29 / 30)
+
+def test_range_report_macro_over_positive_case_axes(pilot_directory):
+    manifest = verify_pilot(pilot_directory)
+    normal = manifest["cases"][0]
+    single = next(entry for entry in manifest["cases"] if entry["case_type"] == "slow_trend")
+    event = _pilot_truth(pilot_directory, single).events[0]
+    positive_units = sum(any(item.type in ("slow_trend", "acceleration", "transient_shift")
+                             and item.axis == axis for item in _pilot_truth(pilot_directory, entry).events)
+                         for entry in manifest["cases"] for axis in ("N", "E", "U"))
+    report = evaluate_pilot(pilot_directory, [
+        range_result(normal["case_id"], N=[[5, 7]]),
+        range_result(single["case_id"], **{
+            event.axis: [[event.start_index, event.end_index]]}),
+    ], "fixture", "range")
+    assert set(report) == {"task", "affiliation_precision", "affiliation_recall",
+                           "affiliation_f1", "far", "execution_success_rate"}
+    for key in ("affiliation_precision", "affiliation_recall", "affiliation_f1"):
+        assert report[key] == pytest.approx(1 / positive_units)
+    assert report["far"] == pytest.approx(1 / 5)
+    assert report["execution_success_rate"] == pytest.approx(2 / 300)
+
+
+def test_range_report_averages_each_axis_f1_before_reporting(pilot_directory):
+    manifest = verify_pilot(pilot_directory)
+    slow = next(entry for entry in manifest["cases"] if entry["case_type"] == "slow_trend")
+    transient = next(entry for entry in manifest["cases"]
+                     if entry["case_type"] == "transient_shift")
+    slow_event = _pilot_truth(pilot_directory, slow).events[0]
+    transient_truth = _pilot_truth(pilot_directory, transient)
+    transient_event = transient_truth.events[0]
+    shifted = (transient_event.start_index + 3, transient_event.end_index)
+    partial = _range_case(transient_truth, range_result(transient["case_id"], **{
+        transient_event.axis: [shifted]}))[0][0]
+    positive_units = sum(any(item.type in ("slow_trend", "acceleration", "transient_shift")
+                             and item.axis == axis for item in _pilot_truth(pilot_directory, entry).events)
+                         for entry in manifest["cases"] for axis in ("N", "E", "U"))
+    report = evaluate_pilot(pilot_directory, [
+        range_result(slow["case_id"], **{
+            slow_event.axis: [[slow_event.start_index, slow_event.end_index]]}),
+        range_result(transient["case_id"], **{transient_event.axis: [shifted]}),
+    ], "fixture", "range")
+    assert report["affiliation_precision"] == pytest.approx((1 + partial[0]) / positive_units)
+    assert report["affiliation_recall"] == pytest.approx((1 + partial[1]) / positive_units)
+    assert report["affiliation_f1"] == pytest.approx((1 + partial[2]) / positive_units)
+
+
+@pytest.mark.parametrize("task", ["point", "range"])
+def test_all_missing_cases_still_enter_execution_and_positive_denominators(pilot_directory, task):
+    report = evaluate_pilot(pilot_directory, [], "fixture", task)
+    assert report["execution_success_rate"] == 0
+    assert report["far"] is None  # failed negative axes are not certified clean
+    if task == "point":
+        assert (report["precision"], report["recall"], report["f1"]) == (0, 0, 0)
+    else:
+        assert (report["affiliation_precision"], report["affiliation_recall"],
+                report["affiliation_f1"]) == (0, 0, 0)
+
+
+def test_invalid_jsonl_and_old_schema_become_missing_case_failures(tmp_path, pilot_directory):
+    path = tmp_path / "point.jsonl"
+    valid = point_result().model_dump(mode="json")
+    path.write_text(json.dumps(valid) + "\n{broken JSON\n" + json.dumps({
+        "case_id": "case_0002", "method": "fixture", "status": "success", "events": []
+    }) + "\n", encoding="utf-8")
+    results, errors = load_results_jsonl(path, "point")
+    assert len(results) == 1
+    assert [error["line"] for error in errors] == [2, 3]
+    report = evaluate_pilot(pilot_directory, results, "fixture", "point")
+    assert report["execution_success_rate"] == pytest.approx(1 / 300)
+
+
+def test_task_mismatch_duplicate_and_unknown_case_are_rejected(pilot_directory):
+    with pytest.raises(ValueError, match="schema"):
+        evaluate_pilot(pilot_directory, [range_result()], "fixture", "point")
+    with pytest.raises(ValueError, match="duplicate"):
+        evaluate_pilot(pilot_directory, [point_result(), point_result()], "fixture", "point")
+    with pytest.raises(ValueError, match="unknown"):
+        evaluate_pilot(pilot_directory, [point_result("case_9999")], "fixture", "point")

@@ -7,6 +7,11 @@ resolution-markers = [
 ]
 
 [[package]]
+name = "affiliation"
+version = "1.0"
+source = { git = "https://github.com/ahstat/affiliation-metrics-py.git?rev=8d8449858096bbade6a6e70848d05c9cc9b846fe#8d8449858096bbade6a6e70848d05c9cc9b846fe" }
+
+[[package]]
 name = "annotated-doc"
 version = "0.0.5"
 source = { registry = "https://pypi.org/simple" }
@@ -85,6 +90,7 @@ name = "gnss-simulation-lab"
 version = "0.1.0"
 source = { editable = "." }
 dependencies = [
+    { name = "affiliation" },
     { name = "fastapi" },
     { name = "numpy", version = "2.4.6", source = { registry = "https://pypi.org/simple" }, marker = "python_full_version < '3.12'" },
     { name = "numpy", version = "2.5.3", source = { registry = "https://pypi.org/simple" }, marker = "python_full_version >= '3.12'" },
@@ -101,6 +107,7 @@ dev = [
 
 [package.metadata]
 requires-dist = [
+    { name = "affiliation", git = "https://github.com/ahstat/affiliation-metrics-py.git?rev=8d8449858096bbade6a6e70848d05c9cc9b846fe" },
     { name = "fastapi", specifier = ">=0.115,<1" },
     { name = "numpy", specifier = ">=2.0,<3" },
     { name = "pydantic", specifier = ">=2.10,<3" },

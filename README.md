@@ -36,7 +36,14 @@ uv run gnss-sim pilot --seed 20260925
 
 `data/generated/` 保存数据集 manifest、`cases/<case_id>/input.json` 与单独的 `truth.json`，默认不入 Git。输入只有日期、固定参考坐标、三轴观测及其确定性派生量；背景、噪声、相位、事件与注入贡献仅在真值文件中。相同主 seed、案例序号、类型与生成器版本产生相同案例内容，批次 ID 和创建时间不要求相同。旧版本批次不再由新接口读取。
 
-`data/pilots/pilot-v1/` 是独立固定的 300 例开发集；再次运行 `pilot` 只校验，不重抽。未来方法统一读取这里的 `input.json`，以 `DetectionResult` JSONL 交给 `uv run gnss-sim evaluate --predictions predictions.jsonl --method METHOD --out report.json` 评价。方法失败或缺少输出保留在分母中。
+`data/pilots/pilot-v1/` 是独立固定的 300 例开发集；再次运行 `pilot` 只校验，不重抽。未来方法统一读取这里的 `input.json`，分别输出 Point/Range JSONL：
+
+```powershell
+uv run gnss-sim evaluate --task point --predictions point.jsonl --method METHOD --out point-report.json
+uv run gnss-sim evaluate --task range --predictions range.jsonl --method METHOD --out range-report.json
+```
+
+Point 为逐轴异常日期列表，按精确日期微 P/R/F1 评分；Range 为逐轴闭区间列表，按 Affiliation case×axis 宏 P/R/F1 评分。失败与缺失保留固定案例分母；完整字段与 FAR 口径见 [P4 协议](docs/05-p4-pilot-evaluator.md)。
 
 ## 已实现口径
 

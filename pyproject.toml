@@ -12,6 +12,7 @@ dependencies = [
   "numpy>=2.0,<3",
   "pydantic>=2.10,<3",
   "uvicorn>=0.30,<1",
+  "affiliation @ git+https://github.com/ahstat/affiliation-metrics-py.git@8d8449858096bbade6a6e70848d05c9cc9b846fe",
 ]
 
 [dependency-groups]
@@ -22,6 +23,9 @@ gnss-sim = "gnss_sim.cli:main"
 
 [tool.hatch.build.targets.wheel]
 packages = ["src/gnss_sim"]
+
+[tool.hatch.metadata]
+allow-direct-references = true
 
 [tool.pytest.ini_options]
 testpaths = ["tests"]

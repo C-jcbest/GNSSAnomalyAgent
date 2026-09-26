@@ -3,6 +3,7 @@ from __future__ import annotations
 import argparse
 import json
 import os
+import sys
 from pathlib import Path
 
 import uvicorn
@@ -32,6 +33,7 @@ def main() -> None:
     pilot.add_argument("--seed", type=int, default=DEFAULT_SEED)
     pilot.add_argument("--data-dir", type=Path, default=Path("data/pilots"))
     evaluate = commands.add_parser("evaluate", help="Evaluate JSONL predictions on pilot-v1")
+    evaluate.add_argument("--task", choices=("point", "range"), required=True)
     evaluate.add_argument("--predictions", type=Path, required=True)
     evaluate.add_argument("--method", required=True)
     evaluate.add_argument("--pilot-dir", type=Path, default=Path("data/pilots/pilot-v1"))
@@ -45,9 +47,12 @@ def main() -> None:
         directory = generate_pilot(args.data_dir, args.seed)
         print(f"{directory.resolve()}: 300 verified cases")
     elif args.command == "evaluate":
-        results, errors = load_results_jsonl(args.predictions)
-        report = evaluate_pilot(args.pilot_dir, results, args.method)
-        report["invalid_result_lines"] = errors
+        results, errors = load_results_jsonl(args.predictions, args.task)
+        report = evaluate_pilot(args.pilot_dir, results, args.method, args.task)
+        if errors:
+            lines = ", ".join(str(error["line"]) for error in errors)
+            print(f"Ignored invalid prediction lines: {lines}; missing cases count as failures",
+                  file=sys.stderr)
         output = json.dumps(report, ensure_ascii=False, indent=2, allow_nan=False) + "\n"
         if args.out:
             args.out.parent.mkdir(parents=True, exist_ok=True)

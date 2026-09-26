@@ -5,7 +5,7 @@ import pytest
 
 from gnss_sim.generator import generate_case
 from gnss_sim.scenarios import MAKERS
-from gnss_sim.schemas import SCENARIO_TYPES, CaseTruth, DetectionResult, GenerationRequest
+from gnss_sim.schemas import SCENARIO_TYPES, CaseTruth, GenerationRequest, PointResult, RangeResult
 from gnss_sim.storage import DatasetStore
 
 
@@ -79,12 +79,12 @@ def test_p3_mixed_batch_has_six_scenarios_and_is_reproducible(tmp_path):
         assert left.event_count >= 2
 
 
-def test_detection_result_has_no_prediction_count_limit():
+def test_point_and_range_result_have_no_prediction_count_limit():
     base = dict(case_id="case_0001", method="future_method", status="success")
-    assert DetectionResult(**base, events=[]).events == []
-    prediction = dict(type="spike", axes=["N"], start_index=100, end_index=100)
-    result = DetectionResult(**base, events=[dict(prediction_id=f"pred_{i:03d}", **prediction) for i in range(30)])
-    assert len(result.events) == 30
+    points = PointResult(**base, predictions={"N": list(range(30)), "E": [], "U": []})
+    ranges = RangeResult(**base, predictions={"N": [[i, i] for i in range(30)],
+                                               "E": [], "U": []})
+    assert len(points.predictions.N) == len(ranges.predictions.N) == 30
 
 
 def test_truth_schema_does_not_encode_p3_event_cap():

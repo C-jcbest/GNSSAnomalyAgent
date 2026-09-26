@@ -1,5 +1,11 @@
 # 项目状态与关键决定
 
+## 2026-09-26 · P4 评价器按 VisualTimeAnomaly 路线破坏性精简
+
+- 类型：需求修正、决定。用户将 P4 从单一 event matching 改为 Point 与 Range 两项任务；2026-09-25 条目中的一对一匹配、Spike/Step 容差、tIoU≥0.5、Onset/End MAE、CCR/MCR、派生 active/effect 视图及旧 `DetectionResult.events[]` 现为历史口径，不再用于当前预测、评分或报告。`pilot-v1` 的 300 例、seed、manifest/summary 哈希、`CaseTruth.events[]`、`event-v6` 生成器和 P1～P3 公式保持原样。正式口径见 [P4 协议](05-p4-pilot-evaluator.md)。
+- 当前实现：`PointResult`/`RangeResult` 只含 case_id、method、status 与逐轴日期/区间；Point 在全 Pilot 日×轴二值网格上做精确日微 P/R/F1，Range 对有区间 GT 的 case×axis 用上游 Affiliation 实现做宏 P/R/F1。两项任务分报成功负轴 FAR 与执行成功率；失败正轴按空预测评分，失败负轴不充作干净样本。Affiliation 来自 `ahstat/affiliation-metrics-py` 的 commit `8d8449858096bbade6a6e70848d05c9cc9b846fe`，通过依赖与锁文件固定。旧 JSONL/report 不兼容，无迁移层；P5 前仍不运行检测器或模型。
+- 验收：264 项 pytest、Ruff、`uv lock --check`、Point/Range CLI 冒烟测试通过。`pilot-v1` 再次验证了全部 300 例，manifest/summary SHA256 分别保持 `a2e43db3493f86b36d1b962126f70f462b2ee3f4bf711bdbd84b078d43c10e33` 与 `a88b4ca674fc3e122f48ba798d7898af2016e02ad4e24e6328f405c62a369007`；没有重生成或覆盖曲线/真值。测试覆盖精确点匹配、闭区间向量、原始 Affiliation 调用、宏/微汇总、负轴 FAR 与失败保留。
+
 ## 2026-09-25 · P4 固定 Pilot 与事件评价器验收
 
 - 类型：决定、状态。`event-v6` 的 P1～P3 背景、幅值、持续时间、场景和生成公式未改。`uv run gnss-sim pilot --seed 20260925` 固定本地 `data/pilots/pilot-v1/`：30 Normal、120 Single、150 Multi；五种 Single 各 24，每种 N/E/U 各 8、每 type×axis 正负各 4；六场景各 25。分层只读 seed 派生的轴/符号元数据，不按观测曲线筛选。manifest 保存源码及案例文件 SHA256，重复调用只校验。唯一真值仍是各例 `events[]`，活动/影响视图按需派生。

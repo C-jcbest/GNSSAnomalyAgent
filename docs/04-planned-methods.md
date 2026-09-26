@@ -1,6 +1,6 @@
 # P2 事件与 P3 场景协议
 
-> 版本：2026-09-25 · `event-v6` 沿用 P2 的五种事件公式与幅值，新增 P3 多事件场景。P4 固定数据与评价器见 [专门协议](05-p4-pilot-evaluator.md)；检测方法仍是草案。
+> 版本：2026-09-26 · `event-v6` 沿用 P2 的五种事件公式与幅值，新增 P3 多事件场景。P4 Point/Range 数据与评价器见 [专门协议](05-p4-pilot-evaluator.md)；检测方法仍是草案。
 
 ## P2 的目标与边界
 
@@ -66,9 +66,9 @@ P3 案例由以下模板加独立事件随机流生成，不从五种类型等�
 
 `scenario_type` 只在 `truth.json` 中。每个事件保持独立 typed truth，按 `start_index`、同日起点时按 Slow Trend、Acceleration、Step、Transient Shift、Spike 的固定优先级排序，再编号 `event_001` 等。`event_contributions` 按同样顺序保存每个事件的 365×3 数组和注入分量；聚合数组必须分别等于对应事件贡献之和。相同 case seed 的 normal、P2、P3 变体有完全相同的相位、背景和测量噪声。研究人员网页的观测主图默认以浅色区间标记持续事件、竖线标记瞬时事件；时间线可按轴和事件族筛选、点选事件突出区间并查看独立贡献。隐藏标注时主图标记与时间线一同消失。该带真值交互图不作为视觉模型输入。
 
-`DetectionResult` 定义统一结果契约：`case_id`、`method`、`status` 和不限长度的预测 `events`。预测项含轴列表、起止索引、可选形态类型及置信度；P4 评价器不使用预测类型。目前没有检测器结果。P3 的 54 例均衡场景检查只验生成器与页面，不是 Pilot 或统计性能实验。
+P4 已将未来检测结果分成 `PointResult` 与 `RangeResult`：分别输出逐轴日期列表或闭区间列表，不要求预测异常类型。目前没有检测器结果。P3 的 54 例均衡场景检查只验生成器与页面，不是 Pilot 或统计性能实验。
 
-P4 已从 `CaseTruth.events[]` 在内存中确定性派生 365×3 的 `active` 与 `effect` 两个布尔视图。前者标活动日，后者包含持久事件结束后的残余偏移；不存第二套标签。当前评价只比较活动事件的轴、起点与活动区间。一次趋势中的尖峰可同时为 active，但评分仍按两个事件一对一匹配。详见 [P4 协议](05-p4-pilot-evaluator.md)。缺测尚未实现。
+P4 直接从 `CaseTruth.events[]` 派生任务真值，不存第二套标签。Spike 与 Step 起点进入 Point；Slow Trend、Acceleration、Transient Shift 的活动区间进入 Range。Step 后及长期事件结束后的稳定残余偏移不延长活动区间。一次趋势中的 Spike 可同时作为 Point 目标和 Range 背景上的局部变化。详见 [P4 协议](05-p4-pilot-evaluator.md)。缺测尚未实现。
 
 ## 数值与视觉方法如何比较
 
@@ -85,7 +85,7 @@ P4 已从 `CaseTruth.events[]` 在内存中确定性派生 365×3 的 `active` �
 
 ## 事件输出与评价
 
-P4 已冻结统一预测项和事件匹配：`type` 可选且不用于评分；Spike/Step 为单日起点，分别容差 ±1/±3 日；其余三种活动区间要求闭区间 tIoU ≥0.5；严格单轴与一对一匹配。主指标为全 Pilot 事件微汇总 P/R/F1，并报告 Onset MAE、区间 IoU/End MAE、Normal FAR、Multi MCR/CCR 和执行成功率。分母、失败规则及零分母语义见 [P4 协议](05-p4-pilot-evaluator.md)。
+P4 当前只保留两个评价任务：Point 在全部 Pilot 三轴日网格上做精确日期微 P/R/F1；Range 对有区间 GT 的 case×axis 调用固定版本的 Affiliation 实现并宏平均 P/R/F1。两项任务各报成功负轴 FAR 与执行成功率，失败正轴按空预测评分。预测不含异常类型；不再使用旧一对一匹配、IoU 门槛或 Multi CCR/MCR。完整口径见 [P4 协议](05-p4-pilot-evaluator.md)。
 
 ## Pilot 与独立测试的顺序
 

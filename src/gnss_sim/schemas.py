@@ -205,26 +205,38 @@ class DatasetManifest(StrictModel):
     error: str | None = None
 
 
-class PredictedEvent(StrictModel):
-    prediction_id: str
-    type: Literal["spike", "step", "slow_trend", "acceleration", "transient_shift"] | None = None
-    axes: list[Axis] = Field(min_length=1)
-    start_index: int = Field(ge=0, le=364)
-    end_index: int = Field(ge=0, le=364)
-    confidence: float | None = Field(default=None, ge=0, le=1)
-    attributes: dict[str, str | int | float | bool] = Field(default_factory=dict)
+DayIndex = Annotated[int, Field(strict=True, ge=0, le=364)]
+DayRange = tuple[DayIndex, DayIndex]
+
+
+class PointPredictions(StrictModel):
+    N: list[DayIndex]
+    E: list[DayIndex]
+    U: list[DayIndex]
+
+
+class RangePredictions(StrictModel):
+    N: list[DayRange]
+    E: list[DayRange]
+    U: list[DayRange]
 
     @model_validator(mode="after")
-    def validate_bounds(self):
-        if self.end_index < self.start_index:
-            raise ValueError("end_index precedes start_index")
-        if len(self.axes) != len(set(self.axes)):
-            raise ValueError("axes must be unique")
+    def validate_ranges(self):
+        for ranges in (self.N, self.E, self.U):
+            if any(start > end for start, end in ranges):
+                raise ValueError("range start must not exceed end")
         return self
 
 
-class DetectionResult(StrictModel):
+class PointResult(StrictModel):
     case_id: str
     method: str
     status: Literal["success", "failed"]
-    events: list[PredictedEvent] = Field(default_factory=list)
+    predictions: PointPredictions
+
+
+class RangeResult(StrictModel):
+    case_id: str
+    method: str
+    status: Literal["success", "failed"]
+    predictions: RangePredictions
