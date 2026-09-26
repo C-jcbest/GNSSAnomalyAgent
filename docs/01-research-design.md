@@ -1,6 +1,6 @@
 # 研究问题与实验路线
 
-> 版本：2026-09-26 · `event-v6` 生成器及 `pilot-v1`/P4 Point/Range 评价器已实现；[P5 数值基线](06-p5-numerical-baselines.md)完成设计但尚未实施。目前没有检测器或性能结果。
+> 版本：2026-09-26 · `event-v6` 生成器、`pilot-v1`/P4 Point/Range 评价器及[P5 数值基线](06-p5-numerical-baselines.md)已实现。当前只有合成开发 Pilot 上的数值结果，尚无视觉或独立测试结果。
 
 ## 摘要
 
@@ -37,7 +37,7 @@ GNSS 时间序列研究常把 annual 和 semiannual 项作为周期信号，参�
 | P2 | 五种单轴单事件注入、typed truth、独立贡献与交互核查 | 已实现；公式沿用至 `event-v6` |
 | P3 | 六场景多事件叠加、同轴/跨轴组合、逐事件贡献 | 已实现；不叠加 Slow Trend 与 Acceleration |
 | P4 | 300 例固定开发 Pilot、Point/Range 分任务真值与评价器 | 已实现；见 [P4 协议](05-p4-pilot-evaluator.md) |
-| P5 | 四个数值基线、Normal 阈值校准、冻结 Point/Range 各一项 | [设计已定](06-p5-numerical-baselines.md)，未实现 |
+| P5 | 四个数值基线、Normal 阈值校准、冻结 Point/Range 各一项 | [已验收](06-p5-numerical-baselines.md)：Point SR、Range Rolling Theil–Sen |
 | P6～P7 | 独立视觉、固定组合与统一批量评价 | 未实现 |
 | P8 | 互补性和失败案例分析 | 未实现 |
 | P9 | 在互补性证据支持下设计轻量 Agent 与独立测试 | 未实现 |

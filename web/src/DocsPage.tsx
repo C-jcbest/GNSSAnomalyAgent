@@ -89,7 +89,7 @@ export default function DocsPage() {
           <h1>实验设计手册</h1>
           <p>从研究问题走到生成公式，再核对数据与复现流程。</p>
         </div>
-        <span className="docs-stage">P4 已验收 · P5 设计</span>
+        <span className="docs-stage">05 / P5 已验收</span>
       </div>
 
       <div className="docs-layout">
@@ -123,7 +123,7 @@ export default function DocsPage() {
             <div className="docs-state docs-error" role="alert">{error}</div>
           ) : (
             <>
-              <div className="docs-paper-topline"><span>GNSS SIMULATION LAB</span><span>{selected === "p1-normal-model" ? "FROZEN BACKGROUND · P1" : selected === "planned-methods" ? "EVENT PROTOCOL · P2/P3" : selected === "p4-pilot-evaluator" ? "PILOT & EVALUATOR · P4" : selected === "p5-numerical-baselines" ? "NUMERICAL DESIGN · P5" : "RESEARCH NOTE"}</span></div>
+              <div className="docs-paper-topline"><span>GNSS SIMULATION LAB</span><span>{selected === "p1-normal-model" ? "FROZEN BACKGROUND · P1" : selected === "planned-methods" ? "EVENT PROTOCOL · P2/P3" : selected === "p4-pilot-evaluator" ? "PILOT & EVALUATOR · P4" : selected === "p5-numerical-baselines" ? "NUMERICAL BASELINES · P5" : "RESEARCH NOTE"}</span></div>
               <details className="docs-mobile-contents">
                 <summary>本篇目录</summary>
                 {headings.map((item) => <button key={item.id} onClick={() => jumpTo(item.id)}>{item.title}</button>)}

@@ -1,0 +1,94 @@
+{
+  "methods": {
+    "matrix-profile": {
+      "calibration": {
+        "threshold": {
+          "E": 6.182971564879041,
+          "N": 6.222121850236403,
+          "U": 6.189510507656067
+        }
+      },
+      "fixed": {
+        "center_offset": 15,
+        "normalize": true,
+        "threshold_quantile": 0.95,
+        "window_days": 30
+      }
+    },
+    "pelt": {
+      "calibration": {
+        "beta": {
+          "E": 32,
+          "N": 32,
+          "U": 32
+        },
+        "penalty": {
+          "E": 188.79671531463973,
+          "N": 188.79671531463973,
+          "U": 188.79671531463973
+        }
+      },
+      "fixed": {
+        "beta_candidates": [
+          1,
+          2,
+          4,
+          8,
+          16,
+          32
+        ],
+        "jump": 1,
+        "min_size": 3,
+        "model": "l2",
+        "normal_max_false_axes_per_axis": 1
+      }
+    },
+    "sr": {
+      "calibration": {
+        "threshold": {
+          "E": 0.26361835231140657,
+          "N": 0.24503167152814492,
+          "U": 0.2740291222258393
+        }
+      },
+      "fixed": {
+        "epsilon": 1e-12,
+        "log_amplitude_window": 3,
+        "threshold_quantile": 0.95
+      }
+    },
+    "theilsen": {
+      "calibration": {
+        "threshold": {
+          "E": 0.0562132783307788,
+          "N": 0.05463217448846406,
+          "U": 0.09609552149426444
+        }
+      },
+      "fixed": {
+        "center_offset": 15,
+        "threshold_quantile": 0.95,
+        "window_days": 30
+      }
+    }
+  },
+  "pilot_sha256": {
+    "manifest": "a2e43db3493f86b36d1b962126f70f462b2ee3f4bf711bdbd84b078d43c10e33",
+    "summary": "a88b4ca674fc3e122f48ba798d7898af2016e02ad4e24e6328f405c62a369007"
+  },
+  "selected": {
+    "point": "sr",
+    "range": "theilsen"
+  },
+  "source_sha256": {
+    "evaluation.py": "4f9fd38b45213897667ba73aa0e6fb2d27d0554585e7368b3cce75b961cdcb0b",
+    "numerical.py": "8750e6d514425c0ab18be8dcf8663d64339952e8283558f44e5d8a121520e286",
+    "numerical_runner.py": "743890640a6c00627edbc6dcbf167227932234d02652053fd8bab34511700646"
+  },
+  "versions": {
+    "numpy": "2.4.6",
+    "ruptures": "1.1.10",
+    "scipy": "1.17.1",
+    "stumpy": "1.14.1"
+  }
+}

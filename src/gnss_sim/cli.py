@@ -38,6 +38,11 @@ def main() -> None:
     evaluate.add_argument("--method", required=True)
     evaluate.add_argument("--pilot-dir", type=Path, default=Path("data/pilots/pilot-v1"))
     evaluate.add_argument("--out", type=Path)
+    numerical = commands.add_parser("numerical", help="Run a frozen P5 numerical baseline")
+    numerical.add_argument("--method", choices=("sr", "pelt", "matrix-profile", "theilsen"),
+                           required=True)
+    numerical.add_argument("--pilot-dir", type=Path, default=Path("data/pilots/pilot-v1"))
+    numerical.add_argument("--out-dir", type=Path, default=Path("runs/p5"))
     serve = commands.add_parser("serve", help="Serve the local experiment API and built UI")
     serve.add_argument("--host", default="127.0.0.1")
     serve.add_argument("--port", type=int, default=8765)
@@ -59,6 +64,11 @@ def main() -> None:
             args.out.write_text(output, encoding="utf-8")
         else:
             print(output)
+    elif args.command == "numerical":
+        from gnss_sim.numerical_runner import run_numerical
+
+        report = run_numerical(args.method, args.pilot_dir, args.out_dir)
+        print(json.dumps(report, ensure_ascii=False, indent=2, allow_nan=False))
     elif args.command == "generate":
         root = args.data_dir or Path(os.environ.get("GNSS_SIM_DATA_DIR", "data/generated"))
         request = GenerationRequest(seed=args.seed, count=args.count, case_type=args.case_type)

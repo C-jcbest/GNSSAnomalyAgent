@@ -1,6 +1,12 @@
 # 项目状态与关键决定
 
-## 2026-09-26 · P5 数值基线设计冻结（尚未实现）
+## 2026-09-26 · P5 四个数值基线运行与方法冻结
+
+- 类型：实现、验收。`gnss-sim numerical --method` 支持 SR、PELT、Matrix Profile、Rolling Theil–Sen；只读取固定 Pilot input，30 个 Normal 的逐轴最大分数校准三项阈值，PELT 从预定六个 beta 候选中按 Normal 误报选取，四项分别以现行 P4 evaluator 评分。300 例×四方法均执行成功；预测、report、run 记录在忽略入 Git 的 `runs/p5/`，四方法参数及选中方法另存[冻结配置](../configs/p5-frozen.json)。没有数值 ensemble、视觉模型或 Agent。
+- 开发结果：Point SR 的 P/R/F1/FAR 为 0.4490/0.7156/0.5518/0.2101，PELT 为 0.4194/0.2054/0.2758/0.1458；Range MP 的 Affiliation P/R/F1/FAR 为 0.0939/0.0954/0.0939/0.0499，Rolling Theil–Sen 为 0.9284/0.9449/0.9345/0.1954。按预定 F1 优先规则，冻结 Point SR 和 Range Rolling Theil–Sen。PELT 三轴均回退最大 `β=32`，N/E/U 的 Normal 校准误报数为 3/2/0，没有为追求结果扩大候选集。完整口径与时间见 [P5 协议](06-p5-numerical-baselines.md)。同一 Normal 既用于校准又用于开发 FAR，所有结果仅说明开发 Pilot，不能推断独立泛化或现场预警。
+- 验收：269 项 pytest、Ruff、`uv lock --check` 通过；四份 JSONL 各 300 条且零解析错误，SR 重跑的预测 SHA256 相同。`pilot-v1` manifest/summary SHA256 仍为 `a2e43db3493f86b36d1b962126f70f462b2ee3f4bf711bdbd84b078d43c10e33` / `a88b4ca674fc3e122f48ba798d7898af2016e02ad4e24e6328f405c62a369007`，逐例输入与真值通过冻结校验。P5 在此结束；P6 尚未开始。
+
+## 2026-09-26 · P5 数值基线设计冻结（实施前记录）
 
 - 类型：设计决定。P5 限定为四个独立数值基线：Point 的 SR、PELT；Range 的 Matrix Profile、Rolling Theil–Sen。P4 `pilot-v1` 数据、`event-v6` 生成器和 Point/Range evaluator 不变；不加数值 ensemble、视觉模型或 Agent。实施协议见 [P5 设计](06-p5-numerical-baselines.md)。
 - 参数：MP 与 Theil–Sen 均用 30 日窗口，分数映射到右中心日；SR 的频谱平滑宽度 3；PELT 固定 L2、`min_size=3`、`jump=1`，断点直接映射新片段首日。SR/MP/Theil–Sen 的三轴阈值及 PELT 的三轴 penalty 只按 30 个 Normal 输入校准，不按异常 GT 搜索 F1。Normal 同时进入开发评价，FAR 不能当独立数据误报保证。

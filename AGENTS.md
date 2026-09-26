@@ -5,8 +5,8 @@
 - 始终将检测输入与模拟真值分开保存。检测主输出分别报告异常日期或活动区间及分量，不要求异常类型，不凭曲线声称仪器故障、真实坡体形变或滑坡成因。
 - `event-v6` 固定背景：2025 年 365 日、P0=(0,0,0) mm、annual/semiannual 幅值 1.0/1.0/1.5 与 0.25/0.25/0.5 mm、365.25 日周期、白噪声标准差 0.5/0.5/1.0 mm。五类事件幅值固定为绝对 mm，不能由当前噪声 σ 动态换算；不得再将 `sigma_multiplier` 作为核心 truth 字段。数值是受控 benchmark 设定，不代表现场精度；不加 AR(1)、secular deformation 或兼容层。
 - P2 单事件入口保留供配对对照；P3 只能按六种场景模板组合，单例 2～6 事件、长期形变最多一个，不叠加 Slow Trend 与 Acceleration。每事件贡献独立保存，聚合逐元素求和；场景与真值不进入检测输入。`case_type=all` 是 P2 检查比例，`all_scenarios` 是均衡 P3 验收集合，均非 P4 Pilot 或自然频率。研究人员网页默认读取独立真值并显示异常标注，未来检测器仍只能读取 input；P3 阶段未实现检测器、评价器、缺测或 Agent。正式定义见 `docs/04-planned-methods.md`。
-- P4 已冻结 `pilot-v1`（seed 20260925，30 Normal/120 Single/150 Multi）；后续方法统一使用该批输入，不按曲线或检测表现筛选、重抽。`events[]` 是唯一真值。Point 评 Spike/Step 起点的精确日二值微 P/R/F1；Range 评其余三类活动区间的 Affiliation case×axis 宏 P/R/F1；各自报告成功负轴 FAR 和案例执行成功率。旧 event matching/IoU/CCR/MCR 契约已破坏性移除，不兼容旧预测或报告。规则以 `docs/05-p4-pilot-evaluator.md` 为准；P5 前不加检测器或模型调用。
-- P5 已完成设计、尚未实现：SR/PELT 分别作为 Point 基线，Matrix Profile/Rolling Theil–Sen 分别作为 Range 基线；只用 Pilot 的 30 个 Normal 输入校准阈值/penalty，再用固定 P4 evaluator 评价四个独立方法并冻结每任务一个。不得以异常真值调阈值、添加数值 ensemble 或把开发集 FAR 称为独立误报保证。实现细节以 `docs/06-p5-numerical-baselines.md` 为准。
+- P4 已冻结 `pilot-v1`（seed 20260925，30 Normal/120 Single/150 Multi）；后续方法统一使用该批输入，不按曲线或检测表现筛选、重抽。`events[]` 是唯一真值。Point 评 Spike/Step 起点的精确日二值微 P/R/F1；Range 评其余三类活动区间的 Affiliation case×axis 宏 P/R/F1；各自报告成功负轴 FAR 和案例执行成功率。旧 event matching/IoU/CCR/MCR 契约已破坏性移除，不兼容旧预测或报告。规则以 `docs/05-p4-pilot-evaluator.md` 为准。
+- P5 已实现并验收：SR/PELT 分别作为 Point 基线，Matrix Profile/Rolling Theil–Sen 分别作为 Range 基线；只用 Pilot 的 30 个 Normal 输入校准阈值/penalty，再用固定 P4 evaluator 评价四个独立方法。开发集按预定规则选择 Point SR、Range Rolling Theil–Sen，四方法参数见 `configs/p5-frozen.json`。不得以异常真值调阈值、添加数值 ensemble 或把开发集 FAR 称为独立误报保证。实现与结果见 `docs/06-p5-numerical-baselines.md`。
 - 全部位移使用毫米；H 与 R3D 是相对于固定初始坐标的偏移模长，不是路径长度。R3D 不与注入形变分量 D 混用。模拟参数只是实验设定，不能宣称代表现场 GNSS 精度。
 - 生成的数据、真值、凭据、模型原始响应和运行产物默认不入 Git。网页仅访问本地实验目录，不自动连接平台或模型 API。
 - `docs/` 是实验说明原稿，网页从后端文档接口读取。实现新阶段或修改公式、字段、评价口径时，同步更新相应文档及阶段状态；草案与已实现内容明确区分。

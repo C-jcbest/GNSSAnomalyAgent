@@ -1,6 +1,6 @@
 # GNSS 模拟实验台
 
-独立的纯模拟日尺度 N/E/U 实验线。P1～P3 生成器及 P4 固定 Pilot、Point/Range 评价器已实现。没有真实 GNSS 数据、检测运行或 Agent。
+独立的纯模拟日尺度 N/E/U 实验线。P1～P3 生成器、P4 固定 Pilot 与 Point/Range 评价器、P5 四个独立数值基线均已实现。没有真实 GNSS 数据、视觉检测或 Agent。
 
 ## 启动
 
@@ -26,7 +26,7 @@ uv run gnss-sim serve --port 18765
 3. [数据契约与可复现流程](docs/03-data-and-reproducibility.md)：输入与真值隔离、seed、文件和 API。
 4. [P2 事件与 P3 场景协议](docs/04-planned-methods.md)：五种事件公式与六种场景。
 5. [P4 固定 Pilot 与 Point/Range 评价协议](docs/05-p4-pilot-evaluator.md)：300 例配额、预测契约和两项任务的评分规则。
-6. [P5 数值基线与参数冻结设计](docs/06-p5-numerical-baselines.md)：四个候选方法、Normal 校准、时间映射和验收门槛；尚未实现。
+6. [P5 数值基线与参数冻结](docs/06-p5-numerical-baselines.md)：四个方法、Normal 校准、开发结果和冻结选择。
 
 CLI 可直接生成：
 
@@ -46,6 +46,17 @@ uv run gnss-sim evaluate --task range --predictions range.jsonl --method METHOD 
 
 Point 为逐轴异常日期列表，按精确日期微 P/R/F1 评分；Range 为逐轴闭区间列表，按 Affiliation case×axis 宏 P/R/F1 评分。失败与缺失保留固定案例分母；完整字段与 FAR 口径见 [P4 协议](docs/05-p4-pilot-evaluator.md)。
 
+P5 四个数值基线分别运行并保存到忽略入 Git 的 `runs/p5/`：
+
+```powershell
+uv run gnss-sim numerical --method sr
+uv run gnss-sim numerical --method pelt
+uv run gnss-sim numerical --method matrix-profile
+uv run gnss-sim numerical --method theilsen
+```
+
+完成四项后自动生成两张开发对照表和选择记录；后续使用的 Point SR、Range Rolling Theil–Sen 的参数见[冻结配置](configs/p5-frozen.json)。Pilot 是开发集，表中的 F1/FAR 不代表独立测试表现。
+
 ## 已实现口径
 
 - `generator_version = "event-v6"`；固定 2025 年的 365 个连续日观测，参考坐标为 `(0,0,0) mm`。该版本包含 P3 场景与逐事件贡献；背景及单事件公式沿用 P2。
@@ -55,4 +66,4 @@ Point 为逐轴异常日期列表，按精确日期微 P/R/F1 评分；Range 为
 - 网页按类型折叠案例，并默认从独立真值接口读取和显示事件标注；事件时间线可筛选、选择和查看独立贡献。该视图只供研究人员核查，不作为未来视觉方法的输入。
 - `POST /api/datasets` 只接受 `seed`、`count`、`case_type`，不兼容旧两字段请求或旧数据格式。
 
-运行 `uv run pytest` 和 `uv run ruff check .` 验证。关键决定记录在[项目状态](docs/project-status.md)。P5 仅完成设计，数值检测尚未运行。
+运行 `uv run pytest` 和 `uv run ruff check .` 验证。关键决定记录在[项目状态](docs/project-status.md)。P5 已验收，下一阶段为独立视觉方法。

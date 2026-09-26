@@ -1,6 +1,6 @@
-# P5 数值基线与参数冻结设计
+# P5 数值基线与参数冻结
 
-> 状态：2026-09-26 设计已定，尚未实现或运行；P4 `pilot-v1`、`event-v6` 与 [Point/Range 评价协议](05-p4-pilot-evaluator.md) 保持冻结。本文的数值选择是本项目预先定义的实现约定，不是参考论文的原封不动复现。
+> 状态：2026-09-26 已实现并验收；P4 `pilot-v1`、`event-v6` 与 [Point/Range 评价协议](05-p4-pilot-evaluator.md) 保持冻结。本文的数值选择是本项目预先定义的实现约定，不是参考论文的原封不动复现。
 
 ## 目标与范围
 
@@ -63,7 +63,7 @@ PELT 对每轴分别从固定候选 `β∈{1,2,4,8,16,32}` 按升序选取首个
 
 ## 运行、选择与冻结
 
-P5 实现时只增加 `gnss-sim numerical --method {sr,pelt,matrix-profile,theilsen}` 一个 CLI 子命令；方法与 P4 task 固定映射，不由用户另传 task。`numerical.py` 保留四个分数/断点函数及小型转换函数；`numerical_runner.py` 负责读取固定 Pilot、Normal 校准、全量预测、调用原 P4 evaluator 与保存文件。只增加 `scipy`、`ruptures`、`stumpy` 并用 `uv.lock` 固定实际版本，不引入 TSB-AD、Torch 或插件框架。
+当前只增加 `gnss-sim numerical --method {sr,pelt,matrix-profile,theilsen}` 一个 CLI 子命令；方法与 P4 task 固定映射，不由用户另传 task。`numerical.py` 保留四个分数/断点函数及小型转换函数；`numerical_runner.py` 负责读取固定 Pilot、Normal 校准、全量预测、调用原 P4 evaluator 与保存文件。只增加 `scipy`、`ruptures`、`stumpy` 并用 `uv.lock` 固定实际版本，不引入 TSB-AD、Torch 或插件框架。
 
 输出置于不入 Git 的 `runs/p5/<method>/`：`predictions.jsonl`、`report.json`、`run.json`。JSONL 按 Pilot manifest 案例顺序、N/E/U 轴顺序和升序索引稳定序列化；失败也写一行。`run.json` 记录 task、方法、完整参数与校准阈值、三轴 Normal 校准误报数、Pilot manifest/summary SHA256、源码修订与依赖版本、失败数和 `runtime_seconds`。计时从读取第一例输入前开始，包含 Normal 校准、300 例推理和预测写盘，不含 P4 评价与报告生成；STUMPY 首次 JIT 开销计入。时间只作相同环境下的描述量，不作选型平局条件。运行前后校验 Pilot 全部输入与真值哈希；不得写入 `data/pilots/pilot-v1/`。
 
@@ -77,4 +77,22 @@ P5 实现时只增加 `gnss-sim numerical --method {sr,pelt,matrix-profile,theil
 4. 300 例各有合法 `PointResult` 或 `RangeResult`，失败不删行；同配置重跑的 JSONL 字节一致，P4 evaluator 接受原样预测。
 5. Pilot manifest、summary、全部 `input.json`/`truth.json` 在 P5 前后哈希一致；只输出两张开发表和两个冻结方法，不声明模型优劣或现场预警能力。
 
-达到以上门槛后停止 P5，P6 再实现独立视觉方法。
+## 开发 Pilot 结果与冻结选择
+
+四个方法均产生 300 条合法预测，执行成功率 1.0。Point 的主指标为 P4 精确日微评分；Range 的主指标为 P4 case×axis Affiliation 宏评分。FAR 按 P4 成功负轴定义，包含其他任务有 GT、而当前任务无 GT 的轴；30 个 Normal 又参与了阈值校准，因此这些数字都不是独立测试结论。时间为本地一次全量运行的秒数，含校准和预测写盘，不含 P4 评价。
+
+| Point 方法 | Precision | Recall | F1 | FAR | 时间（秒） |
+| --- | ---: | ---: | ---: | ---: | ---: |
+| SR | 0.4490 | 0.7156 | **0.5518** | 0.2101 | 0.27 |
+| PELT | 0.4194 | 0.2054 | 0.2758 | 0.1458 | 587.46 |
+
+| Range 方法 | Affiliation P | Affiliation R | Affiliation F1 | FAR | 时间（秒） |
+| --- | ---: | ---: | ---: | ---: | ---: |
+| Matrix Profile | 0.0939 | 0.0954 | 0.0939 | 0.0499 | 21.74 |
+| Rolling Theil–Sen | 0.9284 | 0.9449 | **0.9345** | 0.1954 | 62.70 |
+
+PELT 六个候选 penalty 均未让 N/E 的 30 个 Normal 误报例数降到预设的至多 1 例，故按预注册回退使用三轴 `β=32`；此时 N/E/U 的 Normal 误报例数分别为 3/2/0，没有扩展搜索范围。三个分数法按 95% 分位数校准后，每轴 30 个 Normal 中均有 2 例超过阈值，符合已说明的有限样本分位数语义。
+
+依预定 F1 优先规则，P5 冻结 **SR 为 Point 方法、Rolling Theil–Sen 为 Range 方法**。四个方法的完整固定参数、三轴校准值、依赖版本、Pilot 哈希和源码哈希保存在[受版本控制的冻结配置](../configs/p5-frozen.json)；逐例预测和原始报告保存在不入 Git 的 `runs/p5/`。Pilot manifest/summary 哈希仍分别为 `a2e43db3493f86b36d1b962126f70f462b2ee3f4bf711bdbd84b078d43c10e33` 与 `a88b4ca674fc3e122f48ba798d7898af2016e02ad4e24e6328f405c62a369007`。SR 重跑的预测 JSONL SHA256 两次均为 `00d626b4635f7473cb377ccbd5d66995914e53158c0d6ec5b3dda073487939cc`。
+
+269 项 pytest、Ruff 与 `uv lock --check` 通过；四个方法的 `PointResult`/`RangeResult` JSONL 均为 300 条、无解析错误，冻结 Pilot 逐例校验通过。P5 在此停止；P6 才实现独立视觉方法。上述选择与分数只描述 Development Pilot，不推论真实 GNSS 异常或滑坡预警能力。

@@ -49,4 +49,4 @@ uv run gnss-sim evaluate --task point --predictions point.jsonl --method visual 
 uv run gnss-sim evaluate --task range --predictions range.jsonl --method visual --out range-report.json
 ```
 
-报告只含 `task`、对应三项主指标、`far`、`execution_success_rate`。无效 JSONL 行在 stderr 列出行号，其缺失案例按失败处理。重复 case ID、未知 case ID、method 不一致或任务结果模型不匹配会报错。旧一对一匹配、IoU 门槛、Onset/End MAE、CCR/MCR 和旧 report 格式均已移除，没有兼容层。手工样例覆盖精确日期、区间端点、上游 Affiliation 一致性、宏/微聚合、负轴 FAR、无预测与失败；工程验收不代表检测性能。P5 才开发检测方法。
+报告只含 `task`、对应三项主指标、`far`、`execution_success_rate`。无效 JSONL 行在 stderr 列出行号，其缺失案例按失败处理。重复 case ID、未知 case ID、method 不一致或任务结果模型不匹配会报错。旧一对一匹配、IoU 门槛、Onset/End MAE、CCR/MCR 和旧 report 格式均已移除，没有兼容层。手工样例覆盖精确日期、区间端点、上游 Affiliation 一致性、宏/微聚合、负轴 FAR、无预测与失败；工程验收不代表检测性能。后续的数值基线与开发结果见 [P5 协议](06-p5-numerical-baselines.md)。

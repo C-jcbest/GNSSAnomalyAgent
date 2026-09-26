@@ -66,14 +66,14 @@ P3 案例由以下模板加独立事件随机流生成，不从五种类型等�
 
 `scenario_type` 只在 `truth.json` 中。每个事件保持独立 typed truth，按 `start_index`、同日起点时按 Slow Trend、Acceleration、Step、Transient Shift、Spike 的固定优先级排序，再编号 `event_001` 等。`event_contributions` 按同样顺序保存每个事件的 365×3 数组和注入分量；聚合数组必须分别等于对应事件贡献之和。相同 case seed 的 normal、P2、P3 变体有完全相同的相位、背景和测量噪声。研究人员网页的观测主图默认以浅色区间标记持续事件、竖线标记瞬时事件；时间线可按轴和事件族筛选、点选事件突出区间并查看独立贡献。隐藏标注时主图标记与时间线一同消失。该带真值交互图不作为视觉模型输入。
 
-P3 的 54 例均衡场景检查只验生成器与页面，不是 Pilot 或统计性能实验。P4 的预测格式、从 `CaseTruth.events[]` 派生的 Point/Range 真值和评分规则统一见 [P4 协议](05-p4-pilot-evaluator.md)；目前没有检测器结果。缺测尚未实现。
+P3 的 54 例均衡场景检查只验生成器与页面，不是 Pilot 或统计性能实验。P4 的预测格式、从 `CaseTruth.events[]` 派生的 Point/Range 真值和评分规则统一见 [P4 协议](05-p4-pilot-evaluator.md)；数值检测的开发结果见 [P5 协议](06-p5-numerical-baselines.md)。缺测尚未实现。
 
 ## 后续方法衔接
 
-P5 数值方法已在[专门设计](06-p5-numerical-baselines.md)中定为 SR、PELT、Matrix Profile 与 Rolling Theil–Sen；此处早期 Hampel、斜率变化等候选不再是 P5 实施清单。P6 纯视觉方法拟查看同一输入生成的 N/E/U 带符号位移与 H 四联图，图中不得包含事件标签或注入参数；其具体提示与输出设计待 P6 确定。
+P5 已按[专门协议](06-p5-numerical-baselines.md)实现 SR、PELT、Matrix Profile 与 Rolling Theil–Sen；早期 Hampel、斜率变化等候选未纳入。P6 纯视觉方法拟查看同一输入生成的 N/E/U 带符号位移与 H 四联图，图中不得包含事件标签或注入参数；其具体提示与输出设计待 P6 确定。
 
 ## Pilot 与独立测试的顺序
 
 P4 已固定开发用 `pilot-v1`；配额、分层限制、预测契约和手工验收见 [P4 协议](05-p4-pilot-evaluator.md)。Pilot 不等于独立最终测试。
 
-之后数值、视觉和固定组合必须使用 `pilot-v1` 的同一批检测输入，真值不得进入提示词、路由、参数选择或工具输出。只有在开发分析显示互补性时才设计 Agent；还需与较强的单方法和固定组合比较，并披露模型请求与总耗时。目前尚无检测结果。
+P5 数值方法已使用 `pilot-v1`；后续视觉和固定组合也必须读取同一批检测输入，真值不得进入提示词、路由、参数选择或工具输出。只有在开发分析显示互补性时才设计 Agent；还需与较强的单方法和固定组合比较，并披露模型请求与总耗时。当前只有开发 Pilot 数值结果，尚无独立测试结论。
