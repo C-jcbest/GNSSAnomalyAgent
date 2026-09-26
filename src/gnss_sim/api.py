@@ -17,6 +17,7 @@ DOCUMENTS = (
     {"slug": "planned-methods", "title": "P2 事件与 P3 场景协议", "file": "04-planned-methods.md"},
     {"slug": "p4-pilot-evaluator", "title": "P4 固定 Pilot 与 Point/Range 评价", "file": "05-p4-pilot-evaluator.md"},
     {"slug": "p5-numerical-baselines", "title": "P5 数值基线与参数冻结", "file": "06-p5-numerical-baselines.md"},
+    {"slug": "p6-visual-baseline", "title": "P6 纯视觉基线设计", "file": "07-p6-visual-baseline.md"},
 )
 
 

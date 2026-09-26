@@ -1,5 +1,11 @@
 # 项目状态与关键决定
 
+## 2026-09-26 · P6 纯视觉基线实施前设计
+
+- 类型：设计决定、文档同步。P6 固定为 `pilot-v1` 上独立的 Point/Range 零样本图像基线：从 `CaseInput.displacement_mm` 渲染 N/E/U 三联图，每任务每例一次视觉模型请求，严格解析为现有 P4 结果模型，仍用原评价器计分。旧文档中的 NEUH 四联图已收束为 NEU；不得加入 H、数值摘要、P5 候选、few-shot 或 Agent。正式设计见 [P6 协议](07-p6-visual-baseline.md)。
+- 真值隔离：P6 推理阶段只核对 manifest 指定的输入哈希，不调用会读取 `truth.json` 的 `verify_pilot()`；两任务各生成 300 行结果后单独评价。超时、API/解析失败保留失败行，原始模型响应另存且不入 Git。先在 Pilot 外做图像和 JSON 工程预检，随后冻结图像、提示、模型与运行配置。
+- 状态与待决：当前只完成协议和网页文档导航同步，没有 renderer、runner、模型端点核验、正式调用或 P6 分数。首选 Qwen2.5-VL-7B-Instruct 的实际 provider、模型修订、图像缩放和可用请求参数仍须实施前核实。P5 开发结果保持不变，不据此推断 P6 或独立测试表现。
+
 ## 2026-09-26 · P5 四个数值基线运行与方法冻结
 
 - 类型：实现、验收。`gnss-sim numerical --method` 支持 SR、PELT、Matrix Profile、Rolling Theil–Sen；只读取固定 Pilot input，30 个 Normal 的逐轴最大分数校准三项阈值，PELT 从预定六个 beta 候选中按 Normal 误报选取，四项分别以现行 P4 evaluator 评分。300 例×四方法均执行成功；预测、report、run 记录在忽略入 Git 的 `runs/p5/`，四方法参数及选中方法另存[冻结配置](../configs/p5-frozen.json)。没有数值 ensemble、视觉模型或 Agent。

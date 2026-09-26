@@ -27,6 +27,7 @@ uv run gnss-sim serve --port 18765
 4. [P2 事件与 P3 场景协议](docs/04-planned-methods.md)：五种事件公式与六种场景。
 5. [P4 固定 Pilot 与 Point/Range 评价协议](docs/05-p4-pilot-evaluator.md)：300 例配额、预测契约和两项任务的评分规则。
 6. [P5 数值基线与参数冻结](docs/06-p5-numerical-baselines.md)：四个方法、Normal 校准、开发结果和冻结选择。
+7. [P6 纯视觉基线设计](docs/07-p6-visual-baseline.md)：N/E/U 三联图、独立 Point/Range 提示、运行与真值隔离；尚未实现。
 
 CLI 可直接生成：
 

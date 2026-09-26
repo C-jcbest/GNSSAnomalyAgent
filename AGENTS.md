@@ -7,6 +7,7 @@
 - P2 单事件入口保留供配对对照；P3 只能按六种场景模板组合，单例 2～6 事件、长期形变最多一个，不叠加 Slow Trend 与 Acceleration。每事件贡献独立保存，聚合逐元素求和；场景与真值不进入检测输入。`case_type=all` 是 P2 检查比例，`all_scenarios` 是均衡 P3 验收集合，均非 P4 Pilot 或自然频率。研究人员网页默认读取独立真值并显示异常标注，未来检测器仍只能读取 input；P3 阶段未实现检测器、评价器、缺测或 Agent。正式定义见 `docs/04-planned-methods.md`。
 - P4 已冻结 `pilot-v1`（seed 20260925，30 Normal/120 Single/150 Multi）；后续方法统一使用该批输入，不按曲线或检测表现筛选、重抽。`events[]` 是唯一真值。Point 评 Spike/Step 起点的精确日二值微 P/R/F1；Range 评其余三类活动区间的 Affiliation case×axis 宏 P/R/F1；各自报告成功负轴 FAR 和案例执行成功率。旧 event matching/IoU/CCR/MCR 契约已破坏性移除，不兼容旧预测或报告。规则以 `docs/05-p4-pilot-evaluator.md` 为准。
 - P5 已实现并验收：SR/PELT 分别作为 Point 基线，Matrix Profile/Rolling Theil–Sen 分别作为 Range 基线；只用 Pilot 的 30 个 Normal 输入校准阈值/penalty，再用固定 P4 evaluator 评价四个独立方法。开发集按预定规则选择 Point SR、Range Rolling Theil–Sen，四方法参数见 `configs/p5-frozen.json`。不得以异常真值调阈值、添加数值 ensemble 或把开发集 FAR 称为独立误报保证。实现与结果见 `docs/06-p5-numerical-baselines.md`。
+- P6 目前只有设计，未实现或调用模型。按 `docs/07-p6-visual-baseline.md` 使用 N/E/U 三联图、独立零样本 Point/Range 提示和同一固定模型；不加入 H、数值候选、真值或 Agent。推理阶段不得调用读取真值的 `verify_pilot()`；正式 Pilot 前须完成非 Pilot 工程预检、核实 provider/模型标识并冻结配置。
 - 全部位移使用毫米；H 与 R3D 是相对于固定初始坐标的偏移模长，不是路径长度。R3D 不与注入形变分量 D 混用。模拟参数只是实验设定，不能宣称代表现场 GNSS 精度。
 - 生成的数据、真值、凭据、模型原始响应和运行产物默认不入 Git。网页仅访问本地实验目录，不自动连接平台或模型 API。
 - `docs/` 是实验说明原稿，网页从后端文档接口读取。实现新阶段或修改公式、字段、评价口径时，同步更新相应文档及阶段状态；草案与已实现内容明确区分。
