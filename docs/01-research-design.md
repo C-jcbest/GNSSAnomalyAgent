@@ -1,6 +1,6 @@
 # 研究问题与实验路线
 
-> 版本：2026-09-26 · `event-v6` 生成器及 `pilot-v1`/P4 Point/Range 评价器已实现。P5～P9 尚未实施；目前没有检测器或性能结果。
+> 版本：2026-09-26 · `event-v6` 生成器及 `pilot-v1`/P4 Point/Range 评价器已实现；[P5 数值基线](06-p5-numerical-baselines.md)完成设计但尚未实施。目前没有检测器或性能结果。
 
 ## 摘要
 
@@ -37,7 +37,8 @@ GNSS 时间序列研究常把 annual 和 semiannual 项作为周期信号，参�
 | P2 | 五种单轴单事件注入、typed truth、独立贡献与交互核查 | 已实现；公式沿用至 `event-v6` |
 | P3 | 六场景多事件叠加、同轴/跨轴组合、逐事件贡献 | 已实现；不叠加 Slow Trend 与 Acceleration |
 | P4 | 300 例固定开发 Pilot、Point/Range 分任务真值与评价器 | 已实现；见 [P4 协议](05-p4-pilot-evaluator.md) |
-| P5～P7 | 数值、独立视觉、固定组合与统一批量评价 | 未实现 |
+| P5 | 四个数值基线、Normal 阈值校准、冻结 Point/Range 各一项 | [设计已定](06-p5-numerical-baselines.md)，未实现 |
+| P6～P7 | 独立视觉、固定组合与统一批量评价 | 未实现 |
 | P8 | 互补性和失败案例分析 | 未实现 |
 | P9 | 在互补性证据支持下设计轻量 Agent 与独立测试 | 未实现 |
 
@@ -45,4 +46,4 @@ P1～P4 统一采用 365 日案例。Pilot 是开发验证，不是独立最终�
 
 ## 阅读路径
 
-先看 [P1 正常序列模型](02-p1-normal-model.md) 理解背景，再看 [P2 事件与 P3 场景协议](04-planned-methods.md) 理解五种事件与六种组合；[数据契约与可复现流程](03-data-and-reproducibility.md) 说明临时批次，[P4 固定 Pilot 与 Point/Range 评价协议](05-p4-pilot-evaluator.md) 说明正式开发集和评分。网页的真值视图只用于生成检查；未来检测方法只能使用案例输入。
+先看 [P1 正常序列模型](02-p1-normal-model.md) 理解背景，再看 [P2 事件与 P3 场景协议](04-planned-methods.md) 理解五种事件与六种组合；[数据契约与可复现流程](03-data-and-reproducibility.md) 说明临时批次，[P4 固定 Pilot 与 Point/Range 评价协议](05-p4-pilot-evaluator.md) 说明正式开发集和评分，[P5 数值基线设计](06-p5-numerical-baselines.md) 说明下一阶段的预定方法。网页的真值视图只用于生成检查；未来检测方法只能使用案例输入。

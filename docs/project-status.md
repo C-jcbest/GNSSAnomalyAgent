@@ -1,5 +1,11 @@
 # 项目状态与关键决定
 
+## 2026-09-26 · P5 数值基线设计冻结（尚未实现）
+
+- 类型：设计决定。P5 限定为四个独立数值基线：Point 的 SR、PELT；Range 的 Matrix Profile、Rolling Theil–Sen。P4 `pilot-v1` 数据、`event-v6` 生成器和 Point/Range evaluator 不变；不加数值 ensemble、视觉模型或 Agent。实施协议见 [P5 设计](06-p5-numerical-baselines.md)。
+- 参数：MP 与 Theil–Sen 均用 30 日窗口，分数映射到右中心日；SR 的频谱平滑宽度 3；PELT 固定 L2、`min_size=3`、`jump=1`，断点直接映射新片段首日。SR/MP/Theil–Sen 的三轴阈值及 PELT 的三轴 penalty 只按 30 个 Normal 输入校准，不按异常 GT 搜索 F1。Normal 同时进入开发评价，FAR 不能当独立数据误报保证。
+- 后续验收：四方法各跑固定 300 例、按 P4 原评分输出两张表，要求输出合法、失败不删例、Pilot 哈希不变、同配置预测字节稳定；开发集按预定 F1/FAR 次序冻结每任务一个方法。当前只有文档设计，没有安装依赖、数值实现、运行结果或论文性能结论。
+
 ## 2026-09-26 · P4 评价器按 VisualTimeAnomaly 路线破坏性精简
 
 - 类型：需求修正、决定。用户将 P4 从单一 event matching 改为 Point 与 Range 两项任务；2026-09-25 条目中的一对一匹配、Spike/Step 容差、tIoU≥0.5、Onset/End MAE、CCR/MCR、派生 active/effect 视图及旧 `DetectionResult.events[]` 现为历史口径，不再用于当前预测、评分或报告。`pilot-v1` 的 300 例、seed、manifest/summary 哈希、`CaseTruth.events[]`、`event-v6` 生成器和 P1～P3 公式保持原样。正式口径见 [P4 协议](05-p4-pilot-evaluator.md)。

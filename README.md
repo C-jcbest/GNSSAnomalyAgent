@@ -24,8 +24,9 @@ uv run gnss-sim serve --port 18765
 1. [研究问题与实验路线](docs/01-research-design.md)：名词、研究边界和 P1～P9 的状态。
 2. [P1 正常序列模型](docs/02-p1-normal-model.md)：annual/semiannual 背景、白噪声、坐标及 H/R3D 公式。
 3. [数据契约与可复现流程](docs/03-data-and-reproducibility.md)：输入与真值隔离、seed、文件和 API。
-4. [P2 事件与 P3 场景协议](docs/04-planned-methods.md)：五种事件公式、六种场景及后续检测草案。
+4. [P2 事件与 P3 场景协议](docs/04-planned-methods.md)：五种事件公式与六种场景。
 5. [P4 固定 Pilot 与 Point/Range 评价协议](docs/05-p4-pilot-evaluator.md)：300 例配额、预测契约和两项任务的评分规则。
+6. [P5 数值基线与参数冻结设计](docs/06-p5-numerical-baselines.md)：四个候选方法、Normal 校准、时间映射和验收门槛；尚未实现。
 
 CLI 可直接生成：
 
@@ -54,4 +55,4 @@ Point 为逐轴异常日期列表，按精确日期微 P/R/F1 评分；Range 为
 - 网页按类型折叠案例，并默认从独立真值接口读取和显示事件标注；事件时间线可筛选、选择和查看独立贡献。该视图只供研究人员核查，不作为未来视觉方法的输入。
 - `POST /api/datasets` 只接受 `seed`、`count`、`case_type`，不兼容旧两字段请求或旧数据格式。
 
-运行 `uv run pytest` 和 `uv run ruff check .` 验证。关键决定记录在[项目状态](docs/project-status.md)。P4 验收后暂停，P5 再开发检测方法。
+运行 `uv run pytest` 和 `uv run ruff check .` 验证。关键决定记录在[项目状态](docs/project-status.md)。P5 仅完成设计，数值检测尚未运行。

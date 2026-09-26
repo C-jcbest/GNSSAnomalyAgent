@@ -1,6 +1,6 @@
 # P2 事件与 P3 场景协议
 
-> 版本：2026-09-26 · `event-v6` 沿用 P2 的五种事件公式与幅值，新增 P3 多事件场景。P4 Point/Range 数据与评价器见 [专门协议](05-p4-pilot-evaluator.md)；检测方法仍是草案。
+> 版本：2026-09-26 · `event-v6` 沿用 P2 的五种事件公式与幅值，新增 P3 多事件场景。P4 Point/Range 数据与评价器见 [专门协议](05-p4-pilot-evaluator.md)；P5 数值方法见[独立设计](06-p5-numerical-baselines.md)。
 
 ## P2 的目标与边界
 
@@ -68,18 +68,9 @@ P3 案例由以下模板加独立事件随机流生成，不从五种类型等�
 
 P3 的 54 例均衡场景检查只验生成器与页面，不是 Pilot 或统计性能实验。P4 的预测格式、从 `CaseTruth.events[]` 派生的 Point/Range 真值和评分规则统一见 [P4 协议](05-p4-pilot-evaluator.md)；目前没有检测器结果。缺测尚未实现。
 
-## 后续检测方法候选（草案）
+## 后续方法衔接
 
-下列都是**候选基线**，没有写入当前运行入口：
-
-| 候选方法 | 主要观察量 | 教学用简式 |
-| --- | --- | --- |
-| Hampel / 鲁棒 Z 分数 | 点相对局部中位数的偏离 | $z_t=\lvert x_t-\operatorname{med}(\mathcal W_t)\rvert/(1.4826\operatorname{MAD}(\mathcal W_t)+\epsilon)$ |
-| PELT / 变化点方法 | 分段拟合代价的下降 | $\min_{m,\tau_1,\ldots,\tau_m}\left\{\sum_{j=0}^{m} C(x_{\tau_j:\tau_{j+1}})+\beta m\right\}$ |
-| Theil–Sen 滑动斜率 | 局部长期方向与速度 | $\widehat v=\operatorname{med}_{i<j}\left\{(x_j-x_i)/(j-i)\right\}$ |
-| 斜率变化 | 相邻窗口速度变化 | $\Delta\widehat v=\widehat v_{\mathrm{recent}}-\widehat v_{\mathrm{previous}}$ |
-
-上式仅说明各方法测量什么。其中 $\mathcal W_t$ 是围绕 $t$ 的局部观测窗口；PELT 式中 $\tau_0=0$、$\tau_{m+1}=365$，切分边界采用左闭右开索引。窗口宽度、阈值、代价函数 $C$、惩罚系数 $\beta$、缺测策略和输出事件转换规则，都需要在对应阶段开发与验证，不能在看测试结果后再选。固定数值组合应事先确定如何合并候选，并保留来源。纯视觉方法拟查看同一输入生成的 N/E/U 带符号位移与 H 四联图；图中不得包含事件标签或注入参数。视觉模型应允许返回零个、一个或多个事件。365 日图是否压缩信息，待实验证据出现后再考虑窗口长度消融。
+P5 数值方法已在[专门设计](06-p5-numerical-baselines.md)中定为 SR、PELT、Matrix Profile 与 Rolling Theil–Sen；此处早期 Hampel、斜率变化等候选不再是 P5 实施清单。P6 纯视觉方法拟查看同一输入生成的 N/E/U 带符号位移与 H 四联图，图中不得包含事件标签或注入参数；其具体提示与输出设计待 P6 确定。
 
 ## Pilot 与独立测试的顺序
 
