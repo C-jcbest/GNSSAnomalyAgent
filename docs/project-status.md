@@ -5,12 +5,15 @@
 - 类型：需求修正、决定。用户将 P4 从单一 event matching 改为 Point 与 Range 两项任务；2026-09-25 条目中的一对一匹配、Spike/Step 容差、tIoU≥0.5、Onset/End MAE、CCR/MCR、派生 active/effect 视图及旧 `DetectionResult.events[]` 现为历史口径，不再用于当前预测、评分或报告。`pilot-v1` 的 300 例、seed、manifest/summary 哈希、`CaseTruth.events[]`、`event-v6` 生成器和 P1～P3 公式保持原样。正式口径见 [P4 协议](05-p4-pilot-evaluator.md)。
 - 当前实现：`PointResult`/`RangeResult` 只含 case_id、method、status 与逐轴日期/区间；Point 在全 Pilot 日×轴二值网格上做精确日微 P/R/F1，Range 对有区间 GT 的 case×axis 用上游 Affiliation 实现做宏 P/R/F1。两项任务分报成功负轴 FAR 与执行成功率；失败正轴按空预测评分，失败负轴不充作干净样本。Affiliation 来自 `ahstat/affiliation-metrics-py` 的 commit `8d8449858096bbade6a6e70848d05c9cc9b846fe`，通过依赖与锁文件固定。旧 JSONL/report 不兼容，无迁移层；P5 前仍不运行检测器或模型。
 - 验收：264 项 pytest、Ruff、`uv lock --check`、Point/Range CLI 冒烟测试通过。`pilot-v1` 再次验证了全部 300 例，manifest/summary SHA256 分别保持 `a2e43db3493f86b36d1b962126f70f462b2ee3f4bf711bdbd84b078d43c10e33` 与 `a88b4ca674fc3e122f48ba798d7898af2016e02ad4e24e6328f405c62a369007`；没有重生成或覆盖曲线/真值。测试覆盖精确点匹配、闭区间向量、原始 Affiliation 调用、宏/微汇总、负轴 FAR 与失败保留。
+- 文档同步：README、研究路线、P2/P3 协议、网页文档目录和协作约定统一指向当前 Point/Range 预测与评分契约；旧 P4 评分细节只保留在下方注明失效的历史验收记录中。生成器和冻结数据未改。
 
-## 2026-09-25 · P4 固定 Pilot 与事件评价器验收
+以下条目按发生日期保留当时的决定与验收；其中标明为历史口径的预测契约和指标不能用于现行实验。
+
+## 2026-09-25 · P4 固定 Pilot 与事件评价器验收（历史评分口径，已由 2026-09-26 替代）
 
 - 类型：决定、状态。`event-v6` 的 P1～P3 背景、幅值、持续时间、场景和生成公式未改。`uv run gnss-sim pilot --seed 20260925` 固定本地 `data/pilots/pilot-v1/`：30 Normal、120 Single、150 Multi；五种 Single 各 24，每种 N/E/U 各 8、每 type×axis 正负各 4；六场景各 25。分层只读 seed 派生的轴/符号元数据，不按观测曲线筛选。manifest 保存源码及案例文件 SHA256，重复调用只校验。唯一真值仍是各例 `events[]`，活动/影响视图按需派生。
 - 分布检查：Multi 每例 2/3/4/5/6 事件分别为 22/42/58/27/1；同轴 12、跨轴 138。六事件较少是当前场景模板自然抽样结果，未为使直方图均匀而重抽。事件总数：Spike 302、Step 141、Transient Shift 97、Slow Trend 61、Acceleration 62。生成器/真值 profile、贡献聚合与观测等式均逐例核查。
-- 评价：预测 `type` 可省略且不参与匹配；点事件 Spike/Step 为 ±1/±3 日，持续事件统一闭区间 tIoU≥0.5，严格单轴、一对一，先最大化 TP 再最大化时间质量。输出事件微 P/R/F1、Onset MAE、区间 IoU/End MAE、Normal FAR 与 FP/Normal、Multi MCR/CCR、执行成功和 Normal 失败率。方法失败或缺少结果保留 300 例分母。详细规则见 [P4 协议](05-p4-pilot-evaluator.md)。P4 只有手工预测验收，没有数值、视觉或 Agent 检测结果；下一阶段 P5 待指令。
+- 当时的评价：预测 `type` 可省略且不参与匹配；点事件 Spike/Step 为 ±1/±3 日，持续事件统一闭区间 tIoU≥0.5，严格单轴、一对一，先最大化 TP 再最大化时间质量。输出事件微 P/R/F1、Onset MAE、区间 IoU/End MAE、Normal FAR 与 FP/Normal、Multi MCR/CCR、执行成功和 Normal 失败率。方法失败或缺少结果保留 300 例分母。此评分规则已移除；现行规则见上方 2026-09-26 条目和 [P4 协议](05-p4-pilot-evaluator.md)。当时 P4 只有手工预测验收，没有数值、视觉或 Agent 检测结果。
 - 验收：265 项 pytest、Ruff、前端构建通过；`pilot-v1` 再次执行校验而非重抽，CLI 评价的单条成功样例仍以 300 例为分母。手工预测样例覆盖阈值边界、重复/竞争、一对一、顺序及 ID 不变性、失败和汇总。所有结论仅为数据与评价器工程验收，不是检测性能结论。
 
 ## 2026-09-24 · P3 主图标注显示修正

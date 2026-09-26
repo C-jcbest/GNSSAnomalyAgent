@@ -1,6 +1,6 @@
 # GNSS 模拟实验台
 
-独立的纯模拟日尺度 N/E/U 实验线。P1～P3 生成器及 P4 固定 Pilot、事件评价器已实现。没有真实 GNSS 数据、检测运行或 Agent。
+独立的纯模拟日尺度 N/E/U 实验线。P1～P3 生成器及 P4 固定 Pilot、Point/Range 评价器已实现。没有真实 GNSS 数据、检测运行或 Agent。
 
 ## 启动
 
@@ -25,7 +25,7 @@ uv run gnss-sim serve --port 18765
 2. [P1 正常序列模型](docs/02-p1-normal-model.md)：annual/semiannual 背景、白噪声、坐标及 H/R3D 公式。
 3. [数据契约与可复现流程](docs/03-data-and-reproducibility.md)：输入与真值隔离、seed、文件和 API。
 4. [P2 事件与 P3 场景协议](docs/04-planned-methods.md)：五种事件公式、六种场景及后续检测草案。
-5. [P4 固定 Pilot 与事件评价协议](docs/05-p4-pilot-evaluator.md)：300 例配额、真值视图、匹配及指标。
+5. [P4 固定 Pilot 与 Point/Range 评价协议](docs/05-p4-pilot-evaluator.md)：300 例配额、预测契约和两项任务的评分规则。
 
 CLI 可直接生成：
 
@@ -47,9 +47,9 @@ Point 为逐轴异常日期列表，按精确日期微 P/R/F1 评分；Range 为
 
 ## 已实现口径
 
-- `generator_version = "event-v6"`；固定 2025 年的 365 个连续日观测，参考坐标为 `(0,0,0) mm`。此次升版增加 P3 场景与逐事件贡献；背景及单事件公式不变。
+- `generator_version = "event-v6"`；固定 2025 年的 365 个连续日观测，参考坐标为 `(0,0,0) mm`。该版本包含 P3 场景与逐事件贡献；背景及单事件公式沿用 P2。
 - Annual 幅值 N/E/U 为 `1.0/1.0/1.5 mm`，semiannual 为 `0.25/0.25/0.5 mm`，周期分母 `365.25` 日；各轴相位由案例 seed 独立派生。白噪声标准差为 `0.5/0.5/1.0 mm`。周期结构参考 GNSS 时间序列文献，这组数值是本实验为异常可辨识性采用的受控 benchmark 设定，不代表现场精度，也不宣称全部来自参考论文。
-- `observed = P0 + normal_background + measurement_noise`；无 AR(1)、flicker noise 或 secular deformation。H 与 R3D 分别是观测坐标相对 P0 的水平和三维偏移模长，并非累计路程。
+- `observed = P0 + normal_background + measurement_noise + injected_deformation + observation_artifact`；Normal 例的两项注入为零。无 AR(1)、flicker noise 或 secular deformation。H 与 R3D 分别是观测坐标相对 P0 的水平和三维偏移模长，并非累计路程。
 - `case_type` 可选 normal、五类 P2 事件、六类 P3 场景、`all` 或 `all_scenarios`。P3 每例 2～6 个事件，长期形变最多一个，Spike 可重复，S6 至少跨两轴；`all_scenarios` 均衡分配六场景。Spike、Slow Trend 终值和 Acceleration 终值的绝对幅值为 N/E 4.5 mm、U 9.0 mm；Step 和 Transient Shift 为 N/E 3.75 mm、U 7.5 mm，不随噪声标准差变化。同一 case seed 的不同类型共享完全相同的背景/噪声，事件使用独立 seed。
 - 网页按类型折叠案例，并默认从独立真值接口读取和显示事件标注；事件时间线可筛选、选择和查看独立贡献。该视图只供研究人员核查，不作为未来视觉方法的输入。
 - `POST /api/datasets` 只接受 `seed`、`count`、`case_type`，不兼容旧两字段请求或旧数据格式。
