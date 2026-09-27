@@ -1,6 +1,6 @@
 # P6 纯视觉 MLLM 基线设计
 
-> 版本：2026-09-26 · **实施前协议**。P6 尚未实现、未调用视觉模型，也没有视觉检测结果。正式运行前须完成下述模型部署预检并冻结 `visual-v1` 配置。
+> 版本：2026-09-27 · **实施前协议**。P6 尚未实现、未调用视觉模型，也没有视觉检测结果。正式运行前须完成下述模型部署预检并冻结 `visual-v1` 配置。
 
 ## 研究问题与边界
 
@@ -62,9 +62,9 @@ Do not explain your answer.
 
 ## 模型、预检与冻结点
 
-首选单一主模型为开放权重的 [Qwen/Qwen2.5-VL-7B-Instruct](https://huggingface.co/Qwen/Qwen2.5-VL-7B-Instruct)，这是**目标 checkpoint**，不是已验证可用的本机/服务部署。P6 实施时须先确定运行端点是否确实提供它、核对返回的模型标识和图像处理方式。若不可用，可在正式 Pilot 前选定**一个**可用视觉模型并如实更名记录；不能试跑几个模型后按 Pilot 得分择优。
+P6 主模型固定为 **`qwen3.8-flash`**，与现有 GNSS 项目的视觉模型选择一致。请求中的模型 ID 必须显式为该值，不受旧 `QWEN_MODEL` 环境变量影响。阿里云百炼的[模型说明](https://help.aliyun.com/zh/model-studio/qwen3-8-flash)确认它支持图像输入；P6 实施时仍须核对实际调用端点、响应模型 ID 和图像处理方式。若现有端点不能使用该模型，先停止正式 Pilot 运行并记录原因；更换型号需要另立协议版本，不通过试跑 Pilot 择优。
 
-拟固定 `temperature=0`、最大输出 512 tokens；`top_p`、是否支持关闭额外思考、图像 detail/resize 设置按实际 provider 的可用参数在工程预检中确定并写入配置。`temperature=0` 不保证不同服务器或模型修订下字节级一致。配置必须包含 provider、精确模型 ID、可获得的模型修订/版本、请求参数、SDK/绘图库版本、提示与 renderer 源码哈希、Pilot manifest/summary 哈希；响应模型 ID、用量、耗时也随运行记录。无法获知的底层版本写 `unknown` 并说明，而不是假定固定。
+拟固定 `temperature=0`、`enable_thinking=false`、最大输出 512 tokens；关闭思考须作为请求参数显式发送，不能只在提示里要求不输出推理。`top_p`、图像 detail/resize 设置按实际端点的可用参数在工程预检中确定并写入配置。[百炼视觉调用说明](https://help.aliyun.com/zh/model-studio/vision)列出 `enable_thinking` 参数。`temperature=0` 不保证不同服务器或模型修订下字节级一致。配置必须包含实际 provider/端点身份、精确请求模型 ID `qwen3.8-flash`、可获得的模型修订/版本、请求参数、SDK/绘图库版本、提示与 renderer 源码哈希、Pilot manifest/summary 哈希；响应模型 ID、用量、耗时也随运行记录。无法获知的底层版本写 `unknown` 并说明，而不是假定固定。可复用本机已有模型 API 配置，但凭据不得写入文档、配置或 Git。
 
 先用 5～10 个 **Pilot 以外的人工工程序列**检查图片像素、0/364 刻度、N/E/U 顺序、API 实际图像缩放和 JSON 格式。只修坐标/传输/解析契约问题；不得用 Pilot GT、P4 分数或 P5 预测选择画法、提示或模型。预检完成后一次冻结 `visual-v1`、`renderer-v1`、两个 prompt 版本和 `model-v1`，再开始正式 300×2 任务。正式阶段每个 case×task 只发一次模型请求；超时、API 错误、空响应和非法结构直接记失败，不做内容修复或按结果重试。工程预检请求另外计数，不混入正式 600 次计划调用。
 
