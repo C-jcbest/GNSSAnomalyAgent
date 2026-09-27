@@ -70,7 +70,7 @@ P3 的 54 例均衡场景检查只验生成器与页面，不是 Pilot 或统计
 
 ## 后续方法衔接
 
-P5 已按[专门协议](06-p5-numerical-baselines.md)实现 SR、PELT、Matrix Profile 与 Rolling Theil–Sen；早期 Hampel、斜率变化等候选未纳入。P6 已设计为仅从同一输入绘制 N/E/U 三联图，分别给 Point 与 Range 零样本视觉模型；不使用 H、事件标签、注入参数或数值候选。绘图、提示、真值隔离与失败规则见[P6 实施前协议](07-p6-visual-baseline.md)，目前尚未实现或运行。
+P5 已按[专门协议](06-p5-numerical-baselines.md)实现 SR、PELT、Matrix Profile 与 Rolling Theil–Sen；早期 Hampel、斜率变化等候选未纳入。P6 已按[纯视觉协议](07-p6-visual-baseline.md)从同一输入绘制 N/E/U 三联图，分别运行 Point 与 Range 零样本 `qwen3.8-flash`；不使用 H、事件标签、注入参数或数值候选。两项开发结果及结构失败均见该协议。
 
 ## Pilot 与独立测试的顺序
 

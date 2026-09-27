@@ -1,6 +1,6 @@
 # GNSS 模拟实验台
 
-独立的纯模拟日尺度 N/E/U 实验线。P1～P3 生成器、P4 固定 Pilot 与 Point/Range 评价器、P5 四个独立数值基线均已实现。没有真实 GNSS 数据、视觉检测或 Agent。
+独立的纯模拟日尺度 N/E/U 实验线。P1～P3 生成器、P4 固定 Pilot 与 Point/Range 评价器、P5 四个独立数值基线及 P6 纯视觉基线均已实现。没有真实 GNSS 数据或 Agent。
 
 ## 启动
 
@@ -27,7 +27,7 @@ uv run gnss-sim serve --port 18765
 4. [P2 事件与 P3 场景协议](docs/04-planned-methods.md)：五种事件公式与六种场景。
 5. [P4 固定 Pilot 与 Point/Range 评价协议](docs/05-p4-pilot-evaluator.md)：300 例配额、预测契约和两项任务的评分规则。
 6. [P5 数值基线与参数冻结](docs/06-p5-numerical-baselines.md)：四个方法、Normal 校准、开发结果和冻结选择。
-7. [P6 纯视觉基线设计](docs/07-p6-visual-baseline.md)：N/E/U 三联图、独立 Point/Range 提示、运行与真值隔离；尚未实现。
+7. [P6 纯视觉基线与冻结结果](docs/07-p6-visual-baseline.md)：固定 `qwen3.8-flash`、N/E/U 三联图、独立 Point/Range 运行和开发结果。
 
 CLI 可直接生成：
 
@@ -38,7 +38,7 @@ uv run gnss-sim pilot --seed 20260925
 
 `data/generated/` 保存数据集 manifest、`cases/<case_id>/input.json` 与单独的 `truth.json`，默认不入 Git。输入只有日期、固定参考坐标、三轴观测及其确定性派生量；背景、噪声、相位、事件与注入贡献仅在真值文件中。相同主 seed、案例序号、类型与生成器版本产生相同案例内容，批次 ID 和创建时间不要求相同。旧版本批次不再由新接口读取。
 
-`data/pilots/pilot-v1/` 是独立固定的 300 例开发集；再次运行 `pilot` 只校验，不重抽。未来方法统一读取这里的 `input.json`，分别输出 Point/Range JSONL：
+`data/pilots/pilot-v1/` 是独立固定的 300 例开发集；再次运行 `pilot` 只校验，不重抽。检测方法统一读取这里的 `input.json`，分别输出 Point/Range JSONL：
 
 ```powershell
 uv run gnss-sim evaluate --task point --predictions point.jsonl --method METHOD --out point-report.json
@@ -58,13 +58,23 @@ uv run gnss-sim numerical --method theilsen
 
 完成四项后自动生成两张开发对照表和选择记录；后续使用的 Point SR、Range Rolling Theil–Sen 的参数见[冻结配置](configs/p5-frozen.json)。Pilot 是开发集，表中的 F1/FAR 不代表独立测试表现。
 
+P6 已按[冻结配置](configs/p6-visual.json)完成。首次执行时，先配置本地 `QWEN_BASE_URL`/`QWEN_API_KEY` 环境变量，或通过 `--env-file <本地 .env 路径>` 指定凭据文件，然后依次运行：
+
+```powershell
+uv run gnss-sim visual --phase preflight --env-file "C:\path\to\.env"
+uv run gnss-sim visual --phase run --env-file "C:\path\to\.env"
+uv run gnss-sim visual --phase evaluate
+```
+
+预检只使用 Pilot 以外的人工序列，正式阶段对同一 300 张 N/E/U 图分别执行 Point/Range 请求，评价另行读取真值。原始响应与预测留在忽略入 Git 的 `runs/p6/`；已有预检和正式运行不会被自动覆盖。当前结果与失败口径见[P6 协议](docs/07-p6-visual-baseline.md)。
+
 ## 已实现口径
 
 - `generator_version = "event-v6"`；固定 2025 年的 365 个连续日观测，参考坐标为 `(0,0,0) mm`。该版本包含 P3 场景与逐事件贡献；背景及单事件公式沿用 P2。
 - Annual 幅值 N/E/U 为 `1.0/1.0/1.5 mm`，semiannual 为 `0.25/0.25/0.5 mm`，周期分母 `365.25` 日；各轴相位由案例 seed 独立派生。白噪声标准差为 `0.5/0.5/1.0 mm`。周期结构参考 GNSS 时间序列文献，这组数值是本实验为异常可辨识性采用的受控 benchmark 设定，不代表现场精度，也不宣称全部来自参考论文。
 - `observed = P0 + normal_background + measurement_noise + injected_deformation + observation_artifact`；Normal 例的两项注入为零。无 AR(1)、flicker noise 或 secular deformation。H 与 R3D 分别是观测坐标相对 P0 的水平和三维偏移模长，并非累计路程。
 - `case_type` 可选 normal、五类 P2 事件、六类 P3 场景、`all` 或 `all_scenarios`。P3 每例 2～6 个事件，长期形变最多一个，Spike 可重复，S6 至少跨两轴；`all_scenarios` 均衡分配六场景。Spike、Slow Trend 终值和 Acceleration 终值的绝对幅值为 N/E 4.5 mm、U 9.0 mm；Step 和 Transient Shift 为 N/E 3.75 mm、U 7.5 mm，不随噪声标准差变化。同一 case seed 的不同类型共享完全相同的背景/噪声，事件使用独立 seed。
-- 网页按类型折叠案例，并默认从独立真值接口读取和显示事件标注；事件时间线可筛选、选择和查看独立贡献。该视图只供研究人员核查，不作为未来视觉方法的输入。
+- 网页按类型折叠案例，并默认从独立真值接口读取和显示事件标注；事件时间线可筛选、选择和查看独立贡献。该视图只供研究人员核查，不作为 P6 模型输入。
 - `POST /api/datasets` 只接受 `seed`、`count`、`case_type`，不兼容旧两字段请求或旧数据格式。
 
-运行 `uv run pytest` 和 `uv run ruff check .` 验证。关键决定记录在[项目状态](docs/project-status.md)。P5 已验收，下一阶段为独立视觉方法。
+运行 `uv run pytest` 和 `uv run ruff check .` 验证。关键决定记录在[项目状态](docs/project-status.md)。P5/P6 已验收；后续分析须使用冻结的开发产物，不把 Pilot 结果当独立测试。

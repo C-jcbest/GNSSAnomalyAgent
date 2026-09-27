@@ -1,9 +1,15 @@
 # 项目状态与关键决定
 
+## 2026-09-27 · P6 纯视觉基线运行与冻结
+
+- 类型：实现、验收。`gnss-sim visual` 增加 `preflight`、`run`、`evaluate` 三阶段；`renderer-v1` 只从 `CaseInput.displacement_mm` 生成固定 N/E/U PNG，`visual-v1` 对 Point/Range 各调用一次 `qwen3.8-flash` 并严格验证 N/E/U JSON。推理阶段只校验 manifest/summary/输入哈希，不打开 truth；单独评价阶段复用 P4。6 条人工工程序列的 12 次请求全部合法，正式 Pilot 600 次请求产生两份各 300 行预测；图像及返回模型标识通过预检。冻结配置、源码/产物哈希见 [P6 冻结记录](../configs/p6-frozen.json)，原始响应、PNG、预测和报告保存在不入 Git 的 `runs/p6/qwen3.8-flash/`。
+- 开发结果：Point P/R/F1/FAR/成功率为 0.0339/0.1061/0.0514/0.6213/0.96；Range Affiliation P/R/F1/FAR/成功率为 0.7227/0.8204/0.7573/0.5506/0.91。39 条 HTTP 200 回复是 JSON 数组而非冻结的 N/E/U 对象，Point 12 条、Range 27 条均按失败计入，不作修复或补跑。P5 的 Point SR 和 Range Rolling Theil–Sen 在同一开发 Pilot 分别为 F1 0.5518 与 Affiliation F1 0.9345；本结果不支持 P6 优于数值基线，也不代表独立测试。完整解释见 [P6 协议](07-p6-visual-baseline.md)。
+- 运行成本与限制：正式请求总耗时 227.001 秒，输入/输出共 1,337,785 tokens，API 未返回实际费用，金额记 `null`。Pilot manifest/summary SHA256 未变，输入逐例哈希复核通过；模型服务未暴露稳定权重修订，响应只确认 `qwen3.8-flash`。P6 到此停止，后续只能使用冻结产物做 P7 设计或离线错误分析，不按开发分数更改 P6。
+
 ## 2026-09-27 · P6 主视觉模型改为 qwen3.8-flash
 
 - 类型：用户修正、设计决定。P6 主模型固定使用现有 GNSS 项目的 `qwen3.8-flash`，显式 `enable_thinking=false`；2026-09-26 设计中建议的 Qwen2.5-VL-7B-Instruct 已被本条替代，不进入 P6。请求 ID 不受旧 `QWEN_MODEL` 环境变量覆盖。模型说明、端点预检和运行记录要求见 [P6 协议](07-p6-visual-baseline.md)。
-- 状态：仅更新实施前设计；未调用模型、未生成视觉预测或评分。正式 Pilot 前仍要核实本机端点实际支持图像输入、返回模型 ID、图像缩放及请求参数，并记录可得版本和费用。若 `qwen3.8-flash` 不可用，先停止运行，不用 Pilot 结果选择替代模型。
+- 当时状态：此条仅更新实施前设计，尚未调用模型或生成视觉预测；后续实施和结果见上方 P6 运行条目。当时约定正式 Pilot 前核实本机端点的图像输入、返回模型 ID、缩放及请求参数，若不可用则停止而不按 Pilot 结果选替代模型。
 
 ## 2026-09-26 · P6 纯视觉基线实施前设计
 
@@ -15,7 +21,7 @@
 
 - 类型：实现、验收。`gnss-sim numerical --method` 支持 SR、PELT、Matrix Profile、Rolling Theil–Sen；只读取固定 Pilot input，30 个 Normal 的逐轴最大分数校准三项阈值，PELT 从预定六个 beta 候选中按 Normal 误报选取，四项分别以现行 P4 evaluator 评分。300 例×四方法均执行成功；预测、report、run 记录在忽略入 Git 的 `runs/p5/`，四方法参数及选中方法另存[冻结配置](../configs/p5-frozen.json)。没有数值 ensemble、视觉模型或 Agent。
 - 开发结果：Point SR 的 P/R/F1/FAR 为 0.4490/0.7156/0.5518/0.2101，PELT 为 0.4194/0.2054/0.2758/0.1458；Range MP 的 Affiliation P/R/F1/FAR 为 0.0939/0.0954/0.0939/0.0499，Rolling Theil–Sen 为 0.9284/0.9449/0.9345/0.1954。按预定 F1 优先规则，冻结 Point SR 和 Range Rolling Theil–Sen。PELT 三轴均回退最大 `β=32`，N/E/U 的 Normal 校准误报数为 3/2/0，没有为追求结果扩大候选集。完整口径与时间见 [P5 协议](06-p5-numerical-baselines.md)。同一 Normal 既用于校准又用于开发 FAR，所有结果仅说明开发 Pilot，不能推断独立泛化或现场预警。
-- 验收：269 项 pytest、Ruff、`uv lock --check` 通过；四份 JSONL 各 300 条且零解析错误，SR 重跑的预测 SHA256 相同。`pilot-v1` manifest/summary SHA256 仍为 `a2e43db3493f86b36d1b962126f70f462b2ee3f4bf711bdbd84b078d43c10e33` / `a88b4ca674fc3e122f48ba798d7898af2016e02ad4e24e6328f405c62a369007`，逐例输入与真值通过冻结校验。P5 在此结束；P6 尚未开始。
+- 验收：269 项 pytest、Ruff、`uv lock --check` 通过；四份 JSONL 各 300 条且零解析错误，SR 重跑的预测 SHA256 相同。`pilot-v1` manifest/summary SHA256 仍为 `a2e43db3493f86b36d1b962126f70f462b2ee3f4bf711bdbd84b078d43c10e33` / `a88b4ca674fc3e122f48ba798d7898af2016e02ad4e24e6328f405c62a369007`，逐例输入与真值通过冻结校验。P5 在此结束；P6 在当时尚未开始，后续结果见本文件顶部。
 
 ## 2026-09-26 · P5 数值基线设计冻结（实施前记录）
 

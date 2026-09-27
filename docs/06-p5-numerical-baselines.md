@@ -95,4 +95,4 @@ PELT 六个候选 penalty 均未让 N/E 的 30 个 Normal 误报例数降到预�
 
 依预定 F1 优先规则，P5 冻结 **SR 为 Point 方法、Rolling Theil–Sen 为 Range 方法**。四个方法的完整固定参数、三轴校准值、依赖版本、Pilot 哈希和源码哈希保存在[受版本控制的冻结配置](../configs/p5-frozen.json)；逐例预测和原始报告保存在不入 Git 的 `runs/p5/`。Pilot manifest/summary 哈希仍分别为 `a2e43db3493f86b36d1b962126f70f462b2ee3f4bf711bdbd84b078d43c10e33` 与 `a88b4ca674fc3e122f48ba798d7898af2016e02ad4e24e6328f405c62a369007`。SR 重跑的预测 JSONL SHA256 两次均为 `00d626b4635f7473cb377ccbd5d66995914e53158c0d6ec5b3dda073487939cc`。
 
-269 项 pytest、Ruff 与 `uv lock --check` 通过；四个方法的 `PointResult`/`RangeResult` JSONL 均为 300 条、无解析错误，冻结 Pilot 逐例校验通过。P5 在此停止；P6 才实现独立视觉方法。上述选择与分数只描述 Development Pilot，不推论真实 GNSS 异常或滑坡预警能力。
+269 项 pytest、Ruff 与 `uv lock --check` 通过；四个方法的 `PointResult`/`RangeResult` JSONL 均为 300 条、无解析错误，冻结 Pilot 逐例校验通过。P5 在此停止；之后实施的独立视觉方法与结果见 [P6 协议](07-p6-visual-baseline.md)。上述选择与分数只描述 Development Pilot，不推论真实 GNSS 异常或滑坡预警能力。

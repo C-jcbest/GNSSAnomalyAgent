@@ -43,6 +43,12 @@ def main() -> None:
                            required=True)
     numerical.add_argument("--pilot-dir", type=Path, default=Path("data/pilots/pilot-v1"))
     numerical.add_argument("--out-dir", type=Path, default=Path("runs/p5"))
+    visual = commands.add_parser("visual", help="Run the P6 image-only baseline")
+    visual.add_argument("--phase", choices=("preflight", "run", "evaluate"), required=True)
+    visual.add_argument("--config", type=Path, default=Path("configs/p6-visual.json"))
+    visual.add_argument("--pilot-dir", type=Path, default=Path("data/pilots/pilot-v1"))
+    visual.add_argument("--out-dir", type=Path, default=Path("runs/p6"))
+    visual.add_argument("--env-file", type=Path)
     serve = commands.add_parser("serve", help="Serve the local experiment API and built UI")
     serve.add_argument("--host", default="127.0.0.1")
     serve.add_argument("--port", type=int, default=8765)
@@ -68,6 +74,16 @@ def main() -> None:
         from gnss_sim.numerical_runner import run_numerical
 
         report = run_numerical(args.method, args.pilot_dir, args.out_dir)
+        print(json.dumps(report, ensure_ascii=False, indent=2, allow_nan=False))
+    elif args.command == "visual":
+        from gnss_sim.visual_runner import evaluate_visual, run_preflight, run_visual
+
+        if args.phase == "preflight":
+            report = run_preflight(args.config, args.out_dir, args.env_file)
+        elif args.phase == "run":
+            report = run_visual(args.config, args.pilot_dir, args.out_dir, args.env_file)
+        else:
+            report = evaluate_visual(args.config, args.pilot_dir, args.out_dir)
         print(json.dumps(report, ensure_ascii=False, indent=2, allow_nan=False))
     elif args.command == "generate":
         root = args.data_dir or Path(os.environ.get("GNSS_SIM_DATA_DIR", "data/generated"))
