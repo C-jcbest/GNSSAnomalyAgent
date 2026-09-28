@@ -1,6 +1,6 @@
 # GNSS 模拟实验台
 
-独立的纯模拟日尺度 N/E/U 实验线。P1～P3 生成器、P4 固定 Pilot 与 Point/Range 评价器、P5 四个独立数值基线及 P6 纯视觉基线均已实现。没有真实 GNSS 数据或 Agent。
+独立的纯模拟日尺度 N/E/U 实验线。P1～P3 生成器、P4 固定 Pilot 与 Point/Range 评价器、P5 四个独立数值基线、P6 纯视觉基线及 P7a 提示语义对照均已实现。保留多版本预测和多评价视图，没有真实 GNSS 数据或 Agent。
 
 ## 启动
 
@@ -19,7 +19,9 @@ uv run gnss-sim serve --port 18765
 
 拉取或切换到包含新接口的代码后，应停止旧的 `gnss-sim serve` 进程并重新启动；旧进程不会自动加载新接口，可能使「实验文档」显示 404。
 
-网页顶部的「实验文档」提供章节目录、正文排版和数学公式渲染。后端的 `docs/` 是文档原稿，网页通过 `GET /api/docs` 和 `GET /api/docs/{slug}` 读取同一份 Markdown。阅读顺序：
+网页的「实验文档」默认打开[实验方法手册](docs/11-experimental-handbook.md)：按论文结构解释任务、名词、公式、指标分母、既有结果及 P7b 四条件设计。可直接访问 `http://127.0.0.1:18765/?view=docs&doc=experimental-handbook`。支持文档全文搜索、两级页内目录与阅读进度、文内协议跳转、章节链接分享、原稿下载、打印及移动端折叠菜单。
+
+后端的 `docs/` 是文档原稿，网页通过 `GET /api/docs`（slug/title/file）和 `GET /api/docs/{slug}` 读取同一份 Markdown。方法手册之后可按需查阅：
 
 1. [研究问题与实验路线](docs/01-research-design.md)：名词、研究边界和 P1～P9 的状态。
 2. [P1 正常序列模型](docs/02-p1-normal-model.md)：annual/semiannual 背景、白噪声、坐标及 H/R3D 公式。
@@ -28,6 +30,13 @@ uv run gnss-sim serve --port 18765
 5. [P4 固定 Pilot 与 Point/Range 评价协议](docs/05-p4-pilot-evaluator.md)：300 例配额、预测契约和两项任务的评分规则。
 6. [P5 数值基线与参数冻结](docs/06-p5-numerical-baselines.md)：四个方法、Normal 校准、开发结果和冻结选择。
 7. [P6 纯视觉基线与冻结结果](docs/07-p6-visual-baseline.md)：固定 `qwen3.8-flash`、N/E/U 三联图、独立 Point/Range 运行和开发结果。
+8. [P6 后诊断与 P7 设计](docs/08-p7-design.md)：冻结结果错误分析、论文依据及候选复核草案；实际执行调整见下一章。
+9. [多版本方法与提示语义实验](docs/09-versioned-comparison.md)：保留原预测，统一导出 Point 精确/±3 日与 Range Affiliation/逐日 IoU；新版视觉提示的执行协议与结果。
+10. [实验全程审查与下一阶段建议](docs/10-experiment-audit.md)：可复现检查、方法覆盖与指标限制、P7b 最小复核实验及独立确认前置条件。
+11. [P7b 固定候选复核](docs/12-p7b-candidate-review.md)：60 例 N/V/U/C 对照、严格失败、输入隔离及负结果；复现命令见文档第 8 节。
+12. [P7b 错误归因与实验链检查](docs/13-p7b-error-analysis.md)：按来源、形态、轴、场景和活动阶段分解误删，核验冻结结果与确认工程缺口。
+13. [独立合成确认协议（草案）](docs/14-independent-confirmation-protocol.md)：独立 N/V 的新 300 例比较、失败账本、配对 bootstrap 和执行 Gate；视觉新增 `visual-semantics-v2-8k` 配置（回复上限 8192，原提示），尚未生成或运行。
+14. [P8a 视觉 Range 全局与局部对照](docs/15-p8a-visual-range-context.md)：60 例对照及用户指定的完整 Pilot300 测试均已完成；局部图提高日 IoU，但主 F1 未超过单轮，独立确认与 Agent 未启动。含 8192 tokens、缓存/新增调用、失败账本和两阶段分表。
 
 CLI 可直接生成：
 
@@ -56,7 +65,7 @@ uv run gnss-sim numerical --method matrix-profile
 uv run gnss-sim numerical --method theilsen
 ```
 
-完成四项后自动生成两张开发对照表和选择记录；后续使用的 Point SR、Range Rolling Theil–Sen 的参数见[冻结配置](configs/p5-frozen.json)。Pilot 是开发集，表中的 F1/FAR 不代表独立测试表现。
+完成四项后自动生成两张开发对照表和选择记录；后续使用的 Point SR、Range Rolling Theil–Sen 的参数见[冻结配置](configs/p5-frozen.json)。CLI 拒绝覆盖已有预测、报告或运行记录；有计划的重现实验须指定单独的 `--out-dir`。Pilot 是开发集，表中的 F1/FAR 不代表独立测试表现。
 
 P6 已按[冻结配置](configs/p6-visual.json)完成。首次执行时，先配置本地 `QWEN_BASE_URL`/`QWEN_API_KEY` 环境变量，或通过 `--env-file <本地 .env 路径>` 指定凭据文件，然后依次运行：
 
@@ -77,4 +86,4 @@ uv run gnss-sim visual --phase evaluate
 - 网页按类型折叠案例，并默认从独立真值接口读取和显示事件标注；事件时间线可筛选、选择和查看独立贡献。该视图只供研究人员核查，不作为 P6 模型输入。
 - `POST /api/datasets` 只接受 `seed`、`count`、`case_type`，不兼容旧两字段请求或旧数据格式。
 
-运行 `uv run pytest` 和 `uv run ruff check .` 验证。关键决定记录在[项目状态](docs/project-status.md)。P5/P6 已验收；后续分析须使用冻结的开发产物，不把 Pilot 结果当独立测试。
+运行 `uv run pytest` 和 `uv run ruff check .` 验证。关键决定记录在[项目状态](docs/project-status.md)。P5/P6/P7a 已验收，P7b 开发运行已完成且未通过继续确认 Gate；`uv run python scripts/export_comparison.py` 从八份冻结方法×任务预测导出论文表格、分组/逐案例 CSV 和 PNG/SVG，输出到 `runs/comparison-views-v1/`。后续分析使用冻结的开发产物，不把 Pilot 结果当独立测试。

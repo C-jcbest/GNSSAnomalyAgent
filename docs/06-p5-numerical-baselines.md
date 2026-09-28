@@ -17,7 +17,7 @@ P5 在同一批 300 例开发输入上运行四个可解释的离线基线：Poi
 
 ## 共同输入和时间约定
 
-方法只接收 `CaseInput.displacement_mm` 的 N/E/U 三条**带符号** 365 日序列。`CaseTruth`、事件类型、场景、manifest 中的分层属性、注入成分及 H/R3D 都不进入检测函数。Normal 校准集合由固定 Pilot manifest 的 `case_type=normal` 标识，校准只读取这 30 例的 `input.json`；评价器在产生全部预测之后独立读取真值。所有方法按 N/E/U 分别运行，不做跨轴共享预测或基于 GT 类型的路由。
+方法只接收 `CaseInput.displacement_mm` 的 N/E/U 三条**带符号** 365 日序列。`CaseTruth`、事件类型、场景、manifest 中的分层属性、注入成分及 H/R3D 都不进入检测函数。Normal 校准集合由固定 Pilot manifest 的 `case_type=normal` 标识，校准函数只接收这 30 例的 `CaseInput`。运行器在预测前后调用 `verify_pilot()`，该完整性校验会读取全部真值；预测完成后评价器再用真值评分。因此 P5 的检测计算没有消费异常标签，但整个运行进程并非“预测前不读 truth”的隔离实现。后续独立评价应使用输入校验与评分分离的新运行器。所有方法按 N/E/U 分别运行，不做跨轴共享预测或基于 GT 类型的路由。
 
 所有日期为 0 起始索引。Point 不移动峰值、不设日期容差或 NMS；Range 对 `score_t>τ_c` 的逐日布尔序列直接提取极大连续段，输出两端均包含的 `[start_index,end_index]`，不做最短长度、间隙合并或人工扩展。分数相等于阈值时不报警。无分数的边缘日期固定为 0，不以最近分数填充。输入异常、非有限分数或库运行失败按该案例该方法的 `status="failed"` 记录，不能删掉案例；实现时用 P4 schema 验证每行。
 

@@ -49,6 +49,14 @@ def main() -> None:
     visual.add_argument("--pilot-dir", type=Path, default=Path("data/pilots/pilot-v1"))
     visual.add_argument("--out-dir", type=Path, default=Path("runs/p6"))
     visual.add_argument("--env-file", type=Path)
+    semantics = commands.add_parser("visual-semantics", help="Run versioned prompt-only comparison")
+    semantics.add_argument("--phase", choices=("preflight", "run", "evaluate"), required=True)
+    semantics.add_argument("--config", type=Path,
+                           default=Path("configs/p7a-visual-semantics.json"))
+    semantics.add_argument("--pilot-dir", type=Path, default=Path("data/pilots/pilot-v1"))
+    semantics.add_argument("--out-dir", type=Path, default=Path("runs/p7a/visual-semantics-v2"))
+    semantics.add_argument("--original-run", type=Path, default=Path("runs/p6/qwen3.8-flash"))
+    semantics.add_argument("--env-file", type=Path)
     serve = commands.add_parser("serve", help="Serve the local experiment API and built UI")
     serve.add_argument("--host", default="127.0.0.1")
     serve.add_argument("--port", type=int, default=8765)
@@ -71,6 +79,11 @@ def main() -> None:
         else:
             print(output)
     elif args.command == "numerical":
+        destination = args.out_dir / args.method
+        if any((destination / name).exists()
+               for name in ("predictions.jsonl", "report.json", "run.json")):
+            parser.error("Numerical results already exist; preserve the frozen run and use "
+                         "a separate --out-dir for an explicitly planned new experiment")
         from gnss_sim.numerical_runner import run_numerical
 
         report = run_numerical(args.method, args.pilot_dir, args.out_dir)
@@ -84,6 +97,18 @@ def main() -> None:
             report = run_visual(args.config, args.pilot_dir, args.out_dir, args.env_file)
         else:
             report = evaluate_visual(args.config, args.pilot_dir, args.out_dir)
+        print(json.dumps(report, ensure_ascii=False, indent=2, allow_nan=False))
+    elif args.command == "visual-semantics":
+        from gnss_sim.visual_semantics import evaluate, run_preflight, run_visual
+
+        if args.phase == "preflight":
+            report = run_preflight(args.config, args.out_dir, args.env_file)
+        elif args.phase == "run":
+            run = run_visual(args.config, args.pilot_dir, args.out_dir,
+                             args.original_run, args.env_file)
+            report = {key: run[key] for key in ("method", "new_requests", "tasks")}
+        else:
+            report = evaluate(args.config, args.pilot_dir, args.out_dir)
         print(json.dumps(report, ensure_ascii=False, indent=2, allow_nan=False))
     elif args.command == "generate":
         root = args.data_dir or Path(os.environ.get("GNSS_SIM_DATA_DIR", "data/generated"))

@@ -1,0 +1,17 @@
+{
+  "protocol": "comparison-views-v1",
+  "pilot_id": "pilot-v1",
+  "point_views": ["point-exact-v1", "point-tolerance-3d-v1"],
+  "point_sensitivity_days": [1, 7],
+  "range_views": ["range-affiliation-v1", "range-daily-iou-positive-axes-v1", "range-daily-micro-all-axes-v1"],
+  "methods": [
+    {"method_id": "sr", "task": "point", "predictions": "runs/p5/sr/predictions.jsonl", "config": "configs/p5-frozen.json"},
+    {"method_id": "pelt", "task": "point", "predictions": "runs/p5/pelt/predictions.jsonl", "config": "configs/p5-frozen.json"},
+    {"method_id": "matrix-profile", "task": "range", "predictions": "runs/p5/matrix-profile/predictions.jsonl", "config": "configs/p5-frozen.json"},
+    {"method_id": "theilsen", "task": "range", "predictions": "runs/p5/theilsen/predictions.jsonl", "config": "configs/p5-frozen.json"},
+    {"method_id": "visual-v1", "task": "point", "predictions": "runs/p6/qwen3.8-flash/point/predictions.jsonl", "config": "configs/p6-visual.json"},
+    {"method_id": "visual-v1", "task": "range", "predictions": "runs/p6/qwen3.8-flash/range/predictions.jsonl", "config": "configs/p6-visual.json"},
+    {"method_id": "visual-semantics-v2", "task": "point", "predictions": "runs/p7a/visual-semantics-v2/point/predictions.jsonl", "config": "configs/p7a-visual-semantics.json"},
+    {"method_id": "visual-semantics-v2", "task": "range", "predictions": "runs/p7a/visual-semantics-v2/range/predictions.jsonl", "config": "configs/p7a-visual-semantics.json"}
+  ]
+}

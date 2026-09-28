@@ -1,0 +1,39 @@
+{
+  "protocol": "p8a-range-context-v1",
+  "cases": 60,
+  "model": {
+    "request_id": "qwen3.8-flash",
+    "temperature": 0,
+    "enable_thinking": false,
+    "max_tokens": 8192,
+    "top_p": null,
+    "vl_high_resolution_images": false,
+    "max_pixels": 2160000,
+    "timeout_seconds": 120,
+    "workers": 4,
+    "attempts_per_task_case": 1
+  },
+  "initial_prompt": "The image shows three synchronized daily GNSS displacement time series: N, E, and U.\nThe x-axis is the day index from 0 to 364. Analyze each axis independently; an anomaly need not occur on other axes.\nSmooth recurring background variation and ordinary random fluctuations are not targets by themselves. There may be no anomaly on any axis.\nDetect active anomalous ranges only: a sustained evolving departure from the background, or a temporary anomalous interval that returns to the prior level.\nFor sustained evolution, mark the interval during which the anomalous change is actively developing. Stop when that evolution ends; a stable residual offset afterwards is not active and must not extend the range.\nFor a temporary deviation, mark the entire period of the deviation up to and including its last anomalous day, excluding the day of return to the prior level.\nAn isolated anomalous day belongs to the point task. An abrupt change followed by a stable new level is a point onset; do not label the remaining shifted level as a range solely because of its offset.\nAn axis can contain both point events and range events. Ignore isolated points when deciding the extent of an active range.\nReturn JSON only as one object with exactly these keys:\n{\"N\": [[start, end], ...], \"E\": [[start, end], ...], \"U\": [[start, end], ...]}\nUse integer day indices from 0 to 364. Both endpoints are inclusive. Use an empty list when no active anomalous range is detected. Do not explain your answer.",
+  "review_prompt": "Review the initial ranges against the observed images. The first image is the complete three-axis overview; any additional images are local views of the SAME raw observations with original global day indices and unchanged per-axis vertical scales. Use the global overview to distinguish recurring background from anomalous activity. Do not infer anomaly from the fact that a region has been shown in detail.\nCheck the observations before, within and after each candidate. Correct both its beginning and its end. A weak gradual beginning may still be active; do not automatically shorten intervals. Do not extend a range into a stable residual offset. For temporary deviations, retain the complete anomalous period, excluding the first day of return.\nYou may retain, remove, extend, shorten or split initial ranges, and add clearly missed active ranges visible in the full overview. Initial ranges are fallible predictions, not evidence that an anomaly exists. Also check all axes in the overview for omissions, even when initial predictions are empty. A single-axis anomaly need not be confirmed on another axis. Avoid turning isolated spikes or stable steps into active ranges.\nReturn the COMPLETE final N/E/U JSON object with integer inclusive bounds, exactly the same schema as above, without explanations or extra keys.",
+  "windows": [
+    [
+      0,
+      119
+    ],
+    [
+      90,
+      209
+    ],
+    [
+      180,
+      299
+    ],
+    [
+      245,
+      364
+    ]
+  ],
+  "context_days": 30,
+  "panels_per_sheet": 3,
+  "max_sheets": 4
+}

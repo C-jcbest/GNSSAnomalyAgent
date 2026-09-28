@@ -159,7 +159,27 @@ export default function App() {
   const [caseType, setCaseType] = useState<GenerationType>("all_scenarios");
   const [submitting, setSubmitting] = useState(false);
   const [error, setError] = useState("");
-  const [page, setPage] = useState<"datasets" | "runs" | "docs">("datasets");
+  const [page, setCurrentPage] = useState<"datasets" | "runs" | "docs">(() => {
+    const requested = new URLSearchParams(location.search).get("view");
+    return requested === "docs" || requested === "runs" ? requested : "datasets";
+  });
+  function setPage(next: "datasets" | "runs" | "docs") {
+    const url = new URL(location.href);
+    url.searchParams.set("view", next);
+    url.hash = "";
+    if (next !== "docs") url.searchParams.delete("doc");
+    history.pushState(null, "", url);
+    setCurrentPage(next);
+    window.scrollTo({ top: 0, behavior: "auto" });
+  }
+  useEffect(() => {
+    const restore = () => {
+      const requested = new URLSearchParams(location.search).get("view");
+      setCurrentPage(requested === "docs" || requested === "runs" ? requested : "datasets");
+    };
+    window.addEventListener("popstate", restore);
+    return () => window.removeEventListener("popstate", restore);
+  }, []);
   const [view, setView] = useState<"observed" | "components">("observed");
   const [visible, setVisible] = useState({
     N: true,
@@ -533,7 +553,7 @@ export default function App() {
   }
 
   return (
-    <div className="app-shell">
+    <div className={`app-shell ${page === "docs" ? "docs-mode" : ""}`}>
       <aside className="sidebar">
         <div className="brand">
           <span className="brand-mark">
@@ -541,7 +561,7 @@ export default function App() {
           </span>
           <div>
             <strong>GNSS LAB</strong>
-            <small>模拟实验台 / P3</small>
+            <small>模拟实验台 / event-v6</small>
           </div>
         </div>
         <nav className="main-nav" aria-label="主导航">
@@ -630,9 +650,16 @@ export default function App() {
                 <h1>检测运行</h1>
               </div>
             </div>
-            <div className="empty-runs">
-              <Layers3 size={34} strokeWidth={1.3} />
-              <h2>尚无检测运行</h2>
+            <div className="runs-archive">
+              <p className="eyebrow">FROZEN DEVELOPMENT RESULTS</p>
+              <h2>开发实验已归档</h2>
+              <p>P8a 已完成 60 例筛查及完整 Pilot300 开发测试：局部图提高逐日 IoU，但主 F1 未超过单轮。历史数值与视觉结果全部保留，独立确认未启动。</p>
+              <div className="runs-links">
+                <a href="?view=docs&doc=versioned-comparison"><strong>查看多版本结果 <ChevronRight size={17} /></strong><span>Point 精确 / ±3 日 · Range Affiliation / IoU</span></a>
+                <a href="?view=docs&doc=p8a-visual-range-context"><strong>查看 P8a 视觉范围对照 <ChevronRight size={17} /></strong><span>完整 300 例 · 三条件与数值参考</span></a>
+                <a href="?view=docs&doc=experiment-audit"><strong>查看全程审查 <ChevronRight size={17} /></strong><span>复现核查 · 当前限制 · 独立确认前置条件</span></a>
+              </div>
+              <small>原始响应与逐次运行产物保存在本地 runs/。本页提供文档入口，尚未接入运行明细浏览器。</small>
             </div>
           </section>
         ) : (

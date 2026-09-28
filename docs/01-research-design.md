@@ -1,6 +1,6 @@
 # 研究问题与实验路线
 
-> 版本：2026-09-27 · `event-v6` 生成器、`pilot-v1`/P4 Point/Range 评价器、[P5 数值基线](06-p5-numerical-baselines.md)与[P6 纯视觉基线](07-p6-visual-baseline.md)均已实现。当前只有合成开发 Pilot 上的比较结果，尚无独立测试结果。
+> 版本：2026-09-27 · `event-v6`、P4、[P5](06-p5-numerical-baselines.md)、[P6](07-p6-visual-baseline.md)及[P7a 提示语义与多评价视图](09-versioned-comparison.md)均已实现。当前只有合成开发 Pilot 上的比较结果，尚无独立测试结果。
 
 ## 摘要
 
@@ -39,12 +39,20 @@ GNSS 时间序列研究常把 annual 和 semiannual 项作为周期信号，参�
 | P4 | 300 例固定开发 Pilot、Point/Range 分任务真值与评价器 | 已实现；见 [P4 协议](05-p4-pilot-evaluator.md) |
 | P5 | 四个数值基线、Normal 阈值校准、冻结 Point/Range 各一项 | [已验收](06-p5-numerical-baselines.md)：Point SR、Range Rolling Theil–Sen |
 | P6 | N/E/U 三联图的独立零样本视觉 Point/Range 基线 | [已验收](07-p6-visual-baseline.md)：`qwen3.8-flash`，600 次正式请求 |
-| P7 | 依开发发现设计数值与视觉固定组合 | 未设计或实现 |
-| P8 | 互补性和失败案例分析 | 未实现 |
+| P7 | 先对齐视觉契约，再验证数值与独立视觉候选的固定复核 | [P7a 语义对照已验收](09-versioned-comparison.md)；[P7b 候选复核已完成但未通过继续 Gate](12-p7b-candidate-review.md)；schema 对照未实施 |
+| P8 | 失败分析后优化视觉 Range 定位 | [P8a 全局/局部视觉对照](15-p8a-visual-range-context.md)60 例未通过 Gate；用户随后指定的完整 Pilot300 测试也已完成，IoU 改善但主 F1 未超过单轮 |
 | P9 | 在互补性证据支持下设计轻量 Agent 与独立测试 | 未实现 |
 
 P1～P4 统一采用 365 日案例。Pilot 是开发验证，不是独立最终测试。P1 的正常曲线不能用来推论异常检测能力；合成注入实验也不能直接验证真实滑坡预警。
 
+用户已将 P7a 执行顺序收束为同一 300 例的 prompt-only 语义对照，见[当前协议](09-versioned-comparison.md)。历史方法保留，新增 Point ±3 日与 Range 逐日 IoU 等补充视图；P4 主指标不变。[固定候选复核](12-p7b-candidate-review.md)已在 60 例开发子集运行，C 相对 U 主 F1 未提升，按 Gate 停止推进本版确认；保留独立基线和负结果。
+
+[全程审查](10-experiment-audit.md)已核查数据、冻结源码、八份报告和历史调用；随后已补齐输入隔离及冻结参数数值入口，并完成 N/V/并集/固定复核四条件开发比较。直接并集存在明显误报代价，SR 对 Step 的覆盖也有限，不能预设组合或 Agent 优势。候选复核未通过主指标 Gate，独立确认数据和新结构化输出实验未启动；后续决策以 P7b 结果为准。
+
 ## 阅读路径
+
+2026-09-28 已完成 [P7b 错误归因](13-p7b-error-analysis.md)，随后用户授权 [P8a 视觉 Range 对照](15-p8a-visual-range-context.md)。顺序调整为视觉开发优化、必要时比较固定协作与轻量 Agent、最终冻结后独立确认。[独立确认](14-independent-confirmation-protocol.md)仍是草案，确认集未生成；其最终方法表待开发决策后登记。
+
+首次阅读先看[实验方法手册](11-experimental-handbook.md)：以论文结构统一解释术语、任务、数据、方法、指标和有效性边界。P7b 的四条件、60 例分层开发筛查、候选 ID/预算/失败规则与独立确认建议见手册第 8～10 节；已执行开发筛查，结果见 [P7b](12-p7b-candidate-review.md)；两个任务主 F1 均下降，未启动独立确认。
 
 先看 [P1 正常序列模型](02-p1-normal-model.md) 理解背景，再看 [P2 事件与 P3 场景协议](04-planned-methods.md) 理解五种事件与六种组合；[数据契约与可复现流程](03-data-and-reproducibility.md) 说明临时批次，[P4 固定 Pilot 与 Point/Range 评价协议](05-p4-pilot-evaluator.md) 说明正式开发集和评分，[P5 数值基线](06-p5-numerical-baselines.md) 与 [P6 纯视觉基线](07-p6-visual-baseline.md) 记录两种表示的开发结果。网页的真值视图只用于生成检查；检测方法只能使用案例输入。

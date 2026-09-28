@@ -10,4 +10,17 @@
 - P6 已实现并在固定 Pilot 运行：N/E/U 三联图、独立零样本 Point/Range 提示，模型为 `qwen3.8-flash` 且显式 `enable_thinking=false`；旧 `QWEN_MODEL` 不覆盖。每任务各 300 行结果，Point F1 0.0514/FAR 0.6213/成功率 0.96，Range Affiliation F1 0.7573/FAR 0.5506/成功率 0.91；39 条结构失败按协议计入。配置与产物哈希见 `configs/p6-frozen.json`，解释见 `docs/07-p6-visual-baseline.md`。推理阶段不读取 `truth.json` 或调用 `verify_pilot()`；不得根据开发结果重跑、换模型、改画法或补救无效 JSON。
 - 全部位移使用毫米；H 与 R3D 是相对于固定初始坐标的偏移模长，不是路径长度。R3D 不与注入形变分量 D 混用。模拟参数只是实验设定，不能宣称代表现场 GNSS 精度。
 - 生成的数据、真值、凭据、模型原始响应和运行产物默认不入 Git。网页仅访问本地实验目录，不自动连接平台或模型 API。
+- 用户已要求保留多版本和补充评价视图。`comparison-views-v1` 并列报告 Point 精确/±3 日和 Range Affiliation/正轴逐日 IoU，±1/7 日及并集仍作诊断；这些是同一预测的不同评价口径，不是新 detector，不替换 P4。历史四数值、`visual-v1` 和 `visual-semantics-v2` 都保留，见 `docs/09-versioned-comparison.md`。
+- P7a 已按用户指令完成同一 300 例的 prompt-only 语义实验，仍为 qwen3.8-flash、thinking=false、原 PNG/JSON Object/传输参数；600 次正式调用及 22 次失败均保留，无修复重试。配置与结果见 `configs/p7a-frozen.json`，不得按分数覆盖该版本。此前 `docs/08-p7-design.md` 的 schema A/B 未实施；固定候选复核已按后续 P7b 独立协议完成。整个 Pilot 已用于开发分析，不能把其任何子集称为未见测试。
 - `docs/` 是实验说明原稿，网页从后端文档接口读取。实现新阶段或修改公式、字段、评价口径时，同步更新相应文档及阶段状态；草案与已实现内容明确区分。
+- 全程审查与后续建议见 `docs/10-experiment-audit.md`。P5 的 `verify_pilot()` 在推理前读取 truth 作完整性校验，不能称进程级输入隔离；检测函数未使用真值。独立确认需新增输入专用运行器，复用已冻结阈值，不重新校准确认集 Normal。CLI 拒绝覆盖已有数值结果，禁止绕过保护直接覆盖历史目录。
+- `docs/11-experimental-handbook.md` 是网页默认的论文式方法手册；P7b 第 8～10 节已同步为实施规格；60 例开发结果见 `docs/12-p7b-candidate-review.md`。原评分和历史协议优先；新 U/C 采用严格依赖成功，与此前失败回退数值的并集诊断分开。更新方法、指标或状态时同步手册相关节，避免阅读入口与具体协议矛盾。
+
+- P7b `candidate-review-v1` 已完成：60 例固定元数据分层，复用归档 N/V，4 次工程预检、107 次正式复核均结构合法；Range 5 个上游失败留在分母。C 相对 U 的 Point 精确 F1 和 Range Affiliation F1 均下降，继续 Gate 未通过，不自动执行独立 300 例确认或扩展 Agent。配置/源码/产物哈希见 `configs/p7b-registered.json` 和 `configs/p7b-frozen.json`。只读输入入口为 `input_only.py` / `candidate_review.py`；新输出拒绝覆盖，不按结果重试或修补。
+- P7b 离线误删检查见 `docs/13-p7b-error-analysis.md`：分组为事后关联分析，禁止将来源/类型/阶段真值转成运行时路由；Range 损失按唯一日集合计数，不能累加交叠候选。`docs/14-independent-confirmation-protocol.md` 仅为独立 N/V 确认草案，尚未生成或运行；P7b 停止条件不变。正式确认前必须补齐登记强制校验、逐例数值失败行、纯输入视觉入口、中断账本及配对 bootstrap，不能直接重用固定 pilot-v1 的运行器。
+
+- 用户于 2026-09-28 指定后续模型最大回复 tokens=8192。新纯视觉调用使用 `configs/p8-visual-8k.json` / `visual_8k.py`（visual-semantics-v2-8k），保持 JSON Object 与本地 schema 校验；不修改历史 512/2048 参数或重新标记旧成绩。确认入口尚待实现，必须接新适配器；不得静默回退 token 预算或将预算变更称作旧 v2 原样确认。
+
+- P8a `p8a-range-context-v1` 已完成 60 例同期 V0/V1/V2 Range 对照：6 次预检、172 次正式调用，统一 8192，原图和局部图复核共享 V0、允许修订边界。V2 IoU 0.5805 高于 V0 0.5088，但主 Affiliation F1/recall/成功率下降，未通过预登记 Gate，不自动扩大到 Pilot300、Agent 或独立确认。具体结果与局限见 `docs/15-p8a-visual-range-context.md`；请求与原图/局部图、本地响应、失败及成本都冻结。6 条结构失败均正常 stop，不能归因于回复预算不足。推理源码/配置按 `configs/p8a-registered.json` 固定，后续修改需新版本；不能覆盖历史或重发账本中未知尝试。
+
+- 2026-09-28 用户随后明确选择完整 pilot-v1 300 例继续测试，P8a 全集扩展已完成；不解释为原 Gate 通过。使用 `p8a_full.py` 和 `runs/p8a-full/`，复用原 60 例冻结响应及失败，只新增其余 240 例（660 次请求），三组 Range 设置保持不变。V0/V1/V2 全集主 F1 0.7788/0.7621/0.7652，IoU 0.4591/0.4546/0.5284；保留完整 300 与两阶段分表，缓存和新增调用不同期。仍为开发测试，不自动进入 Agent 或独立确认；冻结索引 `configs/p8a-full-frozen.json`。
