@@ -22,56 +22,43 @@ import DocsPage from "./DocsPage";
 
 type Triple = [number, number, number];
 type Status = "queued" | "running" | "complete" | "failed";
-type CaseType = "normal" | "spike" | "step" | "slow_trend" | "acceleration" | "transient_shift";
-type ScenarioType = "multi_spike" | "change_with_local" | "temporary_with_local" | "longterm_with_local" | "longterm_with_change" | "complex_multiaxis";
-type GenerationType = CaseType | ScenarioType | "all" | "all_scenarios";
-type CaseKind = CaseType | ScenarioType;
+type CaseType = "normal" | "global_extremum" | "trend" | "mean_shift";
+type GenerationType = CaseType | "all";
+type CaseKind = CaseType;
 type Axis = "N" | "E" | "U";
 type EventTruth = {
   event_id: string;
   type: Exclude<CaseType, "normal">;
-  source: "injected_deformation" | "observation_artifact";
   axis: Axis;
   start_index: number;
   end_index: number;
   start_date: string;
   end_date: string;
   persistent: boolean;
-  parameters: { amplitude_mm?: number; final_offset_mm?: number; duration_days?: number; slope_mm_per_day?: number };
+  operation: "native_extremum" | "add";
+  target_offset_mm: number;
+  sigma_mm: number;
+  observed_end_mm: number;
+  source: string;
+  native_parameters: Record<string, number | boolean | string>;
 };
 const caseTypeLabels: Record<CaseType, string> = {
-  normal: "正常", spike: "Spike", step: "Step", slow_trend: "Slow Trend",
-  acceleration: "Acceleration", transient_shift: "Transient Shift",
+  normal: "正常", global_extremum: "Global Extremum", trend: "Trend",
+  mean_shift: "Transient Mean Shift",
 };
 const caseTypes = Object.keys(caseTypeLabels) as CaseType[];
-const scenarioLabels: Record<ScenarioType, string> = {
-  multi_spike: "S1 多 Spike", change_with_local: "S2 Step + 局部",
-  temporary_with_local: "S3 短时 + 局部", longterm_with_local: "S4 长期 + 局部",
-  longterm_with_change: "S5 长期 + 变化点", complex_multiaxis: "S6 跨轴综合",
-};
-const scenarioTypes = Object.keys(scenarioLabels) as ScenarioType[];
-const kindLabels: Record<CaseKind, string> = { ...caseTypeLabels, ...scenarioLabels };
+const kindLabels = caseTypeLabels;
 const generationTypeLabels: Record<GenerationType, string> = {
-  all: "P2 全部类型", all_scenarios: "P3 全部场景", ...kindLabels,
+  all: "全部类型（同背景配对）", ...caseTypeLabels,
 };
-type ComponentKey = "background" | "noise" | "deformation" | "artifact" | "observed";
+type ComponentKey = "noise" | "delta" | "observed";
 const componentLabels: Record<ComponentKey, string> = {
-  background: "正常背景", noise: "测量噪声", deformation: "注入形变",
-  artifact: "观测伪差", observed: "最终观测",
+  noise: "原始高斯噪声", delta: "异常净改变量", observed: "最终观测",
 };
 const componentColors: Record<ComponentKey, string> = {
-  background: "#147d72", noise: "#db6b50", deformation: "#7b5da3",
-  artifact: "#ba5b38", observed: "#253b54",
+  noise: "#db6b50", delta: "#147d72", observed: "#253b54",
 };
-const parameterLabels: Record<string, string> = {
-  amplitude_mm: "带符号幅值", final_offset_mm: "最终累计偏移",
-  duration_days: "事件时长", slope_mm_per_day: "区间斜率",
-};
-function parameterLabel(key: string, value: number) {
-  if (key === "duration_days") return `${value} 日`;
-  if (key === "slope_mm_per_day") return `${value.toFixed(4)} mm/日`;
-  return `${value.toFixed(2)} mm`;
-}
+
 type Manifest = {
   dataset_id: string;
   created_at: string;
@@ -85,6 +72,9 @@ type Manifest = {
     case_seed: number;
     case_type: CaseKind;
     event_count: number;
+    background_group: string;
+    group_axis: Axis;
+    group_sign: -1 | 1;
   }[];
   error: string | null;
 };
@@ -98,21 +88,13 @@ type CaseInput = {
   spatial_offset_mm: number[];
 };
 type CaseTruth = {
-  scenario_type: ScenarioType | null;
   events: EventTruth[];
-  event_contributions: { event_id: string; component: "injected_deformation" | "observation_artifact"; values_mm: Triple[] }[];
-  normal_background_mm: Triple[];
   measurement_noise_mm: Triple[];
-  injected_deformation_mm: Triple[];
-  observation_artifact_mm: Triple[];
-  annual_phase_rad: Triple;
-  semiannual_phase_rad: Triple;
-  component_seeds: {
-    annual_phase: number;
-    semiannual_phase: number;
-    white_noise: number;
-  };
-  event_seeds: { position: number; shape: number; sign: number } | null;
+  anomaly_delta_mm: Triple[];
+  noise_seed: number;
+  position_seed: number;
+  tods_seed: number;
+  background_group: string;
 };
 
 const axisNames = ["N", "E", "U"] as const;
@@ -128,7 +110,7 @@ async function api<T>(path: string, options?: RequestInit): Promise<T> {
   const response = await fetch(path, { cache: "no-store", ...options });
   if (!response.ok) {
     const body = await response.json().catch(() => ({}));
-    throw new Error(body.detail || `请求失败 (${response.status})`);
+    throw new Error(typeof body.detail === "string" ? body.detail : Array.isArray(body.detail) ? body.detail.map((item: { msg: string }) => item.msg).join("；") : `请求失败 (${response.status})`);
   }
   return response.json();
 }
@@ -154,9 +136,9 @@ export default function App() {
   const [caseId, setCaseId] = useState<string | null>(null);
   const [caseInput, setCaseInput] = useState<CaseInput | null>(null);
   const [caseTruth, setCaseTruth] = useState<CaseTruth | null>(null);
-  const [seed, setSeed] = useState("20260923");
-  const [count, setCount] = useState("20");
-  const [caseType, setCaseType] = useState<GenerationType>("all_scenarios");
+  const [seed, setSeed] = useState("20260929");
+  const [count, setCount] = useState("24");
+  const [caseType, setCaseType] = useState<GenerationType>("all");
   const [submitting, setSubmitting] = useState(false);
   const [error, setError] = useState("");
   const [page, setCurrentPage] = useState<"datasets" | "runs" | "docs">(() => {
@@ -191,11 +173,11 @@ export default function App() {
   const [showTruth, setShowTruth] = useState(false);
   const [selectedEventId, setSelectedEventId] = useState<string | null>(null);
   const [eventAxisFilter, setEventAxisFilter] = useState<Axis | "all">("all");
-  const [eventFamilyFilter, setEventFamilyFilter] = useState<"all" | "spike" | "step" | "longterm" | "transient">("all");
+  const [eventFamilyFilter, setEventFamilyFilter] = useState<"all" | "global_extremum" | "trend" | "mean_shift">("all");
   const [truthVisible, setTruthVisible] = useState(true);
   const [truthLoading, setTruthLoading] = useState(false);
   const [componentsVisible, setComponentsVisible] = useState<Record<ComponentKey, boolean>>({
-    background: true, noise: true, deformation: true, artifact: true, observed: true,
+    noise: true, delta: true, observed: true,
   });
   const [dateTarget, setDateTarget] = useState("");
   const [query, setQuery] = useState("");
@@ -315,7 +297,7 @@ export default function App() {
     [detail, query],
   );
   const groupedCases = useMemo(
-    () => ([...caseTypes, ...scenarioTypes] as CaseKind[]).map((type) => ({
+    () => caseTypes.map((type) => ({
       type,
       cases: filteredCases.filter((item) => item.case_type === type),
     })).filter((group) => group.cases.length > 0),
@@ -334,9 +316,7 @@ export default function App() {
   const selectedEvent = caseTruth?.events.find((event) => event.event_id === selectedEventId);
   const filteredEvents = caseTruth?.events.filter((event) =>
     (eventAxisFilter === "all" || event.axis === eventAxisFilter) &&
-    (eventFamilyFilter === "all" || event.type === eventFamilyFilter ||
-      (eventFamilyFilter === "longterm" && (event.type === "slow_trend" || event.type === "acceleration")) ||
-      (eventFamilyFilter === "transient" && event.type === "transient_shift"))) ?? [];
+    (eventFamilyFilter === "all" || event.type === eventFamilyFilter)) ?? [];
 
   const chartOption = useMemo<EChartsOption | null>(() => {
     if (!caseInput || (view === "components" && !caseTruth)) return null;
@@ -388,10 +368,8 @@ export default function App() {
       const axis = axisNames[componentAxis];
       const truth = caseTruth!;
       const componentData: Record<ComponentKey, number[]> = {
-        background: truth.normal_background_mm.map((row) => row[componentAxis]),
         noise: truth.measurement_noise_mm.map((row) => row[componentAxis]),
-        deformation: truth.injected_deformation_mm.map((row) => row[componentAxis]),
-        artifact: truth.observation_artifact_mm.map((row) => row[componentAxis]),
+        delta: truth.anomaly_delta_mm.map((row) => row[componentAxis]),
         observed: caseInput.observed_coordinate_mm.map((row) => row[componentAxis]),
       };
       return {
@@ -405,12 +383,7 @@ export default function App() {
             lineStyle: { width: key === "observed" ? 2.2 : 1.6, color: componentColors[key] },
             itemStyle: { color: componentColors[key] },
             data: componentData[key],
-          })), ...(selectedEvent ? [{
-            name: `${selectedEvent.event_id} 独立贡献`, type: "line" as const,
-            showSymbol: false, lineStyle: { width: 2.5, color: "#b24c32" },
-            itemStyle: { color: "#b24c32" },
-            data: caseTruth?.event_contributions.find((part) => part.event_id === selectedEventId)?.values_mm.map((row) => row[componentAxis]) ?? [],
-          }] : []) ],
+          })) ],
       };
     }
     const series: LineSeriesOption[] = axisNames
@@ -444,13 +417,13 @@ export default function App() {
         .forEach((axis) => {
           const index = axisNames.indexOf(axis);
           series.push({
-            name: `${axis} 正常背景`,
+            name: `${axis} 配对正常观测`,
             type: "line",
             showSymbol: false,
             smooth: false,
             lineStyle: { width: 1.5, type: "dashed", color: colors[axis] },
             itemStyle: { color: colors[axis] },
-            data: caseTruth.normal_background_mm.map((row) => row[index]),
+            data: caseTruth.measurement_noise_mm.map((row) => row[index]),
           });
         });
     }
@@ -465,7 +438,7 @@ export default function App() {
           xAxis: event.start_date,
           lineStyle: {
             color: event.event_id === selectedEventId ? "#aa3e25" : "#b96b46",
-            type: event.type === "spike" ? "dashed" as const : "solid" as const,
+            type: event.type === "global_extremum" ? "dashed" as const : "solid" as const,
             width: event.event_id === selectedEventId ? 2.5 : 1.4,
             opacity: selectedEventId && event.event_id !== selectedEventId ? 0.45 : 0.9,
           },
@@ -498,9 +471,9 @@ export default function App() {
       !Number.isInteger(parsedCount) ||
       parsedCount < 1 ||
       parsedCount > 5000 ||
-      ((caseType === "all" || caseType === "all_scenarios") && parsedCount < 6)
+      (caseType === "all" && parsedCount % 4 !== 0)
     ) {
-      setError(caseType === "all" || caseType === "all_scenarios" ? "混合批次至少需要 6 例；Seed 范围为 0～4294967295，案例数量最多 5000。" : "Seed 范围为 0～4294967295，案例数量为 1～5000。");
+      setError(caseType === "all" ? "配对批次数量必须是 4 的倍数（推荐 24）；Seed 范围为 0～4294967295，案例数量最多 5000。" : "Seed 范围为 0～4294967295，案例数量为 1～5000。");
       return;
     }
     setSubmitting(true);
@@ -561,7 +534,7 @@ export default function App() {
           </span>
           <div>
             <strong>GNSS LAB</strong>
-            <small>模拟实验台 / event-v6</small>
+            <small>模拟实验台 / synthetic-v1</small>
           </div>
         </div>
         <nav className="main-nav" aria-label="主导航">
@@ -650,28 +623,28 @@ export default function App() {
                 <h1>检测运行</h1>
               </div>
             </div>
-            <div className="runs-archive">
-              <p className="eyebrow">FROZEN DEVELOPMENT RESULTS</p>
-              <h2>开发实验已归档</h2>
-              <p>P8a 已完成 60 例筛查及完整 Pilot300 开发测试：局部图提高逐日 IoU，但主 F1 未超过单轮。历史数值与视觉结果全部保留，独立确认未启动。</p>
+            <div className="runs-empty">
+              <p className="eyebrow">EXPERIMENT WORKFLOW</p>
+              <h2>暂无有效检测结果</h2>
+              <p>全部旧实验结果已作废。新实验需要独立 Normal 校准、明确的数据划分和运行登记。</p>
+              <p>数值与视觉独立处理相同观测；运行完成后，通过本地 comparison.html 核对指标、真值和逐例输出。</p>
               <div className="runs-links">
-                <a href="?view=docs&doc=versioned-comparison"><strong>查看多版本结果 <ChevronRight size={17} /></strong><span>Point 精确 / ±3 日 · Range Affiliation / IoU</span></a>
-                <a href="?view=docs&doc=p8a-visual-range-context"><strong>查看 P8a 视觉范围对照 <ChevronRight size={17} /></strong><span>完整 300 例 · 三条件与数值参考</span></a>
-                <a href="?view=docs&doc=experiment-audit"><strong>查看全程审查 <ChevronRight size={17} /></strong><span>复现核查 · 当前限制 · 独立确认前置条件</span></a>
+                <a href="?view=docs&doc=detection"><strong>检测与评价规则 <ChevronRight size={17} /></strong><span>输入隔离 · Point / Range · 请求预算与失败统计</span></a>
+                <a href="?view=docs&doc=development"><strong>运行与开发说明 <ChevronRight size={17} /></strong><span>校准 · 登记 · 检测 · 离线报告</span></a>
               </div>
-              <small>原始响应与逐次运行产物保存在本地 runs/。本页提供文档入口，尚未接入运行明细浏览器。</small>
+              <small>网页不发起模型调用。结果由命令行生成，不预置历史成绩。</small>
             </div>
           </section>
         ) : (
           <>
             <section className="page-heading">
               <div>
-                <p className="eyebrow">SYNTHETIC DATA / EVENT COMPOSITION P3</p>
-                <h1>日坐标模拟数据</h1>
-                <p className="subtitle">固定参考坐标 · 365 日完整年度</p>
+                <p className="eyebrow">SOURCE-VERIFIED / SYNTHETIC GNSS</p>
+                <h1>原生生成 · 配对检查</h1>
+                <p className="subtitle">GutenTAG × TODS · 独立高斯背景 · 365 日 N/E/U</p>
               </div>
               <div className="heading-badge">
-                <span className="badge-dot" /> P3 多事件组合
+                <span className="badge-dot" /> Point / Range
               </div>
             </section>
 
@@ -682,14 +655,14 @@ export default function App() {
                 </span>
                 <div>
                   <h2 id="create-title">生成数据集</h2>
-                  <p>固定背景与事件形态 · 六种多事件场景</p>
+                  <p>Normal + 三类异常 · 同背景逐值配对</p>
                 </div>
               </div>
               <form onSubmit={createDataset} className="create-form">
                 <label>
                   案例类型
                   <select value={caseType} onChange={(event) => setCaseType(event.target.value as GenerationType)}>
-                    {(["all_scenarios", ...scenarioTypes, "all", ...caseTypes] as GenerationType[]).map((type) => (
+                    {(["all", ...caseTypes] as GenerationType[]).map((type) => (
                       <option key={type} value={type}>{generationTypeLabels[type]}</option>
                     ))}
                   </select>
@@ -709,7 +682,7 @@ export default function App() {
                   案例数
                   <input
                     type="number"
-                    min={caseType === "all" || caseType === "all_scenarios" ? "6" : "1"}
+                    min={caseType === "all" ? "4" : "1"}
                     max="5000"
                     step="1"
                     value={count}
@@ -729,24 +702,31 @@ export default function App() {
                   <span>{submitting ? "提交中" : "开始生成"}</span>
                 </button>
               </form>
-              {caseType === "all" && <p className="mix-note">正常 25% · 五类异常各 15% · 余数由 Seed 确定</p>}
-              {caseType === "all_scenarios" && <p className="mix-note">六种 P3 场景均衡分配 · 每例 2～6 个事件</p>}
+              {caseType === "all" && <p className="mix-note">每 4 例共用一份背景 · 24 例覆盖 N/E/U × 正负方向 · 工程检查样例</p>}
             </section>
 
             <section className="fixed-protocol" aria-label="固定生成参数">
               <div className="fixed-protocol-heading">
-                <span>LOCKED PROTOCOL / EVENT-V6</span>
+                <span>CONTROLLED PROTOCOL / UPSTREAM-CORE-V1</span>
                 <strong>固定生成参数</strong>
               </div>
               <dl>
                 <div><dt>长度</dt><dd>365 日</dd></div>
                 <div><dt>起始日期</dt><dd>2025-01-01</dd></div>
-                <div><dt>Annual · N/E/U</dt><dd>1.0 / 1.0 / 1.5 mm</dd></div>
-                <div><dt>Semiannual · N/E/U</dt><dd>0.25 / 0.25 / 0.5 mm</dd></div>
-                <div><dt>White noise · N/E/U</dt><dd>0.5 / 0.5 / 1.0 mm</dd></div>
+                <div><dt>正常均值 · N/E/U</dt><dd>0 / 0 / 0 mm</dd></div>
+                <div><dt>Range 偏移 · N/E/U</dt><dd>3σ = 1.5 / 1.5 / 3.0 mm</dd></div>
+                <div><dt>噪声 σ · N/E/U</dt><dd>0.5 / 0.5 / 1.0 mm</dd></div>
               </dl>
-              <p>背景、噪声与事件幅值固定；P3 按场景模板组合，P2 单事件入口保留用于对照。</p>
+              <p>极值强度由 GutenTAG 按噪声自动生成；Range 参数为本项目选择。保留自然高斯尾部，不按曲线重抽。</p>
             </section>
+
+            <section className="morphology-guide" aria-label="异常规则与标签">
+              <div><small>REFERENCE / GUTENTAG</small><h3>Normal</h3><code>Polynomial [0] + noise</code><p>零基底与原生高斯噪声。组内异常案例逐值复用这份背景。</p></div>
+              <div><small>POINT / GUTENTAG</small><h3>Global Extremum</h3><code>length = 1 · local = false</code><p>原类自动保护极值幅度，再叠加当天噪声。标签为单日。</p></div>
+              <div><small>RANGE / TODS</small><h3>Trend</h3><code>radius = 45 · |factor| = 3/89</code><p>90 日线性累计后保留位移；仅适配位置接口，标签来自原函数。</p></div>
+              <div><small>RANGE / GUTENTAG</small><h3>Transient Mean Shift</h3><code>length = 14 · offset = ±3</code><p>原生 mean 保留噪声，区间后恢复；逐轴标签来自原生协议。</p></div>
+            </section>
+            <p className="protocol-reference">上游实现已锁定 commit、许可证与文件哈希；参数和毫米映射属于项目配置。<a href="?view=docs&doc=data-generation">查看复用边界与完整协议 →</a></p>
 
             {!detail ? (
               <div className="welcome-empty">
@@ -773,7 +753,7 @@ export default function App() {
                   </span>
                 </section>
                 <div className="type-counts" aria-label="计划类型数量">
-                  {([...caseTypes, ...scenarioTypes] as CaseKind[]).filter((type) => detail.type_counts[type]).map((type) => (
+                  {caseTypes.filter((type) => detail.type_counts[type]).map((type) => (
                     <span key={type}>{kindLabels[type]} <strong>{detail.type_counts[type]}</strong></span>
                   ))}
                 </div>
@@ -863,7 +843,7 @@ export default function App() {
                               <span className="case-index">{item.case_id.slice(-4)}</span>
                               <span>
                                 <strong>{item.case_id}</strong>
-                                <small>365 天 · {item.event_count} 个事件</small>
+                                <small>{item.group_axis}{item.group_sign > 0 ? "+" : "−"} · {item.background_group.replace("group_", "组 ")}</small>
                               </span>
                               <ChevronRight size={16} />
                             </button>
@@ -886,6 +866,11 @@ export default function App() {
                         <Check size={14} /> {selectedCaseType ? kindLabels[selectedCaseType] : "等待案例"}
                       </div>
                     </div>
+                    {caseTruth && detail.request.case_type === "all" && <div className="paired-switcher">
+                      <span>同背景 · {caseTruth.background_group.replace("group_", "组 ")}</span>
+                      <div>{detail.cases.filter((item) => item.background_group === caseTruth.background_group).map((item) =>
+                        <button key={item.case_id} className={item.case_id === caseId ? "active" : ""} onClick={() => setCaseId(item.case_id)}>{kindLabels[item.case_type]}</button>)}</div>
+                    </div>}
                     {caseInput && <div className="truth-access">
                       <span>{truthVisible ? caseTruth ? "事件标注已显示" : "正在读取事件标注…" : "事件标注已隐藏"}</span>
                       <button className="truth-command" onClick={() => {
@@ -916,7 +901,7 @@ export default function App() {
                             </button>
                             <button
                               className={view === "components" ? "active" : ""}
-                              onClick={() => setView("components")}
+                              onClick={() => { setTruthVisible(true); setView("components"); }}
                             >
                               生成成分
                             </button>
@@ -1008,7 +993,7 @@ export default function App() {
                                 checked={showTruth}
                                 onChange={() => setShowTruth((old) => !old)}
                               />
-                              正常背景
+                              配对正常观测
                             </label>
                           )}
                         </div>
@@ -1038,7 +1023,7 @@ export default function App() {
                         </div>
                         <div className="events-line">
                           <span>
-                            <Filter size={15} /> 事件时间线 {caseTruth?.scenario_type && `· ${scenarioLabels[caseTruth.scenario_type]}`}
+                            <Filter size={15} /> 事件标签时间线
                           </span>
                           <strong>{!caseTruth ? truthVisible ? "读取中" : "标注已隐藏" : caseTruth.events.length === 0 ? "无注入事件" : `${caseTruth.events.length} 个事件`}</strong>
                         </div>
@@ -1048,7 +1033,7 @@ export default function App() {
                               {(["all", ...axisNames] as const).map((axis) => <button key={axis} className={eventAxisFilter === axis ? "active" : ""} onClick={() => { setEventAxisFilter(axis); setSelectedEventId(null); }}>{axis === "all" ? "全部轴" : axis}</button>)}
                             </div>
                             <div className="segmented" role="group" aria-label="按事件族筛选">
-                              {([ ["all", "全部"], ["spike", "Spike"], ["step", "Step"], ["longterm", "长期"], ["transient", "短时"] ] as const).map(([value, label]) => <button key={value} className={eventFamilyFilter === value ? "active" : ""} onClick={() => { setEventFamilyFilter(value); setSelectedEventId(null); }}>{label}</button>)}
+                              {([ ["all", "全部"], ["global_extremum", "极值"], ["trend", "趋势"], ["mean_shift", "暂态均值"] ] as const).map(([value, label]) => <button key={value} className={eventFamilyFilter === value ? "active" : ""} onClick={() => { setEventFamilyFilter(value); setSelectedEventId(null); }}>{label}</button>)}
                             </div>
                           </div>
                           <div className="event-timeline">
@@ -1063,31 +1048,25 @@ export default function App() {
                             {filteredEvents.length === 0 && <p className="list-empty">当前筛选下没有事件</p>}
                           </div>
                           {selectedEvent && <div className="event-inspector">
-                            <div className="inspector-heading"><strong>{selectedEvent.event_id} · {caseTypeLabels[selectedEvent.type]} · {selectedEvent.axis}</strong><button onClick={() => setView("components")}>查看独立贡献</button></div>
+                            <div className="inspector-heading"><strong>{selectedEvent.event_id} · {caseTypeLabels[selectedEvent.type]} · {selectedEvent.axis}</strong><button onClick={() => setView("components")}>查看净改变量</button></div>
                             <dl>
                               <div><dt>开始</dt><dd>Day {selectedEvent.start_index + 1} · {selectedEvent.start_date}</dd></div>
                               <div><dt>结束</dt><dd>Day {selectedEvent.end_index + 1} · {selectedEvent.end_date}</dd></div>
                               <div><dt>持续 / 保留偏移</dt><dd>{selectedEvent.end_index - selectedEvent.start_index + 1} 日 / {selectedEvent.persistent ? "是" : "否"}</dd></div>
-                              <div><dt>注入来源</dt><dd>{selectedEvent.source === "injected_deformation" ? "注入形变" : "观测伪差"}</dd></div>
-                              {Object.entries(selectedEvent.parameters).map(([key, value]) => <div key={key}><dt>{parameterLabels[key] || key}</dt><dd>{parameterLabel(key, value)}</dd></div>)}
+                              <div><dt>生成操作</dt><dd>{selectedEvent.operation === "native_extremum" ? "原生极值 + 当日噪声" : "叠加偏移"}</dd></div>
+                              <div><dt>末端净改变量</dt><dd>{valueLabel(selectedEvent.target_offset_mm)} · {(selectedEvent.target_offset_mm / selectedEvent.sigma_mm).toFixed(2)}σ</dd></div>
+                              <div><dt>末端实际观测</dt><dd>{valueLabel(selectedEvent.observed_end_mm)} · {(selectedEvent.observed_end_mm / selectedEvent.sigma_mm).toFixed(2)}σ</dd></div>
+                              <div><dt>该轴噪声 σ</dt><dd>{valueLabel(selectedEvent.sigma_mm)}</dd></div>
                             </dl>
+                            <p className="native-source">{selectedEvent.source}</p>
+                            <code className="native-parameters">{JSON.stringify(selectedEvent.native_parameters)}</code>
                           </div>}
                         </>}
                         {caseTruth && <details className="seed-details">
-                          <summary>生成相位与成分 seed（仅用于核对真值）</summary>
-                          <div>
-                            <span>Annual 相位 N/E/U</span>
-                            <code>{caseTruth.annual_phase_rad.map((value) => value.toFixed(3)).join(" / ")} rad</code>
-                          </div>
-                          <div>
-                            <span>Semiannual 相位 N/E/U</span>
-                            <code>{caseTruth.semiannual_phase_rad.map((value) => value.toFixed(3)).join(" / ")} rad</code>
-                          </div>
-                          <div>
-                            <span>成分 seed</span>
-                            <code>{caseTruth.component_seeds.annual_phase} / {caseTruth.component_seeds.semiannual_phase} / {caseTruth.component_seeds.white_noise}</code>
-                          </div>
-                          {caseTruth.event_seeds && <div><span>事件 seed · 位置/形态/符号</span><code>{caseTruth.event_seeds.position} / {caseTruth.event_seeds.shape} / {caseTruth.event_seeds.sign}</code></div>}
+                          <summary>生成 seed（仅用于核对真值）</summary>
+                          <div><span>独立高斯噪声 seed</span><code>{caseTruth.noise_seed}</code></div>
+                          <div><span>位置 / TODS seed</span><code>{caseTruth.position_seed} / {caseTruth.tods_seed}</code></div>
+                          <p>净改变量 = 最终观测 − 配对背景。极值的净改变量和实际观测都不固定为 ±3σ。</p>
                         </details>}
                       </>
                     )}

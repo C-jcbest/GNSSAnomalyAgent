@@ -5,14 +5,9 @@ import rehypeKatex from "rehype-katex";
 import remarkGfm from "remark-gfm";
 import remarkMath from "remark-math";
 
-type DocumentEntry = { slug: string; title: string; file: string };
+type DocumentEntry = { slug: string; title: string; file: string; group: string };
 type Heading = { id: string; title: string; level: number };
 type MarkdownNode = { type: string; value?: string; children?: MarkdownNode[]; data?: { hProperties?: Record<string, unknown> } };
-const groups = [
-  { label: "阅读起点", slugs: ["experimental-handbook", "research-design", "experiment-audit"] },
-  { label: "冻结实验协议", slugs: ["p1-normal-model", "data-and-reproducibility", "planned-methods", "p4-pilot-evaluator", "p5-numerical-baselines", "p6-visual-baseline"] },
-  { label: "比较与后续设计", slugs: ["p8a-visual-range-context", "p7b-error-analysis", "independent-confirmation", "p7b-candidate-review", "versioned-comparison", "p7-design"] },
-];
 function headingText(node: MarkdownNode): string { return node.value ?? node.children?.map(headingText).join("") ?? ""; }
 // Derive unique anchors from the parsed tree so inline formatting does not break links.
 function headingAnchors() {
@@ -30,7 +25,7 @@ function headingAnchors() {
     visit(tree);
   };
 }
-function currentSlug() { return new URLSearchParams(location.search).get("doc") ?? "experimental-handbook"; }
+function currentSlug() { return new URLSearchParams(location.search).get("doc") ?? "data-generation"; }
 function currentAnchor() { try { return decodeURIComponent(location.hash.slice(1)); } catch { return ""; } }
 function scrollToAnchor(id: string, smooth = true) {
   const target = document.getElementById(id || "reading-paper");
@@ -76,7 +71,7 @@ export default function DocsPage() {
     const controller = new AbortController();
     setLoading(true); setError(""); setHeadings([]); setProgress(0); setActive("");
     if (!documents.some(item => item.slug === selected)) {
-      setError("这个文档地址不存在。请从目录选择文档，或返回实验方法手册。"); setLoading(false); return;
+      setError("这个文档地址不存在。请从目录选择文档，或返回开发说明。"); setLoading(false); return;
     }
     fetch(`/api/docs/${encodeURIComponent(selected)}`, { signal: controller.signal, cache: "no-store" })
       .then(readResponse).then(body => {
@@ -126,7 +121,8 @@ export default function DocsPage() {
   }, [markdown, loading, error]);
 
   useEffect(() => { if (!notice) return; const timer = setTimeout(() => setNotice(""), 3500); return () => clearTimeout(timer); }, [notice]);
-  const ordered = useMemo(() => groups.flatMap(group => group.slugs.map(slug => documents.find(item => item.slug === slug)).filter((item): item is DocumentEntry => !!item)), [documents]);
+  const groups = useMemo(() => [...new Set(documents.map(item => item.group))], [documents]);
+  const ordered = documents;
   const index = ordered.findIndex(item => item.slug === selected);
   const title = documents.find(item => item.slug === selected)?.title ?? "实验文档";
   const terms = query.trim().toLocaleLowerCase();
@@ -148,26 +144,26 @@ export default function DocsPage() {
   function download() {
     const url = URL.createObjectURL(new Blob([markdown], { type: "text/markdown;charset=utf-8" }));
     const anchor = document.createElement("a"); anchor.href = url;
-    anchor.download = documents.find(item => item.slug === selected)?.file ?? `${selected}.md`;
+    anchor.download = documents.find(item => item.slug === selected)?.file.split("/").at(-1) ?? `${selected}.md`;
     anchor.click(); setTimeout(() => URL.revokeObjectURL(url), 1000);
   }
 
   return (
     <section className="docs-page" aria-label="实验文档阅读器">
       <a className="docs-skip" href="#reading-paper">跳到正文</a>
-      <div className="docs-hero"><div><p className="docs-eyebrow">GNSS LAB / RESEARCH LIBRARY</p><h1>实验方法与研究记录<span>从任务定义，到可重复的证据。</span></h1></div><div className="docs-edition"><span>METHODS · PROTOCOLS · FINDINGS</span><strong>开发实验 P1—P7b</strong><small>复核实验已完成 · 独立确认未启动</small></div></div>
+      <div className="docs-hero"><div><p className="docs-eyebrow">GNSS LAB / RESEARCH LIBRARY</p><h1>实验方法与开发说明<span>数据、检测与评价的当前约定。</span></h1></div><div className="docs-edition"><span>DATA · DETECTION · DEVELOPMENT</span><strong>当前流程与规则</strong><small>合成生成 · 独立检测 · 离线评价</small></div></div>
       <div className="docs-mobile-bar"><button onClick={() => setMenuOpen(!menuOpen)} aria-expanded={menuOpen} aria-controls="chapter-navigation"><List size={17} /> 文档目录</button><span>{title}</span></div>
       <div className="docs-layout">
         <nav id="chapter-navigation" className={`docs-chapters ${menuOpen ? "is-open" : ""}`} aria-label="选择文档">
           <label className="docs-search"><Search size={16} /><input ref={search} aria-label="搜索文档全文" placeholder="搜索术语、指标、协议…" value={query} onChange={event => setQuery(event.target.value)} onKeyDown={event => { if (event.key === "Escape") setQuery(""); }} />{query && <button aria-label="清除搜索" onClick={() => { setQuery(""); search.current?.focus(); }}><X size={14} /></button>}</label>
           {terms && <p className="docs-search-count" role="status">{results.length} 篇匹配{searching ? " · 正在检索正文" : documents.some(item => !(item.slug in cache)) ? " · 部分正文暂未加载" : ""}</p>}
-          {groups.map(group => <div className="docs-group" key={group.label}><p>{group.label}</p>{ordered.filter(item => group.slugs.includes(item.slug) && matches(item)).map(item => <button type="button" key={item.slug} className={`docs-chapter ${selected === item.slug ? "selected" : ""}`} aria-current={selected === item.slug ? "page" : undefined} onClick={() => navigate(item.slug)}><span className="docs-chapter-number">{String(ordered.indexOf(item) + 1).padStart(2, "0")}</span><span>{item.title}{terms && !item.title.toLocaleLowerCase().includes(terms) && <small>正文包含「{query.trim()}」</small>}</span>{selected === item.slug && <span className="docs-current-dot" />}</button>)}</div>)}
-          {terms && !results.length && !searching && <div className="docs-empty">没有匹配文档。试试“FAR”“活动区间”或“复核”。</div>}
-          <div className="docs-rail-note"><BookOpenText size={17} /><span>首次阅读建议从方法手册开始。历史结果与待执行设计分开标注。</span></div>
+          {groups.map(group => <div className="docs-group" key={group}><p>{group}</p>{ordered.filter(item => item.group === group && matches(item)).map(item => <button type="button" key={item.slug} className={`docs-chapter ${selected === item.slug ? "selected" : ""}`} aria-current={selected === item.slug ? "page" : undefined} onClick={() => navigate(item.slug)}><span className="docs-chapter-number">{String(ordered.indexOf(item) + 1).padStart(2, "0")}</span><span>{item.title}{terms && !item.title.toLocaleLowerCase().includes(terms) && <small>正文包含「{query.trim()}」</small>}</span>{selected === item.slug && <span className="docs-current-dot" />}</button>)}</div>)}
+          {terms && !results.length && !searching && <div className="docs-empty">没有匹配文档。试试“Point”“活动区间”或“校准”。</div>}
+          <div className="docs-rail-note"><BookOpenText size={17} /><span>数据与检测协议定义当前行为；开发说明提供命令和验证方式。</span></div>
         </nav>
         <article id="reading-paper" ref={paper} tabIndex={-1} className="docs-paper" aria-label={title} aria-busy={loading}>
           <div className="docs-reading-line" aria-hidden="true"><span style={{ width: `${progress}%` }} /></div>
-          {loading ? <div className="docs-state" role="status"><LoaderCircle className="spin" size={24} /> 正在读取文档…</div> : error ? <div className="docs-state docs-error" role="alert"><p>{error}</p><button onClick={() => setRetry(value => value + 1)}>重试</button><button onClick={() => navigate("experimental-handbook")}>返回方法手册</button></div> : <>
+          {loading ? <div className="docs-state" role="status"><LoaderCircle className="spin" size={24} /> 正在读取文档…</div> : error ? <div className="docs-state docs-error" role="alert"><p>{error}</p><button onClick={() => setRetry(value => value + 1)}>重试</button><button onClick={() => navigate("development")}>返回开发说明</button></div> : <>
             <div className="docs-paper-topline"><span>RESEARCH NOTE {String(index + 1).padStart(2, "0")}</span><span>约 {readingMinutes} 分钟阅读 · {headings.filter(item => item.level === 2).length} 节</span></div>
             <div className="docs-tools" aria-label="文档操作"><span>同源文档 · 可复现记录</span><div><button onClick={copyLink} title="复制当前文档与章节链接"><Copy size={15} /> 链接</button><button onClick={download} title="下载当前 Markdown 原稿"><Download size={15} /> 原稿</button><button onClick={() => window.print()} title="打印或另存为 PDF"><Printer size={15} /> 打印</button></div></div>
             <details className="docs-mobile-contents"><summary>本篇目录 · {headings.filter(item => item.level === 2).length} 节</summary>{headings.filter(item => item.level === 2).map(item => <button key={item.id} onClick={event => { navigate(selected, item.id); event.currentTarget.closest("details")?.removeAttribute("open"); }}>{item.title}</button>)}</details>
@@ -177,7 +173,9 @@ export default function DocsPage() {
                 if (href?.startsWith("#")) return <a href={href} onClick={event => { event.preventDefault(); navigate(selected, decodeURIComponent(href.slice(1))); }}>{children}</a>;
                 if (href && /^https?:\/\//.test(href)) return <a href={href} target="_blank" rel="noopener noreferrer">{children}<ExternalLink size={11} className="docs-external" aria-label="在新标签页打开" /></a>;
                 const [path, anchor = ""] = (href ?? "").split("#");
-                const target = documents.find(item => item.file === path.split("/").at(-1));
+                const source = documents.find(item => item.slug === selected)?.file ?? "";
+                const resolved = new URL(path, `https://docs.local/${source}`).pathname.slice(1);
+                const target = documents.find(item => item.file === decodeURIComponent(resolved));
                 if (target) return <a href={`?view=docs&doc=${target.slug}${anchor ? `#${anchor}` : ""}`} onClick={event => { if (event.ctrlKey || event.metaKey || event.shiftKey || event.altKey) return; event.preventDefault(); navigate(target.slug, decodeURIComponent(anchor)); }}>{children}</a>;
                 return <span className="docs-source-ref" title={`项目本地文件：${href ?? ""}`}>{children}<small>本地来源</small></span>;
               },

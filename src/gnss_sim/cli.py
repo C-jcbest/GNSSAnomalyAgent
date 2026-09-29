@@ -1,125 +1,80 @@
+"""Command-line entry points for the current experiment workflow."""
 from __future__ import annotations
 
 import argparse
 import json
 import os
-import sys
 from pathlib import Path
 
-import uvicorn
-
-from gnss_sim.api import create_app
-from gnss_sim.evaluation import evaluate_pilot, load_results_jsonl
-from gnss_sim.pilot import DEFAULT_SEED, generate_pilot
-from gnss_sim.schemas import GenerationRequest
-from gnss_sim.storage import DatasetStore
+from gnss_sim.schemas import CASE_TYPES, GenerationRequest
 
 
 def main() -> None:
-    parser = argparse.ArgumentParser(prog="gnss-sim", description="Synthetic daily GNSS lab")
+    parser = argparse.ArgumentParser(prog="gnss-sim", description="GNSS 合成异常实验台")
     commands = parser.add_subparsers(dest="command", required=True)
-    generate = commands.add_parser("generate", help="Generate P2 events or P3 scenarios")
-    generate.add_argument("--seed", type=int, default=20260923)
-    generate.add_argument("--count", type=int, default=20)
-    generate.add_argument(
-        "--case-type",
-        choices=("all", "all_scenarios", "normal", "spike", "step", "slow_trend", "acceleration", "transient_shift",
-                 "multi_spike", "change_with_local", "temporary_with_local", "longterm_with_local",
-                 "longterm_with_change", "complex_multiaxis"),
-        default="all",
-    )
+    generate = commands.add_parser("generate", help="生成合成数据")
+    generate.add_argument("--seed", type=int, required=True)
+    generate.add_argument("--count", type=int, default=24)
+    generate.add_argument("--case-type", choices=("all", *CASE_TYPES), default="all")
     generate.add_argument("--data-dir", type=Path)
-    pilot = commands.add_parser("pilot", help="Create or verify fixed P4 pilot-v1")
-    pilot.add_argument("--seed", type=int, default=DEFAULT_SEED)
-    pilot.add_argument("--data-dir", type=Path, default=Path("data/pilots"))
-    evaluate = commands.add_parser("evaluate", help="Evaluate JSONL predictions on pilot-v1")
-    evaluate.add_argument("--task", choices=("point", "range"), required=True)
-    evaluate.add_argument("--predictions", type=Path, required=True)
-    evaluate.add_argument("--method", required=True)
-    evaluate.add_argument("--pilot-dir", type=Path, default=Path("data/pilots/pilot-v1"))
-    evaluate.add_argument("--out", type=Path)
-    numerical = commands.add_parser("numerical", help="Run a frozen P5 numerical baseline")
-    numerical.add_argument("--method", choices=("sr", "pelt", "matrix-profile", "theilsen"),
-                           required=True)
-    numerical.add_argument("--pilot-dir", type=Path, default=Path("data/pilots/pilot-v1"))
-    numerical.add_argument("--out-dir", type=Path, default=Path("runs/p5"))
-    visual = commands.add_parser("visual", help="Run the P6 image-only baseline")
-    visual.add_argument("--phase", choices=("preflight", "run", "evaluate"), required=True)
-    visual.add_argument("--config", type=Path, default=Path("configs/p6-visual.json"))
-    visual.add_argument("--pilot-dir", type=Path, default=Path("data/pilots/pilot-v1"))
-    visual.add_argument("--out-dir", type=Path, default=Path("runs/p6"))
-    visual.add_argument("--env-file", type=Path)
-    semantics = commands.add_parser("visual-semantics", help="Run versioned prompt-only comparison")
-    semantics.add_argument("--phase", choices=("preflight", "run", "evaluate"), required=True)
-    semantics.add_argument("--config", type=Path,
-                           default=Path("configs/p7a-visual-semantics.json"))
-    semantics.add_argument("--pilot-dir", type=Path, default=Path("data/pilots/pilot-v1"))
-    semantics.add_argument("--out-dir", type=Path, default=Path("runs/p7a/visual-semantics-v2"))
-    semantics.add_argument("--original-run", type=Path, default=Path("runs/p6/qwen3.8-flash"))
-    semantics.add_argument("--env-file", type=Path)
-    serve = commands.add_parser("serve", help="Serve the local experiment API and built UI")
+    serve = commands.add_parser("serve", help="启动本地网页")
     serve.add_argument("--host", default="127.0.0.1")
-    serve.add_argument("--port", type=int, default=8765)
+    serve.add_argument("--port", type=int, default=18765)
     serve.add_argument("--data-dir", type=Path)
+    calibration = commands.add_parser("calibrate", help="在独立 Normal 数据集上校准数值参数")
+    calibration.add_argument("--dataset", type=Path, required=True)
+    calibration.add_argument("--out", type=Path, required=True)
+    prepare = commands.add_parser("prepare", help="登记检测输入、参数与源码；不调用模型")
+    prepare.add_argument("--dataset", type=Path, required=True)
+    prepare.add_argument("--parameters", type=Path, required=True)
+    prepare.add_argument("--out", type=Path, required=True)
+    for name, description in (("numerical", "运行数值检测"), ("visual", "调用视觉模型"),
+                              ("evaluate", "离线评分并导出 HTML 报告")):
+        command = commands.add_parser(name, help=description)
+        command.add_argument("--run", type=Path, required=True)
+        if name == "visual":
+            command.add_argument("--env-file", type=Path)
     args = parser.parse_args()
-    if args.command == "pilot":
-        directory = generate_pilot(args.data_dir, args.seed)
-        print(f"{directory.resolve()}: 300 verified cases")
-    elif args.command == "evaluate":
-        results, errors = load_results_jsonl(args.predictions, args.task)
-        report = evaluate_pilot(args.pilot_dir, results, args.method, args.task)
-        if errors:
-            lines = ", ".join(str(error["line"]) for error in errors)
-            print(f"Ignored invalid prediction lines: {lines}; missing cases count as failures",
-                  file=sys.stderr)
-        output = json.dumps(report, ensure_ascii=False, indent=2, allow_nan=False) + "\n"
-        if args.out:
-            args.out.parent.mkdir(parents=True, exist_ok=True)
-            args.out.write_text(output, encoding="utf-8")
-        else:
-            print(output)
-    elif args.command == "numerical":
-        destination = args.out_dir / args.method
-        if any((destination / name).exists()
-               for name in ("predictions.jsonl", "report.json", "run.json")):
-            parser.error("Numerical results already exist; preserve the frozen run and use "
-                         "a separate --out-dir for an explicitly planned new experiment")
-        from gnss_sim.numerical_runner import run_numerical
+    try:
+        if args.command == "serve":
+            import uvicorn
 
-        report = run_numerical(args.method, args.pilot_dir, args.out_dir)
-        print(json.dumps(report, ensure_ascii=False, indent=2, allow_nan=False))
-    elif args.command == "visual":
-        from gnss_sim.visual_runner import evaluate_visual, run_preflight, run_visual
+            from gnss_sim.api import create_app
 
-        if args.phase == "preflight":
-            report = run_preflight(args.config, args.out_dir, args.env_file)
-        elif args.phase == "run":
-            report = run_visual(args.config, args.pilot_dir, args.out_dir, args.env_file)
-        else:
-            report = evaluate_visual(args.config, args.pilot_dir, args.out_dir)
-        print(json.dumps(report, ensure_ascii=False, indent=2, allow_nan=False))
-    elif args.command == "visual-semantics":
-        from gnss_sim.visual_semantics import evaluate, run_preflight, run_visual
+            uvicorn.run(create_app(args.data_dir), host=args.host, port=args.port)
+            return
+        if args.command == "generate":
+            from gnss_sim.storage import DatasetStore
 
-        if args.phase == "preflight":
-            report = run_preflight(args.config, args.out_dir, args.env_file)
-        elif args.phase == "run":
-            run = run_visual(args.config, args.pilot_dir, args.out_dir,
-                             args.original_run, args.env_file)
-            report = {key: run[key] for key in ("method", "new_requests", "tasks")}
+            root = args.data_dir or Path(os.environ.get("GNSS_SIM_DATA_DIR", "data/generated"))
+            store = DatasetStore(root)
+            try:
+                manifest = store.generate_sync(GenerationRequest(
+                    seed=args.seed, count=args.count, case_type=args.case_type))
+            finally:
+                store.executor.shutdown(wait=True)
+            if manifest.status != "complete":
+                raise ValueError(manifest.error)
+            report = {"dataset": str((root / manifest.dataset_id).resolve()),
+                      "cases": manifest.generated_cases}
+        elif args.command == "evaluate":
+            from gnss_sim.report import run
+
+            report = run(args.run)
         else:
-            report = evaluate(args.config, args.pilot_dir, args.out_dir)
+            from gnss_sim import detection
+
+            if args.command == "calibrate":
+                report = detection.calibrate(args.dataset, args.out)
+            elif args.command == "prepare":
+                report = detection.prepare(args.dataset, args.parameters, args.out)
+            elif args.command == "numerical":
+                report = detection.run_numerical(args.run)
+            else:
+                report = detection.run_visual(args.run, args.env_file)
         print(json.dumps(report, ensure_ascii=False, indent=2, allow_nan=False))
-    elif args.command == "generate":
-        root = args.data_dir or Path(os.environ.get("GNSS_SIM_DATA_DIR", "data/generated"))
-        request = GenerationRequest(seed=args.seed, count=args.count, case_type=args.case_type)
-        result = DatasetStore(root).generate_sync(request)
-        if result.status != "complete":
-            parser.exit(1, f"Generation failed: {result.error}\n")
-        print(f"{result.dataset_id}: {result.generated_cases} cases in {root.resolve()}")
-    else:
-        root = args.data_dir or Path(os.environ.get("GNSS_SIM_DATA_DIR", "data/generated"))
-        uvicorn.run(create_app(root), host=args.host, port=args.port)
+    except (OSError, ValueError, KeyError) as exc:
+        parser.exit(1, f"{type(exc).__name__}: {exc}\n")
 
 
 if __name__ == "__main__":

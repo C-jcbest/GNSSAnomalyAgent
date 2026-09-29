@@ -1,50 +1,13 @@
-"""Frozen N/E/U image renderer and strict P6 answer parser."""
-
-from __future__ import annotations
-
+"""Strict visual output parsing and local credential access."""
 import json
+import os
 import re
 from pathlib import Path
 
-import matplotlib
-import numpy as np
-
-from gnss_sim.schemas import CaseInput, PointResult, RangeResult
-
-matplotlib.use("Agg")
-from matplotlib import pyplot as plt  # noqa: E402
+from gnss_sim.schemas import PointResult, RangeResult
 
 AXES = ("N", "E", "U")
-DAYS = 365
-TICKS = (0, 60, 120, 180, 240, 300, 364)
 FENCE = re.compile(r"\A```(?:json)?\r?\n(.*?)\r?\n```\Z", re.DOTALL)
-
-
-def render_case(case: CaseInput, output: Path) -> None:
-    """Render only signed input displacement; the interface cannot accept truth."""
-    series = np.asarray(case.displacement_mm, dtype=np.float64)
-    if series.shape != (DAYS, 3) or not np.isfinite(series).all():
-        raise ValueError("expected 365 finite N/E/U displacement samples")
-    with plt.rc_context({"font.family": "DejaVu Sans", "font.size": 11,
-                         "axes.linewidth": 0.8, "savefig.facecolor": "white"}):
-        fig, panels = plt.subplots(3, 1, figsize=(12, 8), dpi=150, sharex=True,
-                                   facecolor="white")
-        try:
-            for index, (axis, panel) in enumerate(zip(AXES, panels)):
-                panel.plot(np.arange(DAYS), series[:, index], color="#233b58", linewidth=1)
-                panel.set_xlim(0, DAYS - 1)
-                panel.set_xticks(TICKS)
-                panel.tick_params(axis="x", labelbottom=True)
-                panel.set_ylabel("Displacement (mm)")
-                panel.set_title(axis, loc="left", fontweight="bold")
-                panel.margins(y=0.08)
-            panels[-1].set_xlabel("Day index")
-            fig.subplots_adjust(left=0.12, right=0.985, bottom=0.075, top=0.965,
-                                hspace=0.42)
-            output.parent.mkdir(parents=True, exist_ok=True)
-            fig.savefig(output, format="png", dpi=150, facecolor="white")
-        finally:
-            plt.close(fig)
 
 
 def _unique_object(pairs: list[tuple[str, object]]) -> dict:
@@ -85,3 +48,21 @@ def failed_result(case_id: str, task: str,
     model = PointResult if task == "point" else RangeResult
     return model(case_id=case_id, method=method, status="failed",
                  predictions={axis: [] for axis in AXES})
+
+
+def credentials(env_file: Path | None) -> tuple[str, str]:
+    values = {}
+    if env_file is not None:
+        for line in env_file.read_text(encoding="utf-8-sig").splitlines():
+            if "=" not in line or line.lstrip().startswith("#"):
+                continue
+            key, value = line.split("=", 1)
+            if key.strip() in ("QWEN_BASE_URL", "QWEN_API_KEY"):
+                values[key.strip()] = value.strip().strip("\"'")
+    base = os.getenv("QWEN_BASE_URL") or values.get("QWEN_BASE_URL")
+    key = os.getenv("QWEN_API_KEY") or values.get("QWEN_API_KEY")
+    if not base or not key:
+        raise ValueError("QWEN_BASE_URL and QWEN_API_KEY are required")
+    if not base.startswith(("https://", "http://")):
+        raise ValueError("invalid QWEN_BASE_URL")
+    return base.rstrip("/"), key

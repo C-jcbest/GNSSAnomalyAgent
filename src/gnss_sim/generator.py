@@ -1,127 +1,101 @@
+"""Project orchestration/unit conversion; anomaly calculations run in original upstream code."""
 from __future__ import annotations
 
+import json
+import subprocess
+import tempfile
 from datetime import date, timedelta
+from pathlib import Path
 
 import numpy as np
 
-from gnss_sim import events, scenarios
-from gnss_sim.schemas import (
-    SCENARIO_TYPES,
-    CaseInput,
-    CaseTruth,
-    ComponentSeeds,
-    EventContribution,
-    EventSeeds,
-    GenerationType,
-)
+from gnss_sim.schemas import CASE_TYPES, CaseInput, CaseTruth, Event, GenerationRequest
 
-GENERATOR_VERSION = "event-v6"
-START_DATE = date(2025, 1, 1)
-DAYS = 365
-PERIOD_DAYS = 365.25
-REFERENCE_COORDINATE_MM = (0.0, 0.0, 0.0)
-ANNUAL_AMPLITUDE_MM = (1.0, 1.0, 1.5)
-SEMIANNUAL_AMPLITUDE_MM = (0.25, 0.25, 0.5)
-WHITE_NOISE_SIGMA_MM = (0.5, 0.5, 1.0)
-EVENT_MAGNITUDE_MM = scenarios.MAGNITUDES_MM
+ROOT = Path(__file__).resolve().parents[2]
+GENERATOR_VERSION = "synthetic-v1"
+SIGMA_MM = np.array([0.5, 0.5, 1.0])
 
 
-def derive_component_seeds(case_seed: int) -> ComponentSeeds:
-    children = np.random.SeedSequence(case_seed).spawn(3)
-    values = [int(child.generate_state(1, dtype=np.uint32)[0]) for child in children]
-    return ComponentSeeds(
-        annual_phase=values[0], semiannual_phase=values[1], white_noise=values[2]
-    )
+def allocate_case_types(request: GenerationRequest):
+    if request.case_type == "all":
+        return list(CASE_TYPES) * (request.count // 4)
+    return [request.case_type] * request.count
 
 
-def derive_event_seeds(case_seed: int) -> EventSeeds:
-    # A distinct namespace leaves the frozen P1 phase/noise streams untouched.
-    children = np.random.SeedSequence([case_seed, 0x45564E54]).spawn(3)
-    values = [int(child.generate_state(1, dtype=np.uint32)[0]) for child in children]
-    return EventSeeds(position=values[0], shape=values[1], sign=values[2])
+def make_plans(request: GenerationRequest):
+    plans = []
+    for index, kind in enumerate(allocate_case_types(request)):
+        group = index // 4 if request.case_type == "all" else index
+        states = np.random.SeedSequence([request.seed, group, 0x555053]).generate_state(3)
+        plans.append({"case_id": f"case_{index + 1:04d}", "case_type": kind,
+                      "background_group": f"group_{group + 1:04d}",
+                      "noise_seed": int(states[0]), "position_seed": int(states[1]),
+                      "tods_seed": int(states[2]), "axis": (group // 2) % 3,
+                      "sign": -1 if group % 2 == 0 else 1})
+    return plans
 
 
-def generate_case(
-    case_id: str, case_seed: int, case_type: GenerationType
-) -> tuple[CaseInput, CaseTruth]:
-    seeds = derive_component_seeds(case_seed)
-    annual_phase = np.random.default_rng(seeds.annual_phase).uniform(0, 2 * np.pi, size=3)
-    semiannual_phase = np.random.default_rng(seeds.semiannual_phase).uniform(
-        0, 2 * np.pi, size=3
-    )
-    t = np.arange(DAYS, dtype=float)[:, None]
-    annual = np.asarray(ANNUAL_AMPLITUDE_MM) * np.sin(
-        2 * np.pi * t / PERIOD_DAYS + annual_phase
-    )
-    semiannual = np.asarray(SEMIANNUAL_AMPLITUDE_MM) * np.sin(
-        4 * np.pi * t / PERIOD_DAYS + semiannual_phase
-    )
-    normal_background_mm = annual + semiannual
-    measurement_noise_mm = np.random.default_rng(seeds.white_noise).normal(
-        size=(DAYS, 3)
-    ) * np.asarray(WHITE_NOISE_SIGMA_MM)
-    reference_coordinate_mm = np.asarray(REFERENCE_COORDINATE_MM)
-    dates = [START_DATE + timedelta(days=index) for index in range(DAYS)]
-    injected_deformation_mm = np.zeros((DAYS, 3), dtype=float)
-    observation_artifact_mm = np.zeros((DAYS, 3), dtype=float)
-    event_seeds = None
-    placed = []
-    if case_type != "normal":
-        event_seeds = derive_event_seeds(case_seed)
-        if case_type in SCENARIO_TYPES:
-            placed = scenarios.generate_scenario_events(dates, case_type, event_seeds)
-        else:
-            shape_rng = np.random.default_rng(event_seeds.shape)
-            axis = ("N", "E", "U")[int(shape_rng.integers(0, 3))]
-            magnitude = EVENT_MAGNITUDE_MM[case_type][("N", "E", "U").index(axis)]
-            duration = scenarios.DURATIONS[case_type]
-            last_start = events.SAFE_END - duration + 1
-            start = int(np.random.default_rng(event_seeds.position).integers(events.SAFE_START, last_start + 1))
-            sign = 1 if np.random.default_rng(event_seeds.sign).integers(0, 2) else -1
-            placed = [scenarios.MAKERS[case_type](dates, axis, start, sign * magnitude)]
-    for contribution, event in placed:
-        if event.source == "injected_deformation":
-            injected_deformation_mm += contribution
-        else:
-            observation_artifact_mm += contribution
-    observed_coordinate_mm = (
-        reference_coordinate_mm
-        + normal_background_mm
-        + injected_deformation_mm
-        + measurement_noise_mm
-        + observation_artifact_mm
-    )
-    displacement_mm = observed_coordinate_mm - reference_coordinate_mm
-
-    case_input = CaseInput(
-        case_id=case_id,
-        dates=dates,
-        reference_coordinate_mm=REFERENCE_COORDINATE_MM,
-        observed_coordinate_mm=observed_coordinate_mm.tolist(),
-        displacement_mm=displacement_mm.tolist(),
-        horizontal_offset_mm=np.linalg.norm(displacement_mm[:, :2], axis=1).tolist(),
-        spatial_offset_mm=np.linalg.norm(displacement_mm, axis=1).tolist(),
-    )
-    truth = CaseTruth(
-        case_id=case_id,
-        scenario_type=case_type if case_type in SCENARIO_TYPES else None,
-        normal_background_mm=normal_background_mm.tolist(),
-        measurement_noise_mm=measurement_noise_mm.tolist(),
-        injected_deformation_mm=injected_deformation_mm.tolist(),
-        observation_artifact_mm=observation_artifact_mm.tolist(),
-        annual_phase_rad=tuple(annual_phase),
-        semiannual_phase_rad=tuple(semiannual_phase),
-        component_seeds=seeds,
-        event_seeds=event_seeds,
-        events=[event for _, event in placed],
-        event_contributions=[EventContribution(
-            event_id=event.event_id,
-            component=event.source,
-            values_mm=contribution.tolist(),
-        ) for contribution, event in placed],
-    )
-    return case_input, truth
+def convert_native(result):
+    plan = result["plan"]
+    kind, axis = plan["case_type"], plan["axis"]
+    observed = np.asarray(result["observed"]) * SIGMA_MM
+    noise = np.asarray(result["noise"]) * SIGMA_MM
+    delta = observed - noise
+    dates = [date(2025, 1, 1) + timedelta(days=i) for i in range(365)]
+    events = []
+    if kind != "normal":
+        start, end = result["start"], result["end"]
+        events = [Event(type=kind, task="point" if kind == "global_extremum" else "range",
+                        axis=("N", "E", "U")[axis], start_index=start, end_index=end,
+                        start_date=dates[start], end_date=dates[end], persistent=kind == "trend",
+                        operation="native_extremum" if kind == "global_extremum" else "add",
+                        target_offset_mm=float(delta[end, axis]),
+                        observed_end_mm=float(observed[end, axis]), sigma_mm=float(SIGMA_MM[axis]),
+                        source=result["source"], native_parameters=result["native_parameters"])]
+    case = CaseInput(case_id=plan["case_id"], dates=dates, reference_coordinate_mm=(0, 0, 0),
+                     observed_coordinate_mm=observed.tolist(), displacement_mm=observed.tolist(),
+                     horizontal_offset_mm=np.linalg.norm(observed[:, :2], axis=1).tolist(),
+                     spatial_offset_mm=np.linalg.norm(observed, axis=1).tolist())
+    truth = CaseTruth(case_id=plan["case_id"], background_group=plan["background_group"],
+                      measurement_noise_mm=noise.tolist(), anomaly_delta_mm=delta.tolist(),
+                      noise_seed=plan["noise_seed"], position_seed=plan["position_seed"],
+                      tods_seed=plan["tods_seed"], native_labels=result["labels"],
+                      axis_labels=result["axis_labels"], events=events,
+                      source_lock_sha256=result["source_lock_sha256"])
+    return case, truth
 
 
-def generate_normal_case(case_id: str, case_seed: int) -> tuple[CaseInput, CaseTruth]:
-    return generate_case(case_id, case_seed, "normal")
+def generate_cases(request: GenerationRequest):
+    environment = ROOT / ".venv-generator"
+    python = environment / "Scripts/python.exe"
+    if not python.is_file():
+        python = environment / "bin/python"
+    if not python.is_file():
+        raise RuntimeError("请先运行 uv run python scripts/setup_generator.py")
+    plans = make_plans(request)
+    # A separate process owns TODS' global NumPy RNG; stderr cannot fill a pipe and deadlock.
+    with tempfile.TemporaryFile(mode="w+b") as errors:
+        process = subprocess.Popen([str(python), str(ROOT / "scripts/generate_worker.py")],
+                                   stdin=subprocess.PIPE, stdout=subprocess.PIPE, stderr=errors,
+                                   text=True, encoding="utf-8", cwd=ROOT)
+        try:
+            process.stdin.write(json.dumps(plans) + "\n")
+            process.stdin.close()
+            received = 0
+            for line in process.stdout:
+                result = json.loads(line)
+                if received >= len(plans) or result["plan"] != plans[received]:
+                    raise RuntimeError("Unexpected upstream result order")
+                received += 1
+                case, truth = convert_native(result)
+                yield case, truth, result["plan"]
+            code = process.wait(timeout=30)
+            if code or received != len(plans):
+                errors.seek(0)
+                detail = errors.read().decode("utf-8", errors="replace")[-4000:]
+                raise RuntimeError(f"Upstream worker failed ({code}, {received}/{len(plans)}): {detail}")
+        finally:
+            if process.poll() is None:
+                process.kill()
+                process.wait()
+            process.stdout.close()

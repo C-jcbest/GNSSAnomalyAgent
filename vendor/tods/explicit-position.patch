@@ -1,0 +1,25 @@
+--- univariate_generator.py
++++ univariate_generator_position.py
+@@ -127,15 +127,19 @@
+             self.data[start:end] = sub_data[start:end]
+             self.label[start:end] = 1
+ 
+-    def collective_trend_outliers(self, ratio, factor, radius):
++    def collective_trend_outliers(self, ratio, factor, radius, positions=None):
+         """
+         Add collective trend outliers to original data
+         Args:
+             ratio: what ratio outliers will be added
+             factor: how dramatic will the trend be
+             radius: the radius of collective outliers range
+-        """
+-        position = (np.random.rand(round(self.STREAM_LENGTH * ratio / (2 * radius))) * self.STREAM_LENGTH).astype(int)
++            positions: project adaptation; optional explicit center indices
++        """
++        if positions is None:
++            position = (np.random.rand(round(self.STREAM_LENGTH * ratio / (2 * radius))) * self.STREAM_LENGTH).astype(int)
++        else:
++            position = np.asarray(positions, dtype=int)
+         for i in position:
+             start, end = max(0, i - radius), min(self.STREAM_LENGTH, i + radius)
+             slope = np.random.choice([-1, 1]) * factor * np.arange(end - start)

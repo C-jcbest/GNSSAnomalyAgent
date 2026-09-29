@@ -8,42 +8,17 @@ from datetime import datetime, timezone
 from pathlib import Path
 from uuid import uuid4
 
-import numpy as np
-
-from gnss_sim.generator import GENERATOR_VERSION, generate_case
+from gnss_sim.generator import GENERATOR_VERSION, allocate_case_types, generate_cases
 from gnss_sim.schemas import (
     CASE_TYPES,
-    SCENARIO_TYPES,
     CaseInput,
     CaseSummary,
     CaseTruth,
     DatasetManifest,
     GenerationRequest,
-    GenerationType,
 )
 
-DATASET_ID_PATTERN = re.compile(r"^event-v6-\d{8}-\d{6}-[a-f0-9]{8}$")
-MIX_PERCENTAGES = (25, 15, 15, 15, 15, 15)
-
-
-def allocate_case_types(request: GenerationRequest) -> list[GenerationType]:
-    if request.case_type not in ("all", "all_scenarios"):
-        return [request.case_type] * request.count
-
-    rng = np.random.default_rng(np.random.SeedSequence([request.seed, 0x4D4958]))
-    types = SCENARIO_TYPES if request.case_type == "all_scenarios" else CASE_TYPES
-    percentages = (100 / len(types),) * len(types) if request.case_type == "all_scenarios" else MIX_PERCENTAGES
-    quotas = np.asarray(percentages) * request.count / 100
-    counts = np.maximum(1, np.floor(quotas).astype(int))
-    tie_rank = {int(value): rank for rank, value in enumerate(rng.permutation(len(CASE_TYPES)))}
-    remainder_order = sorted(
-        range(len(types)), key=lambda index: (-(quotas[index] - counts[index]), tie_rank[index])
-    )
-    for index in remainder_order[: request.count - int(counts.sum())]:
-        counts[index] += 1
-    assigned = [case_type for case_type, count in zip(types, counts) for _ in range(count)]
-    rng.shuffle(assigned)
-    return assigned
+DATASET_ID_PATTERN = re.compile(r"^synthetic-v1-\d{8}-\d{6}-[a-f0-9]{8}$")
 
 
 def _write_json(path: Path, value: dict) -> None:
@@ -125,8 +100,9 @@ class DatasetStore:
             created_at=created_at,
             status="queued",
             request=request,
-            type_counts={kind: assigned_types.count(kind) for kind in (*CASE_TYPES, *SCENARIO_TYPES) if kind in assigned_types},
+            type_counts={kind: assigned_types.count(kind) for kind in CASE_TYPES if kind in assigned_types},
         )
+        self._dataset_dir(dataset_id).mkdir(parents=True, exist_ok=False)
         _write_json(self._dataset_dir(dataset_id) / "manifest.json", manifest.model_dump(mode="json"))
         return manifest
 
@@ -143,15 +119,12 @@ class DatasetStore:
         manifest.status = "running"
         _write_json(path, manifest.model_dump(mode="json"))
         try:
-            for index, case_type in enumerate(allocate_case_types(manifest.request)):
-                case_id = f"case_{index + 1:04d}"
-                case_seed = int(
-                    np.random.SeedSequence([manifest.request.seed, index]).generate_state(
-                        1, dtype=np.uint32
-                    )[0]
-                )
-                case_input, truth = generate_case(case_id, case_seed, case_type)
+            for case_input, truth, plan in generate_cases(manifest.request):
+                case_id = case_input.case_id
+                case_type = plan["case_type"]
+                case_seed = plan["noise_seed"]
                 case_dir = self._case_dir(manifest.dataset_id, case_id)
+                case_dir.mkdir(parents=True, exist_ok=False)
                 _write_json(case_dir / "input.json", case_input.model_dump(mode="json"))
                 _write_json(case_dir / "truth.json", truth.model_dump(mode="json"))
                 manifest.cases.append(
@@ -160,6 +133,9 @@ class DatasetStore:
                         case_seed=case_seed,
                         case_type=case_type,
                         event_count=len(truth.events),
+                        background_group=plan["background_group"],
+                        group_axis=("N", "E", "U")[plan["axis"]],
+                        group_sign=plan["sign"],
                     )
                 )
                 manifest.generated_cases += 1
