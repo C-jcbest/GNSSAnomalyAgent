@@ -57,7 +57,7 @@ class DatasetStore:
 
     def list_datasets(self) -> list[DatasetManifest]:
         manifests = []
-        for path in self.root.glob("*/manifest.json"):
+        for path in self.root.glob("synthetic-v1-*/manifest.json"):
             try:
                 manifests.append(DatasetManifest.model_validate(_read_json(path)))
             except (OSError, ValueError):

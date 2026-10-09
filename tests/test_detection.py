@@ -72,8 +72,14 @@ def test_registered_workflow_isolated_inputs_failures_and_no_overwrite(tmp_path,
     summary = report.run(out)
     assert summary["numerical"]["point"]["normal"]["failed_cases"] == 1
     assert summary["visual"]["range"]["daily"]["fn"] == 104
+    assert summary["union"]["point"]["normal"]["failed_cases"] == 1
+    assert summary["intersection"]["point"]["normal"]["failed_cases"] == 1
     assert (out / "comparison.html").is_file()
     saved = json.loads((out / "evaluation.json").read_bytes())
+    analysis = saved["paired_analysis"]
+    assert analysis["groups"] == 1  # Four related cases, one resampling unit.
+    delta = analysis["tasks"]["point"]["paired_differences"]["union_minus_numerical"]["f1"]
+    assert delta["low"] == delta["high"] == 0
     for group in [saved["summary"], *saved["by_type"].values()]:
         for method in group.values():
             for task in ("point", "range"):
@@ -87,6 +93,29 @@ def test_registered_workflow_isolated_inputs_failures_and_no_overwrite(tmp_path,
     (out / "parameters.json").write_text("{}", encoding="utf-8")
     with pytest.raises(ValueError, match="Registered input/config changed"):
         detection.validate(out)
+
+
+def test_offline_fusion_sets_endpoints_and_failure_propagation():
+    from gnss_sim.report import combine
+    from gnss_sim.schemas import PointResult, RangeResult
+
+    def rows(model, values, status="success"):
+        return {"case_0001": model(case_id="case_0001", method="fixture", status=status,
+                                   predictions={"N": values, "E": [], "U": []})}
+
+    a = rows(RangeResult, [(0, 4), (3, 6), (10, 10), (364, 364)])
+    b = rows(RangeResult, [(4, 8), (12, 12), (364, 364)])
+    assert combine(a, b, a, "range", "union")["case_0001"].predictions.N == [
+        (0, 8), (10, 10), (12, 12), (364, 364)]
+    assert combine(a, b, a, "range", "intersection")["case_0001"].predictions.N == [
+        (4, 6), (364, 364)]
+    x, y = rows(PointResult, [1, 1, 3]), rows(PointResult, [3, 4])
+    assert combine(x, y, x, "point", "union")["case_0001"].predictions.N == [1, 3, 4]
+    assert combine(x, y, x, "point", "intersection")["case_0001"].predictions.N == [3]
+    for method in ("union", "intersection"):
+        for missing in ({}, rows(PointResult, [2], "failed")):
+            result = combine(x, missing, x, "point", method)["case_0001"]
+            assert result.status == "failed" and result.predictions.N == []
 
 
 def test_morphology_separates_isolated_jump_and_return_with_signed_trends():

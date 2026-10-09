@@ -1,0 +1,70 @@
+{
+  "schema_version": "landslide-local-view-plan-v1",
+  "status": "frozen_not_executed",
+  "date": "2026-10-07",
+  "purpose": "Separate the effect of local raw-displacement views on activity localization and on stage interpretation.",
+  "scope": "Previously viewed simulated development records; not independent validation.",
+  "case_ids": ["case_0002", "case_0003", "case_0006", "case_0007", "case_0015", "case_0023"],
+  "numeric_run": "artifacts/landslide-comparison-2026-10-07/numeric-v1",
+  "fixed_stage_gate_run": "artifacts/landslide-comparison-2026-10-07/visual-v3",
+  "fixed_stage_gate_method": "visual_rule",
+  "labels": "artifacts/landslide-annotations-2026-10-07/revision-v2/daily-labels.csv",
+  "labels_sha256": "6137a3bb8ece74262d12cba42da6bffbc50a7b84afeb545a86078a51aa5897d1",
+  "model": "qwen3.8-flash",
+  "temperature": 0.1,
+  "top_p": 0.3,
+  "max_output_tokens": 2048,
+  "timeout_seconds": 150,
+  "retries": 0,
+  "repetitions": 1,
+  "maximum_requests": 24,
+  "request_order": "Ascending case_id; alternate control-first and local-first between successive cases within each experiment.",
+  "global_plot": {
+    "source": "Reuse exact visual-v3 raw and auxiliary files, verified by prior request image hashes.",
+    "axes": "N/E/U separate raw panels; same raw calendar and missing mask",
+    "minimum_raw_axis_span_mm": 60,
+    "span_multiplier": 1.5
+  },
+  "local_plot": {
+    "source": "Raw observations only; no annotation, model prediction, scenario, latent displacement or derivative overlay",
+    "window_days": 180,
+    "stride_days": 90,
+    "tail": "Append the final full-length window ending on the last observation if the stride grid does not reach it.",
+    "selection": "All regular windows, including negative and uncertain regions; no label- or error-selected crops.",
+    "windows_per_page": 4,
+    "axes": "N/E/U in three rows, windows as columns; original day indices; observed gaps remain gaps",
+    "figure_inches": [19.2, 7],
+    "dpi": 135,
+    "minimum_axis_span_mm": 10,
+    "minimum_axis_span_noise_multiplier": 6,
+    "axis_noise": "max(1.4826 * median absolute deviation of finite consecutive daily differences / sqrt(2), 0.1 mm), computed per axis from the full observation record",
+    "axis_range": "max(all finite local raw values)-min(all finite local raw values); no outlier clipping",
+    "span_multiplier": 1.5,
+    "implementation": "scripts/diagnose_landslide_stages.py::render_review_atlas"
+  },
+  "experiments": [
+    {
+      "id": "activity_local_views",
+      "control": "Fresh single activity call with global raw image only.",
+      "treatment": "Fresh single activity call with the same global raw image plus every fixed local raw page.",
+      "prompt": "ACTIVITY_TASK plus the identical activity/uncertain JSON schema instruction for both arms.",
+      "auxiliary_evidence": "None in either arm; activity must be confirmed from raw displacement.",
+      "maximum_requests": 12,
+      "primary_metrics": ["daily precision/recall/F1", "event F1 at IoU 0.3", "weak activity recall with support count", "false activity days", "coverage", "contract failures"],
+      "interpretation": "A localization-only comparison; do not use these newly inferred gates to change the separate stage experiment."
+    },
+    {
+      "id": "stage_local_views",
+      "control": "One fresh stage call with frozen visual-v3 activity gate, global raw image and the same 61-day auxiliary image.",
+      "treatment": "One fresh stage call with exactly the same activity gate and global/auxiliary images plus every fixed local raw page.",
+      "prompt": "Reuse the exact visual-v3 per-case stage prompt; same inclusive endpoint contract and no additional examples.",
+      "maximum_requests": 12,
+      "primary_metrics": ["end-to-end stage macro-F1 under the fixed activity gate", "A/S/D precision/recall/F1", "stage confusion", "reference-negative false stage days", "stage abstention", "contract failures"],
+      "interpretation": "Controlled stage-evidence comparison; this is not an end-to-end run of the newly localized activity arm."
+    }
+  ],
+  "cost_policy": "The number of calls and maximum output tokens match. Image counts and actual input tokens differ intentionally; report them and do not claim a token-matched experiment.",
+  "scoring": "Reuse current landslide_evaluation.py without changes. Unknown reference days excluded, positive misses retained, output failures retained; no sorting, clipping, retries or post-hoc label corrections.",
+  "freeze_policy": "Freeze source snapshots, prompts, input/image hashes and this configuration hash before the first request. No parameter search or repeat selection after outputs. Record protocol deviations separately.",
+  "interpretation_limits": "Only one weak-motion reference episode and 42 steady-reference days. No confirmatory significance, noninferiority, cross-site, online-warning, or physical-failure claims. Labels themselves remain subject to independent adjudication."
+}

@@ -1,0 +1,20 @@
+{
+  "protocol_id": "landslide-stage-agreement-v1",
+  "reference_run": "artifacts/landslide-ai-stage-review-2026-10-08/review-v1",
+  "prediction_run": "artifacts/landslide-frozen-stage-heads-2026-10-08/run-v1",
+  "output_run": "artifacts/landslide-stage-agreement-2026-10-08/analysis-v1",
+  "methods": ["rule", "xgboost", "visual"],
+  "primary_prediction_mode": "final",
+  "secondary_diagnostic_mode": "native",
+  "primary_denominator": "all observed definite reference stage days; retain prediction unknown and failure",
+  "unassessed_reference_policy": "unknown reference days are separately counted, never false positives or negatives",
+  "formal_performance_scores": false,
+  "reference_use": "development_only",
+  "macro_f1_policy": "report only when all three reference classes have positive support",
+  "activity_evaluation": false,
+  "exact_boundary_evaluation": false,
+  "new_inference_requests": 0,
+  "retraining": false,
+  "threshold_selection": false,
+  "sealed_test_access": "none"
+}

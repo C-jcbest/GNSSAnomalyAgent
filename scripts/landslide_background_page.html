@@ -1,0 +1,73 @@
+<!doctype html>
+<html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>新背景 · 长期位移审查</title>
+<style>
+:root{color-scheme:light;font-family:system-ui,"Microsoft YaHei",sans-serif;color:#20342f;background:#f3f5f0}
+body{max-width:1240px;margin:0 auto;padding:32px}header{border-bottom:2px solid #286556;padding-bottom:20px}
+h1{font-size:30px;font-weight:600;margin:10px 0}p{line-height:1.75;margin:8px 0}.eyebrow{color:#286556;letter-spacing:2px;font-size:13px}
+.status{display:flex;gap:12px;flex-wrap:wrap;margin:20px 0}.status span{padding:10px 16px;background:#e4ece3;border-radius:5px}
+.panel{padding:24px;background:#fff;border:1px solid #d7dfd5;border-radius:8px;margin:20px 0}
+select,button,a.download{font:inherit;border:1px solid #acbcb0;border-radius:4px;background:#fff;padding:9px 12px;color:#20342f}
+button,a.download{cursor:pointer}a{color:#286556}a.download{display:inline-block;text-decoration:none}label{margin-right:14px}
+.toolbar{display:flex;gap:12px;flex-wrap:wrap;align-items:center}.meta{font-size:13px;color:#52665c;overflow-wrap:anywhere}
+img{width:100%;height:auto;display:block;margin-top:12px}.hidden{display:none}details{margin-top:14px}summary{cursor:pointer;padding:8px 0}
+pre{white-space:pre-wrap;overflow-wrap:anywhere;background:#f2f5f1;border:1px solid #e0e6dc;padding:16px;font-size:13px;line-height:1.7}
+.warning{border-left:3px solid #a27836;padding-left:14px}.steps{display:grid;grid-template-columns:repeat(3,1fr);gap:14px}.steps div{padding:14px;background:#f2f5f1}
+@media(max-width:700px){body{padding:16px}.panel{padding:14px}.steps{grid-template-columns:1fr}h1{font-size:25px}}
+</style></head><body>
+<header><div class="eyebrow">GNSS / NEW BACKGROUND REVIEW</div><h1>先确认持续位移，再判断活动阶段</h1>
+<p>固定新背景与绘图规则，观察弱变化、平台和复杂活动。下方只开放开发观测；生成机制和测试观测保存在网页目录之外。</p></header>
+<div class="status"><span>开发记录 12 条 × 1095 日</span><span>封存测试 12 条</span><span>新模型调用 0 次</span><span>参考标注：待复核</span></div>
+<section class="panel"><div class="steps"><div><b>① 原始位移</b><p>先确认活动的保守内部范围。原始图未显示持续变化时，不根据导数提前确认活动。</p></div>
+<div><b>② 冻结活动</b><p>起止待定、缺测和未审日期保留未知。静稳范围需要明确的原图证据。</p></div>
+<div><b>③ 辅助阶段</b><p>在确认活动内结合多尺度速度／加速度；冻结第一层后再输出阶段。</p></div></div></section>
+<section class="panel"><div class="toolbar"><label>记录 <select id="case"></select></label><label>原图范围 <select id="view"></select></label>
+<a class="download" id="input">下载观测 JSON</a><a class="download" id="csv">下载观测 CSV</a><a class="download" id="review">下载待审模板</a></div>
+<p class="meta" id="calendar"></p><p class="meta" id="hash"></p>
+<p>分轴保留原始观测与缺测断线，纵轴统一增加 50% 留白并设置最小跨度。全局图和三个固定局部窗全部提供，局部窗两侧最多各含 45 日上下文。</p>
+<a id="rawLink" target="_blank"><img id="raw" alt="原始位移图"></a>
+<details><summary>查看第一层读图提示词草案（尚未发送模型）</summary><pre id="activityPrompt"></pre></details>
+<details><summary>查看本图刻度与纵轴审计</summary><pre id="audit"></pre></details></section>
+<section class="panel"><label><input id="showAux" type="checkbox"> 我已先检查原始位移，打开辅助图</label>
+<div id="auxPanel" class="hidden"><p class="warning">居中估计包含未来数据，属于离线辅助。导数提前响应或 3D 速度的零附近正偏不能直接作为活动证据；辅助图没有标注色带。</p>
+<label>拟合窗口 <select id="window"><option>31</option><option selected>61</option><option>91</option></select> 日</label>
+<a id="auxLink" target="_blank"><img id="aux" alt="速度与加速度辅助图"></a>
+<details><summary>查看第二层阶段提示词草案（仅在活动冻结后使用）</summary><pre id="stagePrompt"></pre></details></div></section>
+<section class="panel"><h2>这一批现在能验证什么</h2><p>可以验证绘图、观测接口、读图参考流程与新背景下的候选行为。当前没有独立的观测标签，因此没有新的 F1、召回率或阶段成绩。</p>
+<p>仅凭单条位移曲线，有时不能区分坡体缓慢形变与仪器漂移。读图任务判断“可观测持续位移活动”；物理成因须另有传感器、场地或质量证据，不能依据隐藏机制直接写成稳定负例。</p>
+<p><a href="manifest.json">公开清单</a> · <a href="protocol.json">冻结数据／绘图协议</a> · <a href="review-guide.md">参考复核说明</a></p></section>
+<script>
+let manifest, current;
+const el=id=>document.getElementById(id);
+async function setView(){
+  const entry=current.views[Number(el('view').value)];
+  el('raw').src=entry.image;el('rawLink').href=entry.image;
+  el('audit').textContent=JSON.stringify(entry.audit,null,2);
+  el('activityPrompt').textContent=manifest.activity_prompt;
+}
+function setAux(){
+  const file=current.diagnostics[el('window').value].image;
+  el('aux').src=file;el('auxLink').href=file;
+}
+function setCase(){
+  current=manifest.cases.find(item=>item.case_id===el('case').value);
+  el('view').replaceChildren(...current.views.map((entry,index)=>{
+    const option=document.createElement('option');option.value=index;
+    option.textContent=index===0?'全记录':`固定局部窗 ${index} · 目标 ${entry.target.join('–')} 日`;
+    return option;
+  }));
+  el('calendar').textContent=`${current.case_id} · ${current.start_date} 至 ${current.end_date} · 有效观测 ${current.observed_days} 日 · 缺测 ${current.missing_days} 日`;
+  el('hash').textContent=`观测 SHA-256：${current.input_sha256}`;
+  for(const key of ['input','csv','review']){el(key).href=current[key];el(key).download='';}
+  el('showAux').checked=false;el('auxPanel').classList.add('hidden');el('aux').removeAttribute('src');
+  setView();
+}
+el('case').addEventListener('change',setCase);el('view').addEventListener('change',setView);
+el('window').addEventListener('change',setAux);
+el('showAux').addEventListener('change',()=>{el('auxPanel').classList.toggle('hidden',!el('showAux').checked);if(el('showAux').checked){setAux();}});
+fetch('manifest.json').then(response=>response.json()).then(data=>{
+  manifest=data;
+  el('case').replaceChildren(...data.cases.map(item=>{const option=document.createElement('option');option.value=item.case_id;option.textContent=item.case_id;return option;}));
+  el('stagePrompt').textContent=data.stage_prompt;setCase();
+}).catch(error=>{el('calendar').textContent='清单加载失败：'+error.message;});
+</script></body></html>

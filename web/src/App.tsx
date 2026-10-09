@@ -19,6 +19,7 @@ import {
   Search,
 } from "lucide-react";
 import DocsPage from "./DocsPage";
+import LandslidePage from "./LandslidePage";
 
 type Triple = [number, number, number];
 type Status = "queued" | "running" | "complete" | "failed";
@@ -141,11 +142,11 @@ export default function App() {
   const [caseType, setCaseType] = useState<GenerationType>("all");
   const [submitting, setSubmitting] = useState(false);
   const [error, setError] = useState("");
-  const [page, setCurrentPage] = useState<"datasets" | "runs" | "docs">(() => {
+  const [page, setCurrentPage] = useState<"datasets" | "landslides" | "runs" | "docs">(() => {
     const requested = new URLSearchParams(location.search).get("view");
-    return requested === "docs" || requested === "runs" ? requested : "datasets";
+    return requested === "docs" || requested === "runs" || requested === "landslides" ? requested : "datasets";
   });
-  function setPage(next: "datasets" | "runs" | "docs") {
+  function setPage(next: "datasets" | "landslides" | "runs" | "docs") {
     const url = new URL(location.href);
     url.searchParams.set("view", next);
     url.hash = "";
@@ -157,7 +158,7 @@ export default function App() {
   useEffect(() => {
     const restore = () => {
       const requested = new URLSearchParams(location.search).get("view");
-      setCurrentPage(requested === "docs" || requested === "runs" ? requested : "datasets");
+      setCurrentPage(requested === "docs" || requested === "runs" || requested === "landslides" ? requested : "datasets");
     };
     window.addEventListener("popstate", restore);
     return () => window.removeEventListener("popstate", restore);
@@ -196,7 +197,7 @@ export default function App() {
   }, []);
 
   useEffect(() => {
-    if (!selectedId) {
+    if (page !== "datasets" || !selectedId) {
       setDetail(null);
       return;
     }
@@ -236,10 +237,11 @@ export default function App() {
       disposed = true;
       window.clearTimeout(timer);
     };
-  }, [selectedId]);
+  }, [selectedId, page]);
 
   useEffect(() => {
     if (
+      page !== "datasets" ||
       !selectedId ||
       !caseId ||
       detail?.dataset_id !== selectedId ||
@@ -271,10 +273,10 @@ export default function App() {
     return () => {
       disposed = true;
     };
-  }, [selectedId, caseId, detail?.dataset_id]);
+  }, [selectedId, caseId, detail?.dataset_id, page]);
 
   useEffect(() => {
-    if (!truthVisible || !selectedId || !caseId || !caseInput) {
+    if (page !== "datasets" || !truthVisible || !selectedId || !caseId || !caseInput) {
       setCaseTruth(null);
       setTruthLoading(false);
       return;
@@ -289,7 +291,7 @@ export default function App() {
       .catch((cause) => { if (!disposed) { setError(cause.message); setTruthVisible(false); } })
       .finally(() => { if (!disposed) setTruthLoading(false); });
     return () => { disposed = true; };
-  }, [truthVisible, selectedId, caseId, caseInput]);
+  }, [truthVisible, selectedId, caseId, caseInput, page]);
 
   const filteredCases = useMemo(
     () =>
@@ -526,7 +528,7 @@ export default function App() {
   }
 
   return (
-    <div className={`app-shell ${page === "docs" ? "docs-mode" : ""}`}>
+    <div className={`app-shell ${page === "docs" ? "docs-mode" : ""} ${page === "landslides" ? "landslide-mode" : ""}`}>
       <aside className="sidebar">
         <div className="brand">
           <span className="brand-mark">
@@ -534,7 +536,7 @@ export default function App() {
           </span>
           <div>
             <strong>GNSS LAB</strong>
-            <small>模拟实验台 / synthetic-v1</small>
+            <small>日尺度位移 / 仿真实验</small>
           </div>
         </div>
         <nav className="main-nav" aria-label="主导航">
@@ -543,6 +545,12 @@ export default function App() {
             onClick={() => setPage("datasets")}
           >
             <Database size={17} /> 数据集
+          </button>
+          <button
+            className={page === "landslides" ? "active" : ""}
+            onClick={() => setPage("landslides")}
+          >
+            <Activity size={17} /> 长期位移
           </button>
           <button
             className={page === "runs" ? "active" : ""}
@@ -558,7 +566,7 @@ export default function App() {
           </button>
         </nav>
         <div className="sidebar-section-title">
-          <span>生成历史</span>
+          <span>一年基准历史</span>
           <span>{datasets.length}</span>
         </div>
         <div className="dataset-list">
@@ -596,7 +604,7 @@ export default function App() {
         <header className="topbar">
           <div className="breadcrumb">
             实验 /{" "}
-            <strong>{page === "datasets" ? "数据集" : page === "runs" ? "检测运行" : "实验文档"}</strong>
+            <strong>{{ datasets: "数据集", landslides: "长期位移", runs: "检测运行", docs: "实验文档" }[page]}</strong>
           </div>
           <div className="topbar-meta">
             <span>日尺度</span>
@@ -613,7 +621,9 @@ export default function App() {
           </div>
         )}
 
-        {page === "docs" ? (
+        {page === "landslides" ? (
+          <LandslidePage />
+        ) : page === "docs" ? (
           <DocsPage />
         ) : page === "runs" ? (
           <section className="runs-page">

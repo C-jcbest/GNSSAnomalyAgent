@@ -1,0 +1,40 @@
+{
+  "protocol_id": "landslide-stage-support-ablation-v1",
+  "status": "planned_not_executed",
+  "design_type": "post_audit_development_ablation_not_independent_preregistration",
+  "support_audit_run": "artifacts/landslide-window-support-audit-2026-10-09/audit-v2",
+  "support_audit_freeze_sha256": "b8f335c18465d9b8faed1f877bd9047112f2156a41bb7c069381af52fe421d03",
+  "native_prediction_run": "artifacts/landslide-frozen-stage-heads-2026-10-08/run-v1",
+  "native_inference_freeze_sha256": "2df474031eb0cdd7742614345887d0a4c1976f5de545fd49c55bb490cdbc9fe2",
+  "methods": ["rule", "xgboost", "visual"],
+  "conditions": [
+    {"id": "fixed_61", "policy": "use finite 61-day support; reproduce frozen baseline"},
+    {"id": "fixed_31", "policy": "use finite 31-day support"},
+    {"id": "fixed_91", "policy": "use finite 91-day support"},
+    {"id": "fallback_31_contained", "policy": "use 61 when sufficient for the native class; otherwise require sufficient 31 support and full calendar window inside the same frozen activity interior"},
+    {"id": "contained_61", "policy": "use finite 61-day support only when its full calendar window lies inside the same frozen activity interior"}
+  ],
+  "class_support": {
+    "steady_motion": "finite velocity vector; no new claim that availability establishes nonzero steady motion",
+    "acceleration_or_deceleration": "finite velocity and tangential acceleration from the same selected window"
+  },
+  "unknown_native_policy": "preserve unknown; never infer a stage from available derivatives",
+  "outside_activity_or_missing_policy": "preserve frozen labels; no definite stages",
+  "raw_sign_conflict_policy": "diagnostic only; no sign-based reclassification or conflict veto",
+  "input_identity_checks": "match complete dates, observation hash, activity content hash and observation-only diagnostics before using native outputs",
+  "prediction_freeze_before_reference": true,
+  "reference_run": "artifacts/landslide-ai-stage-review-2026-10-08/review-v1",
+  "reference_use": "development_only_nonindependent_author_reference",
+  "primary_denominator": "all 585 observed definite reference stage days, retaining prediction unknown and failure",
+  "full_activity_denominator": "all 2126 observed frozen activity days; report availability and output coverage without accuracy claims",
+  "reference_unknown_policy": "report definite predictions on 1541 unknown-reference days separately, never treat them as false positives",
+  "reporting": "all methods and conditions; correct, incorrect, abstained, per-class confusion and macro-F1 when all reference classes exist; per-record and per-interior changes; no best-arm replacement decision",
+  "max_new_model_calls": 0,
+  "retraining": false,
+  "threshold_selection": false,
+  "generator_truth_access": "none",
+  "sealed_test_access": "none",
+  "formal_reference_verified": false,
+  "formal_performance_scores": false,
+  "main_configuration_replaced": false
+}

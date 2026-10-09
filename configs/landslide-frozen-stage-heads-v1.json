@@ -1,0 +1,23 @@
+{
+  "protocol_id": "landslide-frozen-stage-heads-v1",
+  "activity_run": "artifacts/landslide-raw-adjudication-2026-10-08/review-v3",
+  "observation_packet": "artifacts/landslide-background-2026-10-08/batch-v1/public",
+  "numeric_run": "artifacts/landslide-comparison-2026-10-07/numeric-v1",
+  "model": "qwen3.8-flash",
+  "maximum_requests": 9,
+  "repetitions": 1,
+  "temperature": 0.1,
+  "top_p": 0.3,
+  "max_tokens": 2048,
+  "retries": 0,
+  "hard_timeout_seconds": 1800,
+  "stage_classes": ["acceleration", "steady_motion", "deceleration"],
+  "rule_relative_change_60d": 0.25,
+  "xgboost": "saved stage head; no retraining, threshold selection or confidence rejection",
+  "visual_images": "four frozen raw views plus three frozen 31/61/91-day auxiliary views",
+  "visual_input_exclusions": "author notes, block statistics, numeric predictions, old stage outputs, hidden mechanisms",
+  "stage_support": "all stages need observed frozen activity and finite 61-day velocity; A/D also need finite 61-day tangential acceleration",
+  "stage_endpoints": "half-open sparse spans; omitted dates unknown; reject outside activity without clipping",
+  "scoring": false,
+  "sealed_test_access": "none"
+}

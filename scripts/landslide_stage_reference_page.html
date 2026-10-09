@@ -1,0 +1,997 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>长期位移阶段复核工作台</title>
+    <style>
+      :root {
+        color-scheme: light;
+        --ink: #213b35;
+        --line: #d7e1d9;
+        --paper: #fff;
+        --accent: #266b59;
+      }
+      * {
+        box-sizing: border-box;
+      }
+      body {
+        margin: 0;
+        background: #f2f5ef;
+        color: var(--ink);
+        font:
+          15px/1.65 system-ui,
+          "Microsoft YaHei",
+          sans-serif;
+      }
+      header,
+      main {
+        max-width: 1500px;
+        margin: auto;
+        padding: 24px;
+      }
+      header {
+        border-bottom: 1px solid var(--line);
+      }
+      h1 {
+        font-size: 30px;
+        margin: 5px 0;
+      }
+      h2 {
+        font-size: 21px;
+        margin: 0 0 14px;
+      }
+      h3 {
+        font-size: 16px;
+      }
+      .eyebrow {
+        font-size: 12px;
+        letter-spacing: 2px;
+        color: #53786a;
+      }
+      .notice {
+        border-left: 4px solid #b38737;
+        padding: 8px 16px;
+        background: #fbf6e9;
+      }
+      .links,
+      .controls {
+        display: flex;
+        gap: 14px;
+        flex-wrap: wrap;
+        align-items: center;
+      }
+      a {
+        color: var(--accent);
+      }
+      button,
+      select,
+      input,
+      textarea {
+        font: inherit;
+        border: 1px solid #aabdb2;
+        border-radius: 4px;
+        padding: 8px;
+        background: white;
+        color: var(--ink);
+      }
+      button {
+        cursor: pointer;
+        background: #e6eee6;
+      }
+      button.primary {
+        background: var(--accent);
+        color: white;
+        border-color: var(--accent);
+      }
+      button:disabled {
+        opacity: 0.5;
+        cursor: default;
+      }
+      input[type="checkbox"] {
+        width: 18px;
+        height: 18px;
+        vertical-align: middle;
+      }
+      textarea {
+        width: 100%;
+        min-height: 72px;
+        resize: vertical;
+      }
+      label {
+        display: block;
+      }
+      label small,
+      .caption {
+        color: #627368;
+        font-size: 13px;
+      }
+      input[type="text"] {
+        width: 100%;
+      }
+      .workspace {
+        display: grid;
+        grid-template-columns: minmax(0, 1.8fr) minmax(340px, 1fr);
+        gap: 22px;
+      }
+      .card {
+        border: 1px solid var(--line);
+        border-radius: 6px;
+        background: var(--paper);
+        padding: 20px;
+        margin-bottom: 20px;
+      }
+      .profile {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 15px;
+      }
+      .profile label {
+        min-width: 0;
+      }
+      .profile select {
+        width: 100%;
+      }
+      img {
+        display: block;
+        width: 100%;
+        height: auto;
+      }
+      pre {
+        white-space: pre-wrap;
+        overflow-wrap: anywhere;
+        font-size: 13px;
+        background: #edf2eb;
+        padding: 12px;
+      }
+      .error {
+        color: #993f25;
+        white-space: pre-wrap;
+      }
+      .success {
+        color: #246850;
+      }
+      .bounds {
+        display: flex;
+        gap: 12px;
+      }
+      .bounds input {
+        width: 105px;
+      }
+      .segment {
+        border-top: 1px solid var(--line);
+        padding: 16px 0;
+      }
+      .segment h3 {
+        margin: 0 0 10px;
+      }
+      .segment label {
+        margin: 9px 0;
+      }
+      .segment .controls {
+        justify-content: space-between;
+      }
+      table {
+        width: 100%;
+        border-collapse: collapse;
+        font-size: 13px;
+      }
+      td,
+      th {
+        text-align: left;
+        border-bottom: 1px solid var(--line);
+        padding: 7px;
+      }
+      details > summary {
+        cursor: pointer;
+        padding: 8px 0;
+      }
+      svg {
+        width: 100%;
+        height: 72px;
+      }
+      .status {
+        font-variant-numeric: tabular-nums;
+      }
+      .step {
+        color: #688478;
+        font-size: 12px;
+        font-weight: 650;
+        letter-spacing: 1px;
+      }
+      @media (max-width: 950px) {
+        .workspace {
+          grid-template-columns: 1fr;
+        }
+        .profile {
+          grid-template-columns: 1fr 1fr;
+        }
+        header,
+        main {
+          padding: 16px;
+        }
+      }
+      @media (max-width: 550px) {
+        .profile {
+          grid-template-columns: 1fr;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <header>
+      <div class="eyebrow">GNSS · CONDITIONAL STAGE REVIEW</div>
+      <h1>先确认原始位移，再判断运动阶段</h1>
+      <p class="notice">
+        这是未审复核工作台，默认没有阶段答案。活动范围来自已冻结的作者复核；本页只研究其内部阶段。填写、校验和来源哈希不会自动证明复核独立或正确。当前没有正式准确率。
+      </p>
+      <div class="links">
+        <a href="review-guide.md">复核规则与可判性说明</a
+        ><a href="review-template.json">空填写模板</a
+        ><a href="review-schema.json">填写格式</a
+        ><a href="bundle-manifest.json">输入来源</a>
+      </div>
+    </header>
+    <main>
+      <section class="card">
+        <h2>复核者与已见材料</h2>
+        <p class="caption">
+          请真实填写；未知声明不能自动视为“未见”。若已看过模型预测或生成标签，仍可保存开发复核，但不能改称盲审。
+        </p>
+        <div class="profile">
+          <label>姓名／唯一标识<input id="reviewer-name" type="text" /></label
+          ><label
+            >专业背景／复核身份<input id="reviewer-background" type="text"
+          /></label>
+          <label
+            >复核者类型<select id="reviewer-type">
+              <option value="">尚未填写</option>
+              <option value="human">人员</option>
+              <option value="ai">AI辅助作者复核</option>
+            </select></label
+          >
+          <label
+            >是否已见阶段预测<select id="predictions-seen">
+              <option value="">尚未声明</option>
+              <option value="false">未见</option>
+              <option value="true">已见</option>
+            </select></label
+          >
+          <label
+            >是否已见生成标签<select id="generation-seen">
+              <option value="">尚未声明</option>
+              <option value="false">未见</option>
+              <option value="true">已见</option>
+            </select></label
+          >
+          <label
+            >是否参与活动标注<select id="activity-participation">
+              <option value="">尚未声明</option>
+              <option value="false">未参与</option>
+              <option value="true">参与过</option>
+            </select></label
+          >
+        </div>
+      </section>
+      <section class="card">
+        <div class="controls">
+          <label
+            >记录
+            <select id="case-select"></select></label
+          ><label
+            >活动内部
+            <select id="interior-select"></select></label
+          ><span class="status" id="progress"></span>
+        </div>
+      </section>
+      <div class="workspace">
+        <div>
+          <section class="card">
+            <span class="step">01 / 原始位移</span>
+            <h2 id="case-title"></h2>
+            <div class="controls">
+              <label
+                >原始视图
+                <select id="view-select">
+                  <option value="0">全记录</option>
+                  <option value="1">前段 0–409</option>
+                  <option value="2">中段 320–774</option>
+                  <option value="3">后段 685–1094</option>
+                </select></label
+              ><a id="raw-link" target="_blank">打开原图</a>
+            </div>
+            <img id="raw-image" alt="未附阶段预测的原始NEU位移" />
+            <p class="caption">
+              原图轴限与缺测保持冻结输入；高位平台不等于持续活动。活动起止只作为此次条件任务范围，不当精确物理边界。
+            </p>
+          </section>
+          <section class="card" id="aux-card">
+            <span class="step">02 / 速度大小与有效支撑</span>
+            <h2>辅助证据</h2>
+            <p id="aux-locked">先查看原始位移并记录活动判断，才展开辅助图。</p>
+            <div id="aux-content" hidden>
+              <div id="support"></div>
+              <p class="caption">
+                计数是可用性，不是置信度；辅助窗可能跨活动边界。参考不会被模型的61日掩码自动过滤。支撑不足时应由复核者明确记录未定理由。
+              </p>
+              <label
+                >辅助窗口
+                <select id="window-select">
+                  <option value="0">31日</option>
+                  <option value="1" selected>61日</option>
+                  <option value="2">91日</option>
+                </select></label
+              ><a id="aux-link" target="_blank"
+                ><img id="aux-image" alt="观测派生辅助证据"
+              /></a>
+            </div>
+          </section>
+          <section class="card">
+            <h2>当前填写预览</h2>
+            <svg
+              id="stage-preview"
+              role="img"
+              aria-label="当前活动阶段草稿与原始缺测"
+            ></svg>
+            <p class="caption">
+              橙=A，蓝=S，金=D，黄=明确未知，白=未填写，灰=缺测。草稿不等于参考，缺测在预览与编译导出中均为未知。
+            </p>
+          </section>
+        </div>
+        <aside>
+          <section class="card" id="activity-form">
+            <span class="step">先完成原图判断</span>
+            <h2>活动证据</h2>
+            <label
+              ><input id="raw-seen" type="checkbox" /> 已查看原始位移图</label
+            >
+            <label
+              >原图是否支持该活动内部<select id="raw-status">
+                <option value="unreviewed">尚未判断</option>
+                <option value="confirmed">确认可见持续位移</option>
+                <option value="needs_review">活动范围本身需另审</option>
+              </select></label
+            >
+            <label
+              >可核查原图依据<textarea
+                id="activity-evidence"
+                placeholder="分量、日期、持续累计变化；如不支持，请说明原因"
+              ></textarea>
+            </label>
+            <label
+              ><input id="aux-seen" type="checkbox" />
+              原图判断后已查看辅助证据</label
+            >
+            <p class="caption">
+              方向正负不同于加速／减速。不能用阶段未知反向改写活动；挑战活动时，本轮内部阶段仅可记录为“活动需另审”。
+            </p>
+          </section>
+          <section class="card" id="stage-form">
+            <span class="step">03 / 内部细分</span>
+            <h2>阶段或明确未定</h2>
+            <p class="caption">
+              用半开[start,stop)完整划分本活动内部。A/D需原图与速率演化依据；S另需非零与近恒速两项证据。转折未定应单列未知段，不强制A→S→D。
+            </p>
+            <div id="segments-list"></div>
+            <button id="add-segment" type="button">添加片段</button>
+            <p id="interior-errors" class="error"></p>
+            <label
+              ><input id="reviewed" type="checkbox" />
+              已完成该活动内部复核</label
+            >
+            <p id="review-time" class="caption"></p>
+          </section>
+        </aside>
+      </div>
+      <section class="card">
+        <h2>保存与校验</h2>
+        <div class="controls">
+          <button id="save-draft">保存本机草稿</button
+          ><button id="export-draft">下载草稿 JSON</button
+          ><button id="export-complete" class="primary">
+            校验并下载完整复核</button
+          ><label
+            >导入填写文件<input
+              id="import-review"
+              type="file"
+              accept="application/json,.json"
+          /></label>
+        </div>
+        <p id="save-status"></p>
+        <p class="caption">
+          本页不发送数据、不调用模型。草稿仅存在当前浏览器，建议下载备份。完整文件还需使用Python编译器核验、冻结；不会直接写入旧实验或自动生成评分。
+        </p>
+        <details>
+          <summary>后续编译命令</summary>
+          <pre>
+python scripts/landslide_stage_reference.py compile --review 你的复核.json --output 新的参考输出目录</pre
+          >
+        </details>
+      </section>
+    </main>
+    <script id="page-data" type="application/json">
+      __PAGE_DATA__
+    </script>
+    <script>
+      const input = JSON.parse(
+        document.getElementById("page-data").textContent,
+      );
+      const el = (id) => document.getElementById(id),
+        clone = (v) => JSON.parse(JSON.stringify(v));
+      const escapeHtml = (v) =>
+        String(v).replace(
+          /[&<>"']/g,
+          (c) =>
+            ({
+              "&": "&amp;",
+              "<": "&lt;",
+              ">": "&gt;",
+              '"': "&quot;",
+              "'": "&#39;",
+            })[c],
+        );
+      let packet = clone(input.template);
+      const storageKey =
+        "gnss-stage-reference-v1:" + packet.source_manifest_sha256;
+      const unknownReasons = {
+        raw_signal_unclear: "原始运动信号不清",
+        insufficient_rate_support: "速率支撑不足",
+        turning_unclear: "转折位置未定",
+        window_conflict: "窗口证据冲突",
+        measurement_artifact: "观测干扰混合",
+        activity_needs_review: "活动范围需另审",
+        other: "其他（需解释）",
+      };
+      const features = {
+        unknown: "明确未定",
+        acceleration: "A · 速率增加",
+        steady_motion: "S · 非零近恒速",
+        deceleration: "D · 速率下降",
+      };
+      const profileFields = {
+        "reviewer-name": "name",
+        "reviewer-background": "background",
+        "reviewer-type": "reviewer_type",
+        "predictions-seen": "prior_predictions_seen",
+        "generation-seen": "prior_generation_labels_seen",
+        "activity-participation": "participated_in_activity_review",
+      };
+      function current() {
+        const i = Number(el("case-select").value),
+          j = Number(el("interior-select").value || 0);
+        return {
+          record: packet.cases[i],
+          interior: packet.cases[i].interiors[j],
+          display: input.cases[i],
+        };
+      }
+      function invalidate(interior) {
+        interior.review_status = "unreviewed";
+        interior.reviewed_at = null;
+      }
+      function interiorErrors(interior) {
+        const errors = [];
+        if (!interior.raw_views_seen) {
+          errors.push("尚未确认已查看原图。");
+        }
+        if (
+          interior.raw_activity_status === "unreviewed" ||
+          !interior.raw_activity_evidence.trim()
+        ) {
+          errors.push("需先记录原图活动判断及依据。");
+        }
+        let next = interior.start;
+        for (const s of interior.segments) {
+          if (
+            !Number.isInteger(s.start) ||
+            !Number.isInteger(s.stop) ||
+            s.start !== next ||
+            s.start >= s.stop ||
+            s.stop > interior.stop
+          ) {
+            errors.push("片段需完整、按序、无重叠地覆盖活动内部。");
+          }
+          if (!s.raw_evidence.trim()) {
+            errors.push("每段都需原图依据或未定说明。");
+          }
+          if (s.feature === "unknown") {
+            if (!s.unknown_reason) {
+              errors.push("未知段需选择理由。");
+            }
+          } else {
+            if (
+              !interior.auxiliary_views_seen ||
+              !s.rate_evidence.trim() ||
+              s.unknown_reason !== null
+            ) {
+              errors.push(
+                "确定阶段需声明辅助复核并记录速率证据，未知理由应为空。",
+              );
+            }
+            if (
+              s.feature === "steady_motion" &&
+              (!s.nonzero_evidence.trim() || !s.steady_evidence.trim())
+            ) {
+              errors.push("S需分别记录非零与近恒速依据。");
+            }
+          }
+          if (
+            interior.raw_activity_status === "needs_review" &&
+            (s.feature !== "unknown" ||
+              s.unknown_reason !== "activity_needs_review")
+          ) {
+            errors.push("活动需另审时不能赋确定阶段。");
+          }
+          next = s.stop;
+        }
+        if (next !== interior.stop) {
+          errors.push("仍有未填写日期，必须显式记录未知。");
+        }
+        return [...new Set(errors)];
+      }
+      function profileErrors() {
+        const r = packet.reviewer,
+          errors = [];
+        if (!r.name.trim() || !r.background.trim()) {
+          errors.push("复核身份／背景未填。");
+        }
+        for (const key of [
+          "reviewer_type",
+          "prior_predictions_seen",
+          "prior_generation_labels_seen",
+          "participated_in_activity_review",
+        ]) {
+          if (r[key] === null) {
+            errors.push("复核者类型或已见材料声明未填。");
+          }
+        }
+        return [...new Set(errors)];
+      }
+      function completeErrors() {
+        const errors = profileErrors();
+        for (const c of packet.cases) {
+          for (const it of c.interiors) {
+            if (it.review_status !== "reviewed" || !it.reviewed_at) {
+              errors.push(c.case_id + " 尚有未完成活动。");
+            }
+            if (
+              it.reviewed_at &&
+              (!/(Z|[+-]\d\d:\d\d)$/.test(it.reviewed_at) ||
+                !Number.isFinite(Date.parse(it.reviewed_at)))
+            ) {
+              errors.push(c.case_id + " 完成时间需包含有效时区。");
+            }
+            errors.push(...interiorErrors(it).map((e) => c.case_id + " " + e));
+          }
+        }
+        return [...new Set(errors)];
+      }
+      function validateImported(candidate) {
+        if (
+          Object.keys(candidate).sort().join() !==
+            Object.keys(input.template).sort().join() ||
+          candidate.schema_version !== packet.schema_version ||
+          candidate.source_manifest_sha256 !==
+            input.template.source_manifest_sha256 ||
+          !Array.isArray(candidate.cases) ||
+          candidate.cases.length !== input.template.cases.length
+        ) {
+          throw Error("来源或填写格式不匹配。");
+        }
+        if (
+          !candidate.reviewer ||
+          Object.keys(candidate.reviewer).sort().join() !==
+            Object.keys(input.template.reviewer).sort().join()
+        ) {
+          throw Error("复核者字段不匹配。");
+        }
+        if (
+          typeof candidate.reviewer.name !== "string" ||
+          typeof candidate.reviewer.background !== "string"
+        ) {
+          throw Error("身份格式错误。");
+        }
+        for (const key of [
+          "prior_predictions_seen",
+          "prior_generation_labels_seen",
+          "participated_in_activity_review",
+        ]) {
+          if (
+            candidate.reviewer[key] !== null &&
+            typeof candidate.reviewer[key] !== "boolean"
+          ) {
+            throw Error("已见材料声明必须为布尔值或null。");
+          }
+        }
+        if (![null, "human", "ai"].includes(candidate.reviewer.reviewer_type)) {
+          throw Error("复核者类型错误。");
+        }
+        candidate.cases.forEach((c, i) => {
+          const t = input.template.cases[i];
+          if (
+            c.case_id !== t.case_id ||
+            c.input_sha256 !== t.input_sha256 ||
+            c.activity_sha256 !== t.activity_sha256 ||
+            !Array.isArray(c.interiors) ||
+            c.interiors.length !== t.interiors.length
+          ) {
+            throw Error("记录或活动来源不匹配。");
+          }
+          c.interiors.forEach((it, j) => {
+            const origin = t.interiors[j];
+            if (
+              it.start !== origin.start ||
+              it.stop !== origin.stop ||
+              !Array.isArray(it.segments) ||
+              Object.keys(it).sort().join() !==
+                Object.keys(origin).sort().join()
+            ) {
+              throw Error("活动范围或字段不匹配。");
+            }
+            if (
+              !["unreviewed", "reviewed"].includes(it.review_status) ||
+              !["unreviewed", "confirmed", "needs_review"].includes(
+                it.raw_activity_status,
+              ) ||
+              typeof it.raw_views_seen !== "boolean" ||
+              typeof it.auxiliary_views_seen !== "boolean" ||
+              typeof it.raw_activity_evidence !== "string" ||
+              (it.reviewed_at !== null && typeof it.reviewed_at !== "string")
+            ) {
+              throw Error("复核状态字段错误。");
+            }
+            for (const s of it.segments) {
+              if (
+                Object.keys(s).sort().join() !==
+                  "feature,nonzero_evidence,rate_evidence,raw_evidence,start,steady_evidence,stop,unknown_reason" ||
+                !Number.isInteger(s.start) ||
+                !Number.isInteger(s.stop) ||
+                !Object.hasOwn(features, s.feature)
+              ) {
+                throw Error("阶段字段错误。");
+              }
+              for (const k of [
+                "raw_evidence",
+                "rate_evidence",
+                "nonzero_evidence",
+                "steady_evidence",
+              ]) {
+                if (typeof s[k] !== "string") {
+                  throw Error("阶段证据格式错误。");
+                }
+              }
+              if (
+                s.unknown_reason !== null &&
+                !Object.hasOwn(unknownReasons, s.unknown_reason)
+              ) {
+                throw Error("未知理由错误。");
+              }
+            }
+          });
+        });
+      }
+      function saveLocal() {
+        try {
+          localStorage.setItem(storageKey, JSON.stringify(packet));
+          el("save-status").textContent =
+            "草稿已保存到当前浏览器；未提交参考。";
+        } catch (e) {
+          el("save-status").textContent = "本机草稿保存失败，请下载备份。";
+        }
+      }
+      function fillProfile() {
+        for (const [id, key] of Object.entries(profileFields)) {
+          el(id).value =
+            packet.reviewer[key] === null ? "" : String(packet.reviewer[key]);
+        }
+      }
+      function updateProgress() {
+        const all = packet.cases.flatMap((c) => c.interiors);
+        el("progress").textContent =
+          `已标记完成 ${all.filter((it) => it.review_status === "reviewed").length} / ${all.length} 个活动内部`;
+        const it = current().interior;
+        if (it) {
+          el("interior-errors").textContent = interiorErrors(it).join("\n");
+          el("reviewed").checked = it.review_status === "reviewed";
+          el("review-time").textContent = it.reviewed_at || "尚未完成";
+        }
+        drawPreview();
+      }
+      function renderImages() {
+        const c = current(),
+          view = Number(el("view-select").value),
+          raw = c.display.raw_images[view];
+        el("raw-image").src = raw;
+        el("raw-link").href = raw;
+        el("case-title").textContent =
+          c.record.case_id +
+          (c.interior
+            ? ` · [${c.interior.start},${c.interior.stop})`
+            : " · 无冻结确认活动");
+        const unlocked =
+          c.interior &&
+          c.interior.raw_views_seen &&
+          c.interior.raw_activity_status !== "unreviewed" &&
+          c.interior.raw_activity_evidence.trim();
+        el("aux-content").hidden = !unlocked;
+        el("aux-locked").hidden = Boolean(unlocked);
+        if (unlocked) {
+          const path =
+            c.display.auxiliary_images[Number(el("window-select").value)];
+          el("aux-image").src = path;
+          el("aux-link").href = path;
+          const count = c.display.support[Number(el("interior-select").value)];
+          el("support").innerHTML =
+            `<p>内部${count.calendar_days}日，原观测${count.observed_days}日</p><table><tr><th>窗口</th><th>速度可用日</th><th>切向可用日</th></tr>` +
+            Object.entries(count.windows)
+              .map(
+                ([w, v]) =>
+                  `<tr><td>${w}日</td><td>${v.velocity_days}</td><td>${v.tangential_days}</td></tr>`,
+              )
+              .join("") +
+            "</table>";
+        }
+      }
+      function drawPreview() {
+        const { interior: it, display } = current();
+        if (!it) {
+          el("stage-preview").innerHTML =
+            '<text x="10" y="40">无条件阶段任务，不作正常识别成绩</text>';
+          return;
+        }
+        const width = 1000,
+          len = it.stop - it.start,
+          colors = {
+            acceleration: "#d27545",
+            steady_motion: "#557ab6",
+            deceleration: "#a98630",
+            unknown: "#e5b65b",
+          };
+        let paths = "";
+        for (let day = it.start; day < it.stop; day++) {
+          const segment = it.segments.find(
+            (s) => s.start <= day && day < s.stop,
+          );
+          let color = "#fff";
+          if (!display.observed[day]) {
+            color = "#737373";
+          } else if (segment) {
+            color = colors[segment.feature] || "#fff";
+          }
+          paths += `<rect x="${((day - it.start) / len) * width}" y="15" width="${width / len + 0.05}" height="28" fill="${color}"/>`;
+        }
+        el("stage-preview").setAttribute("viewBox", "0 0 1000 72");
+        el("stage-preview").innerHTML =
+          paths +
+          `<text x="0" y="65">${it.start}</text><text x="990" y="65" text-anchor="end">${it.stop}（排他终点）</text>`;
+      }
+      function renderSegments() {
+        const { interior: it } = current();
+        el("activity-form").hidden = !it;
+        el("stage-form").hidden = !it;
+        el("add-segment").disabled = !it;
+        el("reviewed").disabled = !it;
+        if (!it) {
+          el("segments-list").textContent = "无确认活动：本页不补造阶段。";
+          el("interior-errors").textContent = "";
+          drawPreview();
+          return;
+        }
+        el("raw-seen").checked = it.raw_views_seen;
+        el("raw-status").value = it.raw_activity_status;
+        el("activity-evidence").value = it.raw_activity_evidence;
+        el("aux-seen").checked = it.auxiliary_views_seen;
+        el("segments-list").innerHTML = it.segments
+          .map(
+            (s, i) =>
+              `<div class="segment"><div class="controls"><h3>片段 ${i + 1}</h3><button data-delete="${i}" type="button">移除</button></div><div class="bounds"><label>开始<input data-index="${i}" data-field="start" type="number" value="${s.start}"></label><label>排他结束<input data-index="${i}" data-field="stop" type="number" value="${s.stop}"></label></div><label>判定<select data-index="${i}" data-field="feature">${Object.entries(
+                features,
+              )
+                .map(
+                  ([v, t]) =>
+                    `<option value="${v}" ${s.feature === v ? "selected" : ""}>${t}</option>`,
+                )
+                .join(
+                  "",
+                )}</select></label><label>原图依据／未定说明<textarea data-index="${i}" data-field="raw_evidence">${escapeHtml(s.raw_evidence)}</textarea></label>${
+                s.feature === "unknown"
+                  ? `<label>未知理由<select data-index="${i}" data-field="unknown_reason"><option value="">请选择</option>${Object.entries(
+                      unknownReasons,
+                    )
+                      .map(
+                        ([v, t]) =>
+                          `<option value="${v}" ${s.unknown_reason === v ? "selected" : ""}>${t}</option>`,
+                      )
+                      .join("")}</select></label>`
+                  : `<label>速率演化依据<textarea data-index="${i}" data-field="rate_evidence">${escapeHtml(s.rate_evidence)}</textarea></label>`
+              }${s.feature === "steady_motion" ? `<label>持续非零依据<textarea data-index="${i}" data-field="nonzero_evidence">${escapeHtml(s.nonzero_evidence)}</textarea></label><label>近似恒速依据<textarea data-index="${i}" data-field="steady_evidence">${escapeHtml(s.steady_evidence)}</textarea></label>` : ""}</div>`,
+          )
+          .join("");
+        renderImages();
+        updateProgress();
+      }
+      function chooseCase() {
+        const c = packet.cases[Number(el("case-select").value)];
+        el("interior-select").innerHTML = c.interiors
+          .map(
+            (it, i) => `<option value="${i}">[${it.start},${it.stop})</option>`,
+          )
+          .join("");
+        el("interior-select").disabled = !c.interiors.length;
+        el("interior-select").value = c.interiors.length ? "0" : "";
+        renderImages();
+        renderSegments();
+      }
+      function download(name) {
+        const url = URL.createObjectURL(
+          new Blob([JSON.stringify(packet, null, 2)], {
+            type: "application/json;charset=utf-8",
+          }),
+        );
+        const a = document.createElement("a");
+        a.href = url;
+        a.download = name;
+        a.click();
+        URL.revokeObjectURL(url);
+      }
+      for (const [id, key] of Object.entries(profileFields)) {
+        el(id).addEventListener("change", () => {
+          const v = el(id).value;
+          if (["name", "background"].includes(key)) {
+            packet.reviewer[key] = v;
+          } else if (key === "reviewer_type") {
+            packet.reviewer[key] = v || null;
+          } else if (v === "") {
+            packet.reviewer[key] = null;
+          } else {
+            packet.reviewer[key] = v === "true";
+          }
+          saveLocal();
+        });
+      }
+      for (const id of [
+        "raw-seen",
+        "raw-status",
+        "activity-evidence",
+        "aux-seen",
+      ]) {
+        el(id).addEventListener("change", () => {
+          const it = current().interior;
+          if (!it) {
+            return;
+          }
+          it.raw_views_seen = el("raw-seen").checked;
+          it.raw_activity_status = el("raw-status").value;
+          it.raw_activity_evidence = el("activity-evidence").value;
+          it.auxiliary_views_seen = el("aux-seen").checked;
+          invalidate(it);
+          renderImages();
+          updateProgress();
+          saveLocal();
+        });
+      }
+      el("segments-list").addEventListener("change", (event) => {
+        const t = event.target;
+        if (!t.dataset.field) {
+          return;
+        }
+        const it = current().interior,
+          s = it.segments[Number(t.dataset.index)],
+          field = t.dataset.field;
+        let v = t.value;
+        if (["start", "stop"].includes(field)) {
+          v = v === "" ? null : Number(v);
+        }
+        if (field === "unknown_reason" && !v) {
+          v = null;
+        }
+        s[field] = v;
+        if (field === "feature" && v !== "unknown") {
+          s.unknown_reason = null;
+        }
+        invalidate(it);
+        if (field === "feature") {
+          renderSegments();
+        } else {
+          updateProgress();
+        }
+        saveLocal();
+      });
+      el("segments-list").addEventListener("click", (event) => {
+        if (event.target.dataset.delete === undefined) {
+          return;
+        }
+        const it = current().interior;
+        it.segments.splice(Number(event.target.dataset.delete), 1);
+        invalidate(it);
+        renderSegments();
+        saveLocal();
+      });
+      el("add-segment").addEventListener("click", () => {
+        const it = current().interior;
+        if (!it) {
+          return;
+        }
+        it.segments.push({
+          start: it.segments.length ? it.segments.at(-1).stop : it.start,
+          stop: it.stop,
+          feature: "unknown",
+          raw_evidence: "",
+          rate_evidence: "",
+          nonzero_evidence: "",
+          steady_evidence: "",
+          unknown_reason: null,
+        });
+        invalidate(it);
+        renderSegments();
+        saveLocal();
+      });
+      el("reviewed").addEventListener("change", () => {
+        const it = current().interior;
+        if (!it) {
+          return;
+        }
+        if (el("reviewed").checked && interiorErrors(it).length === 0) {
+          it.review_status = "reviewed";
+          it.reviewed_at = new Date().toISOString();
+        } else {
+          invalidate(it);
+        }
+        updateProgress();
+        saveLocal();
+      });
+      el("save-draft").addEventListener("click", saveLocal);
+      el("export-draft").addEventListener("click", () =>
+        download("stage-review-draft.json"),
+      );
+      el("export-complete").addEventListener("click", () => {
+        const errors = completeErrors();
+        el("save-status").textContent = errors.length
+          ? errors.join("\n")
+          : "填写校验通过，仍需Python编译与真实来源核验。";
+        if (!errors.length) {
+          download("stage-review-completed.json");
+        }
+      });
+      el("import-review").addEventListener("change", async (event) => {
+        try {
+          const file = event.target.files[0];
+          if (!file) {
+            return;
+          }
+          if (file.size > 2000000) {
+            throw Error("填写文件过大。");
+          }
+          const value = JSON.parse(await file.text());
+          validateImported(value);
+          packet = value;
+          fillProfile();
+          chooseCase();
+          saveLocal();
+        } catch (error) {
+          el("save-status").textContent = "未导入：" + error.message;
+        }
+      });
+      el("case-select").innerHTML = packet.cases
+        .map((c, i) => `<option value="${i}">${c.case_id}</option>`)
+        .join("");
+      el("case-select").value = "0";
+      el("case-select").addEventListener("change", chooseCase);
+      el("interior-select").addEventListener("change", renderSegments);
+      el("view-select").addEventListener("change", renderImages);
+      el("window-select").addEventListener("change", renderImages);
+      try {
+        const saved = localStorage.getItem(storageKey);
+        if (saved) {
+          const value = JSON.parse(saved);
+          validateImported(value);
+          packet = value;
+        }
+      } catch (error) {
+        el("save-status").textContent = "已保存草稿未载入：" + error.message;
+      }
+      fillProfile();
+      chooseCase();
+    </script>
+  </body>
+</html>

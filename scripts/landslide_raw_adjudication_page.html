@@ -1,0 +1,80 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>持续位移 · 原图复核工作台</title>
+<style>
+:root{--ink:#22342c;--paper:#f4f3eb;--line:#cdd4c9;--activity:#427b9b;--stationary:#dce5de;--unknown:#e5b65b;--missing:#737373}
+*{box-sizing:border-box}body{margin:0;background:var(--paper);color:var(--ink);font-family:"Microsoft YaHei","PingFang SC",sans-serif;line-height:1.65}
+header{padding:42px 4vw 30px;border-bottom:1px solid var(--line)}.eyebrow{font-family:Consolas,monospace;font-size:12px;letter-spacing:2px;margin:0;color:#536a5d}
+h1{font-family:"Songti SC","SimSun",serif;font-size:clamp(28px,3.3vw,46px);font-weight:500;letter-spacing:2px;margin:10px 0}h2{font-size:19px;font-weight:600;margin:0 0 14px}h3{font-size:15px}
+.intro{max-width:960px;font-size:14px}.notice{border-left:3px solid #b28a37;padding-left:16px;color:#635528}.stats{display:flex;gap:40px;flex-wrap:wrap;margin-top:24px}.stat strong{display:block;font-family:Consolas,monospace;font-size:25px;font-weight:400}.stat span{font-size:12px;color:#5c6c60}
+main{display:grid;grid-template-columns:205px minmax(0,1fr);gap:28px;margin:28px 4vw 50px}aside{position:sticky;top:16px;align-self:start}aside p{font-size:12px;color:#65766b}
+button,select{font:inherit;color:inherit;background:transparent;border:1px solid var(--line);padding:8px 12px;cursor:pointer}button:focus-visible,select:focus-visible,a:focus-visible{outline:3px solid #94682b;outline-offset:3px}button:hover{background:#e4e9df}
+.case-button{width:100%;display:flex;justify-content:space-between;border-width:0 0 1px;text-align:left;padding:9px 10px;font-size:13px}.case-button[aria-pressed=true]{background:var(--ink);color:#fff}.case-button small{font-family:Consolas,monospace;font-size:11px}
+.content{min-width:0}section{background:#fffef8;border:1px solid var(--line);padding:22px;margin-bottom:20px}.record-head{display:flex;align-items:baseline;gap:18px;flex-wrap:wrap}.record-head h2{font-size:25px;font-family:Consolas,monospace}.downloads{font-size:13px;margin:12px 0}a{color:#306c5a;text-underline-offset:3px}.toolbar{display:flex;gap:12px;align-items:center;flex-wrap:wrap;margin:12px 0;font-size:13px}
+.legend{display:flex;gap:16px;flex-wrap:wrap;font-size:12px}.legend span:before{content:"";display:inline-block;width:11px;height:11px;margin-right:6px;background:var(--c)}img{width:100%;height:auto;display:block}.chart-link{display:block;border:1px solid #e3e7df;margin-top:16px}.caption{font-size:12px;color:#596b5d}.scroll{overflow:auto;max-height:600px}table{border-collapse:collapse;width:100%;font-size:13px}th,td{border-bottom:1px solid #dde3d9;text-align:left;padding:10px;vertical-align:top}th{background:#eef2e9;position:sticky;top:0}td.bounds{font-family:Consolas,monospace;white-space:nowrap}.state{white-space:nowrap;font-size:12px;border-left:4px solid var(--c);padding-left:7px}.notes{font-size:14px}details{border-top:1px solid var(--line);padding-top:12px;margin-top:16px}summary{cursor:pointer;font-size:13px}pre{white-space:pre-wrap;overflow-wrap:anywhere;font-size:12px;line-height:1.7;background:#edf1e7;padding:16px}.block-table td{font-family:Consolas,monospace;white-space:nowrap}.error{color:#9d342c}.muted{color:#647363;font-size:13px}footer{padding:20px 4vw;border-top:1px solid var(--line);font-size:12px}
+@media(max-width:850px){main{grid-template-columns:1fr;margin:20px}aside{position:static}.case-nav{display:grid;grid-template-columns:repeat(3,1fr)}header{padding:25px 20px}.stats{gap:20px}.case-button{padding:9px 6px}section{padding:15px}.case-button small{display:none}}
+</style></head>
+<body>
+<header><p class="eyebrow">GNSS RESEARCH / RAW DISPLACEMENT REVIEW / V3</p><h1>先确认持续位移，再判断运动阶段</h1>
+<p class="intro">全局与局部原始位移 → 固定 30 日块描述统计 → 活动、静稳与未知分区 → 缺测掩码 → 活动冻结。本轮只完成活动层；加速、减速等阶段仍未开始。</p>
+<p class="intro notice">同会话 AI 作者复核：已看过旧回答、部分辅助图和作者诊断。本轮不是独立盲标或专家真值；新旧标签差异不表示准确率提升。持续位移也不直接确定滑坡成因。</p>
+<div id="stats" class="stats" aria-live="polite"></div></header>
+<main><aside><h2>12 条完整记录</h2><nav id="cases" class="case-nav" aria-label="选择记录"></nav><p>日界使用 [start, stop)；stop 当天不属于前一段。活动内缺测仍未知。</p><p><a href="daily-activity-author.csv">全部逐日 CSV</a></p><p><a href="manifest.json">复核清单与来源</a></p><p><a href="http://127.0.0.1:18779/" target="_blank">历史 API 原图／提示／回答 ↗</a></p><p>本轮无新增外部 API 请求，也没有独立保存的 API 提示词或回答。下方展示实际复核指南与作者裁决。</p></aside>
+<div class="content"><p id="loading" role="status">读取复核材料…</p><div id="record" hidden>
+<section><div class="record-head"><h2 id="case-title"></h2><span id="case-counts" class="muted"></span></div>
+<p id="notes" class="notes"></p><div class="downloads" id="downloads"></div>
+<div class="toolbar"><label>视窗 <select id="view"></select></label><label>图像 <select id="mode"><option value="review">原始位移 + 逐日活动色带</option><option value="raw">本轮阅读的无标签原图</option></select></label></div>
+<div class="legend"><span style="--c:var(--activity)">确认活动</span><span style="--c:var(--stationary)">已审静稳</span><span style="--c:var(--unknown)">有观测未知</span><span style="--c:var(--missing)">缺测</span></div>
+<a id="chart-link" class="chart-link" target="_blank"><img id="chart" alt=""></a>
+<p class="caption">N/E/U 分别读取毫米刻度。复核图沿用对应原图的轴限；局部视窗用于查看弱变化。色带与导出来自同一逐日数组，缺测断线，不跨空档推断。</p>
+</section>
+<section><h2>逐段原图依据</h2><p class="caption">完整分区是日历记账，不要求每一天都可判定；名义活动段内缺测仍被逐日掩码置为未知。</p><div class="scroll"><table><thead><tr><th>半开日界</th><th>裁决</th><th>原图证据／保留未知的原因</th></tr></thead><tbody id="spans"></tbody></table></div>
+<details><summary>本条来源、复核身份与活动内容哈希</summary><pre id="provenance"></pre></details></section>
+<section><h2>固定 30 日块 · 原始观测核查</h2><p class="caption">每块从原始观测计算 N/E/U 中位数与四分位距（IQR），单位 mm；有效日数独立显示。固定非重叠块、不插值、不做显著性检验、不通过阈值自动标注，不能据块统计精确决定逐日起止。</p><div class="scroll"><table class="block-table"><thead><tr><th>日界</th><th>有效日</th><th>N 中位 / IQR</th><th>E 中位 / IQR</th><th>U 中位 / IQR</th></tr></thead><tbody id="blocks"></tbody></table></div></section>
+<section><h2>与冻结 v2 草案的分歧</h2><p id="difference" class="muted"></p><table><thead><tr><th>v2 → 作者复核</th><th>有观测日数</th></tr></thead><tbody id="transitions"></tbody></table><p class="caption">这是状态转移，不是 TP/FP/FN。两组均缺少独立专家参考，不能据此计算准确率或宣称某方法更优。</p></section>
+</div><section><h2>实际复核指南</h2><details><summary>查看本轮执行范围、证据规则与限制</summary><pre id="guide"></pre></details><p class="muted">下一步：保持活动内容哈希不变，开展活动内阶段判别，使用原图和多窗口辅助证据；独立效果评价仍需另建可信参考。</p></section></div></main>
+<footer>作者复核开发材料 · 仿真观测，未作现场分布标定 · 阶段未开始 · 封存测试未解封</footer>
+<script>
+const labels={"-1":"未知","0":"静稳","1":"活动"};
+const stateNames={activity:"活动",stationary:"静稳",unknown:"未知"};
+const stateColors={activity:"#427b9b",stationary:"#a9c2ae",unknown:"#e5b65b"};
+let manifest, current, requestVersion=0;
+const byId=id=>document.getElementById(id);
+async function readJSON(path){const response=await fetch(path);if(!response.ok){throw new Error(`${path}: ${response.status}`);}return response.json();}
+function row(values, parent){const tr=document.createElement("tr");for(const value of values){const td=document.createElement("td");td.textContent=value;tr.append(td);}parent.append(tr);return tr;}
+function updateChart(){if(!current){return;}const index=Number(byId("view").value);const view=current.views[index];const source=byId("mode").value==="raw"?view.image:view.review_image;byId("chart").src=source;byId("chart").alt=`${current.case_id}，第${view.view[0]}至${view.view[1]}日，${byId("mode").value==="raw"?"无标签原图":"原始位移与活动色带"}`;byId("chart-link").href=source;}
+async function selectCase(caseId){
+  const version=++requestVersion;byId("loading").hidden=false;byId("loading").textContent="读取复核材料…";byId("record").hidden=true;
+  try{
+    const entry=manifest.cases.find(item=>item.case_id===caseId);
+    const [review, blocks]=await Promise.all([readJSON(entry.review),readJSON(entry.blocks)]);
+    if(version!==requestVersion){return;}current=entry;
+    for(const button of byId("cases").children){button.setAttribute("aria-pressed",String(button.dataset.case===caseId));}
+    byId("case-title").textContent=caseId;byId("notes").textContent=review.activity_notes;
+    byId("case-counts").textContent=`活动 ${entry.counts["1"]||0} 日 · 静稳 ${entry.counts["0"]||0} 日 · 有观测未知 ${entry.observed_unknown_days} 日 · 缺测 ${entry.missing_days} 日`;
+    byId("downloads").replaceChildren();
+    for(const [name,path] of [["裁决 JSON",entry.review],["逐日 JSON",entry.daily],["逐日 CSV",entry.daily.replace(".json",".csv")],["原始观测",entry.input],["块统计 JSON",entry.blocks]]){const a=document.createElement("a");a.textContent=name;a.href=path;byId("downloads").append(a,document.createTextNode("　"));}
+    byId("view").replaceChildren();entry.views.forEach((view,index)=>{const option=document.createElement("option");option.value=index;option.textContent=`${index===0?"全局":"局部 "+index} · ${view.view[0]}–${view.view[1]} 日`;byId("view").append(option);});
+    byId("spans").replaceChildren();
+    for(const span of review.spans){const tr=row([`[${span.start}, ${span.stop})`,stateNames[span.state],span.raw_evidence],byId("spans"));tr.children[0].className="bounds";tr.children[1].className="state";tr.children[1].style.setProperty("--c",stateColors[span.state]);}
+    const identity={...review};delete identity.spans;delete identity.activity_notes;identity.activity_sha256=entry.activity_sha256;byId("provenance").textContent=JSON.stringify(identity,null,2);
+    byId("blocks").replaceChildren();const number=value=>value===null?"—":value.toFixed(2);
+    for(const block of blocks.blocks){row([`[${block.start}, ${block.stop})`,`${block.valid_days}/${block.stop-block.start}`,...[0,1,2].map(axis=>`${number(block.median_NEU_mm[axis])} / ${number(block.iqr_NEU_mm[axis])}`)],byId("blocks"));}
+    byId("difference").textContent=`本条 ${entry.disagreement_days} 个有观测日与旧分区不同；缺测日不计入分歧。`;
+    byId("transitions").replaceChildren();for(const [transition,count] of Object.entries(entry.v2_to_author_transitions).sort()){const [before,after]=transition.split("->");row([`${labels[before]} → ${labels[after]}`,count],byId("transitions"));}
+    updateChart();byId("loading").hidden=true;byId("record").hidden=false;history.replaceState(null,"",`#${caseId}`);
+  }catch(error){if(version===requestVersion){byId("loading").textContent=`读取失败：${error.message}`;byId("loading").className="error";}}
+}
+async function init(){
+  try{
+    manifest=await readJSON("manifest.json");const summary=manifest.summary;
+    for(const [value,name] of [[`${summary.cases} / ${summary.raw_images_read}`,"记录 / 已阅读原图"],[summary.activity_days,"有观测确认活动日"],[summary.observed_unknown_days,"有观测未知日"],[summary.missing_days,"缺测日"],["0","新增外部 API 请求"]]){const item=document.createElement("div");item.className="stat";const strong=document.createElement("strong");strong.textContent=value;const span=document.createElement("span");span.textContent=name;item.append(strong,span);byId("stats").append(item);}
+    for(const entry of manifest.cases){const button=document.createElement("button");button.type="button";button.className="case-button";button.dataset.case=entry.case_id;button.setAttribute("aria-pressed","false");const title=document.createElement("span");title.textContent=entry.case_id;const count=document.createElement("small");count.textContent=`${entry.counts["1"]||0} d`;button.append(title,count);button.addEventListener("click",()=>selectCase(entry.case_id));byId("cases").append(button);}
+    const guide=await fetch("review-guide.md");if(!guide.ok){throw new Error("复核指南读取失败");}byId("guide").textContent=await guide.text();
+    const requested=location.hash.slice(1);await selectCase(manifest.cases.some(entry=>entry.case_id===requested)?requested:"case_0001");
+  }catch(error){byId("loading").textContent=`读取失败：${error.message}`;byId("loading").className="error";}
+}
+byId("view").addEventListener("change",updateChart);byId("mode").addEventListener("change",updateChart);init();
+</script></body></html>

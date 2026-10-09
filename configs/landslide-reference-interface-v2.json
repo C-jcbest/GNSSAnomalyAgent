@@ -1,0 +1,18 @@
+{
+  "protocol_id": "landslide-reference-interface-v2",
+  "source_packet": "artifacts/landslide-background-2026-10-08/batch-v1/public",
+  "historical_run": "artifacts/landslide-reference-draft-2026-10-08/run-v1",
+  "model": "qwen3.8-flash",
+  "arms": ["episode_v1", "partition_v2"],
+  "maximum_requests": 24,
+  "repetitions": 1,
+  "temperature": 0.1,
+  "top_p": 0.3,
+  "max_tokens": 2048,
+  "retries": 0,
+  "hard_timeout_seconds": 1800,
+  "order": "case ascending; episode first for odd case numbers, partition first for even",
+  "stage_calls": 0,
+  "performance_scoring": false,
+  "sealed_test_access": "none"
+}

@@ -1,0 +1,75 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>长期形变 · 视觉证据审查</title>
+  <link rel="icon" href="data:,">
+  <link rel="stylesheet" href="trace.css">
+  <script src="trace.js" defer></script>
+</head>
+<body>
+  <aside class="sidebar">
+    <a class="brand" href="./"><span class="brand-symbol">↗</span> 地表形变研究室 <small>GNSS / EVIDENCE LAB</small></a>
+    <div class="sidebar-caption">01 / 选择观测记录</div>
+    <nav id="case-list" aria-label="观测记录"></nav>
+    <div class="sidebar-caption">02 / 选择实验配置</div>
+    <label for="run">实验轮次</label>
+    <select id="run">
+      <option value="visual-v3">当前实验 · visual-v3</option>
+      <option value="visual-v2">历史实验 · visual-v2</option>
+      <option value="reference-v1">参考范围诊断 · reference-v1</option>
+    </select>
+    <label for="method">方法 / 消融项</label>
+    <select id="method"></select>
+    <label class="check"><input type="checkbox" id="failed-only"> 展开本轮契约失败请求</label>
+    <div id="failure-links" class="failure-links"></div>
+    <div class="sidebar-foot">开发证据 · 2026.10.07<br>已查看的仿真数据 / 离线回顾<br><a href="trace-data.json" download>下载完整审查数据 ↗</a></div>
+  </aside>
+  <main>
+    <header>
+      <div><p class="eyebrow">VISUAL ANALYSIS / AUDIT TRAIL</p><h1>让每次视觉判断<br>都有迹可循<span>。</span></h1></div>
+      <div class="headline-note">原始位移先确认活动<br>辅助图再支持阶段识别<br><strong>输入 → 回答 → 校验</strong></div>
+    </header>
+    <div class="overview" id="overview" aria-live="polite">正在读取保存的实验记录…</div>
+    <p class="scope">这里展示实际保存的输入与输出。历史调用关闭了 thinking，并要求只返回 JSON，没有保存自然语言判读解释。本页的中文说明和错误定位来自程序复核，不是模型的隐藏推理。</p>
+    <section class="selection-head">
+      <div><p class="eyebrow" id="case-meta"></p><h2 id="case-title"></h2></div>
+      <div id="status" aria-live="polite"></div>
+    </section>
+    <div id="flow" class="flow" aria-label="分析步骤"></div>
+    <p id="source-note" class="source-note"></p>
+    <section id="timeline-card" class="timeline-card" aria-label="活动范围与已接收阶段">
+      <div class="section-line"><h3>程序接收的逐日结果</h3><span>A 加速 · S 近似匀速 · D 减速 · 灰色未知 / 缺测</span></div>
+      <div id="timelines"></div>
+      <p class="small" id="timeline-note"></p>
+    </section>
+    <div class="workspace">
+      <section class="images-panel">
+        <div class="section-line"><h3>发送给模型的图片</h3><span id="image-count"></span></div>
+        <p class="small">下方保持请求时的原始图像。点击打开大图，不重绘、不改变坐标轴。</p>
+        <div id="input-images"></div>
+      </section>
+      <section class="receipt-panel">
+        <div class="tabs" role="tablist" aria-label="调用证据">
+          <button id="tab-prompt" role="tab" aria-controls="receipt-body" data-tab="prompt" aria-selected="true">完整提示词</button>
+          <button id="tab-response" role="tab" aria-controls="receipt-body" data-tab="response" aria-selected="false">原始回答</button>
+          <button id="tab-validation" role="tab" aria-controls="receipt-body" data-tab="validation" aria-selected="false">程序校验</button>
+        </div>
+        <div id="receipt-body" role="tabpanel" aria-labelledby="tab-prompt" tabindex="0"></div>
+      </section>
+    </div>
+    <section class="review-section">
+      <div class="section-line"><div><p class="eyebrow">POST-HOC REVIEW</p><h2>事后审查 / 未发送给模型</h2></div><span class="tag amber">与输入证据分开</span></div>
+      <p id="review-note">以下误报、漏检和阶段差异对照 AI 辅助开发标注；它们提示复核方向，不等于已证实的物理错误。局部图只供本轮审查，既有模型请求没有看到这些局部窗口。</p>
+      <div id="audit"></div>
+      <details id="review-gallery"><summary id="review-gallery-title">展开阶段对比图与全部局部原始图</summary><div id="review-images"></div></details>
+    </section>
+    <footer id="trace-footer">本次只构建可追溯视图，新增模型调用为 0；不修改预测、标签或成绩。阶段判别通过契约不代表识别正确。居中导数含未来信息，不能作为在线预警验证。</footer>
+  </main>
+  <dialog id="image-dialog" aria-label="原图查看器">
+    <div class="dialog-toolbar"><span id="dialog-title"></span><div><a id="original-link" target="_blank" rel="noopener">新窗口原尺寸 ↗</a><button id="close-dialog" aria-label="关闭大图">关闭 ×</button></div></div>
+    <img id="dialog-image" alt="">
+  </dialog>
+</body>
+</html>

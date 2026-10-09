@@ -1,0 +1,196 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <title>阶段判别 · 开发一致性诊断</title>
+    <style>
+      :root { color: #20332e; background: #f3f2eb; font-family: "Microsoft YaHei", sans-serif; line-height: 1.7; }
+      * { box-sizing: border-box; }
+      body { max-width: 1320px; margin: auto; padding: 32px 24px 70px; }
+      h1 { font-family: "Songti SC", "SimSun", serif; font-size: clamp(27px, 4vw, 42px); margin: 8px 0 18px; }
+      h2 { font-size: 21px; margin: 0 0 12px; }
+      h3 { font-size: 16px; margin: 22px 0 8px; }
+      a { color: #226455; text-underline-offset: 3px; }
+      .eyebrow { letter-spacing: 3px; font-size: 12px; color: #496658; }
+      .notice { border-left: 4px solid #b37b32; padding: 2px 18px; max-width: 1000px; }
+      section { background: #fffef9; padding: 24px; margin: 22px 0; border: 1px solid #d7ddd1; }
+      .stats { display: flex; flex-wrap: wrap; border-top: 1px solid #b9c8b7; margin-top: 24px; }
+      .stat { padding: 18px 36px 14px 0; }
+      .stat b { display: block; font-family: Georgia, serif; font-size: 32px; font-weight: normal; }
+      .stat span, .caption { font-size: 13px; color: #596b62; }
+      .controls, .links { display: flex; flex-wrap: wrap; align-items: center; gap: 16px; margin: 15px 0; }
+      select { font: inherit; padding: 6px 12px; background: white; border: 1px solid #a4b6a7; }
+      table { border-collapse: collapse; width: 100%; font-size: 13px; }
+      th, td { padding: 9px 12px; border-bottom: 1px solid #dde3d6; text-align: left; white-space: nowrap; }
+      th { color: #476050; font-weight: normal; }
+      .scroll { overflow-x: auto; }
+      pre { font-size: 12px; white-space: pre-wrap; overflow-wrap: anywhere; max-height: 600px; overflow: auto; }
+      summary { cursor: pointer; color: #315c4c; padding: 7px 0; }
+      img { display: block; width: 100%; height: auto; }
+      #bands { width: 100%; min-width: 630px; display: block; }
+      .legend { display: flex; gap: 18px; flex-wrap: wrap; font-size: 12px; }
+      .legend span::before { content: ""; display: inline-block; width: 12px; height: 12px; margin-right: 6px; background: var(--color); }
+      .segment { padding: 15px 0; border-top: 1px solid #e1e6d9; }
+      .segment p { margin: 6px 0; font-size: 14px; }
+      .segment strong { font-weight: 600; }
+      .empty { color: #647269; padding: 15px 0; }
+      @media (max-width: 650px) { body { padding: 22px 12px; } section { padding: 16px; } }
+    </style>
+  </head>
+  <body>
+    <div class="eyebrow">GNSS / DEVELOPMENT AGREEMENT / 01</div>
+    <h1>阶段判别的分歧，发生在哪里</h1>
+    <div class="notice">
+      <p>这里比较冻结规则、XGBoost和视觉输出与AI作者开发标注的一致性。作者已见历史预测并参与活动复核，参考不是独立金标准；数字不能证明准确率或方法更优。</p>
+      <p>共同分母保留模型弃判和失败。未定参考日上的确定预测只表示尚未核验的判断；不计FP。恒速仅一个记录支持。所有图与居中辅助量只支持离线回顾。</p>
+    </div>
+    <div class="stats">
+      <div class="stat"><b>585</b><span>确定且有观测参考日</span></div>
+      <div class="stat"><b>1541</b><span>阶段未定活动日</span></div>
+      <div class="stat"><b>25</b><span>恒速参考日 · 单记录</span></div>
+      <div class="stat"><b>0</b><span>新增推理请求</span></div>
+    </div>
+    <div class="links">
+      <a href="summary.json">汇总JSON</a>
+      <a href="daily-comparison.csv">全部逐日对照CSV</a>
+      <a href="disagreement-spans.json">全部连续分歧带</a>
+      <a href="reference-review.json">作者标注与身份</a>
+      <a href="http://127.0.0.1:18788/presentation-v1/index.html">标注原工作台</a>
+      <a href="http://127.0.0.1:18781/">既有模型实际输入／提示／回答</a>
+    </div>
+    <section>
+      <h2>共同参考上的开发一致性</h2>
+      <div class="controls">
+        <label>预测版本 <select id="mode-select"><option value="final">最终输出（主诊断）</option><option value="native">原生输出（支撑诊断）</option></select></label>
+      </div>
+      <p id="mode-note" class="caption"></p>
+      <div id="totals" class="scroll"></div>
+      <p class="caption">F1按TP／FP／FN计算，预测unknown保留为参考类FN；三类等权平均只在三类参考支持均为正时报告。参考未定不当负类，相邻日不当独立样本。</p>
+      <details><summary>混淆矩阵、支持数及原生→最终过滤</summary><pre id="global-detail"></pre></details>
+    </section>
+    <section>
+      <div class="controls">
+        <label>记录 <select id="case-select"></select></label>
+        <label>原图视窗 <select id="view-select"><option value="0">全程</option><option value="1">0–409日</option><option value="2">320–774日</option><option value="3">685–1094日</option></select></label>
+        <label>辅助窗口 <select id="window-select"><option value="0">31日</option><option value="1">61日</option><option value="2">91日</option></select></label>
+      </div>
+      <h2 id="case-title"></h2>
+      <p id="case-summary"></p>
+      <div id="case-counts" class="scroll"></div>
+      <h3>原始位移与阶段色带</h3>
+      <p class="caption">原图保留冻结纵轴与观测；下面色带使用同一日索引视窗，单独绘制坐标。色带为本轮展示，未送给既有模型。</p>
+      <a id="raw-link" target="_blank" rel="noopener"><img id="raw-image" alt="当前记录的冻结原始N/E/U位移图"></a>
+      <div class="scroll"><svg id="bands" role="img" aria-label="AI开发参考与三方法逐日阶段色带"></svg></div>
+      <div class="legend">
+        <span style="--color:#d27545">A 加速</span><span style="--color:#557ab6">S 近恒速</span>
+        <span style="--color:#a98630">D 减速</span><span style="--color:#e5b65b">未定</span>
+        <span style="--color:#dbe7d4">非活动</span><span style="--color:#737373">缺测</span>
+      </div>
+      <details><summary>同源辅助图（不是独立传感器证据）</summary><a id="aux-link" target="_blank" rel="noopener"><img id="aux-image" loading="lazy" alt="当前记录所选窗口的观测派生辅助图"></a></details>
+      <h3>活动内部与原图／速率标注依据</h3>
+      <div id="interiors"></div>
+      <h3>本记录最终输出的全部分歧带</h3>
+      <p class="caption">仅确定参考日上的异类或弃判，按原日期逐段列出；不是经过独立核验的错误段。</p>
+      <div id="disagreements" class="scroll"></div>
+    </section>
+    <script id="page-data" type="application/json">__PAGE_DATA__</script>
+    <script>
+      const data = JSON.parse(document.getElementById("page-data").textContent);
+      const el = id => document.getElementById(id);
+      const names = { rule: "规则", xgboost: "保存 XGBoost", visual: "视觉模型" };
+      const stages = { acceleration: "A", steady_motion: "S", deceleration: "D", unknown: "未定", none: "非活动" };
+      const colors = { acceleration: "#d27545", steady_motion: "#557ab6", deceleration: "#a98630", unknown: "#e5b65b", none: "#dbe7d4" };
+      const esc = value => String(value).replace(/[&<>"']/g, char => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" })[char]);
+      const fraction = value => value === null ? "—" : value.toFixed(3);
+      const percentage = value => value === null ? "—" : `${(100 * value).toFixed(1)}%`;
+
+      function scoreTable(heads) {
+        const rows = Object.entries(names).map(([method, name]) => {
+          const h = heads[method];
+          const perClass = h.per_class;
+          return `<tr><td>${name}</td><td>${h.exact_agreement_days}/${h.reference_evaluable_days}</td><td>${percentage(h.agreement_rate)}</td><td>${h.different_class_days}</td><td>${h.abstained_evaluable_days}</td><td>${percentage(h.prediction_coverage_on_evaluable)}</td><td>${fraction(perClass.acceleration.f1)}</td><td>${fraction(perClass.steady_motion.f1)}</td><td>${fraction(perClass.deceleration.f1)}</td><td>${fraction(h.development_agreement_macro_f1)}</td></tr>`;
+        }).join("");
+        return `<table><thead><tr><th>阶段头</th><th>一致日／共同分母</th><th>一致比例</th><th>异类日</th><th>弃判日</th><th>参考日覆盖</th><th>A F1</th><th>S F1</th><th>D F1</th><th>开发macro-F1</th></tr></thead><tbody>${rows}</tbody></table>`;
+      }
+
+      function drawBands(c, mode, view) {
+        const ranges = [[0, c.observed.length], [0, 410], [320, 775], [685, c.observed.length]];
+        const [start, stop] = ranges[view];
+        const rows = [{ name: "AI开发参考", values: c.reference_features }];
+        for (const [method, name] of Object.entries(names)) {
+          rows.push({ name, values: c.prediction_features[mode][method] });
+        }
+        let shapes = "";
+        for (let rowIndex = 0; rowIndex < rows.length; rowIndex++) {
+          const row = rows[rowIndex];
+          const y = 12 + rowIndex * 36;
+          shapes += `<text x="0" y="${y + 17}" font-size="13">${row.name}</text>`;
+          for (let day = start; day < stop; day++) {
+            const color = c.observed[day] ? colors[row.values[day]] : "#737373";
+            const x = 130 + (day - start) / (stop - start) * 1000;
+            const width = 1000 / (stop - start) + 0.03;
+            shapes += `<rect x="${x}" y="${y}" width="${width}" height="23" fill="${color}"><title>第${day}日 · ${row.name} · ${c.observed[day] ? stages[row.values[day]] : "缺测"}</title></rect>`;
+          }
+        }
+        shapes += `<text x="130" y="170" font-size="12">${start}</text><text x="1130" y="170" font-size="12" text-anchor="end">${stop}（排他终点）</text>`;
+        el("bands").setAttribute("viewBox", "0 0 1140 180");
+        el("bands").innerHTML = shapes;
+      }
+
+      function showInteriors(c) {
+        if (!c.interiors.length) {
+          el("interiors").innerHTML = '<p class="empty">无确认活动，不补造阶段，不计正常识别成绩。</p>';
+          return;
+        }
+        el("interiors").innerHTML = c.interiors.map(interior => {
+          const segments = interior.segments.map(segment => {
+            const methodCounts = Object.entries(names).map(([method, name]) => {
+              const h = segment.methods[method];
+              if (!h.reference_evaluable_days) {
+                const definite = h.observed_activity_days - (h.active_prediction_features.unknown || 0);
+                return `${name}：${definite}日确定判断尚未核验`;
+              }
+              return `${name}：一致${h.exact_agreement_days}/${h.reference_evaluable_days}，异类${h.different_class_days}，弃判${h.abstained_evaluable_days}`;
+            }).join("；");
+            const steady = segment.feature === "steady_motion" ? `<p>持续非零：${esc(segment.nonzero_evidence)}</p><p>近恒速：${esc(segment.steady_evidence)}</p>` : "";
+            return `<div class="segment"><strong>[${segment.start}, ${segment.stop}) · ${stages[segment.feature]}</strong><p>${esc(methodCounts)}</p><p>原图：${esc(segment.raw_evidence)}</p><p>速率：${esc(segment.rate_evidence)}</p>${steady}${segment.unknown_reason ? `<p class="caption">未定理由：${esc(segment.unknown_reason)}</p>` : ""}</div>`;
+          }).join("");
+          return `<details><summary>活动 [${interior.start}, ${interior.stop}) · ${interior.methods.rule.reference_evaluable_days}确定参考日</summary><p>${esc(interior.raw_activity_evidence)}</p><div class="scroll">${scoreTable(interior.methods)}</div>${segments}</details>`;
+        }).join("");
+      }
+
+      function update() {
+        const mode = el("mode-select").value;
+        const c = data.cases[Number(el("case-select").value)];
+        const view = Number(el("view-select").value);
+        const window = Number(el("window-select").value);
+        el("mode-note").textContent = mode === "final"
+          ? "最终输出使用既有支撑过滤；所有方法仍以相同585日为总体分母。"
+          : "原生输出用于解释支撑过滤，可能包含无支撑阶段；不作为放宽支撑的效果证明。";
+        el("totals").innerHTML = scoreTable(data.summary.methods[mode]);
+        el("global-detail").textContent = JSON.stringify({ methods: data.summary.methods[mode], support_filter: data.summary.support_filter, paired: data.summary.paired_agreement }, null, 2);
+        el("case-title").textContent = c.case_id;
+        const score = c.scores[mode].rule;
+        el("case-summary").textContent = `${score.observed_activity_days}个有观测活动日；${score.reference_evaluable_days}个确定参考日。${c.interiors.length ? "" : "无条件阶段评价任务。"}`;
+        el("case-counts").innerHTML = scoreTable(c.scores[mode]);
+        el("raw-image").src = c.raw_images[view];
+        el("raw-link").href = c.raw_images[view];
+        el("aux-image").src = c.auxiliary_images[window];
+        el("aux-link").href = c.auxiliary_images[window];
+        drawBands(c, mode, view);
+        showInteriors(c);
+        const spans = data.disagreements.filter(span => span.case_id === c.case_id);
+        el("disagreements").innerHTML = spans.length
+          ? `<table><thead><tr><th>方法</th><th>半开日索引</th><th>连续日数</th><th>开发参考</th><th>最终预测</th></tr></thead><tbody>${spans.map(span => `<tr><td>${names[span.method]}</td><td>[${span.start}, ${span.stop})</td><td>${span.days}</td><td>${stages[span.reference]}</td><td>${stages[span.prediction]}</td></tr>`).join("")}</tbody></table>`
+          : '<p class="empty">没有此类分歧带；参考支持为零时，这不表示预测正确。</p>';
+      }
+
+      el("case-select").innerHTML = data.cases.map((c, index) => `<option value="${index}">${esc(c.case_id)}</option>`).join("");
+      for (const id of ["mode-select", "case-select", "view-select", "window-select"]) {
+        el(id).addEventListener("change", update);
+      }
+      update();
+    </script>
+  </body>
+</html>

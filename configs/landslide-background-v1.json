@@ -1,0 +1,27 @@
+{
+  "protocol_id": "landslide-background-v1",
+  "days": 1095,
+  "start_date": "2023-01-01",
+  "split_seeds": {"development": 20261021, "sealed_test": 20261022},
+  "profiles_per_split": {"mixed": 3, "weak_embedded": 3, "noise_control": 3, "nuisance": 3},
+  "weak_peak_mm_day": [0.025, 0.075],
+  "drift_amplitude_mm": [8.0, 24.0],
+  "drift_duration_days": [90, 260],
+  "plot": {
+    "figure_inches": [12.0, 7.0],
+    "dpi": 130,
+    "minimum_span_mm": 10.0,
+    "noise_span_multiplier": 6.0,
+    "total_span_multiplier": 1.5,
+    "tick_label_gap_pixels": 8.0,
+    "global_tick_days": 90,
+    "local_tick_days": 30,
+    "local_target_days": 365,
+    "context_days": 45
+  },
+  "diagnostic_windows": [31, 61, 91],
+  "reference_status": "pending_observation_review",
+  "model_call_budget_this_step": 0,
+  "no_resampling": true,
+  "test_release_requires_method_and_reference_protocol_freeze": true
+}

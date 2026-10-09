@@ -1,0 +1,55 @@
+<!doctype html><html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>长期位移 · 固定原生阶段的支撑消融</title><style>
+:root{font-family:"Microsoft YaHei",sans-serif;color:#223730;background:#f3f5ef}body{margin:0}main{max-width:1280px;margin:auto;padding:30px 24px}h1{font-size:30px;margin:10px 0}p{line-height:1.8}small{color:#64736b}a{color:#146a55}.notice{background:#fff7e5;border-left:4px solid #b58b38;padding:12px 18px}.panel{background:white;border:1px solid #dce4da;padding:20px;margin:20px 0}select{font:inherit;padding:9px;border:1px solid #b2c0b5;background:white}nav,.controls{display:flex;gap:20px;flex-wrap:wrap;margin:20px 0}table{border-collapse:collapse;width:100%}th,td{padding:10px;text-align:left;border-bottom:1px solid #e1e7dd;font-size:14px}.scroll{overflow:auto}img{display:block;max-width:100%;height:auto}summary{cursor:pointer;padding:12px;font-weight:bold}pre{white-space:pre-wrap;overflow-wrap:anywhere;max-height:480px;overflow:auto;padding:14px;background:#f4f6f1;font-size:12px}figure{margin:20px 0}figcaption{font-size:13px;color:#66746b}@media(max-width:650px){main{padding:18px 12px}.panel{padding:12px}h1{font-size:24px}}
+</style></head><body><main>
+<small>GNSS 长期位移研究 / 同一原生内容，仅改变最终支撑 / 2026-10-09</small>
+<h1>保留更多阶段，还是增加弃判？</h1>
+<p>固定规则、保存XGBoost和历史视觉原生阶段输出，比较五种最终支撑门控。活动范围、观测、原生类别不变；本轮新增模型调用0，未重训，也未由导数产生阶段。</p>
+<p class="notice">所有F1都是与非独立AI作者开发参考的一致性，不能证明准确率或现场优越。585个确定阶段日来自7条记录，S仅单记录25日；1541个未定参考日上的确定输出单列，不算误报。输出已在程序加载完整参考前冻结，本批材料此前已暴露。</p>
+<nav><a href="analysis.json">完整结果 JSON</a><a href="daily-stage-support.csv">逐日比较 CSV</a><a href="daily-support-predictions.csv">评分前冻结输出 CSV</a><a href="http://127.0.0.1:18794/">窗口支撑审计</a></nav>
+<div class="controls"><label>阶段头 <select id="method-select"><option value="rule">规则</option><option value="xgboost">保存XGBoost</option><option value="visual">历史视觉</option></select></label><label>记录 <select id="case-select"></select></label><label>详细配置 <select id="condition-select"></select></label></div>
+<section class="panel"><h2>共同585日分母</h2><div class="scroll" id="overall"></div><p>31／91固定窗仅替换最终支撑。完整内31补充沿用可用61窗，不会去掉旧61输出；完整内61则额外检查窗是否越活动边界。原生unknown在所有配置继续unknown。</p></section>
+<section class="panel"><h2 id="case-title"></h2><p id="case-summary"></p><img id="comparison" alt="同一原生阶段在五种支撑下的完整日历对照"><div class="scroll" id="case-table"></div><details><summary>所选配置：原生未知、门控过滤、跨界支撑与逐段增减</summary><pre id="condition-detail"></pre></details></section>
+<section id="interiors"></section>
+<section class="panel"><h2>原始位移与辅助审计图</h2><p>这里复用前一轮日轴版本的来源图，不是历史视觉原生输出的实际输入。历史输入另列如下，包含当时辅助图的坐标呈现。</p><details><summary>4张原图与3张辅助图</summary><div id="audit-inputs"></div></details></section>
+<section class="panel"><h2>历史视觉请求来源</h2><p id="request-status"></p><div id="request-detail"><details><summary>当时实际发送的7张图</summary><div id="native-inputs"></div></details><details><summary>实际提示词与原始回答（复用，无本轮新推理）</summary><pre id="prompt"></pre><pre id="response"></pre><pre id="receipt"></pre></details></div></section>
+<p><small>加速／匀速／减速的内容来自冻结原生输出，支撑策略只能保留或变为未知。图中黑色为原观测缺测、灰色为未知；所有居中窗使用未来观测，仅用于离线分析。真实浏览器验收状态见报告。</small></p>
+</main><script id="page-data" type="application/json">__PAGE_DATA__</script><script>
+const data=JSON.parse(document.getElementById('page-data').textContent);
+const node=id=>document.getElementById(id);
+const labels={fixed_61:'固定61日（基线）',fixed_31:'固定31日',fixed_91:'固定91日',fallback_31_contained:'61不足→完整内31补充',contained_61:'仅完整内61日'};
+function table(results){
+  const rows=data.summary.conditions.map(condition=>{
+    const value=results[condition];
+    const score=value.scores;
+    const f1=score.development_agreement_macro_f1;
+    return `<tr><td>${labels[condition]}</td><td>${score.exact_agreement_days}</td><td>${score.different_class_days}</td><td>${score.abstained_evaluable_days}</td><td>${f1===null?'—':f1.toFixed(4)}</td><td>${value.coverage.final_definite_days}</td></tr>`;
+  }).join('');
+  return `<table><thead><tr><th>配置</th><th>同类</th><th>异类</th><th>弃判</th><th>开发macro-F1</th><th>全部活动确定覆盖</th></tr></thead><tbody>${rows}</tbody></table>`;
+}
+function images(names){return names.map(name=>`<figure><img src="${name}" alt="冻结来源 ${name}" loading="lazy"><figcaption>${name}</figcaption></figure>`).join('');}
+function render(){
+  const current=data.cases[Number(node('case-select').value)];
+  const method=node('method-select').value;
+  const condition=node('condition-select').value;
+  node('overall').innerHTML=table(data.summary.methods[method]);
+  node('case-title').textContent=`${current.case_id} · ${method} · ${labels[condition]}`;
+  node('case-summary').textContent=`${current.interiors.length}个活动内部；本记录确定参考${current.summary[method][condition].scores.reference_evaluable_days}日。缺少任一参考类别时macro-F1不计算。`;
+  node('comparison').src=current.plots[method];
+  node('case-table').innerHTML=table(current.summary[method]);
+  node('condition-detail').textContent=JSON.stringify({native_scores:current.native_scores[method],selected:current.summary[method][condition]},null,2);
+  node('interiors').innerHTML=current.interiors.length?current.interiors.map(interior=>`<section class="panel"><h3>活动 [${interior.start}, ${interior.stop})</h3><div class="scroll">${table(interior.methods[method])}</div><details><summary>所选配置的逐段变化与覆盖</summary><pre>${JSON.stringify(interior.methods[method][condition],null,2)}</pre></details></section>`).join(''):'<section class="panel"><p>没有确认活动；所有配置保持无活动，不计阶段分类成绩。</p></section>';
+  node('audit-inputs').innerHTML=images([...current.raw_images,...current.aux_images]);
+  const request=method==='visual'?current.visual_request:null;
+  node('request-detail').hidden=!request;
+  node('native-inputs').innerHTML=request?images(request.images):'';
+  node('prompt').textContent=request?request.started.prompt:'';
+  node('response').textContent=request?request.response.output:'';
+  node('receipt').textContent=request?JSON.stringify({historical_not_new:true,started:request.started,response:request.response},null,2):'';
+  node('request-status').textContent=request?'显示历史冻结请求：本轮仅重新应用支撑门控，没有重新发送图像或生成回答。':method==='visual'?'本记录无确认活动，原生视觉请求跳过；不计正常识别成绩。':'所选为数值阶段头：固定已有规则或保存模型，本轮无模型提示与视觉请求。';
+}
+node('case-select').innerHTML=data.cases.map((current,index)=>`<option value="${index}">${current.case_id}</option>`).join('');
+node('condition-select').innerHTML=data.summary.conditions.map(condition=>`<option value="${condition}">${labels[condition]}</option>`).join('');
+for(const id of ['case-select','method-select','condition-select']){node(id).addEventListener('change',render);}
+render();
+</script></body></html>

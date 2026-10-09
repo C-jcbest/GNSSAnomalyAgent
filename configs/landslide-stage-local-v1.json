@@ -1,0 +1,21 @@
+{
+  "protocol_id": "landslide-stage-local-v1",
+  "source_axis_run": "artifacts/landslide-stage-axis-2026-10-08/run-v1",
+  "source_evidence_run": "artifacts/landslide-stage-evidence-2026-10-08/run-v1",
+  "conditions": ["full", "local"],
+  "repetitions": 2,
+  "maximum_requests": 36,
+  "model": "qwen3.8-flash",
+  "temperature": 0.1,
+  "top_p": 0.3,
+  "max_tokens": 2048,
+  "retries": 0,
+  "hard_timeout_seconds": 7200,
+  "context_days": 45,
+  "scoring": false,
+  "sealed_test_access": "none",
+  "intervention": "append three auxiliary crops per frozen activity to unchanged seven global/raw images; includes more images, local horizontal scale, titles and increased token/pixel budget",
+  "invariants": "same prompt in both conditions, original seven images/order, frozen activity, cached estimates, y limits, units, gaps, support, model, settings, output schema and stage compiler",
+  "schedule": "per active case full-r1 local-r1 local-r2 full-r2; reversed for every second active case, no retry or outcome-dependent stopping",
+  "analysis": "all twelve records, full paired class/unknown/failure/support counts, repeats, common-success sensitivity and real costs; no accuracy without independent reference"
+}

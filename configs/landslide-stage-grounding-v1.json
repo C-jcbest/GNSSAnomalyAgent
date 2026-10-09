@@ -1,0 +1,21 @@
+{
+  "protocol_id": "landslide-stage-grounding-v1",
+  "source_axis_run": "artifacts/landslide-stage-axis-2026-10-08/run-v1",
+  "output_run": "artifacts/landslide-stage-grounding-2026-10-09/run-v1",
+  "conditions": ["image", "numeric"],
+  "condition_meaning": "image=original seven-image control; numeric=identical images plus inventory and evidence-locator instructions; no turning proposals",
+  "repetitions": 2,
+  "maximum_requests": 36,
+  "model": "qwen3.8-flash",
+  "temperature": 0.1,
+  "top_p": 0.3,
+  "max_tokens": 2048,
+  "retries": 0,
+  "hard_timeout_seconds": 7200,
+  "invariants": "same seven day-index images, original prompt prefix, activity review-v3, stage schema/compiler, 61-day final support",
+  "citation_check": "post-freeze diagnostic only; not a classifier or rejection gate",
+  "turning_proposals": false,
+  "reference_access": "development agreement only after inference freeze; author previously exposed",
+  "formal_performance_scores": false,
+  "sealed_test_access": "none"
+}

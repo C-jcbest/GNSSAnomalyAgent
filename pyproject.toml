@@ -15,6 +15,7 @@ dependencies = [
   "affiliation @ git+https://github.com/ahstat/affiliation-metrics-py.git@8d8449858096bbade6a6e70848d05c9cc9b846fe",
   "matplotlib>=3.10,<4",
   "httpx>=0.28,<1",
+  "langchain>=1.2,<2",
 ]
 
 [dependency-groups]
@@ -37,3 +38,7 @@ line-length = 100
 
 [tool.ruff.lint]
 select = ["E4", "E7", "E9", "F", "I"]
+
+[tool.ruff.lint.per-file-ignores]
+# This frozen runner imports after configuring sys.path; preserve its audited source hash.
+"scripts/landslide_stage_evidence.py" = ["E402"]

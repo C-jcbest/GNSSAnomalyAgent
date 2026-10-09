@@ -1,0 +1,19 @@
+{
+  "protocol_id": "landslide-stage-evidence-v1",
+  "source_axis_run": "artifacts/landslide-stage-axis-2026-10-08/run-v1",
+  "conditions": ["control", "structured"],
+  "repetitions": 2,
+  "maximum_requests": 36,
+  "model": "qwen3.8-flash",
+  "temperature": 0.1,
+  "top_p": 0.3,
+  "max_tokens": 2048,
+  "retries": 0,
+  "hard_timeout_seconds": 7200,
+  "scoring": false,
+  "sealed_test_access": "none",
+  "intervention": "append structured per-activity observable evidence instruction; includes observation sequence and emphasis, not a pure order-only intervention",
+  "invariants": "same day-index seven images and order, frozen activity, estimates, model, settings, output schema, stage compiler and support; control prompt byte-identical to historical prompt",
+  "schedule": "per active case control-r1 structured-r1 structured-r2 control-r2, reversed for every second active case; no retry or outcome-dependent stopping",
+  "analysis": "complete paired coverage, abstention, failures, classes, support suppression, repeat disagreement, costs and case diagnostics; no accuracy without independent stage reference"
+}

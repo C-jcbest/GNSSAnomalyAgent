@@ -1,0 +1,54 @@
+<!doctype html>
+<html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>冻结活动 · 三阶段头分析</title>
+<style>
+:root{font-family:system-ui,"Microsoft YaHei",sans-serif;color:#213a34;background:#f3f5f0;line-height:1.65}
+body{max-width:1240px;margin:auto;padding:28px}h1{font-size:30px;margin:8px 0}h2{font-size:22px}h3{font-size:16px}
+a{color:#23675a}section{background:white;border:1px solid #d4ded4;border-radius:8px;padding:22px;margin:20px 0}
+.notice{border-left:4px solid #aa7c35;padding-left:14px}.controls{display:flex;flex-wrap:wrap;gap:18px;align-items:center}
+select{font:inherit;padding:7px;background:white;border:1px solid #a9beb4;border-radius:4px}img{width:100%;height:auto;display:block}
+table{width:100%;border-collapse:collapse;font-size:14px}td,th{padding:9px;text-align:left;border-bottom:1px solid #dde5dd}
+.scroll{overflow:auto}.inputs{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px}.inputs span{font-size:13px}
+pre{white-space:pre-wrap;overflow-wrap:anywhere;font-size:13px;line-height:1.6;background:#f0f4ef;padding:16px}
+summary{cursor:pointer;padding:10px 0}.caption{color:#52645c;font-size:14px}.links{display:flex;flex-wrap:wrap;gap:14px}
+@media(max-width:700px){body{padding:12px}section{padding:14px}.inputs{grid-template-columns:1fr}h1{font-size:25px}}
+</style></head><body>
+<header><p>GNSS / FROZEN ACTIVITY · STAGE HEADS</p><h1>固定活动范围，核查阶段判别</h1>
+<p id="run-summary"></p><p class="notice">这是开发预测与支撑诊断，没有独立阶段真值。覆盖率、共同赋值与分歧均不是准确率，不能据此给方法排名。居中辅助图包含未来信息，本实验属于离线描述。</p>
+<div class="links"><a href="daily-stage-heads.csv">最终逐日 CSV</a><a href="analysis.json">分析与重放检查</a><a href="results.json">冻结推理结果</a><a href="protocol.json">固定配置</a><a href="http://127.0.0.1:18780/">原始位移活动复核</a></div></header>
+<section><h2>全部记录汇总</h2><div class="scroll" id="totals"></div>
+<p>规则：本项目原有 60 日相对速率变化阈值 0.25。XGBoost：本项目已保存的监督阶段模型，12 个观测派生特征，不重训。视觉：qwen3.8-flash，单次读取 4 张原图与 3 张辅助图。三者都不是某篇原论文方法的直接复现，监督信息与原生支撑限制不同。</p>
+<p>最终支撑检查：所有确定阶段需有观测、冻结活动及有限 61 日速度；加速／减速还需有限切向加速度。有效估计不证明语义正确，匀速仍需非零且近似恒定的实际证据。3 条无活动记录确定性跳过视觉，不能算模型识别正常的成绩。</p>
+<details><summary>活动内配对分歧（非错误计数）</summary><pre id="pairs"></pre></details></section>
+<section><div class="controls"><label>记录 <select id="case-select"></select></label><label>视图 <select id="view-select"><option value="0">全记录</option><option value="1">前段 0–409</option><option value="2">中段 320–774</option><option value="3">后段 685–1094</option></select></label><label>阶段结果 <select id="mode-select"><option value="final">应用支撑后</option><option value="native">原生输出</option></select></label></div>
+<h2 id="case-title"></h2><p id="case-summary"></p><a id="plot-link" target="_blank"><img id="comparison" alt="原始位移、冻结活动及三种阶段输出"></a>
+<p class="caption">原曲线、原始日轴与纵轴上下限保持一致。第一行活动：橙=活动，浅绿=静稳，黄=未知，灰=缺测。阶段行：橙=加速，蓝=匀速运动，金=减速，黄=未知，浅绿=none，灰=缺测。以上叠图未发送给模型。</p>
+<div class="scroll" id="case-counts"></div><details><summary>该记录分歧与支撑统计</summary><pre id="case-detail"></pre></details>
+<details><summary>冻结活动来源与阶段文件</summary><div id="sources" class="links"></div><pre id="activity-detail"></pre></details></section>
+<section><h2>视觉模型的真实分析过程</h2><p id="request-status"></p><div id="request-links" class="links"></div>
+<details id="request-detail"><summary>完整提示词、原始回答与请求参数</summary><h3>实际提示词</h3><pre id="prompt"></pre><h3>原始回答（未改写）</h3><pre id="response"></pre><h3>调用参数／服务凭据摘要</h3><pre id="receipt"></pre></details>
+<h3>按实际发送顺序排列的输入图</h3><div id="inputs" class="inputs"></div></section>
+<section><h2>事后内容审查</h2><p>推理完成并冻结后，作者查看原始与辅助图进行诊断；不是独立专家阶段标注，不修改预测。</p><div id="findings"></div></section>
+<script id="page-data" type="application/json">__PAGE_DATA__</script>
+<script>
+const data=JSON.parse(document.getElementById('page-data').textContent);
+const el=id=>document.getElementById(id), names={rule:'规则',xgboost:'保存 XGBoost',visual:'视觉模型'};
+const esc=value=>String(value).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+function table(heads){let rows='';for(const method of ['rule','xgboost','visual']){const h=heads[method],n=h.native_activity_features,f=h.final_activity_features;rows+=`<tr><td>${names[method]}</td><td>${n.acceleration||0}/${n.steady_motion||0}/${n.deceleration||0}</td><td>${f.acceleration||0}/${f.steady_motion||0}/${f.deceleration||0}</td><td>${f.unknown||0}</td><td>${Object.values(h.suppressed_support).reduce((a,b)=>a+b,0)}</td><td>${esc(h.status||'见各记录')}</td></tr>`;}return `<table><thead><tr><th>阶段头</th><th>原生 A/S/D 日</th><th>最终 A/S/D 日</th><th>活动内未知日</th><th>支撑过滤日</th><th>状态</th></tr></thead><tbody>${rows}</tbody></table>`;}
+el('run-summary').textContent=`12 条记录，${data.analysis.active_days} 个有观测活动日；${data.summary.calls} 次真实调用，${data.summary.total_tokens} token；无重试。`;
+el('totals').innerHTML=table(data.analysis.heads);el('pairs').textContent=JSON.stringify(data.analysis.pairs,null,2);
+for(const item of data.cases){const option=document.createElement('option');option.value=item.case_id;option.textContent=item.case_id;el('case-select').appendChild(option);}
+function update(){const c=data.cases.find(c=>c.case_id===el('case-select').value),view=Number(el('view-select').value),mode=el('mode-select').value;
+el('case-title').textContent=c.case_id;el('case-summary').textContent=`确认活动 ${c.result.active_days} 日；61 日速度支撑 ${c.result.velocity_supported_activity_days} 日；切向加速度支撑 ${c.result.tangent_supported_activity_days} 日。`;
+const image=c.plots[mode][view];el('comparison').src=image;el('plot-link').href=image;el('case-counts').innerHTML=table(c.result.heads);el('case-detail').textContent=JSON.stringify(c.result,null,2);
+el('activity-detail').textContent=JSON.stringify({activity_sha256:c.result.activity_sha256,spans:c.activity.spans,provenance:c.activity.provenance},null,2);
+el('sources').innerHTML=c.sources.map(s=>`<a href="${esc(s.url)}">${esc(s.label)}</a>`).join('');
+const r=c.request;el('request-detail').hidden=!r;el('inputs').innerHTML='';el('request-links').innerHTML='';
+if(r){el('request-status').textContent=`${c.result.heads.visual.status}；阶段编译错误：${c.result.visual_error?JSON.stringify(c.result.visual_error):'无'}。`;
+el('prompt').textContent=r.started.prompt;el('response').textContent=r.response.output||'没有完整回答';el('receipt').textContent=JSON.stringify(r.receipt_summary,null,2);
+el('request-links').innerHTML=`<a href="${esc(r.started_url)}">完整请求凭据</a><a href="${esc(r.response_url)}">完整响应</a>`;
+el('inputs').innerHTML=r.images.map((p,i)=>`<a href="${esc(p)}" target="_blank"><img loading="lazy" src="${esc(p)}" alt="实际输入图 ${i+1}"><span>${i+1}. ${esc(p)}</span></a>`).join('');
+}else{el('request-status').textContent='没有确认活动：确定性跳过，未调用视觉模型，没有模型回答。';el('prompt').textContent='';el('response').textContent='';el('receipt').textContent='';}
+const findings=(data.findings||[]).filter(f=>f.case_id===c.case_id);el('findings').innerHTML=findings.length?findings.map(f=>`<p>${esc(f.finding)}</p><p class="caption">${esc(f.limit)}</p><div class="links">${f.images.map(p=>`<a target="_blank" href="${esc(p)}">${esc(p)}</a>`).join('')}</div>`).join(''):'该记录尚无额外作者裁决；不能据空白认定预测正确。';}
+for(const id of ['case-select','view-select','mode-select']){el(id).addEventListener('change',update);}update();
+</script></body></html>

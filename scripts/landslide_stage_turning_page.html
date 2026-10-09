@@ -1,0 +1,98 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>内部转折候选 · 同期阶段对照</title>
+  <style>
+    :root { font-family: "Microsoft YaHei", sans-serif; color: #233e35; background: #f2f2e9; line-height: 1.7; }
+    body { max-width: 1280px; margin: auto; padding: 28px 20px 60px; }
+    h1 { font-family: "SimSun", serif; font-size: 34px; margin: 10px 0; }
+    h2 { font-size: 21px; } h3 { font-size: 16px; }
+    .eyebrow { letter-spacing: 3px; font-size: 12px; color: #647c6a; }
+    .notice { border-left: 4px solid #b28638; padding: 3px 20px; }
+    section { background: #fffef9; border: 1px solid #d4ddd0; padding: 22px; margin: 22px 0; }
+    .controls, .links { display: flex; flex-wrap: wrap; gap: 16px; align-items: center; margin: 16px 0; }
+    select { font: inherit; padding: 6px 10px; border: 1px solid #9fb49e; background: white; }
+    a { color: #286854; } img { display: block; width: 100%; height: auto; }
+    pre { font-size: 12px; white-space: pre-wrap; overflow-wrap: anywhere; max-height: 650px; overflow: auto; }
+    .scroll { overflow-x: auto; } table { width: 100%; border-collapse: collapse; font-size: 13px; }
+    th, td { padding: 9px; border-bottom: 1px solid #dae2d5; text-align: left; white-space: nowrap; }
+    .caption { font-size: 13px; color: #647166; } summary { cursor: pointer; color: #315c4c; padding: 8px 0; }
+    .inputs { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 18px; }
+  </style>
+</head>
+<body>
+  <div class="eyebrow">GNSS / INTERNAL TURNING PROPOSALS</div>
+  <h1>提示内部转折，是否帮助拆分阶段</h1>
+  <div class="notice">
+    <p>这是新执行的同期两组、各两遍对照。控制只使用原七图与原提示；候选组使用同样图像，再追加来自观测缓存的速率峰／谷粗候选。候选不是阶段答案，模型可以拒绝或保留未知。</p>
+    <p>模型、活动、图像、纵轴和最终61日支撑保持固定；失败无重试且保留为弃判。冻结后与已暴露AI开发标注比较，不能作为独立准确率或优胜证明。恒速只有一个参考记录支持。</p>
+  </div>
+  <div class="links"><a href="protocol.json">协议</a><a href="turning-summaries.json">全部候选</a><a href="packets.json">完整请求计划</a><a href="analysis.json">诊断JSON</a><a href="daily-stage-turning.csv">逐日CSV</a></div>
+  <section>
+    <h2>完整运行与开发诊断</h2><p id="run-summary"></p>
+    <div id="totals" class="scroll"></div>
+    <p class="caption">统一585日分母；模型弃判和失败不删日期。开发F1只是与AI复核一致性；参考未定日预测另外保存，不能当FP。</p>
+    <details><summary>混淆矩阵、未定判断量及重复分歧</summary><pre id="analysis"></pre></details>
+  </section>
+  <section>
+    <div class="controls">
+      <label>记录 <select id="case-select"></select></label>
+      <label>视窗 <select id="view-select"><option value="0">全程</option><option value="1">0–409日</option><option value="2">320–774日</option><option value="3">685–1094日</option></select></label>
+      <label>实际请求 <select id="arm-select"><option value="image-r1">控制 · 第1遍</option><option value="numeric-r1">候选 · 第1遍</option><option value="image-r2">控制 · 第2遍</option><option value="numeric-r2">候选 · 第2遍</option></select></label>
+    </div>
+    <h2 id="case-title"></h2>
+    <a id="plot-link" target="_blank" rel="noopener"><img id="comparison" alt="冻结原始位移与四组最终阶段色带"></a>
+    <p class="caption">第一色带是作者活动，之后依次控制第1遍、候选第1遍、控制第2遍、候选第2遍；橙A、蓝S、金D、黄未定、灰缺测、浅绿非活动。图由本轮展示生成，未发送给模型。</p>
+    <h3>本记录候选内容</h3><pre id="candidates"></pre>
+    <h3>实际模型过程</h3><p id="request-status"></p>
+    <div id="request-links" class="links"></div>
+    <details id="request-detail"><summary>实际完整提示、原始回答、参数与失败凭据</summary><h3>提示</h3><pre id="prompt"></pre><h3>回答</h3><pre id="response"></pre><h3>凭据摘要</h3><pre id="receipt"></pre></details>
+    <h3>按实际发送顺序排列的输入图</h3><div id="inputs" class="inputs"></div>
+  </section>
+  <script id="page-data" type="application/json">__PAGE_DATA__</script>
+  <script>
+    const data = JSON.parse(document.getElementById("page-data").textContent);
+    const el = id => document.getElementById(id);
+    const names = { "image-r1": "控制 第1遍", "numeric-r1": "候选 第1遍", "image-r2": "控制 第2遍", "numeric-r2": "候选 第2遍" };
+    const esc = value => String(value).replace(/[&<>"']/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" })[c]);
+    const number = value => value === null ? "—" : value.toFixed(3);
+    const summary = data.summary;
+    el("run-summary").textContent = `${summary.calls}次实际请求尝试；${summary.total_tokens} token；${JSON.stringify(summary.receipt_statuses)}；无重试。`;
+    el("analysis").textContent = JSON.stringify(data.analysis, null, 2);
+    const rows = Object.entries(names).map(([arm, name]) => {
+      const h = data.analysis.development_agreement[arm];
+      return `<tr><td>${name}</td><td>${h.exact_agreement_days}/${h.reference_evaluable_days}</td><td>${h.different_class_days}</td><td>${h.abstained_evaluable_days}</td><td>${number(h.development_agreement_macro_f1)}</td><td>${number(h.per_class.deceleration.f1)}</td></tr>`;
+    }).join("");
+    el("totals").innerHTML = `<table><thead><tr><th>同期配置</th><th>一致日／分母</th><th>异类日</th><th>弃判日</th><th>开发macro-F1</th><th>D开发F1</th></tr></thead><tbody>${rows}</tbody></table>`;
+    el("case-select").innerHTML = data.cases.map((c, index) => `<option value="${index}">${esc(c.case_id)}</option>`).join("");
+    function update() {
+      const c = data.cases[Number(el("case-select").value)];
+      const arm = el("arm-select").value;
+      const view = Number(el("view-select").value);
+      el("case-title").textContent = c.case_id;
+      el("comparison").src = c.plots[view];
+      el("plot-link").href = c.plots[view];
+      el("candidates").textContent = JSON.stringify(c.summary, null, 2);
+      const request = c.requests[arm];
+      el("request-detail").hidden = !request;
+      el("inputs").innerHTML = "";
+      el("request-links").innerHTML = "";
+      if (!request) {
+        el("request-status").textContent = "无确认活动：确定性跳过，无模型回答，不计正常识别成绩。";
+        for (const id of ["prompt", "response", "receipt"]) { el(id).textContent = ""; }
+        return;
+      }
+      el("request-status").textContent = `${names[arm]} · ${request.response.status} · ${request.response.error_type || "无传输／解析错误，阶段契约状态另见results.json"}`;
+      el("prompt").textContent = request.started.prompt;
+      el("response").textContent = request.response.output || "没有完整回答，已保留弃判";
+      el("receipt").textContent = JSON.stringify(request.receipt_summary, null, 2);
+      const id = `${c.case_id}-${arm}`;
+      el("request-links").innerHTML = `<a href="requests/${id}.started.json">完整请求凭据</a><a href="requests/${id}.response.json">完整响应凭据</a>`;
+      el("inputs").innerHTML = request.images.map((image, index) => `<a href="${esc(image)}" target="_blank" rel="noopener"><img src="${esc(image)}" loading="lazy" alt="实际输入图${index + 1}"><span>${index + 1}. ${esc(image)}</span></a>`).join("");
+    }
+    for (const id of ["case-select", "view-select", "arm-select"]) { el(id).addEventListener("change", update); }
+    update();
+  </script>
+</body>
+</html>

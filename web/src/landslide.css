@@ -1,0 +1,884 @@
+.app-shell.landslide-mode .main-content {
+  background: #f7f8f3;
+}
+.ls-page {
+  padding: 30px 0 20px;
+  min-height: calc(100vh - 80px);
+}
+.ls-page button,
+.ls-page a,
+.ls-page input,
+.ls-page select {
+  transition:
+    border-color 0.18s,
+    background 0.18s,
+    color 0.18s;
+}
+.ls-page a {
+  color: #147d72;
+  text-decoration: none;
+}
+.ls-page h1,
+.ls-page h2,
+.ls-page p {
+  margin-top: 0;
+}
+.ls-page .eyebrow {
+  color: #70837a;
+  font-size: 10px;
+  letter-spacing: 1.5px;
+}
+.ls-intro {
+  display: flex;
+  justify-content: space-between;
+  gap: 48px;
+  padding: 9px 0 31px;
+}
+.ls-intro h1 {
+  margin: 18px 0 17px;
+  font-size: clamp(28px, 2.8vw, 42px);
+  line-height: 1.25;
+  letter-spacing: -1.6px;
+  font-weight: 500;
+}
+.ls-intro h1 span {
+  color: #147d72;
+}
+.ls-intro-copy {
+  max-width: 600px;
+  font-size: 13px;
+  color: #687970;
+  line-height: 1.9;
+  margin-bottom: 0;
+}
+.ls-intro-aside {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  justify-content: center;
+  flex-shrink: 0;
+  color: #476a5a;
+  gap: 8px;
+}
+.ls-intro-aside > span {
+  font-weight: 600;
+  font-size: 13px;
+}
+.ls-intro-aside small {
+  color: #7d8b7f;
+  font-size: 11px;
+}
+.ls-intro-aside a {
+  display: flex;
+  align-items: center;
+  font-size: 12px;
+  gap: 5px;
+  margin-top: 4px;
+}
+.ls-generator {
+  display: flex;
+  gap: 16px;
+  align-items: flex-end;
+  background: #fffefa;
+  padding: 22px;
+  border: 1px solid #dce4d8;
+  border-radius: 7px;
+  box-shadow: 0 3px 8px #23382c03;
+}
+.ls-generator-title {
+  margin-right: auto;
+  align-self: center;
+  min-width: 140px;
+}
+.ls-generator-title span,
+.ls-generator-title strong {
+  display: block;
+}
+.ls-generator-title strong {
+  margin-top: 8px;
+  font-size: 14px;
+}
+.ls-generator label {
+  display: grid;
+  gap: 8px;
+  font-size: 11px;
+  color: #78867b;
+  width: 108px;
+}
+.ls-generator label:has(input[type="date"]) {
+  width: 143px;
+}
+.ls-generator input {
+  width: 100%;
+  padding: 8px 9px;
+  height: 37px;
+  border-radius: 4px;
+  border: 1px solid #dce3d8;
+  background: #fff;
+  color: #334c3e;
+  font-family: "IBM Plex Mono", "Microsoft YaHei", monospace;
+  font-size: 12px;
+}
+.ls-page .ls-primary {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 7px;
+  background: #1d6555;
+  color: #fff;
+  border: 1px solid #1d6555;
+  height: 37px;
+  padding: 0 16px;
+  border-radius: 4px;
+  white-space: nowrap;
+  font-size: 12px;
+}
+.ls-primary:hover {
+  background: #134b3e;
+}
+.ls-batch-bar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 24px;
+  padding: 28px 0;
+}
+.ls-batch-bar > label {
+  display: grid;
+  gap: 9px;
+  min-width: 0;
+  max-width: 55%;
+}
+.ls-batch-bar select {
+  max-width: 100%;
+  padding: 9px 29px 9px 11px;
+  border: 1px solid #dce4d8;
+  border-radius: 4px;
+  background: #fffefa;
+  color: #40554a;
+  font-size: 11px;
+  font-family: "IBM Plex Mono", "Microsoft YaHei", monospace;
+}
+.ls-batch-stats {
+  display: flex;
+  gap: 34px;
+}
+.ls-batch-stats > div {
+  display: grid;
+  gap: 5px;
+}
+.ls-batch-stats strong {
+  font-size: 24px;
+  font-family: "IBM Plex Mono", monospace;
+  font-weight: 500;
+  letter-spacing: -1px;
+}
+.ls-batch-stats small {
+  color: #839286;
+  font-size: 12px;
+  letter-spacing: 0;
+}
+.ls-batch-stats span {
+  font-size: 10px;
+  color: #7e8b80;
+}
+.ls-scale-panel {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 14px 24px;
+  align-items: center;
+  padding: 17px 20px;
+  background: #edf2e9;
+  border-left: 3px solid #739b79;
+  border-radius: 0 5px 5px 0;
+  margin-bottom: 28px;
+}
+.ls-scale-panel > div {
+  margin-right: auto;
+}
+.ls-scale-panel strong {
+  font-size: 12px;
+  font-weight: 600;
+}
+.ls-scale-panel p {
+  margin: 6px 0 0;
+  color: #7a8a7b;
+  font-size: 10px;
+}
+.ls-scale-panel > label {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  font-size: 11px;
+  color: #536c59;
+  white-space: nowrap;
+}
+.ls-scale-panel input[type="number"] {
+  width: 62px;
+  border: 1px solid #d4ddcf;
+  background: #fafff7;
+  border-radius: 3px;
+  padding: 5px 4px;
+  font-size: 12px;
+  color: #35593d;
+}
+.ls-scale-panel > label > span {
+  color: #899486;
+}
+.ls-page input[type="checkbox"] {
+  accent-color: #147d72;
+  width: 13px;
+  height: 13px;
+  margin: 0;
+}
+.ls-section-heading {
+  display: flex;
+  justify-content: space-between;
+  gap: 20px;
+  align-items: center;
+  margin-bottom: 17px;
+}
+.ls-section-heading .eyebrow {
+  margin-bottom: 7px;
+}
+.ls-section-heading h2 {
+  margin-bottom: 0;
+  font-size: 19px;
+  font-weight: 500;
+}
+.ls-legend {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 13px;
+  font-size: 11px;
+}
+.ls-legend > span,
+.ls-axis-toggles label {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+.ls-legend i,
+.ls-axis-toggles i {
+  display: inline-block;
+  width: 13px;
+  height: 2px;
+}
+.ls-legend small {
+  color: #879384;
+  font-size: 10px;
+}
+.ls-filter-row {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 17px;
+  align-items: center;
+}
+.ls-filters {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px;
+}
+.ls-filters button {
+  border: 1px solid transparent;
+  background: transparent;
+  color: #728071;
+  font-size: 11px;
+  padding: 7px 9px;
+  border-radius: 4px;
+}
+.ls-filters button span {
+  padding-left: 7px;
+  font-size: 10px;
+  color: #96a08f;
+}
+.ls-filters button:hover {
+  background: #eef2e8;
+}
+.ls-filters button.active {
+  background: #e3ede0;
+  border-color: #d3e0ce;
+  color: #326342;
+}
+.ls-scale-badge {
+  font-size: 10px;
+  color: #708369;
+  background: #edf0e6;
+  padding: 5px 7px;
+  border-radius: 3px;
+}
+.ls-cards {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 14px;
+}
+.ls-card {
+  min-width: 0;
+  border: 1px solid #dfe5d9;
+  border-radius: 5px;
+  background: #fffefa;
+  padding: 14px 14px 11px;
+  color: #374d3d;
+  text-align: left;
+  overflow: hidden;
+}
+.ls-card:hover {
+  border-color: #91ae91;
+  background: #fff;
+}
+.ls-card.selected {
+  border-color: #648f72;
+  box-shadow: inset 0 2px #648f72;
+  background: #fff;
+}
+.ls-card-heading {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.ls-card-heading strong {
+  font-family: "IBM Plex Mono", monospace;
+  font-size: 12px;
+  font-weight: 500;
+}
+.ls-card-heading > span {
+  margin-left: auto;
+  color: #758573;
+  font-size: 10px;
+}
+.ls-card-heading svg {
+  color: #9ea99a;
+}
+.ls-mini-chart {
+  display: block;
+  width: 100%;
+  height: auto;
+  margin-top: 8px;
+}
+.ls-mini-placeholder {
+  display: grid;
+  place-items: center;
+  height: 120px;
+  color: #9aa594;
+  font-size: 11px;
+}
+.ls-card-scale,
+.ls-card-dates {
+  display: flex;
+  justify-content: space-between;
+  gap: 8px;
+  font-size: 9px;
+  font-family: "IBM Plex Mono", "Microsoft YaHei", monospace;
+}
+.ls-card-scale {
+  color: #74876e;
+  padding-top: 4px;
+}
+.ls-card-dates {
+  color: #a1aa99;
+  margin-top: 9px;
+}
+.ls-pagination {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 12px;
+  padding: 18px 0 29px;
+  color: #7c8976;
+  font-size: 10px;
+}
+.ls-pagination > span:first-child {
+  margin-right: auto;
+}
+.ls-pagination label {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+.ls-pagination select,
+.ls-pagination button {
+  border: 1px solid #dce4d6;
+  border-radius: 3px;
+  background: #fffefa;
+  padding: 5px;
+  color: #62775b;
+  font-size: 10px;
+}
+.ls-pagination button {
+  display: grid;
+  place-items: center;
+}
+.ls-page button:disabled {
+  cursor: default;
+  opacity: 0.45;
+}
+.ls-detail {
+  border: 1px solid #dce4d7;
+  border-radius: 7px;
+  background: #fffefa;
+  padding: 25px 25px 0;
+  scroll-margin-top: 20px;
+}
+.ls-detail .ls-section-heading h2 {
+  font-family: "IBM Plex Mono", "Microsoft YaHei", monospace;
+  font-size: 19px;
+}
+.ls-detail h2 > span {
+  font-family: "IBM Plex Sans", "Microsoft YaHei", sans-serif;
+  margin-left: 12px;
+  font-size: 11px;
+  color: #7a8c72;
+}
+.ls-downloads {
+  display: flex;
+  gap: 16px;
+}
+.ls-downloads a {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  font-size: 10px;
+}
+.ls-detail-toolbar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 19px;
+  border-top: 1px solid #e8ece1;
+  padding: 17px 0 9px;
+}
+.ls-detail-toolbar > label,
+.ls-axis-toggles {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  color: #6e7f65;
+  font-size: 11px;
+}
+.ls-axis-toggles {
+  gap: 16px;
+  margin-right: 10px;
+}
+.ls-detail-toolbar button {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  border: 0;
+  background: none;
+  color: #6e8363;
+  font-size: 10px;
+  margin-left: auto;
+  padding: 3px 0;
+}
+.ls-chart-note {
+  display: flex;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 8px;
+  color: #8b9780;
+  font-size: 9px;
+  line-height: 1.7;
+  padding: 9px 0 18px;
+  border-bottom: 1px solid #e8ece1;
+}
+.ls-truth-access {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 20px;
+  padding: 20px 0;
+}
+.ls-truth-access strong {
+  font-size: 12px;
+  font-weight: 500;
+}
+.ls-truth-access p {
+  color: #8a9781;
+  font-size: 10px;
+  margin: 6px 0 0;
+}
+.ls-truth-access button {
+  background: #fffefa;
+  border: 1px solid #cddbc8;
+  color: #5f7954;
+  border-radius: 4px;
+  font-size: 11px;
+  padding: 8px 13px;
+  white-space: nowrap;
+}
+.ls-truth-access button[aria-pressed="true"] {
+  background: #eaf1e5;
+}
+.ls-truth-panel {
+  border-top: 1px solid #e8ece1;
+  padding: 17px 0 24px;
+}
+.ls-truth-panel > p {
+  font-size: 11px;
+  color: #8c8364;
+}
+.ls-generation-note,
+.ls-overview-note {
+  color: #82917a;
+  font-size: 10px;
+  line-height: 1.8;
+  margin: 10px 0 0;
+}
+.ls-overview-note {
+  margin: -5px 0 16px;
+}
+.ls-diagnostics {
+  padding: 25px 0 21px;
+  border-bottom: 1px solid #e8ece1;
+}
+.ls-diagnostics h3 {
+  font-size: 16px;
+  font-weight: 500;
+  margin: 0;
+}
+.ls-diagnostics-subtitle {
+  color: #85947b;
+  font-size: 10px;
+  line-height: 1.8;
+  margin: 8px 0 0;
+}
+.ls-diagnostics-controls {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 16px;
+}
+.ls-diagnostics-controls label,
+.ls-diagnostics-controls a {
+  display: flex;
+  gap: 6px;
+  align-items: center;
+  font-size: 11px;
+  white-space: nowrap;
+}
+.ls-diagnostics-controls label {
+  color: #78876f;
+}
+.ls-diagnostics-controls select {
+  padding: 5px;
+  border: 1px solid #d1ddca;
+  background: #fffefa;
+  border-radius: 4px;
+  color: #456540;
+  font-size: 11px;
+}
+.ls-diagnostics-legend {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px 20px;
+  color: #82917a;
+  font-size: 10px;
+  margin: 0 0 10px;
+}
+.ls-diagnostics-legend > span {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+.ls-diagnostics-legend i {
+  display: inline-block;
+  width: 18px;
+  border-top: 2px solid #34473c;
+}
+.ls-diagnostics-legend i.dashed {
+  border-top-style: dashed;
+}
+.ls-diagnostics-notes {
+  padding: 12px 15px;
+  background: #f2f5ee;
+  border-left: 2px solid #adc1a2;
+  color: #7f8e74;
+  font-size: 10px;
+  line-height: 1.9;
+}
+.ls-diagnostics-notes p {
+  margin: 0 0 5px;
+}
+.ls-diagnostics-notes strong {
+  font-weight: 500;
+  color: #58754b;
+}
+.ls-diagnostics-notes > span {
+  color: #8b947f;
+}
+.ls-phase-timeline {
+  position: relative;
+  height: 35px;
+  background: #edf1e7;
+  border-radius: 3px;
+  overflow: hidden;
+  margin-top: 18px;
+}
+.ls-phase-timeline > div {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-right: 1px solid #fffefa;
+  overflow: hidden;
+}
+.ls-phase-timeline span {
+  white-space: nowrap;
+  font-size: 10px;
+  color: #253a2a;
+}
+.ls-phase-timeline-dates {
+  display: flex;
+  justify-content: space-between;
+  color: #8b987f;
+  font:
+    10px "IBM Plex Mono",
+    monospace;
+  margin: 8px 0 20px;
+}
+.ls-phase-name {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 12px;
+  font-weight: 500;
+  margin: 0 0 4px;
+  color: #4a6641;
+}
+.ls-phase-name i {
+  width: 8px;
+  height: 8px;
+  border-radius: 2px;
+}
+.ls-phases {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 12px;
+}
+.ls-phases > div {
+  border-left: 2px solid #c0d2b7;
+  padding: 3px 12px;
+}
+.ls-phases span {
+  display: block;
+  color: #8b987f;
+  font-family: "IBM Plex Mono", monospace;
+  font-size: 10px;
+  margin-bottom: 7px;
+}
+.ls-phases strong {
+  font-size: 12px;
+  font-weight: 400;
+  color: #5c7153;
+  line-height: 1.8;
+}
+.ls-footer {
+  display: flex;
+  justify-content: space-between;
+  gap: 15px;
+  color: #a5ae9b;
+  font-size: 9px;
+  letter-spacing: 1px;
+  padding: 22px 0 0;
+}
+.ls-empty {
+  padding: 50px 24px;
+  text-align: center;
+  color: #8e9c84;
+  font-size: 12px;
+}
+.ls-error {
+  padding: 13px 16px;
+  display: flex;
+  justify-content: space-between;
+  gap: 16px;
+  align-items: center;
+  background: #fff0e8;
+  border: 1px solid #ecd1c2;
+  color: #9d5942;
+  border-radius: 4px;
+  margin: 13px 0;
+  font-size: 12px;
+}
+.ls-error button {
+  border: none;
+  background: none;
+  color: #9d5942;
+  text-decoration: underline;
+  white-space: nowrap;
+}
+.ls-loading,
+.ls-progress {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  color: #6f8662;
+  font-size: 11px;
+}
+.ls-progress {
+  margin-bottom: 19px;
+}
+.ls-progress progress {
+  accent-color: #147d72;
+  margin-left: auto;
+  height: 5px;
+  max-width: 25%;
+}
+.ls-spin {
+  animation: ls-spin 1s linear infinite;
+}
+@keyframes ls-spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+@media (min-width: 1700px) {
+  .ls-cards {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+  }
+}
+@media (max-width: 1280px) {
+  .ls-page {
+    padding: 25px 0 20px;
+  }
+  .ls-generator {
+    flex-wrap: wrap;
+  }
+  .ls-generator-title {
+    width: 100%;
+  }
+  .ls-generator label {
+    flex: 1;
+    min-width: 90px;
+  }
+  .ls-cards {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+  .ls-intro {
+    gap: 20px;
+  }
+  .ls-batch-stats {
+    gap: 20px;
+  }
+}
+@media (max-width: 700px) {
+  .ls-page {
+    padding: 21px 16px 18px;
+  }
+  .ls-intro {
+    display: block;
+  }
+  .ls-intro h1 {
+    font-size: 30px;
+    letter-spacing: -0.6px;
+  }
+  .ls-intro h1 span {
+    display: block;
+    margin-top: 4px;
+  }
+  .ls-intro-aside {
+    align-items: flex-start;
+    margin-top: 20px;
+  }
+  .ls-intro-aside > svg {
+    display: none;
+  }
+  .ls-intro-aside small {
+    display: none;
+  }
+  .ls-generator {
+    padding: 17px;
+    gap: 13px;
+  }
+  .ls-generator label,
+  .ls-generator label:has(input[type="date"]) {
+    min-width: 40%;
+  }
+  .ls-primary {
+    width: 100%;
+  }
+  .ls-batch-bar {
+    flex-wrap: wrap;
+  }
+  .ls-batch-bar > label {
+    max-width: 100%;
+    width: 100%;
+  }
+  .ls-batch-stats {
+    width: 100%;
+    justify-content: space-between;
+  }
+  .ls-scale-panel {
+    padding: 14px;
+    gap: 16px;
+  }
+  .ls-scale-panel > div {
+    width: 100%;
+  }
+  .ls-section-heading {
+    align-items: flex-start;
+    flex-direction: column;
+    gap: 12px;
+  }
+  .ls-cards {
+    gap: 10px;
+  }
+  .ls-card {
+    padding: 11px 8px;
+  }
+  .ls-card-heading {
+    gap: 4px;
+  }
+  .ls-card-heading svg {
+    display: none;
+  }
+  .ls-card-heading strong {
+    font-size: 10px;
+  }
+  .ls-card-heading > span {
+    font-size: 9px;
+  }
+  .ls-card-scale {
+    flex-direction: column;
+    gap: 3px;
+  }
+  .ls-card-dates {
+    font-size: 8px;
+  }
+  .ls-pagination {
+    gap: 7px;
+    flex-wrap: wrap;
+  }
+  .ls-pagination > span:first-child {
+    width: 100%;
+  }
+  .ls-detail {
+    padding: 20px 12px 0;
+  }
+  .ls-detail-toolbar {
+    gap: 13px;
+  }
+  .ls-detail-toolbar button {
+    margin-left: 0;
+  }
+  .ls-phases {
+    grid-template-columns: 1fr;
+  }
+  .ls-footer {
+    font-size: 8px;
+    letter-spacing: 0;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .ls-spin {
+    animation: none;
+  }
+  .ls-page * {
+    transition: none !important;
+  }
+}

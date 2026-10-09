@@ -1,0 +1,20 @@
+{
+  "protocol_id": "landslide-stage-axis-v1",
+  "source_run": "artifacts/landslide-frozen-stage-heads-2026-10-08/run-v1",
+  "activity_run": "artifacts/landslide-raw-adjudication-2026-10-08/review-v3",
+  "conditions": ["dates", "day_index"],
+  "repetitions": 2,
+  "maximum_requests": 36,
+  "model": "qwen3.8-flash",
+  "temperature": 0.1,
+  "top_p": 0.3,
+  "max_tokens": 2048,
+  "retries": 0,
+  "hard_timeout_seconds": 7200,
+  "scoring": false,
+  "sealed_test_access": "none",
+  "intervention": "auxiliary horizontal presentation only: date+day at eight legacy ticks versus integer days at frozen raw-global ticks; vertical grid positions change with ticks",
+  "invariants": "same observations, centered estimates, line arrays, missing masks, panel geometry, x/y limits, raw images, seven-image order, prompt bytes, activity, stage compiler and support",
+  "schedule": "per active case dates/day_index then day_index/dates; reverse order for every second active case; no retries or outcome-dependent stopping",
+  "analysis": "all-record coverage, classes, failures, support suppression, paired disagreements and between-repeat variability; derivative sign only a disclosed diagnostic, never accuracy or method selection"
+}

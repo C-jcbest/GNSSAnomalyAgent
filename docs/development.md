@@ -1,12 +1,17 @@
 # 开发与运行
 
+论文方法的独立复现环境、固定源码、运行记录和命令见[方法复现](landslide-reproduction.md)。这些示例与 TAMA 开发试运行不替代正式滑坡对比；下一步执行设计见[对比实验安排](landslide-comparison-execution-plan.md)。
+
 ## 目录职责
 
 | 路径 | 职责 |
 | --- | --- |
 | src/gnss_sim/generator.py、schemas.py、storage.py | 生成编排、当前数据契约、批次存储 |
+| src/gnss_sim/landslide.py、landslide_store.py | 多年滑坡仿真契约、速度积分、观测质量与批次存储 |
+| src/gnss_sim/landslide_diagnostics.py | 仅用观测估计速度/加速度，输出无标签复核图 |
 | src/gnss_sim/numerical.py、visual.py、rendering.py | 数值方法、视觉解析/凭据、无标签检测图 |
 | src/gnss_sim/detection.py | 校准边界、运行登记、数值及视觉执行 |
+| src/gnss_sim/agent.py、experiment.py | LangChain 只读工具智能体、共享候选对照及新背景登记 |
 | src/gnss_sim/metrics.py、report.py | 原生标签评分、离线报告 |
 | src/gnss_sim/artifacts.py、api.py、cli.py | 文件读写、网页API、命令入口 |
 | scripts/setup_generator.py、generate_worker.py | 独立生成环境安装与上游调用 |
@@ -30,7 +35,7 @@ uv run gnss-sim visual --run <运行目录> --env-file <本机凭据文件>
 uv run gnss-sim evaluate --run <运行目录>
 ```
 
-视觉命令产生外部调用；其余命令不调用模型。用浏览器打开运行目录中的 `comparison.html` 查看结果。网页不读取旧报告副本，也不会自动连接模型API。
+`visual` 和 `experiment-run` 命令产生外部调用；其余命令不调用模型。用浏览器打开运行目录中的 `comparison.html` 查看结果。网页不读取旧报告副本，也不会自动连接模型API。
 
 ## 验证
 
@@ -47,3 +52,24 @@ npm --prefix web run build
 ## 本地文件
 
 `.venv/` 和 `.venv-generator/` 为可重建环境；`data/`、`runs/`、`artifacts/`、`papers/local/` 和凭据均不入Git。论文留在本地。不要在AGENTS.md堆积状态或历史记录；上游源码不要为满足lint而格式化。
+
+## LangChain 对照实验
+
+长期滑坡数据另用 `uv run gnss-sim generate-landslides --seed 20261009 --count 24 --days 1095`，默认生成复合阶段记录与稳定对照。网页 `/?view=landslides` 可生成、浏览及下载观测派生辅助图。它不依赖 `.venv-generator/`，也不支持下面的一年检测对照命令；范围与 API 见[长期滑坡数据设计](landslide-design.md)。
+
+在新目录登记后执行。示例seed只是占位，已用seed会被拒绝；96例对应24个背景组。复用校准文件必须与当前数值源码一致。
+
+```powershell
+uv run gnss-sim experiment-register --out <新实验目录> --seed <未用seed> --count 96 --parameters <冻结校准文件.json>
+uv run gnss-sim experiment-run --run <实验目录> --env-file .env
+```
+
+专门定位工具实验在新的运行目录使用 `experiment-register --design localization`，其余参数相同。默认从已登记校准seed查找独立Normal批次；可用 `--calibration-dataset <目录>` 显式指定，仍须核对完整Normal输入哈希。该设计运行三个复核组及无模型定位工具评分，调用上限22n，禁止改旧运行参数重跑。
+
+观测窗口内端点搜索实验使用 `experiment-register --design window`，同批比较新旧定位工具与智能体，调用上限19n。新窗口Point共享本批旧定位智能体的冻结输出，不再次请求；效果对照与限制见[检测与评价](detection.md)。
+
+Point局部图实验使用 `experiment-register --design point_context`，同批比较全年/局部图与仅视觉/数值工具复核的四种组合，上限22n。局部图由全部数值Point候选前后14日的原始观测生成，推理前登记图片哈希；局部组的Range共享对应全年组结果。只改变Point图像输入，不修改数值阈值。
+
+Point双解释实验使用 `experiment-register --design point_hypothesis`，上限22n。四个Point复核组使用相同全年与局部图，只比较原说明与同时考察正常背景尖峰的新说明；四组Range均共享本批窗口智能体冻结结果。判据与限制见[检测与评价](detection.md)。
+
+登记会保存源码与依赖锁快照；执行目录存在开始标记时禁止重复执行。异常中断后先核对逐请求开始/结束账本，不自动重发。`evaluation.json` 包含十种方法和背景组配对区间，`comparison.html` 可离线逐例查看；`langchain_agent/requests/` 和 `boundary_agent/requests/` 保存工具轨迹。上限和比较口径见[检测与评价](detection.md)。

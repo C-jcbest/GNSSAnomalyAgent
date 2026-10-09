@@ -1,0 +1,44 @@
+<!doctype html><html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>结构化阶段证据同期对照</title><style>
+body{font-family:system-ui,"Microsoft YaHei",sans-serif;background:#f3f5f0;color:#213a34;max-width:1240px;margin:auto;padding:28px;line-height:1.65}
+h1{font-size:30px}h2{font-size:22px}h3{font-size:16px}a{color:#23675a}section{background:white;border:1px solid #d4ded4;border-radius:8px;padding:22px;margin:20px 0}
+.notice{border-left:4px solid #aa7c35;padding-left:14px}.controls,.links{display:flex;flex-wrap:wrap;gap:16px;align-items:center}
+select{font:inherit;padding:7px;background:white;border:1px solid #a9beb4;border-radius:4px}img{display:block;width:100%;height:auto}
+table{width:100%;border-collapse:collapse;font-size:14px}td,th{padding:9px;text-align:left;border-bottom:1px solid #dde5dd}.scroll{overflow:auto}
+pre{white-space:pre-wrap;overflow-wrap:anywhere;background:#f0f4ef;padding:16px;font-size:13px}.inputs{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px}
+summary{cursor:pointer;padding:10px 0}.caption{color:#52645c;font-size:14px}@media(max-width:700px){body{padding:12px}section{padding:14px}.inputs{grid-template-columns:1fr}}
+</style></head><body>
+<header><p>GNSS / STAGE EVIDENCE · PAIRED REPEATS</p><h1>阶段判别：逐活动结构化证据对照</h1><p id="run-summary"></p>
+<p class="notice">固定活动、日轴七图、辅助缓存、模型、输出契约与支撑。对照原提示与追加的逐活动结构化证据指令；干预同时含观察顺序和证据强调。无独立阶段参考，分歧、覆盖与符号一致性均不是准确率。</p>
+<div class="links"><a href="daily-stage-evidence.csv">四组逐日 CSV</a><a href="analysis.json">配对分析</a><a href="results.json">冻结结果</a><a href="input-image-audits.json">冻结输入图哈希</a><a href="protocol.json">固定协议</a><a href="independent-stage-review-template.json">未审独立复核模板</a><a href="independent-stage-review-guide.md">复核指南</a><a href="http://127.0.0.1:18782/">历史横轴对照</a><a href="http://127.0.0.1:18781/">历史三阶段头</a><a href="http://127.0.0.1:18780/">原图活动复核</a></div></header>
+<section><h2>两组各两遍：完整结果</h2><div id="totals" class="scroll"></div><p>control：原提示逐字节保留；structured：仅追加逐活动原图方向→速度大小前中后演化→内部转折→阶段证据指令。两组实际七图逐字节相同，无数值摘要／旧答案。3条无活动各组各遍跳过，不算视觉识别正常；复核模板未填，不是参考标签。</p>
+<details><summary>同期组间与组内重复分歧</summary><pre id="pairs"></pre></details><details><summary>31/61/91日切向符号诊断及分母</summary><pre id="signs"></pre></details>
+<details><summary>事后共同成功子集（响应相关筛选，非主结果）</summary><pre id="sensitivity"></pre></details><details><summary>完整调用成本及结束原因</summary><pre id="costs"></pre></details><p class="caption">A负／D正仅表示区间预测与瞬时拟合符号分歧；噪声、居中平滑、阶跃及转折都会影响，不能当错误日数。S没有独立恒速判据。</p></section>
+<section><div class="controls"><label>记录 <select id="case-select"></select></label><label>视图 <select id="view-select"><option value="0">全记录</option><option value="1">前段 0–409</option><option value="2">中段 320–774</option><option value="3">后段 685–1094</option></select></label><label>阶段结果 <select id="mode-select"><option value="final">应用支撑后</option><option value="native">原生输出</option></select></label></div>
+<h2 id="case-title"></h2><p id="case-summary"></p><a id="plot-link" target="_blank"><img id="plot" alt="两证据指令组两遍阶段色带"></a>
+<p class="caption">活动：橙=活动，浅绿=静稳，黄=未知，灰=缺测。阶段：橙=A，蓝=S，金=D，黄=未知，浅绿=none，灰=缺测。叠图未送模型，原始日轴与纵轴上下限沿用冻结原图。</p>
+<div id="case-totals" class="scroll"></div><details><summary>该记录分歧与标签文件</summary><pre id="case-pairs"></pre><div id="files" class="links"></div></details></section>
+<section><h2>真实视觉过程</h2><div class="controls"><label>调用组 <select id="arm-select"><option value="control-r1">原提示 · 第一遍</option><option value="structured-r1">结构化证据 · 第一遍</option><option value="control-r2">原提示 · 第二遍</option><option value="structured-r2">结构化证据 · 第二遍</option></select></label></div>
+<p id="request-status"></p><div id="request-links" class="links"></div><details id="request-detail"><summary>完整实际提示／原回答／参数</summary><h3>实际提示</h3><pre id="prompt"></pre><h3>原始回答（不修补）</h3><pre id="answer"></pre><h3>凭据与编译状态</h3><pre id="receipt"></pre></details>
+<h3>实际发送的七图与顺序</h3><div id="inputs" class="inputs"></div></section>
+<section><h2>推理冻结后的内容审查</h2><p>作者事后诊断，不是独立阶段真值，不修改活动或预测。</p><div id="findings"></div></section>
+<script id="page-data" type="application/json">__PAGE_DATA__</script><script>
+const data=JSON.parse(document.getElementById('page-data').textContent),el=id=>document.getElementById(id);
+const arms=['control-r1','structured-r1','control-r2','structured-r2'];
+const esc=v=>String(v).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+function table(items){return '<table><thead><tr><th>组／遍</th><th>原生 A/S/D</th><th>最终 A/S/D</th><th>活动内未知日</th><th>过滤日</th><th>成功／失败／跳过</th></tr></thead><tbody>'+arms.map(arm=>{let h=items[arm],n=h.native_activity_features,f=h.final_activity_features;return `<tr><td>${arm}</td><td>${n.acceleration||0}/${n.steady_motion||0}/${n.deceleration||0}</td><td>${f.acceleration||0}/${f.steady_motion||0}/${f.deceleration||0}</td><td>${f.unknown||0}</td><td>${Object.values(h.suppressed_support).reduce((a,b)=>a+b,0)}</td><td>${esc(h.status||JSON.stringify(h.statuses))}</td></tr>`;}).join('')+'</tbody></table>';}
+el('run-summary').textContent=`12 条完整记录 × 两组 × 两遍；${data.summary.calls} 次真实调用，${data.summary.total_tokens} token，无重试。`;
+el('totals').innerHTML=table(data.analysis.arms);el('pairs').textContent=JSON.stringify(data.analysis.pairs,null,2);el('signs').textContent=JSON.stringify(data.analysis.sign_counts,null,2);el('sensitivity').textContent=JSON.stringify(data.analysis.sensitivity,null,2);el('costs').textContent=JSON.stringify(data.analysis.costs,null,2);
+for(const c of data.cases){let o=document.createElement('option');o.value=c.case_id;o.textContent=c.case_id;el('case-select').appendChild(o);}
+function update(){let c=data.cases.find(c=>c.case_id===el('case-select').value),mode=el('mode-select').value,v=Number(el('view-select').value),arm=el('arm-select').value,r=c.requests[arm];
+el('case-title').textContent=c.case_id;el('case-summary').textContent=`冻结有观测活动 ${c.active_days} 日；两组共享活动与最终支撑。`;
+el('plot').src=c.plots[mode][v];el('plot-link').href=c.plots[mode][v];el('case-totals').innerHTML=table(c.results);el('case-pairs').textContent=JSON.stringify(c.pairs,null,2);
+el('files').innerHTML=arms.map(a=>`<a href="native/${c.case_id}-${a}.json">${a} 原生</a><a href="daily/${c.case_id}-${a}.json">${a} 最终</a>`).join('');
+el('request-detail').hidden=!r;el('request-links').innerHTML='';el('inputs').innerHTML='';
+if(r){el('request-status').textContent=c.results[arm].status+'；错误：'+JSON.stringify(c.results[arm].error);el('prompt').textContent=r.started.prompt;el('answer').textContent=r.response.output||'没有完整回答';el('receipt').textContent=JSON.stringify(r.receipt_summary,null,2);
+el('request-links').innerHTML=`<a href="requests/${r.started.request_id}.started.json">完整请求</a><a href="requests/${r.started.request_id}.response.json">完整响应</a>`;
+el('inputs').innerHTML=r.images.map((p,i)=>`<a target="_blank" href="${esc(p)}"><img loading="lazy" src="${esc(p)}" alt="实际输入图 ${i+1}"><span>${i+1}. ${esc(p)}</span></a>`).join('');
+}else{el('request-status').textContent='无确认活动：确定性跳过，没有API调用或模型回答。';el('prompt').textContent='';el('answer').textContent='';el('receipt').textContent='';}
+let findings=data.findings.filter(f=>f.case_id===c.case_id);el('findings').innerHTML=findings.length?findings.map(f=>`<p>${esc(f.finding)}</p><p class="caption">${esc(f.limit)}</p>`).join(''):'没有额外作者裁决，不据空白认定预测正确。';}
+for(const id of ['case-select','view-select','mode-select','arm-select'])el(id).addEventListener('change',update);update();
+</script></body></html>

@@ -1,0 +1,24 @@
+{
+  "protocol_id": "landslide-stage-numeric-v1",
+  "source_axis_run": "artifacts/landslide-stage-axis-2026-10-08/run-v1",
+  "source_evidence_run": "artifacts/landslide-stage-evidence-2026-10-08/run-v1",
+  "conditions": [
+    "image",
+    "numeric"
+  ],
+  "repetitions": 2,
+  "maximum_requests": 36,
+  "model": "qwen3.8-flash",
+  "temperature": 0.1,
+  "top_p": 0.3,
+  "max_tokens": 2048,
+  "retries": 0,
+  "hard_timeout_seconds": 7200,
+  "scoring": false,
+  "sealed_test_access": "none",
+  "intervention": "append fixed observation-only numeric summary and field explanation to original prompt; no added images",
+  "invariants": "original prompt prefix, same seven images/order, frozen activity, cached estimates, y limits, units, gaps, support, model, settings, schema and compiler",
+  "schedule": "image-r1 numeric-r1 numeric-r2 image-r2; reversed for every second active case",
+  "analysis": "all twelve records, paired unknown/classes/failure/support counts, repeated runs, common-success sensitivity, real costs; no accuracy without independent reference",
+  "bin_days": 30
+}
