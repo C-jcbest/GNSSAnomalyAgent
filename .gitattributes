@@ -1,2 +1,12 @@
-* text=auto eol=lf
-vendor/** -text -whitespace
+*.py text eol=lf
+*.md text eol=lf
+*.json text eol=lf
+*.toml text eol=lf
+*.lock text eol=lf
+.env.example text eol=lf
+.gitattributes text eol=lf
+.gitignore text eol=lf
+# Cached evidence must retain exact fetched bytes and its original formatting.
+papers/evidence/** -text -whitespace
+# Matplotlib SVG paths contain generator-owned trailing spaces.
+results/**/*.svg -text -whitespace

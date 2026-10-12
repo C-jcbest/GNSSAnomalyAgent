@@ -1,0 +1,3404 @@
+
+
+
+Harnessing Vision-Language Models for Time Series Anomaly Detection
+
+
+
+ 
+
+  // Restore the saved color scheme preference, or
+  // enact the browser preference if "automatic", 
+  // without expecting DOM load to have completed.
+  //
+  // Also restore any saved readingmode and ToC display preferences.
+  function initializeReadingPreferences() {
+    let saved_theme = localStorage.getItem("ar5iv_theme") || "automatic";
+    if (saved_theme === "automatic") {
+      if (window.matchMedia("(prefers-color-scheme: dark)").matches) {
+        saved_theme = "dark";
+      }
+    }
+    if (saved_theme == "dark") {
+      document.documentElement.setAttribute("data-theme", "dark");
+    } else {
+      document.documentElement.setAttribute("data-theme", "light");
+    }
+
+    const tocDisplay = localStorage.getItem('arxiv_html_paper_toc_display');
+    if (tocDisplay) {
+      document.documentElement.setAttribute("data-toc-display", tocDisplay);
+    }
+    const readingMode = localStorage.getItem('arxiv_html_paper_reading_mode');
+    if (readingMode) {
+      document.documentElement.setAttribute("data-reading-mode", readingMode);
+    }
+    // Pre-apply spinout-banner dismissal here, before the banner paints, so it
+    // never flashes in only to be hidden later by the deferred arxiv-header.js.
+    // Key matches arxiv-header.js: "arxiv-banner-dismissed:" + data-banner-name.
+    if (localStorage.getItem('arxiv-banner-dismissed:spinout-nonprofit')) {
+      document.documentElement.setAttribute("data-banner-dismissed", "");
+    }
+  }
+  // Run as soon as JS starts, to minimize repainting
+  initializeReadingPreferences();
+
+
+
+
+
+
+
+  /* Banner pre-dismissal (set above before paint -> no flash-then-hide) and
+     reading-mode chrome hiding. */
+  html[data-banner-dismissed] .ds-announcement { display: none; }
+  html[data-reading-mode="enabled"] .ds-announcement,
+  html[data-reading-mode="enabled"] .ds-site-footer { display: none; }
+  /* Keep the announcement text dark on the Open-Blue band in both colour themes
+     (otherwise it inherits the paper's warm-wash text in dark mode and washes out). */
+  .ds-announcement-text { color: var(--arxiv-ink, #1c1a17); }
+
+
+
+
+
+  
+    
+      Report GitHub Issue
+      ×
+    
+
+    
+      Title:
+      
+
+      
+Content selection saved. Describe the issue below:
+
+      Description:
+      
+    
+
+    
+      Submit without GitHub
+      Submit in GitHub
+    
+  
+
+    
+    arXiv is now an independent nonprofit!
+    Learn more
+    ×
+  
+
+
+  
+    
+      Back to arXiv
+    
+  
+  
+  
+    Why HTML?
+    
+      
+        
+      
+      Report Issue
+    
+    
+      
+        
+        
+      
+      Back to Abstract
+    
+    
+    
+      
+        
+      
+      Download PDF
+    
+    
+      
+        
+        
+      
+    
+    
+    
+      
+        
+      
+    
+    
+    
+      
+        
+          
+          
+        
+      
+      
+        
+          
+          
+        
+      
+      
+        
+          
+          
+        
+      
+    
+  
+
+
+
+
+Abstract
+
+Introduction
+
+Related Work
+
+Methodology
+
+
+ViT4TS: Visual Times Series Anomaly Screening
+
+VLM4TS: Anomaly Verification and Refinement
+
+
+Experiments
+
+
+Experimental Setup
+
+Performance Evaluation
+
+Additional Analysis
+
+
+Conclusion
+
+Acknowledgments
+
+References
+
+A Experimental Details and Further Discussion
+
+
+Benchmark Datasets
+
+Model Setup
+
+Baseline Methods and Evaluation Procedure
+
+Data Preprocessing, Postprocessing and Evaluation.
+
+Prompt Design for VLM4TS
+
+Limitation and Future Work.
+
+
+B Additional Experimental Results
+
+
+Full Ablation Analysis
+
+Multivariate Extension.
+
+Elapsed Time Comparison
+
+Embedding Analysis
+
+Recall and Precision Comparison between ViT4TS and VLM4TS
+
+Choice of Patch Size and Its Effect on Screening Performance
+
+Choice of VLM Backbone
+
+Comparison with Spectrogram-Based TSAD Approaches.
+
+Full F1 scores for Table 1
+
+
+
+
+
+  
+    License: CC BY 4.0
+  
+  
+arXiv:2506.06836v2 [cs.CV] 25 Nov 2025
+
+
+
+Harnessing Vision-Language Models for Time Series Anomaly Detection
+
+
+Zelin He
+
+  
+Sarah Alnegheimish
+
+  
+Matthew Reimherr
+††thanks: Work unrelated to Amazon. 
+Code available at https://github.com/ZLHe0/VLM4TS.
+
+Abstract
+    
+
+Time-series anomaly detection (TSAD) has played a vital role in a variety of fields, including healthcare, finance, and sensor-based condition monitoring. Prior methods, which mainly focus on training domain-specific models on numerical data, lack the visual–temporal understanding capacity that human experts have to identify contextual anomalies. To fill this gap, we explore a solution based on vision language models (VLMs). Recent studies have shown the ability of VLMs for visual understanding tasks, yet their direct application to time series has fallen short on both accuracy and efficiency. To harness the power of VLMs for TSAD, we propose a two-stage solution, with (1) ViT4TS, a vision-screening stage built on a relatively lightweight pre-trained vision encoder, which leverages 2-D time series representations to accurately localize candidate anomalies; (2) VLM4TS, a VLM-based stage that integrates global temporal context and VLM’s visual understanding capacity to refine the detection upon the candidates provided by ViT4TS. We show that without any time-series training, VLM4TS outperforms time-series pre-trained and from-scratch baselines in most cases, yielding a 24.6% improvement in F1-max score over the best baseline. Moreover, VLM4TS also consistently outperforms existing language model-based TSAD methods and is on average 36 × more efficient in token usage.
+  
+
+
+    
+
+
+1Pennsylvania State University
+
+2Massachusetts Institute of Technology
+
+3Amazon
+
+zbh5185@psu.edu, smish@mit.edu, mlr36@psu.edu
+
+  
+
+
+
+Introduction
+
+
+
+Time series anomaly detection (TSAD) is an important task for maintaining safety and efficiency in many domains, such as cloud computing, industrial monitoring, and web services (Lavin and Ahmad 2015). One critical challenge is that time series signals usually exhibit diverse temporal scales and dynamic behaviors, demanding deep temporal understanding to distinguish true anomalies from benign fluctuations. For example, a sudden increase in spacecraft telemetry readings may be benign if it has recurred frequently in historical records, whereas a gradual drift that deviates from an established trend could be an anomaly (Hundman et al. 2018). However, most existing TSAD models are built based on domain-specific assumptions and are trained on numerical data, limiting them to detecting surface-level anomalies without rich visual-temporal understanding capacities that human experts have (Kong et al. 2025).
+
+
+Figure 1: (Left) max F1 score averaged over all benchmarks, comparing VLM4TS to the best time-series-pretrained and from-scratch baselines. Error bars indicate standard deviation across datasets. (Right) max F1 score and token usage of VLM4TS versus language-model-based baselines.
+
+
+Figure 2: (a) Presenting time series as textual input for LLMs can obscure real anomalies and increase incorrect detection, whereas visualizing time series as line plots makes contextual anomalies, such as distortions, readily apparent. (b) The resolution–context dilemma in VLM-based TSAD: a global plot preserves long-range context but compresses details for detection (left), while small-window views maintain high resolution but provide limited context and incur high token cost (right).
+
+
+
+Recent breakthroughs in multimodal foundation models have demonstrated human-level understanding across multiple modalities such as images, audio, and video (Wu et al. 2023). However, there is not yet a well-developed time-series-language model that brings human-like understanding capacities for time series analysis and anomaly detection, largely because time series–text corpora are scarce (Kong et al. 2025). Vision–language models (VLMs) have become a good alternative for two main reasons. First, their vision transformer architecture mimics a human-expert visual inspection mechanism—comparing and contrasting patterns at multiple scales to localize and characterize anomalies. Compared with LLM-based approaches (Alnegheimish et al. 2024), a vision-based mechanism is especially effective at examining contextual anomalies that don’t include extreme values but show deviation from normal signal patterns, see Figure 2-(a). Second, pretraining on massive image–text datasets equips VLMs with strong inference and reasoning capabilities that generalize across domains (Nagar et al. 2024). By encoding time series as visual representations, we can leverage VLMs’ rich visual–textual understanding to perform TSAD tasks.
+
+
+
+Recently, few pioneering works have explored VLM-based TSAD by rendering raw time series as line graphs with x-axis tick marks, then prompting the model to return anomaly intervals by referencing those tick labels (Zhuang et al. 2024; Zhou and Yu 2024; Xu et al. 2025). In practice, however, such a naive application of VLMs faces a major resolution-context dilemma when selecting the window size, as demonstrated in Figure 2-(b). With short context windows, we face challenges with high cost, latency, and limited context. To not only keep tick marks legible but also satisfy VLM input constraints, long series must be split into many small rolling window plots. For example, a 1,000-step sequence might produce around 20 images, consuming around 20,000 tokens and incurring high latency, which is untenable for real time monitoring across thousands of sensors (Alnegheimish et al. 2025). Furthermore, each plot captures only a brief temporal segment, thus preventing understanding over global trends or long range dependencies that distinguish true anomalies from transient noise. On the other hand, with long context windows, we face challenges with limited resolution, poor localization, and missed anomalies. Plotting long series as one single image reduces token usage but significantly degrades the image resolution. The VLM cannot pinpoint the exact interval boundaries via crowded x-axis ticks, even if an anomalous behavior is identified. Moreover, the volume of visual content overwhelms the attention of the model, causing it to overlook some of the anomalies.
+
+
+
+In this paper, our goal is to harness the power of VLMs for TSAD by addressing the aforementioned resolution–context dilemma in a cost-effective manner. We propose a novel framework to decompose the anomaly detection task into two components: localization and verification. The first step localizes anomalies via a lightweight pretrained vision encoder (ViT4TS), while the second step verifies anomalies with a heavier yet more powerful VLM (VLM4TS). We emphasize that both stages of our framework work in a zero‐shot setting—that is, neither ViT4TS nor VLM4TS is fine‐tuned on the in-domain time series data. ViT4TS uses off-the-shelf, image-pretrained weights to screen windows purely via visual pattern matching, and VLM4TS relies on the pretrained cross-modal understanding of a VLM, showing great generalizability to a broad range of TSAD tasks. Figure 1 showcases the gain in detection performance and token efficiency of our approach. To our knowledge, this is the first VLM-based TSAD solution to achieve both superior detection accuracy and practical computational and token efficiency. To summarize, our main contributions are listed as follows.
+
+
+
+∙\bullet Motivated by human diagnostic workflows, we explore a solution that casts a 1-D anomaly detection as a 2-D visual understanding problem with VLMs. To resolve the resolution–context dilemma in VLM application, we explore decomposing the problem into sequential localization and verification stages.
+
+
+
+∙\bullet For the localization task, we propose ViT4TS, which leverages rich multi-scale cross-patch comparison to accurately localize anomaly candidates; then, for the verification task, we propose VLM4TS, that produce a final detection by filtering and refining on the detected anomalous intervals raised by ViT4TS with a deep temporal understanding on global temporal context.
+
+
+
+∙\bullet We demonstrate that our approach generalizes across domains and achieves state-of-the-art performance on multiple benchmark datasets without dataset-specific tuning, and requiring much less token usage than existing language model-based methods.
+
+
+
+
+Related Work
+
+
+
+In-domain TSAD.
+Early in-domain TSAD methods relied on statistical and distance-based techniques—e.g., threshold detectors and ARIMA residual analysis (Pena et al. 2013), which demand clean, uncontaminated training data and extensive domain expertise. Later on, many deep learning-based methods were introduced, applying structures like RNNs and sequence autoencoders to detect anomalies via prediction or reconstruction error (Hundman et al. 2018; Malhotra et al. 2016; Wong et al. 2022). Some works also explored VAE- and GAN-based frameworks to model normal behavior probabilistically (Geiger et al. 2020; Li et al. 2020; Kieu et al. 2019; Yin et al. 2020). More recently, Transformer-based models have shown the capacity to capture more complex temporal patterns for detection (Xu et al. 2021; Tuli et al. 2022). For a comprehensive survey, see (Zamanzadeh Darban et al. 2024). Although highly effective in-domain, these approaches require large training sets and may not generalize well beyond the conditions they were trained on.
+
+
+
+Foundation Model-based and LLM-based TSAD.
+Recent efforts pretrain general-purpose time series encoders (Gao et al. 2024; Zhang et al. 2024) or build large forecasting foundation models (Rasul et al. 2023; Ansari et al. 2024; Das et al. 2024; Goswami et al. 2024; Shi et al. 2024) that can be adapted for anomaly detection. However, these models usually excel at forecasting the next few time steps or encoding a short time window, but lack the capacity to perform human-like understanding over long-range temporal context, making them inefficient for detecting contextual anomalies across extended horizons. Prompting LLMs directly on numerical sequences has also been explored (Alnegheimish et al. 2024), yet they have shown that naive prompting underperforms some of the classical TSAD methods and comes with huge token costs.
+
+
+
+Vision and VLM-based TSAD.
+Treating time series as images has shown promise across a range of tasks (Ni et al. 2025), including classification (Costa et al. 2024; Kaewrakmuk and Srinonchat 2024; Li et al. 2023) and forecasting (Yang et al. 2023; Zeng et al. 2023; Semenoglou et al. 2023). However, the application in unsupervised anomaly detection remains relatively underexplored. There are few works exploring vision-based TSAD approaches using spectrograms or RP transformations (Namura and Ichikawa 2024; Lin et al. 2024), yet these approaches works purely with the vision modality. As a result, these pure vision-based approaches do not possess the multimodal reasoning and temporal understanding capabilities. Recent prototypes like TAMA (Zhuang et al. 2024) and related methods (Zhou and Yu 2024; Xu et al. 2025) prompt VLMs on small rolling-window plots to assign anomaly scores, but they incur prohibitive token costs and offer only limited temporal context. Consequently, they cannot scale to real-world tasks or capture contextual anomalies based on long-range temporal understanding required for robust anomaly detection.
+
+
+
+
+Methodology
+
+
+
+To overcome the resolution–context dilemma and token inefficiency of naive VLM-based TSAD, we introduce a unified, two-stage framework (Figure 3). For the first stage, we propose ViT4TS, which leverages a lightweight, pretrained vision transformer on sliding-window plots to rapidly screen the entire series and generate anomaly candidates via cross-patch comparisons. In the second stage, we propose VLM4TS, which takes each candidate proposal, renders it at a larger temporal scale, and applies an LLM’s cross-modal understanding to verify and precisely localize anomalies across extended horizons.
+
+
+
+Problem Formulation.
+Consider a univariate time series 𝒙=(x1,…,xT)∈ℝT\boldsymbol{x}=(x_{1},...,x_{T})\in\mathbb{R}^{T}, where xtx_{t} represents the value sampled at timestamp tt. Assume there exists a set of anomalies of varied length 𝐀={(ts,te)i∣1≤ts<te≤T}i=1m\mathbf{A}=\{\left(t_{s},t_{e}\right)^{i}\mid 1\leq t_{s}<t_{e}\leq T\}_{i=1}^{m} that is unknown a priori, our goal is to find a set of mm anomalous time intervals, where tst_{s} and tet_{e} represent the start and end time points of an anomalous interval. In this paper, we mainly consider the univariate time series to focus on key method development; a discussion on extending the method for multivariate time series is provided in the Appendix.
+
+
+Figure 3: Overview of ViT4TS/VLM4TS (upper/lower pane). In ViT4TS, the raw time series is sliced into windows, and each window is transformed into an image and then embedded into multi-scale feature vectors. By comparing each of these features to others, ViT4TS localizes potentially anomalous regions, and outputs a set of candidate anomaly intervals. Then in VLM4TS, a VLM is then prompted to integrate global temporal context to refine the detection.
+
+
+
+ViT4TS: Visual Times Series Anomaly Screening
+
+
+
+Time Series as Line Graphs. We convert 1-D time series into 2-D images by rendering them as clean line plots, a representation that aligns with both human intuition and the visual pretraining of vision encoders. Line graphs preserve temporal ordering and relative amplitude changes, enabling our ViT4TS module to perform meaningful cross-patch comparisons. As illustrated in Figure 3, to minimize non-informative visual artifacts, we omit axis ticks, legends, and other decorative elements.
+
+
+
+Rolling Windows and Image Creation. Pretrained vision encoders usually require square inputs (e.g. 224×224224\times 224 or 336×336336\times 336 pixels), yet raw series 𝒙\boldsymbol{x} often span far more time steps than a single image width. To achieve precise, local-scale anomaly localization, we extract overlapping windows of length LwL_{w}—chosen to match the image width—using a stride Ls=⌊Lw/4⌋L_{s}=\lfloor L_{w}/4\rfloor. Each segment is rendered as a clean line plot on an Lw×LwL_{w}\times L_{w} canvas, where each time tick maps to one pixel column.
+To make images of different time segments directly comparable, we use the same y-axis limits set to [mint⁡xt,maxt⁡xt][\min_{t}x_{t},\max_{t}x_{t}] for every image. This process produces N≈(T−Lw)/Ls+1N\approx(T-L_{w})/L_{s}+1 images 𝐈i∈ℝLw×Lw×3\mathbf{I}_{i}\in\mathbb{R}^{L_{w}\times L_{w}\times 3} (replicated to three channels for compatibility), which are then fed into vision encoders. For brevity, we omit explicit window subscripts in 𝐈i\mathbf{I}_{i} in later sections.
+
+
+
+Multi-Scale Embedding Extraction.
+For image encoding, we adopt the pretrained CLIP vision encoder fclipf_{\mathrm{clip}} (Schuhmann et al. 2021), as it is a standard VLM vision encoder backbone (Liu et al. 2023; Liu et al. 2024) and thus can align our visual screening results with the subsequent VLM4TS stage, yet any other vision model can also be used within this framework. To capture fine-grained time series anomalies, following the standard practice in image segmentation (Jeong et al. 2023; Mishra et al. 2021), for each image we extract the full patch-level penultimate feature map
+𝐅=fclip​(𝐈)∈ℝP×P×D,\mathbf{F}=f_{\mathrm{clip}}(\mathbf{I})\;\in\;\mathbb{R}^{P\times P\times D},
+where PP is the patch size and DD is the embedding dimension. In this way, anomalies like narrow spikes or brief dips can be localized at patch resolution.
+
+
+
+At the same time, many anomalies, such as an extended jump or a drift that distorts the temporal patterns over dozens of time steps, will span multiple patches and demand broader context. To capture features at varying spatial scales, we generate pooled feature maps {𝐅(k)}k∈𝒦\{\mathbf{F}^{(k)}\}_{k\in\mathcal{K}} by applying average pooling with kernel size kk and stride 1 over the base patch feature map 𝐅∈ℝP×P×D\mathbf{F}\in\mathbb{R}^{P\times P\times D}. For each k∈𝒦k\in\mathcal{K} and spatial location (i,j)(i,j),
+
+
+
+
+
+𝐅i,j,d(k)=1k2​∑u=0k−1∑v=0k−1𝐅i+u,j+v,d.\mathbf{F}^{(k)}_{i,j,d}=\frac{1}{k^{2}}\sum_{u=0}^{k-1}\sum_{v=0}^{k-1}\mathbf{F}_{i+u,\;j+v,\;d}.
+
+
+
+Here i,j=1,…,P−k+1i,j=1,\dots,P-k+1 and d=1,…,Dd=1,\dots,D.
+Each 𝐅(k)∈ℝ(P−k+1)×(P−k+1)×D\mathbf{F}^{(k)}\in\mathbb{R}^{(P-k+1)\times(P-k+1)\times D} aggregates overlapping k×kk\times k neighborhoods, trading fine spatial detail for broader contextual information. These scale-specific feature maps are collected for later aggregation. Another advantage of such a multi-scale embedding is to enable rich cross-window comparisons, which in turn allows a larger rolling-window stride LsL_{s}, and thus improving efficiency without sacrificing localization accuracy.
+
+
+
+Cross-Patch Comparison.
+As we don’t have any ground-truth normal reference, we leverage the rarity of anomalies by matching each window’s patch embeddings against those of all other windows at multiple scales. Concretely, for each sliding-window index ii and scale k∈𝒦k\in\mathcal{K}, let
+𝐋i(k)∈ℝP2×D\;\mathbf{L}_{i}^{(k)}\in\mathbb{R}^{P^{2}\times D}
+denote the flattened embedding grid. To score patch pp in window ii, we first compute its cosine dissimilarity to every patch rr in each other window j≠ij\neq i, then aggregate across windows via the median, that is, we obtain a cross-patch reference map
+
+
+
+
+
+
+𝐒i(k)​[p]=medianj≠i​𝑼i,j(k)​[p],with\displaystyle\mathbf{S}_{i}^{(k)}[p]=\mathrm{median}_{j\neq i}\,\boldsymbol{U}_{i,j}^{(k)}[p],\ \text{with}
+
+
+
+
+
+𝑼i,j(k)​[p]=minr⁡[1−cos⁡(𝐋i(k)​[p],𝐋j(k)​[r])].\displaystyle\boldsymbol{U}_{i,j}^{(k)}[p]=\min_{r}\bigl[1-\cos(\mathbf{L}_{i}^{(k)}[p],\mathbf{L}_{j}^{(k)}[r])\bigr].
+
+
+
+Such a cross-patch matching can flexibly capture local pattern correspondences, regardless of spatial position, making it capable of detecting rare patterns while being robust to irregular seasonal shifts, trends, or periodic motifs. To reduce memory usage, we also evaluate a median-reference variant: we first compute a single reference map and then score each test patch, that is,
+
+
+
+
+
+
+𝐒~i(k)​[p]=minr⁡[1−cos⁡(𝐋i(k)​[p],𝐕(k)​[r])],with\displaystyle\tilde{\mathbf{S}}_{i}^{(k)}[p]=\min_{r}\bigl[1-\cos(\mathbf{L}_{i}^{(k)}[p],\mathbf{V}^{(k)}[r])\bigr],\text{with}
+
+
+
+
+
+𝐕(k)​[r]=medianj​𝐋j(k)​[r].\displaystyle\mathbf{V}^{(k)}[r]=\mathrm{median}_{j}\mathbf{L}_{j}^{(k)}[r].
+
+
+
+The median-reference variant drastically reduces memory usage, while the all-pairs variant remains more sensitive to rare anomalies. In our main experiments, we adopt the median-reference approach for its efficiency and report the min-reference results in the Appendix. Finally, to produce a single, fine-grained anomaly map, we upsample each scale-specific map {𝐒i(k)}k∈𝒦\{\mathbf{S}_{i}^{(k)}\}_{k\in\mathcal{K}} to the base patch resolution and fuse them via harmonic averaging at every patch location. This multi-scale fusion combines the pinpoint sensitivity of small-scale scores with the broader context captured at larger scales. Examples of the resulting aggregated patch-level anomaly maps are shown in Figure 3.
+
+
+
+Anomaly Scoring and Localization.
+To assemble a final anomaly score per time step, we first map each fused patch-level score back to its original time index and average overlapping contributions to form a 2-D anomaly map 𝐌∈ℝP×T\mathbf{M}\in\mathbb{R}^{P\times T}, where PP is the patch resolution and TT the series length. We then collapse 𝐌\mathbf{M} to a 1-D score s∈ℝTs\in\mathbb{R}^{T} by taking the qq-th quantile across all rows:
+s(t)=quantileq(𝐌:,t).s(t)=\mathrm{quantile}_{q}\bigl(\mathbf{M}_{:,t}\bigr).
+Lower qq (e.g. 0.1) increases sensitivity to subtle distortions, while higher qq (e.g. 0.5) emphasizes large spikes; we set q=0.25q=0.25 for a balanced trade-off (See the Appendix for details). Finally, we choose a threshold τ\tau at the (1−α)(1-\alpha)-Gaussian quantile of ss and extract all contiguous intervals 𝐀^={(ts,te)i∣s(t)>τ,∀ts≤t≤te}i=1m\hat{\mathbf{A}}=\{(t_{s},t_{e})^{i}\mid s(t)>\tau,\ \forall\,t_{s}\leq t\leq t_{e}\}_{i=1}^{m} as our detected anomalies from ViT4TS.
+
+
+
+
+VLM4TS: Anomaly Verification and Refinement
+
+
+
+Once ViT4TS produces a set of accurate candidate intervals, we send the full series image and these candidate proposals to VLM4TS for verification under the global context. ViT4TS excels at precise, local detection but may flag benign fluctuations or miss extended anomalies; VLM4TS uses cross-modal understanding along with the global temporal context to resolve these cases. In our main experiments, we employ GPT-4o, and evaluate alternatives in ablation studies.
+
+
+
+Visual Input. We render each complete time series as an ordinary line graph—with evenly spaced x-axis ticks and y-axis value labels—so that the VLM can perceive trends, seasonality, and drifts at a glance. Because ViT4TS has already provided precise endpoints, we feed this single, full-length image per signal into the VLM’s vision channel, avoiding further windowing and enabling understanding over the entire horizon.
+
+
+
+Textual Input. In parallel, we supply a prompt that (1) lists the initial proposals 𝐀^\hat{\mathbf{A}} and remind the model these were generated from local shape matching; (2) instructs it to confirm only intervals that truly deviate from the global pattern; (3) rejects any false positives consistent with overall behavior; and (4) suggests additional intervals exhibiting clear statistical or visual irregularities that ViT4TS may have missed. We further ask the VLM to assign each interval a confidence score from 1 (low) to 3 (high). See the Appendix for the full prompt. The VLM returns a JSON object containing the refined anomaly set 𝐀^f​i​n​a​l={(ts,te)i}i=1m^\hat{\mathbf{A}}_{final}=\{(t_{s},t_{e})^{i}\}_{i=1}^{\hat{m}}, per-interval confidence ratings, and a brief natural-language justification for each decision. We discard any interval with confidence = 1 to produce our final detection and diagnosis.
+
+
+
+Remark on Computation. By confining expensive VLM inference in a longer context rather than every sliding window, our two-stage pipeline cuts token usage by an average factor of 36 ×\times compared to naive rolling-window prompting (Table 2). ViT4TS (Stage 1) runs in reasonably short time with just CPU for moderate-length series (See the Appendix), and VLM4TS (Stage 2) incurs only a few seconds of latency per series—well within acceptable bounds for offline analysis or human-in-the-loop systems.
+
+
+
+
+
+Experiments
+
+
+
+We perform an array of experiments to evaluate the performance of ViT4TS and VLM4TS on a variety of benchmarks on industrial anomaly detection. We also conduct an extensive ablation study to validate the individual effectiveness of our proposed components. Detailed experimental setups—including data preprocessing, evaluation metrics are provided in the Appendix.
+
+
+
+Experimental Setup
+
+
+
+Benchmark Datasets and Baseline Methods. For unsupervised anomaly detection, we follow the standard evaluation protocol to test ViT4TS and VLM4TS on 11 widely used benchmark datasets in time series anomaly detection research (Lavin and Ahmad 2015; Hundman et al. 2018), spanning various domains from sensor data like astronomy sensory, web monitoring data like production traffic, to web metric data like volume of Twitter mentions, to evaluate the models’ generalizability and adaptability. For baseline models, we compare our method against several anomaly detection approaches, from statistical baselines like ARIMA (Pena et al. 2013), to deep learning models currently considered state-of-the-art, including a forecasting- based LSTM model (LSTM-DT) (Hundman et al. 2018), (variational) reconstruction-based models like LSTM-AE (Malhotra et al. 2016), VAE (Park et al. 2018), and TadGAN (Geiger et al. 2020), hybrid models like AER (Wong et al. 2022), transformer-based models like Anomaly Transformer (ATrans) (Xu et al. 2021), and pre-trained time series foundation models like UniTS (Gao et al. 2024) and TimesFM (Das et al. 2024), as well as LLM-based approaches such as prompt-based detectors (SigLLM‐PG on GPT, SigLLM‐PM on Mistral) and LLM prediction-based models SIGLLM-D (Alnegheimish et al. 2024). We also report TAMA (Zhuang et al. 2024), a naive rolling-window VLM prompting baseline.
+
+
+
+Evaluation.
+For any method that produces continuous anomaly scores, we first smooth the raw outputs with an exponentially weighted moving average. We then apply a Gaussian-based threshold of the form μ+k​σ\mu+k\sigma, where μ\mu and σ\sigma are the mean and standard deviation of the smoothed scores, sweeping kk to compute the unweighted contextual F1 score (Geiger et al. 2020; Wong et al. 2022).
+Max F1 score (F1-max) results appear in the main text; full F1 results are provided in the Appendix. Methods yielding only binary labels are evaluated at their default settings and reported by raw F1. See Appendix for the formal definition of these metrics. All experiments run on an NVIDIA V100 GPU if not otherwise specified. Baselines are implemented via the Orion framework (Alnegheimish 2022) when available; otherwise, we follow each original implementation’s setup and prompt.
+
+
+
+vs. detection delay).
+
+
+Table 1: Detection performance (F1-max) of ViT4TS and VLM4TS versus trained-from-scratch and time-series-pretrained baselines on benchmark datasets. Each entry reports the maximum F1 score across all evaluated thresholds; the best score is shown in bold, and the second-best is underlined. Definition of the F1-max score, full F1 results and elapsed (wall-clock) time comparison are provided in the Appendix.
+
+
+
+
+Type
+Method
+NAB
+NASA
+YAHOO
+
+
+
+
+
+Art
+AWS
+AdEx
+Traf
+Tweets
+MSL
+SMAP
+A1
+A2
+A3
+A4
+𝝁±𝝈\boldsymbol{\mu\pm\sigma}
+
+
+
+
+
+Trained
+
+From
+
+Scratch
+
+ARIMA
+0.387
+0.263
+0.500
+0.344
+0.179
+0.585
+0.750
+0.650
+0.771
+0.502
+0.336
+0.479±\pm0.187
+
+
+AER
+0.338
+0.244
+0.518
+0.404
+0.178
+0.553
+0.753
+0.618
+0.866
+0.711
+0.614
+0.527±\pm0.207
+
+
+TadGAN
+0.338
+0.196
+0.385
+0.421
+0.205
+0.612
+0.593
+0.492
+0.667
+0.135
+0.109
+0.378±\pm0.189
+
+
+LSTM-DT
+0.368
+0.273
+0.444
+0.451
+0.190
+0.615
+0.724
+0.639
+0.877
+0.704
+0.534
+0.529±\pm0.200
+
+
+LSTM-AE
+0.231
+0.244
+0.400
+0.416
+0.232
+0.487
+0.673
+0.583
+0.853
+0.584
+0.201
+0.446±\pm0.203
+
+
+ATrans
+0.262
+0.168
+0.200
+0.365
+0.147
+0.454
+0.567
+0.263
+0.554
+0.437
+0.394
+0.346±\pm0.142
+
+
+VAE
+0.000
+0.248
+0.345
+0.323
+0.237
+0.515
+0.695
+0.557
+0.845
+0.524
+0.189
+0.407±\pm0.234
+
+
+
+
+
+Time-series
+
+Pretrained
+
+UniTS
+0.182
+0.246
+0.326
+0.479
+0.167
+0.561
+0.723
+0.605
+0.760
+0.126
+0.110
+0.390±\pm0.233
+
+
+TimesFM
+0.234
+0.243
+0.400
+0.467
+0.198
+0.564
+0.686
+0.554
+0.694
+0.120
+0.107
+0.388±\pm0.209
+
+
+TimesFM2
+0.255
+0.233
+0.364
+0.386
+0.171
+0.556
+0.676
+0.594
+0.692
+0.202
+0.181
+0.392±\pm0.194
+
+
+Ours
+ViT4TS
+0.545
+0.400
+0.615
+0.615
+0.597
+0.543
+0.726
+0.614
+0.892
+0.614
+0.565
+0.612±\pm0.116
+
+
+VLM4TS
+0.714
+0.488
+0.727
+0.632
+0.686
+0.619
+0.773
+0.733
+0.901
+0.497
+0.474
+0.659±\pm0.127
+
+
+
+
+Table 2: Performance and efficiency comparison of VLM4TS versus language model–based baseline methods on benchmark datasets. “Tokens” reports the average number of tokens consumed per time series; “Time” indicates the average elapsed (wall-clock) time to generate detections per time series. Efficiency metrics have been adjusted to account for the methods’ window and step size difference.
+
+
+
+
+Type
+Method
+NAB
+NASA
+YAHOO
+𝝁\boldsymbol{\mu}
+
+
+
+
+F1‐max
+Tokens
+Time
+F1‐max
+Tokens
+Time
+F1‐max
+Tokens
+Time
+F1‐max
+Tokens
+Time
+
+
+LLM‐based
+SIGLLM‐D
+0.353
+11153
+83.77
+0.232
+13157
+89.50
+0.393
+21508
+62.20
+0.326
+15273
+78.49
+
+
+SigLLM‐PM
+0.206
+14191
+613.28
+0.157
+45050
+2107.96
+0.276
+45082
+984.45
+0.213
+34774
+1235.23
+
+
+SigLLM‐PG
+0.162
+25006
+2258.78
+0.080
+78187
+2614.87
+0.143
+83207
+2852.52
+0.128
+62133
+2575.39
+
+
+VLM‐based
+TAMA
+0.513
+40009
+110.47
+0.631
+31563
+83.49
+0.616
+27324
+68.99
+0.587
+32965
+87.65
+
+
+Ours
+VLM4TS
+0.649
+1219
+16.71
+0.696
+1213
+20.97
+0.651
+1204
+6.36
+0.665
+1212
+14.68
+
+
+
+
+
+
+Performance Evaluation
+
+
+
+Overall Detection Performance.
+Table 1 reports the F1-max scores versus trained-from-scratch and time-series-pretrained baselines on all 11 benchmark datasets. Our two-stage VLM4TS framework achieves the highest average F1-max, outperforming competing methods on 9 out of 11 datasets, achieving a 24.6 % improvement in average F1-max score over the second-best baseline LSTM-DT. These results underscore that purely vision-driven screening, when coupled with powerful VLM understanding, can exceed state-of-the-art time series-based TSAD models in most cases. Furthermore, even the first-stage visual screening module ViT4TS ranks second overall, securing the top-two position on 6 datasets, showing the effectiveness of detecting time series anomalies from a visual perspective. In Table 2, we further compare against existing language model-based baseline methods, where VLM4TS also consistently outperform baselines by a large margin, achieving 13.3% performance gain over the VLM prompting-based method TAMA and ×2\times 2 improvement over the strongest LLM-based method SigLLM-D. Moreover, we observe that both VLM-based methods substantially surpass LLM prompting frameworks, confirming that casting time series as images unlocks more effective anomaly detection than text-only representations.
+
+
+
+Task-Specific Detection Performance. Compared with time-series-based methods in Table 1, VLM4TS delivers its strongest gains on real-world datasets dominated by contextual anomalies (e.g., the NAB dataset group), where it outperforms all baselines by a large margin. Its advantage stems from the ability to localize anomalies in a 2-D representation and then apply global-context verification to boost precision without sacrificing recall (see discussion on precision and recall in the Appendix).
+In contrast, on a few synthetic datasets, such as A3 and A4, where anomalies are densely and synthetically injected (average anomalies per time series: A3 = 9.39, A4 = 8.37 versus A1 = 2.66, A2 = 2.00), we see forecasting-based methods (e.g., AER and LSTM-DT) excelling compare to our method. Because VLM4TS assumes anomalies are rare, it adopts a more conservative behavior in high-density scenarios: visually similar, tightly packed anomaly points are interpreted as fluctuations within a broader pattern rather than as anomalies. This conservativeness results in fewer selected anomalies, leading to lower F1 scores on A3 and A4 (see Appendix for further discussion). Compared with language-based methods shown in Table 2, such as TAMA, VLM4TS delivers the strongest gains in datasets that demand long-range context, most notably the NAB dataset group (26.5%). This advantage arises from our two-stage design: ViT4TS supplies high-resolution, localized proposals, allowing VLM4TS to verify and refine anomalies over a much larger temporal horizon without losing localization accuracy.
+
+
+
+Computational Time and Token Cost.
+Table 2 shows the F1-max score, per-series elapsed time, and token consumption for VLM4TS and language model-based baseline methods. We also report per-series elapsed time comparison with time-series-based method in the Appendix. Due to our two-stage design, VLM4TS requires substantially less cost, reducing token usage by an average of 30× compared to pure LLM- and VLM-based detectors that encode numerical data into text or image for every rolling window. When compared against time series–only approaches—both pretrained foundation models and models trained from scratch, VLM4TS achieves comparable end-to-end runtime while achieving better overall detection accuracy. We also evaluate CPU-only operation of VLM4TS (with VLM running on the API) with the default ViT-B/16 backbone. On moderate-length series spanning thousands of time points, ViT4TS screening completes in seconds, demonstrating feasibility for large-scale deployment without GPU acceleration and with low token cost.
+
+
+
+
+Additional Analysis
+
+
+
+Ablation Study. Table 3 evaluates the contribution of each ViT4TS component and the necessity of visual screening for VLM4TS. We have the following observations:
+∙\bullet Patch-level embedding: replacing the detailed grid of patch embeddings with a single global summary embedding ([CLS] token) per window leads to a substantial drop by 11.94% on average on the benchmark datasets. This confirms that fine-grained, patch-level representations are critical for accurately localizing distortions in time series plots. 
+∙\bullet Cross-patch matching: compared to position-aligned patches comparison (No cross-patch comparison) and row-wise patches comparison (No column-wise comparison), cross-patch matching leads to an substantial 18.76% and 30.54% improvement on YAHOO dataset group. This is because a flexible matching across both spatial dimensions is especially important on YAHOO dataset group, where seasonal and trend patterns can hide anomaly patterns. 
+∙\bullet Multi-scale embedding: ablating multi-scale embedding extraction reduces performance, especially on NASA dataset group, which can lead to a 8.35% drop in F1-max, as multi-scale embeddings enhance detection to extended contextual anomalies that cannot be captured in a patch-level, particularly in domains like spacecraft telemetry. 
+∙\bullet Visual screening: omitting the ViT4TS proposal stage and applying VLM4TS directly to full-series images causes a dramatic F1 collapse,
+especially on dataset with more dense anomalies like those in the YAHOO dataset group. This shows the importance of high-recall, local screening step for VLM to achieve superior performance; without it, the model cannot reliably isolate multiple anomalies within complex temporal backgrounds.
+
+
+Table 3: Ablation study of ViT4TS and VLM4TS on different dataset groups, reporting F1-max scores for each configuration.
+
+
+
+
+Method
+NAB
+NASA
+YAHOO
+
+
+w/o patch-level embedding
+0.519
+0.578
+0.541
+
+
+w/o cross-patch comparison
+0.504
+0.613
+0.514
+
+
+w/o column-wise comparison
+0.523
+0.624
+0.565
+
+
+w/o multi-scale embedding
+0.534
+0.582
+0.677
+
+
+ViT4TS (ours)
+0.555
+0.635
+0.671
+
+
+w/o ViT4TS
+0.539
+0.517
+0.292
+
+
+VLM4TS (ours)
+0.649
+0.696
+0.651
+
+
+
+
+Figure 4: F1-max score and elapsed (wall-clock) time for ViT4TS with different backbones. Error bars indicate standard deviation across 3 replications.
+
+
+
+Backbone Scalability and Efficiency.
+To evaluate the impact of vision encoder capacity and patch resolution on screening performance, we replace our default ViT-B/16 backbone with other backbones within the ViT4TS pipeline and measure both F1-max and inference time (Figure 4). To accommodate real-world industrial environments where GPU resources may be limited, here we evaluate ViT4TS’s elapsed time on CPU (Xeon E5, 32 GB RAM). Compared to the default backbone, coarsening the patch grid to 32×32 in ViT-B/32 yields much lower F1-max on NAB (–14.89%) and YAHOO (–8.99%), showing the importance of fine patch-level representations for accurate localization. Conversely, increasing model depth and hidden dimension improves detection on volatile series such as those in the YAHOO dataset group, showing that larger backbones better capture complex temporal patterns. However, these gains come at a steep computational cost: For the YAHOO dataset group, ViT-B/32 completes screening in under 2s per series on CPU, whereas ViT-H/14 exceeds 50s on average. Overall, the default backbone ViT-B/16 provides a nice trade-off between accuracy and efficiency for TSAD tasks.
+
+
+
+Qualitative Results. Figure 5 illustrates anomaly localization on two NASA telemetry signals. In both cases, VLM4TS delivers the most precise detections: it refines ViT4TS’s candidate proposals by comparing each candidate against the full-series context, correctly isolating the true anomalous intervals. By contrast, the “VLM-Long” ablation (prompting the VLM on the entire series without prior screening) either misaligns its anomaly boundaries (MSL C-1) or fails to flag the event entirely (SMAP A-4). Meanwhile, “VLM-Short” (TAMA), which prompts on every rolling window, generates numerous false positives due to its narrow context and incurs prohibitively high token usage.
+
+
+Figure 5: Qualitative results on MSL C-1 (top) and SMAP A-4 (bottom), illustrating how VLM4TS refines the initial local anomaly proposals from ViT4TS by selectively keeping, discarding, or adding intervals based on global temporal understanding. ”VLM-Long” refers to VLM prompting on the full-series image (ablation without ViT4TS screening); “VLM-Short” (TAMA) refers to VLM prompting on the rolling-windows image. Only representative segments are shown for clarity.
+
+
+
+Additional Analyses. In the Appendix, we provide further analysis of the framework, including patch‐level embedding and anomaly map visualizations, comparisons across different VLM backbones, alternative visualizations such as spectrogram baselines, and a study of how window size and patch scale affect fine‐grained detection, among other results and discussions.
+
+
+
+
+
+Conclusion
+
+
+
+We introduce a novel two‐stage framework for unsupervised time‐series anomaly detection that reframes 1-D time series as 2-D visual inputs and leverages pretrained vision and vision–language models without any in‐domain training. In the first stage, ViT4TS applies multi‐scale cross‐patch comparisons to generate anomaly candidates in high resolution, and in the second stage, VLM4TS verifies these candidate proposals via temporal understanding with long context. Our method achieves state‐of‐the‐art performance on diverse benchmarks while using many fewer tokens.
+
+
+
+
+Acknowledgments
+
+
+
+We thank Dr. Runze Li for valuable discussions and suggestions that contributed to the methodological formulation.
+
+
+
+
+References
+
+
+
+Alnegheimish et al. (2022)
+S. Alnegheimish et al.
+
+Sintel: a machine learning framework to extract insights from signals.
+
+In Proceedings of the 2022 International Conference on Management of Data,
+
+SIGMOD ’22, New York, NY, USA, pp. 1855–1865.
+
+External Links: ISBN 9781450392495,
+Document
+
+Cited by: Appendix A.
+
+
+Alnegheimish et al. (2024)
+S. Alnegheimish et al.
+
+Making the end-user a priority in benchmarking: orionbench for unsupervised time series anomaly detection.
+
+External Links: 2310.17748
+
+Cited by: Appendix B.
+
+
+Alnegheimish et al. (2025)
+S. Alnegheimish, Z. He, M. Reimherr, A. Chandrayan, A. Pradhan, and L. D’Angelo
+
+M2AD: multi-sensor multi-system anomaly detection through global scoring and calibrated thresholding.
+
+In International Conference on Artificial Intelligence and Statistics,
+
+pp. 4384–4392.
+
+Cited by: Introduction.
+
+
+Alnegheimish et al. (2024)
+S. Alnegheimish, L. Nguyen, L. Berti-Equille, and K. Veeramachaneni
+
+Can large language models be anomaly detectors for time series?.
+
+In 2024 IEEE 11th International Conference on Data Science and Advanced Analytics (DSAA),
+
+pp. 1–10.
+
+Cited by: Appendix A,
+Introduction,
+Related Work,
+Experimental Setup.
+
+
+Alnegheimish (2022)
+S. Alnegheimish
+
+Orion–a machine learning framework for unsupervised time series anomaly detection.
+
+Ph.D. Thesis, Massachusetts Institute of Technology.
+
+Cited by: Appendix A,
+Experimental Setup.
+
+
+Ansari et al. (2024)
+A. F. Ansari et al.
+
+Chronos: learning the language of time series.
+
+arXiv preprint arXiv:2403.07815.
+
+Cited by: Related Work.
+
+
+Costa et al. (2024)
+H. V. Costa, A. G. Ribeiro, and V. M. Souza
+
+Fusion of image representations for time series classification with deep learning.
+
+In International Conference on Artificial Neural Networks,
+
+pp. 235–250.
+
+Cited by: Related Work.
+
+
+Das et al. (2024)
+A. Das, W. Kong, R. Sen, and Y. Zhou
+
+A decoder-only foundation model for time-series forecasting.
+
+In Forty-first International Conference on Machine Learning,
+
+Cited by: Appendix A,
+Related Work,
+Experimental Setup.
+
+
+Gao et al. (2024)
+S. Gao, T. Koker, O. Queen, T. Hartvigsen, T. Tsiligkaridis, and M. Zitnik
+
+UniTS: a unified multi-task time series model.
+
+Advances in Neural Information Processing Systems 37, pp. 140589–140631.
+
+Cited by: Appendix A,
+Related Work,
+Experimental Setup.
+
+
+Geiger et al. (2020)
+A. Geiger et al.
+
+TadGAN: time series anomaly detection using generative adversarial networks.
+
+In 2020 IEEE International Conference on Big Data (Big Data),
+
+pp. 33–43.
+
+Cited by: Appendix A,
+Appendix A,
+Related Work,
+Experimental Setup,
+Experimental Setup.
+
+
+Goswami et al. (2024)
+M. Goswami, K. Szafer, A. Choudhry, Y. Cai, S. Li, and A. Dubrawski
+
+Moment: a family of open time-series foundation models.
+
+arXiv preprint arXiv:2402.03885.
+
+Cited by: Related Work.
+
+
+Hundman et al. (2018)
+K. Hundman et al.
+
+Detecting spacecraft anomalies using LSTMs and nonparametric dynamic thresholding.
+
+In Proceedings of the 24th ACM SIGKDD International Conference on Knowledge Discovery & Data Mining,
+
+pp. 387–395.
+
+Cited by: Appendix A,
+Appendix A,
+Appendix A,
+Appendix A,
+Introduction,
+Related Work,
+Experimental Setup.
+
+
+Ilharco et al. (2021)
+OpenCLIP
+
+External Links: Document,
+Link
+
+Cited by: Appendix A.
+
+
+Jeong et al. (2023)
+J. Jeong, Y. Zou, T. Kim, D. Zhang, A. Ravichandran, and O. Dabeer
+
+WinCLIP: zero-/few-shot anomaly classification and segmentation.
+
+In Proceedings of the IEEE/CVF Conference on Computer Vision and Pattern Recognition (CVPR),
+
+pp. 19606–19616.
+
+Cited by: ViT4TS: Visual Times Series Anomaly Screening.
+
+
+Kaewrakmuk and Srinonchat (2024)
+T. Kaewrakmuk and J. Srinonchat
+
+Multi-sensor data fusion and time series to image encoding for hardness recognition.
+
+IEEE Sensors Journal.
+
+Cited by: Related Work.
+
+
+Kieu et al. (2019)
+T. Kieu, B. Yang, C. Guo, and C. S. Jensen
+
+Outlier detection for time series with recurrent autoencoder ensembles..
+
+In Ijcai,
+
+pp. 2725–2732.
+
+Cited by: Related Work.
+
+
+Kong et al. (2025)
+Y. Kong, Y. Yang, S. Wang, C. Liu, Y. Liang, M. Jin, S. Zohren, D. Pei, Y. Liu, and Q. Wen
+
+Position: empowering time series reasoning with multimodal llms.
+
+arXiv preprint arXiv:2502.01477.
+
+Cited by: Introduction,
+Introduction.
+
+
+Lavin and Ahmad (2015)
+A. Lavin and S. Ahmad
+
+Evaluating real-time anomaly detection algorithms–the numenta anomaly benchmark.
+
+In 2015 IEEE 14th international conference on machine learning and applications (ICMLA),
+
+pp. 38–44.
+
+Cited by: Introduction,
+Experimental Setup.
+
+
+Li et al. (2020)
+L. Li, J. Yan, H. Wang, and Y. Jin
+
+Anomaly detection of time series with smoothness-inducing sequential variational auto-encoder.
+
+IEEE transactions on neural networks and learning systems 32 (3), pp. 1177–1191.
+
+Cited by: Related Work.
+
+
+Li et al. (2023)
+Z. Li, S. Li, and X. Yan
+
+Time series as images: vision transformer for irregularly sampled time series.
+
+Advances in Neural Information Processing Systems 36, pp. 49187–49204.
+
+Cited by: Related Work.
+
+
+Lin et al. (2024)
+C. Lin, B. Du, L. Sun, and L. Li
+
+Hierarchical context representation and self-adaptive thresholding for multivariate anomaly detection.
+
+IEEE Transactions on Knowledge and Data Engineering 36 (7), pp. 3139–3150.
+
+Cited by: Related Work.
+
+
+Liu et al. (2024)
+H. Liu, C. Li, Y. Li, and Y. J. Lee
+
+Improved baselines with visual instruction tuning.
+
+In Proceedings of the IEEE/CVF Conference on Computer Vision and Pattern Recognition (CVPR),
+
+pp. 26296–26306.
+
+Cited by: ViT4TS: Visual Times Series Anomaly Screening.
+
+
+Liu et al. (2023)
+H. Liu, C. Li, Q. Wu, and Y. J. Lee
+
+Visual instruction tuning.
+
+In Advances in Neural Information Processing Systems,  A. Oh, T. Naumann, A. Globerson, K. Saenko, M. Hardt, and S. Levine (Eds.),
+
+Vol. 36, pp. 34892–34916.
+
+External Links: Link
+
+Cited by: ViT4TS: Visual Times Series Anomaly Screening.
+
+
+Malhotra et al. (2016)
+P. Malhotra et al.
+
+LSTM-based encoder-decoder for multi-sensor anomaly detection.
+
+arXiv preprint arXiv:1607.00148.
+
+Cited by: Appendix A,
+Related Work,
+Experimental Setup.
+
+
+Mishra et al. (2021)
+P. Mishra, R. Verk, D. Fornasier, C. Piciarelli, and G. L. Foresti
+
+VT-adl: a vision transformer network for image anomaly detection and localization.
+
+In 2021 IEEE 30th International Symposium on Industrial Electronics (ISIE),
+
+Vol. , pp. 01–06.
+
+External Links: Document
+
+Cited by: ViT4TS: Visual Times Series Anomaly Screening.
+
+
+Nagar et al. (2024)
+A. Nagar, S. Jaiswal, and C. Tan
+
+Zero-shot visual reasoning by vision-language models: benchmarking and analysis.
+
+In 2024 International Joint Conference on Neural Networks (IJCNN),
+
+pp. 1–8.
+
+Cited by: Introduction.
+
+
+Namura and Ichikawa (2024)
+N. Namura and Y. Ichikawa
+
+Training-free time-series anomaly detection: leveraging image foundation models.
+
+arXiv preprint arXiv:2408.14756.
+
+Cited by: Appendix B,
+Related Work.
+
+
+Ni et al. (2025)
+J. Ni, Z. Zhao, C. Shen, H. Tong, D. Song, W. Cheng, D. Luo, and H. Chen
+
+Harnessing vision models for time series analysis: a survey.
+
+arXiv preprint arXiv:2502.08869.
+
+Cited by: Related Work.
+
+
+Park et al. (2018)
+D. Park et al.
+
+A multimodal anomaly detector for robot-assisted feeding using an LSTM-based variational autoencoder.
+
+IEEE Robotics and Automation Letters 3 (3), pp. 1544–1551.
+
+Cited by: Appendix A,
+Experimental Setup.
+
+
+Pena et al. (2013)
+E. H.M. Pena et al.
+
+Anomaly detection using forecasting methods ARIMA and HWDS.
+
+In 2013 32nd International Conference of the Chilean Computer Science Society (sccc),
+
+pp. 63–66.
+
+Cited by: Appendix A,
+Related Work,
+Experimental Setup.
+
+
+Rasul et al. (2023)
+K. Rasul, A. Ashok, A. R. Williams, H. Ghonia, R. Bhagwatkar, A. Khorasani, M. J. D. Bayazi, G. Adamopoulos, R. Riachi, N. Hassen, et al.
+
+Lag-llama: towards foundation models for probabilistic time series forecasting.
+
+arXiv preprint arXiv:2310.08278.
+
+Cited by: Related Work.
+
+
+Schuhmann et al. (2021)
+C. Schuhmann, R. Vencu, R. Beaumont, R. Kaczmarczyk, C. Mullis, A. Katta, T. Coombes, J. Jitsev, and A. Komatsuzaki
+
+Laion-400m: open dataset of clip-filtered 400 million image-text pairs.
+
+arXiv preprint arXiv:2111.02114.
+
+Cited by: Appendix A,
+ViT4TS: Visual Times Series Anomaly Screening.
+
+
+Semenoglou et al. (2023)
+A. Semenoglou, E. Spiliotis, and V. Assimakopoulos
+
+Image-based time series forecasting: a deep convolutional neural network approach.
+
+Neural Networks 157, pp. 39–53.
+
+Cited by: Related Work.
+
+
+Shi et al. (2024)
+X. Shi, S. Wang, Y. Nie, D. Li, Z. Ye, Q. Wen, and M. Jin
+
+Time-moe: billion-scale time series foundation models with mixture of experts.
+
+arXiv preprint arXiv:2409.16040.
+
+Cited by: Related Work.
+
+
+Tuli et al. (2022)
+S. Tuli, G. Casale, and N. R. Jennings
+
+Tranad: deep transformer networks for anomaly detection in multivariate time series data.
+
+arXiv preprint arXiv:2201.07284.
+
+Cited by: Related Work.
+
+
+Wong et al. (2022)
+L. Wong et al.
+
+AER: auto-encoder with regression for time series anomaly detection.
+
+In 2022 IEEE International Conference on Big Data (Big Data),
+
+pp. 1152–1161.
+
+Cited by: Appendix A,
+Appendix A,
+Appendix A,
+Related Work,
+Experimental Setup,
+Experimental Setup.
+
+
+Wu et al. (2023)
+J. Wu, W. Gan, Z. Chen, S. Wan, and P. S. Yu
+
+Multimodal large language models: a survey.
+
+In 2023 IEEE International Conference on Big Data (BigData),
+
+pp. 2247–2256.
+
+Cited by: Introduction.
+
+
+Xu et al. (2021)
+J. Xu, H. Wu, J. Wang, and M. Long
+
+Anomaly transformer: time series anomaly detection with association discrepancy.
+
+arXiv preprint arXiv:2110.02642.
+
+Cited by: Appendix A,
+Related Work,
+Experimental Setup.
+
+
+Xu et al. (2025)
+X. Xu, H. Wang, Y. Liang, P. S. Yu, Y. Zhao, and K. Shu
+
+Can multimodal llms perform time series anomaly detection?.
+
+arXiv preprint arXiv:2502.17812.
+
+Cited by: Introduction,
+Related Work.
+
+
+Yang et al. (2023)
+L. Yang, X. Fan, and Z. Zhang
+
+Your time series is worth a binary image: machine vision assisted deep framework for time series forecasting.
+
+arXiv preprint arXiv:2302.14390.
+
+Cited by: Related Work.
+
+
+Yin et al. (2020)
+C. Yin, S. Zhang, J. Wang, and N. N. Xiong
+
+Anomaly detection based on convolutional recurrent autoencoder for iot time series.
+
+IEEE Transactions on Systems, Man, and Cybernetics: Systems 52 (1), pp. 112–122.
+
+Cited by: Related Work.
+
+
+Zamanzadeh Darban et al. (2024)
+Z. Zamanzadeh Darban, G. I. Webb, S. Pan, C. Aggarwal, and M. Salehi
+
+Deep learning for time series anomaly detection: a survey.
+
+ACM Computing Surveys 57 (1), pp. 1–42.
+
+Cited by: Related Work.
+
+
+Zeng et al. (2023)
+Z. Zeng, R. Kaur, S. Siddagangappa, T. Balch, and M. Veloso
+
+From pixels to predictions: spectrogram and vision transformer for better time series forecasting.
+
+In Proceedings of the Fourth ACM International Conference on AI in Finance,
+
+pp. 82–90.
+
+Cited by: Related Work.
+
+
+Zhang et al. (2024)
+X. Zhang, D. Teng, R. R. Chowdhury, S. Li, D. Hong, R. Gupta, and J. Shang
+
+UniMTS: unified pre-training for motion time series.
+
+Advances in Neural Information Processing Systems 37, pp. 107469–107493.
+
+Cited by: Related Work.
+
+
+Zhou and Yu (2024)
+Z. Zhou and R. Yu
+
+Can llms understand time series anomalies?.
+
+arXiv preprint arXiv:2410.05440.
+
+Cited by: Introduction,
+Related Work.
+
+
+Zhuang et al. (2024)
+J. Zhuang, L. Yan, Z. Zhang, R. Wang, J. Zhang, and Y. Gu
+
+See it, think it, sorted: large multimodal models are few-shot time series anomaly analyzers.
+
+arXiv preprint arXiv:2411.02465.
+
+Cited by: Appendix A,
+Introduction,
+Related Work,
+Experimental Setup.
+
+
+
+
+
+
+Appendix A Experimental Details and Further Discussion
+
+
+
+Benchmark Datasets
+
+
+
+We use 11 datasets spanning various domains to evaluate the models’ generalizability and adaptability. The National Aeronautics and Space Administration (NASA) provided two spacecraft telemetry datasets 11
+              1
+              
+              
+            NASA data: https://github.com/khundman/telemanom/: Soil Moisture Active Passage (SMAP) and Mars Science Laboratory (MSL) acquired from a satellite and a rover, respectively (Hundman et al. 2018). Each numeric measurement in the target channel is accompanied by one-hot encoded information about commands sent or received by specific spacecraft modules in a given time window. The Yahoo Webscope Program provided the S5 datasets 22
+              2
+              
+              
+            YAHOO data: https://webscope.sandbox.yahoo.com/catalog.php?datatype=s&did=70 consisting of one set of real production traffic to Yahoo properties (A1) and three synthetic datasets (A2, A3, A4) with varying trends, noise, and pre-specified or random seasonality. The A2 and A3 datasets only contain outliers inserted at random positions, while A4 has outliers and change points. The Numenta Anomaly Benchmark (NAB) provided several datasets 33
+              3
+              
+              
+            NAB data: https://github.com/numenta/NAB from various domains: artificialWithAnomaly (Art), realAdExchange (AdEx), realAWSCloudwatch (AWS), realTraffic (Traffic), realTweets (Tweets). NAB is challenging due to its variety and the requirement for detectors to work across domains. Results on NAB can assess how well our approach handles completely different kinds of time series in one unified model. Similar to (Wong et al. 2022), Table 4 summarizes the basic information of each dataset. It differentiates between real and synthetic datasets and provides the number of
+anomalies for each dataset. Each anomaly is classified as either
+point or collective, depending on the length of the anomaly.
+Lastly, the total number of anomalous and overall data points
+are provided for each dataset.
+
+
+Table 4: Summary of dataset properties across benchmarks.
+
+
+
+
+Category
+Metric
+NASA
+YAHOO
+NAB
+
+
+MSL
+SMAP
+A1
+A2
+A3
+A4
+Art
+AdEx
+AWS
+Traf
+Tweets
+
+
+Properties
+Synthetic # signals
+No
+No
+No
+Yes
+Yes
+Yes
+Yes
+No
+No
+No
+No
+
+
+# Anomalies
+Point (len = 1)
+0
+0
+68
+33
+935
+833
+0
+0
+0
+0
+0
+
+
+
+Collective (len >> 1)
+36
+67
+110
+167
+4
+2
+6
+11
+30
+14
+33
+
+
+# Data Points
+Anomalous points
+7766
+54696
+1669
+466
+943
+837
+2418
+795
+6312
+1560
+15651
+
+
+
+Total points
+132046
+562800
+94866
+142100
+168000
+168000
+24192
+7965
+67644
+15662
+158511
+
+
+
+
+
+
+Model Setup
+
+
+
+For the primary experiment, ViT4TS uses the OpenCLIP (Ilharco et al. 2021) implementation of CLIP with the ViT-B/16 backbone, pretrained on the LAION-400M dataset (Schuhmann et al. 2021). For multi-scale embedding extraction, we perform average pooling over the patch grid using kernel sizes of 2×22\times 2 and 3×33\times 3. For the verification stage, VLM4TS employs GPT-4o (API version 2024-08-06) via OpenAI’s API.
+
+
+
+
+Baseline Methods and Evaluation Procedure
+
+
+
+We evaluate our methods against a broad spectrum of TSAD baselines, as detailed below:
+
+
+
+• ARIMA (Pena et al. 2013): autoregressive integrated moving average forecasting model; learns autocorrelations to predict future values and uses point‐wise forecast errors as anomaly scores.
+• LSTM‐DT (Hundman et al. 2018): two‐layer LSTM for one‐step ahead prediction; uses residuals as anomaly scores.
+• LSTM‐AE (Malhotra et al. 2016): LSTM autoencoder over sliding windows; use reconstruction error as anomaly scores.
+• VAE (Park et al. 2018): variational autoencoder with LSTM encoder/decoder; use reconstruction likelihood and point‐wise error to construct anomaly scores.
+• AER (Wong et al. 2022): joint autoencoder and bidirectional LSTM predictor; optimizes reconstruction and forward/backward prediction, combining DTW‐based and point‐wise errors for anomaly scores.
+• TadGAN (Geiger et al. 2020): GAN with LSTM generator and critic; computes anomaly score via dynamic‐time‐warping, point‐wise, and area‐difference errors between real and generated series.
+• ATrans (Anomaly Transformer) (Xu et al. 2021): transformer with anomaly‐attention mechanism measuring association discrepancies among adjacent points as anomaly scores.
+• UniTS (Gao et al. 2024): unified multi‐task transformer pretrained on diverse series; tokenizes forecasting, imputation, and anomaly tasks for cross-domain transfer. Using forecasting error as anomaly scores.
+• TimesFM / TimesFM2 (Das et al. 2024): decoder‐style attention model pretrained on patched time-series corpus; using forecasting error as anomaly scores.
+• SigLLM‐P (SigLLM‐PG on GPT, SigLLM‐PM on Mistral) (Alnegheimish et al. 2024): prompt‐based detectors that ask an LLM to mark anomalous indices in textual form.
+• SigLLM‐D (Alnegheimish et al. 2024): detects anomalies via LLM forecasting errors—comparing next‐step predictions to actual values.
+• TAMA (Zhuang et al. 2024): rolling‐window VLM prompts, rendering each window as an image and querying GPT-4o for anomaly detection, using confidence score as anomaly scores.
+
+
+
+
+All baselines except SigLLM and TAMA are evaluated using the Orion pipeline 44
+              4
+              
+              
+            Orion: https://github.com/sintel-dev/Orion. SigLLM is run via its repository 55
+              5
+              
+              
+            SIGLLM: https://github.com/sintel-dev/sigllm, while TAMA—which lacks a public implementation—is reproduced using the original prompts. TAMA is implemented on 20% of the series, due to high API costs.
+
+
+
+
+Data Preprocessing, Postprocessing and Evaluation.
+
+
+
+Each raw series x1:Tx_{1:T} is first min–max normalized to [0,1][0,1] and detrended by removing a least‐squares linear fit; for the A4 dataset, we additionally standardize before and after the known change point. After generating anomaly scores, we apply an exponentially weighted moving average (EWMA) to smooth each score (Alnegheimish et al. 2022; Alnegheimish 2022; Hundman et al. 2018). We then apply Gaussian quantile thresholds
+
+
+
+
+
+τα=μ+k​σ=μ+zα​σ,\tau_{\alpha}\;=\;\mu+k\sigma\;=\;\mu+z_{\alpha}\,\sigma,
+
+
+
+where μ\mu and σ\sigma are the mean and standard deviation and zαz_{\alpha} is the standard normal deviate at quantile α∈{0.10,0.01,0.001}\alpha\in\{0.10,0.01,0.001\}, and report the unweighted contextual F1 and the maximum F1 (F1​-​max\mathrm{F1\text{-}max}) over these zαz_{\alpha} values (Hundman et al. 2018; Wong et al. 2022; Geiger et al. 2020). Formally, let the ground-truth anomaly intervals be
+
+
+
+
+
+𝐀={(ts,te)i}i=1m,𝐀^={(t^s,t^e)j}j=1n.\mathbf{A}=\{\bigl(t_{s},\;t_{e}\bigr)^{i}\}_{i=1}^{m},\quad\hat{\mathbf{A}}=\{\bigl(\hat{t}_{s},\;\hat{t}_{e}\bigr)^{j}\}_{j=1}^{n}.
+
+
+
+Define
+
+
+
+
+
+TP=|{j:∃i,(t^s,t^e)j∩(ts,te)i≠∅}|,\mathrm{TP}=\left|\bigl\{\,j:\exists\,i,\;\bigl(\hat{t}_{s},\hat{t}_{e}\bigr)^{j}\cap\bigl(t_{s},t_{e}\bigr)^{i}\neq\emptyset\bigl\}\right|,
+
+
+
+
+
+
+
+FP=|{j:∀i,(t^s,t^e)j∩(ts,te)i=∅}|,\mathrm{FP}=\left|\bigl\{\,j:\forall\,i,\;\bigl(\hat{t}_{s},\hat{t}_{e}\bigr)^{j}\cap\bigl(t_{s},t_{e}\bigr)^{i}=\emptyset\bigl\}\right|,
+
+
+
+
+
+
+
+FN=|{i:∀j,(ts,te)i∩(t^s,t^e)j=∅}|.\mathrm{FN}=\left|\bigl\{\,i:\forall\,j,\;\bigl(t_{s},t_{e}\bigr)^{i}\cap\bigl(\hat{t}_{s},\hat{t}_{e}\bigr)^{j}=\emptyset\bigl\}\right|.
+
+
+
+The unweighted contextual precision, recall, and F1 score are then calculated corespondingly. No interval padding is applied, ensuring that the detection performance reflects each method’s raw localization capability.
+
+
+
+
+Prompt Design for VLM4TS
+
+
+
+We prompt the VLM with the full-series line plot and indicate the intervals ViT4TS marked as anomalous. Each candidate anomaly is precisely localized through the x-axis tick marks. Our goal for the VLM is to refine the output of the ViT4TS and increase the precision scores. It directs the model to discard any intervals that align with the overall trend, add missed segments exhibiting clear spikes or level shifts, and retain the exact tick-based boundaries from ViT4TS. A three-level confidence scale (1–3) supports downstream filtering. See the attached prompting box for details.
+
+
+
+
+Limitation and Future Work.
+
+
+
+While our results demonstrate VLMs’ promise for unsupervised anomaly detection, our current prompting strategy remains simple. Future work could explore advanced in-context reasoning methods, such as chain-of-thought or retrieval-augmented prompts, to further enhance temporal inference. Additionally, we have focused on univariate series; extending to multivariate data is an interesting future direction. In the following section, we give an initial exploration of a multivariate extension, showcasing how the two-stage design can be extended to incorporate multi-channel temporal information.
+
+
+
+
+
+Appendix B Additional Experimental Results
+
+
+
+Full Ablation Analysis
+
+
+
+Table 5 presents the full ablation results, extending the analyses from Section 4.3 with two additional experiments. First, we evaluate an all‐pairs cross‐patch comparison—computing the minimum cosine dissimilarity between every patch in the test window and every patch across all other windows (instead of using a single median reference). As expected, all‐pairs matching yields higher F1‐max across multiple threshold quantiles, though at the expense of an increased memory usage (as we need to store embeddings for all windows). The default median‐reference approach (reported in the main paper) therefore remains preferable for its efficiency.
+
+
+
+Second, we vary the quantile qq used to collapse the 2-D anomaly map to 1-D (Section 3.1). In addition to the standard q=25%q=25\%, we test q=12.5%q=12.5\% and q=50%q=50\%. Reducing qq to 12.5% produces nearly identical F1‐max, while increasing qq to 50% improves detection on signals with extended, high‐amplitude anomalies (e.g. long spikes). All other variants—patch‐level embedding, cross‐patch matching ablations, multi‐scale embedding, and omission of the ViT4TS screening stage—reproduce the trends reported in Section 4.3, confirming that (i) fine‐grained patch features, (ii) flexible cross-patch comparision, (iii) multi‐scale feature extraction are each crucial to our performance gains.
+
+
+Table 5: Full F1 scores of ViT4TS ablation variants at different thresholding quantile α\alpha, grouped by NAB, NASA, and YAHOO dataset groups.
+
+
+
+
+Variant
+NAB
+NASA
+YAHOO
+
+
+
+α=0.1\alpha=0.1
+α=0.01\alpha=0.01
+α=0.001\alpha=0.001
+α=0.1\alpha=0.1
+α=0.01\alpha=0.01
+α=0.001\alpha=0.001
+α=0.1\alpha=0.1
+α=0.01\alpha=0.01
+α=0.001\alpha=0.001
+
+
+default
+0.384
+0.513
+0.450
+0.454
+0.610
+0.613
+0.623
+0.598
+0.492
+
+
+all-pairs comparison
+0.467
+0.573
+0.558
+0.468
+0.645
+0.652
+0.664
+0.599
+0.474
+
+
+quantile q=q=12.5%
+0.382
+0.506
+0.452
+0.451
+0.612
+0.599
+0.609
+0.592
+0.497
+
+
+quantile q=q=50%
+0.395
+0.553
+0.488
+0.435
+0.647
+0.632
+0.638
+0.608
+0.483
+
+
+w/o class token
+0.380
+0.476
+0.446
+0.394
+0.616
+0.597
+0.520
+0.491
+0.342
+
+
+w/o cross-ref
+0.369
+0.478
+0.374
+0.416
+0.586
+0.587
+0.477
+0.436
+0.307
+
+
+w/o multi-scale
+0.357
+0.515
+0.458
+0.347
+0.554
+0.547
+0.599
+0.608
+0.512
+
+
+w/o patch-level
+0.491
+0.434
+0.334
+0.539
+0.576
+0.501
+0.541
+0.183
+0.027
+
+
+
+
+Figure 6: 
+Multivariate extension of our framework.
+Left: ViT4TS detects candidate anomalies independently for each channel.
+Bottom: VLM4TS receives both the multivariate visualization and a textual summary of all channel–wise candidates, enabling cross–channel visual understanding for a refined detection.
+Right: final multivariate anomaly intervals produced by VLM4TS.
+
+
+
+
+
+Multivariate Extension.
+
+
+
+While our main experiments focus on univariate time series to highlight the key idea of the two–stage framework, the method extends naturally to multivariate settings. The key idea is to keep the first stage channel–specific and allow the second stage to perform cross–channel visual understanding and reasoning to produce the final detection.
+
+
+
+Figure 6 illustrates this procedure. On the left, ViT4TS is applied independently to each channel, producing channel–wise candidate intervals based on local shape deviations. These raw candidates often include false positives or isolated fluctuations. In the second stage, VLM4TS receives (i) an aggregated textual summary of all channel–wise candidates and (ii) a stacked‐subplot visualization of the full multivariate series. As shown in the bottom panel in Figure 6, with access to this global view, the VLM is able to reason across channels, retaining intervals that exhibit coordinated cross–channel anomalies while discarding channel–specific noise. The right panel shows the resulting multivariate anomaly intervals.
+
+
+
+We conduct preliminary experiments on the multivariate MSL benchmark using this pipeline. Incorporating cross–channel context raises the Max-F1 from 0.619 (univariate) to 0.660, suggesting that VLM–based integration across channels provides additional benefit beyond single–channel counterpart. This multivariate extension preserves the design of the univariate framework while leveraging the VLM’s ability to fuse information from different time series channels.
+
+
+
+VLM4TS Prompt
+
+
+You are an expert in both time‐series analysis and multimodal (vision + language) reasoning. You will be shown:
+1. A plot of raw time‐series data
+
+• 
+
+X‐axis: time step index
+
+• 
+
+Y‐axis: signal value over time
+
+
+2. Preliminary “vision‐based” anomaly windows
+
+• 
+
+A list of intervals detected by a coarse, purely visual model (may include false positives and false negatives)
+
+
+Your goal is to integrate both sources—the visual plot and the preliminary windows—and produce a refined, final anomaly detection for the entire series. Specifically:
+
+• 
+
+Eliminate any preliminary windows that look anomalous in isolation but are consistent with the overall trend.
+
+• 
+
+Add any intervals that the visual model missed but which break temporal continuity or exhibit clear statistical irregularities (spikes, level shifts, abrupt changes).
+
+
+Response format
+Reply only with a JSON object containing these fields:
+{
+  "interval_index": [[start1,end1],[start2,end2],…],
+  "confidence":    [c1,c2,…],
+  "abnormal_description": "..."
+}
+
+where:
+
+• 
+
+"interval_index": an array of [start, end] pairs (inclusive indices).
+
+• 
+
+"confidence": a parallel array of integers (1–3 scale).
+
+• 
+
+"abnormal_description": a single paragraph (less than 100 words) summarizing why these intervals are anomalous.
+
+
+Confidence scale:
+
+• 
+
+1 = Low confidence: ambiguous or very subtle deviation.
+
+• 
+
+2 = Medium confidence: clear local irregularity but moderate global uncertainty.
+
+• 
+
+3 = High confidence: strong statistical or contextual evidence of anomaly.
+
+
+Important:
+
+• 
+
+Estimate interval boundaries using the tick marks on the x‐axis as precisely as possible.
+
+• 
+
+The very first segment may appear atypical due to slicing; do not flag it without clear anomaly evidence.
+
+• 
+
+Do not include any extra keys or commentary—only the JSON object above.
+
+
+
+
+
+
+
+Elapsed Time Comparison
+
+
+
+In Table 6, we compare end-to-end elapsed time (measured on an NVIDIA V100 GPU) for ViT4TS, VLM4TS against both scratch-trained and time-series-pretrained TSAD baselines. We note that different class of model follows its different hyperparameter settings based on the protocol (Alnegheimish et al. 2024): forecasting methods (ARIMA, ATrans, TimesFM, LSTM-DT, UniTS) use window size of 250 and step size of 1, and reconstruction methods (AER, TadGAN, VAE, LSTM-AE) use window size of 100 and step size of 1; ViT4TS employs a 224×224 window with a step size of 56 (one-quarter window). The reason we choose such a step size is that for each image we are applying multi-scale feature extraction and patch-level cross‐patch comparison, which allows for larger step size. For scratch-trained networks, timings include both training and inference; for pretrained models (UniTS, TimesFM) and our methods, we report inference time only. For comparison in elapsed time with language model-based methods, see Table 2. The Token usage and computation time is adjusted based on the window length and stride size, making sure that in Table 2 all the metrics are directly comparable. Despite its multi‐scale screening and VLM verification stages, ViT4TS runs in seconds on moderate‐length series and VLM4TS incurs only a few seconds per candidate via the VLM API, indicating that our two-stage pipeline is sufficiently efficient for deployment in real-world industrial monitoring systems.
+
+
+Table 6: Elapsed time comparison of VLM4TS versus trained-from-scratch and time-series-pretrained baselines on benchmark datasets. Different methods follow different hyperparameter settings, with details discussed in the Appendix.
+
+
+
+
+Method
+A1
+A2
+A3
+A4
+Art
+AWS
+AdEx
+Traf
+Tweets
+MSL
+SMAP
+
+
+ARIMA
+93.91
+87.96
+89.89
+92.20
+98.42
+137.91
+108.23
+315.87
+698.62
+203.07
+823.64
+
+
+AER
+20.25
+21.70
+24.08
+24.55
+37.83
+22.90
+22.14
+38.09
+57.37
+26.48
+33.45
+
+
+TadGAN
+567.06
+549.82
+552.48
+561.97
+351.49
+358.08
+286.88
+752.34
+1708.46
+845.98
+994.65
+
+
+LSTM-AE
+11.10
+12.05
+13.38
+12.67
+14.52
+13.16
+12.98
+18.95
+28.50
+14.75
+19.94
+
+
+ATransFormer
+8.36
+8.38
+9.92
+9.98
+11.99
+12.76
+10.11
+23.73
+47.37
+13.01
+19.80
+
+
+TimesFM
+7.55
+7.49
+8.69
+8.88
+10.43
+11.87
+8.63
+24.60
+63.07
+14.19
+40.73
+
+
+TimesFM2
+5.53
+5.49
+6.06
+5.51
+6.00
+5.97
+5.55
+8.96
+14.76
+7.30
+14.27
+
+
+LSTM-DT
+14.61
+12.12
+17.34
+17.31
+23.06
+15.96
+19.01
+33.17
+37.45
+20.71
+25.10
+
+
+VAE
+21.66
+24.14
+26.59
+25.05
+29.05
+26.70
+27.17
+70.84
+88.90
+30.46
+39.17
+
+
+UniTS
+11.69
+11.79
+14.44
+14.32
+17.34
+17.26
+14.13
+38.87
+78.87
+23.94
+75.57
+
+
+ViT4TS
+2.53
+2.26
+3.56
+3.58
+7.45
+7.23
+3.25
+3.74
+44.37
+9.56
+25.99
+
+
+VLM4TS
+5.80
+5.49
+7.26
+6.89
+10.41
+10.89
+6.63
+7.14
+48.48
+12.84
+29.09
+
+
+
+
+
+
+Embedding Analysis
+
+
+
+Figure 7 illustrates how ViT4TS’s patch-level embeddings distinguish anomalous regions from normal patterns. Panels (a) show a two-dimensional projection with t-SNE of the patch-level feature maps, for a representative window in A1 dataset containing the sudden spike anomaly. In panel (a), patches covering the anomaly (orange) form a compact cluster that is well separated from normal patches (blue), reflecting the pre-trained Vision Transformer’s sensitivity to local shape deviations.
+
+
+
+Panel (b) presents the median-reference cross-patch dissimilarity heatmap over a longer series. Bright red bands precisely mark the true anomalous region, demonstrating that ViT4TS localizes anomalies in the 2-D plot before mapping back to time steps. The thin dark strip at the bottom of the heatmap corresponds to whitespace rows, which appear in every window and thus yield uniformly low dissimilarity (high similarity) under the median-reference comparison.
+
+
+Figure 7: Patch embedding and 2-D anomaly score visualization for YAHOOA1-real_13. Panels (a) project ViT4TS’s patch embeddings at patch scales into low-dimensional space with t-SNE, showing the clustering of anomaly-related patches (orange). Panel (b) shows the multi-scale cross-patch comparison anomaly map as a heatmap, where warmer colors indicate higher anomaly scores and identify the anomalous interval.
+
+
+
+
+Recall and Precision Comparison between ViT4TS and VLM4TS
+
+
+
+Tables 7, 8, and 9 present precision and recall for ViT4TS and VLM4TS across all 11 benchmarks under three threshold settings. As expected, the verification stage usually increases precision: in most datasets, VLM4TS reduces false positives generated by the high‐recall ViT4TS screening, particularly at lower thresholds where ViT4TS produces many candidate intervals. This precision gain comes with a modest recall reduction, since VLM4TS filters out some true positives; however, the net effect is an improved F1-max in most datasets. The exceptions are A3 and A4 datasets, where the abundance of anomalies makes conservative filtering less beneficial.
+
+
+
+On the other hand, VLM4TS also boosts recall in datasets dominated by contextual anomalies, like MSL, SMAP, Art, by flagging additional intervals that ViT4TS missed due to its limited local window. In these cases, the model’s global reasoning corrects false negatives and yields a more balanced precision–recall profile. Overall, VLM4TS improves the screening baseline’s F1-max in nine out of eleven tasks, showing the necessity of the two‐stage localization and verification design.
+
+
+Table 7: Precision and recall of ViT4TS and VLM4TS at different thresholding quantile α\alpha on MSL, SMAP, and realTweets (Tweets) datasets.
+
+
+
+
+Method
+Metric
+MSL
+SMAP
+Tweets
+
+
+0.1
+0.01
+0.001
+0.1
+0.01
+0.001
+0.1
+0.01
+0.001
+
+
+ViT4TS
+Precision
+0.271
+0.472
+0.593
+0.326
+0.598
+0.831
+0.252
+0.413
+0.590
+
+
+Recall
+0.978
+0.641
+0.432
+0.940
+0.779
+0.645
+0.921
+0.816
+0.605
+
+
+VLM4TS
+Precision
+0.404
+0.508
+0.397
+0.560
+0.731
+0.667
+0.727
+0.481
+0.360
+
+
+Recall
+0.900
+0.789
+0.694
+0.903
+0.819
+0.712
+0.727
+0.703
+0.649
+
+
+
+
+Table 8: Precision and recall of ViT4TS and VLM4TS at different thresholding quantile α\alpha on artificialWithAnomaly (Art), realAWSCloudwatch (AWS), realAdExchange (AdEx), and realTraffic (Traf).
+
+
+
+
+Method
+Metric
+Art
+AWS
+AdEx
+Traf
+
+
+0.1
+0.01
+0.001
+0.1
+0.01
+0.001
+0.1
+0.01
+0.001
+0.1
+0.01
+0.001
+
+
+ViT4TS
+Precision
+0.152
+0.750
+1.000
+0.233
+0.286
+0.643
+0.276
+0.571
+0.500
+0.353
+0.391
+0.727
+
+
+Recall
+0.909
+0.429
+0.167
+0.857
+0.516
+0.290
+0.727
+0.667
+0.273
+0.857
+0.643
+0.533
+
+
+VLM4TS
+Precision
+0.381
+0.546
+0.625
+0.267
+0.339
+0.400
+0.500
+0.615
+0.727
+0.500
+0.440
+0.526
+
+
+Recall
+0.889
+0.857
+0.833
+0.848
+0.645
+0.625
+0.727
+0.667
+0.727
+0.857
+0.785
+0.714
+
+
+
+
+Table 9: Precision and recall of ViT4TS and VLM4TS at different thresholding quantile α\alpha on YAHOO A1-A4.
+
+
+
+
+Method
+Metric
+A1
+A2
+A3
+A4
+
+
+0.1
+0.01
+0.001
+0.1
+0.01
+0.001
+0.1
+0.01
+0.001
+0.1
+0.01
+0.001
+
+
+ViT4TS
+Precision
+0.549
+0.701
+0.795
+0.543
+0.879
+0.978
+0.814
+0.909
+0.917
+0.731
+0.906
+0.924
+
+
+Recall
+0.697
+0.519
+0.348
+0.980
+0.905
+0.680
+0.493
+0.298
+0.200
+0.461
+0.302
+0.219
+
+
+VLM4TS
+Precision
+0.725
+0.742
+0.716
+0.853
+0.887
+0.828
+0.933
+0.931
+0.847
+0.900
+0.910
+0.836
+
+
+Recall
+0.742
+0.672
+0.596
+0.955
+0.905
+0.745
+0.339
+0.257
+0.182
+0.322
+0.255
+0.207
+
+
+
+
+
+
+Choice of Patch Size and Its Effect on Screening Performance
+
+
+
+In Table 1 (Max-F1) and Table 9 (precision–recall), the ViT4TS screening stage shows noticeably lower recall on the A3 and A4 datasets, resulting in reduced Max-F1 compared with the best TSAD baselines. To understand this behavior, we analyze how ViT4TS responds to different anomaly structures. As shown in Figure 8, anomalies in A3 and A4 are short, dense, and concentrated within narrow intervals. Under the default patch configuration (window size 224), several such point anomalies fall within a single window, producing coarse anomaly maps that under-represent the fine-scale deviations.
+
+
+
+To further understand the effect of patch size, we evaluated a smaller patch size (window size 28), which offers substantially finer temporal granularity for cross-patch comparison. This adjustment yields a marked improvement, increasing Max-F1 from 0.614 to 0.906 on A3 and from 0.565 to 0.844 on A4, surpassing all baselines reported in Table 1. Figure 8 also illustrates this effect. Using the default patch size (window size 224; middle panel), anomaly scores merge multiple point anomalies into broad peaks, yielding coarse localization and reduced sensitivity. In contrast, the smaller patch configuration (window size 28; bottom panel) produces sharply localized anomaly responses that align closely with
+the rapid, fine-scale deviations in the signal. These results underscore the importance of patch and window size selection in capturing subtle, high-frequency anomaly patterns. Developing data-driven or adaptive strategies for patch sizing is therefore a promising direction for further improving the ViT4TS screening stage.
+
+
+Figure 8: Patch-size effect on ViT4TS for anomaly scoring on A3 TS2. Top: original time series with ground-truth anomalies (red).
+Middle: anomaly scores produced using the default patch size 224, which smooths over short and densely occurring anomalies.
+Bottom: anomaly scores using a smaller patch size 28, yielding substantially improved localization.
+
+
+
+
+Choice of VLM Backbone
+
+
+
+Table 10 and 11 report the Max-F1 scores of VLM4TS when using with different VLM backbones, including the close-sourced Gemini-2.0 and Claude-3.5 as well as the open-sourced Qwen-VL-2.5–72B. While these models exhibit different verification behaviors across tasks, the overall performance remains at or above state-of-the-art TSAD baselines presented in Table 1.
+
+
+Table 10: Max‐F1 scores of VLM4TS with different VLMs on NASA and YAHOO dataset groups, with percentage change relative to GPT-4o.
+
+
+
+
+
+NASA
+YAHOO
+
+
+Method
+MSL
+SMAP
+A1
+A2
+A3
+A4
+
+
+GPT-4o
+0.619
+0.773
+0.733
+0.901
+0.497
+0.474
+
+
+Claude-3.5
+0.588 (−5.0%-5.0\%)
+0.723 (−6.5%-6.5\%)
+0.708 (−3.4%-3.4\%)
+0.887 (−1.6%-1.6\%)
+0.530 (+6.6%+6.6\%)
+0.490 (+3.4%+3.4\%)
+
+
+Gemini-2.0
+0.554 (−10.4%-10.4\%)
+0.754 (−2.5%-2.5\%)
+0.723 (−1.4%-1.4\%)
+0.865 (−4.0%-4.0\%)
+0.531 (+6.8%+6.8\%)
+0.496 (+4.6%+4.6\%)
+
+
+Qwen-2.5-72B
+0.606 (−2.1%-2.1\%)
+0.805 (+4.1%+4.1\%)
+0.747 (+1.9%+1.9\%)
+0.919 (+2.0%+2.0\%)
+0.492 (−1.0%-1.0\%)
+0.531 (+12.0%+12.0\%)
+
+
+
+
+Table 11: Max‐F1 scores of VLM4TS with different VLMs on NAB datasest group, with percentage change relative to GPT-4o.
+
+
+
+
+
+NAB
+
+
+Method
+AdEx
+Tweets
+Traffic
+AWS
+Art
+
+
+GPT-4o
+0.727
+0.686
+0.632
+0.488
+0.714
+
+
+Claude-3.5
+0.625 (−14.1%-14.1\%)
+0.617 (−10.0%-10.0\%)
+0.600 (−4.9%-4.9\%)
+0.543 (+11.2%+11.2\%)
+0.674 (−5.6%-5.6\%)
+
+
+Gemini-2.0
+0.583 (−19.8%-19.8\%)
+0.643 (−6.3%-6.3\%)
+0.703 (+11.2%+11.2\%)
+0.439 (−10.1%-10.1\%)
+0.625 (−12.4%-12.4\%)
+
+
+Qwen-2.5-72B
+0.667 (−8.3%-8.3\%)
+0.630 (−8.2%-8.2\%)
+0.649 (+2.7%+2.7\%)
+0.500 (+2.5%+2.5\%)
+0.857 (+20.0%+20.0\%)
+
+
+
+
+
+
+Comparison with Spectrogram-Based TSAD Approaches.
+
+
+
+Spectrograms provide an alternative 2D representation of time series by encoding time–frequency structure, offering some global context. However, their use in zero-shot TSAD is restricted. Spectrogram characteristics are highly domain dependent and considerably less interpretable than line plots. Second, their visual appearance differs substantially from natural images used in large-scale vision pretraining, which weakens the transferability of off-the-shelf vision encoders and VLMs.
+
+
+
+It’s also worth noting that spectrograms do not resolve the resolution–context dilemma: long sequences must still be divided into fixed windows before being processed, as in ITF-TAD (Namura and Ichikawa 2024), leaving the trade-off between fine local resolution and global temporal coverage unresolved. Our two-stage design directly addresses this challenge by decoupling the tasks: ViT4TS performs fine-grained localization on high-resolution line plots, while VLM4TS conducts global verification with access to the full temporal horizon.
+
+
+
+We compare ViT4TS and VLM4TS against the spectrogram-based ITF-TAD baseline. As shown in Table 12, ITF-TAD underperforms ViT4TS across most datasets, suggesting that spectrogram statistics are not well aligned with vision models pretrained on natural images. Furthermore, ITF-TAD falls far short of VLM4TS as it lacks a mechanism to combine fine-grained localization with global temporal understanding.
+
+
+Table 12: Comparison of ITF-TAD (spectrogram) versus ViT4TS (line-plot) and VLM4TS.
+
+
+
+
+Method
+NAB
+NASA
+YAHOO
+
+
+
+
+Art
+AWS
+AdEx
+Traf
+Tweets
+MSL
+SMAP
+A1
+A2
+A3
+A4
+𝝁±𝝈\boldsymbol{\mu\pm\sigma}
+
+
+ITF-TAD
+0.800
+0.343
+0.389
+0.423
+0.284
+0.567
+0.726
+0.569
+0.767
+0.425
+0.403
+0.518±\pm0.157
+
+
+ViT4TS
+0.545
+0.400
+0.615
+0.615
+0.597
+0.543
+0.726
+0.614
+0.892
+0.614
+0.565
+0.612±\pm0.116
+
+
+VLM4TS
+0.714
+0.488
+0.727
+0.632
+0.686
+0.619
+0.773
+0.733
+0.901
+0.497
+0.474
+0.659±\pm0.127
+
+
+
+
+
+
+Full F1 scores for Table 1
+
+
+Table 13: Full F1 scores of ViT4TS and VLM4TS versus trained-from-scratch and time-series-pretrained baselines for MSL, SMAP and realTweets (Tweets).
+
+
+
+
+Type
+Method
+MSL
+SMAP
+Tweets
+
+
+0.1
+0.01
+0.001
+0.1
+0.01
+0.001
+0.1
+0.01
+0.001
+
+
+Trained-from-scratch
+ARIMA
+0.409
+0.547
+0.585
+0.466
+0.750
+0.661
+0.094
+0.165
+0.179
+
+
+AER
+0.475
+0.546
+0.553
+0.500
+0.711
+0.753
+0.130
+0.141
+0.178
+
+
+TadGAN
+0.553
+0.610
+0.612
+0.560
+0.584
+0.593
+0.205
+0.170
+0.169
+
+
+LSTM-DT
+0.592
+0.515
+0.615
+0.664
+0.724
+0.713
+0.076
+0.136
+0.190
+
+
+LSTM-AE
+0.487
+0.375
+0.382
+0.455
+0.672
+0.673
+0.179
+0.163
+0.232
+
+
+VAE
+0.515
+0.342
+0.333
+0.553
+0.695
+0.661
+0.184
+0.156
+0.237
+
+
+ATrans
+0.387
+0.426
+0.454
+0.348
+0.538
+0.567
+0.147
+0.144
+0.145
+
+
+Time-series-pretrained
+UniTS
+0.531
+0.550
+0.561
+0.560
+0.715
+0.723
+0.130
+0.167
+0.120
+
+
+TimesFM
+0.410
+0.500
+0.564
+0.434
+0.686
+0.602
+0.127
+0.182
+0.198
+
+
+
+TimesFM2
+0.391
+0.512
+0.556
+0.202
+0.608
+0.676
+0.158
+0.156
+0.171
+
+
+Ours
+ViT4TS
+0.425
+0.543
+0.500
+0.484
+0.677
+0.726
+0.395
+0.549
+0.597
+
+
+VLM4TS
+0.558
+0.619
+0.505
+0.691
+0.773
+0.689
+0.486
+0.571
+0.686
+
+
+
+
+Table 14: Full F1 scores of ViT4TS and VLM4TS versus trained-from-scratch and time-series-pretrained baselines for artificialWithAnomaly (Art), realAWSCloudwatch (AWS), realAdExchange (AdEx), and realTraffic (Traf).
+
+
+
+
+Type
+Method
+Art
+AWS
+AdEx
+Traf
+
+
+0.1
+0.01
+0.001
+0.1
+0.01
+0.001
+0.1
+0.01
+0.001
+0.1
+0.01
+0.001
+
+
+Trained-From-Scratch
+ARIMA
+0.344
+0.387
+0.353
+0.263
+0.185
+0.198
+0.295
+0.375
+0.500
+0.344
+0.320
+0.160
+
+
+AER
+0.296
+0.318
+0.338
+0.244
+0.185
+0.185
+0.233
+0.412
+0.518
+0.404
+0.326
+0.323
+
+
+TadGAN
+0.338
+0.214
+0.000
+0.196
+0.165
+0.129
+0.231
+0.263
+0.385
+0.400
+0.421
+0.276
+
+
+LSTM-DT
+0.345
+0.368
+0.328
+0.273
+0.190
+0.202
+0.279
+0.367
+0.444
+0.451
+0.390
+0.414
+
+
+LSTM-AE
+0.231
+0.000
+0.000
+0.203
+0.244
+0.167
+0.241
+0.333
+0.400
+0.416
+0.205
+0.235
+
+
+VAE
+0.000
+0.000
+0.000
+0.158
+0.248
+0.086
+0.200
+0.300
+0.345
+0.323
+0.190
+0.229
+
+
+ATrans
+0.239
+0.247
+0.262
+0.168
+0.140
+0.134
+0.200
+0.179
+0.157
+0.365
+0.324
+0.316
+
+
+Time-series-Pretrained
+UniTS
+0.182
+0.000
+0.000
+0.228
+0.246
+0.214
+0.246
+0.326
+0.312
+0.479
+0.383
+0.323
+
+
+TimesFM
+0.224
+0.234
+0.000
+0.243
+0.194
+0.202
+0.152
+0.270
+0.400
+0.467
+0.333
+0.343
+
+
+
+TimesFM2
+0.255
+0.235
+0.000
+0.233
+0.177
+0.176
+0.196
+0.286
+0.364
+0.386
+0.381
+0.207
+
+
+Ours
+ViT4TS
+0.260
+0.545
+0.286
+0.366
+0.368
+0.400
+0.400
+0.615
+0.353
+0.500
+0.486
+0.615
+
+
+VLM4TS
+0.533
+0.667
+0.714
+0.406
+0.444
+0.488
+0.593
+0.640
+0.727
+0.632
+0.564
+0.606
+
+
+
+
+Table 15: Full F1 scores of ViT4TS and VLM4TS versus trained-from-scratch and time-series-pretrained baselines for YAHOO A1-A4.
+
+
+
+
+Type
+Method
+YAHOOA1
+YAHOOA2
+YAHOOA3
+YAHOOA4
+
+
+0.1
+0.01
+0.001
+0.1
+0.01
+0.001
+0.1
+0.01
+0.001
+0.1
+0.01
+0.001
+
+
+Trained-from-scratch
+ARIMA
+0.269
+0.586
+0.650
+0.246
+0.663
+0.771
+0.502
+0.440
+0.179
+0.224
+0.336
+0.168
+
+
+AER
+0.458
+0.614
+0.618
+0.232
+0.814
+0.866
+0.529
+0.696
+0.711
+0.399
+0.614
+0.609
+
+
+TadGAN
+0.371
+0.435
+0.492
+0.461
+0.651
+0.667
+0.135
+0.132
+0.106
+0.110
+0.088
+0.060
+
+
+LSTM‐DT
+0.343
+0.534
+0.639
+0.638
+0.877
+0.716
+0.597
+0.654
+0.704
+0.382
+0.534
+0.482
+
+
+LSTM‐AE
+0.329
+0.536
+0.583
+0.340
+0.703
+0.853
+0.584
+0.461
+0.268
+0.199
+0.202
+0.121
+
+
+VAE
+0.339
+0.537
+0.557
+0.343
+0.664
+0.845
+0.524
+0.353
+0.214
+0.189
+0.169
+0.090
+
+
+ATrans
+0.263
+0.239
+0.244
+0.481
+0.518
+0.554
+0.437
+0.334
+0.284
+0.394
+0.261
+0.212
+
+
+Time-series-pretrained
+UniTS
+0.248
+0.520
+0.605
+0.205
+0.760
+0.748
+0.121
+0.126
+0.107
+0.110
+0.090
+0.064
+
+
+TimesFM
+0.221
+0.516
+0.554
+0.215
+0.694
+0.621
+0.120
+0.044
+0.015
+0.107
+0.066
+0.019
+
+
+
+TimesFM2
+0.271
+0.577
+0.594
+0.313
+0.692
+0.630
+0.202
+0.084
+0.013
+0.181
+0.106
+0.032
+
+
+Ours
+ViT4TS
+0.614
+0.597
+0.484
+0.699
+0.892
+0.802
+0.614
+0.449
+0.329
+0.565
+0.453
+0.354
+
+
+VLM4TS
+0.733
+0.706
+0.650
+0.901
+0.896
+0.784
+0.497
+0.402
+0.300
+0.474
+0.399
+0.332
+
+
+
+
+
+
+
+
+
+  
+    Experimental support, please
+    view the build logs
+    for errors. Generated by
+    
+      
+        L
+        A
+        T
+        E
+      
+      xml
+      
+    .
+  
+  
+    
+Instructions for reporting errors
+    
+We are continuing to improve HTML versions of papers, and your feedback helps enhance accessibility and mobile
+      support. To report errors in the HTML that will help us improve conversion and rendering, choose any of the
+      methods listed below:
+    
+      
+Click the "Report Issue" (
+            
+          ) button, located in the page header.
+    
+    
+Tip: You can select the relevant text first, to include it in your report.
+    
+Our team has already identified the following issues. We appreciate your time reviewing and reporting rendering errors we
+      may not have found yet. Your efforts will help us improve the HTML versions for all readers, because disability
+      should not be a barrier to accessing research. Thank you for your continued support in championing open access for
+      all.
+    
+Have a free development cycle? Help support accessibility at arXiv! Our collaborators at LaTeXML maintain a list of packages that need conversion, and welcome developer contributions.
+  
+
+  
+    
+      
+        We gratefully acknowledge support from
+        our major funders,
+        member institutions, ,
+        and all contributors.
+      
+      
+        About
+        ·
+        Help
+        ·
+        Contact
+        ·
+        Subscribe
+        ·
+        Copyright
+        ·
+        Privacy
+        ·
+        Accessibility
+        ·
+        Operational Status (opens in new tab)
+      
+    
+
+    
+      Major funding support from
+      
+        
+          
+        
+        
+          
+        
+        
+          
+        
+      
+    
+  
+
+  
+    
+      
+    
+  
+
+
