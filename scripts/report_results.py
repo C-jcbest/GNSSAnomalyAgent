@@ -72,6 +72,7 @@ def report(run: Path, repeat: Path | None, out: Path, supplement: bool,
            author_analysis: Path | None = None, evaluation: str = "evaluation",
            author_repeat_analysis: Path | None = None) -> None:
     out.mkdir(parents=True, exist_ok=False)
+    identity = read_json(ROOT / "configs/experiment.json")
     summary = read_json(run / evaluation / "summary.json")
     rows = table_rows(summary)
     if author_analysis is not None:
@@ -90,6 +91,7 @@ def report(run: Path, repeat: Path | None, out: Path, supplement: bool,
             rows.append(row)
     registration = read_json(run / "registration.json")
     receipt = {"main": costs(run), "run": str(run.resolve()),
+               "experiment": identity,
                "registration_sha256": sha256(run / "registration.json"),
                "summary_sha256": sha256(run / evaluation / "summary.json"),
                "evaluation_directory": evaluation,
@@ -101,7 +103,13 @@ def report(run: Path, repeat: Path | None, out: Path, supplement: bool,
                                     for path in sorted((ROOT / "runs").iterdir()) if path.is_dir()}
     receipt["total_recorded_requests"] = sum(
         item["requests"] for item in receipt["all_recorded_runs"].values())
-    lines = ["# 新分支实际实验结果", "", "## Material Passport", "",
+    lines = [f"# {identity['experiment_id']}：{identity['name']}", "",
+             f"协议版本：`{identity['protocol_version']}`。名称和编号于"
+             f"{identity['label_added_on']}补充；原冻结登记、实验条件和结果未修改。", "",
+             "## 实验批次", "", "| 运行目录 | 名称 |", "|---|---|"]
+    for directory, label in identity["runs"].items():
+        lines.append(f"| `{directory}` | {label} |")
+    lines.extend(["", "## Material Passport", "",
              "- Origin Skill: academic-research-suite / experiment-agent",
              "- Origin Mode: run（用户授权）", "- Origin Date: 2026-10-12",
              "- Verification Status: 保存响应的确定性离线评分；不是现场验证或完整论文复现。",
@@ -111,7 +119,7 @@ def report(run: Path, repeat: Path | None, out: Path, supplement: bool,
              "所有表格由脚本读取保存结果生成。作者源码只提供通用异常，形变列留空；"
              "rf_balanced是特别标注的class_weight调整，默认RF单列。", "",
              "| 方法 | 通用异常日F1 | 持续形变日F1 | 形变事件F1 IoU≥0.5 | 正常站误报段/站年 | 失败/未执行 |",
-             "|---|---:|---:|---:|---:|---:|"]
+             "|---|---:|---:|---:|---:|---:|"])
     for row in rows:
         values = [row["method"], format_number(row["generic_daily_f1"]),
                   format_number(row["deformation_daily_f1"]),
@@ -189,6 +197,8 @@ def report(run: Path, repeat: Path | None, out: Path, supplement: bool,
         writer.writeheader()
         writer.writerows(rows)
     figure, panels = plt.subplots(1, 2, figsize=(14, 6), dpi=180)
+    figure.suptitle(f"{identity['experiment_id']} | protocol {identity['protocol_version']}",
+                   fontsize=13)
     colors = ["#bb6953" if row["method"] == "fusion" else "#42778a" for row in rows]
     positions = np.arange(len(rows))
     panels[0].barh(positions, [row["generic_daily_f1"] for row in rows], color=colors)
@@ -216,7 +226,7 @@ def report(run: Path, repeat: Path | None, out: Path, supplement: bool,
                 "Generic author-source methods have no deformation endpoint. "
                 "No field-validation or superiority claim.",
                 ha="center", fontsize=9)
-    figure.tight_layout(rect=(0, 0.09, 1, 1))
+    figure.tight_layout(rect=(0, 0.09, 1, 0.95))
     figure.savefig(out / "comparison.png")
     figure.savefig(out / "comparison.svg")
     plt.close(figure)

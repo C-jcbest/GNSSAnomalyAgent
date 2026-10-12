@@ -1,5 +1,7 @@
 # 当前证据能支持什么
 
+对应实验：**GNSS-VLM-EXP01（协议v4）——基于站点正常背景的GNSS视觉数值融合异常识别仿真对照与消融实验**。
+
 日期：2026-10-12。下列解释来自本分支实际保存的响应和评分；详细数字见[结果表](../results/main-v4/results.md)，协议、来源和登记后分析分别见[实验协议](experiment-protocol.md)、[文献核查](literature.md)、[分析说明](analysis-addendum.md)。
 
 ## 研究判断

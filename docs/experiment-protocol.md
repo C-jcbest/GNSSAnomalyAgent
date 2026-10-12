@@ -1,5 +1,9 @@
 # GNSS 视觉数值异常识别实验协议 v4
 
+实验编号：**GNSS-VLM-EXP01**。实验名称：**基于站点正常背景的GNSS视觉数值融合异常识别仿真对照与消融实验**。
+
+此名称于2026-10-12完成实验后补充，作为管理标识；已保存运行中的冻结协议快照、登记哈希和实验条件保持原样。
+
 ## Material Passport
 
 - Origin Skill: academic-research-suite / experiment-agent

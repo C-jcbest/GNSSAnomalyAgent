@@ -1,4 +1,14 @@
-# 新分支实际实验结果
+# GNSS-VLM-EXP01：基于站点正常背景的GNSS视觉数值融合异常识别仿真对照与消融实验
+
+协议版本：`v4`。名称和编号于2026-10-12补充；原冻结登记、实验条件和结果未修改。
+
+## 实验批次
+
+| 运行目录 | 名称 |
+|---|---|
+| `main-v4` | 主实验：数值对照、视觉数值融合与信息组消融 |
+| `main-repeat-v4` | 同测试集复测：默认RF、纯视觉与融合 |
+| `main-upstream-repeat-v4` | 作者源码适配的独立响应复测 |
 
 ## Material Passport
 
@@ -120,10 +130,22 @@
     "timing_note": "sum of request/record times, not concurrent wall time or billing"
   },
   "run": "C:\\Users\\JC\\.codex\\worktrees\\gnss-vlm-research\\GNSSAnomalyAgent-sim\\runs\\main-v4",
+  "experiment": {
+    "experiment_id": "GNSS-VLM-EXP01",
+    "name": "\u57fa\u4e8e\u7ad9\u70b9\u6b63\u5e38\u80cc\u666f\u7684GNSS\u89c6\u89c9\u6570\u503c\u878d\u5408\u5f02\u5e38\u8bc6\u522b\u4eff\u771f\u5bf9\u7167\u4e0e\u6d88\u878d\u5b9e\u9a8c",
+    "protocol_version": "v4",
+    "label_added_on": "2026-10-12",
+    "label_note": "\u5b9e\u9a8c\u5b8c\u6210\u540e\u8865\u5145\u7684\u7ba1\u7406\u540d\u79f0\u4e0e\u7f16\u53f7\uff0c\u4e0d\u4fee\u6539\u539f\u59cb\u51bb\u7ed3\u767b\u8bb0\u3001\u6761\u4ef6\u6216\u7ed3\u679c\uff0c\u4e5f\u4e0d\u662f\u5df2\u53d1\u8868\u7684\u65b9\u6cd5\u540d\u79f0\u3002",
+    "runs": {
+      "main-v4": "\u4e3b\u5b9e\u9a8c\uff1a\u6570\u503c\u5bf9\u7167\u3001\u89c6\u89c9\u6570\u503c\u878d\u5408\u4e0e\u4fe1\u606f\u7ec4\u6d88\u878d",
+      "main-repeat-v4": "\u540c\u6d4b\u8bd5\u96c6\u590d\u6d4b\uff1a\u9ed8\u8ba4RF\u3001\u7eaf\u89c6\u89c9\u4e0e\u878d\u5408",
+      "main-upstream-repeat-v4": "\u4f5c\u8005\u6e90\u7801\u9002\u914d\u7684\u72ec\u7acb\u54cd\u5e94\u590d\u6d4b"
+    }
+  },
   "registration_sha256": "6c6fe3825f1fa307ff305e6ecc56f1d1fe3a2d75793c2bc6bafe5bbaa762e8da",
   "summary_sha256": "bd136e66f034ee465766535899d628693b0d549c7fab79d7b078d16bfb55c7e4",
   "evaluation_directory": "evaluation-corrected",
-  "report_script_sha256": "8d11859f15e1335817a0c4168726dc98eb1ce00ad68f09af7b1fab69c0b625af",
+  "report_script_sha256": "8ba8d50b12fa991727495cc9ccda8bc62e524f21df3530697c13b41fe598c24c",
   "author_repeat": {
     "requests": 144,
     "prompt_tokens": 74734,
