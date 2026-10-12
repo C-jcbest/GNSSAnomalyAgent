@@ -91,3 +91,28 @@ def summarize_blocks(evidence: Evidence, block_days: int = 21) -> list[dict]:
                 evidence.matrix[start:end][valid], axis=0).tolist()
         blocks.append(record)
     return blocks
+
+
+def morphology_features(evidence: Evidence) -> np.ndarray:
+    """Add short raw-neighbor context that block medians and backward differences omit."""
+    standardized = evidence.residual / evidence.noise
+    columns = []
+    for axis in range(3):
+        series = standardized[:, axis]
+        previous = np.r_[np.nan, series[:-1]]
+        following = np.r_[series[1:], np.nan]
+        increment = series - previous
+        next_increment = following - series
+        before = np.full(len(series), np.nan)
+        after = np.full(len(series), np.nan)
+        for day in range(len(series)):
+            left = series[max(0, day - 5):day]
+            right = series[day + 1:min(len(series), day + 6)]
+            if np.isfinite(left).any():
+                before[day] = np.nanmedian(left)
+            if np.isfinite(right).any():
+                after[day] = np.nanmedian(right)
+        columns.extend([next_increment, series - (previous + following) / 2,
+                        increment * next_increment, after - before,
+                        series - before, series - after])
+    return np.column_stack([evidence.matrix, *columns])

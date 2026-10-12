@@ -1,5 +1,21 @@
 # GNSS 视觉异常识别：文献与官方代码核查
 
+## EXP02优化过程补查（2026-10-12）
+
+重新核对VLM4TS全文引言和附录Tables 7–9讨论：长全局图存在分辨率/上下文矛盾，
+候选核验通常提升精度但可能降低召回，部分数据可增补漏候选；其原文是其他领域实验，
+不能推定本轮GNSS同样改善。作者源码 `verify_intervals` 确实查看全图及候选并可修改区间。
+重新核对TAMA的Multiscale Self-reflection及正常参考消融：其局部放大/复核已有先例，
+主表包含point-adjusted指标，而部分消融另报无PA结果；本轮继续使用无PA评分，不能跨协议引用论文数值作直接比较。
+
+本轮实测自由视觉复核可能误报普通噪声及混淆暂态/阶跃，采用局部原始图与正常历史拟合参考是待验证改进。
+正常参考、两阶段复核和数值工具结合都不是本项目首次提出。
+另外核实sklearn官方[RF文档](https://scikit-learn.org/stable/modules/generated/sklearn.ensemble.RandomForestClassifier.html)
+与[MultiOutputClassifier文档](https://scikit-learn.org/stable/modules/generated/sklearn.multioutput.MultiOutputClassifier.html)：
+多输出类别权重逐列相乘；独立二元估计器是另一训练方式，不能描述成仅改接口。
+对应页面已缓存到证据清单，当前安装源码也确认此权重语义。独立训练在新验证集上反而退化，保留负结果，未宣称必然改善。
+本项目Viterbi路径使用RF后验作启发式证据，不是另取得或复现了某篇GNSS HMM论文。
+
 核查日期：2026-10-12。本文由 AI 辅助查阅，事实依据限定为实际取得的论文、DOI 元数据和官方代码；没有执行上述论文的完整复现实验。本文不是系统综述，也不构成创新性证明。所有来源字节、URL、访问日期、SHA-256 与抓取失败记录见 `papers/evidence/manifest.json`。`metadata`、`metadata_abstract`、`full_text`、`code_documentation`、`code` 和全文提取文本分开记录。
 
 ## 1. Can Multimodal LLMs Perform Time Series Anomaly Detection?

@@ -7,6 +7,7 @@ from pathlib import Path
 
 from gnss_research import data, experiment
 from gnss_research.baselines import NUMERICAL_METHODS
+from gnss_research.fusion import DERIVED_METHODS
 from gnss_research.upstream import ROOT, UPSTREAM_METHODS, setup_sources
 from gnss_research.vision import VISUAL_METHODS
 
@@ -23,12 +24,14 @@ def main() -> None:
     registration.add_argument("--dataset", type=Path, required=True)
     registration.add_argument("--out", type=Path, required=True)
     registration.add_argument("--methods", nargs="+", choices=NUMERICAL_METHODS + VISUAL_METHODS
-                              + UPSTREAM_METHODS, default=list(NUMERICAL_METHODS))
+                              + UPSTREAM_METHODS + tuple(DERIVED_METHODS),
+                              default=list(NUMERICAL_METHODS))
     registration.add_argument("--split", choices=("validation", "test"), default="validation")
     registration.add_argument("--seed", type=int, default=20261012)
     registration.add_argument("--model")
     registration.add_argument("--max-requests", type=int, default=0)
     registration.add_argument("--workers", type=int, default=3)
+    registration.add_argument("--identity", type=Path, help="实验编号、名称与方法协议配置")
     execution = commands.add_parser("run", help="执行已冻结方案，不自动重试失败调用")
     execution.add_argument("--run", type=Path, required=True)
     execution.add_argument("--env-file", type=Path)
@@ -44,7 +47,8 @@ def main() -> None:
             result = data.generate(args.out, args.seed, args.per_split, args.days)
         elif args.command == "register":
             result = experiment.register(args.dataset, args.out, args.methods, args.split,
-                                         args.seed, args.model, args.max_requests, args.workers)
+                                         args.seed, args.model, args.max_requests, args.workers,
+                                         args.identity)
         elif args.command == "run":
             result = experiment.execute(args.run, args.env_file)
         elif args.command == "evaluate":

@@ -1,0 +1,851 @@
+{
+  "dataset_seeds": [
+    2026101203,
+    2026101204,
+    2026101205
+  ],
+  "methods": {
+    "random_forest": {
+      "stations": 72,
+      "generic_daily_micro": {
+        "tp": 1876,
+        "fp": 983,
+        "fn": 1537,
+        "precision": 0.6561734872332984,
+        "recall": 0.5496630530325227,
+        "f1": 0.5982142857142857
+      },
+      "generic_daily_station_macro_f1": 0.3712750108932634,
+      "false_alarm_runs_per_normal_station_year": 4.312550698512844,
+      "normal_stations": 13,
+      "false_alarm_runs_per_normal_station_year_controls": 0.7126056796011272,
+      "types": {
+        "spike": {
+          "daily_micro": {
+            "tp": 3,
+            "fp": 0,
+            "fn": 21,
+            "precision": 1.0,
+            "recall": 0.125,
+            "f1": 0.2222222222222222
+          },
+          "events_micro": {
+            "iou_0.3": {
+              "tp": 3,
+              "fp": 0,
+              "fn": 21,
+              "precision": 1.0,
+              "recall": 0.125,
+              "f1": 0.2222222222222222
+            },
+            "iou_0.5": {
+              "tp": 3,
+              "fp": 0,
+              "fn": 21,
+              "precision": 1.0,
+              "recall": 0.125,
+              "f1": 0.2222222222222222
+            }
+          }
+        },
+        "step": {
+          "daily_micro": {
+            "tp": 0,
+            "fp": 0,
+            "fn": 23,
+            "precision": 0.0,
+            "recall": 0.0,
+            "f1": 0.0
+          },
+          "events_micro": {
+            "iou_0.3": {
+              "tp": 0,
+              "fp": 0,
+              "fn": 23,
+              "precision": 0.0,
+              "recall": 0.0,
+              "f1": 0.0
+            },
+            "iou_0.5": {
+              "tp": 0,
+              "fp": 0,
+              "fn": 23,
+              "precision": 0.0,
+              "recall": 0.0,
+              "f1": 0.0
+            }
+          }
+        },
+        "transient": {
+          "daily_micro": {
+            "tp": 156,
+            "fp": 444,
+            "fn": 657,
+            "precision": 0.26,
+            "recall": 0.1918819188191882,
+            "f1": 0.2208067940552017
+          },
+          "events_micro": {
+            "iou_0.3": {
+              "tp": 6,
+              "fp": 129,
+              "fn": 18,
+              "precision": 0.044444444444444446,
+              "recall": 0.25,
+              "f1": 0.07547169811320754
+            },
+            "iou_0.5": {
+              "tp": 4,
+              "fp": 131,
+              "fn": 20,
+              "precision": 0.02962962962962963,
+              "recall": 0.16666666666666666,
+              "f1": 0.050314465408805034
+            }
+          }
+        },
+        "deformation": {
+          "daily_micro": {
+            "tp": 1540,
+            "fp": 928,
+            "fn": 1380,
+            "precision": 0.6239870340356564,
+            "recall": 0.5273972602739726,
+            "f1": 0.5716406829992576
+          },
+          "events_micro": {
+            "iou_0.3": {
+              "tp": 11,
+              "fp": 300,
+              "fn": 13,
+              "precision": 0.03536977491961415,
+              "recall": 0.4583333333333333,
+              "f1": 0.06567164179104477
+            },
+            "iou_0.5": {
+              "tp": 4,
+              "fp": 307,
+              "fn": 20,
+              "precision": 0.012861736334405145,
+              "recall": 0.16666666666666666,
+              "f1": 0.023880597014925373
+            }
+          }
+        }
+      },
+      "failed_records": 0
+    },
+    "rf_balanced": {
+      "stations": 72,
+      "generic_daily_micro": {
+        "tp": 2470,
+        "fp": 2836,
+        "fn": 943,
+        "precision": 0.46551074255559743,
+        "recall": 0.7237034866686199,
+        "f1": 0.5665787360935887
+      },
+      "generic_daily_station_macro_f1": 0.3330851201131507,
+      "false_alarm_runs_per_normal_station_year": 8.83908292023434,
+      "normal_stations": 13,
+      "false_alarm_runs_per_normal_station_year_controls": 4.513169304140472,
+      "types": {
+        "spike": {
+          "daily_micro": {
+            "tp": 12,
+            "fp": 1,
+            "fn": 12,
+            "precision": 0.9230769230769231,
+            "recall": 0.5,
+            "f1": 0.6486486486486487
+          },
+          "events_micro": {
+            "iou_0.3": {
+              "tp": 12,
+              "fp": 1,
+              "fn": 12,
+              "precision": 0.9230769230769231,
+              "recall": 0.5,
+              "f1": 0.6486486486486487
+            },
+            "iou_0.5": {
+              "tp": 12,
+              "fp": 1,
+              "fn": 12,
+              "precision": 0.9230769230769231,
+              "recall": 0.5,
+              "f1": 0.6486486486486487
+            }
+          }
+        },
+        "step": {
+          "daily_micro": {
+            "tp": 3,
+            "fp": 8,
+            "fn": 20,
+            "precision": 0.2727272727272727,
+            "recall": 0.13043478260869565,
+            "f1": 0.17647058823529413
+          },
+          "events_micro": {
+            "iou_0.3": {
+              "tp": 3,
+              "fp": 8,
+              "fn": 20,
+              "precision": 0.2727272727272727,
+              "recall": 0.13043478260869565,
+              "f1": 0.17647058823529413
+            },
+            "iou_0.5": {
+              "tp": 3,
+              "fp": 8,
+              "fn": 20,
+              "precision": 0.2727272727272727,
+              "recall": 0.13043478260869565,
+              "f1": 0.17647058823529413
+            }
+          }
+        },
+        "transient": {
+          "daily_micro": {
+            "tp": 354,
+            "fp": 1217,
+            "fn": 459,
+            "precision": 0.22533418204964992,
+            "recall": 0.4354243542435424,
+            "f1": 0.29697986577181207
+          },
+          "events_micro": {
+            "iou_0.3": {
+              "tp": 7,
+              "fp": 287,
+              "fn": 17,
+              "precision": 0.023809523809523808,
+              "recall": 0.2916666666666667,
+              "f1": 0.0440251572327044
+            },
+            "iou_0.5": {
+              "tp": 5,
+              "fp": 289,
+              "fn": 19,
+              "precision": 0.017006802721088437,
+              "recall": 0.20833333333333334,
+              "f1": 0.031446540880503145
+            }
+          }
+        },
+        "deformation": {
+          "daily_micro": {
+            "tp": 1995,
+            "fp": 2708,
+            "fn": 925,
+            "precision": 0.4241973208590262,
+            "recall": 0.6832191780821918,
+            "f1": 0.5234159779614325
+          },
+          "events_micro": {
+            "iou_0.3": {
+              "tp": 13,
+              "fp": 561,
+              "fn": 11,
+              "precision": 0.02264808362369338,
+              "recall": 0.5416666666666666,
+              "f1": 0.043478260869565216
+            },
+            "iou_0.5": {
+              "tp": 6,
+              "fp": 568,
+              "fn": 18,
+              "precision": 0.010452961672473868,
+              "recall": 0.25,
+              "f1": 0.020066889632107024
+            }
+          }
+        }
+      },
+      "failed_records": 0
+    },
+    "rf_split_temporal": {
+      "stations": 72,
+      "generic_daily_micro": {
+        "tp": 2329,
+        "fp": 2387,
+        "fn": 1084,
+        "precision": 0.4938507209499576,
+        "recall": 0.6823908584822737,
+        "f1": 0.5730102103579776
+      },
+      "generic_daily_station_macro_f1": 0.3950508200898082,
+      "false_alarm_runs_per_normal_station_year": 1.4978706624605678,
+      "normal_stations": 13,
+      "false_alarm_runs_per_normal_station_year_controls": 0.0,
+      "types": {
+        "spike": {
+          "daily_micro": {
+            "tp": 12,
+            "fp": 1,
+            "fn": 12,
+            "precision": 0.9230769230769231,
+            "recall": 0.5,
+            "f1": 0.6486486486486487
+          },
+          "events_micro": {
+            "iou_0.3": {
+              "tp": 12,
+              "fp": 1,
+              "fn": 12,
+              "precision": 0.9230769230769231,
+              "recall": 0.5,
+              "f1": 0.6486486486486487
+            },
+            "iou_0.5": {
+              "tp": 12,
+              "fp": 1,
+              "fn": 12,
+              "precision": 0.9230769230769231,
+              "recall": 0.5,
+              "f1": 0.6486486486486487
+            }
+          }
+        },
+        "step": {
+          "daily_micro": {
+            "tp": 5,
+            "fp": 6,
+            "fn": 18,
+            "precision": 0.45454545454545453,
+            "recall": 0.21739130434782608,
+            "f1": 0.29411764705882354
+          },
+          "events_micro": {
+            "iou_0.3": {
+              "tp": 5,
+              "fp": 6,
+              "fn": 18,
+              "precision": 0.45454545454545453,
+              "recall": 0.21739130434782608,
+              "f1": 0.29411764705882354
+            },
+            "iou_0.5": {
+              "tp": 5,
+              "fp": 6,
+              "fn": 18,
+              "precision": 0.45454545454545453,
+              "recall": 0.21739130434782608,
+              "f1": 0.29411764705882354
+            }
+          }
+        },
+        "transient": {
+          "daily_micro": {
+            "tp": 243,
+            "fp": 979,
+            "fn": 570,
+            "precision": 0.1988543371522095,
+            "recall": 0.2988929889298893,
+            "f1": 0.2388206388206388
+          },
+          "events_micro": {
+            "iou_0.3": {
+              "tp": 6,
+              "fp": 7,
+              "fn": 18,
+              "precision": 0.46153846153846156,
+              "recall": 0.25,
+              "f1": 0.32432432432432434
+            },
+            "iou_0.5": {
+              "tp": 6,
+              "fp": 7,
+              "fn": 18,
+              "precision": 0.46153846153846156,
+              "recall": 0.25,
+              "f1": 0.32432432432432434
+            }
+          }
+        },
+        "deformation": {
+          "daily_micro": {
+            "tp": 1913,
+            "fp": 2236,
+            "fn": 1007,
+            "precision": 0.4610749578211617,
+            "recall": 0.6551369863013699,
+            "f1": 0.54123638421276
+          },
+          "events_micro": {
+            "iou_0.3": {
+              "tp": 16,
+              "fp": 17,
+              "fn": 8,
+              "precision": 0.48484848484848486,
+              "recall": 0.6666666666666666,
+              "f1": 0.5614035087719298
+            },
+            "iou_0.5": {
+              "tp": 10,
+              "fp": 23,
+              "fn": 14,
+              "precision": 0.30303030303030304,
+              "recall": 0.4166666666666667,
+              "f1": 0.3508771929824561
+            }
+          }
+        }
+      },
+      "failed_records": 0
+    },
+    "fusion": {
+      "stations": 72,
+      "generic_daily_micro": {
+        "tp": 2504,
+        "fp": 8789,
+        "fn": 909,
+        "precision": 0.22173027539183565,
+        "recall": 0.7336653970114269,
+        "f1": 0.34054127566979464
+      },
+      "generic_daily_station_macro_f1": 0.36027488013687226,
+      "false_alarm_runs_per_normal_station_year": 3.670606128886886,
+      "normal_stations": 13,
+      "false_alarm_runs_per_normal_station_year_controls": 6.967699978322133,
+      "types": {
+        "spike": {
+          "daily_micro": {
+            "tp": 2,
+            "fp": 11,
+            "fn": 22,
+            "precision": 0.15384615384615385,
+            "recall": 0.08333333333333333,
+            "f1": 0.10810810810810811
+          },
+          "events_micro": {
+            "iou_0.3": {
+              "tp": 2,
+              "fp": 11,
+              "fn": 22,
+              "precision": 0.15384615384615385,
+              "recall": 0.08333333333333333,
+              "f1": 0.10810810810810811
+            },
+            "iou_0.5": {
+              "tp": 2,
+              "fp": 11,
+              "fn": 22,
+              "precision": 0.15384615384615385,
+              "recall": 0.08333333333333333,
+              "f1": 0.10810810810810811
+            }
+          }
+        },
+        "step": {
+          "daily_micro": {
+            "tp": 2,
+            "fp": 19,
+            "fn": 21,
+            "precision": 0.09523809523809523,
+            "recall": 0.08695652173913043,
+            "f1": 0.09090909090909091
+          },
+          "events_micro": {
+            "iou_0.3": {
+              "tp": 2,
+              "fp": 22,
+              "fn": 21,
+              "precision": 0.08333333333333333,
+              "recall": 0.08695652173913043,
+              "f1": 0.0851063829787234
+            },
+            "iou_0.5": {
+              "tp": 2,
+              "fp": 22,
+              "fn": 21,
+              "precision": 0.08333333333333333,
+              "recall": 0.08695652173913043,
+              "f1": 0.0851063829787234
+            }
+          }
+        },
+        "transient": {
+          "daily_micro": {
+            "tp": 142,
+            "fp": 40,
+            "fn": 671,
+            "precision": 0.7802197802197802,
+            "recall": 0.17466174661746617,
+            "f1": 0.28542713567839195
+          },
+          "events_micro": {
+            "iou_0.3": {
+              "tp": 6,
+              "fp": 0,
+              "fn": 18,
+              "precision": 1.0,
+              "recall": 0.25,
+              "f1": 0.4
+            },
+            "iou_0.5": {
+              "tp": 6,
+              "fp": 0,
+              "fn": 18,
+              "precision": 1.0,
+              "recall": 0.25,
+              "f1": 0.4
+            }
+          }
+        },
+        "deformation": {
+          "daily_micro": {
+            "tp": 2136,
+            "fp": 8951,
+            "fn": 784,
+            "precision": 0.19265806800757643,
+            "recall": 0.7315068493150685,
+            "f1": 0.3049903619618762
+          },
+          "events_micro": {
+            "iou_0.3": {
+              "tp": 16,
+              "fp": 33,
+              "fn": 8,
+              "precision": 0.32653061224489793,
+              "recall": 0.6666666666666666,
+              "f1": 0.4383561643835616
+            },
+            "iou_0.5": {
+              "tp": 13,
+              "fp": 36,
+              "fn": 11,
+              "precision": 0.2653061224489796,
+              "recall": 0.5416666666666666,
+              "f1": 0.3561643835616438
+            }
+          }
+        }
+      },
+      "failed_records": 3
+    },
+    "guided_fusion": {
+      "stations": 72,
+      "generic_daily_micro": {
+        "tp": 2413,
+        "fp": 916,
+        "fn": 1000,
+        "precision": 0.7248422949834785,
+        "recall": 0.7070026369762672,
+        "f1": 0.7158113319489766
+      },
+      "generic_daily_station_macro_f1": 0.639983121638468,
+      "false_alarm_runs_per_normal_station_year": 1.316809373591708,
+      "normal_stations": 13,
+      "false_alarm_runs_per_normal_station_year_controls": 2.9296011272490787,
+      "types": {
+        "spike": {
+          "daily_micro": {
+            "tp": 20,
+            "fp": 38,
+            "fn": 4,
+            "precision": 0.3448275862068966,
+            "recall": 0.8333333333333334,
+            "f1": 0.4878048780487805
+          },
+          "events_micro": {
+            "iou_0.3": {
+              "tp": 20,
+              "fp": 38,
+              "fn": 4,
+              "precision": 0.3448275862068966,
+              "recall": 0.8333333333333334,
+              "f1": 0.4878048780487805
+            },
+            "iou_0.5": {
+              "tp": 20,
+              "fp": 38,
+              "fn": 4,
+              "precision": 0.3448275862068966,
+              "recall": 0.8333333333333334,
+              "f1": 0.4878048780487805
+            }
+          }
+        },
+        "step": {
+          "daily_micro": {
+            "tp": 9,
+            "fp": 16,
+            "fn": 14,
+            "precision": 0.36,
+            "recall": 0.391304347826087,
+            "f1": 0.375
+          },
+          "events_micro": {
+            "iou_0.3": {
+              "tp": 9,
+              "fp": 16,
+              "fn": 14,
+              "precision": 0.36,
+              "recall": 0.391304347826087,
+              "f1": 0.375
+            },
+            "iou_0.5": {
+              "tp": 9,
+              "fp": 16,
+              "fn": 14,
+              "precision": 0.36,
+              "recall": 0.391304347826087,
+              "f1": 0.375
+            }
+          }
+        },
+        "transient": {
+          "daily_micro": {
+            "tp": 351,
+            "fp": 4,
+            "fn": 462,
+            "precision": 0.9887323943661972,
+            "recall": 0.4317343173431734,
+            "f1": 0.601027397260274
+          },
+          "events_micro": {
+            "iou_0.3": {
+              "tp": 13,
+              "fp": 0,
+              "fn": 11,
+              "precision": 1.0,
+              "recall": 0.5416666666666666,
+              "f1": 0.7027027027027027
+            },
+            "iou_0.5": {
+              "tp": 13,
+              "fp": 0,
+              "fn": 11,
+              "precision": 1.0,
+              "recall": 0.5416666666666666,
+              "f1": 0.7027027027027027
+            }
+          }
+        },
+        "deformation": {
+          "daily_micro": {
+            "tp": 1920,
+            "fp": 995,
+            "fn": 1000,
+            "precision": 0.6586620926243568,
+            "recall": 0.6575342465753424,
+            "f1": 0.6580976863753213
+          },
+          "events_micro": {
+            "iou_0.3": {
+              "tp": 20,
+              "fp": 13,
+              "fn": 4,
+              "precision": 0.6060606060606061,
+              "recall": 0.8333333333333334,
+              "f1": 0.7017543859649122
+            },
+            "iou_0.5": {
+              "tp": 19,
+              "fp": 14,
+              "fn": 5,
+              "precision": 0.5757575757575758,
+              "recall": 0.7916666666666666,
+              "f1": 0.6666666666666666
+            }
+          }
+        }
+      },
+      "failed_records": 0
+    },
+    "anchored_fusion": {
+      "stations": 72,
+      "generic_daily_micro": {
+        "tp": 2305,
+        "fp": 1426,
+        "fn": 1108,
+        "precision": 0.6177968373090325,
+        "recall": 0.675358921769704,
+        "f1": 0.6452967525195968
+      },
+      "generic_daily_station_macro_f1": 0.45806418612911237,
+      "false_alarm_runs_per_normal_station_year": 0.6913249211356467,
+      "normal_stations": 13,
+      "false_alarm_runs_per_normal_station_year_controls": 0.0,
+      "types": {
+        "spike": {
+          "daily_micro": {
+            "tp": 12,
+            "fp": 1,
+            "fn": 12,
+            "precision": 0.9230769230769231,
+            "recall": 0.5,
+            "f1": 0.6486486486486487
+          },
+          "events_micro": {
+            "iou_0.3": {
+              "tp": 12,
+              "fp": 1,
+              "fn": 12,
+              "precision": 0.9230769230769231,
+              "recall": 0.5,
+              "f1": 0.6486486486486487
+            },
+            "iou_0.5": {
+              "tp": 12,
+              "fp": 1,
+              "fn": 12,
+              "precision": 0.9230769230769231,
+              "recall": 0.5,
+              "f1": 0.6486486486486487
+            }
+          }
+        },
+        "step": {
+          "daily_micro": {
+            "tp": 5,
+            "fp": 2,
+            "fn": 18,
+            "precision": 0.7142857142857143,
+            "recall": 0.21739130434782608,
+            "f1": 0.3333333333333333
+          },
+          "events_micro": {
+            "iou_0.3": {
+              "tp": 5,
+              "fp": 2,
+              "fn": 18,
+              "precision": 0.7142857142857143,
+              "recall": 0.21739130434782608,
+              "f1": 0.3333333333333333
+            },
+            "iou_0.5": {
+              "tp": 5,
+              "fp": 2,
+              "fn": 18,
+              "precision": 0.7142857142857143,
+              "recall": 0.21739130434782608,
+              "f1": 0.3333333333333333
+            }
+          }
+        },
+        "transient": {
+          "daily_micro": {
+            "tp": 326,
+            "fp": 3,
+            "fn": 487,
+            "precision": 0.9908814589665653,
+            "recall": 0.4009840098400984,
+            "f1": 0.5709281961471103
+          },
+          "events_micro": {
+            "iou_0.3": {
+              "tp": 12,
+              "fp": 0,
+              "fn": 12,
+              "precision": 1.0,
+              "recall": 0.5,
+              "f1": 0.6666666666666666
+            },
+            "iou_0.5": {
+              "tp": 12,
+              "fp": 0,
+              "fn": 12,
+              "precision": 1.0,
+              "recall": 0.5,
+              "f1": 0.6666666666666666
+            }
+          }
+        },
+        "deformation": {
+          "daily_micro": {
+            "tp": 1913,
+            "fp": 1504,
+            "fn": 1007,
+            "precision": 0.5598478197249049,
+            "recall": 0.6551369863013699,
+            "f1": 0.603755720372416
+          },
+          "events_micro": {
+            "iou_0.3": {
+              "tp": 16,
+              "fp": 6,
+              "fn": 8,
+              "precision": 0.7272727272727273,
+              "recall": 0.6666666666666666,
+              "f1": 0.6956521739130435
+            },
+            "iou_0.5": {
+              "tp": 10,
+              "fp": 12,
+              "fn": 14,
+              "precision": 0.45454545454545453,
+              "recall": 0.4166666666666667,
+              "f1": 0.43478260869565216
+            }
+          }
+        }
+      },
+      "failed_records": 0
+    }
+  },
+  "paired_stratified_bootstrap": {
+    "random_forest": {
+      "endpoint": "deformation daily micro-F1 difference",
+      "repeats": 2000,
+      "strata": "dataset seeds, stations resampled within each seed",
+      "percentile_ci_95": [
+        -0.04090436338392499,
+        0.11575540216690673
+      ],
+      "seed": 2026101203,
+      "scope": "conditional on three fitted models, not all training variability",
+      "difference": 0.03211503737315835
+    },
+    "rf_balanced": {
+      "endpoint": "deformation daily micro-F1 difference",
+      "repeats": 2000,
+      "strata": "dataset seeds, stations resampled within each seed",
+      "percentile_ci_95": [
+        0.030286491383741843,
+        0.15036681961179638
+      ],
+      "seed": 2026101203,
+      "scope": "conditional on three fitted models, not all training variability",
+      "difference": 0.08033974241098352
+    },
+    "rf_split_temporal": {
+      "endpoint": "deformation daily micro-F1 difference",
+      "repeats": 2000,
+      "strata": "dataset seeds, stations resampled within each seed",
+      "percentile_ci_95": [
+        0.0196777393651405,
+        0.12782906751906026
+      ],
+      "seed": 2026101203,
+      "scope": "conditional on three fitted models, not all training variability",
+      "difference": 0.06251933615965599
+    },
+    "fusion": {
+      "endpoint": "deformation daily micro-F1 difference",
+      "repeats": 2000,
+      "strata": "dataset seeds, stations resampled within each seed",
+      "percentile_ci_95": [
+        0.18011731063762604,
+        0.4134561869047432
+      ],
+      "seed": 2026101203,
+      "scope": "conditional on three fitted models, not all training variability",
+      "difference": 0.2987653584105398
+    },
+    "guided_fusion": {
+      "endpoint": "deformation daily micro-F1 difference",
+      "repeats": 2000,
+      "strata": "dataset seeds, stations resampled within each seed",
+      "percentile_ci_95": [
+        -0.15755137382085363,
+        0.0577802451482726
+      ],
+      "seed": 2026101203,
+      "scope": "conditional on three fitted models, not all training variability",
+      "difference": -0.054341966002905306
+    }
+  }
+}

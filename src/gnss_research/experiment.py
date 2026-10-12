@@ -12,7 +12,10 @@ from pathlib import Path
 import numpy as np
 
 from gnss_research.baselines import NUMERICAL_METHODS, fit_baselines, predict_numerical
+from gnss_research.features import numerical_evidence
 from gnss_research.files import read_json, sha256, source_hashes, write_json
+from gnss_research.fusion import DERIVED_METHODS, anchored_review
+from gnss_research.guided import GUIDED_METHODS
 from gnss_research.metrics import aggregate, evaluate_record, paired_bootstrap
 from gnss_research.plots import export_labels, render_observation
 from gnss_research.schema import Prediction, observed_values
@@ -41,11 +44,15 @@ def verify_dataset(dataset: Path) -> dict:
 
 
 def register(dataset: Path, out: Path, methods: list[str], split: str, seed: int,
-             model: str | None, max_requests: int, workers: int) -> dict:
+             model: str | None, max_requests: int, workers: int,
+             identity: Path | None = None) -> dict:
     if not methods or len(methods) != len(set(methods)):
         raise ValueError("nonempty distinct methods required")
-    if set(methods) - set(NUMERICAL_METHODS + VISUAL_METHODS + UPSTREAM_METHODS):
+    if set(methods) - set(NUMERICAL_METHODS + VISUAL_METHODS + UPSTREAM_METHODS
+                          + tuple(DERIVED_METHODS)):
         raise ValueError("unknown method")
+    if any(parent not in methods for name, parent in DERIVED_METHODS.items() if name in methods):
+        raise ValueError("anchored fusion requires its same-response visual control")
     if split not in ("validation", "test") or not 1 <= workers <= 4 or seed < 0:
         raise ValueError("invalid split, seed or concurrency")
     manifest = verify_dataset(dataset)
@@ -80,6 +87,15 @@ def register(dataset: Path, out: Path, methods: list[str], split: str, seed: int
                         "point_adjustment": False, "missing": "excluded and coverage reported",
                         "failures": "zero detections for unconditional score; separately counted",
                         "online": False}}
+    if identity is not None:
+        frozen["experiment"] = read_json(identity)
+        shutil.copyfile(identity, snapshot / "experiment.json")
+        protocol = project_root / frozen["experiment"]["protocol_path"]
+        shutil.copyfile(protocol, snapshot / "method-protocol.md")
+        frozen["method_protocol_sha256"] = sha256(protocol)
+        frozen["rules"]["threshold_tuning"] = (
+            "no physical threshold or validation/test score cutoff tuning; balanced RF, "
+            "training-only transition pseudocount=1, top-ranked review windows disclosed")
     write_json(out / "registration.json", frozen)
     return {"run": str(out.resolve()), "expected_requests": expected, "stations": len(records)}
 
@@ -109,10 +125,16 @@ def execute(run: Path, env_file: Path | None = None) -> dict:
     completed = []
     for record in records:
         observation = read_json(dataset / record["observation"])
+        evidence = numerical_evidence(observation)
+        numerical = predict_numerical(models["rf_split_temporal"], "rf_split_temporal",
+                                      observation, evidence) \
+            if set(config["methods"]) & set(GUIDED_METHODS) else None
         for method in config["methods"]:
             work = run / "predictions" / method / record["station_id"]
+            if method in DERIVED_METHODS:
+                continue
             if method in VISUAL_METHODS:
-                prepare_request(observation, method, work, settings[2])
+                prepare_request(observation, method, work, settings[2], numerical)
                 pending.append((record, method, observation, work))
             elif method in UPSTREAM_METHODS:
                 prepare_visualtime(observation, work, settings[2])
@@ -120,7 +142,7 @@ def execute(run: Path, env_file: Path | None = None) -> dict:
             else:
                 work.mkdir(parents=True, exist_ok=False)
                 start = time.perf_counter()
-                result = predict_numerical(models[method], method, observation)
+                result = predict_numerical(models[method], method, observation, evidence)
                 result.update({"status": "success", "elapsed_seconds": time.perf_counter() - start,
                                "request_count": 0, "method": method})
                 write_json(work / "result.json", result)
@@ -139,6 +161,20 @@ def execute(run: Path, env_file: Path | None = None) -> dict:
     # remains serial, while independent station requests share a bounded provider budget.
     with ThreadPoolExecutor(max_workers=config["workers"]) as executor:
         completed.extend(executor.map(infer, pending))
+    derived = []
+    for record, parent, observation, parent_work, result in completed:
+        for method, visual_parent in DERIVED_METHODS.items():
+            if parent != visual_parent or method not in config["methods"]:
+                continue
+            work = run / "predictions" / method / record["station_id"]
+            work.mkdir(parents=True, exist_ok=False)
+            candidates = read_json(parent_work / "candidates.json")
+            fused = anchored_review(observation, result, candidates)
+            fused.update(method=method, source_visual_method=parent,
+                         source_result_sha256=sha256(parent_work / "result.json"))
+            write_json(work / "result.json", fused)
+            derived.append((record, method, observation, work, fused))
+    completed.extend(derived)
     for record, method, observation, work, result in completed:
         if result.get("prediction") is not None:
             prediction = Prediction.model_validate(result["prediction"])
@@ -170,7 +206,7 @@ def evaluate(run: Path, out: Path | None = None, dataset_override: Path | None =
             if result["status"] != "success":
                 failures[method] += result["status"] != "not_run"
                 missing_results[method] += result["status"] == "not_run"
-                typed_method = method in VISUAL_METHODS or (
+                typed_method = method in VISUAL_METHODS or method in DERIVED_METHODS or (
                     method in NUMERICAL_METHODS and method != "isolation_forest")
                 result = {"prediction": {"events": []} if typed_method else None,
                           "generic_mask": [False] * len(observed), "generic_score": None}
@@ -186,14 +222,17 @@ def evaluate(run: Path, out: Path | None = None, dataset_override: Path | None =
                         "not_run_records": missing_results[method]}
                for method, rows in reports.items()}
     pairs = {}
-    if "fusion" in reports:
+    main_method = config.get("experiment", {}).get("primary_method")
+    if main_method is None:
+        main_method = "guided_fusion" if "guided_fusion" in reports else "fusion"
+    if main_method in reports:
         for method in reports:
-            if method != "fusion":
-                pairs[f"fusion_minus_{method}"] = paired_bootstrap(
-                    reports["fusion"], reports[method], config["seed"])
+            if method != main_method:
+                pairs[f"{main_method}_minus_{method}"] = paired_bootstrap(
+                    reports[main_method], reports[method], config["seed"])
                 if method not in ("isolation_forest", "visualtime_gnss"):
-                    pairs[f"fusion_minus_{method}_deformation"] = paired_bootstrap(
-                        reports["fusion"], reports[method], config["seed"], endpoint="deformation")
+                    pairs[f"{main_method}_minus_{method}_deformation"] = paired_bootstrap(
+                        reports[main_method], reports[method], config["seed"], endpoint="deformation")
     output = out or run / "evaluation"
     output.mkdir(parents=True, exist_ok=False)
     write_json(output / "per-station.json", reports)

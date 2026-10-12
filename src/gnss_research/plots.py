@@ -15,7 +15,8 @@ from gnss_research.schema import Prediction, event_masks, observed_values, phase
 
 
 def render_observation(observation: dict, path: Path, axes: tuple[int, ...] = (0, 1, 2),
-                       show_background: bool = True, prediction: Prediction | None = None) -> None:
+                       show_background: bool = True, prediction: Prediction | None = None,
+                       reference_curve: np.ndarray | None = None) -> None:
     values = observed_values(observation)
     observed = np.isfinite(values).all(axis=1)
     labels = phase_labels(prediction, observed) if prediction is not None else [None] * len(values)
@@ -27,6 +28,10 @@ def render_observation(observation: dict, path: Path, axes: tuple[int, ...] = (0
                     "deformation": "#3b9a88"}
     for panel, axis_index in zip(panels[:, 0], axes):
         panel.plot(np.arange(len(values)), values[:, axis_index], color="#23495b", linewidth=0.8)
+        if reference_curve is not None:
+            panel.plot(np.arange(len(values)), reference_curve[:, axis_index], "--",
+                       color="#be7739", linewidth=1, label="normal-prefix fitted trajectory")
+            panel.legend(loc="best", fontsize=8)
         panel.set_ylabel(f"{('N', 'E', 'U')[axis_index]} (mm)")
         panel.grid(alpha=0.2)
         if show_background:

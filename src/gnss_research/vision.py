@@ -11,11 +11,12 @@ import numpy as np
 
 from gnss_research.features import numerical_evidence, summarize_blocks
 from gnss_research.files import sha256, write_json
+from gnss_research.guided import GUIDED_METHODS, prepare_guided
 from gnss_research.plots import render_observation
 from gnss_research.provider import send_request
 from gnss_research.schema import Prediction, VisualDecision, event_masks
 
-VISUAL_METHODS = ("visual_only", "fusion", "fusion_no_reference", "fusion_n_only")
+VISUAL_METHODS = ("visual_only", "fusion", "fusion_no_reference", "fusion_n_only", *GUIDED_METHODS)
 SYSTEM = """You review daily GNSS station N/E/U displacement observations, offline.
 Identify observed morphology, not unobserved causes: isolated spike, permanent step onset,
 temporary level shift (transient), and sustained displacement activity (deformation).
@@ -74,9 +75,14 @@ def parse_prediction(content: str, length: int) -> Prediction:
     return VisualDecision.model_validate(payload).as_prediction(length)
 
 
-def prepare_request(observation: dict, method: str, work: Path, model: str) -> dict:
+def prepare_request(observation: dict, method: str, work: Path, model: str,
+                    numerical: dict | None = None) -> dict:
     if method not in VISUAL_METHODS:
         raise ValueError("unknown visual method")
+    if method in GUIDED_METHODS:
+        if numerical is None:
+            raise ValueError("guided review requires training-only numerical predictions")
+        return prepare_guided(observation, numerical, method, work, model, SYSTEM)
     work.mkdir(parents=True, exist_ok=False)
     no_reference = method == "fusion_no_reference"
     axes = (0,) if method == "fusion_n_only" else (0, 1, 2)
