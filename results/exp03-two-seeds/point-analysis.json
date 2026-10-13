@@ -1,0 +1,139 @@
+{
+  "contrasts": {
+    "spike": {
+      "rf_split_temporal": {
+        "endpoint": "spike daily micro-F1 difference",
+        "repeats": 2000,
+        "difference": -0.21052631578947367,
+        "percentile_ci_95": [
+          -0.4694101671676423,
+          0.05444669247009141
+        ],
+        "scope": "stations resampled within dataset seed; conditional on fitted models"
+      },
+      "boundary_fusion": {
+        "endpoint": "spike daily micro-F1 difference",
+        "repeats": 2000,
+        "difference": -0.21052631578947367,
+        "percentile_ci_95": [
+          -0.4694101671676423,
+          0.05444669247009141
+        ],
+        "scope": "stations resampled within dataset seed; conditional on fitted models"
+      },
+      "guided_fusion": {
+        "endpoint": "spike daily micro-F1 difference",
+        "repeats": 2000,
+        "difference": 0.03678551216751552,
+        "percentile_ci_95": [
+          0.008523884867137715,
+          0.07320494398501366
+        ],
+        "scope": "stations resampled within dataset seed; conditional on fitted models"
+      }
+    },
+    "step": {
+      "rf_split_temporal": {
+        "endpoint": "step daily micro-F1 difference",
+        "repeats": 2000,
+        "difference": 0.4206896551724138,
+        "percentile_ci_95": [
+          0.07897727272727272,
+          0.7395269218798628
+        ],
+        "scope": "stations resampled within dataset seed; conditional on fitted models"
+      },
+      "boundary_fusion": {
+        "endpoint": "step daily micro-F1 difference",
+        "repeats": 2000,
+        "difference": 0.5095785440613028,
+        "percentile_ci_95": [
+          0.23038235294117648,
+          0.7692307692307693
+        ],
+        "scope": "stations resampled within dataset seed; conditional on fitted models"
+      },
+      "guided_fusion": {
+        "endpoint": "step daily micro-F1 difference",
+        "repeats": 2000,
+        "difference": 0.020689655172413834,
+        "percentile_ci_95": [
+          0.0,
+          0.05555555555555558
+        ],
+        "scope": "stations resampled within dataset seed; conditional on fitted models"
+      }
+    }
+  },
+  "training": [
+    {
+      "run": "exp03-main-v2-recovered",
+      "stations": 96,
+      "mechanism_events": {
+        "spike": 32,
+        "step": 32,
+        "transient": 32,
+        "deformation": 32
+      },
+      "observable_events": {
+        "spike": 32,
+        "step": 29,
+        "transient": 32,
+        "deformation": 32
+      }
+    },
+    {
+      "run": "exp03-seed2026101208-v2",
+      "stations": 96,
+      "mechanism_events": {
+        "spike": 32,
+        "step": 32,
+        "transient": 32,
+        "deformation": 32
+      },
+      "observable_events": {
+        "spike": 29,
+        "step": 31,
+        "transient": 32,
+        "deformation": 32
+      }
+    },
+    {
+      "run": "exp03-train24-seed2026101207-v2",
+      "stations": 24,
+      "mechanism_events": {
+        "spike": 8,
+        "step": 8,
+        "transient": 8,
+        "deformation": 8
+      },
+      "observable_events": {
+        "spike": 8,
+        "step": 7,
+        "transient": 8,
+        "deformation": 8
+      }
+    },
+    {
+      "run": "exp03-train24-seed2026101208-v2",
+      "stations": 24,
+      "mechanism_events": {
+        "spike": 8,
+        "step": 8,
+        "transient": 8,
+        "deformation": 8
+      },
+      "observable_events": {
+        "spike": 7,
+        "step": 8,
+        "transient": 8,
+        "deformation": 8
+      }
+    }
+  ],
+  "scope": "after frozen testing; not validation-based tuning",
+  "registration_hashes": [
+    "fd4f4eeb892025d02d0f4c59408b8990661bb158bb3208b577c7fff75e633210",
+    "6d87ec32b982a1334c77076d98006d47b593a297a8830f9d60179d568bd1ed8a"
+  ]
+}

@@ -9,7 +9,87 @@ DERIVED_METHODS = {
     "anchored_fusion": "guided_fusion",
     "anchored_no_local": "guided_no_local",
     "anchored_no_scores": "guided_no_scores",
+    "boundary_fusion": "guided_fusion",
+    "boundary_no_local": "guided_no_local",
+    "boundary_no_scores": "guided_no_scores",
+    "boundary_numeric_points": "guided_fusion",
+    "ranked_boundary_fusion": "guided_fusion",
+    "ranked_no_local": "guided_no_local",
+    "ranked_no_scores": "guided_no_scores",
 }
+
+
+def ranked_boundary_review(observation: dict, visual: dict, candidates: dict) -> dict:
+    """Rank locates sparse points; exact raw-curve visual confirmation decides presence."""
+    result = boundary_review(observation, visual, candidates)
+    if result["status"] != "success":
+        return result
+    events = [event for event in result["prediction"]["events"]
+              if event["kind"] not in ("spike", "step")]
+    confirmed_points = {(event["kind"], event["start"]): event
+                        for event in visual["prediction"]["events"]
+                        if event["status"] == "confirmed" and event["kind"] in ("spike", "step")}
+    observed = np.isfinite(observed_values(observation)).all(axis=1)
+    emitted = set()
+    for window in candidates["windows"]:
+        kind, peak = window["inspection_kind"], window["peak_index"]
+        key = (kind, peak)
+        if key in confirmed_points and observed[peak] and key not in emitted:
+            decision = confirmed_points[key]
+            events.append({**decision, "evidence":
+                "Ranked classifier peak and exact-day visual morphology agree; no RF vote cutoff: "
+                + decision["evidence"]})
+            emitted.add(key)
+    prediction = Prediction.model_validate({"events": events})
+    masks = event_masks(prediction, observed)
+    result.update(prediction=prediction.model_dump(),
+                  generic_mask=np.any(np.column_stack(list(masks.values())), axis=1).tolist(),
+                  derivation="same response; ranked peaks with exact-day visual point confirmation, "
+                  "visually revised numeric-supported activity boundaries")
+    return result
+
+
+def boundary_review(observation: dict, visual: dict, candidates: dict,
+                    numerical_points: bool = False) -> dict:
+    """Visual displacement boundaries may revise a numerically supported activity.
+
+    Overlap gates morphology, never proves the boundaries. The visual model must inspect
+    raw displacement and arrest; this rule cannot guarantee its judgment is correct.
+    The point ablation removes visual vetoes without changing RF votes or their dates.
+    """
+    result = anchored_review(observation, visual, candidates)
+    if result["status"] != "success":
+        return result
+    observed = np.isfinite(observed_values(observation)).all(axis=1)
+    proposals = candidates["numerical_prediction"]["prediction"]["events"]
+    decisions = [event for event in visual["prediction"]["events"]
+                 if event["status"] == "confirmed"]
+    events = [event for event in result["prediction"]["events"]
+              if event["kind"] != "deformation"]
+    if numerical_points:
+        events = [event for event in events if event["kind"] not in ("spike", "step")]
+        events.extend({**event, "evidence": "Numerical point decision without visual veto"}
+                      for event in proposals if event["kind"] in ("spike", "step"))
+    for decision in decisions:
+        if decision["kind"] != "deformation":
+            continue
+        for proposal in proposals:
+            if proposal["kind"] != "deformation":
+                continue
+            left = max(proposal["start"], decision["start"])
+            right = min(proposal["end"], decision["end"])
+            if left <= right and observed[left:right + 1].any():
+                events.append({**decision, "evidence":
+                    "Visual raw-displacement boundaries revise an overlapping numeric activity: "
+                    + decision["evidence"]})
+                break
+    prediction = Prediction.model_validate({"events": events})
+    masks = event_masks(prediction, observed)
+    return {"status": "success", "prediction": prediction.model_dump(),
+            "generic_mask": np.any(np.column_stack(list(masks.values())), axis=1).tolist(),
+            "generic_score": None, "request_count": 0,
+            "derivation": "same visual response; revised activity boundaries, "
+            + ("numeric points without veto" if numerical_points else "exact-day point consensus")}
 
 
 def anchored_review(observation: dict, visual: dict, candidates: dict) -> dict:

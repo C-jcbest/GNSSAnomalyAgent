@@ -20,6 +20,8 @@ def main() -> None:
     generation.add_argument("--seed", type=int, required=True)
     generation.add_argument("--per-split", type=int, default=24)
     generation.add_argument("--days", type=int, default=730)
+    generation.add_argument("--train-stations", type=int,
+                            help="仅增加训练站，验证/测试仍各per-split站且随机流不变")
     registration = commands.add_parser("register", help="冻结方案、数据与源码；不调用模型")
     registration.add_argument("--dataset", type=Path, required=True)
     registration.add_argument("--out", type=Path, required=True)
@@ -44,7 +46,8 @@ def main() -> None:
     args = parser.parse_args()
     try:
         if args.command == "generate":
-            result = data.generate(args.out, args.seed, args.per_split, args.days)
+            result = data.generate(args.out, args.seed, args.per_split, args.days,
+                                   args.train_stations)
         elif args.command == "register":
             result = experiment.register(args.dataset, args.out, args.methods, args.split,
                                          args.seed, args.model, args.max_requests, args.workers,

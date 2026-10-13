@@ -92,18 +92,28 @@ def simulate(seed: int, station_id: str, scenario: str, days: int = 730,
     return observation, truth
 
 
-def generate(out: Path, seed: int, per_split: int, days: int) -> dict:
+def generate(out: Path, seed: int, per_split: int, days: int,
+             train_stations: int | None = None) -> dict:
     if per_split < 6 or per_split % 6:
         raise ValueError("per-split must be a positive multiple of six")
     if seed < 0:
         raise ValueError("seed must be nonnegative")
+    training_count = per_split if train_stations is None else train_stations
+    if training_count < per_split or training_count % 6:
+        raise ValueError("train-stations must be a multiple of six, at least per-split")
     out.mkdir(parents=True, exist_ok=False)
-    streams = np.random.SeedSequence(seed).spawn(per_split * 3)
+    streams = np.random.SeedSequence(seed).spawn(per_split * 2 + training_count)
     records = []
     for split_index, split in enumerate(("train", "validation", "test")):
-        for index in range(per_split):
-            station_id = f"s{split_index * per_split + index:04d}"
-            case_seed = int(streams[split_index * per_split + index].generate_state(1)[0])
+        count = training_count if split == "train" else per_split
+        for index in range(count):
+            # Additional training stations use new streams after the original three splits.
+            # Scaling training must leave validation/test observations exactly unchanged.
+            stream_index = split_index * per_split + index
+            if split == "train" and index >= per_split:
+                stream_index = per_split * 3 + index - per_split
+            station_id = f"s{stream_index:04d}"
+            case_seed = int(streams[stream_index].generate_state(1)[0])
             observation, truth = simulate(case_seed, station_id, SCENARIOS[index % 6], days,
                                           background_days=min(365, days // 2))
             observation_path = out / "observations" / f"{station_id}.json"
@@ -118,6 +128,8 @@ def generate(out: Path, seed: int, per_split: int, days: int) -> dict:
     manifest = {"schema": "gnss-research-dataset-v1", "seed": seed, "days": days,
                 "origin": "mechanism-inspired simulation, not field measurements",
                 "per_split": per_split, "sources": source_hashes(), "records": records,
+                "split_counts": {"train": training_count, "validation": per_split,
+                                 "test": per_split},
                 "design": "independent stations, simple white noise, normal historical prefix",
                 "background_days": min(365, days // 2)}
     write_json(out / "manifest.json", manifest)

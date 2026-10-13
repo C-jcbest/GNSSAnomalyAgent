@@ -14,7 +14,12 @@ import numpy as np
 from gnss_research.baselines import NUMERICAL_METHODS, fit_baselines, predict_numerical
 from gnss_research.features import numerical_evidence
 from gnss_research.files import read_json, sha256, source_hashes, write_json
-from gnss_research.fusion import DERIVED_METHODS, anchored_review
+from gnss_research.fusion import (
+    DERIVED_METHODS,
+    anchored_review,
+    boundary_review,
+    ranked_boundary_review,
+)
 from gnss_research.guided import GUIDED_METHODS
 from gnss_research.metrics import aggregate, evaluate_record, paired_bootstrap
 from gnss_research.plots import export_labels, render_observation
@@ -169,7 +174,13 @@ def execute(run: Path, env_file: Path | None = None) -> dict:
             work = run / "predictions" / method / record["station_id"]
             work.mkdir(parents=True, exist_ok=False)
             candidates = read_json(parent_work / "candidates.json")
-            fused = anchored_review(observation, result, candidates)
+            if method.startswith("ranked_"):
+                fused = ranked_boundary_review(observation, result, candidates)
+            elif method.startswith("boundary_"):
+                fused = boundary_review(observation, result, candidates,
+                                        numerical_points=method == "boundary_numeric_points")
+            else:
+                fused = anchored_review(observation, result, candidates)
             fused.update(method=method, source_visual_method=parent,
                          source_result_sha256=sha256(parent_work / "result.json"))
             write_json(work / "result.json", fused)

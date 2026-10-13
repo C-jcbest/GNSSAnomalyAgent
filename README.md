@@ -1,6 +1,43 @@
 # GNSS 视觉大模型异常识别研究
 
-当前完成 **GNSS-VLM-EXP02-v3：GNSS活动与质量异常分离的时间解码及局部视觉复核实验**。
+当前完成 **GNSS-VLM-EXP03-v2：GNSS排序候选视觉确认、可修正活动边界与训练规模对照实验**。
+分支`codex/gnss-vlm-research`；主方法结果对应`ranked_boundary_fusion`行。
+两个新种子、48个独立模拟测试站，主方法形变日/事件F1 **0.7474/0.8000**，
+相同数值法`rf_split_temporal`为 **0.5216/0.5854**；阶跃日F1 **0.6207**，数值法 **0.2000**。
+停止后假活动日553→81，活动漏日增加；尖峰F1 **0.4561**低于数值 **0.6667**，保留误报代价。
+相对数值法形变日F1差值95%CI [.0890,.3632]；相对旧锚定/自由视觉区间跨0，不宣称稳定最优。
+24/96训练同站对照没有证明数值法随训练增加而改善；局部图消融仅主种子，增量未确定。
+
+- [EXP03两个新种子结果与训练规模对照](results/exp03-two-seeds/results.md)
+- [主种子消融与作者原码/适配结果](results/exp03-main-v2/results.md)
+- [冻结方案和方法对应](docs/experiment-exp03.md)
+- [开发取舍与负结果](docs/exp03-development.md)
+- [研究结论与优先问题](docs/exp03-assessment.md)
+
+先18次新验证小批，再冻结正式测试；确认376次模型请求，另至多1次中断在途请求状态未知。
+主批在新目录仅离线恢复，未重试或覆盖；同响应派生不重复计数。不是现场验证。
+27个业务测试及Ruff通过。论文与作者代码持续实读，原码、GNSS适配和未执行项分别披露。
+补充包：`artifacts/exp03-package/exp03-supplement.zip`；完整数据、冻结源码、请求/响应、
+中断原批与恢复、开发负结果和文献证据均保留。清单与SHA见
+[补充包记录](results/exp03-two-seeds/supplement-manifest.json)，本地凭据及Git元数据排除。
+
+## EXP03运行
+
+```powershell
+uv sync --locked
+uv run python scripts/prepare_exp03.py --seed 2026101207 --out data/reproduce-exp03
+uv run gnss-research register --dataset data/reproduce-exp03 --out runs/reproduce-exp03 --methods rf_split_temporal guided_fusion anchored_fusion boundary_fusion ranked_boundary_fusion --split test --seed 2026101206 --model qwen3.8-flash --max-requests 24 --identity configs/experiment-exp03.json
+uv run gnss-research run --run runs/reproduce-exp03 --env-file .env
+```
+
+上述是同条件复现入口，不是未见测试。额外训练站不改变验证/测试观测；
+生成的`-train24`数据集是前24训练站的显式子集，`-small`是首六验证站的小批。
+排名点确认不要求RF票决阳性，但必须是已有排名峰且视觉同日同类型确认，不作日期吸附。
+所有窗口/训练先验/排名预算/数值默认判决均披露，未设跨站点统一物理告警阈值。
+
+## EXP02历史结果
+
+已完成 **GNSS-VLM-EXP02-v3：GNSS活动与质量异常分离的时间解码及局部视觉复核实验**。
 在`codex/gnss-vlm-research`分支新增邻日形态特征、训练侧时间解码、单轮局部原始NEU复核及按任务归属的融合，未设统一物理告警阈值。
 三个新数据种子、72个独立测试站：主方法`anchored_fusion`形变日/事件F1为 **0.6038/0.4348**，
 相同数值定位`rf_split_temporal`为 **0.5412/0.3509**，原方案`fusion`重新测试为 **0.3050/0.3562**。

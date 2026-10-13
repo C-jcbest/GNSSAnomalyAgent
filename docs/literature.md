@@ -142,6 +142,32 @@ Andrade、Paulo、Marques 的 *Anomaly detection in weekly SIRGAS GNSS time seri
 
 在本轮三项工作及先前已读取来源里，**尚未确认与上述完整标签和证据契约完全相同的方案**。这项状态应写为“有界检索下未确认”，不得改写成“首次”“研究空白已经证明”或“创新性成立”。未深入核查搜索结果中其他候选的全文，未检索全部索引、中文 GNSS/滑坡文献或该方向后续引用链；正式投稿前仍需扩大范围并核查正式版及可获取的源码。
 
+## EXP03继续核查：阶跃定位与GNSS TimesNet作者代码
+
+2026-10-12重新阅读Crocetti2021正文3.1–3.4、4.4（缓存全文有哈希）。
+21日重叠三分量原坐标窗口、窗内多类断点时间与缺测窗剔除，与本项目
+48项局部特征的日级多标签RF不同。其3.3单独区分类型正确但时间错误，
+支持本轮精确日和±3日辅助分别报告。3.4清洗有经验5倍噪声尺度，4.4比较5–15mm
+断点筛选；本项目不迁入这些经验/毫米阈值，也不冒称其完整源码复现。
+
+此前6.3仓库访问失败的历史记录保留。此次通过HTTP实际取得
+[deep_anomaly_gnss](https://github.com/mauriciodev/deep_anomaly_gnss)提交
+`7bf4e9f31215fa93265d7b59e6fcd744924d163d`的文件树、TimesNet模型、
+StationTrainer、批处理及CHEC参数，另保存读取时的README/提交API响应。
+来源与内容哈希见证据清单。实际读到：
+
+- StationTrainer.train对同站training_data执行fit及decision_function，MinMax缩放后
+  采用默认99百分位截点；use_du=False时选择N/E两列。
+- process_stations默认use_du=False；其TopK数量直接读取truth中1的数量，
+  属于使用真值异常总量的排序诊断，不能作为未知事件数下的部署结果。
+- model/timesnet.py使用DeepOD的BaseDeepAD及工具、PyTorch；作者实现添加训练损失的
+  early stop和权重恢复。CHEC参数seq_len=10、e_layers=2、d_model=d_ff=128、
+  dropout=.2、top_k=3；这不是本轮日NEU任务已经验证的设置。
+
+这些事实来自当前作者提交，不断言与正式出版正文每项一致。本轮尚未执行TimesNet，
+不填对比数值；若后续迁移，需要将同站无监督拟合、训练跨站监督、
+日/周频率、是否使用U、缺测、百分位和oracle TopK分别声明。
+
 ## 参考文献
 
 1. Xu, X., Wang, H., Liang, Y., Yu, P. S., Zhao, Y., & Shu, K. (2026). Can Multimodal LLMs Perform Time Series Anomaly Detection? *Proceedings of the ACM Web Conference 2026*. https://doi.org/10.1145/3774904.3792376
