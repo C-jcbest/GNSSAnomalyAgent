@@ -1,6 +1,6 @@
 from gnss_research.data import generate
 from gnss_research.files import read_json
-from gnss_research.fusion import boundary_review, ranked_boundary_review
+from gnss_research.fusion import boundary_review, morphology_review, ranked_boundary_review
 
 
 def event(kind, start, end, status="confirmed"):
@@ -62,3 +62,22 @@ def test_ranked_points_do_not_require_numeric_positive_but_need_exact_visual_day
     assert [(e["kind"], e["start"]) for e in result["prediction"]["events"]] == [("spike", 10)]
     observation["displacement_mm"][10] = None
     assert ranked_boundary_review(observation, visual, candidates)["prediction"]["events"] == []
+
+
+def test_morphology_ownership_preserves_numeric_spikes_and_recovers_ranked_steps():
+    observation = {"dates": list(range(100)), "displacement_mm": [[0., 0., 0.]] * 100}
+    observation["displacement_mm"][50] = None
+    candidates = {"numerical_prediction": {"prediction": {"events": [
+        event("spike", 10, 10), event("deformation", 30, 80)]}}, "windows": [
+        {"inspection_kind": "spike", "peak_index": 20},
+        {"inspection_kind": "step", "peak_index": 25}]}
+    visual = {"status": "success", "prediction": {"events": [
+        event("spike", 20, 20), event("step", 25, 25), event("deformation", 35, 60)]}}
+    result = morphology_review(observation, visual, candidates)
+    assert {(e["kind"], e["start"], e["end"]) for e in result["prediction"]["events"]} == {
+        ("spike", 10, 10), ("step", 25, 25), ("deformation", 35, 60)}
+    assert not result["generic_mask"][50]
+    fixed = morphology_review(observation, visual, candidates, revise_activity=False)
+    assert {(e["kind"], e["start"], e["end"]) for e in fixed["prediction"]["events"]} == {
+        ("spike", 10, 10), ("step", 25, 25), ("deformation", 30, 80)}
+    assert morphology_review(observation, {"status": "failed"}, candidates)["status"] == "failed"

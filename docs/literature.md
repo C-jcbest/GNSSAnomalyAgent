@@ -168,6 +168,28 @@ StationTrainer、批处理及CHEC参数，另保存读取时的README/提交API�
 不填对比数值；若后续迁移，需要将同站无监督拟合、训练跨站监督、
 日/周频率、是否使用U、缺测、百分位和oracle TopK分别声明。
 
+## EXP04继续核查：形态分工与F1定义（2026-10-13）
+
+本轮重新实读已取得并有哈希的三篇全文，未宣称完成新的全库检索。
+
+- [VisualTimeAnomaly / Can Multimodal LLMs Perform Time Series Anomaly Detection?](https://arxiv.org/abs/2502.17812)
+  的已缓存版本§2使用按类型注入的简单合成时序，报告precision、recall与F1；
+  §6.2–6.3明确用传统方法处理point、用视觉模型处理range，并有checking修正。
+  因此EXP04“尖峰数值、阶跃排名视觉、持续形变视觉边界”的工作是GNSS细化和实证，
+  不能声称发明了按粒度分工或数值/视觉互补。作者完整代理代码未在已取得公开目录中确认。
+- [VLM4TS](https://arxiv.org/abs/2506.06836)已缓存全文的附录
+  “Data Preprocessing, Postprocessing and Evaluation”明示扫描
+  alpha∈{0.10,0.01,0.001}并报告F1-max。其unweighted contextual定义按预测区间
+  是否有任意交集计TP/FP、按真区间是否无交集计FN，不等同本项目一对一IoU匹配。
+  不将原文F1-max直接作为本项目固定判决下的比较分数。
+- [TAMA](https://arxiv.org/abs/2411.02465)已缓存v1 Table 1、Metrics段及Appendix A.2
+  明示PA-F1，并承认PA可能高估性能。本轮保留无PA的日级、事件级及时间容差指标，
+  允许论文选择效果较好且有领域意义的指标，但说明是在验证集选择，并给完整矩阵。
+
+指标选择服务于“多形态识别”这一目标：逐类汇总F1再四类等权，避免长持续活动在
+通用逐日micro-F1中压过稀疏质量异常。它是标准宏平均应用，不包装为新的评价指标。
+±3日只评价点事件定位容差；不改标签、不吸附预测日期、不用于选择数值判决阈值。
+
 ## 参考文献
 
 1. Xu, X., Wang, H., Liang, Y., Yu, P. S., Zhao, Y., & Shu, K. (2026). Can Multimodal LLMs Perform Time Series Anomaly Detection? *Proceedings of the ACM Web Conference 2026*. https://doi.org/10.1145/3774904.3792376

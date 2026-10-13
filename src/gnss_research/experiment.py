@@ -18,6 +18,7 @@ from gnss_research.fusion import (
     DERIVED_METHODS,
     anchored_review,
     boundary_review,
+    morphology_review,
     ranked_boundary_review,
 )
 from gnss_research.guided import GUIDED_METHODS
@@ -94,6 +95,8 @@ def register(dataset: Path, out: Path, methods: list[str], split: str, seed: int
                         "online": False}}
     if identity is not None:
         frozen["experiment"] = read_json(identity)
+        if "primary_endpoint" in frozen["experiment"]:
+            frozen["rules"]["primary"] = frozen["experiment"]["primary_endpoint"]
         shutil.copyfile(identity, snapshot / "experiment.json")
         protocol = project_root / frozen["experiment"]["protocol_path"]
         shutil.copyfile(protocol, snapshot / "method-protocol.md")
@@ -174,7 +177,10 @@ def execute(run: Path, env_file: Path | None = None) -> dict:
             work = run / "predictions" / method / record["station_id"]
             work.mkdir(parents=True, exist_ok=False)
             candidates = read_json(parent_work / "candidates.json")
-            if method.startswith("ranked_"):
+            if method.startswith("morphology_"):
+                fused = morphology_review(observation, result, candidates,
+                                          revise_activity=method != "morphology_fixed_activity")
+            elif method.startswith("ranked_"):
                 fused = ranked_boundary_review(observation, result, candidates)
             elif method.startswith("boundary_"):
                 fused = boundary_review(observation, result, candidates,

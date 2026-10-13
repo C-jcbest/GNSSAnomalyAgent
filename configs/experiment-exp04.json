@@ -1,0 +1,14 @@
+{
+  "experiment_id": "GNSS-VLM-EXP04",
+  "name": "GNSS形态分工视觉数值融合异常识别实验",
+  "protocol_version": "v1",
+  "protocol_path": "docs/experiment-exp04.md",
+  "primary_method": "morphology_fusion",
+  "primary_endpoint": "four-type macro daily F1: pool TP/FP/FN within each type, then average four type F1 scores equally; no point adjustment",
+  "secondary_endpoints": ["four-type macro event F1 at IoU 0.5", "generic daily micro F1", "all per-type daily and event F1", "spike/step tolerance 3 days F1"],
+  "development_seed": 2026101301,
+  "test_seeds": [2026101302, 2026101303],
+  "training_seed": 2026101301,
+  "metric_selection": "Selected after 24 validation stations, before fresh test generation/inference. Full candidate endpoint matrix retained.",
+  "note": "EI定位的GNSS领域方法实验；不要求全面领先；默认库、GNSS适配和本项目方法分列。"
+}

@@ -1,6 +1,48 @@
 # GNSS 视觉大模型异常识别研究
 
-当前完成 **GNSS-VLM-EXP03-v2：GNSS排序候选视觉确认、可修正活动边界与训练规模对照实验**。
+当前完成 **GNSS-VLM-EXP04-v1：GNSS形态分工视觉数值融合异常识别实验**。
+分支`codex/gnss-vlm-research`；主方法为`morphology_fusion`。
+尖峰交给数值分类，阶跃交给排名候选视觉确认，持续活动按原始位移复核边界。
+先新验证小批，后24验证站选定四类等权日F1，再冻结两个新种子、48测试站。
+
+| 方法 | 四类等权日F1 | 四类等权事件F1≥.5 |
+|---|---:|---:|
+| 平衡RF | .4257 | .2276 |
+| 数值时间解码 | .3734 | .3542 |
+| 纯视觉 | .1907 | .1904 |
+| EXP03排名融合（相同新测试） | .5080 | .5045 |
+| **EXP04形态分工融合** | **.5681** | **.5646** |
+
+主要新增收益是尖峰误报减少：尖峰F1由.3913提升至.6316，召回有所下降。
+固定数值活动边界变体的等权日F1=.5816、通用日F1=.7734；
+主批去局部图也优于完整方法，因此论文重点放在有证据的形态分工，不强求每个模块领先。
+不同变体、不同站数和不同F1分别标注，完整主方法通用日F1为.7095。
+
+- [EXP04两个新种子完整结果](results/exp04-two-seeds/results.md)
+- [主批24站对照与消融](results/exp04-main-v1/results.md)
+- [EI论文使用建议与实际结论](docs/exp04-assessment.md)
+- [冻结方案](docs/experiment-exp04.md)、[开发与指标选择](docs/exp04-development.md)
+- [固定场景原始位移与标签图](results/exp04-cases/cases.png)
+
+开发36+正式144，共180请求；全部失败保留，无自动重试，主方法0/48失败。
+29个业务测试、Ruff及四批冻结材料核验通过。仅离线模拟GNSS证据。
+原始数据/请求/响应/源码快照在`data/exp04-*`及`runs/exp04-*`，凭据不入库。
+文献持续实读；作者源码、通用库、GNSS适配与未执行模型均明确区分。
+
+## EXP04复现入口
+
+```powershell
+uv sync --locked
+uv run python scripts/prepare_exp04.py --seed 2026101302 --out data/reproduce-exp04
+uv run gnss-research register --dataset data/reproduce-exp04 --out runs/reproduce-exp04 --methods random_forest rf_balanced rf_split_temporal visual_only guided_fusion ranked_boundary_fusion morphology_fusion morphology_fixed_activity --split test --seed 2026101301 --model qwen3.8-flash --max-requests 48 --identity configs/experiment-exp04.json
+uv run gnss-research run --run runs/reproduce-exp04 --env-file .env
+```
+
+上述复现种子已使用；新优化另设开发/测试种子，不覆盖原运行。
+
+## EXP03历史结果
+
+已完成 **GNSS-VLM-EXP03-v2：GNSS排序候选视觉确认、可修正活动边界与训练规模对照实验**。
 分支`codex/gnss-vlm-research`；主方法结果对应`ranked_boundary_fusion`行。
 两个新种子、48个独立模拟测试站，主方法形变日/事件F1 **0.7474/0.8000**，
 相同数值法`rf_split_temporal`为 **0.5216/0.5854**；阶跃日F1 **0.6207**，数值法 **0.2000**。

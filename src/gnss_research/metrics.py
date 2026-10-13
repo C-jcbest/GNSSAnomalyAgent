@@ -123,7 +123,19 @@ def aggregate(rows: list[dict]) -> dict:
                 events[threshold] = counts_metrics(*(sum(
                     row["types"][kind]["events"][threshold][key] for row in typed)
                     for key in ("tp", "fp", "fn")))
+            if kind in ("spike", "step"):
+                events["tolerance_3_days_secondary"] = counts_metrics(*(sum(
+                    row["types"][kind]["events"]["tolerance_3_days_secondary"][key]
+                    for row in typed) for key in ("tp", "fp", "fn")))
             summary["types"][kind] = {"daily_micro": type_daily, "events_micro": events}
+        # Equal morphology weight keeps long activity spans from overwhelming sparse points.
+        # This is a macro average of four pooled type scores, not a station-macro score.
+        summary["types_daily_macro_f1"] = float(np.mean([
+            values["daily_micro"]["f1"] for values in summary["types"].values()]))
+        summary["types_event_macro_f1"] = {
+            threshold: float(np.mean([values["events_micro"][threshold]["f1"]
+                                      for values in summary["types"].values()]))
+            for threshold in ("iou_0.3", "iou_0.5")}
     return summary
 
 

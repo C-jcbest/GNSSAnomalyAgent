@@ -16,7 +16,41 @@ DERIVED_METHODS = {
     "ranked_boundary_fusion": "guided_fusion",
     "ranked_no_local": "guided_no_local",
     "ranked_no_scores": "guided_no_scores",
+    "morphology_fusion": "guided_fusion",
+    "morphology_no_local": "guided_no_local",
+    "morphology_no_scores": "guided_no_scores",
+    "morphology_fixed_activity": "guided_fusion",
 }
+
+
+def morphology_review(observation: dict, visual: dict, candidates: dict,
+                      revise_activity: bool = True) -> dict:
+    """Use RF votes for spikes, ranked visual confirmation for steps, and visual ranges.
+
+    Sparse RF step votes may miss persistent offsets, while visual spike confirmation
+    can promote ordinary noise peaks. Assign these two shapes different decision rules.
+    The fixed-activity ablation changes only the ownership of deformation boundaries.
+    """
+    result = ranked_boundary_review(observation, visual, candidates)
+    if result["status"] != "success":
+        return result
+    events = [event for event in result["prediction"]["events"] if event["kind"] != "spike"]
+    proposals = candidates["numerical_prediction"]["prediction"]["events"]
+    events.extend({**event, "evidence": "RF spike decision; visual review owns other morphologies"}
+                  for event in proposals if event["kind"] == "spike")
+    if not revise_activity:
+        anchored = anchored_review(observation, visual, candidates)
+        events = [event for event in events if event["kind"] != "deformation"]
+        events.extend(event for event in anchored["prediction"]["events"]
+                      if event["kind"] == "deformation")
+    prediction = Prediction.model_validate({"events": events})
+    observed = np.isfinite(observed_values(observation)).all(axis=1)
+    masks = event_masks(prediction, observed)
+    result.update(prediction=prediction.model_dump(),
+                  generic_mask=np.any(np.column_stack(list(masks.values())), axis=1).tolist(),
+                  derivation="same response; RF spikes, exact ranked visual steps, "
+                  + ("visual activity boundaries" if revise_activity else "numeric activity boundaries"))
+    return result
 
 
 def ranked_boundary_review(observation: dict, visual: dict, candidates: dict) -> dict:
