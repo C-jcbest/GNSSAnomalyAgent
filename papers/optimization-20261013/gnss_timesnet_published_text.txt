@@ -1,0 +1,261 @@
+Anomaly detection in weekly SIRGAS GNSS time series: a TimesNet assessment in real data | GPS Solutions | Springer Nature Link
+Skip to main content
+Advertisement
+Log in
+Menu
+Find a journal
+Publish with us
+Track your research
+Search
+Saved research
+Cart
+Home
+GPS Solutions
+Article
+Anomaly detection in weekly SIRGAS GNSS time series: a TimesNet assessment in real data
+Research
+Published: 15 March 2025
+Volume 29, article number 79 (2025)
+Cite this article
+Save article
+View saved research
+GPS Solutions
+Aims and scope
+Submit manuscript
+Luiz Claudio Oliveira de Andrade
+ORCID: orcid.org/0000-0002-5092-65521,
+Maurício Carvalho Mathias de Paulo
+ORCID: orcid.org/0000-0003-2438-05812 &
+Haroldo Antonio Marques
+ORCID: orcid.org/0000-0001-9535-87232
+805 Accesses
+4 Citations
+Explore all metrics
+Abstract
+Time series anomaly detection is essential in a range of fields because it allows for the identification of atypical patterns that differ from the expected behavior. Time series data of GNSS coordinates of SIRGAS stations are valuable for research purposes, including the determination of tectonic drift (velocity) and strain rate deformation. Changes in the patterns of a GNSS time series at a station due to abnormal events such as earthquakes, equipment changes, or malfunctions can significantly impact the accuracy of velocity estimation. In this work, we assess the efficacy of a neural network called TimesNet for detecting anomalies in real GNSS time series data from 95 SIRGAS stations in Brazil and Ecuador. As TimesNet achieved state-of-the-art efficiency on many benchmark datasets, it was chosen as the primary model for this research. Hyperparameter optimization was employed for TimesNet using two stations: BRAZ, in a low seismic activity area in Brazil, and CHEC in a high seismic activity area in Ecuador. The results with both hyperparameters sets were compared against three established anomaly detection filters (Gaussian process, Kalman and Moving Average) and a LSTM neural network that were paired with three anomaly scorer methods (norm, K-means and difference). We tested two methods to predict labels from the anomaly scores: (1) Using a fixed percentile (Top 1%) threshold, and (2) Using the Top S scores, where S is the number of anomalies of each station. The TimesNet with hyperparameters optimized in the CHEC station obtained better results than BRAZ, both in Brazil and Ecuador stations, showing that the choice of hyperparameters may present an impact in the anomaly detection results. The best F1Top S and MSE in Brazil were obtained with the Kalman filter (F1Top S=57.60 | MSE = 0.0094), closely followed by TimesNet (F1Top S=55.67 | MSE = 0.0095). In Ecuador, the best F1Top S and MSE were obtained by TimesNet (F1Top S=63.64 | MSE = 0.0145), followed by the Kalman filter (F1Top S=59.09 | MSE = 0.0344). Therefore, the anomaly scores produced by TimesNet were less noisy than those produced by the other methods on Ecuador. To foster further research, the source code for this analysis is publicly available at https://github.com/mauriciodev/deep_anomaly_gnss.
+This is a preview of subscription content, log in via an institution
+to check access.
+Access this article
+Log in via an institution
+Subscribe and save
+Springer+
+from $39.99 /Month
+Starting from 10 chapters or articles per month
+Access and download chapters and articles from more than 300k books and 2,500 journals
+Cancel anytime
+View plans
+Buy Now
+Buy article PDF USD 39.95
+Price excludes VAT (USA)
+Tax calculation will be finalised during checkout.
+Instant access to the full article PDF.
+Institutional subscriptions
+Fig. 1
+Fig. 2
+Fig. 3
+Fig. 4
+Fig. 5
+Fig. 6
+Fig. 7
+Similar content being viewed by others
+Transient deformation from the 2016 Meinong earthquake in Southwestern Taiwan revealed by Kalman filter analysis of GNSS time series
+Article
+Open access
+27 January 2026
+Ionosphere TEC Variations Over Bosnia and Herzegovina Using GNSS Data
+Chapter
+© 2018
+Revealing the deformational anomalies based on GNSS data in relation to the preparation and stress release of large earthquakes
+Article
+29 January 2018
+Explore related subjects
+Discover the latest articles, books and news in related subjects, suggested using machine learning.
+Data Mining
+Motion Detection
+Time-domain Astronomy
+Data Analytics
+Time Series Analysis
+Machine Learning
+Natural Language Processing Techniques for Sentiment Analysis
+Data availability
+Code and data were released in the GitHub address https://github.com/mauriciodev/deep_anomaly_gnss to provide repeatability and reproducibility, while also providing new tools for the geodesy researchers.
+References
+Ahmed S, Nielsen IE, Tripathi A, Siddiqui S, Ramachandran RP, Rasool G (2023) Transformers in time-series analysis: a tutorial. Circuits Syst Signal Process 42(12):7433–7466. https://doi.org/10.1007/s00034-023-02454-8
+Barba P, Rosado B, Ramírez-Zelaya J, Berrocoso M (2021) Comparative Analysis of Statistical and Analytical Techniques for the Study of GNSS Geodetic Time Series. The 7th International Conference on Time Series and Forecasting, 21. https://doi.org/10.3390/engproc2021005021
+Braei M, Wagner S (2020) Anomaly detection in univariate time-series: a survey on the state-of-the-art. preprint at https://doi.org/10.48550/arXiv.2004.00433
+Chicco D, Jurman G (2020) The advantages of the Matthews correlation coefficient (MCC) over F1 score and accuracy in binary classification evaluation. BMC Genomics 21(1):6. https://doi.org/10.1186/s12864-019-6413-7
+Article
+Google Scholar
+Choi K, Yi J, Park C, Yoon S (2021) Deep learning for anomaly detection in time-series data: review, analysis, and guidelines. IEEE Access 9:120043–120065. https://doi.org/10.1109/ACCESS.2021.3107975
+Article
+Google Scholar
+Desai A, Freeman C, Wang Z, Beaver I (2021) TimeVAE: a variational auto-encoder for multivariate time series generation. Preprint at https://doi.org/10.48550/arXiv.2111.08095
+Gazeaux J, Williams S, King M, Bos M, Dach R, Deo M, Moore AW, Ostini L, Petrie E, Roggero M, Teferle FN, Olivares G, Webb FH (2013) Detecting offsets in GPS time series: first results from the detection of offsets in GPS experiment. J Geophys Research: Solid Earth 118(5):2397–2407. https://doi.org/10.1002/jgrb.50152
+Article
+Google Scholar
+Ghaderpour E (2021) JUST: MATLAB and python software for change detection and time series analysis. GPS Solutions 25(3):85. https://doi.org/10.1007/s10291-021-01118-x
+Article
+Google Scholar
+He K, Zhang X, Ren S, Sun J (2016) Deep residual learning for image recognition. Proceedings of the IEEE Computer Society Conference on computer vision and pattern recognition, 2016-Decem, 770–778. https://doi.org/10.1109/CVPR.2016.90
+Herzen J, Lässig F, Piazzetta SG, Neuer T, Tafti L, Raille G, Van Pottelbergh T, Pasieka M, Skrodzki A, Huguenin N, Ko´sciszko´scisz J, Bader D, Gusset F, Benheddi M, Williamson C, Kosinski M, Petrik M, Grosch G (2022) Darts: User-Friendly Modern Machine Learning for Time Series Maxime Dumonal †. In Journal of Machine Learning Research (Vol. 23). https://github.com/unit8co/darts
+Ishikawa T, Yokota Y, Watanabe S, Nakamura Y (2020) History of On-Board equipment improvement for GNSS-A observation with focus on observation frequency. Front Earth Sci 8. https://doi.org/10.3389/feart.2020.00150
+Ji Z, Gong J, Feng J (2021) A novel deep learning approach for anomaly detection of time series data. Sci Program 2021:1–11. https://doi.org/10.1155/2021/6636270
+Article
+Google Scholar
+Jing C, Huang G, Zhang Q, Li X, Bai Z, Du Y (2022) GNSS/Accelerometer adaptive coupled landslide deformation monitoring technology. Remote Sens 14(15):3537. https://doi.org/10.3390/rs14153537
+Article
+Google Scholar
+Kiani M (2020) A specifically designed machine learning algorithm for GNSS position time series prediction and its applications in outlier and anomaly detection and earthquake prediction. Preprint at https://doi.org/10.48550/arXiv.2006.09067
+Lebrun S, Kaloustian S, Rollier R, Barschel C (2021) GNSS Positioning Security: Automatic Anomaly Detection on Reference Stations. In D. Percia David, A. Mermoud, & T. Maillart (Eds.), Critical Information Infrastructures Security (pp. 60–76). Springer International Publishing. https://doi.org/10.1007/978-3-030-93200-8_4
+Lei P, Ma F, Zhu C, Li T (2024) Soft Sens Sens 24(8):2521. https://doi.org/10.3390/s24082521. LSTM Short-Term Wind Power Prediction Method Based on Data Preprocessing and Variational Modal Decomposition
+Lim B, Zohren S (2021) Time-series forecasting with deep learning: a survey. Philosophical Trans Royal Soc A: Math Phys Eng Sci 379(2194):20200209. https://doi.org/10.1098/rsta.2020.0209
+Article
+Google Scholar
+Liu Z, Lin Y, Cao Y, Hu H, Wei Y, Zhang Z, Lin S, Guo B (2021) Swin transformer: Hierarchical vision transformer using shifted windows. In: Proceedings of the IEEE/CVF international conference on computer vision. pp 10012–10022
+Liu Z, Mao H, Wu C-Y, Feichtenhofer C, Darrell T, Xie S (2022) A ConvNet for the 2020s. In: Proceedings of the IEEE/CVF Conference on computer vision and pattern recognition, pp 11976–11986
+Miau S, Hung W-H (2020) River flooding forecasting and anomaly detection based on deep learning. IEEE Access 8:198384–198402. https://doi.org/10.1109/ACCESS.2020.3034875
+Article
+Google Scholar
+Microsoft (2021) Neural Network Intelligence. https://github.com/microsoft/nni
+Schmidl S, Wenig P, Papenbrock T (2022) Anomaly detection in time series. Proceedings of the VLDB Endowment, 15(9), 1779–1797. https://doi.org/10.14778/3538598.3538602
+Szegedy C, Liu W, Jia Y, Sermanet P, Reed S, Anguelov D, Erhan D, Vanhoucke V, Rabinovich A (2014) Going deeper with convolutions. In: Proceedings of the IEEE Conference on computer vision and pattern recognition, pp 1–9
+Verhaegen M, Verdult V (2007) Filtering and system identification: a least squares approach. Cambridge University Press
+Vitti A (2012) Sigseg: a tool for the detection of position and velocity discontinuities in geodetic time-series. GPS Solutions 16(3):405–410. https://doi.org/10.1007/s10291-012-0257-9
+Article
+Google Scholar
+Wang J, Jiang W, Li Z, Lu Y (2021) A new Multi-Scale sliding window LSTM framework (MSSW-LSTM): A case study for GNSS Time-Series prediction. Remote Sens 13(16):3328. https://doi.org/10.3390/rs13163328
+Article
+Google Scholar
+Williams CKI, Rasmussen CE (2006) Gaussian processes for machine learning, vol 2. MIT press Cambridge, MA, 3
+Google Scholar
+Wu D, Yan H, Shen Y (2017) TSAnalyzer, a GNSS time series analysis software. GPS Solutions 21(3):1389–1394. https://doi.org/10.1007/s10291-017-0637-2
+Article
+Google Scholar
+Wu H, Hu T, Liu Y, Zhou H, Wang J, Long M (2022) TimesNet: temporal 2D-variation modeling for general time series analysis. Preprint at https://doi.org/10.48550/arXiv.2210.02186
+Xie S, Girshick R, Dollár P, Tu Z, He K (2017) Aggregated residual transformations for deep neural networks. In: Proceedings of the IEEE Conference on computer vision and pattern recognition. pp 1492–1500. https://doi.org/10.48550/arXiv.1611.05431
+Yu T, Zhu H (2020) Hyper-parameter optimization: a review of algorithms and applications. Preprint at https://doi.org/10.48550/arXiv.2003.05689
+Zhang J, Huang C, Lian L, Zhang S (2024) Assessment of the improvement in observation precision of GNSS, SLR, VLBI, and DORIS inputs from ITRF2014 to ITRF2020 using TRF stacking methods. Remote Sens 16(7):1240. https://doi.org/10.3390/rs16071240
+Article
+Google Scholar
+Download references
+Acknowledgements
+The authors thank DGFI-TUM for the publicly available GNSS time series files (e.g., NEU, dsc and XYZ). The authors would like to thank the Brazilian Army and Brazilian National Council for Scientific and Technological Development (CNPq).L.C.O. de Andrade is currently assigned as Professor/Military Advisor by the Brazilian Army to the University of the Armed Forces of Ecuador (ESPE). M.C.M de Paulo is funded by Military Institute of Engineering (IME) of the Brazilian Army, at CMLabIME Project - Creation and Modernization of Laboratories at the Military Engineering Institute (FINEP Agreement No. 0122031900 - Ref. 0160/22). H.A. Marques (grant 431559/2018-0) is funded by CNPq.
+Funding
+L.C.O. de Andrade is currently assigned as Professor/Military Advisor by the Brazilian Army to the University of the Armed Forces of Ecuador (ESPE). M.C.M de Paulo is funded by Military Institute of Engineering (IME) of the Brazilian Army, at CMLabIME Project - Creation and Modernization of Laboratories at the Military Engineering Institute (FINEP Agreement No. 0122031900 - Ref. 0160/22). H.A. Marques (grant 431559/2018-0) is funded by CNPq.The authors have no competing interests to declare that are relevant to the content of this article.
+Author information
+Authors and Affiliations
+University of the Armed Forces (ESPE), Av. Gral. Rumiñahui S/N, Sangolquí, Ecuador
+Luiz Claudio Oliveira de Andrade
+Military Institute of Engineering (IME), Praça Gen. Tibúrcio, 80, Rio de Janeiro, RJ, Brazil
+Maurício Carvalho Mathias de Paulo & Haroldo Antonio Marques
+Authors
+Luiz Claudio Oliveira de Andrade
+View author publications
+Search author on:PubMed Google Scholar
+Maurício Carvalho Mathias de Paulo
+View author publications
+Search author on:PubMed Google Scholar
+Haroldo Antonio Marques
+View author publications
+Search author on:PubMed Google Scholar
+Contributions
+All authors contributed to the study conception and design. Material preparation, data collection and analysis were performed by L.C.O. de Andrade and M.C.M. de Paulo. The first draft of the manuscript was written by L.C.O. de Andrade and all authors commented on previous versions of the manuscript. All authors read and approved the final manuscript.
+Corresponding author
+Correspondence to
+Maurício Carvalho Mathias de Paulo.
+Ethics declarations
+Ethics approval and consent to participate
+Not applicable.
+Competing interests
+The authors declare no competing interests.
+Additional information
+Publisher’s note
+Springer Nature remains neutral with regard to jurisdictional claims in published maps and institutional affiliations.
+Rights and permissions
+Springer Nature or its licensor (e.g. a society or other partner) holds exclusive rights to this article under a publishing agreement with the author(s) or other rightsholder(s); author self-archiving of the accepted manuscript version of this article is solely governed by the terms of such publishing agreement and applicable law.
+Reprints and permissions
+About this article
+Cite this article
+Andrade, L.C.O.d., Paulo, M.C.M.d. & Marques, H.A. Anomaly detection in weekly SIRGAS GNSS time series: a TimesNet assessment in real data.
+GPS Solut 29, 79 (2025). https://doi.org/10.1007/s10291-025-01839-3
+Download citation
+Received: 22 May 2024
+Accepted: 28 February 2025
+Published: 15 March 2025
+Version of record: 15 March 2025
+DOI: https://doi.org/10.1007/s10291-025-01839-3
+Share this article
+Anyone you share the following link with will be able to read this content:Get shareable link
+Sorry, a shareable link is not currently available for this article.
+Copy shareable link to clipboard
+Provided by the Springer Nature SharedIt content-sharing initiative
+Keywords
+GNSS time series
+Anomaly detection
+Deep learning
+TimesNet
+Hyperparameter optimization
+Kalman
+Profiles
+Maurício Carvalho Mathias de Paulo
+View author profile
+Associated Content
+Part of a collection:
+Artificial Intelligence Applications in GNSS
+Access this article
+Log in via an institution
+Subscribe and save
+Springer+
+from $39.99 /Month
+Starting from 10 chapters or articles per month
+Access and download chapters and articles from more than 300k books and 2,500 journals
+Cancel anytime
+View plans
+Buy Now
+Buy article PDF USD 39.95
+Price excludes VAT (USA)
+Tax calculation will be finalised during checkout.
+Instant access to the full article PDF.
+Institutional subscriptions
+Advertisement
+Search
+Search by keyword or author
+Search
+Navigation
+Find a journal
+Publish with us
+Track your research
+Footer Navigation
+Discover content
+Journals A-Z
+Books A-Z
+Subjects A-Z
+Publish with us
+Journal finder
+Publish your research
+Language editing
+Open access publishing
+Products and services
+Our products
+Librarians
+Societies
+Partners and advertisers
+Our brands
+Springer
+Nature Portfolio
+BMC
+Palgrave Macmillan
+Apress
+Discover
+Corporate Navigation
+Your privacy choices/Manage cookies
+Your US state privacy rights
+Accessibility statement
+Terms and conditions
+Privacy policy
+Help and support
+Legal notice
+Cancel contracts here
+172.233.152.105
+Not affiliated
+© 2026 Springer Nature

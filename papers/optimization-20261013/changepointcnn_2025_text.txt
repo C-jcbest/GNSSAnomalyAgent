@@ -1,0 +1,814 @@
+--- PDF page 1 ---
+ChangePointCNN‐GNSS: An AI Model for Assessing
+Change Points and Optimizing Site Velocity Estimation
+From Global GNSS Data
+Guoquan Wang
+1
+, Yan Bao
+2
+, Shuangcheng Zhang
+3
+, Guanwen Huang
+3
+, and Xie Hu
+4
+1
+Department of Earth and Atmospheric Sciences, University of Houston, Houston, TX, USA,
+2
+National Key Laboratory of
+Bridge Safety and Resilience, Beijing University of Technology, Beijing, China,
+3
+School of Geology Engineering and
+Geomatics, Chang'an University, Xian, China,
+4
+College of Urban and Environmental Sciences, Peking University, Beijing,
+China
+Abstract Estimating long‐term site velocities from Global Navigation Satellite System (GNSS)‐derived
+daily displacement time series is vital for studying secular tectonic motions and establishing regional and global
+geodetic reference frames. However, this estimation is complicated by displacements caused by earthquakes,
+equipment changes, hydraulic head changes, and other sources, which introduce change points in GNSS time
+series. This study introduces a two‐stage hybrid framework for automated change‐point detection in GNSS time
+series. The framework integrates (a) analytical methods, including a sliding‐window algorithm for instant
+change‐point detection and a cubic polynomial fit for transitional change‐point detection and (b) an artificial
+intelligence (AI) model, ChangePointCNN‐GNSS, which evaluates the suitability of candidate change points
+for site velocity estimation and iteratively optimizes analytical parameters. Unlike prior data‐driven approaches,
+our framework leverages an image‐driven method, employing a convolutional neural network (CNN) to visually
+assess and select the most suitable change‐point configuration for reliable site velocity estimation. Site
+velocities are computed from the longest change‐point‐free segment (minimum 4 years), processed
+independently for each station and direction. This integrated approach ensures robust site velocity estimation
+across large GNSS networks. The CNN is trained using approximately 6,000 time series plots with marked
+change points. Each plot is labeled as “good” if the detected change points are suitable for reliable site velocity
+estimation or “bad” if unsuitable. This study delivers long‐term site velocities (IGS20) for approximately 14,600
+permanent GNSS stations worldwide, with a 95% confidence interval below 1 mm/year, offering a foundational
+data set for researchers in geodesy, tectonophysics, and hazard mitigation.
+Plain Language Summary Global Navigation Satellite System (GNSS) stations monitor Earth's
+surface displacements to estimate long‐term site velocities, from which secular tectonic motions can be derived.
+These secular velocities are fundamental for studying plate movements and assessing geological hazards.
+However, displacements from earthquakes, equipment changes, or other factors introduce change points that
+disrupt reliable secular velocity estimates. Conventionally, change points are detected using analytical methods
+that require manual tuning of multiple parameters—a slow, impractical process that limits the use of vast global
+GNSS data. We developed a two‐stage solution: first employing analytical methods to scan for potential change
+points, then using our artificial intelligence (AI) tool to assess their suitability for reliable velocity estimation—
+automatically fine‐tuning parameters without human intervention. Applied to decades of GNSS records, this
+method delivers trustworthy site velocities with a 95% confidence interval under 1 mm/year. By combining
+classic math with a modern, image‐based convolutional neural network (CNN), our method simplifies and
+improves the analysis of large GNSS data sets, offering reliable site velocities where conventional data‐driven
+methods often fall short. All tools and data are shared, enabling others to apply and extend this innovation across
+Earth science and related fields.
+1. Introduction
+Displacement time series derived from Global Navigation Satellite System (GNSS) observations provide
+essential data for estimating long‐term site velocities, which are commonly interpreted as secular tectonic motion
+trends in tectonically stable regions. These velocities are fundamental for the periodic updates of global geodetic
+reference frames (e.g., Altamimi et al., 2023 ), the development of regional crustal velocity models (e.g., Snay
+et al., 2025 ), and the establishment of regional and local‐scale reference frames (e.g., Agudelo et al., 2020 ; Bao
+RESEARCH ARTICLE
+10.1029/2025JH000910
+Special Collection:
+Advanced machine learning in
+solid earth geoscience
+Key Points:
+• Analytical methods, including sliding‐
+window detection and cubic fitting,
+enable identification of instant and
+transitional change points
+• ChangePointCNN‐GNSS optimizes
+parameters to detect change points and
+selects the longest change‐point‐free
+segment for site velocity
+• Site velocities for ∼ 14,600 global
+GNSS stations, supporting global and
+regional reference frames and
+advancing broad geoscience studies
+Correspondence to:
+G. Wang,
+gwang@uh.edu
+Citation:
+Wang, G., Bao, Y., Zhang, S., Huang, G.,
+& Hu, X. (2025).
+ChangePointCNN‐GNSS: An AI model
+for assessing change points and optimizing
+site velocity estimation from global GNSS
+data. Journal of Geophysical Research:
+Machine Learning and Computation , 2 ,
+e2025JH000910. https://doi.org/10.1029/
+2025JH000910
+Received 19 JUL 2025
+Accepted 18 OCT 2025
+Author Contributions:
+Conceptualization: Guoquan Wang,
+Yan Bao
+Formal analysis: Guoquan Wang,
+Guanwen Huang, Xie Hu
+Methodology: Guoquan Wang, Yan Bao,
+Shuangcheng Zhang
+Writing – review & editing:
+Guoquan Wang, Yan Bao,
+Shuangcheng Zhang, Guanwen Huang,
+Xie Hu
+© 2025 The Author(s). Journal of
+Geophysical Research: Machine Learning
+and Computation published by Wiley
+Periodicals LLC on behalf of American
+Geophysical Union.
+This is an open access article under the
+terms of the Creative Commons
+Attribution License, which permits use,
+distribution and reproduction in any
+medium, provided the original work is
+properly cited.
+WANG ET AL. 1 of 15
+
+
+--- PDF page 2 ---
+et al., 2021; Blewitt et al., 2013; Wang et al., 2018). Since the mid‐1990s, over 20,000 permanent GNSS stations
+worldwide have generated long‐term records. GNSS‐derived displacement time series are openly accessible
+through archives like UNAVCO (Herring et al., 2016) and the Nevada Geodetic Laboratory (Blewitt et al., 2018),
+enabling detailed studies of crustal motion and the development of numerous regional reference frames.
+Site velocities are typically derived by applying linear regression to displacement time series to determine stable,
+secular trends. However, change points, both instant and transitional, frequently disrupt long‐term GNSS time
+series due to various factors, such as earthquakes, equipment changes, groundwater level fluctuations, severe
+droughts, and undocumented events, complicating accurate site velocity estimation. Robust change‐point
+detection is thus essential for the reliable analysis of large‐scale GNSS networks (e.g., Gazeaux et al., 2013;
+Griffiths & Ray, 2016; Heflin et al., 2020).
+Traditional methods for calculating site velocities from large GNSS data sets, such as the Median Interannual
+Difference Adjusted for Skewness (MIDAS) (Blewitt et al., 2016) and trajectory modeling (Bedford &
+Bevis, 2018; Bevis & Brown, 2014), face challenges with large global data sets involving frequent steps and gaps.
+MIDAS estimates site velocity by calculating linear trends from 1‐year segments of the time series and selecting
+the median trend, but these segments may include complex earthquake signals or other natural and anthropogenic
+events, potentially biasing velocity estimates, particularly in tectonically active regions.
+Catalog‐driven physical trajectory models fit parametric functions, including linear trends, seasonal signals, and
+Heaviside step functions for known events like earthquakes, to the entire time series (Bevis & Brown, 2014).
+These models rely on prior knowledge of disruptive events from external sources, such as earthquake catalogs,
+GNSS site logs (documenting equipment changes and maintenance), and software update histories, to manually
+define change points. Data‐driven trajectory modeling, such as greedy automatic signal decomposition, identifies
+trends and change points without predefined catalogs, offering flexibility for complex time series with unknown
+disruptions (Bedford & Bevis, 2018). However, for processing large global data sets, data‐driven approaches face
+challenges, including high computational complexity due to iterative model fitting, sensitivity to noise and
+outliers across diverse stations, lack of geophysical interpretability for detected change points, parameter tuning
+difficulties for heterogeneous time series, and limited scalability in fully automated processing of large data sets.
+To overcome the limitations of conventional methods, we propose a hybrid framework that integrates analytical
+techniques with a convolutional neural network (CNN), ChangePointCNN‐GNSS. The process begins by using
+an analytical method to identify potential change points in a GNSS time series; however, the number of change
+points is highly sensitive to predefined threshold parameters. Our hybrid approach iteratively tests a range of these
+thresholds, generating a unique candidate set of change points for each one. The CNN model then evaluates and
+scores the suitability of each candidate set for long‐term velocity estimation. This score is used to refine the
+analytical parameters, creating an optimization loop that converges on the most statistically robust change‐point
+configuration. Finally, the longest change‐point‐free segment (minimum of 4 years) is selected from the optimal
+configuration, and a linear regression is applied to estimate the final site velocity. This integrated method en-
+hances both the precision and automation of velocity estimation.
+2. Data and Methods
+2.1. Data
+As of 2025, the NGL maintains a comprehensive data set of GNSS‐derived daily displacement time series from
+over 20,000 GNSS stations worldwide (Blewitt et al., 2018). Among these, approximately 15,000 stations offer
+continuous records spanning at least 4 years, with a data availability threshold exceeding 70%. This ensures
+sufficient temporal and spatial coverage for estimating long‐term site velocities directly from GNSS data, which
+can represent secular tectonic motion in stable regions.
+In this study, we utilize the GNSS time series provided by the NGL to train the ChangePointCNN‐GNSS model.
+The training data set comprises daily displacement time series from approximately 2,000 stations. The
+displacement time series are referenced to the International GNSS Service (IGS) reference frames. The trained
+model is then applied to estimate site velocities at approximately 15,000 stations by identifying the longest
+change‐point‐free segment in each station's time series for each directional component (NS, north‐south; EW,
+east‐west; and UD, upper‐down).
+JGR: Machine Learning and Computation 10.1029/2025JH000910
+WANG ET AL. 2 of 15
+ 29935210, 2025, 4, Downloaded from https://agupubs.onlinelibrary.wiley.com/doi/10.1029/2025JH000910 by GUOQUAN Wang , Wiley Online Library on [10/11/2025]. See the Terms and Conditions (https://onlinelibrary.wiley.com/terms-and-conditions) on Wiley Online Library for rules of use; OA articles are governed by the applicable Creative Commons License
+
+
+--- PDF page 3 ---
+2.2. Analytical Methods for Detecting Change Points
+Displacement time series derived from GNSS often exhibit two distinct classes of anomalies: abrupt displace-
+ments (referred to as steps) bounded by instant change points and gradual displacements bounded by transitional
+change points, reflecting divergent geophysical or anthropogenic origins. Instant change points mark the start and
+end of abrupt displacements, characterized by near‐instantaneous positional offsets, typically arising from
+discrete events such as equipment changes (e.g., antenna or receiver replacements, antenna mount adjustments),
+coseismic displacements, or sudden environmental perturbations. These change points are identified by sharp,
+discontinuous deviations exceeding background noise within a short period, often at a single sampling interval.
+Transitional change points, in contrast, define the boundaries of gradual, nonlinear displacements evolving over
+weeks to years, often linked to postseismic deformation, pre‐ and postvolcano‐eruption surface deformation,
+tectonic transient, slow‐slip events, or anthropogenic processes, such as groundwater withdrawal‐induced land
+subsidence. Prolonged drought events can also induce gradual displacements in GNSS time series, particularly in
+the vertical component, as shown by Welch et al. (2024). These displacements often follow logarithmic or
+exponential decay patterns, necessitating specialized detection techniques to distinguish them from secular tec-
+tonic trends. Figure 1 illustrates instant and transitional change points observed at a representative long‐term
+GNSS station in an earthquake‐prone region, with change‐point‐free segments highlighted in red, used for
+linear regression to estimate site velocities that capture secular crustal block motions.
+Two common approaches are used to detect change points in time series. The first is the sliding‐window method,
+which uses adjustable windows to scan the data for abrupt steps. The second is the rupture method (Truong
+et al., 2020), which applies statistical optimization to the entire time series to robustly identify change points. The
+sliding‐window method scans detrended data by comparing mean shifts within fixed windows, tunable via
+Figure 1. GNSS‐derived daily displacement time series (referred to IGS20) plots at station J959 (Japan), illustrating instant and transitional change points. Instant change
+points bound abrupt displacements (e.g., coseismic offsets), while transitional change points define gradual displacements (e.g., postseismic deformation). The longest
+change‐point‐free segment (minimum 4 years, highlighted in red) is used for linear regression to estimate site velocity, capturing the secular crustal motion trend in this
+region.
+JGR: Machine Learning and Computation 10.1029/2025JH000910
+WANG ET AL. 3 of 15
+ 29935210, 2025, 4, Downloaded from https://agupubs.onlinelibrary.wiley.com/doi/10.1029/2025JH000910 by GUOQUAN Wang , Wiley Online Library on [10/11/2025]. See the Terms and Conditions (https://onlinelibrary.wiley.com/terms-and-conditions) on Wiley Online Library for rules of use; OA articles are governed by the applicable Creative Commons License
+
+
+--- PDF page 4 ---
+window size and threshold parameters to detect instant change points. It often misses slow, gradual displacements
+that span years, limiting its effectiveness for complex GNSS time series in earthquake‐prone regions. In contrast,
+the rupture method, implemented via the ruptures library, uses dynamic programming to minimize a cost function
+—typically a radial basis function (rbf) kernel—across segments, offering the potential to capture both abrupt and
+gradual displacements by modeling nuanced changes. Yet, its conventional form is computationally intensive,
+making it impractical for processing decade‐long GNSS time series. The rpt.KernelCPD variant, with linear
+complexity penalties (e.g., L1 norm), improves efficiency but sacrifices precision, frequently producing spurious
+change points or overlooking gradual transitions due to its reliance on simplified kernel assumptions.
+To address these challenges, we implement a two‐stage analytical approach, utilizing sliding‐window analysis to
+detect instant change points and curvature‐based analysis to identify transitional change points in GNSS time
+series. For preprocessing, we employ a robust outlier removal method that first excludes extreme displacements
+exceeding a 5‐m absolute threshold, then detrends the time series, and iteratively filters outliers using a 360‐day
+rolling window with a 2.5‐sigma threshold over three iterations. These parameter values were optimized through
+extensive empirical testing on diverse GNSS data sets to achieve a primary objective: maximizing the removal of
+noise and outliers while rigorously preserving the integrity of the geophysical signal. This careful balancing act
+significantly enhances the visibility of both abrupt and gradual change points for subsequent analysis.
+Instant change‐point detection is performed on the detrended time series. These change points are identified using
+a sliding‐window method that compares mean shifts between adjacent 30‐day windows. To reduce false de-
+tections caused by noise, short‐term environmental variations, or overly sensitive thresholds, a minimum sepa-
+ration of 30 days is enforced between consecutive change points. The threshold controlling the magnitude of
+detected abrupt steps is iteratively selected from a predefined set of candidate values during the detection process.
+In our implementation for global GNSS time series processing, the threshold list used for the horizontal com-
+ponents is (0.15, 0.2, 0.25, 0.3, 0.4, 0.5, 0.7, 1.0, 1.4, 2.0, 10.0, 20.0), while the vertical component uses (0.5, 0.6,
+0.7, 0.8, 1.0, 1.2, 1.4, 1.8, 2.5, 10.0, 20.0, 30.0). The threshold values share the same unit as the displacement time
+series, which is typically expressed in centimeters.
+To minimize the risk of undetected change points within large data gaps biasing site velocity estimates, we
+systematically add change points at the start and end of all gaps exceeding 1 year, since these gaps often stem from
+equipment replacements or antenna mount adjustments—events that typically introduce physical steps in the time
+series.
+Transitional change‐point detection targets the longest contiguous segment (>4 years) previously identified as
+free of instant change points during the initial sliding‐window analysis. Within this segment, we first remove the
+linear trend. To detect the nonlinear signatures of gradual transitions, we then apply a weighted cubic polynomial
+fit. This model was selected after testing various approaches, including quadratic (second‐order) fitting, splines,
+and higher‐order polynomials. A cubic polynomial effectively models the curved transitions in displacement time
+series, providing a better fit than a quadratic function while avoiding the overfitting risks associated with more
+complex models like splines or higher‐order polynomials. The transitional change point corresponds to a turning
+point in the detrended displacement time series. This is identified by finding where the first derivative (velocity)
+of the fitted cubic function equals zero. A weighted least‐squares approach is beneficial because the timing of a
+transitional change often occurs in the earlier or later portions of the time series segment, rather than near the
+middle. The complete algorithm is implemented in the provided Python code to facilitate replication. Figure 2
+illustrates typical examples of transitional change points detected by this cubic‐fitting approach.
+We assess whether a cubic model provides a better fit than a linear model by comparing their mean squared errors
+(MSE). If the absolute value of the MSE improvement ratio—calculated as the difference between the linear and
+cubic MSE, divided by the linear MSE—exceeds an empirically derived threshold of 0.2, the cubic model is
+adopted to identify potential transitional change points. This threshold was calibrated through extensive testing on
+a large and diverse set of GNSS time series to effectively distinguish nonlinear motion from linear noise. It serves
+as an initial, lower‐bound filter; candidate segments that pass this threshold are then subjected to additional
+criteria to confirm the presence of a statistically significant transitional change point. Turning points are then
+identified by solving the derivative of the cubic polynomial. The amplitude of each turning point is quantified as
+its deviation from a baseline, defined as the mean value of the segment. If this amplitude exceeds a predefined
+threshold, the turning point is marked as a transitional change point. In our iterative program, these amplitude
+thresholds serve as key control parameters for transitional change‐point detection. For the horizontal components,
+JGR: Machine Learning and Computation 10.1029/2025JH000910
+WANG ET AL. 4 of 15
+ 29935210, 2025, 4, Downloaded from https://agupubs.onlinelibrary.wiley.com/doi/10.1029/2025JH000910 by GUOQUAN Wang , Wiley Online Library on [10/11/2025]. See the Terms and Conditions (https://onlinelibrary.wiley.com/terms-and-conditions) on Wiley Online Library for rules of use; OA articles are governed by the applicable Creative Commons License
+
+
+--- PDF page 5 ---
+candidate thresholds of 0.4, 0.6, and 1.0 (in data units) are used; for the vertical component, thresholds of 0.5, 0.8,
+and 1.2 are applied.
+2.3. Estimation of Site Velocity and Its Uncertainty
+Determining optimal thresholds for change point detection is a complex calibration problem, as requirements vary
+significantly between stations and even between components at a single site, making manual tuning impractical
+for large‐scale data sets. To automate this process, we developed an AI‐driven framework that iteratively tests
+each candidate configuration of thresholds from a predefined pool—established for detecting instant and, where
+necessary, transitional change points, as described in the previous section. For each configuration, the algorithm
+generates a time series plot with all detected change points clearly marked. A CNN model then evaluates the
+suitability of each plot for reliable velocity estimation and assigns a corresponding probability score.
+The iterative process is designed for computational efficiency: if any configuration achieves a high confidence
+score of 0.85 or above, the iteration stops early and that configuration is selected. If no configuration meets this
+score, the process exhaustively tests all candidates and selects the one with the highest score. The final selected
+configuration is used to identify the longest change‐point‐free segment.
+In our method, site velocities are estimated using linear regression applied to the longest change‐point‐free
+segment, provided it spans at least 4 years. This minimum 4‐year duration is a critical criterion, ensuring both
+statistical reliability and geophysical relevance of the velocity estimates. First, the empirical analysis of three‐
+component displacement time series from approximately 9,700 global GNSS stations demonstrates that the
+95% confidence interval (95% CI) of the linear trends decreases exponentially with the duration of continuous
+observations (Figure 3 ) (Cornelison & Wang, 2023 ; Wang, 2022 ). The 95% CI is widely used as a measure of
+uncertainty for GNSS‐derived site velocities. Typically, horizontal velocities achieve about 1 mm /year uncer-
+tainty (95% CI) with 2.5 years of uninterrupted data, while vertical velocities require about 4 years to reach the
+same level of uncertainty. Extending the observation length beyond 7 years further reduces uncertainties below
+0.5 mm /year across all components. In general, beyond about 4 years, additional data yield only marginal
+reduction in velocity uncertainty, suggesting a practical limit to accuracy gains. Based on this, we impose a
+minimum 4‐year threshold for change‐point‐free segments, ensuring a 95% CI of below 1 mm /year for the
+estimated site velocity. This precision threshold is a commonly adopted standard in geodetic studies for resolving
+secular tectonic signals and longer‐term deformation processes.
+Second, step correction is deliberately avoided in large‐scale analyses. Equipment‐related abrupt steps (e.g.,
+antenna changes) are often accounted for during the processing calculating daily positions from GNSS raw data,
+Receiver Independent Exchange Format (RINEX) files, if these changes are recorded in the site log of the station.
+However, undocumented equipment changes or environmental perturbations can cause complex steps in GNSS
+time series. Correcting these steps manually for individual time series, though feasible in certain cases (e.g.,
+Wang, 2023 ; Wang et al., 2022 ), could introduce subjective errors that amplify velocity uncertainties. More
+critically, automated step correction across vast GNSS data sets is computationally prohibitive and error‐prone
+due to station‐specific variability in steps and noise characteristics. By favoring change‐point‐free segments
+over step‐corrected data, our framework avoids these challenges while still achieving reliable velocity estimates.
+Figure 2. Detrended GNSS time series for three stations: G007 (NS component, Japan), SHUL (EW component, Taiwan), and SHWA (EW component, Taiwan),
+arranged from left to right. These examples illustrate the detection of transitional change points. For each plot, the longest instant‐change‐point‐free segment, initially
+identified using the sliding‐window method, is fitted with a cubic polynomial. The point of maximum curvature, derived from the first derivative of the cubic fit, is
+marked as the transitional change point.
+JGR: Machine Learning and Computation 10.1029/2025JH000910
+WANG ET AL. 5 of 15
+ 29935210, 2025, 4, Downloaded from https://agupubs.onlinelibrary.wiley.com/doi/10.1029/2025JH000910 by GUOQUAN Wang , Wiley Online Library on [10/11/2025]. See the Terms and Conditions (https://onlinelibrary.wiley.com/terms-and-conditions) on Wiley Online Library for rules of use; OA articles are governed by the applicable Creative Commons License
+
+
+--- PDF page 6 ---
+3. Methodology
+3.1. Training Data Set
+The CNN model is trained on over 6,000 labeled displacement time series
+plots with instant and transitional change points marked, classified as “good”
+(suitable for site velocity estimation) or “bad” (unsuitable for site velocity
+estimation due to poor change‐point configurations). All training plots are
+prepared with identical sizes, using the same font for text and the same colors
+for time series and the marked change points. Figure 4 shows two example
+training plots: one labeled as “good” and the other as “bad.” The training data
+set is primarily sourced from regions where the authors conducted extensive
+studies, including California (Wang et al., 2007 ), Alaska (Wang et al., 2015 ),
+the Caribbean (e.g., Wang et al., 2019 ), the Gulf of Mexico (e.g., Wang
+et al., 2020 ), Japan, and China (Wang & Bao, 2022 ).
+3.2. Training Method
+We trained our CNN using the VGG16 architecture, originally developed and
+pretrained on the ImageNet data set (Deng et al., 2009 ) by the Visual Ge-
+ometry Group (VGG) at the University of Oxford (Simonyan & Zisser-
+man, 2015 ). VGG16 consists of 16 weight layers—13 convolutional layers
+and 3 fully connected layers, employing small 3 × 3 filters to extract hier-
+archical visual features efficiently. In this study, we utilized the VGG16
+model implementation provided by the TensorFlow software package (Abadi
+et al., 2016 ), which includes pretrained weights for ImageNet and an acces-
+sible interface for transfer learning in deep learning applications. Renowned for its powerful performance in
+image recognition tasks, VGG16 excels at identifying subtle visual patterns, making it an ideal foundation for our
+change‐point‐detection assessment model via transfer learning. This approach leverages VGG16's robust feature
+extraction capabilities, minimizing the computational resources and training data needed for high accuracy.
+We adopted a two‐phase training strategy to optimize performance for binary classification of GNSS change‐
+point‐detection plots (“good” vs. “bad”). In Phase 1, we froze the VGG16 convolutional base and appended
+custom dense layers: a flatten layer to linearize the convolutional output, followed by two fully connected layers
+(256 and 128 neurons, ReLU activation) with dropout rates of 0.5 and 0.3, respectively, to mitigate overfitting,
+and a final sigmoid output layer for binary classification. This phase, compiled with the Adam optimizer (learning
+rate 10
+  4
+) and binary cross‐entropy loss, trained the top layers for 10 epochs. An epoch refers to one complete
+pass through the entire training data set during the learning process. In Phase 2, we unfroze the top eight VGG16
+layers for fine‐tuning, recompiling with a lower learning rate (2 × 10
+  5
+) and training for up to 30 epochs, using
+early stopping (patience of 5) to prevent overfitting and retain the best validation accuracy.
+Figure 3. Curves illustrating empirical formulas that model the 95%
+confidence interval (95% CI) for horizontal and vertical site velocities
+derived from GNSS daily displacement time series. The empirical formulas
+used to generate these curves are adapted from Wang ( 2022 ).
+Figure 4. Sample training plots of detrended east‐west (EW) displacement time series for station G009 in Japan, illustrating examples used to train the CNN model:
+ChangePointCNN‐GNSS. Each plot shows detected change points along with markers at the beginning and end of a large data gap ( > 1 year). The left image is labeled
+“good”, as it correctly identifies both instant and transitional change points, making it suitable for reliable site velocity estimation. The right image is labeled “bad”, as it
+fails to detect the transitional change point, making the configuration unsuitable for site velocity estimation.
+JGR: Machine Learning and Computation 10.1029/2025JH000910
+WANG ET AL. 6 of 15
+ 29935210, 2025, 4, Downloaded from https://agupubs.onlinelibrary.wiley.com/doi/10.1029/2025JH000910 by GUOQUAN Wang , Wiley Online Library on [10/11/2025]. See the Terms and Conditions (https://onlinelibrary.wiley.com/terms-and-conditions) on Wiley Online Library for rules of use; OA articles are governed by the applicable Creative Commons License
+
+
+--- PDF page 7 ---
+Training plots were standardized to 224 × 224 pixels, and random horizontal flips were applied during data
+augmentation using TensorFlow's ImageDataGenerator (Abadi et al., 2016 ). Horizontal flips mirror the time
+series plots across the vertical axis, effectively simulating a reversal of the time direction (e.g., from left‐to‐right
+to right‐to‐left), which ensures the model learns to detect displacement patterns regardless of the temporal
+orientation of the GNSS data. The resulting model is saved as ChangePointCNN‐GNSS.keras. For a detailed
+understanding of the training methodology, readers are encouraged to refer to the Python program,
+Train_ChangePointCNN‐GNSS.py .
+To determine the optimal pretrained model for our ChangePointCNN‐GNSS architecture, we also evaluated
+ResNet50 as a feature extractor for classifying GNSS change‐point detection plots. ResNet50 is a 50‐layer CNN
+with residual connections (He et al., 2016 ). It excels in deep learning tasks by mitigating vanishing gradient
+issues, making it a robust feature extractor for image‐based classification. Its pretrained weights support transfer
+learning for specialized applications like our GNSS time series plot analysis.
+Both models were trained in two phases: initial training with frozen base layers and fine‐tuning of the top layers.
+VGG16 achieved a peak validation accuracy of 0.90 and a minimum validation loss of 0.45, slightly out-
+performing ResNet50, which reached 0.82 validation accuracy and a minimum validation loss of 0.63. Despite
+ResNet50's deeper architecture, its performance was hindered by overfitting, as evidenced by a higher final
+validation loss (0.63 vs. VGG16's 0.45), likely due to its complexity relative to our moderate data set size.
+VGG16's simpler architecture provided better generalization and stability for our task, leading to its selection as
+the pretrained model for the ChangePointCNN‐GNSS pipeline.
+3.3. Educating the CNN for Omitting Minor Instant and Transitional Displacements
+Traditional change‐point detection, particularly for transitional change points, faces inherent limitations: the
+criteria for identifying change points vary significantly across research objectives and spatiotemporal scales,
+complicating the establishment of universal rules. Even among experts, subjective interpretations often yield
+inconsistent change‐point identification, particularly when distinguishing between physical displacements and
+nonphysical signals.
+For long‐term site velocity estimation, we prioritize omitting minor instant and transitional displacements to
+secure longer change‐point‐free segments. To train the model with this objective in mind, we labeled numerous
+plots containing detected change points associated with minor displacements as “bad” and those omitting these
+Figure 5. Three‐component (NS, EW, UD) detrended displacement time series for GNSS station TXDL in Dalhart, northern Texas, showing seasonal horizontal motions
+(NS, EW) and decade‐scale sinusoidal vertical fluctuations (UD) possibly tied to groundwater cycles. First‐row subplots display change points identified using a sliding‐
+window method (instant change points, NS and EW components) and a cubic‐fitting method (transitional change points, UD component), purposefully labeled as “bad”
+for CNN training. Second‐row subplots exclude these change points associated with minor displacements and are labeled as “good” for CNN training.
+JGR: Machine Learning and Computation 10.1029/2025JH000910
+WANG ET AL. 7 of 15
+ 29935210, 2025, 4, Downloaded from https://agupubs.onlinelibrary.wiley.com/doi/10.1029/2025JH000910 by GUOQUAN Wang , Wiley Online Library on [10/11/2025]. See the Terms and Conditions (https://onlinelibrary.wiley.com/terms-and-conditions) on Wiley Online Library for rules of use; OA articles are governed by the applicable Creative Commons License
+
+
+--- PDF page 8 ---
+change points as “good.” Figure 5 showcases several examples of these labeled plots, illustrating the omission of
+change points associated with minor displacements in change‐point detection.
+Minor displacements in GNSS time series often arise from nontectonic influences such as transient noise,
+multipath effects, or localized environmental factors (e.g., short‐term droughts, vegetation changes, fluctuations
+of groundwater levels). These artifacts manifest spurious displacements—sometimes as alternating positive and
+negative instant or transitional displacements. Over multiyear timescales, such random fluctuations tend to cancel
+out, leaving the long‐term linear trend largely unaffected. Including change points associated with these minor
+displacements may lead to overfitting of noise or misinterpretation of short‐term variations as long‐term defor-
+mation trend, particularly in vertical displacement analyses where seasonal and environmental signals are
+prominent. By omitting change points associated with minor displacements, we prioritize segments of uninter-
+rupted motion that robustly capture the site's secular velocity. However, the determination of which change points
+to exclude or include is somehow subjective, guided by research objectives and experience (see Figure 5).
+Our AI‐driven approach resolves this ambiguity by training the CNN on meticulously curated data sets, enabling
+it to implicitly learn context‐dependent distinctions from expert‐labeled examples. This ensures methodological
+consistency while retaining adaptability to varied geophysical contexts. Through repeated exposure to nuanced
+cases, the model autonomously determines optimal change‐point configurations tailored to specific objective,
+accurately estimating long‐term site velocities. By doing so, the CNN‐guided framework outperforms rigid rule‐
+based methods, demonstrating flexibility in handling the complexities of GNSS data analysis. This hybrid
+approach facilitates reliable velocity estimates across diverse tectonic, anthropogenic, and environmental settings.
+3.4. Model Accuracy and Probability Score
+The ChangePointCNN‐GNSS model is designed to assess the suitability of analytically detected change points for
+reliable site velocity estimation from GNSS time series. The training data set is split into 80% for training and 20%
+for validation. In addition, we created an independent test set comprising approximately 10% of the training data
+set size, which were not used during training or validation. These test images were carefully selected to include a
+representative balance of both “good” and “bad” cases, ensuring a robust and unbiased evaluation of the model's
+performance.
+In the CNN training program, validation and test data sets serve distinct roles. The validation data set guides
+model training by monitoring the generalization capability of the model, tuning hyperparameters (such as learning
+rate and batch size), and detecting convergence or potential overfitting. In contrast, the test data set is evaluated
+only after training concludes, providing an unbiased estimate of the model's performance on completely inde-
+pendent data. The CNN model achieved a validation accuracy of 0.90 and a test accuracy of 0.89. Considering the
+inherent ambiguity in labeling training images strictly as “good” or “bad”—since many change‐point plots are
+subjectively rated as “OK,” meaning neither distinctly good nor clearly bad, and thus inconsistently labeled—the
+achieved accuracy values near 0.9 are notably high.
+Rather than providing a binary classification of “good” or “bad,” the CNN model outputs a probability score
+ranging from 0 to 1 as an assessing result for each input image. The probability score is defined as the model's
+predicted probability that a plot belongs to the “good” class using a sigmoid activation function. This probabilistic
+approach, leveraging the sigmoid activation in the final dense layer, allows for nuanced assessment, enabling the
+model to rank candidate change‐point configurations based on their likelihood of being optimal. This scoring
+mechanism is critical for our application, as it facilitates the selection of the most appropriate change‐point
+configuration for each GNSS time series. The average probability score for “good” images in the test data sets
+is 0.87 and the average score for “bad” images is 0.1. These scores demonstrate the model's effectiveness by
+showing a clear distinction between suitable (good) and unsuitable (bad) plots, underscoring its ability to
+accurately differentiate between the two.
+In practical applications, the CNN model evaluates multiple candidate change‐point‐detection plots for each time
+series, with each plot generated using a different configuration of analytical parameters. These plots, derived from
+the sliding‐window and cubic‐fitting methods, are scored by the CNN. The iterative process selects the first
+parameter configuration that meets or exceeds a probability score threshold of 0.85; if none are found, the
+configuration with the highest score after evaluating all candidates is selected. This ensures the identification of
+JGR: Machine Learning and Computation 10.1029/2025JH000910
+WANG ET AL. 8 of 15
+ 29935210, 2025, 4, Downloaded from https://agupubs.onlinelibrary.wiley.com/doi/10.1029/2025JH000910 by GUOQUAN Wang , Wiley Online Library on [10/11/2025]. See the Terms and Conditions (https://onlinelibrary.wiley.com/terms-and-conditions) on Wiley Online Library for rules of use; OA articles are governed by the applicable Creative Commons License
+
+
+--- PDF page 9 ---
+optimal parameter settings, which enhances the precision of site velocity estimates by reliably identifying the
+longest change‐point‐free segment for linear regression.
+4. Results
+The methods introduced in this study are integrated into a Python program, GNSS_CPD_VelocityEstimation.py ,
+which efficiently computes site velocities for approximately 15,000 GNSS sites in about 2 days on a Dell Pre-
+cision workstation equipped with the Intel® Xeon® W3‐2423 processor (6 cores, up to 4.2 GHz) and 64 GB of
+RAM. The station information and estimated site velocities (IGS20) are provided in the data set archived on
+Zenodo (Wang et al., 2025 ; file: IGS20_Velocities_at_Global_GNSS.txt).
+Figure 6 illustrates the long‐term vertical ground motion velocities at approximately 12,500 global GNSS sites,
+providing a global perspective on land uplift and subsidence patterns. The site velocities are aligned to the In-
+ternational GNSS Service 2020 (IGS20) reference frame (Rebischung et al., 2022 ). While velocities were
+calculated for approximately 15,000 stations, we omitted those with extreme vertical velocities and consolidated
+colocated or closely spaced stations to a single representative site to enhance map readability and avoid visual
+clutter. The map reveals that land uplift follows distinct and widespread patterns across the globe, with yellow to
+orange dots indicating uplift rates of 2 to over 10 mm /year, while subsidence, marked by cyan to blue dots,
+appears less prevalent on a global scale. Many uplift patterns align with well‐established glacial isostatic
+adjustment (GIA) processes, as documented in regions like Scandinavia (notably Sweden and Finland),
+Greenland, Iceland, and much of Canada (e.g., Caron et al., 2018 ; Peltier et al., 2015 ; Zhou et al., 2020 ), where the
+Earth's crust continues to rebound following the retreat of glaciers from the last Ice Age, often at rates around a
+few mm /year.
+The most significant uplift patterns are driven by tectonic activity, particularly in tectonically active zones such as
+the eastern coastal region of Japan, central Taiwan, the Alaskan coast extending to the western coast of the United
+States, and the western coast at the southern tip of South America, where active plate interactions generate
+substantial uplift, frequently surpassing 5 mm /year. These subsidence and uplift patterns, consistent with previous
+global vertical land movement studies (e.g., Hammond et al., 2021 ), demonstrate the ChangePointCNN‐GNSS
+model's ability to refine site velocity estimates, providing insights into geodynamic processes, regional tec-
+tonics, and sea‐level changes.
+Figure 6. Map illustrating global vertical land motion patterns derived from GNSS data ( ∼ 12,500 stations). Vertical
+velocities (IGS20) are shown in millimeters per year (mm /year) using a color‐coded scale.
+JGR: Machine Learning and Computation 10.1029/2025JH000910
+WANG ET AL. 9 of 15
+ 29935210, 2025, 4, Downloaded from https://agupubs.onlinelibrary.wiley.com/doi/10.1029/2025JH000910 by GUOQUAN Wang , Wiley Online Library on [10/11/2025]. See the Terms and Conditions (https://onlinelibrary.wiley.com/terms-and-conditions) on Wiley Online Library for rules of use; OA articles are governed by the applicable Creative Commons License
+
+
+--- PDF page 10 ---
+A detailed analysis of Figure 7, which zooms into southern Canada and the U.S. mainland, highlights a distinct
+uplift pattern in the middle‐south U.S. along the Mississippi River, where yellow dots indicate uplift rates of
+2–5 mm /year. This uplift is particularly striking because the region, encompassing eastern Texas, Arkansas,
+western Tennessee, and Mississippi, is generally regarded as an area experiencing minor land subsidence due to
+groundwater extraction (e.g., Galloway et al., 1999; Rodgers & Whaling, 2020; Traylor et al., 2024; Turco
+et al., 2025). The observed uplift may be attributed to understudied processes such as isostatic responses to
+sediment unloading, subtle tectonic adjustments, groundwater storage recovery in large aquifer systems
+(Larochelle et al., 2022), though these mechanisms remain poorly documented in this area. Additionally, Figure 7
+also reveals pronounced subsidence around the Great Lakes region, including Michigan, Wisconsin, Minnesota,
+northern Illinois, northern Indiana, and southern Ontario, Canada, with subsidence rates often ranging from 2 to
+5 mm /year, likely driven by a combination of GIA relaxation (e.g., Kreemer et al., 2018), groundwater withdrawal
+for agricultural irrigation, and rise of Great Lakes surface water (Argus et al., 2020).
+These contrasting patterns, uncovered through the large‐scale application of our automated method, highlight the
+significance of high‐accuracy, globally consistent site velocities. The efficiency and reliability of our approach
+provide a new tool for the research community to identify previously overlooked regions of land motion and
+explore their underlying causes and implications for global and regional‐scale sea‐level change and tectonic
+studies.
+5. Discussion
+5.1. Comparison With MIDAS Velocities
+Our global process identified approximately 14,600 GNSS stations with at least 4‐year‐long change‐point‐free
+segments in all three components (NS, EW, UD). For a follow‐up review, we compared velocities derived from
+our method with those from MIDAS for these stations. This comparison serves as a diagnostic tool rather than a
+validation of our velocities, as MIDAS does not provide a definitive ground truth for secular velocities in complex
+GNSS data sets (Blewitt et al., 2016). At about 12,200 stations (approximately 90% of the data set), the velocity
+differences are less than 2 mm /year in all directions, indicating strong agreement between the two methods
+despite their differing approaches.
+In contrast to our segment‐based approach, which isolates a single longest stable segment, MIDAS derives a
+velocity by calculating the median rate from the slopes of all possible 1‐year data pairs within the entire time
+Figure 7. Map showing the magnitude of vertical land motion derived from GNSS data across southern Canada and the contiguous United States. Vertical velocities
+(IGS20) are shown in millimeters per year (mm /year) using a color‐coded scale.
+JGR: Machine Learning and Computation 10.1029/2025JH000910
+WANG ET AL. 10 of 15
+ 29935210, 2025, 4, Downloaded from https://agupubs.onlinelibrary.wiley.com/doi/10.1029/2025JH000910 by GUOQUAN Wang , Wiley Online Library on [10/11/2025]. See the Terms and Conditions (https://onlinelibrary.wiley.com/terms-and-conditions) on Wiley Online Library for rules of use; OA articles are governed by the applicable Creative Commons License
+
+
+--- PDF page 11 ---
+series, without explicit change‐point detection (Blewitt et al., 2016 ). This method effectively resists outliers
+by using the median statistic, while our method prioritizes the identification of a single, long‐term stable
+segment to ensure low velocity uncertainties. The key difference lies in their handling of nonlinear motion; a
+significant discrepancy (e.g., > 2 mm /yr) between their estimated velocities serves as a robust indicator that a
+station's time series likely contains complex deformation signals or undocumented disturbances. Therefore,
+for global or regional analyses, we recommend cross‐verifying velocities from both methods, as provided in
+the comparative data set archived on Zenodo (Wang et al., 2025 ; file: IGS20_Velocities_CNN_MIDAS.txt).
+Stations where differences exceed 2 mm /year are prime candidates for expert, case‐by‐case analysis,
+requiring a manual review of the time series plots to determine the most appropriate velocity, as no single
+method can guarantee optimal estimates for all applications given the complex nature of real ground motions
+and GNSS noise patterns.
+5.2. Linking Secular and Site Velocities
+Secular velocities in geodesy and tectonics refer to the long‐term, steady rates of tectonic plate motion, averaging
+out transient effects like seasonal variations or earthquake‐induced displacements. These velocities represent the
+consistent background movement of the Earth's crust over extended periods. In contrast to idealized secular
+velocities, our site velocity estimates may reflect station‐specific temporal complexities. By integrating the
+ChangePointCNN‐GNSS model with analytical techniques, our approach delivers robust velocity estimates that
+align closely with secular velocities in tectonically stable regions. In regions with frequent earthquakes or vol-
+canic activity, site velocities primarily reflect secular motion but may be partially biased by ongoing postseismic
+Figure 8. Change‐point detection and site velocity estimates for GNSS station TLKA, located ∼ 115 km north of Anchorage, Alaska. (Left panel) Detrended daily
+displacement time series (2000–2015) with detected instant and transitional change points; the longest change‐point‐free segment in each time series, used for site
+velocity estimation, is highlighted in red. (Right panel) Displacement time series (relative to IGS20) with estimated site velocities. A prominent step in the horizontal
+components reflects coseismic displacement from the 2002 Denali earthquake (M 7.9, 3 November 2002).
+JGR: Machine Learning and Computation 10.1029/2025JH000910
+WANG ET AL. 11 of 15
+ 29935210, 2025, 4, Downloaded from https://agupubs.onlinelibrary.wiley.com/doi/10.1029/2025JH000910 by GUOQUAN Wang , Wiley Online Library on [10/11/2025]. See the Terms and Conditions (https://onlinelibrary.wiley.com/terms-and-conditions) on Wiley Online Library for rules of use; OA articles are governed by the applicable Creative Commons License
+
+
+--- PDF page 12 ---
+deformation or long‐term volcanic processes, which can continue for years to decades. Researchers must account
+for these differences when using the site velocity to interpret crustal deformation and assessing hazards in such
+regions.
+Figure 8 presents the three‐component displacement time series (relative to IGS20) for the TLKA GNSS station,
+highlighting detected change points. The TLKA station is located in Alaska in south‐central, approximately
+115 km north of Anchorage. The station lies in a tectonically active region influenced by the interaction of the
+Pacific and North American plates and numerous active faults. The left panel shows instant and transitional
+change points, while the right panel identifies the longest change‐point‐free segments used for site velocity
+estimation. A significant step in the horizontal components reflects coseismic displacements from the 2002
+Denali earthquake (M 7.9, 3 November 2002). This station is located approximately 200 km from the epicenters
+of the 2002 Denali and the 1964 Alaska (M 9.2, 27 March 1964) earthquakes. Postseismic deformation from the
+2002 Denali earthquake was significant for about 5 years as depicted in the displacement time series, and
+postseismic displacements (residual effect) from the 1964 earthquake may still contribute to present‐day crustal
+displacements in the TLKA area (e.g., Suito & Freymueller, 2009 ).
+Thus, deriving precise secular velocities for the tectonic block in this region is challenging due to these effects.
+Our method effectively identifies stable segments for estimating site velocities, minimizing disruptions from the
+2002 Denali earthquake. The resulting velocities provide the best estimates of long‐term tectonic block motion in
+this area. The MIDAS method estimates velocities at TLKA as   22.1 (NS),   15.4 (EW), and 11.7 (UD) mm /
+year. In contrast, our method yields velocities of   23.4 (NS),   11.4 (EW), and 0.1 (UD) mm /year. The horizontal
+velocity differences between the two methods are in the order of a few mm /year, while the vertical velocity
+difference reaches up to 10 mm /year. Our velocity estimates minimize the potential impact of postseismic dis-
+placements by omitting approximately 6 years of data (with slightly different durations for each of the three
+components) following the Denali earthquake.
+For studies in complex tectonic settings, we recommend inspecting time series plots on a case‐by‐case basis to
+select the most appropriate velocity for specific research objectives, as the choice of velocity depends on the
+study's objectives, such as interseismic and long‐term crustal motion studies and landslide monitoring (e.g., Wang
+et al., 2015 ).
+5.3. Machine Learning: From Data‐Driven Models to Image‐Driven Assessment
+Under the broad umbrella term of AI, machine learning (ML) is a specialized domain where algorithms are
+designed to learn from data and subsequently make predictions or informed decisions. Within ML, an advanced
+subset known as deep learning (DL) employs neural networks composed of multiple layers to address complex
+tasks, such as image recognition and speech processing. A further specialized category within DL, known as
+CNNs, excels specifically at analyzing spatial patterns in images, such as those representing change‐point con-
+figurations in GNSS time series plots. Unlike conventional ML techniques that rely heavily on manually engi-
+neered statistical or sequential features extracted from time series, the CNN method adopted in this study directly
+learns temporal patterns from visual representations of displacement time series and change‐point plots, closely
+emulating the visual reasoning and context‐awareness of human experts.
+A wide variety of ML approaches, including random forest, multilayer perceptron (MLP), extreme gradient
+boosting (XGBoost), linear support vector classification (LSVC), and long short‐term memory (LSTM) methods,
+have previously been applied to GNSS time series analysis (e.g., Chen et al., 2023 ; Crocetti et al., 2021 ; Gao
+et al., 2022 ; Li et al., 2023 ; Özbey et al., 2024 ; Wang et al., 2021 ; Xie et al., 2023 ). These data‐driven methods
+typically utilize predefined statistical features or temporal assumptions to detect anomalies or discontinuities.
+Commonly used features include statistical metrics (e.g., mean, standard deviation, skewness, kurtosis),
+frequency‐domain characteristics (Fourier coefficients), trend indicators (linear or polynomial regression co-
+efficients), and displacement metrics (e.g., maximum, minimum, range, step‐detection thresholds). However,
+reliance on these manually crafted features can limit the flexibility and adaptability of these methods, particularly
+when dealing with context‐specific change‐point detection scenarios across diverse GNSS stations exhibiting
+varied noise levels, data gaps, and geophysical signals. Moreover, these traditional ML techniques often require
+extensive feature engineering or detailed labeling of training data.
+JGR: Machine Learning and Computation 10.1029/2025JH000910
+WANG ET AL. 12 of 15
+ 29935210, 2025, 4, Downloaded from https://agupubs.onlinelibrary.wiley.com/doi/10.1029/2025JH000910 by GUOQUAN Wang , Wiley Online Library on [10/11/2025]. See the Terms and Conditions (https://onlinelibrary.wiley.com/terms-and-conditions) on Wiley Online Library for rules of use; OA articles are governed by the applicable Creative Commons License
+
+
+--- PDF page 13 ---
+Recently, one‐dimensional CNNs (1D CNNs) have demonstrated exceptional performance across various ap-
+plications involving time series data (e.g., Ismail Fawaz et al., 2019; Kiranyaz et al., 2021), including biomedical
+signal classification (Kiranyaz et al., 2017) and structural health monitoring (Abdeljaber et al., 2017). 1D CNN is
+a data‐driven method, which processes sequential data using convolutional filters to capture temporal patterns. By
+directly processing sequential displacement data, 1D CNNs could detect subtle trends and anomalies relevant to
+tectonic and nontectonic signals within GNSS data. Future research might explore hybrid models integrating 1D
+CNNs with analytical approaches to further enhance robustness, computational efficiency, and interpretability in
+complex GNSS data sets.
+In contrast to purely data‐driven AI methods, this study introduces a hybrid analytical‐CNN framework that
+integrates physical modeling with image‐based evaluation. Specifically, we adopt a two‐dimensional convolu-
+tional neural network (2D CNN), a model designed to process spatial patterns and features in visual represen-
+tations, typically images. Leveraging transfer learning from a large pretrained CNN, our 2D CNN analyzes
+synthetic “scenes”—visual plots of displacement time series annotated with analytically detected change points.
+By evaluating these visual representations holistically, the 2D CNN performs a task analogous to expert visual
+judgment, identifying and prioritizing change‐point‐free segments to optimize site‐velocity estimation.
+Our decision to represent GNSS time series and candidate change points as images, subsequently evaluated by a
+2D CNN, is strategically motivated by our primary objective of accurately estimating long‐term site velocities.
+This estimation depends on selecting a suitable overall configuration of change points rather than focusing on the
+identification of individual change points from raw data. This image‐based approach offers several advantages.
+1. It closely mimics the visual inspection performed by geodetic experts, capturing contextual nuances—such as
+the alignment of change points with geophysical events or data gaps—while disregarding minor displacements
+that are challenging to encode numerically.
+2. It simplifies training data annotation, requiring only binary classifications (“good” or “bad”), thus eliminating
+the need for granular labeling (exact change‐point positions) required by data‐drive ML methods.
+3. By leveraging transfer learning from pretrained CNN models, it achieves high validation accuracy with
+relatively modest training data sets, promoting scalability across diverse GNSS networks.
+4. It integrates seamlessly with the hybrid analytical framework (sliding‐window and cubic‐fitting techniques),
+enabling efficient ranking of candidate configurations according to their suitability for precise long‐term site
+velocity estimation.
+6. Conclusions
+This study significantly advances the field of geodesy through two key contributions: the development of the AI
+model ChangePointCNN‐GNSS.keras and the generation of reliable site velocities (IGS20) for approximately
+14,600 GNSS stations worldwide. To promote transparency and reproducibility, we have publicly released all
+supporting materials, including the training and test data sets, the training script (Train_ChangePointCNN‐GNSS.
+py), and the integrated processing tool (GNSS_CPD_VelocityEstimation.py) (Wang et al., 2025). These open‐
+source tools are designed to be easily adapted for different GNSS data sets or customized research goals.
+Beyond GNSS, the methodological framework is applicable to other geophysical time series such as those from
+tide gauges, extensometers, groundwater wells, and meteorological stations, enabling broad interdisciplinary use.
+Ultimately, this study lays the foundation for robust, image‐driven AI methodologies for large‐scale geophysical
+monitoring worldwide.
+Conflict of Interest
+The authors declare no conflicts of interest relevant to this study.
+Data Availability Statement
+The raw GNSS time series were obtained from the Nevada Geodetic Laboratory (https://geodesy.unr.edu). The
+complete set of derived materials for this study has been permanently archived on Zenodo (Wang et al., 2025).
+This archive includes the training data set, Python source code (for both model training and application), the
+pretrained CNN model, and the final catalog of IGS20 site velocities for approximately 14,600 stations. All files
+JGR: Machine Learning and Computation 10.1029/2025JH000910
+WANG ET AL. 13 of 15
+ 29935210, 2025, 4, Downloaded from https://agupubs.onlinelibrary.wiley.com/doi/10.1029/2025JH000910 by GUOQUAN Wang , Wiley Online Library on [10/11/2025]. See the Terms and Conditions (https://onlinelibrary.wiley.com/terms-and-conditions) on Wiley Online Library for rules of use; OA articles are governed by the applicable Creative Commons License
+
+
+--- PDF page 14 ---
+are accessible through the DOI: https://doi.org/10.5281/zenodo.17180354. The project's development history can
+be viewed on the first author's GitHub page (https://github.com/bob‐Github‐2020).
+References
+Abadi, M., Agarwal, A., Barham, P., Brevdo, E., Chen, Z., Citro, C., et al. (2016). TensorFlow: Large‐scale machine learning on heterogeneous
+systems. arXiv:1603.04467 https://arxiv.org/abs /1603.04467
+Abdeljaber, O., Avci, O., Kiranyaz, S., Gabbouj, M., & Inman, D. J. (2017). Real‐time vibration‐based structural damage detection using one‐
+dimensional convolutional neural networks. Journal of Sound and Vibration, 388, 154–170. https://doi.org/10.1016/j.jsv.2016.10.043
+Agudelo, G., Wang, G., Liu, Y., Bao, Y., & Turco, M. J. (2020). GPS geodetic infrastructure for subsidence and fault monitoring in Houston,
+Texas, USA. Proceedings of IAHS, 382, 11–18. https://doi.org/10.5194/piahs‐382‐11‐2020
+Altamimi, Z., Rebischung, P., Collilieux, X., Métivier, L., & Chanard, K. (2023). ITRF2020: An augmented reference frame refining the modeling
+of nonlinear station motions. Journal of Geodynamics, 97 (47), 47. https://doi.org/10.1007/s00190‐023‐01738‐w
+Argus, D. F., Peltier, W. R., Drummond, R., Borsa, A. A., Wiese, D. N., Blewitt, G., et al. (2020). Rise of Great Lakes surface water, sinking of the
+upper Midwest of the United States, and viscous collapse of the forebulge of the former Laurentide ice sheet. Journal of Geophysical Research:
+Solid Earth, 125 (9), e2020JB019739. https://doi.org/10.1029/2020JB019739
+Bao, Y., Yu, X., Wang, G., Zhou, H., Ding, X., Xiao, G., et al. (2021). SChina20: A stable geodetic reference frame for ground movement and
+structural deformation monitoring in South China. Journal of Surveying Engineering, 147 (3), 04021006. https://doi.org/10.1061/(ASCE)SU.
+1943‐5428.0000352
+Bedford, J., & Bevis, M. (2018). Greedy automatic signal decomposition and its application to daily GPS time series. Journal of Geophysical
+Research: Solid Earth, 123 (8), 6992–7003. https://doi.org/10.1029/2017jb014765
+Bevis, M., & Brown, A. (2014). Trajectory models and reference frames for crustal motion geodesy. Journal of Geodesy, 88 (3), 283–311. https://
+doi.org/10.1007/s00190‐013‐0685‐5
+Blewitt, G., Hammond, W. C., & Kreemer, C. (2018). Harnessing the GPS data explosion for interdisciplinary science. Eos, 99 (10), 485. https://
+doi.org/10.1029/2018EO104623
+Blewitt, G., Kreemer, C., Hammond, W., & Goldfarb, J. M. (2013). Terrestrial reference frame NA12 for crustal deformation studies in North
+America. Journal of Geodynamics, 72, 11–24. https://doi.org/10.1016/j.jog.2013.08.004
+Blewitt, G., Kreemer, C., Hammond, W. C., & Gazeaux, J. (2016). MIDAS robust trend estimator for accurate GPS station velocities without step
+detection. Journal of Geophysical Research: Solid Earth, 121 (3), 2054–2068. https://doi.org/10.1002/2015JB012552
+Caron, L., Ivins, E. R., Larour, E., Adhikari, S., Nilsson, J., & Blewitt, G. (2018). Gia model statistics for grace hydrology, cryosphere, and ocean
+science. Geophysical Research Letters, 45 (5), 2203–2212. https://doi.org/10.1002/2017GL076644
+Chen, H., Lu, T., Huang, J., He, X., Yu, K., Sun, X., et al. (2023). An improved VMD‐LSTM model for time‐varying GNSS time series prediction
+with temporally correlated noise. Remote Sensing, 2023, 15 (14), 3694. https://doi.org/10.3390/rs15143694
+Cornelison, B., & Wang, G. (2023). GNSS_Vel_95CI.py: A python module for calculating the uncertainty of GNSS‐derived site velocity. Journal
+of Surveying Engineering, 149 (1), 06022001. https://doi.org/10.1061/(ASCE)SU.1943‐5428.0000410
+Crocetti, L., Schartner, M., & Soja, B. (2021). Discontinuity detection in GNSS station coordinate time series using machine learning. Remote
+Sensing, 13 (19), 3906. https://doi.org/10.3390/rs13193906
+Deng, J., Dong, W., Socher, R., Li, L. J., Li, K., & Li, F. F. (2009). ImageNet: A large‐scale hierarchical image database. In 2009 IEEE Conference
+on computer vision and pattern recognition (pp. 248–255). https://doi.org/10.1109/CVPR.2009.5206848
+Galloway, D. L., Jones, D. R., & Ingebritsen, S. E. (1999). Land subsidence in the United States (Vol. 1182). U.S. Geological Survey Circular.
+Retrieved from https://pubs.usgs.gov /circ /circ1182/
+Gao, W., Li, Z., Chen, Q., Jiang, W., & Feng, Y. (2022). Modelling and prediction of GNSS time series using GBDT, LSTM and SVM machine
+learning approaches. Journal of Geodesy, 96 (10), 71. https://doi.org/10.1007/s00190‐022‐01662‐5
+Gazeaux, J., Williams, S., King, M., Bos, M., Dach, R., Deo, M., et al. (2013). Detection of offsets in GPS experiment. Journal of Geophysical
+Research: Solid Earth, 118 (5), 2397–2407. https://doi.org/10.1002/jgrb.50152
+Griffiths, J., & Ray, J. (2016). Impacts of GNSS position offsets on global frame stability. Geophysical Journal International, 204 (1), 480–487.
+https://doi.org/10.1093/gji /ggv455
+Hammond, W. C., Blewitt, G., Kreemer, C., & Nerem, R. S. (2021). Global vertical land motion for studies of sea level rise. Journal of
+Geophysical Research: Solid Earth, 126 (7), e2021JB022355. https://doi.org/10.1029/2021jb022355
+He, K., Zhang, X., Ren, S., & Sun, J. (2016). Deep residual learning for image recognition. In Proceedings of the IEEE Conference on computer
+vision and pattern recognition (pp. 770–778). https://doi.org/10.48550/arXiv.1512.03385
+Heflin, M., Donnellan, A., Parker, J., Lyzenga, G., Moore, A., Ludwig, L. G., et al. (2020). Automated estimation and tools to extract positions,
+velocities, breaks, and seasonal terms from daily GNSS measurements: Illuminating nonlinear Salton trough deformation. Earth and Space
+Science, 7 (7), e2019EA000644. https://doi.org/10.1029/2019EA000644
+Herring, T. A., Melbourne, T. I., Murray, M. H., Floyd, M. A., Szeliga, W. M., King, R. W., et al. (2016). Plate boundary observatory and related
+networks: GPS data analysis methods and geodetic products. Reviews of Geophysics, 54 (4), 759–808. https://doi.org/10.1002/2016RG000529
+Ismail Fawaz, H., Forestier, G., Weber, J., Idoumghar, L., & Muller, P. A. (2019). Deep learning for time series classification: A review. Data
+Mining and Knowledge Discovery, 33 (4), 917–963. https://doi.org/10.1007/s10618‐019‐00619‐1
+Kiranyaz, S., Avci, O., Abdeljaber, O., Ince, T., Gabbouj, M., & Inman, D. J. (2021). 1D convolutional neural networks and applications: A
+survey. Mechanical Systems and Signal Processing, 151, 107398. https://doi.org/10.1016/j.ymssp.2020.107398
+Kiranyaz, S., Ince, T., & Gabbouj, M. (2017). Personalized monitoring and advance warning system for cardiac arrhythmias. Scientific Reports,
+7 (1), 9270. https://doi.org/10.1038/s41598‐017‐09544‐z
+Kreemer, C., Hammond, W. C., & Blewitt, G. (2018). A robust estimation of the 3‐D intraplate deformation of the North American plate from
+GPS. Journal of Geophysical Research: Solid Earth, 123 (5), 4388–4412. https://doi.org/10.1029/2017JB015257
+Larochelle, S., Chanard, K., Fleitout, L., Fortin, J., Gualandi, A., Longuevergne, L., et al. (2022). Understanding the geodetic signature of large
+aquifer systems: Example of the Ozark Plateaus in central United States. Journal of Geophysical Research: Solid Earth, 127 (3),
+e2021JB023097. https://doi.org/10.1029/2021JB023097
+Li, Z., Lu, T., Yu, K., & Wang, J. (2023). Interpolation of GNSS position time series using GBDT, XGBoost, and RF machine learning algorithms
+and models error analysis. Remote Sensing, 2023, 15 (18), 4374. https://doi.org/10.3390/rs15184374
+Özbey, V., Ergintav, S., & Tarı, E. (2024). GNSS time series analysis with machine learning algorithms: A case study for Anatolia. Remote
+Sensing, 16 (17), 3309. https://doi.org/10.3390/rs16173309
+Acknowledgments
+This research would not have been feasible
+without the global GNSS displacement
+time series provided by the Nevada
+Geodetic Laboratory (NGL). The authors
+express their gratitude to Drs. Geoffrey
+Blewitt, Corné Kreemer, and Bill
+Hammond for their invaluable contribution
+in making these high‐quality GNSS data
+sets openly accessible, enabling
+advancements in geodetic research. The
+authors sincerely appreciate the editors and
+the four anonymous reviewers for their
+invaluable time and constructive
+comments on our manuscript. Their
+insightful critiques and thoughtful
+suggestions have been instrumental in
+significantly improving the clarity, depth,
+and overall quality of this paper.
+JGR: Machine Learning and Computation 10.1029/2025JH000910
+WANG ET AL. 14 of 15
+ 29935210, 2025, 4, Downloaded from https://agupubs.onlinelibrary.wiley.com/doi/10.1029/2025JH000910 by GUOQUAN Wang , Wiley Online Library on [10/11/2025]. See the Terms and Conditions (https://onlinelibrary.wiley.com/terms-and-conditions) on Wiley Online Library for rules of use; OA articles are governed by the applicable Creative Commons License
+
+
+--- PDF page 15 ---
+Peltier, W., Argus, D., & Drummond, R. (2015). Space geodesy constrains ice age terminal deglaciation: The global ICE6G_C (VM5a) model.
+Journal of Geophysical Research: Solid Earth, 120 (1), 450–487. https://doi.org/10.1002/2014JB011176
+Rebischung, P., Villiger, A., Masoumi, S., & Herring, T. (2022). Upcoming switch to IGS20/igs20.atx and repro3 standards. IGSMAIL‐8238.
+https://lists.igs.org/pipermail /igsmail /2022/008234.html
+Rodgers, K. D., & Whaling, A. R. (2020). Water levels and selected water‐quality conditions in the Mississippi river Valley alluvial aquifer in
+eastern Arkansas, 2014. U.S. Geological Survey Scientific Investigations Report 2020–5123, (p. 22). https://doi.org/10.3133/sir20205123
+Simonyan, K., & Zisserman, A. (2015). Very deep convolutional networks for large‐scale image recognition. arXiv:1409.1556. https://doi.org/10.
+48550/arXiv.1409.1556
+Snay, R. A., Gillins, A. G., & Wang, G. (2025). Improving TRANS4D's crustal velocity model for the southeastern United States. Journal of
+Surveying Engineering, 151 (4), 04025009. https://doi.org/10.1061/JSUED2.SUENG‐1572
+Suito, H., & Freymueller, J. T. (2009). A viscoelastic and afterslip postseismic deformation model for the 1964 Alaska earthquake. Journal of
+Geophysical Research, 114 (B11), 404. https://doi.org/10.1029/2008JB005954
+Traylor, J. P., Duncan, L. L., Leaf, A. T., Weisser, A. R., Dietsch, B. J., & Guira, M. (2024). Inset groundwater‐flow models for the cache and
+Grand Prairie critical groundwater areas, northeastern Arkansas. U.S. Geological Survey Scientific Investigations Report 2024–5088, (p.
+152). https://doi.org/10.3133/sir20245088
+Truong, C., Oudre, L., & Vayatis, N. (2020). Selective review of offline change point detection methods. Signal Processing, 167, 107299. https://
+doi.org/10.1016/j.sigpro.2019.107299
+Turco, M. J., Greuter, A., & Wang, G. (2025). A century (1906–2024) of groundwater and land subsidence studies in greater Houston region: A
+review. Groundwater, 63 (4), 459–483. https://doi.org/10.1111/gwat.70003
+Wang, G. (2022). The 95% confidence interval for the GNSS‐derived site velocities. Journal of Surveying Engineering, 148 (1), 04021030. https://
+doi.org/10.1061/(ASCE)SU.1943‐5428.0000390
+Wang, G. (2023). A methodology for long‐term offshore structural health monitoring using stand‐alone GNSS: Case study in the Gulf of Mexico.
+Structural Health Monitoring, 23 (1), 463–478. https://doi.org/10.1177/14759217231169934
+Wang, G., & Bao, Y. (2022). GNSS landslide monitoring aligned to regional reference frames. Acta Geodaetica et Cartographica Sinica, 51 (10),
+2107–2116. https://doi.org/10.11947/J.AGCS.2022.20220308
+Wang, G., Bao, Y., Cuddus, Y., Jia, X., Serna, J., & Jing, Q. (2015). A methodology to derive precise landslide displacement time series from
+continuous GPS observations in tectonically active and cold regions: A case study in Alaska. Natural Hazards, 77 (3), 1939–1961. https://doi.
+org/10.1007/s11069‐015‐1684‐z
+Wang, G., Bao, Y., Gan, W., Geng, J., Xiao, G., & Shen, S. (2018). NChina16, a stable geodetic reference frame for geological hazard studies in
+North China. Journal of Geodynamics, 115 (Apr), 10–22. https://doi.org/10.1016/j.jog.2018.01.003
+Wang, G., Bao, Y., Zhang, S., Huang, G., & Hu, X. (2025). Python programs for training and implementing the ChangePointCNN‐GNSS model.
+Zenodo. https://doi.org/10.5281/zenodo.17180354
+Wang, G., Boore, D. M., Tang, G., & Zhou, X. (2007). Comparisons of ground motions from colocated and closely spaced one‐sample‐per‐second
+global positioning system and accelerograph recordings of the 2003 M 6.5 San Simeon, California, earthquake in the Parkfield region. Bulletin
+of the Seismological Society of America, 97 (1B), 76–90. https://doi.org/10.1785/0120060053
+Wang, G., Greuter, A., Petersen, C. M., & Turco, M. J. (2022). Houston GNSS Network (HoustonNet) for subsidence and faulting monitoring:
+Data analysis methods and products. Journal of Surveying Engineering, 148 (4), 04022008. https://doi.org/10.1061/(ASCE)SU.1943‐5428.
+0000399
+Wang, G., Liu, H., Mattioli, G. S., Miller, M. M., Feaux, K., & Braun, J. (2019). CARIB18: A stable geodetic reference frame for geological
+hazard monitoring in the Caribbean region. Remote Sensing, 11 (6), 680. https://doi.org/10.3390/rs11060680
+Wang, G., Zhou, X., Wang, K., Ke, X., Zhang, Y., Zhao, R., & Bao, Y. (2020). GOM20, a stable geodetic reference frame for subsidence, faulting,
+and sea‐level rise studies along the coast of the Gulf of Mexico. Remote Sensing, 12 (3), 350. https://doi.org/10.3390/rs12030350
+Wang, J., Jiang, W., Li, Z., & Lu, Y. (2021). A new Multi‐Scale Sliding Window LSTM Framework (MSSW‐LSTM): A case study for GNSS
+time‐series prediction. Remote Sensing, 13 (16), 3328. https://doi.org/10.3390/rs13163328
+Welch, J., Wang, G., Bao, Y., Zhang, S., Huang, G., & Hu, X. (2024). Unveiling the hidden threat: Drought‐induced inelastic subsidence in
+expansive soils. Geophysical Research Letters, 51 (7), e2023GL107549. https://doi.org/10.1029/2023GL107549
+Xie, Y., Wang, J., Li, H., Dong, A., Kang, Y., Zhu, J., et al. (2023). Deep learning CNN‐GRU method for GNSS deformation monitoring
+prediction. Applied Sciences, 14 (10), 4004. https://doi.org/10.3390/app14104004
+Zhou, Y., Yang, S., Luo, J., Ray, J., Huang, Y., & Li, J. (2020). Global glacial isostatic adjustment constrained by GPS measurements: Spherical
+harmonic analyses of uplifts and geopotential variations. Remote Sensing, 12 (7), 1209. https://doi.org/10.3390/rs12071209
+JGR: Machine Learning and Computation 10.1029/2025JH000910
+WANG ET AL. 15 of 15
+ 29935210, 2025, 4, Downloaded from https://agupubs.onlinelibrary.wiley.com/doi/10.1029/2025JH000910 by GUOQUAN Wang , Wiley Online Library on [10/11/2025]. See the Terms and Conditions (https://onlinelibrary.wiley.com/terms-and-conditions) on Wiley Online Library for rules of use; OA articles are governed by the applicable Creative Commons License

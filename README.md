@@ -25,6 +25,7 @@
 - [EXP04两个新种子完整结果](results/exp04-two-seeds/results.md)
 - [主批24站对照与消融](results/exp04-main-v1/results.md)
 - [EI论文使用建议与实际结论](docs/exp04-assessment.md)
+- [后续优化思路、11项论文调研与阶跃错误诊断](docs/optimization-next.md)
 - [冻结方案](docs/experiment-exp04.md)、[开发与指标选择](docs/exp04-development.md)
 - [固定场景原始位移与标签图](results/exp04-cases/cases.png)
 
