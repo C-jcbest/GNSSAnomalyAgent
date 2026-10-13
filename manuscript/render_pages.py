@@ -12,7 +12,7 @@ import shutil
 ROOT = Path(__file__).resolve().parent
 DEPENDENCIES = Path("C:/Users/JC/.cache/codex-runtimes/codex-primary-runtime/dependencies")
 RENDERER = Path("C:/Users/JC/.codex/plugins/cache/openai-primary-runtime/documents/26.1011.11113/skills/documents/render_docx.py")
-RENDER = ROOT / "working/render-final"
+RENDER = ROOT / "working/render-revision"
 
 
 def native_word_pdf(doc_path, user_profile, convert_tmp_dir, stem, verbose):
@@ -27,7 +27,7 @@ def main():
     module = importlib.util.module_from_spec(specification)
     specification.loader.exec_module(module)
     module.convert_to_pdf = native_word_pdf
-    pages = module.rasterize(str(ROOT / "GNSS多类型异常识别论文初稿.docx"), str(RENDER), 120, False, False)
+    pages = module.rasterize(str(ROOT / "GNSS多类型异常识别论文初稿_结构优化版.docx"), str(RENDER), 120, False, False)
     current = {Path(page).resolve() for page in pages}
     for previous_page in RENDER.glob("page-*.png"):
         if previous_page.resolve() not in current:

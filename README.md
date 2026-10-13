@@ -1,8 +1,8 @@
 # GNSS 视觉大模型异常识别研究
 
-已完成[29页中文Word论文初稿](manuscript/GNSS多类型异常识别论文初稿.docx)，
+已完成[26页中文Word论文结构优化稿](manuscript/GNSS多类型异常识别论文初稿_结构优化版.docx)，
 题为《融合数值形态候选与视觉大模型的GNSS多类型异常识别方法》。
-七章正文、逐章文献参考、结果审阅与版面检查见[论文材料](manuscript/README.md)。
+六章正文已撤去独立实验设置章，扩充引言与相关工作。章节分配、文献参考、内容审阅与版面检查见[论文材料](manuscript/README.md)。
 
 当前完成 **GNSS-VLM-EXP04-v1：GNSS形态分工视觉数值融合异常识别实验**。
 分支`codex/gnss-vlm-research`；主方法为`morphology_fusion`。

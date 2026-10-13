@@ -22,7 +22,7 @@ from PIL import Image, ImageDraw, ImageFont
 ROOT = Path(__file__).resolve().parent
 REPO = ROOT.parent
 ASSETS = ROOT / "figures"
-OUTPUT = ROOT / "GNSS多类型异常识别论文初稿.docx"
+OUTPUT = ROOT / "GNSS多类型异常识别论文初稿_结构优化版.docx"
 sys.path.insert(0, str(Path(os.environ["TEMP"]) / "gnss-paper-authoring-deps"))
 from latex2mathml.converter import convert as latex_to_mathml
 
@@ -157,7 +157,7 @@ FIGURES = {
     "framework": (1, "MF-VLM的数值候选、视觉审阅与形态分工流程", 16),
     "comparison_overall": (2, "48个测试站上主要方法的四类等权日F1与事件F1", 15.6),
     "comparison_types": (3, "48个测试站上主要方法的分类型日F1，配色与图2一致", 15.6),
-    "case_transient": (4, "固定选取的首个暂态场景及检测区间对照", 10.5),
+    "case_transient": (4, "固定选取的首个暂态场景及检测区间对照", 9.0),
     "case_deformation": (5, "固定选取的首个持续形变场景及检测区间对照", 10.5),
 }
 
@@ -418,7 +418,7 @@ def main():
         "figures": {key: value[0] for key, value in FIGURES.items()},
         "experiment": "GNSS-VLM-EXP04-v1",
     }
-    (ROOT / "working/build-manifest.json").write_text(json.dumps(manifest, ensure_ascii=False, indent=2), encoding="utf-8")
+    (ROOT / "working/build-manifest-revision.json").write_text(json.dumps(manifest, ensure_ascii=False, indent=2), encoding="utf-8")
     print(json.dumps(manifest, ensure_ascii=False))
 
 
