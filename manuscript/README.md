@@ -1,43 +1,43 @@
-# GNSS多类型异常识别论文初稿
+# SDR-VLM论文实验更新版
 
-[Word语言润色稿](GNSS多类型异常识别论文初稿_语言润色版.docx)：《融合数值形态候选与视觉大模型的GNSS多类型异常识别方法》。2026-10-14完成，Microsoft Word实际分页24页，包含中英文摘要、六章正文、5幅图、8张表、10组编号公式和14条实际引用。
+[25页Word实验更新稿](GNSS多类型异常识别论文初稿_SDR-VLM实验更新版.docx)：《融合位移结构分解与视觉语义修复的GNSS多类型异常识别方法》。2026-10-14完成，包含中英文摘要、六章正文、5幅图、10张表、13组编号公式和17条实际引用。当前分支codex/paper-sdr-vlm。
 
-本版按作者提供的写作规则突出形态分工贡献，精简重复免责声明，将不利结果写成具体指标取舍。沿用六章结构；正文文字占比依次为14.4%、17.5%、25.4%、33.0%、6.7%、3.1%。全部表格数据与展示公式保留，已完成内容复核及逐页视觉检查。
+论文已由EXP04形态分工方案改为当前保留的 **GNSS-VLM-EXP06-v1：GNSS位移结构分解与视觉语义核验实验**。主方法SDR-VLM，对应pair_focus_repair；主实验48站四类等权日F1为0.8652，无视觉结构分解为0.8323。总体改进以数值结构为主体，视觉增加3.30个百分点，配对区间下界为零。
 
-[原26页结构优化稿](GNSS多类型异常识别论文初稿_结构优化版.docx)与[原29页初稿](GNSS多类型异常识别论文初稿.docx)均保留为历史版本，源文件分别对应提交 `fb97423` 与 `f37f140`。
+EXP07、EXP08原版SDR-VLM的两批各48站复核另表列示，未将未采纳方案写成生产方法，也未合并为原预登记144站。较低的EXP08结果及种子1412视觉负增量一并保留。原作者PELT与GNSS适配在独立边缘任务中比较，前期MF-VLM和定位融合明确标作本研究前期方案。
 
-论文对应 **GNSS-VLM-EXP04-v1：GNSS形态分工视觉数值融合异常识别实验**。正文简称MF-VLM，对应冻结结果中的 `morphology_fusion`。证据范围为两个种子、48个模拟测试站；24站消融单独报告。初稿未新增模型调用或修改冻结实验材料。
+六章正文文字占比依次约为15.0%、17.8%、24.5%、30.9%、9.3%、2.6%；统计口径沿用此前篇幅调研。没有独立实验设置章，必要条件融入方法与结果。
 
 ## 内容与证据
 
-- `chapters/`：逐章正文源文件，包含摘要和六章正文。
-- `working/chapter-source-style-notes.md`：逐章参考论文、读取范围、结构及学术表达借鉴说明。
-- `working/extra-references.json`：核实的书目与版本。保留15条检索资料，文末仅列正文实际使用的14条。
-- `working/content-review.md`：独立内容审阅及从原始真值、预测复算结果的记录。
-- `working/polish-final-check.md`：本版语言修订、证据复核、章节占比与24页视觉检查。
-- `working/polish-edit-receipt.json`、`working/polish-review-corrections.json`：逐段润色与复审修改记录。
-- `working/revision-final-check.md`：历史结构优化版的26页检查记录。
-- `working/content-review-revision.md`：六章结构优化版内容复审与修正记录。
-- `working/section-allocation-proposal.md`：先前五篇论文占比调研与历史提案；用户修正后的实际方案见本版检查记录。
-- `working/section-allocation-polished.json`：本版文字与版面占比。
-- `supplement/reproducibility.md`：由原实验章保留的复现条件、方法映射和运行入口。
-- `working/final-check.md`：原29页初稿的历史检查记录。
-- `working/build-manifest-polished.json`：章节、引用、图表和公式编号映射。
-- `working/final-integrity-polished.json`：最终DOCX哈希及结构检查结果。
+- chapters/：新版逐章正文。
+- figures/exp06/、prepare_sdr_figures.py：由冻结结果和原始观测绘制5图，旧EXP04图保留。
+- working/exp06-evidence-audit.md与.json：重算672份主实验输出、192份扩展输出及bootstrap、活动误差、PELT边缘结果。
+- working/exp06-method-source-map.md：方法与冻结代码映射，明确均值填补和平衡RF。
+- working/exp06-literature-check.md、extra-references.json：新增文献、正式版本和实际阅读范围。
+- working/sdr-final-check.md：全稿内容、图表及25页视觉检查。
+- working/section-allocation-sdr.json：实际章节文字和版面占比。
+- working/build-manifest-sdr.json、final-integrity-sdr.json：图表公式编号、文件哈希、历史稿保留检查。
+- supplement/reproducibility.md：EXP06条件及方法键映射；reproducibility-exp04.md保留历史说明。
 
-图1是根据冻结方法绘制的流程图；图2、图3来自 `results/exp04-two-seeds/comparison.png` 的分面；图4、图5来自 `results/exp04-cases/cases.png` 的暂态与持续形变面板。裁剪只改变布局，没有重算或修改曲线、标签及成绩。
+第4章表3为主比较，表4为各类指标，表5为核心消融，表6为活动边界，表7为作者PELT边缘对照，表8和表9为跨种子与描述性区间，表10为扩展验证。图4同时展示暂态恢复和真实阶跃损失，图5展示原始位移活动与停止平台。
+
+## 历史版本
+
+[24页语言润色稿](GNSS多类型异常识别论文初稿_语言润色版.docx)、[26页结构优化稿](GNSS多类型异常识别论文初稿_结构优化版.docx)和[29页最初稿](GNSS多类型异常识别论文初稿.docx)全部保留，文件与本轮开始时逐字节一致。历史稿对应EXP04；各自审阅记录仍保存在working中，不能作为新版检查凭据。
 
 ## 本机重建
 
-`build_manuscript.py` 将章节和书目装配为Word，公式为可编辑OMML。它依赖当前Windows环境的Microsoft Office MathML转换样式表、宋体/微软雅黑/Times New Roman，以及bundled Python中的python-docx、lxml和Pillow；`latex2mathml==3.81.1`安装在本任务临时目录 `%TEMP%/gnss-paper-authoring-deps`。临时目录失效时，需要用同一Python重新安装该依赖：
+使用Codex bundled Python、python-docx、lxml、Pillow、numpy及本机Office的MML2OMML.XSL。任务临时依赖目录为 %TEMP%/gnss-paper-authoring-deps；当前使用latex2mathml 3.81.1、matplotlib 3.10.8及其绘图依赖。目录失效时先安装，再依次运行：
 
 ```powershell
-& 'C:/Users/JC/.cache/codex-runtimes/codex-primary-runtime/dependencies/python/python.exe' -m pip install --target "$env:TEMP/gnss-paper-authoring-deps" 'latex2mathml==3.81.1'
+& 'C:/Users/JC/.cache/codex-runtimes/codex-primary-runtime/dependencies/python/python.exe' -m pip install --target "$env:TEMP/gnss-paper-authoring-deps" 'latex2mathml==3.81.1' 'matplotlib==3.10.8'
 & 'C:/Users/JC/.cache/codex-runtimes/codex-primary-runtime/dependencies/python/python.exe' manuscript/build_manuscript.py
 & ./manuscript/render_word.ps1
 & 'C:/Users/JC/.cache/codex-runtimes/codex-primary-runtime/dependencies/python/python.exe' manuscript/render_pages.py
+& 'C:/Users/JC/.cache/codex-runtimes/codex-primary-runtime/dependencies/python/python.exe' manuscript/working/measure_sdr.py
 ```
 
-渲染使用本机Microsoft Word导出PDF，再调用文档技能的栅格化组件生成120 dpi逐页PNG。`render_pages.py`中的技能及Poppler路径与当前安装绑定，迁移机器时需调整；该脚本只使用前一步已导出的PDF，所以必须按上述顺序执行。内部PDF、PNG和转换诊断已忽略，不作为论文交付物。正文或布局修改后应重新检查受影响页面，本版24页检查记录对应语言润色版DOCX，历史26页与29页记录分别对应此前两版。
+生成图表需要本地data/exp06-*和runs/exp06-*材料。公式为可编辑OMML。渲染用独立隐藏Word实例导出PDF，再调用文档技能栅格化组件生成120 dpi逐页PNG；转换路径与本机安装绑定。PDF与PNG仅供内部检查，交付文件为Word。重新构建后须重新审阅受影响页面，原检查记录与哈希绑定。
 
-正式投稿前仍需根据目标刊物模板、作者及单位信息进行排版，并为读者提供可访问的代码与补充材料入口。研究结论限定于本文模拟条件。
+投稿时按目标刊物模板填写作者、单位与公开材料入口；正文保持作者视角及当前实验的真实证据范围。

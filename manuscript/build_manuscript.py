@@ -17,80 +17,16 @@ from docx.oxml import OxmlElement
 from docx.oxml.ns import qn
 from docx.shared import Cm, Pt, RGBColor
 from lxml import etree
-from PIL import Image, ImageDraw, ImageFont
 
 ROOT = Path(__file__).resolve().parent
 REPO = ROOT.parent
-ASSETS = ROOT / "figures"
-OUTPUT = ROOT / "GNSS多类型异常识别论文初稿_语言润色版.docx"
+ASSETS = ROOT / "figures/exp06"
+OUTPUT = ROOT / "GNSS多类型异常识别论文初稿_SDR-VLM实验更新版.docx"
 sys.path.insert(0, str(Path(os.environ["TEMP"]) / "gnss-paper-authoring-deps"))
 from latex2mathml.converter import convert as latex_to_mathml
 
 
-def prepare_figures():
-    ASSETS.mkdir(exist_ok=True)
-    comparison = Image.open(REPO / "results/exp04-two-seeds/comparison.png")
-    width, height = comparison.size
-    comparison.crop((0, int(height * .06), int(width * .499), height)).save(
-        ASSETS / "comparison_overall.png"
-    )
-    comparison.crop((int(width * .500), int(height * .06), width, height)).save(
-        ASSETS / "comparison_types.png"
-    )
-    cases = Image.open(REPO / "results/exp04-cases/cases.png")
-    width, height = cases.size
-    for name, left, right in [("case_transient", .501, .751), ("case_deformation", .751, 1.)]:
-        cases.crop((int(width * left), int(height * .038), int(width * right), height)).save(
-            ASSETS / f"{name}.png"
-        )
-
-    canvas = Image.new("RGB", (1900, 1120), "white")
-    draw = ImageDraw.Draw(canvas)
-    regular = ImageFont.truetype("C:/Windows/Fonts/msyh.ttc", 31)
-    bold = ImageFont.truetype("C:/Windows/Fonts/msyhbd.ttc", 35)
-    small = ImageFont.truetype("C:/Windows/Fonts/msyh.ttc", 27)
-    ink, edge = "#162a3c", "#4c6375"
-
-    def box(rect, heading, lines):
-        draw.rounded_rectangle(rect, radius=12, fill="#f5f7f9", outline=edge, width=3)
-        center = (rect[0] + rect[2]) / 2
-        draw.text((center, rect[1] + 22), heading, fill=ink, font=bold, anchor="mt")
-        for index, line in enumerate(lines):
-            draw.text((center, rect[1] + 80 + 45 * index), line, fill=ink, font=regular, anchor="mt")
-
-    def arrow(start, end):
-        draw.line((start, end), fill=edge, width=5)
-        x, y = end
-        if end[1] > start[1]:
-            draw.polygon([(x, y), (x - 12, y - 20), (x + 12, y - 20)], fill=edge)
-        else:
-            draw.polygon([(x, y), (x - 20, y - 12), (x - 20, y + 12)], fill=edge)
-
-    box((30, 30, 570, 230), "站点内正常参考", ["日尺度 NEU 与有效观测掩码", "趋势  年周期  稳健残差尺度"])
-    box((680, 30, 1220, 230), "数值形态候选", ["点特征 48 维   区间特征 30 维", "平衡随机森林与区间时间解码"])
-    box((1330, 30, 1870, 230), "单轮视觉审阅", ["全局图  正常参考  六个局部窗", "形态类型与活动起止确认"])
-    arrow((570, 130), (680, 130))
-    arrow((1220, 130), (1330, 130))
-    draw.line((950, 230, 950, 300, 1600, 300, 1600, 230), fill=edge, width=4)
-    arrow((950, 300), (950, 365))
-    positions = [(30, 370, 460, 650), (500, 370, 930, 650), (970, 370, 1400, 650), (1440, 370, 1870, 650)]
-    descriptions = [
-        ("尖峰", ["保留数值单日分类", "不由视觉补回漏检", "输出数值预测日"]),
-        ("阶跃", ["排名候选提供日期", "视觉须同日同类确认", "只标变化起始日"]),
-        ("暂态", ["数值候选约束检查窗", "视觉确认进入与返回", "输出窗内视觉区间"]),
-        ("持续形变", ["数值区间提供活动支持", "视觉审阅运动起止", "停止后平台不再活动"]),
-    ]
-    draw.line((245, 350, 1655, 350), fill=edge, width=4)
-    for rect, (heading, lines) in zip(positions, descriptions):
-        center = (rect[0] + rect[2]) / 2
-        arrow((center, 350), (center, 370))
-        box(rect, heading, lines)
-        draw.line((center, 650, center, 720), fill=edge, width=4)
-    draw.line((245, 720, 1655, 720), fill=edge, width=4)
-    arrow((950, 720), (950, 775))
-    box((390, 775, 1510, 1000), "四类可并存事件与日标签", ["图示  导出  评价共享有效观测掩码", "分别评价日 F1  事件 F1  点定位及活动边界误差"])
-    draw.text((950, 1050), "固定数值活动边界变体仅改变持续形变的起止来源", font=small, fill=ink, anchor="mt")
-    canvas.save(ASSETS / "framework.png")
+from prepare_sdr_figures import prepare_figures
 
 
 def font_properties(font, chinese="宋体", size=12, bold=False):
@@ -154,11 +90,11 @@ def set_style(document):
 
 
 FIGURES = {
-    "framework": (1, "MF-VLM的数值候选、视觉审阅与形态分工流程", 16),
+    "framework": (1, "SDR-VLM的独立数值路径与受限视觉语义修复", 16),
     "comparison_overall": (2, "48个测试站上主要方法的四类等权日F1与事件F1", 15.6),
-    "comparison_types": (3, "48个测试站上主要方法的分类型日F1，配色与图2一致", 15.6),
-    "case_transient": (4, "固定选取的首个暂态场景及检测区间对照", 9.0),
-    "case_deformation": (5, "固定选取的首个持续形变场景及检测区间对照", 9.0),
+    "comparison_types": (3, "48个测试站上主要方法的分类型日F1", 15.6),
+    "case_transient": (4, "首个视觉修复案例的原始曲线与阶跃和暂态标签对照", 15.6),
+    "case_deformation": (5, "首个纯形变站的原始位移与活动边界对照", 15.6),
 }
 
 
@@ -184,12 +120,12 @@ def text_with_markup(paragraph, text, citation_numbers, table_numbers):
 
 def add_inline_math(paragraph, text):
     """Typeset the author's inline symbols without changing implementation names."""
-    pattern = r"(?<![A-Za-z_])(?:TP|FP|FN|x̂|[xarcempqvbuNEUVRFQHWOPDKAℓλεσπŷ])_(?:\{[^}]+\}|[A-Za-z0-9]+)(?:\^(?:\{[^}]+\}|[A-Za-z0-9]+))?"
+    pattern = r"(?<![A-Za-z_])(?:TP|FP|FN|RSS|x̂|[xarcempqvbutngNEUVRFQLHWOPDKAℓλεσκτπŷ])_(?:\{[^}]+\}|[A-Za-z0-9τ]+)(?:\^(?:\{[^}]+\}|[A-Za-z0-9]+))?"
     cursor = 0
     for match in re.finditer(pattern, text):
         paragraph.add_run(text[cursor:match.start()])
         expression = match[0].replace("x̂", r"\widehat{x}").replace("ŷ", r"\widehat{y}").replace("ℓ", r"\ell").replace("σ", r"\sigma").replace("π", r"\pi").replace("λ", r"\lambda")
-        expression = expression.replace("ε", r"\varepsilon")
+        expression = expression.replace("ε", r"\varepsilon").replace("κ", r"\kappa").replace("τ", r"\tau")
         expression = re.sub(r"_([A-Za-z0-9]+)", lambda item: "_{" + (r"\mathrm{" + item[1] + "}" if len(item[1]) > 1 else item[1]) + "}", expression)
         expression = re.sub(r"\^([A-Za-z0-9]+)", lambda item: "^{" + (r"\mathrm{" + item[1] + "}" if len(item[1]) > 1 else item[1]) + "}", expression)
         mathml = etree.fromstring(latex_to_mathml(expression).encode())
@@ -209,7 +145,9 @@ def add_table(document, rows, citations, tables):
     elif count == 3 and "bootstrap" in rows[0][-1]:
         widths = [5.2, 4.3, 6.5]
     elif count == 3:
-        widths = [4, 9.5, 2.5]
+        widths = [9, 3.5, 3.5]
+    elif count == 5 and "批次" in rows[0][0]:
+        widths = [4.0, 4.0, 2.5, 3.0, 2.5]
     elif count == 4 and "异常类型" in rows[0][0]:
         widths = [2, 4.6, 4.9, 4.5]
     else:
@@ -262,6 +200,7 @@ def add_table(document, rows, citations, tables):
 
 def add_equation(document, latex, number, transform):
     latex = latex.replace(r"\arg\max", r"\mathop{\mathrm{arg\,max}}")
+    latex = latex.replace(r"\arg\min", r"\mathop{\mathrm{arg\,min}}")
     # A multi-expression display is laid out over two lines when needed.
     pieces = [latex]
     if len(latex) > 180:
@@ -313,7 +252,7 @@ def main():
     global MATH_TRANSFORM
     prepare_figures()
     paths = sorted((ROOT / "chapters").glob("*.md"))
-    chapters = [(path, path.read_text(encoding="utf-8")) for path in paths]
+    chapters = [(path, path.read_text(encoding="utf-8-sig")) for path in paths]
     entire = "\n\n".join(text for _, text in chapters).replace("[@Andrade2024]", "[@Andrade2024preprint]")
     citation_order = list(dict.fromkeys(re.findall(r"@([A-Za-z0-9]+)", entire)))
     citations = {key: index + 1 for index, key in enumerate(citation_order)}
@@ -328,10 +267,10 @@ def main():
     MATH_TRANSFORM = transform
     document = Document()
     set_style(document)
-    document.core_properties.title = "融合数值形态候选与视觉大模型的GNSS多类型异常识别方法"
-    document.core_properties.subject = "GNSS-VLM-EXP04-v1"
+    document.core_properties.title = "融合位移结构分解与视觉语义修复的GNSS多类型异常识别方法"
+    document.core_properties.subject = "GNSS-VLM-EXP06-v1"
     document.core_properties.author = ""
-    document.core_properties.keywords = "GNSS;视觉语言模型;多类型异常识别;MF-VLM"
+    document.core_properties.keywords = "GNSS;视觉语言模型;多类型异常识别;SDR-VLM"
     equation = 0
     for path, chapter in chapters:
         lines = chapter.splitlines()
@@ -386,6 +325,8 @@ def main():
                         style = "Heading 2"
                 else:
                     style = "Heading 1" if len(hashes) == 1 else "Heading 2"
+                if style == "Title":
+                    content = content.replace("的GNSS", "的\nGNSS")
                 p = document.add_paragraph(content, style)
                 if path.name.startswith("00"):
                     p.alignment = WD_ALIGN_PARAGRAPH.CENTER
@@ -416,9 +357,9 @@ def main():
         "docx": str(OUTPUT), "chapters": [path.name for path, _ in chapters],
         "citations": citations, "tables": tables, "equations": equation,
         "figures": {key: value[0] for key, value in FIGURES.items()},
-        "experiment": "GNSS-VLM-EXP04-v1",
+        "experiment": "GNSS-VLM-EXP06-v1",
     }
-    (ROOT / "working/build-manifest-polished.json").write_text(json.dumps(manifest, ensure_ascii=False, indent=2), encoding="utf-8")
+    (ROOT / "working/build-manifest-sdr.json").write_text(json.dumps(manifest, ensure_ascii=False, indent=2), encoding="utf-8")
     print(json.dumps(manifest, ensure_ascii=False))
 
 

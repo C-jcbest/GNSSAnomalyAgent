@@ -1,6 +1,6 @@
 param(
-    [string]$DocumentPath = (Join-Path $PSScriptRoot 'GNSS多类型异常识别论文初稿_语言润色版.docx'),
-    [string]$OutputDirectory = (Join-Path $PSScriptRoot 'working/render-polished')
+    [string]$DocumentPath = (Join-Path $PSScriptRoot 'GNSS多类型异常识别论文初稿_SDR-VLM实验更新版.docx'),
+    [string]$OutputDirectory = (Join-Path $PSScriptRoot 'working/render-sdr')
 )
 
 $ErrorActionPreference = 'Stop'
