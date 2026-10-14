@@ -36,6 +36,11 @@ balanced RF/ExtraTrees开发未达条件；默认RF另设开发确认后在新48
 [EXP08判断与机制](docs/exp08-assessment.md)、[正式结果](results/exp08-main-v1/results.md)、
 [新论文/库源码核查](docs/exp08-reading-notes.md)。生产仍为EXP06，原备份保留。
 
+继续完成 **EXP09：GNSS歧义返回对视觉重复判断与多数修复实验**。
+新24开发站，多数修复F1=.7916，单次三成员均值=.7909，增量仅.0007；9请求全部成功。
+相对首成员的.0388改善未推广到成员平均表现，取消集成，稳定方法保持SDR-VLM。
+[EXP09结论与后续配对思路](docs/exp09-assessment.md)、[全部成员与多数结果](results/exp09-development-v1/results.md)。
+
 复现第一个EXP06正式种子（以下为已使用种子的复现，不是新测试）：
 
 ```powershell
