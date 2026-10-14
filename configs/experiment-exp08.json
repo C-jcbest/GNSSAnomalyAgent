@@ -1,0 +1,14 @@
+{
+  "experiment_id": "GNSS-VLM-EXP08",
+  "name": "GNSS尖峰独立学习与视觉位移分解融合实验",
+  "protocol_version": "development-v1",
+  "protocol_path": "docs/experiment-exp08.md",
+  "primary_endpoint": "four-type pooled daily macro F1; no point adjustment",
+  "stable_commit": "23be8da",
+  "development_seed": 2026101410,
+  "planned_test_seeds": [2026101411, 2026101412],
+  "candidates": ["binary_rf_repair", "binary_et_repair"],
+  "minimum_absolute_improvement": 0.02,
+  "maximum_per_type_degradation": 0.05,
+  "selection_note": "RF preferred if candidate difference <=0.005; unbalanced RF is an ablation only"
+}

@@ -29,6 +29,13 @@
 [完整决定与备份](docs/exp07-assessment.md)、[新48站结果](results/exp07-main-v1/results.md)、
 [本轮论文调研](docs/exp07-reading-notes.md)、[备份SHA凭据](docs/backup-exp06-receipt.json)。
 
+2026-10-14完成 **EXP08：GNSS独立尖峰先验与视觉位移分解融合正式复核**。
+balanced RF/ExtraTrees开发未达条件；默认RF另设开发确认后在新48站测试。
+候选ISP-VLM四类日F1=.7596，原SDR-VLM=.7724，数值增量仅.0001，取消集成。
+相同模型请求也观察到修复差异，下降不能全部归因RF；16实际请求全部成功。
+[EXP08判断与机制](docs/exp08-assessment.md)、[正式结果](results/exp08-main-v1/results.md)、
+[新论文/库源码核查](docs/exp08-reading-notes.md)。生产仍为EXP06，原备份保留。
+
 复现第一个EXP06正式种子（以下为已使用种子的复现，不是新测试）：
 
 ```powershell

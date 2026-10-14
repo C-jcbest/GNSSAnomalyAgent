@@ -1,0 +1,18 @@
+{
+  "experiment_id": "GNSS-VLM-EXP08",
+  "name": "GNSS独立尖峰先验与视觉位移分解融合正式复核实验",
+  "protocol_version": "test-v1",
+  "protocol_path": "docs/experiment-exp08-test.md",
+  "primary_method": "binary_rf_default_repair",
+  "primary_method_name": "ISP-VLM（待正式复核）",
+  "selected_classifier": "binary_rf_default",
+  "candidates": ["binary_rf_default_repair"],
+  "primary_endpoint": "four-type pooled daily macro F1; no point adjustment",
+  "development_seeds": [2026101410, 2026101411],
+  "test_seeds": [2026101412, 2026101413],
+  "minimum_absolute_improvement": 0.02,
+  "maximum_per_type_degradation": 0.05,
+  "require_both_seed_directions_positive": true,
+  "stable_commit": "23be8da",
+  "adjustments": ["48-feature binary spike RF with default class weights", "replace original multi-output RF spikes; no probability threshold tuning", "unchanged EXP06 segmentation and visual role"]
+}

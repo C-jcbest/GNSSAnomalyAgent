@@ -1,0 +1,60 @@
+{
+  "baseline_registration_sha256": "19ce79c06e15cc9cff4f2062c6a94e3ad678c17d03340162993af2aa11d6c7ab",
+  "dataset_manifest_sha256": "fd772b98b52b99d025f75f7e36519b11241ffb2f388c2345658798ad49b8bc49",
+  "classifiers": [
+    "binary_rf_default"
+  ],
+  "split": "test",
+  "script_sha256": "fc11cefc9e0b03487f3a71cb45840b6fd481a560ad60a1bbf38e4eb001b001b7",
+  "source_hashes": {
+    "__init__.py": "9c1ecee1dd8350d88a13e3e542d0541a2448cd34e44ed9127c453b604970296f",
+    "baselines.py": "a8ca8c9b3f80ad376183ee7c1ee77501c543168f0cd4d5564fc78ae08df26861",
+    "cli.py": "5483b1976d756d5e006a2c4a931898c4d5916b8b8f6b7db55313dfd8e16cb4bf",
+    "data.py": "a0ac7ba8a3ed984e60965ca08ba93dc4ce696f2390f054fc7eb1c73afc47f45c",
+    "experiment.py": "fd0b0f10d9b080fa74a62ebe16c024e9064bfd3acec83cf3415fb9150c748ff2",
+    "features.py": "8b6fed5af931113b10e1cf6a3759017e8bdbbf42891e5c6e92b5e245f7d80d8f",
+    "files.py": "fda1f5894c90c61a8d259c5aa67fc40a052b764634b6d60cf3c740be56b6637b",
+    "fusion.py": "83f1428a3ecb6bd75c606ec219ce6e38bff5ce126a6f9a9f985c04db7527969d",
+    "guided.py": "a1c6c1ed183f614ef30879f0a13f00b9cafee6eb5f5f4b264c190787a5a65a92",
+    "localization.py": "287aa2a38d7e354486b7f42c11ead417d3a8264fc3dc2b35511247d6e9f18eab",
+    "metrics.py": "ee774e99262112dd043de5d19bb88bab69b46dc7422f2edb6988881a25fdc9f8",
+    "plots.py": "a3f3ee1852ea81e94aa321c27a9beef4ed96ef056cf4a6321d15e3e139a05708",
+    "provider.py": "ca0e9a594d59e9caf15d649815051ff652f39924ccc62ed0a6328db66eaf77f7",
+    "schema.py": "ff1477391c9ac4f3e5b9883e140451b204f5f5beca95f3795a90e13e65a3196f",
+    "segmentation.py": "3f139e94e4ba68a33665d8f77fbb85515ff741d73a7ad5709f38bac780166805",
+    "segmented_review.py": "90b8576d9372911ca71f5cd054342e69b0dcb61e5c59abacb4c8ba6019775f4c",
+    "temporal.py": "f594ebf0683ff4f717242f0325cc98430d7fec171787b5b478762a18bfcdd11c",
+    "upstream.py": "0d471248da8b6a2e01e8516b771c0c7b299c318194dd5ddcefccb984554a7e08",
+    "vision.py": "12388c54aef7e0326d3d5dab49cbd0419a3e230910f04faa20ade7d67673c9e9"
+  },
+  "protocol": {
+    "experiment_id": "GNSS-VLM-EXP08",
+    "name": "GNSS独立尖峰先验与视觉位移分解融合正式复核实验",
+    "protocol_version": "test-v1",
+    "protocol_path": "docs/experiment-exp08-test.md",
+    "primary_method": "binary_rf_default_repair",
+    "primary_method_name": "ISP-VLM（待正式复核）",
+    "selected_classifier": "binary_rf_default",
+    "candidates": [
+      "binary_rf_default_repair"
+    ],
+    "primary_endpoint": "four-type pooled daily macro F1; no point adjustment",
+    "development_seeds": [
+      2026101410,
+      2026101411
+    ],
+    "test_seeds": [
+      2026101412,
+      2026101413
+    ],
+    "minimum_absolute_improvement": 0.02,
+    "maximum_per_type_degradation": 0.05,
+    "require_both_seed_directions_positive": true,
+    "stable_commit": "23be8da",
+    "adjustments": [
+      "48-feature binary spike RF with default class weights",
+      "replace original multi-output RF spikes; no probability threshold tuning",
+      "unchanged EXP06 segmentation and visual role"
+    ]
+  }
+}
