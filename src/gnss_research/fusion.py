@@ -20,7 +20,59 @@ DERIVED_METHODS = {
     "morphology_no_local": "guided_no_local",
     "morphology_no_scores": "guided_no_scores",
     "morphology_fixed_activity": "guided_fusion",
+    "morphology_global_fixed": "guided_no_local",
+    "morphology_step_local": "guided_step_local",
+    "morphology_step_fixed": "guided_step_local",
+    "localized_fusion": "guided_fusion",
+    "localized_global": "guided_no_local",
+    "localized_step_local": "guided_step_local",
+    "localized_fixed": "guided_fusion",
+    "localized_global_fixed": "guided_no_local",
+    "localized_step_fixed": "guided_step_local",
 }
+
+
+def localized_review(observation: dict, visual: dict, candidates: dict,
+                     revise_activity: bool = True) -> dict:
+    """Let visual step semantics confirm a window, then retain its numerical onset.
+
+    This explicitly replaces EXP04's exact-day intersection. A visual date must fall
+    in a step inspection window; if windows overlap, the nearest RF center owns it.
+    The date estimator uses only observations and the normal reference, never truth.
+    """
+    result = morphology_review(observation, visual, candidates, revise_activity)
+    if result["status"] != "success":
+        return result
+    events = [event for event in result["prediction"]["events"] if event["kind"] != "step"]
+    windows = [window for window in candidates["windows"]
+               if window["inspection_kind"] == "step"]
+    localizations = {item["window_id"]: item for item in candidates["step_localizations"]}
+    emitted = set()
+    for decision in visual["prediction"]["events"]:
+        if decision["kind"] != "step" or decision["status"] != "confirmed":
+            continue
+        supporting = [window for window in windows
+                      if window["start"] <= decision["start"] <= window["end"]]
+        if not supporting:
+            continue
+        window = min(supporting, key=lambda item: abs(item["peak_index"] - decision["start"]))
+        index = localizations[window["id"]]["index"]
+        if index is None or index in emitted:
+            continue
+        events.append({**decision, "start": index, "end": index,
+                       "evidence": "Visual persistent-step confirmation within " + window["id"]
+                       + "; onset from station-standardized common-trend level-jump fit: "
+                       + decision["evidence"]})
+        emitted.add(index)
+    prediction = Prediction.model_validate({"events": events})
+    observed = np.isfinite(observed_values(observation)).all(axis=1)
+    masks = event_masks(prediction, observed)
+    result.update(prediction=prediction.model_dump(),
+                  generic_mask=np.any(np.column_stack(list(masks.values())), axis=1).tolist(),
+                  derivation="same response; numerical spikes, visual window-confirmed fitted "
+                  "step dates, " + ("visual activity boundaries" if revise_activity
+                                     else "numeric activity boundaries"))
+    return result
 
 
 def morphology_review(observation: dict, visual: dict, candidates: dict,

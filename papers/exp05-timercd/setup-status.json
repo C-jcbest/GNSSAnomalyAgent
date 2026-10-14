@@ -1,0 +1,98 @@
+{
+  "status": "blocked_incomplete_checkpoint",
+  "author_inference_executed": false,
+  "environment_installation": "completed in isolated Python 3.12 environment",
+  "attempts": [
+    {
+      "mode": "official single stream",
+      "status": "RemoteProtocolError",
+      "received_bytes": 30990335
+    },
+    {
+      "mode": "author-recommended mirror single stream",
+      "status": "RemoteProtocolError",
+      "received_bytes": 5437628
+    },
+    {
+      "mode": "8-connection HTTP ranges",
+      "status": "RemoteProtocolError; partial blocks retained, checkpoint not assembled",
+      "script_sha256": "e55086ecd587ff6973fd893f073c91b049a858dda153cba126f417b320a9420e"
+    },
+    {
+      "mode": "official hf client at pinned revision",
+      "status": "acquisition stopped after more than 10 minutes without complete local checkpoint; no inference run was started"
+    }
+  ],
+  "partial_files": [
+    {
+      "path": "vendor\\upstream\\time-rcd\\weights\\pretrain_checkpoint_best_multi.pth",
+      "bytes": 30990335
+    },
+    {
+      "path": "vendor\\upstream\\time-rcd\\weights\\pretrain_checkpoint_best_multi_mirror.pth",
+      "bytes": 5437628
+    },
+    {
+      "path": "vendor\\upstream\\time-rcd\\weights\\ranges\\000000000000.part",
+      "bytes": 3936083
+    },
+    {
+      "path": "vendor\\upstream\\time-rcd\\weights\\ranges\\000008388608.part",
+      "bytes": 3636087
+    },
+    {
+      "path": "vendor\\upstream\\time-rcd\\weights\\ranges\\000016777216.part",
+      "bytes": 3938454
+    },
+    {
+      "path": "vendor\\upstream\\time-rcd\\weights\\ranges\\000025165824.part",
+      "bytes": 3926826
+    },
+    {
+      "path": "vendor\\upstream\\time-rcd\\weights\\ranges\\000033554432.part",
+      "bytes": 3905816
+    },
+    {
+      "path": "vendor\\upstream\\time-rcd\\weights\\ranges\\000041943040.part",
+      "bytes": 3940819
+    },
+    {
+      "path": "vendor\\upstream\\time-rcd\\weights\\ranges\\000050331648.part",
+      "bytes": 3877067
+    },
+    {
+      "path": "vendor\\upstream\\time-rcd\\weights\\ranges\\000058720256.part",
+      "bytes": 3918050
+    },
+    {
+      "path": "vendor\\upstream\\time-rcd\\weights\\ranges\\000067108864.part",
+      "bytes": 8388608
+    },
+    {
+      "path": "vendor\\upstream\\time-rcd\\weights\\ranges\\000075497472.part",
+      "bytes": 6833596
+    },
+    {
+      "path": "vendor\\upstream\\time-rcd\\weights\\ranges\\000083886080.part",
+      "bytes": 8388608
+    },
+    {
+      "path": "vendor\\upstream\\time-rcd\\weights\\ranges\\000092274688.part",
+      "bytes": 6824328
+    },
+    {
+      "path": "vendor\\upstream\\time-rcd\\weights\\ranges\\000100663296.part",
+      "bytes": 8388608
+    },
+    {
+      "path": "vendor\\upstream\\time-rcd\\weights\\ranges\\000109051904.part",
+      "bytes": 6087397
+    },
+    {
+      "path": "vendor\\upstream\\time-rcd\\weights\\ranges\\000117440512.part",
+      "bytes": 6822722
+    }
+  ],
+  "expected_bytes": 444841116,
+  "scores": "not available; no invented scores"
+}

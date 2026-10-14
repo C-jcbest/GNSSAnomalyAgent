@@ -1,0 +1,16 @@
+{
+  "experiment_id": "GNSS-VLM-EXP05",
+  "name": "GNSS视觉形态确认与数值精确定位实验",
+  "method_label": "SG-LocFusion（单图形态确认与数值定位融合）",
+  "protocol_version": "test-v1",
+  "protocol_path": "docs/experiment-exp05.md",
+  "primary_method": "localized_global",
+  "primary_endpoint": "four-type macro daily F1: pool TP/FP/FN within each type, then average four type F1 scores equally; no point adjustment",
+  "secondary_endpoints": ["four-type macro event F1 at IoU 0.5", "generic daily micro F1", "per-type daily precision/recall/F1", "step exact-day and tolerance 3 days F1", "normal-control false alarms", "activity coverage and post-arrest false days", "prompt tokens and request latency"],
+  "development_seed": 2026101401,
+  "training_seed": 2026101401,
+  "test_seeds": [2026101402, 2026101403],
+  "selection": "After 24 fresh validation stations, before generating or inspecting fresh test seeds: highest prespecified four-type daily F1 among the registered image/date/boundary variants. Complete development matrix retained.",
+  "adjustments": ["single global plot with unchanged numerical proposal text", "visual-window confirmed numerical step onset", "normal-prefix scale normalization", "minimum 5 observed samples on each side", "adjacent observed onset pair", "visual activity boundaries retained"],
+  "note": "Project GNSS adaptation, not reproduction of VLM4TS or ChangePointCNN-GNSS. No cross-station physical alarm threshold."
+}

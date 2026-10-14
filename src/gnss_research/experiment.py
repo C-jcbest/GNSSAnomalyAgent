@@ -18,6 +18,7 @@ from gnss_research.fusion import (
     DERIVED_METHODS,
     anchored_review,
     boundary_review,
+    localized_review,
     morphology_review,
     ranked_boundary_review,
 )
@@ -177,9 +178,14 @@ def execute(run: Path, env_file: Path | None = None) -> dict:
             work = run / "predictions" / method / record["station_id"]
             work.mkdir(parents=True, exist_ok=False)
             candidates = read_json(parent_work / "candidates.json")
-            if method.startswith("morphology_"):
+            if method.startswith("localized_"):
+                fused = localized_review(observation, result, candidates,
+                                         revise_activity=not method.endswith("fixed"))
+            elif method.startswith("morphology_"):
                 fused = morphology_review(observation, result, candidates,
-                                          revise_activity=method != "morphology_fixed_activity")
+                                          revise_activity=method not in (
+                                              "morphology_fixed_activity",
+                                              "morphology_global_fixed", "morphology_step_fixed"))
             elif method.startswith("ranked_"):
                 fused = ranked_boundary_review(observation, result, candidates)
             elif method.startswith("boundary_"):

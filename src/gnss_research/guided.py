@@ -11,10 +11,11 @@ import numpy as np
 
 from gnss_research.features import numerical_evidence
 from gnss_research.files import sha256, write_json
+from gnss_research.localization import locate_step
 from gnss_research.plots import render_observation
 from gnss_research.schema import EVENT_TYPES, VisualDecision, observed_values
 
-GUIDED_METHODS = ("guided_fusion", "guided_no_local", "guided_no_scores")
+GUIDED_METHODS = ("guided_fusion", "guided_no_local", "guided_no_scores", "guided_step_local")
 REVIEW = """
 Review the global raw N/E/U plot and, when provided, high-resolution local views.
 All local indices are ORIGINAL daily indices. Local windows were selected by a supervised
@@ -97,8 +98,11 @@ def prepare_guided(observation: dict, numerical: dict, method: str, work: Path,
     evidence = numerical_evidence(observation)
     reference = evidence.values - evidence.residual
     windows = inspection_windows(observation, numerical)
-    write_json(work / "candidates.json", {"selector": "rf_split_temporal", "windows": windows,
-                                         "numerical_prediction": numerical})
+    write_json(work / "candidates.json", {
+        "selector": "rf_split_temporal", "windows": windows,
+        "numerical_prediction": numerical,
+        "step_localizations": [locate_step(evidence, window) for window in windows
+                               if window["inspection_kind"] == "step"]})
     global_plot = work / "input.png"
     render_observation(observation, global_plot, reference_curve=reference)
     images = [global_plot]
@@ -124,12 +128,16 @@ def prepare_guided(observation: dict, numerical: dict, method: str, work: Path,
             "are learned on training stations; missing-day emissions are neutral. "
             "No universal physical threshold and no test-label threshold selection.")
     if method != "guided_no_local":
-        background_window = {"id": "normal-reference", "start": observation["background_end"] - 120,
-                             "end": observation["background_end"]}
-        background_plot = work / "normal-reference.png"
-        render_local(observation, background_window, background_plot, reference)
-        images.append(background_plot)
+        if method != "guided_step_local":
+            background_window = {"id": "normal-reference",
+                                 "start": observation["background_end"] - 120,
+                                 "end": observation["background_end"]}
+            background_plot = work / "normal-reference.png"
+            render_local(observation, background_window, background_plot, reference)
+            images.append(background_plot)
         for window in windows:
+            if method == "guided_step_local" and window["inspection_kind"] != "step":
+                continue
             path = work / f"{window['id']}.png"
             render_local(observation, window, path, reference)
             images.append(path)

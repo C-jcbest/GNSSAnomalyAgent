@@ -1,0 +1,1430 @@
+{
+  "experiment_id": "GNSS-VLM-EXP05",
+  "split": "validation",
+  "seed": 2026101401,
+  "manifest_sha256": "9761963c8a3f96f4951ebf54e2b43783c6de06c3d783364f8316b030ed83d97f",
+  "source_hashes": {
+    "__init__.py": "9c1ecee1dd8350d88a13e3e542d0541a2448cd34e44ed9127c453b604970296f",
+    "baselines.py": "b024a74514f03477bd00b3298d8bfe89284a32ad2a55578f3c33a8397d83bcef",
+    "cli.py": "5483b1976d756d5e006a2c4a931898c4d5916b8b8f6b7db55313dfd8e16cb4bf",
+    "data.py": "a0ac7ba8a3ed984e60965ca08ba93dc4ce696f2390f054fc7eb1c73afc47f45c",
+    "experiment.py": "ea6d877f559400763e2ca3861378ffcd9f7c7f6d5940868940739fb7a2d7e3b4",
+    "features.py": "8b6fed5af931113b10e1cf6a3759017e8bdbbf42891e5c6e92b5e245f7d80d8f",
+    "files.py": "fda1f5894c90c61a8d259c5aa67fc40a052b764634b6d60cf3c740be56b6637b",
+    "fusion.py": "631409b3c85f03792e0fe48b0e580140a6389fe7583b9d8dc2e1fd7227fddda5",
+    "guided.py": "a1c6c1ed183f614ef30879f0a13f00b9cafee6eb5f5f4b264c190787a5a65a92",
+    "localization.py": "287aa2a38d7e354486b7f42c11ead417d3a8264fc3dc2b35511247d6e9f18eab",
+    "metrics.py": "ee774e99262112dd043de5d19bb88bab69b46dc7422f2edb6988881a25fdc9f8",
+    "plots.py": "a3f3ee1852ea81e94aa321c27a9beef4ed96ef056cf4a6321d15e3e139a05708",
+    "provider.py": "ca0e9a594d59e9caf15d649815051ff652f39924ccc62ed0a6328db66eaf77f7",
+    "schema.py": "ff1477391c9ac4f3e5b9883e140451b204f5f5beca95f3795a90e13e65a3196f",
+    "temporal.py": "f594ebf0683ff4f717242f0325cc98430d7fec171787b5b478762a18bfcdd11c",
+    "upstream.py": "0d471248da8b6a2e01e8516b771c0c7b299c318194dd5ddcefccb984554a7e08",
+    "vision.py": "825bbc4c26c0ebe2f4209278c282c0dc621ed37450948af3db8a1dc076f4280b"
+  },
+  "observable_truth_steps": 8,
+  "counts": {
+    "window_covers": 6,
+    "rf_exact": 4,
+    "rf_within3": 4,
+    "fit_exact": 4,
+    "fit_within3": 4
+  },
+  "stations": [
+    {
+      "station_id": "s0024",
+      "windows": [
+        {
+          "id": "view3",
+          "start": 552,
+          "end": 594,
+          "inspection_kind": "step",
+          "peak_index": 573,
+          "peak_classifier_score": 0.03
+        },
+        {
+          "id": "view4",
+          "start": 671,
+          "end": 713,
+          "inspection_kind": "step",
+          "peak_index": 692,
+          "peak_classifier_score": 0.03
+        }
+      ],
+      "fits": [
+        {
+          "window_id": "view3",
+          "start": 552,
+          "end": 594,
+          "minimum_observed_per_side": 5,
+          "index": 574,
+          "standardized_jump": [
+            1.318199829297544,
+            -0.5341662837688427,
+            1.2486235886180848
+          ],
+          "observed_before": 21,
+          "observed_after": 19,
+          "residual_sum_squares": 144.12513084803692,
+          "no_jump_sum_squares": 153.51440610656783
+        },
+        {
+          "window_id": "view4",
+          "start": 671,
+          "end": 713,
+          "minimum_observed_per_side": 5,
+          "index": 688,
+          "standardized_jump": [
+            -1.8451808629280162,
+            0.6122824030825205,
+            0.6727322779924614
+          ],
+          "observed_before": 16,
+          "observed_after": 26,
+          "residual_sum_squares": 95.47218615716267,
+          "no_jump_sum_squares": 107.15919497190895
+        }
+      ]
+    },
+    {
+      "station_id": "s0025",
+      "windows": [
+        {
+          "id": "view3",
+          "start": 594,
+          "end": 636,
+          "inspection_kind": "step",
+          "peak_index": 615,
+          "peak_classifier_score": 0.15
+        },
+        {
+          "id": "view4",
+          "start": 566,
+          "end": 608,
+          "inspection_kind": "step",
+          "peak_index": 587,
+          "peak_classifier_score": 0.05
+        }
+      ],
+      "fits": [
+        {
+          "window_id": "view3",
+          "start": 594,
+          "end": 636,
+          "minimum_observed_per_side": 5,
+          "index": 614,
+          "standardized_jump": [
+            2.3292327535790527,
+            -1.160539168074673,
+            4.359315341608368
+          ],
+          "observed_before": 20,
+          "observed_after": 23,
+          "residual_sum_squares": 656.2145790533573,
+          "no_jump_sum_squares": 726.0451394454475
+        },
+        {
+          "window_id": "view4",
+          "start": 566,
+          "end": 608,
+          "minimum_observed_per_side": 5,
+          "index": 589,
+          "standardized_jump": [
+            2.3954324045154607,
+            0.8441318748386447,
+            -0.4449858397425893
+          ],
+          "observed_before": 23,
+          "observed_after": 17,
+          "residual_sum_squares": 117.72515787346556,
+          "no_jump_sum_squares": 132.8899402826466
+        }
+      ]
+    },
+    {
+      "station_id": "s0026",
+      "windows": [
+        {
+          "id": "view3",
+          "start": 468,
+          "end": 510,
+          "inspection_kind": "step",
+          "peak_index": 489,
+          "peak_classifier_score": 0.75
+        },
+        {
+          "id": "view4",
+          "start": 397,
+          "end": 439,
+          "inspection_kind": "step",
+          "peak_index": 418,
+          "peak_classifier_score": 0.03
+        }
+      ],
+      "fits": [
+        {
+          "window_id": "view3",
+          "start": 468,
+          "end": 510,
+          "minimum_observed_per_side": 5,
+          "index": 489,
+          "standardized_jump": [
+            1.9513514553982914,
+            3.387678561199082,
+            -7.988959996657558
+          ],
+          "observed_before": 21,
+          "observed_after": 22,
+          "residual_sum_squares": 114.00183039780882,
+          "no_jump_sum_squares": 326.4885781215627
+        },
+        {
+          "window_id": "view4",
+          "start": 397,
+          "end": 439,
+          "minimum_observed_per_side": 5,
+          "index": 421,
+          "standardized_jump": [
+            0.03184834592429488,
+            -1.326211398623418,
+            -0.27495639531013516
+          ],
+          "observed_before": 23,
+          "observed_after": 19,
+          "residual_sum_squares": 128.67139342450818,
+          "no_jump_sum_squares": 133.637341600597
+        }
+      ]
+    },
+    {
+      "station_id": "s0027",
+      "windows": [
+        {
+          "id": "view3",
+          "start": 541,
+          "end": 583,
+          "inspection_kind": "step",
+          "peak_index": 562,
+          "peak_classifier_score": 0.06
+        },
+        {
+          "id": "view4",
+          "start": 700,
+          "end": 729,
+          "inspection_kind": "step",
+          "peak_index": 721,
+          "peak_classifier_score": 0.04
+        }
+      ],
+      "fits": [
+        {
+          "window_id": "view3",
+          "start": 541,
+          "end": 583,
+          "minimum_observed_per_side": 5,
+          "index": 569,
+          "standardized_jump": [
+            -2.845296039447317,
+            -1.0173778243077858,
+            -0.5930790074812651
+          ],
+          "observed_before": 26,
+          "observed_after": 15,
+          "residual_sum_squares": 132.94547988677212,
+          "no_jump_sum_squares": 159.0504117538432
+        },
+        {
+          "window_id": "view4",
+          "start": 700,
+          "end": 729,
+          "minimum_observed_per_side": 5,
+          "index": 718,
+          "standardized_jump": [
+            -1.5846434239909712,
+            0.9711858967724417,
+            -0.08543914931240422
+          ],
+          "observed_before": 14,
+          "observed_after": 12,
+          "residual_sum_squares": 70.21717773256486,
+          "no_jump_sum_squares": 76.58750772921624
+        }
+      ]
+    },
+    {
+      "station_id": "s0028",
+      "windows": [
+        {
+          "id": "view3",
+          "start": 665,
+          "end": 707,
+          "inspection_kind": "step",
+          "peak_index": 686,
+          "peak_classifier_score": 0.08
+        },
+        {
+          "id": "view4",
+          "start": 621,
+          "end": 663,
+          "inspection_kind": "step",
+          "peak_index": 642,
+          "peak_classifier_score": 0.04
+        }
+      ],
+      "fits": [
+        {
+          "window_id": "view3",
+          "start": 665,
+          "end": 707,
+          "minimum_observed_per_side": 5,
+          "index": 697,
+          "standardized_jump": [
+            0.9626330855932181,
+            -1.1605876671871949,
+            2.278228393556314
+          ],
+          "observed_before": 32,
+          "observed_after": 11,
+          "residual_sum_squares": 92.37986247922736,
+          "no_jump_sum_squares": 118.56568323979543
+        },
+        {
+          "window_id": "view4",
+          "start": 621,
+          "end": 663,
+          "minimum_observed_per_side": 5,
+          "index": 629,
+          "standardized_jump": [
+            1.5061307798185384,
+            -2.172154780714937,
+            -0.17660819763487234
+          ],
+          "observed_before": 7,
+          "observed_after": 35,
+          "residual_sum_squares": 132.84316540932443,
+          "no_jump_sum_squares": 156.7137653605737
+        }
+      ]
+    },
+    {
+      "station_id": "s0029",
+      "windows": [
+        {
+          "id": "view3",
+          "start": 627,
+          "end": 669,
+          "inspection_kind": "step",
+          "peak_index": 648,
+          "peak_classifier_score": 0.39
+        },
+        {
+          "id": "view4",
+          "start": 602,
+          "end": 644,
+          "inspection_kind": "step",
+          "peak_index": 623,
+          "peak_classifier_score": 0.23
+        }
+      ],
+      "fits": [
+        {
+          "window_id": "view3",
+          "start": 627,
+          "end": 669,
+          "minimum_observed_per_side": 5,
+          "index": 648,
+          "standardized_jump": [
+            -7.236329484186403,
+            0.7442302557686076,
+            -6.542738743035071
+          ],
+          "observed_before": 21,
+          "observed_after": 21,
+          "residual_sum_squares": 282.06393717581506,
+          "no_jump_sum_squares": 538.0642781626833
+        },
+        {
+          "window_id": "view4",
+          "start": 602,
+          "end": 644,
+          "minimum_observed_per_side": 5,
+          "index": 623,
+          "standardized_jump": [
+            0.40990553811400465,
+            2.531355560810352,
+            3.572771866891463
+          ],
+          "observed_before": 21,
+          "observed_after": 22,
+          "residual_sum_squares": 425.1918497404303,
+          "no_jump_sum_squares": 477.14128485835005
+        }
+      ]
+    },
+    {
+      "station_id": "s0030",
+      "windows": [
+        {
+          "id": "view3",
+          "start": 600,
+          "end": 642,
+          "inspection_kind": "step",
+          "peak_index": 621,
+          "peak_classifier_score": 0.04
+        },
+        {
+          "id": "view4",
+          "start": 575,
+          "end": 617,
+          "inspection_kind": "step",
+          "peak_index": 596,
+          "peak_classifier_score": 0.03
+        }
+      ],
+      "fits": [
+        {
+          "window_id": "view3",
+          "start": 600,
+          "end": 642,
+          "minimum_observed_per_side": 5,
+          "index": 627,
+          "standardized_jump": [
+            -0.7766677494379615,
+            -0.5775308049969234,
+            1.8056160036199385
+          ],
+          "observed_before": 27,
+          "observed_after": 16,
+          "residual_sum_squares": 110.52253968414996,
+          "no_jump_sum_squares": 123.11735379498582
+        },
+        {
+          "window_id": "view4",
+          "start": 575,
+          "end": 617,
+          "minimum_observed_per_side": 5,
+          "index": 595,
+          "standardized_jump": [
+            -1.09012660650208,
+            -0.5649047134278156,
+            0.8671172870044103
+          ],
+          "observed_before": 20,
+          "observed_after": 23,
+          "residual_sum_squares": 118.8394601326237,
+          "no_jump_sum_squares": 124.96047798632983
+        }
+      ]
+    },
+    {
+      "station_id": "s0031",
+      "windows": [
+        {
+          "id": "view3",
+          "start": 521,
+          "end": 563,
+          "inspection_kind": "step",
+          "peak_index": 542,
+          "peak_classifier_score": 0.18
+        },
+        {
+          "id": "view4",
+          "start": 641,
+          "end": 683,
+          "inspection_kind": "step",
+          "peak_index": 662,
+          "peak_classifier_score": 0.04
+        }
+      ],
+      "fits": [
+        {
+          "window_id": "view3",
+          "start": 521,
+          "end": 563,
+          "minimum_observed_per_side": 5,
+          "index": 541,
+          "standardized_jump": [
+            3.819905250563551,
+            -4.1562373105532355,
+            -3.843385860619877
+          ],
+          "observed_before": 20,
+          "observed_after": 23,
+          "residual_sum_squares": 858.4089333319179,
+          "no_jump_sum_squares": 984.7572475026878
+        },
+        {
+          "window_id": "view4",
+          "start": 641,
+          "end": 683,
+          "minimum_observed_per_side": 5,
+          "index": 660,
+          "standardized_jump": [
+            -0.5471413690884401,
+            1.9359410988748122,
+            0.25686522551629676
+          ],
+          "observed_before": 11,
+          "observed_after": 23,
+          "residual_sum_squares": 98.6593298319418,
+          "no_jump_sum_squares": 105.49291272511502
+        }
+      ]
+    },
+    {
+      "station_id": "s0032",
+      "windows": [
+        {
+          "id": "view3",
+          "start": 603,
+          "end": 645,
+          "inspection_kind": "step",
+          "peak_index": 624,
+          "peak_classifier_score": 0.18
+        },
+        {
+          "id": "view4",
+          "start": 523,
+          "end": 565,
+          "inspection_kind": "step",
+          "peak_index": 544,
+          "peak_classifier_score": 0.07
+        }
+      ],
+      "fits": [
+        {
+          "window_id": "view3",
+          "start": 603,
+          "end": 645,
+          "minimum_observed_per_side": 5,
+          "index": 624,
+          "standardized_jump": [
+            11.974467276196894,
+            -6.395687420910611,
+            -14.635383724524036
+          ],
+          "observed_before": 19,
+          "observed_after": 18,
+          "residual_sum_squares": 96.054824223135,
+          "no_jump_sum_squares": 1087.7186417259413
+        },
+        {
+          "window_id": "view4",
+          "start": 523,
+          "end": 565,
+          "minimum_observed_per_side": 5,
+          "index": 544,
+          "standardized_jump": [
+            0.15878735426821453,
+            1.4396064516095446,
+            -1.6243588855465403
+          ],
+          "observed_before": 21,
+          "observed_after": 22,
+          "residual_sum_squares": 155.62272001581186,
+          "no_jump_sum_squares": 168.344432458729
+        }
+      ]
+    },
+    {
+      "station_id": "s0033",
+      "windows": [
+        {
+          "id": "view3",
+          "start": 579,
+          "end": 621,
+          "inspection_kind": "step",
+          "peak_index": 600,
+          "peak_classifier_score": 0.33
+        },
+        {
+          "id": "view4",
+          "start": 479,
+          "end": 521,
+          "inspection_kind": "step",
+          "peak_index": 500,
+          "peak_classifier_score": 0.04
+        }
+      ],
+      "fits": [
+        {
+          "window_id": "view3",
+          "start": 579,
+          "end": 621,
+          "minimum_observed_per_side": 5,
+          "index": 612,
+          "standardized_jump": [
+            24.23018158388613,
+            -1.2315558007190237,
+            -10.239075938402635
+          ],
+          "observed_before": 32,
+          "observed_after": 10,
+          "residual_sum_squares": 1185.8317293203302,
+          "no_jump_sum_squares": 3506.6725103916183
+        },
+        {
+          "window_id": "view4",
+          "start": 479,
+          "end": 521,
+          "minimum_observed_per_side": 5,
+          "index": 497,
+          "standardized_jump": [
+            -0.36353464867759816,
+            -1.4550431688675167,
+            -0.9970943572594124
+          ],
+          "observed_before": 18,
+          "observed_after": 25,
+          "residual_sum_squares": 112.50902113042999,
+          "no_jump_sum_squares": 121.65617606979042
+        }
+      ]
+    },
+    {
+      "station_id": "s0034",
+      "windows": [
+        {
+          "id": "view3",
+          "start": 619,
+          "end": 661,
+          "inspection_kind": "step",
+          "peak_index": 640,
+          "peak_classifier_score": 0.05
+        },
+        {
+          "id": "view4",
+          "start": 538,
+          "end": 580,
+          "inspection_kind": "step",
+          "peak_index": 559,
+          "peak_classifier_score": 0.04
+        }
+      ],
+      "fits": [
+        {
+          "window_id": "view3",
+          "start": 619,
+          "end": 661,
+          "minimum_observed_per_side": 5,
+          "index": 657,
+          "standardized_jump": [
+            1.3010455646227268,
+            0.34486593008826355,
+            1.302103023383396
+          ],
+          "observed_before": 37,
+          "observed_after": 5,
+          "residual_sum_squares": 95.35621137437748,
+          "no_jump_sum_squares": 105.70062612835703
+        },
+        {
+          "window_id": "view4",
+          "start": 538,
+          "end": 580,
+          "minimum_observed_per_side": 5,
+          "index": 572,
+          "standardized_jump": [
+            -0.559245628576417,
+            -1.1245080511076286,
+            -0.5540873871557254
+          ],
+          "observed_before": 32,
+          "observed_after": 8,
+          "residual_sum_squares": 107.38245753979535,
+          "no_jump_sum_squares": 113.12368451420048
+        }
+      ]
+    },
+    {
+      "station_id": "s0035",
+      "windows": [
+        {
+          "id": "view3",
+          "start": 604,
+          "end": 646,
+          "inspection_kind": "step",
+          "peak_index": 625,
+          "peak_classifier_score": 0.4
+        },
+        {
+          "id": "view4",
+          "start": 540,
+          "end": 582,
+          "inspection_kind": "step",
+          "peak_index": 561,
+          "peak_classifier_score": 0.28
+        }
+      ],
+      "fits": [
+        {
+          "window_id": "view3",
+          "start": 604,
+          "end": 646,
+          "minimum_observed_per_side": 5,
+          "index": 625,
+          "standardized_jump": [
+            -2.741926822331813,
+            20.642568203899927,
+            0.8418264292166657
+          ],
+          "observed_before": 20,
+          "observed_after": 21,
+          "residual_sum_squares": 108.1425874797573,
+          "no_jump_sum_squares": 1233.4317791005801
+        },
+        {
+          "window_id": "view4",
+          "start": 540,
+          "end": 582,
+          "minimum_observed_per_side": 5,
+          "index": 561,
+          "standardized_jump": [
+            -5.234685614884765,
+            -2.876146146370054,
+            1.3426973329499727
+          ],
+          "observed_before": 21,
+          "observed_after": 22,
+          "residual_sum_squares": 736.349024749302,
+          "no_jump_sum_squares": 837.0139529858179
+        }
+      ]
+    },
+    {
+      "station_id": "s0036",
+      "windows": [
+        {
+          "id": "view3",
+          "start": 401,
+          "end": 443,
+          "inspection_kind": "step",
+          "peak_index": 422,
+          "peak_classifier_score": 0.1
+        },
+        {
+          "id": "view4",
+          "start": 678,
+          "end": 720,
+          "inspection_kind": "step",
+          "peak_index": 699,
+          "peak_classifier_score": 0.08
+        }
+      ],
+      "fits": [
+        {
+          "window_id": "view3",
+          "start": 401,
+          "end": 443,
+          "minimum_observed_per_side": 5,
+          "index": 422,
+          "standardized_jump": [
+            1.8995382375704553,
+            0.03459299353776228,
+            -0.5748230836135835
+          ],
+          "observed_before": 21,
+          "observed_after": 22,
+          "residual_sum_squares": 121.34476670263511,
+          "no_jump_sum_squares": 131.92742403470447
+        },
+        {
+          "window_id": "view4",
+          "start": 678,
+          "end": 720,
+          "minimum_observed_per_side": 5,
+          "index": 699,
+          "standardized_jump": [
+            1.284040629469704,
+            0.3969062595108575,
+            -1.0396395485050691
+          ],
+          "observed_before": 21,
+          "observed_after": 21,
+          "residual_sum_squares": 156.79854430245987,
+          "no_jump_sum_squares": 164.37595531440274
+        }
+      ]
+    },
+    {
+      "station_id": "s0037",
+      "windows": [
+        {
+          "id": "view3",
+          "start": 432,
+          "end": 474,
+          "inspection_kind": "step",
+          "peak_index": 453,
+          "peak_classifier_score": 0.04
+        },
+        {
+          "id": "view4",
+          "start": 612,
+          "end": 654,
+          "inspection_kind": "step",
+          "peak_index": 633,
+          "peak_classifier_score": 0.04
+        }
+      ],
+      "fits": [
+        {
+          "window_id": "view3",
+          "start": 432,
+          "end": 474,
+          "minimum_observed_per_side": 5,
+          "index": 466,
+          "standardized_jump": [
+            -0.3059511094052989,
+            -1.3016757121965115,
+            -0.5498248195553442
+          ],
+          "observed_before": 29,
+          "observed_after": 9,
+          "residual_sum_squares": 93.99898629703266,
+          "no_jump_sum_squares": 101.47357561685133
+        },
+        {
+          "window_id": "view4",
+          "start": 612,
+          "end": 654,
+          "minimum_observed_per_side": 5,
+          "index": 650,
+          "standardized_jump": [
+            0.6336525689396416,
+            1.4408201188094851,
+            0.6105798152394994
+          ],
+          "observed_before": 38,
+          "observed_after": 5,
+          "residual_sum_squares": 109.70357646401467,
+          "no_jump_sum_squares": 118.4132616438274
+        }
+      ]
+    },
+    {
+      "station_id": "s0038",
+      "windows": [
+        {
+          "id": "view3",
+          "start": 490,
+          "end": 532,
+          "inspection_kind": "step",
+          "peak_index": 511,
+          "peak_classifier_score": 0.19
+        },
+        {
+          "id": "view4",
+          "start": 570,
+          "end": 612,
+          "inspection_kind": "step",
+          "peak_index": 591,
+          "peak_classifier_score": 0.05
+        }
+      ],
+      "fits": [
+        {
+          "window_id": "view3",
+          "start": 490,
+          "end": 532,
+          "minimum_observed_per_side": 5,
+          "index": 511,
+          "standardized_jump": [
+            -3.1376121883359342,
+            -5.905419819702093,
+            3.0015538103947335
+          ],
+          "observed_before": 21,
+          "observed_after": 22,
+          "residual_sum_squares": 99.0702395146309,
+          "no_jump_sum_squares": 243.38592829849756
+        },
+        {
+          "window_id": "view4",
+          "start": 570,
+          "end": 612,
+          "minimum_observed_per_side": 5,
+          "index": 586,
+          "standardized_jump": [
+            0.17517566277442845,
+            1.2950296383003397,
+            -0.9392058831160599
+          ],
+          "observed_before": 16,
+          "observed_after": 20,
+          "residual_sum_squares": 97.91243317583395,
+          "no_jump_sum_squares": 104.81896210147262
+        }
+      ]
+    },
+    {
+      "station_id": "s0039",
+      "windows": [
+        {
+          "id": "view3",
+          "start": 601,
+          "end": 643,
+          "inspection_kind": "step",
+          "peak_index": 622,
+          "peak_classifier_score": 0.57
+        },
+        {
+          "id": "view4",
+          "start": 558,
+          "end": 600,
+          "inspection_kind": "step",
+          "peak_index": 579,
+          "peak_classifier_score": 0.23
+        }
+      ],
+      "fits": [
+        {
+          "window_id": "view3",
+          "start": 601,
+          "end": 643,
+          "minimum_observed_per_side": 5,
+          "index": 622,
+          "standardized_jump": [
+            3.6245010053149134,
+            9.03414860270318,
+            8.079471083695335
+          ],
+          "observed_before": 21,
+          "observed_after": 22,
+          "residual_sum_squares": 144.7739892161636,
+          "no_jump_sum_squares": 574.6238967484369
+        },
+        {
+          "window_id": "view4",
+          "start": 558,
+          "end": 600,
+          "minimum_observed_per_side": 5,
+          "index": 579,
+          "standardized_jump": [
+            -2.921134656522139,
+            -8.798200807698047,
+            -9.012380585530495
+          ],
+          "observed_before": 21,
+          "observed_after": 22,
+          "residual_sum_squares": 154.64184548962675,
+          "no_jump_sum_squares": 603.6531155831316
+        }
+      ]
+    },
+    {
+      "station_id": "s0040",
+      "windows": [
+        {
+          "id": "view3",
+          "start": 684,
+          "end": 726,
+          "inspection_kind": "step",
+          "peak_index": 705,
+          "peak_classifier_score": 0.11
+        },
+        {
+          "id": "view4",
+          "start": 449,
+          "end": 491,
+          "inspection_kind": "step",
+          "peak_index": 470,
+          "peak_classifier_score": 0.03
+        }
+      ],
+      "fits": [
+        {
+          "window_id": "view3",
+          "start": 684,
+          "end": 726,
+          "minimum_observed_per_side": 5,
+          "index": 702,
+          "standardized_jump": [
+            1.9463714023126122,
+            0.4004127506966222,
+            -0.12827526724790705
+          ],
+          "observed_before": 17,
+          "observed_after": 25,
+          "residual_sum_squares": 112.45774955692931,
+          "no_jump_sum_squares": 123.32779022141021
+        },
+        {
+          "window_id": "view4",
+          "start": 449,
+          "end": 491,
+          "minimum_observed_per_side": 5,
+          "index": 464,
+          "standardized_jump": [
+            -0.1935000406467088,
+            -1.539663954125341,
+            -0.4235540840699703
+          ],
+          "observed_before": 15,
+          "observed_after": 28,
+          "residual_sum_squares": 119.3471521332749,
+          "no_jump_sum_squares": 127.3883486801214
+        }
+      ]
+    },
+    {
+      "station_id": "s0041",
+      "windows": [
+        {
+          "id": "view3",
+          "start": 643,
+          "end": 685,
+          "inspection_kind": "step",
+          "peak_index": 664,
+          "peak_classifier_score": 0.23
+        },
+        {
+          "id": "view4",
+          "start": 706,
+          "end": 729,
+          "inspection_kind": "step",
+          "peak_index": 727,
+          "peak_classifier_score": 0.13
+        }
+      ],
+      "fits": [
+        {
+          "window_id": "view3",
+          "start": 643,
+          "end": 685,
+          "minimum_observed_per_side": 5,
+          "index": 664,
+          "standardized_jump": [
+            -5.081897889155737,
+            -2.0593607340526536,
+            -3.2800237671998063
+          ],
+          "observed_before": 21,
+          "observed_after": 21,
+          "residual_sum_squares": 211.2273267366252,
+          "no_jump_sum_squares": 320.4192516681183
+        },
+        {
+          "window_id": "view4",
+          "start": 706,
+          "end": 729,
+          "minimum_observed_per_side": 5,
+          "index": 725,
+          "standardized_jump": [
+            3.2547245376289395,
+            0.9829613275939644,
+            2.9571754696065256
+          ],
+          "observed_before": 19,
+          "observed_after": 5,
+          "residual_sum_squares": 110.71970796047773,
+          "no_jump_sum_squares": 151.2548046326983
+        }
+      ]
+    },
+    {
+      "station_id": "s0042",
+      "windows": [
+        {
+          "id": "view3",
+          "start": 484,
+          "end": 526,
+          "inspection_kind": "step",
+          "peak_index": 505,
+          "peak_classifier_score": 0.05
+        },
+        {
+          "id": "view4",
+          "start": 518,
+          "end": 560,
+          "inspection_kind": "step",
+          "peak_index": 539,
+          "peak_classifier_score": 0.04
+        }
+      ],
+      "fits": [
+        {
+          "window_id": "view3",
+          "start": 484,
+          "end": 526,
+          "minimum_observed_per_side": 5,
+          "index": 496,
+          "standardized_jump": [
+            -0.6418071819366199,
+            -0.6809504619160992,
+            -1.3626575953654123
+          ],
+          "observed_before": 11,
+          "observed_after": 31,
+          "residual_sum_squares": 132.23070678381515,
+          "no_jump_sum_squares": 141.5185968473623
+        },
+        {
+          "window_id": "view4",
+          "start": 518,
+          "end": 560,
+          "minimum_observed_per_side": 5,
+          "index": 531,
+          "standardized_jump": [
+            -0.5135182757411209,
+            -1.504183744468933,
+            0.8673659406581106
+          ],
+          "observed_before": 13,
+          "observed_after": 28,
+          "residual_sum_squares": 127.7892804589168,
+          "no_jump_sum_squares": 137.88648353673986
+        }
+      ]
+    },
+    {
+      "station_id": "s0043",
+      "windows": [
+        {
+          "id": "view3",
+          "start": 427,
+          "end": 469,
+          "inspection_kind": "step",
+          "peak_index": 448,
+          "peak_classifier_score": 0.06
+        },
+        {
+          "id": "view4",
+          "start": 667,
+          "end": 709,
+          "inspection_kind": "step",
+          "peak_index": 688,
+          "peak_classifier_score": 0.05
+        }
+      ],
+      "fits": [
+        {
+          "window_id": "view3",
+          "start": 427,
+          "end": 469,
+          "minimum_observed_per_side": 5,
+          "index": 439,
+          "standardized_jump": [
+            1.7440333608755996,
+            -0.5692682455090108,
+            -0.8413317626495821
+          ],
+          "observed_before": 12,
+          "observed_after": 27,
+          "residual_sum_squares": 128.99629782263054,
+          "no_jump_sum_squares": 142.3079497961201
+        },
+        {
+          "window_id": "view4",
+          "start": 667,
+          "end": 709,
+          "minimum_observed_per_side": 5,
+          "index": 688,
+          "standardized_jump": [
+            1.4818168224167432,
+            -0.043659817642121346,
+            1.212672055653143
+          ],
+          "observed_before": 20,
+          "observed_after": 21,
+          "residual_sum_squares": 132.97898248540767,
+          "no_jump_sum_squares": 142.34374163256155
+        }
+      ]
+    },
+    {
+      "station_id": "s0044",
+      "windows": [
+        {
+          "id": "view3",
+          "start": 502,
+          "end": 544,
+          "inspection_kind": "step",
+          "peak_index": 523,
+          "peak_classifier_score": 0.41
+        },
+        {
+          "id": "view4",
+          "start": 465,
+          "end": 507,
+          "inspection_kind": "step",
+          "peak_index": 486,
+          "peak_classifier_score": 0.04
+        }
+      ],
+      "fits": [
+        {
+          "window_id": "view3",
+          "start": 502,
+          "end": 544,
+          "minimum_observed_per_side": 5,
+          "index": 523,
+          "standardized_jump": [
+            -14.520725737510217,
+            -0.17928249319805886,
+            14.87154308172343
+          ],
+          "observed_before": 18,
+          "observed_after": 22,
+          "residual_sum_squares": 101.55636121258433,
+          "no_jump_sum_squares": 1260.178728187314
+        },
+        {
+          "window_id": "view4",
+          "start": 465,
+          "end": 507,
+          "minimum_observed_per_side": 5,
+          "index": 486,
+          "standardized_jump": [
+            0.621637835536384,
+            0.9200276508158451,
+            0.9656096875157755
+          ],
+          "observed_before": 21,
+          "observed_after": 22,
+          "residual_sum_squares": 131.01173348016255,
+          "no_jump_sum_squares": 136.82779385227133
+        }
+      ]
+    },
+    {
+      "station_id": "s0045",
+      "windows": [
+        {
+          "id": "view3",
+          "start": 418,
+          "end": 460,
+          "inspection_kind": "step",
+          "peak_index": 439,
+          "peak_classifier_score": 0.52
+        },
+        {
+          "id": "view4",
+          "start": 445,
+          "end": 487,
+          "inspection_kind": "step",
+          "peak_index": 466,
+          "peak_classifier_score": 0.25
+        }
+      ],
+      "fits": [
+        {
+          "window_id": "view3",
+          "start": 418,
+          "end": 460,
+          "minimum_observed_per_side": 5,
+          "index": 439,
+          "standardized_jump": [
+            10.847223520227605,
+            3.5303356721064327,
+            -4.697095546326927
+          ],
+          "observed_before": 20,
+          "observed_after": 22,
+          "residual_sum_squares": 110.7397879050327,
+          "no_jump_sum_squares": 501.7383446533935
+        },
+        {
+          "window_id": "view4",
+          "start": 445,
+          "end": 487,
+          "minimum_observed_per_side": 5,
+          "index": 466,
+          "standardized_jump": [
+            -10.850335909658517,
+            -3.9548500821649757,
+            4.012817412958032
+          ],
+          "observed_before": 21,
+          "observed_after": 22,
+          "residual_sum_squares": 117.07250847530054,
+          "no_jump_sum_squares": 518.5648307830268
+        }
+      ]
+    },
+    {
+      "station_id": "s0046",
+      "windows": [
+        {
+          "id": "view3",
+          "start": 365,
+          "end": 389,
+          "inspection_kind": "step",
+          "peak_index": 368,
+          "peak_classifier_score": 0.05
+        },
+        {
+          "id": "view4",
+          "start": 437,
+          "end": 479,
+          "inspection_kind": "step",
+          "peak_index": 458,
+          "peak_classifier_score": 0.05
+        }
+      ],
+      "fits": [
+        {
+          "window_id": "view3",
+          "start": 365,
+          "end": 389,
+          "minimum_observed_per_side": 5,
+          "index": 380,
+          "standardized_jump": [
+            -2.0676176341359533,
+            0.49624582922542787,
+            -0.637324262596482
+          ],
+          "observed_before": 15,
+          "observed_after": 10,
+          "residual_sum_squares": 58.40362251924911,
+          "no_jump_sum_squares": 66.64768365991398
+        },
+        {
+          "window_id": "view4",
+          "start": 437,
+          "end": 479,
+          "minimum_observed_per_side": 5,
+          "index": 449,
+          "standardized_jump": [
+            -0.30854563043424577,
+            0.6894853873645443,
+            1.1831399179059763
+          ],
+          "observed_before": 12,
+          "observed_after": 31,
+          "residual_sum_squares": 133.53183789095024,
+          "no_jump_sum_squares": 140.2839606140564
+        }
+      ]
+    },
+    {
+      "station_id": "s0047",
+      "windows": [
+        {
+          "id": "view3",
+          "start": 544,
+          "end": 586,
+          "inspection_kind": "step",
+          "peak_index": 565,
+          "peak_classifier_score": 0.63
+        },
+        {
+          "id": "view4",
+          "start": 578,
+          "end": 620,
+          "inspection_kind": "step",
+          "peak_index": 599,
+          "peak_classifier_score": 0.27
+        }
+      ],
+      "fits": [
+        {
+          "window_id": "view3",
+          "start": 544,
+          "end": 586,
+          "minimum_observed_per_side": 5,
+          "index": 565,
+          "standardized_jump": [
+            0.2818452032592701,
+            10.130198321097092,
+            -16.32980174115645
+          ],
+          "observed_before": 20,
+          "observed_after": 21,
+          "residual_sum_squares": 127.95305206431021,
+          "no_jump_sum_squares": 1110.514603385659
+        },
+        {
+          "window_id": "view4",
+          "start": 578,
+          "end": 620,
+          "minimum_observed_per_side": 5,
+          "index": 599,
+          "standardized_jump": [
+            0.2995846106340871,
+            -10.807697288285603,
+            16.602834896312853
+          ],
+          "observed_before": 20,
+          "observed_after": 22,
+          "residual_sum_squares": 130.00550341676492,
+          "no_jump_sum_squares": 1163.3615879422664
+        }
+      ]
+    }
+  ],
+  "events": [
+    {
+      "station_id": "s0026",
+      "truth_day": 489,
+      "window_covers": true,
+      "rf_exact": true,
+      "rf_within3": true,
+      "fit_exact": true,
+      "fit_within3": true
+    },
+    {
+      "station_id": "s0029",
+      "truth_day": 661,
+      "window_covers": true,
+      "rf_exact": false,
+      "rf_within3": false,
+      "fit_exact": false,
+      "fit_within3": false
+    },
+    {
+      "station_id": "s0032",
+      "truth_day": 624,
+      "window_covers": true,
+      "rf_exact": true,
+      "rf_within3": true,
+      "fit_exact": true,
+      "fit_within3": true
+    },
+    {
+      "station_id": "s0035",
+      "truth_day": 556,
+      "window_covers": true,
+      "rf_exact": false,
+      "rf_within3": false,
+      "fit_exact": false,
+      "fit_within3": false
+    },
+    {
+      "station_id": "s0038",
+      "truth_day": 511,
+      "window_covers": true,
+      "rf_exact": true,
+      "rf_within3": true,
+      "fit_exact": true,
+      "fit_within3": true
+    },
+    {
+      "station_id": "s0041",
+      "truth_day": 608,
+      "window_covers": false,
+      "rf_exact": false,
+      "rf_within3": false,
+      "fit_exact": false,
+      "fit_within3": false
+    },
+    {
+      "station_id": "s0044",
+      "truth_day": 523,
+      "window_covers": true,
+      "rf_exact": true,
+      "rf_within3": true,
+      "fit_exact": true,
+      "fit_within3": true
+    },
+    {
+      "station_id": "s0047",
+      "truth_day": 465,
+      "window_covers": false,
+      "rf_exact": false,
+      "rf_within3": false,
+      "fit_exact": false,
+      "fit_within3": false
+    }
+  ],
+  "interpretation": "Candidate localization only; no visual confirmation, no final detection result, no test data inspected"
+}

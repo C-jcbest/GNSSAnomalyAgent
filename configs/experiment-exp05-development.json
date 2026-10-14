@@ -1,0 +1,14 @@
+{
+  "experiment_id": "GNSS-VLM-EXP05",
+  "name": "GNSS视觉形态确认与数值精确定位实验",
+  "protocol_version": "development-v1",
+  "protocol_path": "docs/experiment-exp05-development.md",
+  "primary_method": "localized_step_fixed",
+  "primary_endpoint": "four-type macro daily F1: pool TP/FP/FN within each type, then average four type F1 scores equally; no point adjustment",
+  "primary_method_status": "provisional development candidate; final choice after 24 validation stations",
+  "development_seed": 2026101401,
+  "training_seed": 2026101401,
+  "test_seeds": [2026101402, 2026101403],
+  "adjustments": ["window-confirmed numerical step dates", "minimum 5 observed samples per side", "adjacent observed onset pair", "three image configurations", "visual or numeric activity boundary ownership"],
+  "note": "Keep EXP04 frozen; no physical alarm thresholds; new date estimator is project code, not an author-code reproduction."
+}
