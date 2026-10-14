@@ -1,0 +1,16 @@
+{
+  "experiment_id": "GNSS-VLM-EXP06",
+  "name": "GNSS位移结构分解与视觉语义核验实验",
+  "protocol_version": "main-v1",
+  "protocol_path": "docs/experiment-exp06.md",
+  "primary_method": "pair_focus_repair",
+  "primary_method_name": "SDR-VLM：位移结构分解与视觉语义修复",
+  "primary_endpoint": "four-type macro daily F1: pool TP/FP/FN within each type, then average four type F1 scores equally; no point adjustment",
+  "primary_method_status": "frozen on 24 development validation stations before generating two fresh test datasets",
+  "development_seed": 2026101404,
+  "test_seeds": [2026101405, 2026101406],
+  "development_macro_f1": {"pair_focus_repair": 0.8233030818331376, "segment_numeric": 0.7952586431778031, "localized_fusion": 0.6494938087543409},
+  "visual_failure_policy": "independent numerical decisions retained; failed visual path supplies no semantic repair; no-ambiguity stations not requested; parent failures separately disclosed",
+  "adjustments": ["ruptures 1.1.10 original PELT search with custom GNSS three-axis linear cost", "min_size=7, jump=1, penalty=6log(3n)", "single bounded linear or smoothstep displacement trajectory", "statistical return-pair model comparison and optional visual semantic repair", "raw plus 21-day continuous-spline-adjusted auxiliary views", "same-role historical-residual-only view ablation", "conditional visual requests"],
+  "source_baseline_note": "Unmodified author PELT API/default constructor and README rbf/pen10 example reported separately on change-point edges; library has no four-type anomaly labels. No invented full VLM4TS or TimeRCD scores."
+}

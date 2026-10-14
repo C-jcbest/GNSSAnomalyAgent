@@ -1,0 +1,104 @@
+{
+  "schema": "gnss-research-run-v1",
+  "dataset": "C:\\Users\\JC\\.codex\\worktrees\\gnss-vlm-research\\GNSSAnomalyAgent-sim\\data\\exp06-focus-remaining",
+  "manifest_sha256": "b553a0dad9095b63e183742f73b391562952273189a6dce2239e7ceaaedc005e",
+  "split": "validation",
+  "station_ids": [
+    "s0024",
+    "s0025",
+    "s0026",
+    "s0027",
+    "s0028",
+    "s0030",
+    "s0031",
+    "s0032",
+    "s0033",
+    "s0034",
+    "s0036",
+    "s0037",
+    "s0038",
+    "s0039",
+    "s0040",
+    "s0042",
+    "s0043",
+    "s0044",
+    "s0045",
+    "s0046"
+  ],
+  "methods": [
+    "segment_numeric",
+    "pair_focus",
+    "pair_focus_repair"
+  ],
+  "seed": 2026101404,
+  "model": "qwen3.8-flash",
+  "max_requests": 20,
+  "expected_requests": 20,
+  "workers": 3,
+  "source_hashes": {
+    "__init__.py": "9c1ecee1dd8350d88a13e3e542d0541a2448cd34e44ed9127c453b604970296f",
+    "baselines.py": "a8ca8c9b3f80ad376183ee7c1ee77501c543168f0cd4d5564fc78ae08df26861",
+    "cli.py": "5483b1976d756d5e006a2c4a931898c4d5916b8b8f6b7db55313dfd8e16cb4bf",
+    "data.py": "a0ac7ba8a3ed984e60965ca08ba93dc4ce696f2390f054fc7eb1c73afc47f45c",
+    "experiment.py": "db266862cb1a347307d5f4bea6edf8f4b73fe3b87580ca6fde558ba90257ee99",
+    "features.py": "8b6fed5af931113b10e1cf6a3759017e8bdbbf42891e5c6e92b5e245f7d80d8f",
+    "files.py": "fda1f5894c90c61a8d259c5aa67fc40a052b764634b6d60cf3c740be56b6637b",
+    "fusion.py": "e28053bb26289f481319d721aa248d97e6386e130057b667e59b300fafe07404",
+    "guided.py": "a1c6c1ed183f614ef30879f0a13f00b9cafee6eb5f5f4b264c190787a5a65a92",
+    "localization.py": "287aa2a38d7e354486b7f42c11ead417d3a8264fc3dc2b35511247d6e9f18eab",
+    "metrics.py": "ee774e99262112dd043de5d19bb88bab69b46dc7422f2edb6988881a25fdc9f8",
+    "plots.py": "a3f3ee1852ea81e94aa321c27a9beef4ed96ef056cf4a6321d15e3e139a05708",
+    "provider.py": "ca0e9a594d59e9caf15d649815051ff652f39924ccc62ed0a6328db66eaf77f7",
+    "schema.py": "ff1477391c9ac4f3e5b9883e140451b204f5f5beca95f3795a90e13e65a3196f",
+    "segmentation.py": "3f139e94e4ba68a33665d8f77fbb85515ff741d73a7ad5709f38bac780166805",
+    "segmented_review.py": "cb6c1143d5b4b86c613ee7a0ec43b6a1e81d9d5234674e821d7607b960911021",
+    "temporal.py": "f594ebf0683ff4f717242f0325cc98430d7fec171787b5b478762a18bfcdd11c",
+    "upstream.py": "0d471248da8b6a2e01e8516b771c0c7b299c318194dd5ddcefccb984554a7e08",
+    "vision.py": "271c0e3b3d18d4f15054abbacabb39330471b38356d2f568f04911ca9ff69619"
+  },
+  "protocol_sha256": "c03fc5f77e02fc2fc065dc31abe0d7ec4968706c331529e5199eb30f470cc8e2",
+  "upstream": {},
+  "environment": {
+    "python": "3.13.13",
+    "platform": "Windows-11-10.0.26200-SP0",
+    "packages": {
+      "numpy": "2.5.3",
+      "scipy": "1.18.1",
+      "scikit-learn": "1.9.1",
+      "matplotlib": "3.11.2",
+      "pydantic": "2.13.5",
+      "httpx": "0.28.1",
+      "ruptures": "1.1.10"
+    }
+  },
+  "rules": {
+    "threshold_tuning": "no physical threshold or validation/test score cutoff tuning; balanced RF, training-only transition pseudocount=1, top-ranked review windows disclosed",
+    "primary": "four-type macro daily F1: pool TP/FP/FN within each type, then average four type F1 scores equally; no point adjustment",
+    "generic_comparison": "union of morphological anomaly masks",
+    "point_adjustment": false,
+    "missing": "excluded and coverage reported",
+    "failures": "zero detections for unconditional score; separately counted",
+    "online": false
+  },
+  "experiment": {
+    "experiment_id": "GNSS-VLM-EXP06",
+    "name": "GNSS位移结构分解与视觉语义核验实验",
+    "protocol_version": "development-v3-conditional",
+    "protocol_path": "docs/experiment-exp06-development-v3-conditional.md",
+    "primary_method": "pair_focus_repair",
+    "primary_endpoint": "four-type macro daily F1: pool TP/FP/FN within each type, then average four type F1 scores equally; no point adjustment",
+    "primary_method_status": "provisional v3 rule unchanged; explicitly skip visual requests when no repair alternative exists",
+    "development_seed": 2026101404,
+    "test_seeds": [
+      2026101405,
+      2026101406
+    ],
+    "visual_failure_policy": "failed request supplies no repair; numerical decisions retained; no-ambiguity stations are explicitly not requested",
+    "adjustments": [
+      "all v3 numerical and semantic rules unchanged",
+      "conditional model requests only when an alternative return pair exists"
+    ]
+  },
+  "method_protocol_sha256": "7e528c4ffb8373a9f6dc504e6093046309425255ed84f9fc3e5dbb61965933bb",
+  "expected_requests_note": "upper bound: pair_focus requests only stations with unselected alternative return pairs; no-ambiguity stations emit an explicit not_requested receipt and retain numerical decisions"
+}

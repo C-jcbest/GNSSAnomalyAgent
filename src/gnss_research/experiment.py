@@ -26,6 +26,7 @@ from gnss_research.guided import GUIDED_METHODS
 from gnss_research.metrics import aggregate, evaluate_record, paired_bootstrap
 from gnss_research.plots import export_labels, render_observation
 from gnss_research.schema import Prediction, observed_values
+from gnss_research.segmented_review import repair_return_pairs, segmented_fusion
 from gnss_research.upstream import (
     UPSTREAM_METHODS,
     call_visualtime,
@@ -87,7 +88,7 @@ def register(dataset: Path, out: Path, methods: list[str], split: str, seed: int
               "environment": {"python": platform.python_version(), "platform": platform.platform(),
                               "packages": {name: version(name) for name in
                                            ("numpy", "scipy", "scikit-learn", "matplotlib",
-                                            "pydantic", "httpx")}},
+                                            "pydantic", "httpx", "ruptures")}},
               "rules": {"threshold_tuning": "none; numerical library default decisions",
                         "primary": "deformation daily F1 and event F1 at IoU 0.5",
                         "generic_comparison": "union of morphological anomaly masks",
@@ -105,6 +106,10 @@ def register(dataset: Path, out: Path, methods: list[str], split: str, seed: int
         frozen["rules"]["threshold_tuning"] = (
             "no physical threshold or validation/test score cutoff tuning; balanced RF, "
             "training-only transition pseudocount=1, top-ranked review windows disclosed")
+    if set(methods) & {"pair_focus", "pair_raw"}:
+        frozen["expected_requests_note"] = (
+            "upper bound: pair_focus requests only stations with unselected alternative return pairs; "
+            "no-ambiguity stations emit an explicit not_requested receipt and retain numerical decisions")
     write_json(out / "registration.json", frozen)
     return {"run": str(out.resolve()), "expected_requests": expected, "stations": len(records)}
 
@@ -137,21 +142,27 @@ def execute(run: Path, env_file: Path | None = None) -> dict:
         evidence = numerical_evidence(observation)
         numerical = predict_numerical(models["rf_split_temporal"], "rf_split_temporal",
                                       observation, evidence) \
-            if set(config["methods"]) & set(GUIDED_METHODS) else None
+            if set(config["methods"]) & (set(GUIDED_METHODS)
+                                          | {"segment_guided", "pair_focus", "pair_raw"}) else None
         for method in config["methods"]:
             work = run / "predictions" / method / record["station_id"]
             if method in DERIVED_METHODS:
                 continue
             if method in VISUAL_METHODS:
-                prepare_request(observation, method, work, settings[2], numerical)
-                pending.append((record, method, observation, work))
+                payload = prepare_request(observation, method, work, settings[2], numerical)
+                if payload is None:
+                    result = read_json(work / "result.json")
+                    completed.append((record, method, observation, work, result))
+                else:
+                    pending.append((record, method, observation, work))
             elif method in UPSTREAM_METHODS:
                 prepare_visualtime(observation, work, settings[2])
                 pending.append((record, method, observation, work))
             else:
                 work.mkdir(parents=True, exist_ok=False)
                 start = time.perf_counter()
-                result = predict_numerical(models[method], method, observation, evidence)
+                model = models["rf_split_temporal"] if method == "segment_numeric" else models[method]
+                result = predict_numerical(model, method, observation, evidence)
                 result.update({"status": "success", "elapsed_seconds": time.perf_counter() - start,
                                "request_count": 0, "method": method})
                 write_json(work / "result.json", result)
@@ -178,7 +189,12 @@ def execute(run: Path, env_file: Path | None = None) -> dict:
             work = run / "predictions" / method / record["station_id"]
             work.mkdir(parents=True, exist_ok=False)
             candidates = read_json(parent_work / "candidates.json")
-            if method.startswith("localized_"):
+            if method in ("segment_pair_repair", "pair_focus_repair", "pair_raw_repair"):
+                fused = repair_return_pairs(observation, result, candidates)
+            elif method.startswith("segment_"):
+                fused = segmented_fusion(observation, result, candidates,
+                                         visual_bounds=method == "segment_visual_bounds")
+            elif method.startswith("localized_"):
                 fused = localized_review(observation, result, candidates,
                                          revise_activity=not method.endswith("fixed"))
             elif method.startswith("morphology_"):

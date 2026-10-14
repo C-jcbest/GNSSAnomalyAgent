@@ -1,0 +1,13 @@
+{
+  "experiment_id": "GNSS-VLM-EXP06",
+  "name": "GNSS位移结构分解与视觉语义核验实验",
+  "protocol_version": "development-v3-conditional",
+  "protocol_path": "docs/experiment-exp06-development-v3-conditional.md",
+  "primary_method": "pair_focus_repair",
+  "primary_endpoint": "four-type macro daily F1: pool TP/FP/FN within each type, then average four type F1 scores equally; no point adjustment",
+  "primary_method_status": "provisional v3 rule unchanged; explicitly skip visual requests when no repair alternative exists",
+  "development_seed": 2026101404,
+  "test_seeds": [2026101405, 2026101406],
+  "visual_failure_policy": "failed request supplies no repair; numerical decisions retained; no-ambiguity stations are explicitly not requested",
+  "adjustments": ["all v3 numerical and semantic rules unchanged", "conditional model requests only when an alternative return pair exists"]
+}

@@ -15,8 +15,10 @@ from gnss_research.guided import GUIDED_METHODS, prepare_guided
 from gnss_research.plots import render_observation
 from gnss_research.provider import send_request
 from gnss_research.schema import Prediction, VisualDecision, event_masks
+from gnss_research.segmented_review import prepare_pair_focus, prepare_segmented
 
-VISUAL_METHODS = ("visual_only", "fusion", "fusion_no_reference", "fusion_n_only", *GUIDED_METHODS)
+VISUAL_METHODS = ("visual_only", "fusion", "fusion_no_reference", "fusion_n_only",
+                  "segment_guided", "pair_focus", "pair_raw", *GUIDED_METHODS)
 SYSTEM = """You review daily GNSS station N/E/U displacement observations, offline.
 Identify observed morphology, not unobserved causes: isolated spike, permanent step onset,
 temporary level shift (transient), and sustained displacement activity (deformation).
@@ -76,9 +78,19 @@ def parse_prediction(content: str, length: int) -> Prediction:
 
 
 def prepare_request(observation: dict, method: str, work: Path, model: str,
-                    numerical: dict | None = None) -> dict:
+                    numerical: dict | None = None) -> dict | None:
     if method not in VISUAL_METHODS:
         raise ValueError("unknown visual method")
+    if method == "segment_guided":
+        if numerical is None:
+            raise ValueError("segmented review requires training-only spike predictions")
+        return prepare_segmented(observation, numerical, work, model, SYSTEM)
+    if method in ("pair_focus", "pair_raw"):
+        if numerical is None:
+            raise ValueError("pair review requires training-only spike predictions")
+        return prepare_pair_focus(observation, numerical, work, model, SYSTEM,
+                                  view_mode="slow_subtracted" if method == "pair_focus"
+                                  else "historical_residual")
     if method in GUIDED_METHODS:
         if numerical is None:
             raise ValueError("guided review requires training-only numerical predictions")

@@ -1,0 +1,13 @@
+{
+  "experiment_id": "GNSS-VLM-EXP06",
+  "name": "GNSS位移结构分解与视觉语义核验实验",
+  "protocol_version": "development-v1",
+  "protocol_path": "docs/experiment-exp06-development.md",
+  "primary_method": "segment_fusion",
+  "primary_endpoint": "four-type macro daily F1: pool TP/FP/FN within each type, then average four type F1 scores equally; no point adjustment",
+  "primary_method_status": "provisional; choose only on all 24 new development validation stations",
+  "development_seed": 2026101404,
+  "test_seeds": [2026101405, 2026101406],
+  "adjustments": ["ruptures 1.1.10 author PELT, project three-axis linear cost", "min_size=7, jump=1, penalty=6log(3n)", "linear and smoothstep bounded raw displacement trajectory", "one activity maximum; minimum 15 days", "paired jump return alternatives", "visual semantics with numeric or visual interval boundaries"],
+  "note": "No shared physical threshold; statistical penalties and shape restrictions explicitly disclosed. Author algorithm and GNSS adapter are separate."
+}

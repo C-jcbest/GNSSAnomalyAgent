@@ -1,0 +1,306 @@
+{
+  "sklearn_version": "1.9.1",
+  "training_stations": [
+    "s0000",
+    "s0001",
+    "s0002",
+    "s0003",
+    "s0004",
+    "s0005",
+    "s0006",
+    "s0007",
+    "s0008",
+    "s0009",
+    "s0010",
+    "s0011",
+    "s0012",
+    "s0013",
+    "s0014",
+    "s0015",
+    "s0016",
+    "s0017",
+    "s0018",
+    "s0019",
+    "s0020",
+    "s0021",
+    "s0022",
+    "s0023",
+    "s0072",
+    "s0073",
+    "s0074",
+    "s0075",
+    "s0076",
+    "s0077",
+    "s0078",
+    "s0079",
+    "s0080",
+    "s0081",
+    "s0082",
+    "s0083",
+    "s0084",
+    "s0085",
+    "s0086",
+    "s0087",
+    "s0088",
+    "s0089",
+    "s0090",
+    "s0091",
+    "s0092",
+    "s0093",
+    "s0094",
+    "s0095",
+    "s0096",
+    "s0097",
+    "s0098",
+    "s0099",
+    "s0100",
+    "s0101",
+    "s0102",
+    "s0103",
+    "s0104",
+    "s0105",
+    "s0106",
+    "s0107",
+    "s0108",
+    "s0109",
+    "s0110",
+    "s0111",
+    "s0112",
+    "s0113",
+    "s0114",
+    "s0115",
+    "s0116",
+    "s0117",
+    "s0118",
+    "s0119",
+    "s0120",
+    "s0121",
+    "s0122",
+    "s0123",
+    "s0124",
+    "s0125",
+    "s0126",
+    "s0127",
+    "s0128",
+    "s0129",
+    "s0130",
+    "s0131",
+    "s0132",
+    "s0133",
+    "s0134",
+    "s0135",
+    "s0136",
+    "s0137",
+    "s0138",
+    "s0139",
+    "s0140",
+    "s0141",
+    "s0142",
+    "s0143"
+  ],
+  "classification_rule": "library predict; probability argmax; no validation/test tuning",
+  "parameters": {
+    "random_forest": {
+      "bootstrap": true,
+      "ccp_alpha": 0.0,
+      "class_weight": null,
+      "criterion": "gini",
+      "max_depth": null,
+      "max_features": "sqrt",
+      "max_leaf_nodes": null,
+      "max_samples": null,
+      "min_impurity_decrease": 0.0,
+      "min_samples_leaf": 1,
+      "min_samples_split": 2,
+      "min_weight_fraction_leaf": 0.0,
+      "monotonic_cst": null,
+      "n_estimators": 100,
+      "n_jobs": null,
+      "oob_score": false,
+      "random_state": 2026101406,
+      "verbose": 0,
+      "warm_start": false
+    },
+    "rf_balanced": {
+      "bootstrap": true,
+      "ccp_alpha": 0.0,
+      "class_weight": "balanced",
+      "criterion": "gini",
+      "max_depth": null,
+      "max_features": "sqrt",
+      "max_leaf_nodes": null,
+      "max_samples": null,
+      "min_impurity_decrease": 0.0,
+      "min_samples_leaf": 1,
+      "min_samples_split": 2,
+      "min_weight_fraction_leaf": 0.0,
+      "monotonic_cst": null,
+      "n_estimators": 100,
+      "n_jobs": null,
+      "oob_score": false,
+      "random_state": 2026101406,
+      "verbose": 0,
+      "warm_start": false
+    },
+    "rf_morphology": {
+      "bootstrap": true,
+      "ccp_alpha": 0.0,
+      "class_weight": "balanced",
+      "criterion": "gini",
+      "max_depth": null,
+      "max_features": "sqrt",
+      "max_leaf_nodes": null,
+      "max_samples": null,
+      "min_impurity_decrease": 0.0,
+      "min_samples_leaf": 1,
+      "min_samples_split": 2,
+      "min_weight_fraction_leaf": 0.0,
+      "monotonic_cst": null,
+      "n_estimators": 100,
+      "n_jobs": null,
+      "oob_score": false,
+      "random_state": 2026101406,
+      "verbose": 0,
+      "warm_start": false
+    },
+    "extra_trees": {
+      "bootstrap": false,
+      "ccp_alpha": 0.0,
+      "class_weight": null,
+      "criterion": "gini",
+      "max_depth": null,
+      "max_features": "sqrt",
+      "max_leaf_nodes": null,
+      "max_samples": null,
+      "min_impurity_decrease": 0.0,
+      "min_samples_leaf": 1,
+      "min_samples_split": 2,
+      "min_weight_fraction_leaf": 0.0,
+      "monotonic_cst": null,
+      "n_estimators": 100,
+      "n_jobs": null,
+      "oob_score": false,
+      "random_state": 2026101406,
+      "verbose": 0,
+      "warm_start": false
+    },
+    "isolation_forest": {
+      "bootstrap": false,
+      "contamination": "auto",
+      "max_features": 1.0,
+      "max_samples": "auto",
+      "n_estimators": 100,
+      "n_jobs": null,
+      "random_state": 2026101406,
+      "verbose": 0,
+      "warm_start": false
+    },
+    "rf_independent": {
+      "wrapper": "sklearn.multioutput.MultiOutputClassifier",
+      "n_jobs": null,
+      "binary_estimator": {
+        "bootstrap": true,
+        "ccp_alpha": 0.0,
+        "class_weight": "balanced",
+        "criterion": "gini",
+        "max_depth": null,
+        "max_features": "sqrt",
+        "max_leaf_nodes": null,
+        "max_samples": null,
+        "min_impurity_decrease": 0.0,
+        "min_samples_leaf": 1,
+        "min_samples_split": 2,
+        "min_weight_fraction_leaf": 0.0,
+        "monotonic_cst": null,
+        "n_estimators": 100,
+        "n_jobs": null,
+        "oob_score": false,
+        "random_state": 2026101406,
+        "verbose": 0,
+        "warm_start": false
+      }
+    }
+  },
+  "adjustments": [
+    "random_state fixed for reproducibility",
+    "shared GNSS feature adapter",
+    "training-only median imputation for numerical features",
+    "IsolationForest trained on normal station prefixes",
+    "rf_balanced: class_weight=balanced; derivatives inherit it, separate from default RF",
+    "rf_independent: four independent balanced binary RFs via MultiOutputClassifier; same features and per-type predict; avoids multioutput class-weight products",
+    "rf_morphology: balanced RF, 30 original + 18 short-context features; next increment, neighbor departure, increment reversal product, before/after median contrast, current minus before/after median; 5-day windows, all station normalized",
+    "rf_split: point types from 48-feature RF, interval types from 30-feature RF; rf_split_temporal adds identical interval decoder; no extra training or vote cutoff"
+  ],
+  "paper_reproduction": false,
+  "isolation_forest_library_source_sha256": "9b60e77c1c251836ce3f0e8274e7cef1250deb1d1574e6b9a304b2296033c945",
+  "temporal_decoder": {
+    "transitions": {
+      "spike": [
+        [
+          0.9990113840623127,
+          0.000988615937687238
+        ],
+        [
+          0.9696969696969697,
+          0.030303030303030304
+        ]
+      ],
+      "step": [
+        [
+          0.9990113840623127,
+          0.000988615937687238
+        ],
+        [
+          0.9696969696969697,
+          0.030303030303030304
+        ]
+      ],
+      "transient": [
+        [
+          0.9990096252050386,
+          0.0009903747949614682
+        ],
+        [
+          0.02722323049001815,
+          0.9727767695099818
+        ]
+      ],
+      "deformation": [
+        [
+          0.9990063922101149,
+          0.0009936077898850728
+        ],
+        [
+          0.010248447204968944,
+          0.989751552795031
+        ]
+      ]
+    },
+    "initial": {
+      "spike": [
+        0.999032683570277,
+        0.0009673164297229958
+      ],
+      "step": [
+        0.999032683570277,
+        0.0009673164297229958
+      ],
+      "transient": [
+        0.9667301773413455,
+        0.03326982265865455
+      ],
+      "deformation": [
+        0.9039718598856807,
+        0.09602814011431922
+      ]
+    },
+    "adjustments": [
+      "same balanced RF, no retraining",
+      "Laplace pseudocount=1",
+      "transient/deformation: training-only Viterbi transition prior",
+      "spike/step: unchanged library predict",
+      "missing: neutral emission, excluded from all exported labels"
+    ],
+    "probability_note": "RF posteriors are heuristic emissions, not a generative HMM fit"
+  }
+}

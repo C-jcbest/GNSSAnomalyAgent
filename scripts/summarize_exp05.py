@@ -12,7 +12,8 @@ from gnss_research.files import read_json, sha256, write_json
 from gnss_research.metrics import aggregate
 
 
-def summarize(runs: list[Path], out: Path) -> dict:
+def summarize(runs: list[Path], out: Path, *, experiment_id: str = "GNSS-VLM-EXP05",
+              experiment_name: str = "GNSS视觉形态确认与数值精确定位实验") -> dict:
     pooled = {}
     usage = {}
     receipts = []
@@ -64,7 +65,7 @@ def summarize(runs: list[Path], out: Path) -> dict:
     for costs in usage.values():
         seconds = costs.pop("seconds")
         costs["median_request_seconds"] = float(np.median(seconds)) if seconds else None
-    summary = {"experiment_id": "GNSS-VLM-EXP05", "sources": receipts,
+    summary = {"experiment_id": experiment_id, "sources": receipts,
                "splits": sorted(splits), "unique_stations": len(seen),
                "methods": {method: {**aggregate(rows), "failed_records": usage[method]["failed"]}
                            for method, rows in pooled.items()}, "costs": usage,
@@ -81,7 +82,7 @@ def summarize(runs: list[Path], out: Path) -> dict:
         for filename in ("registration.json", "training.json", "execution-started.json",
                          "execution-complete.json"):
             shutil.copyfile(run / filename, target / filename)
-    lines = ["# GNSS-VLM-EXP05：GNSS视觉形态确认与数值精确定位实验", "",
+    lines = [f"# {experiment_id}：{experiment_name}", "",
              "从所列运行的全站计数汇总；失败按零检测保留，无point adjustment。", "",
              "| 方法 | 类型日F1 | 类型事件F1≥.5 | 通用日F1 | 阶跃严格F1 | 失败 |",
              "|---|---:|---:|---:|---:|---:|"]

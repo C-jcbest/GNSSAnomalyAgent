@@ -1,0 +1,4695 @@
+
+ 
+ 
+ Selective review of offline change point detection methods 
+ 
+ 
+ 
+   
+ 
+ 
+  // Restore the saved color scheme preference, or
+  // enact the browser preference if "automatic", 
+  // without expecting DOM load to have completed.
+  //
+  // Also restore any saved readingmode and ToC display preferences.
+  function initializeReadingPreferences() {
+    let saved_theme = localStorage.getItem("ar5iv_theme") || "automatic";
+    if (saved_theme === "automatic") {
+      if (window.matchMedia("(prefers-color-scheme: dark)").matches) {
+        saved_theme = "dark";
+      }
+    }
+    if (saved_theme == "dark") {
+      document.documentElement.setAttribute("data-theme", "dark");
+    } else {
+      document.documentElement.setAttribute("data-theme", "light");
+    }
+
+    const tocDisplay = localStorage.getItem('arxiv_html_paper_toc_display');
+    if (tocDisplay) {
+      document.documentElement.setAttribute("data-toc-display", tocDisplay);
+    }
+    const readingMode = localStorage.getItem('arxiv_html_paper_reading_mode');
+    if (readingMode) {
+      document.documentElement.setAttribute("data-reading-mode", readingMode);
+    }
+    // Pre-apply spinout-banner dismissal here, before the banner paints, so it
+    // never flashes in only to be hidden later by the deferred arxiv-header.js.
+    // Key matches arxiv-header.js: "arxiv-banner-dismissed:" + data-banner-name.
+    if (localStorage.getItem('arxiv-banner-dismissed:spinout-nonprofit')) {
+      document.documentElement.setAttribute("data-banner-dismissed", "");
+    }
+  }
+  // Run as soon as JS starts, to minimize repainting
+  initializeReadingPreferences();
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+  /* Banner pre-dismissal (set above before paint -> no flash-then-hide) and
+     reading-mode chrome hiding. */
+  html[data-banner-dismissed] .ds-announcement { display: none; }
+  html[data-reading-mode="enabled"] .ds-announcement,
+  html[data-reading-mode="enabled"] .ds-site-footer { display: none; }
+  /* Keep the announcement text dark on the Open-Blue band in both colour themes
+     (otherwise it inherits the paper's warm-wash text in dark mode and washes out). */
+  .ds-announcement-text { color: var(--arxiv-ink, #1c1a17); }
+ 
+ 
+ 
+ 
+ 
+   
+     
+       Report GitHub Issue 
+       × 
+     
+
+     
+       Title: 
+       
+
+       Content selection saved. Describe the issue below: 
+
+       Description: 
+       
+     
+
+     
+       Submit without GitHub 
+       Submit in GitHub 
+     
+   
+ 
+     
+     arXiv is now an independent nonprofit! 
+     Learn more 
+     × 
+   
+
+ 
+   
+     
+       Back to arXiv 
+     
+   
+   
+   
+     Why HTML? 
+     
+       
+         
+       
+       Report Issue 
+     
+     
+       
+         
+         
+       
+       Back to Abstract 
+     
+     
+     
+       
+         
+       
+       Download PDF 
+     
+     
+       
+         
+         
+       
+     
+     
+     
+       
+         
+       
+     
+     
+     
+       
+         
+           
+           
+         
+       
+       
+         
+           
+           
+         
+       
+       
+         
+           
+           
+         
+       
+     
+   
+ 
+ 
+ 
+ Abstract 
+ 1  Introduction 
+ 2  Background 
+ 
+ 2.1  Notations 
+ 2.2  Problem formulation 
+ 2.3  Selection criteria for the review 
+ 2.4  Limitations 
+ 2.5  Outline of the article 
+ 
+ 3  Evaluation 
+ 
+ 3.1  Consistency 
+ 3.2  Evaluation metrics 
+ 
+ 3.2.1  AnnotationError 
+ 3.2.2  Hausdorff 
+ 3.2.3  RandIndex 
+ 3.2.4  F1-score 
+ 
+ 
+ 4  Models and cost functions 
+ 
+ 4.1  Parametric models 
+ 
+ 4.1.1  Maximum likelihood estimation 
+ 
+ Related cost functions. 
+ 
+ 4.1.2  Piecewise linear regression 
+ 
+ Related cost functions. 
+ 
+ 4.1.3  Mahalanobis-type metric 
+ 
+ 4.2  Non-parametric models 
+ 
+ Signal model. 
+ 4.2.1  Non-parametric maximum likelihood 
+ 4.2.2  Rank-based detection 
+ 4.2.3  Kernel-based detection 
+ 
+ Related cost functions. 
+ 
+ 
+ 4.3  Summary table 
+ 
+ 5  Search methods 
+ 
+ 5.1  Optimal detection 
+ 
+ 5.1.1  Solution to Problem 1 ( ):  Opt 
+ 
+ Related search methods. 
+ 
+ 5.1.2  Solution to Problem 2 ( ):  Pelt 
+ 
+ 5.2  Approximate detection 
+ 
+ 5.2.1  Window sliding 
+ 5.2.2  Binary segmentation 
+ 
+ Related search methods. 
+ 
+ 5.2.3  Bottom-up segmentation 
+ 
+ 
+ 6  Estimating the number of changes 
+ 
+ 6.1  Linear penalty 
+ 
+ Calibration. 
+ Related penalties. 
+ 
+ 6.2  Fused lasso 
+ 6.3  Complex penalties 
+ 
+ 7  Summary table 
+ 8  Presentation of the Python package 
+ 9  Conclusion 
+ References 
+ 
+ 
+ 
+ 
+   
+    License: arXiv.org perpetual non-exclusive license
+   
+   
+arXiv:1801.00718v3 [cs.CE] 26 Mar 2020 
+ 
+ 
+ Selective review of offline change point detection methods 
+ Journal:  Signal Processing 
+ 
+ 
+ Charles Truong
+ 
+ Address:  CMLA, CNRS, ENS Paris Saclay 
+ 
+ Corresponding author:  Corresponding author 
+ 
+     
+ Laurent Oudre
+ 
+ Address:  L2TI, University Paris 13 
+ 
+     
+ Nicolas Vayatis
+ 
+ Address:  CMLA, CNRS, ENS Paris Saclay 
+ 
+
+ Abstract 
+    
+ This article presents a selective survey of algorithms for the offline detection of multiple change points in multivariate time series.
+A general yet structuring methodological strategy is adopted to organize this vast body of work.
+More precisely, detection algorithms considered in this review are characterized by three elements: a cost function, a search method and a constraint on the number of changes.
+Each of those elements is described, reviewed and discussed separately.
+Implementations of the main algorithms described in this article are provided within a Python package called ruptures. 
+  
+ 
+ 
+ Keywords:  
+change point detection, segmentation, statistical signal processing
+ 
+ 
+ 
+ 1  Introduction 
+
+ 
+ A common task in signal processing is the identification and analysis of complex systems whose underlying state changes, possibly several times. This setting arises when industrial systems, physical phenomena or human activity are continuously monitored with sensors. The objective of practitioners is to extract from the recorded signals a posteriori meaningful information about the different states and transitions of the monitored object for analysis purposes. This setting encompasses a broad range of real-world scenarios and a wide variety of signals. 
+ 
+ 
+ Change point detection is the task of finding changes in the underlying model of a signal or time series.
+The first works on change point detection go back to the 50s  Page [1954] ,  Page [1955] : the goal was to locate a shift in the mean of independent and identically distributed (iid) Gaussian variables for industrial quality control purposes.
+Since then, this problem has been actively investigated, and is periodically the subject of in-depth monographs  Basseville and Nikiforov [1993] ,  Brodsky and Darkhovsky [1993] ,  Csörgö and Horváth [1997] ,  Chen and Gupta [2011a] .
+This subject has generated important activity in statistics and signal processing  [ Lavielle and Teyssière, 2007 ,  Jandhyala et al., 2013 ,  Haynes et al., 2017a ]  but also in various application settings such as speech processing  Desobry et al. [2005] ,  Harchaoui et al. [2009] ,  Angelosante and Giannakis [2012] ,  Seichepine et al. [2014] , financial analysis  Lavielle and Teyssière [2007] ,  Bai and Perron [1998] ,  Frick et al. [2014] , bio-informatics  Hocking et al. [2013a] ,  Maidstone et al. [2017] ,  Vert and Bleakley [2010] ,  Picard et al. [2005] ,  Guédon [2013] ,  Chakar et al. [2017] ,  Oudre et al. [2015] ,  Audiffren et al. [2015] ,  Liu et al. [2018] , climatology  Maidstone [2013] ,  Verbesselt et al. [2010] ,  Reeves et al. [2007] , network traffic data analysis  Lévy-Leduc and Roueff [2009] ,  Lung-Yut-Fong et al. [2012] .
+Modern applications in bioinformatics, finance, monitoring of complex systems have also motivated recent developments from the machine learning community  [ Vert and Bleakley, 2010 ,  Lajugie et al., 2014 ,  Hocking et al., 2015 ] . 
+ 
+ 
+ Figure 1:  Flowchart of a study scheme, for gait analysis. 
+ 
+ 
+ Let us take the example of gait analysis, illustrated on the flowchart displayed on Figure  1 . In this context, a patient’s movements are monitored with accelerometers and gyroscopes while performing simple activities, for instance walking at preferred speed, running or standing still. The objective is to objectively quantify gait characteristics  Barrois-Müller et al. [2016a] ,  Barrois-Müller et al. [2016b] ,  Oudre et al. [2018] ,  Truong et al. [2015] ,  Barrois-Müller et al. [2015] . The resulting signal is described as a succession of non-overlapping segments, each one corresponding to an activity and having its own gait characteristics. Insightful features from homogeneous phases can be extracted if the temporal boundaries of those segments are identified. This analysis therefore needs a preliminary processing of the signals: change point detection. 
+ 
+ 
+ Change point detection methods are divided into two main branches:  online  methods, that aim to detect changes as soon as they occur in a real-time setting, and  offline  methods that retrospectively detect changes when all samples are received. The former task is often referred to as  event or anomaly detection , while the latter is sometimes called  signal segmentation . 
+ 
+ 
+ In this article, we propose a survey of algorithms for the detection of multiple change points in multivariate time series. All reviewed methods presented in this paper address the problem of  offline  (also referred to as  retrospective  or  a posteriori ) change point detection, in which segmentation is performed after the signal has been collected. The objective of this article is to facilitate the search of a suitable detection method for a given application. In particular, focus is made on practical considerations such as implementations and procedures to calibrate the algorithms. This review also presents the mathematical properties of the main approaches, as well as the metrics to evaluate and compare their results. This article is linked with a Python scientific library called  ruptures   Truong [2018] , that includes a modular and easy-to-use implementation of all the main methods presented in this paper. 
+ 
+ 
+ 
+ 2  Background 
+
+ 
+ This section introduces the main concepts for change point detection, as well as the selection criteria and the outline of this review. 
+ 
+ 
+ 2.1  Notations 
+
+ 
+ In the remainder of this article, we use the following notations.
+For a given signal  y = { y t } t = 1 T y=\{y_{t}\}_{t=1}^{T} , the  ( b − a ) (b-a) -sample long sub-signal  { y t } t = a + 1 b \{y_{t}\}_{t=a+1}^{b}  ( 1 ≤ a < b ≤ T 1\leq a<b\leq T ) is simply denoted  y a . . b y_{a..b} ; the complete signal is therefore  y = y 0 . . T y=y_{0..T} .
+A set of indexes is denoted by a calligraphic letter:  𝒯 = { t 1 , t 2 , … } ⊂ { 1 , … , T } \mathcal{T}=\{t_{1},t_{2},\dots\}\subset\{1,\dots,T\} , and its cardinal is  | 𝒯 | |\mathcal{T}| .
+For a set of indexes  𝒯 = { t 1 , … , t K } \mathcal{T}=\{t_{1},\dots,t_{K}\} , the dummy indexes  t 0 := 0 t_{0}:=0  and  t K + 1 := T t_{K+1}:=T  are implicitly available. 
+ 
+ 
+ 
+ 2.2  Problem formulation 
+
+ 
+ Let us consider a multivariate non-stationary random process  y = { y 1 , … , y T } y=\{y_{1},\dots,y_{T}\}  that takes value in  ℝ d \mathbb{R}^{d}  ( d ≥ 1 d\geq 1 ) and has  T T  samples.
+The signal  y y  is assumed to be piecewise stationary, meaning that some characteristics of the process change abruptly at some unknown instants  t 1 ∗ < t 2 ∗ < ⋯ < t K ∗ ∗ t^{*}_{1}<t^{*}_{2}<\dots<t^{*}_{K^{*}} .
+Change point detection consists in estimating the indexes  t k ∗ t^{*}_{k} .
+Depending on the context, the number  K ∗ K^{*}  of changes may or may not be known, in which case it has to be estimated too. 
+ 
+ 
+ Formally, change point detection is cast as a model selection problem, which consists in choosing the best possible segmentation  𝒯 \mathcal{T}  according to a quantitative criterion  V ⁡ ( 𝒯 , y ) V(\mathcal{T},y)  that must be minimized.
+(The function  V ⁡ ( 𝒯 , y ) V(\mathcal{T},y)  is simply denoted  V ⁡ ( 𝒯 ) V(\mathcal{T})  when it is obvious from the context that it refers to the signal  y y .)
+The choice of the criterion function  V ⁡ ( ⋅ ) V(\cdot)  depends on preliminary knowledge on the task at hand. 
+ 
+ 
+ In this work, we make the assumption that the criterion function  V ⁡ ( 𝒯 ) V(\mathcal{T})  for a particular segmentation is a sum of costs of all the segments that define the segmentation: 
+ 
+
+ 
+ 
+ V ⁡ ( 𝒯 , y ) := ∑ k = 0 K c ⁡ ( y t k . . t k + 1 ) V(\mathcal{T},y):=\sum_{k=0}^{K}\ c(y_{t_{k}..t_{k+1}}) 
+ 
+ (1) 
+ 
+ where  c ⁡ ( ⋅ ) c(\cdot)  is a cost function which measures goodness-of-fit of the sub-signal  y t k . . t k + 1 = { y t } t k + 1 t k + 1 y_{t_{k}..t_{k+1}}=\{y_{t}\}_{t_{k}+1}^{t_{k+1}}  to a specific model.
+The “best segmentation”  𝒯 ^ \widehat{\mathcal{T}}  is the minimizer of the criterion  V ⁡ ( 𝒯 ) V(\mathcal{T}) .
+In practice, depending on whether the number  K ∗ K^{*}  of change points is known beforehand, change point detection methods fall into two categories. 
+ 
+ 
+ 
+ •  
+ 
+ Problem 1 : known number of changes  K K .  The change point detection problem with a fixed number  K K  of change points consists in solving the following discrete optimization problem 
+ 
+
+ 
+ 
+ min | 𝒯 | = K ⁡ V ⁡ ( 𝒯 ) . \min_{|\mathcal{T}|=K}\ V(\mathcal{T}). 
+ 
+ (P1) 
+ 
+ 
+ •  
+ 
+ Problem 2 : unknown number of changes.  The change point detection problem with an unknown number of change points consists in solving the following discrete optimization problem 
+ 
+
+ 
+ 
+ min 𝒯 ⁡ V ⁡ ( 𝒯 ) + pen ​ ( 𝒯 ) \min_{\mathcal{T}}\ V(\mathcal{T})\ +\ \mbox{pen}(\mathcal{T}) 
+ 
+ (P2) 
+ 
+ where  pen ​ ( 𝒯 ) \mbox{pen}(\mathcal{T})  is an appropriate measure of the complexity of a segmentation  𝒯 \mathcal{T} . 
+ 
+ 
+ 
+ 
+ All change point detection methods considered in this work yield an exact or an approximate solution to either Problem 1 ( P1 ) or Problem 2 ( P2 ), with the function  V ⁡ ( 𝒯 , y ) V(\mathcal{T},y)  adhering to the format ( 1 ). 
+ 
+ 
+ 
+ 2.3  Selection criteria for the review 
+
+ 
+ Figure 2:  Typology of change point detection methods described in this article.
+Reviewed algorithms are defined by three elements: a cost function, a search method and a constraint (on the number of change points).
+ 
+ 
+ 
+ To better understand the strengths and weaknesses of change point detection methods, we propose to classify algorithms according to a comprehensive typology.
+Precisely, detection methods are expressed as the combination of the following three elements. 
+ 
+ •  
+ 
+ Cost function.  The cost function  c ⁡ ( ⋅ ) c(\cdot)  is a measure of “homogeneity”.
+Its choice encodes the type of changes that can be detected.
+Intuitively,  c ⁡ ( y a . . b ) c(y_{a..b})  is expected to be low if the sub-signal  y a . . b y_{a..b}  is “homogeneous” (meaning that it does not contain any change point), and large if the sub-signal  y a . . b y_{a..b}  is “heterogeneous” (meaning that it contains one or several change points). 
+ 
+ •  
+ 
+ Search method.  The search method is the resolution procedure for the discrete optimization problems associated with Problem 1 ( P1 ) and Problem 2 ( P2 ).
+The literature contains several methods to efficiently solve those problems, in an exact fashion or in an approximate fashion.
+Each method strikes a balance between computational complexity and accuracy. 
+ 
+ •  
+ 
+ Constraint (on the number of change points).  When the number of changes is unknown ( P2 ), a constraint is added, in the form of a complexity penalty  pen ​ ( ⋅ ) \mbox{pen}(\cdot)  ( P2 ), to balance out the goodness-of-fit term  V ⁡ ( 𝒯 , y ) V(\mathcal{T},y) .
+The choice of the complexity penalty is related to the amplitude of the changes to detect: with too “small” a penalty (compared to the goodness-of-fit) in ( P2 ), many change points are detected, even those that are the result of noise.
+Conversely, too much penalization only detects the most significant changes, or even none. 
+ 
+ 
+ This typology of change point detection methods is schematically shown on Figure  2 . 
+ 
+ 
+ 
+ 2.4  Limitations 
+
+ 
+ The described framework, however general, does not encompass all published change point detection methods.
+In particular, Bayesian approaches are not considered in the remainder of this article, even though they provide state-of-the-art results in several domains, such as speech and sound processing.
+The most well-known Bayesian algorithm is the Hidden Markov Model (HMM)  Rabiner [1989] .
+This model was later extended, for instance with Dirichlet processes  Ko et al. [2015] ,  Martínez and Mena [2014]  or product partition models  Barry and Hartigan [1992] ,  Barry and Hartigan [1993] .
+The interested reader can find reviews of Bayesian approaches in  Brodsky and Darkhovsky [1993]  and  Chen and Gupta [2011a] .
+ Also, several literature reviews with different selection criteria can be found.
+Recent and important works include  Aminikhanghahi and Cook [2017]  which focuses on window-based detection algorithms.
+In particular, the authors use the quantity of samples needed to detect a change as a basis for comparison.
+Maximum likelihood and Bayes-type detection are reviewed, from a theoretical standpoint, in  Jandhyala et al. [2013] .
+Existing asymptotic distributions for change point estimates are described for several statistical models.
+In  Niu et al. [2016] , detection is formulated as a statistical hypothesis testing problem, and emphasis is put on the algorithmic and theoretical properties of several sequential mean-shift detection procedures. 
+ 
+ 
+ 
+ 2.5  Outline of the article 
+
+ 
+ Before starting this review, we propose in Section  3  a detailed overview of the main mathematical tools that can be used for evaluating and comparing the change point detection methods. The organization of the remaining of this review article reflects the typology of change point detection methods, which is schematically shown on Figure  2 .
+Precisely, the three defining elements of a detection algorithm are reviewed separately.
+In Section  4 , cost functions from the literature are presented, along with the associated signal model and the type of change that can be detected.
+Whenever possible, theoretical results on asymptotic consistency are also given.
+Section  5  lists search methods that efficiently solve the discrete optimizations associated with Problem 1 ( P1 ) and Problem 2 ( P2 ).
+Both exact and approximate methods are described.
+Constraints on the number of change points are reviewed in Section  6 .
+A summary table of the literature review can be found in Section  7 .
+The last section  8  is dedicated to the presentation of the Python package that goes with this article and propose a modular implementation of all the main approaches described in this article. 
+ 
+ 
+ 
+ 
+ 3  Evaluation 
+
+ 
+ Change point detection methods can be evaluated either by proving some mathematical properties of the algorithms (such as consistency) in general case, or empirically by computing several metrics to assess the performances on a given dataset. 
+ 
+ 
+ 3.1  Consistency 
+
+ 
+ A natural question when designing detection algorithms is the consistency of estimated change point indexes, as the number of samples  T T  goes to infinity.
+In the literature, the “asymptotic setting” is intuitively described as follows: the observed signal  y y  is regarded as a realization of a continuous-time process on an equispaced grid of size  1 / T 1/T , and “ T T  goes to infinity” means that the spacing of the sampling grid converges to 0.
+Precisely, for all  τ ∈ [ 0 , 1 ] \tau\in[0,1] , let  Y ⁡ ( τ ) Y(\tau)  denote an  ℝ d \mathbb{R}^{d} -valued random variable such that 
+ 
+
+ 
+ 
+ y t = Y ⁡ ( t / T ) ∀ t = 1 , … , T . y_{t}=Y(t/T)\hskip 10.00002pt\forall t=1,\dots,T. 
+ 
+ (2) 
+ 
+ The continuous-time process undergoes  K ∗ K^{*}  changes in the probability distribution at the time instants  τ k ∗ ∈ ( 0 , 1 ) \tau^{*}_{k}\in(0,1) .
+Those  τ k ∗ \tau^{*}_{k}  are related to the change point indexes  t k ∗ t^{*}_{k}  through the following relationship: 
+ 
+
+ 
+ 
+ t k ∗ = ⌊ T ​ τ k ∗ ⌋ . t^{*}_{k}=\lfloor T\tau^{*}_{k}\rfloor. 
+ 
+ (3) 
+ 
+ Generally, for a given change point index  t k t_{k} , the associated quantity  τ k = t k / T ∈ ( 0 , 1 ) \tau_{k}=t_{k}/T\in(0,1)  is referred to as a change point  fraction .
+In particular, the change point fractions  τ k ∗ \tau^{*}_{k}  ( k = 1 , … , K ∗ k=1,\dots,K^{*} ) of the time-continuous process  Y Y  are change point indexes of the discrete-time signal  y y .
+Note that in this asymptotic setting, the lengths of each regime of  y y  increase linearly with  T T .
+The notion of asymptotic consistency of a change point detection method is formally introduced as follows. 
+ 
+ 
+ Definition 1  (Asymptotic consistency) 
+ 
+ A change point detection algorithm is said to be asymptotically consistent if the estimated segmentation  𝒯 ^ = { t ^ 1 , t ^ 2 , … } \widehat{\mathcal{T}}=\{\hat{t}_{1},\hat{t}_{2},\dots\}  satisfies the following conditions, when  T ⟶ + ∞ T\longrightarrow+\infty : 
+ 
+ (i)  
+ 
+ P ⁡ ( | 𝒯 ^ | = K ∗ ) ⟶ 1 P(|\widehat{\mathcal{T}}|=K^{*})\longrightarrow 1 , 
+ 
+ (ii)  
+ 
+ 1 T ​ ‖ 𝒯 ^ − 𝒯 ∗ ‖ ∞ ​ ⟶ 𝑝 ​ 0 \frac{1}{T}\left\lVert\widehat{\mathcal{T}}-\mathcal{T}^{*}\right\rVert_{\infty}\overset{p}{\longrightarrow}0 , 
+ 
+ 
+ where the distance between two change point sets is defined by 
+ 
+
+ 
+ 
+ ‖ 𝒯 ^ − 𝒯 ∗ ‖ ∞ := max ⁡ { max t ^ ∈ 𝒯 ^ ⁡ min t ∗ ∈ 𝒯 ∗ ​ | t ^ − t ∗ | , max t ∗ ∈ 𝒯 ∗ ⁡ min t ^ ∈ 𝒯 ^ ​ | t ^ − t ∗ | } . \left\lVert\widehat{\mathcal{T}}-\mathcal{T}^{*}\right\rVert_{\infty}:=\max\ \{\ \max_{\hat{t}\in\widehat{\mathcal{T}}}\ \min_{t^{*}\in\mathcal{T}^{*}}|\hat{t}-t^{*}|,\ \max_{t^{*}\in\mathcal{T}^{*}}\min_{\hat{t}\in\widehat{\mathcal{T}}}|\hat{t}-t^{*}|\ \}. 
+ 
+ (4) 
+ 
+ 
+ 
+ 
+ In Definition  1 , the first condition is trivially verified when the number  K ∗ K^{*}  of change points is known beforehand.
+As for the second condition, it implies that the estimated change point fractions are consistent, and not the indexes themselves.
+In general, distances  | t ^ − t ∗ | |\hat{t}-t^{*}|  between true change point indexes and their estimated counterparts do not converge to 0, even for simple models  Bai and Perron [2003a] ,  Chakar et al. [2014] ,  Vert and Bleakley [2010] ,  Boysen et al. [2009] .
+As a result, consistency results in the literature only deal with change point fractions. 
+ 
+ 
+ 
+ 3.2  Evaluation metrics 
+
+ 
+ Several metrics from the literature are presented below.
+Each metric correspond to one of the previously listed criteria by which segmentation performances are assessed.
+In the following, the set of true change points is denoted by  𝒯 ∗ = { t 1 ∗ , … , t K ∗ ∗ } \mathcal{T}^{*}=\{t^{*}_{1},\dots,t^{*}_{K^{*}}\} , and the set of estimated change points is denoted by  𝒯 ^ = { t ^ 1 , … , t ^ K ^ } \widehat{\mathcal{T}}=\{\hat{t}_{1},\dots,\hat{t}_{\widehat{K}}\} .
+Note that that the cardinals of each set,  K ∗ K^{*}  and  K ^ \widehat{K} , are not necessarily equal. 
+ 
+ 
+ 3.2.1  AnnotationError 
+
+ 
+ The  AnnotationError  is simply the difference between the predicted number of change points  | 𝒯 ^ | |\widehat{\mathcal{T}}|  and the true number of change points  | 𝒯 ⋆ | |\mathcal{T}^{\star}| : 
+ 
+
+ 
+ 
+ AnnotationError := | K ^ − K ∗ | . \textsc{AnnotationError}:=|\widehat{K}-K^{*}|. 
+ 
+ (5) 
+ 
+ This metric can be used to discriminate detection method when the number of changes is unknown. 
+ 
+ 
+ 
+ 3.2.2  Hausdorff 
+
+ 
+ The  Hausdorff  metric measures the robustness of detection methods  Boysen et al. [2009] ,  Harchaoui and Lévy-Leduc [2010] .
+Formally, it is equal to the greatest temporal distance between a change point and its prediction: 
+ 
+
+ 
+ 
+ Hausdorff ​ ( 𝒯 ∗ , 𝒯 ^ ) := max ⁡ { max t ^ ∈ 𝒯 ^ ⁡ min t ∗ ∈ 𝒯 ∗ ​ | t ^ − t ∗ | , max t ∗ ∈ 𝒯 ∗ ⁡ min t ^ ∈ 𝒯 ^ ​ | t ^ − t ∗ | } . \textsc{Hausdorff}(\mathcal{T}^{*},\widehat{\mathcal{T}}):=\max\ \{\ \max_{\hat{t}\in\widehat{\mathcal{T}}}\ \min_{t^{*}\in\mathcal{T}^{*}}|\hat{t}-t^{*}|,\ \max_{t^{*}\in\mathcal{T}^{*}}\min_{\hat{t}\in\widehat{\mathcal{T}}}|\hat{t}-t^{*}|\ \}. 
+ 
+ 
+ It is the worst error made by the algorithm that produced  𝒯 ^ \widehat{\mathcal{T}}  and is expressed in number of samples.
+If this metric is equal to zero, both breakpoint sets are equal; it is large when a change point from either  𝒯 ∗ \mathcal{T}^{*}  or  𝒯 ^ \widehat{\mathcal{T}}  is far from every change point of  𝒯 ^ \widehat{\mathcal{T}}  or  𝒯 ∗ \mathcal{T}^{*}  respectively.
+Over-segmentation as well as under-segmentation is penalized.
+An illustrative example is displayed on Figure  3 . 
+ 
+ 
+ Figure 3:  Hausdorff .
+Alternating gray areas mark the segmentation  𝒯 ∗ \mathcal{T}^{*} ; dashed lines mark the segmentation  𝒯 ^ \widehat{\mathcal{T}} .
+Here,  Hausdorff  is equal to  Δ ​ t 1 = max ⁡ ( Δ ​ t 1 , Δ ​ t 2 , Δ ​ t 3 ) \Delta t_{1}=\max(\Delta t_{1},\Delta t_{2},\Delta t_{3}) .
+ 
+ 
+ 
+ 
+ 3.2.3  RandIndex 
+
+ 
+ Accuracy can be measured by the  RandIndex , which is the average similarity between the predicted breakpoint set  𝒯 ^ \widehat{\mathcal{T}}  and the ground truth  𝒯 ∗ \mathcal{T}^{*}   Lajugie et al. [2014] .
+Intuitively, it is equal to the number of agreements between two segmentations.
+An agreement is a pair of indexes which are either in the same segment according to both  𝒯 ^ \widehat{\mathcal{T}}  and  𝒯 ∗ \mathcal{T}^{*}  or in different segments according to both  𝒯 ^ \widehat{\mathcal{T}}  and  𝒯 ∗ \mathcal{T}^{*} .
+Formally, for a breakpoint set  𝒯 \mathcal{T} , the set of grouped indexes and the set of non-grouped indexes are respectively  gr ⁡ ( 𝒯 ) \mathrm{gr}(\mathcal{T})  and  ngr ⁡ ( 𝒯 ) \mathrm{ngr}(\mathcal{T}) : 
+ 
+
+ 
+ 
+ gr ⁡ ( 𝒯 ) : = { ( s , t ) , 1 ≤ s < t ≤ T  s.t.  s  and  t  belong to the same segment according to  𝒯 } , ngr ⁡ ( 𝒯 ) : = { ( s , t ) , 1 ≤ s < t ≤ T  s.t.  s  and  t  belong to different segments according to  𝒯 } . \begin{split}\mathrm{gr}(\mathcal{T})&:=\{(s,t),1\leq s<t\leq T\text{ s.t. }s\text{ and }t\text{ belong to the same segment according to }\mathcal{T}\ \},\\
+\mathrm{ngr}(\mathcal{T})&:=\{(s,t),1\leq s<t\leq T\text{ s.t. }s\text{ and }t\text{ belong to different segments according to }\mathcal{T}\ \}.\end{split} 
+ 
+ 
+ The  RandIndex  is then defined as follows: 
+ 
+
+ 
+ 
+ RandIndex ​ ( 𝒯 ∗ , 𝒯 ^ ) := OPEN | gr ⁡ ( 𝒯 ^ ) ∩ gr ⁡ ( 𝒯 ∗ ) | + | ngr ⁡ ( 𝒯 ^ ) ∩ ngr ⁡ ( 𝒯 ∗ ) | ) T ⁡ ( T − 1 ) . \text{{RandIndex}}(\mathcal{T}^{*},\widehat{\mathcal{T}}):=\frac{|\mathrm{gr}(\widehat{\mathcal{T}})\cap\mathrm{gr}(\mathcal{T}^{*})|+|\mathrm{ngr}(\widehat{\mathcal{T}})\cap\mathrm{ngr}(\mathcal{T}^{*})|)}{T(T-1)}. 
+ 
+ (6) 
+ 
+ It is normalized between 0 (total disagreement) and 1 (total agreement).
+Originally,  RandIndex  has been introduced to evaluate clustering methods  Boysen et al. [2009] ,  Lajugie et al. [2014] .
+An illustrative example is displayed on Figure  4 . 
+ 
+ 
+ Figure 4:  RandIndex .
+Top: alternating gray areas mark the segmentation  𝒯 ∗ \mathcal{T}^{*} ; dashed lines mark the segmentation  𝒯 ^ \widehat{\mathcal{T}} .
+Below: representations of associated adjacency matrices and disagreement matrix.
+The adjacency matrix of a segmentation is the  T × T T\times T  binary matrix with coefficient  ( s , t ) (s,t)  equal to 1 if  s s  and  t t  belong to the same segment, 0 otherwise.
+The disagreement matrix is the  T × T T\times T  binary matrix with coefficient  ( s , t ) (s,t)  equal to 1 where the two adjacency matrices disagree, and 0 otherwise.
+ RandIndex  is equal to the white area (where coefficients are 0) of the disagreement matrix.
+ 
+ 
+ 
+ 
+ 3.2.4  F1-score 
+
+ 
+ Another measure of accuracy is the  F1-Score .
+Precision is the proportion of predicted change points that are true change points.
+Recall is the proportion of true change points that are well predicted.
+A breakpoint is considered detected up to a user-defined margin of error  M > 0 M>0 ; true positives  Tp  are true change points for which there is an estimated one at less than  M M  samples,  i.e. 
+ 
+
+ 
+ 
+ Tp ( 𝒯 ∗ , 𝒯 ^ ) := { t ∗ ∈ 𝒯 ∗ | ∃ t ^ ∈ 𝒯 ^ s.t. | t ^ − t ∗ | < M } . \text{\sc Tp}(\mathcal{T}^{*},\widehat{\mathcal{T}}):=\{t^{*}\in\mathcal{T}^{*}\ |\ \exists\,\hat{t}\in\widehat{\mathcal{T}}\ \ \text{s.t.}\ |\hat{t}-t^{*}|<M\}. 
+ 
+ (7) 
+ 
+ Precision  Prec  and recall  Rec  are then given by 
+ 
+
+ 
+ 
+ Prec ​ ( 𝒯 ∗ , 𝒯 ^ ) := | Tp ​ ( 𝒯 ∗ , 𝒯 ^ ) | / K ^ and Rec ​ ( 𝒯 ∗ , 𝒯 ^ ) := | Tp ​ ( 𝒯 ∗ , 𝒯 ^ ) | / K ∗ . \text{{\sc Prec}}(\mathcal{T}^{*},\widehat{\mathcal{T}}):=|\text{\sc Tp}(\mathcal{T}^{*},\widehat{\mathcal{T}})|/\widehat{K}\hskip 10.00002pt\text{and}\hskip 10.00002pt\text{{\sc Rec}}(\mathcal{T}^{*},\widehat{\mathcal{T}}):=|\text{\sc Tp}(\mathcal{T}^{*},\widehat{\mathcal{T}})|/K^{*}. 
+ 
+ (8) 
+ 
+ Precision  and  Recall  are well-defined (ie. between 0 and 1) if the margin  M M  is smaller than the minimum spacing between two true change point indexes  t k ∗ t^{*}_{k}  and  t k + 1 ∗ t^{*}_{k+1} .
+Over-segmentation of a signal causes the precision to be close to zero and the recall close to one.
+Under-segmentation has the opposite effect.
+The  F1-Score  is the harmonic mean of precision  Prec  and recall  Rec : 
+ 
+
+ 
+ 
+ F1-Score ​ ( 𝒯 ∗ , 𝒯 ^ ) := 2 × Prec ​ ( 𝒯 ∗ , 𝒯 ^ ) × Rec ​ ( 𝒯 ∗ , 𝒯 ^ ) Prec ​ ( 𝒯 ∗ , 𝒯 ^ ) + Rec ​ ( 𝒯 ∗ , 𝒯 ^ ) . \text{{F1-Score}}(\mathcal{T}^{*},\widehat{\mathcal{T}}):=2\times\frac{\textsc{Prec}(\mathcal{T}^{*},\widehat{\mathcal{T}})\times\textsc{Rec}(\mathcal{T}^{*},\widehat{\mathcal{T}})}{\textsc{Prec}(\mathcal{T}^{*},\widehat{\mathcal{T}})+\textsc{Rec}(\mathcal{T}^{*},\widehat{\mathcal{T}})}. 
+ 
+ (9) 
+ 
+ Its best value is 1 and its worse value is 0.
+An illustrative example is displayed on Figure  5 . 
+ 
+ 
+ Figure 5:  F1-Score .
+Alternating gray areas mark the segmentation  𝒯 ∗ \mathcal{T}^{*} ; dashed lines mark the segmentation  𝒯 ^ \widehat{\mathcal{T}} ; dashed areas mark the allowed margin of error around true change points.
+Here,  Prec  is  2 / 3 2/3 ,  Rec  is  2 / 2 2/2  and  F1-Score  is  4 / 5 4/5 .
+ 
+ 
+ 
+ 
+ 
+ 
+ 4  Models and cost functions 
+
+ 
+ This section presents the first defining element of change detection methods, namely the cost function.
+In most cases, cost functions are derived from a signal model.
+In the following, models and their associated cost function are organized in two categories: parametric and non-parametric, as schematically shown in Figure  6 .
+For each model, the most general formulation is first given, then special cases, if any, are described.
+A summary table of all reviewed costs can be found at the end of this section. 
+ 
+ 
+ Figure 6:  Typology of the cost functions described in Section  4 . 
+ 
+ 
+ 4.1  Parametric models 
+
+ 
+ Parametric detection methods focus on changes in a finite-dimensional parameter vector.
+Historically, they were the first to be introduced, and remain extensively studied in the literature. 
+ 
+ 
+ 4.1.1  Maximum likelihood estimation 
+
+ 
+ Maximum likelihood procedures are ubiquitous in the change point detection literature.
+They generalize a large number of models and cost functions, such as mean-shifts and scale shifts in normally distributed data  Page [1955] ,  Lavielle [1999] ,  Pein et al. [2017] ,  Keshavarz et al. [2018] , changes in the rate parameter of Poisson distributed data  Ko et al. [2015] , etc.
+In the general setting of maximum likelihood estimation for change detection, the observed signal  y = { y 1 , … , y T } y=\{y_{1},\dots,y_{T}\}  is composed of independent random variables, such that 
+ 
+
+ 
+ 
+ y t ∼ ∑ k = 0 K ∗ f ( ⋅ | θ k ) 𝟙 ( t k ∗ < t ≤ t k + 1 ∗ ) y_{t}\sim\sum_{k=0}^{K^{*}}f(\cdot|\theta_{k})\mathds{1}(t^{*}_{k}<t\leq t^{*}_{k+1}) 
+ 
+ (M1) 
+ 
+ where the  t k ∗ t^{*}_{k}  are change point indexes, the  f ( ⋅ | θ ) f(\cdot|\theta)  are probability density functions parametrized by the vector-valued parameter  θ \theta , and the  θ k \theta_{k}  are parameter values.
+In other words, the signal  y y  is modelled by iid variables with piecewise constant distribution.
+The parameter  θ \theta  represents a quantity of interest whose value changes abruptly at the unknown instants  t k ∗ t^{*}_{k} , which are to be estimated.
+Under this setting, change point detection is equivalent to maximum likelihood estimation if the sum of cost  V ⁡ ( 𝒯 , y ) V(\mathcal{T},y)  is equal to the negative log-likelihood.
+The corresponding cost function, denoted  c i.i.d. c_{\mbox{i.i.d.}} , is defined as follows. 
+ 
+ 
+ Cost function 1  ( c i.i.d. c_{\mbox{i.i.d.}} ) 
+ 
+ For a given parametric family of distribution densities  { f ( ⋅ | θ ) | θ ∈ Θ } \{f(\cdot|\theta)|\theta\in\Theta\}  where  Θ \Theta  is a compact subset of  ℝ p \mathbb{R}^{p}  (for a certain  p p ), the cost function  c i.i.d. c_{\mbox{i.i.d.}}  is defined by 
+ 
+
+ 
+ 
+ c i.i.d. ( y a . . b ) := − sup θ ∑ t = a + 1 b log f ( y t | θ ) . c_{\mbox{i.i.d.}}(y_{a..b}):=-\sup\limits_{\theta}\sum_{t=a+1}^{b}\log f(y_{t}|\theta). 
+ 
+ (C1) 
+ 
+ 
+ 
+ 
+ Model  M1  and the related cost function  c i.i.d. c_{\mbox{i.i.d.}}  encompasses a large number of change point methods.
+Note that, in this context, the family of distributions must be known before performing the detection, usually thanks to prior knowledge on the data.
+Historically, the Gaussian distribution was first used, to model mean-shifts  Lavielle and Moulines [2000] ,  Sen and Srivastava [1975] ,  Krishnaiah [1988]  and scale shifts  Ko et al. [2015] ,  Aue and Horvàth [2012] ,  Pein et al. [2017] .
+A large part of the literature then evolved towards other parametric distributions, most notably resorting to distributions from the general exponential family  Maidstone [2013] ,  Fearnhead [2006] ,  Frick et al. [2014] .
+ From a theoretical point of view, asymptotic consistency, as described in Definition  1 , has been demonstrated, in the case of  a single change point , first with Gaussian distribution (fixed variance), then for several specific distributions, e.g. Gaussian with mean and scale shifts  Basseville and Nikiforov [1993] ,  Chen and Gupta [2011a] ,  Keshavarz et al. [2018] ,  Górecki et al. [2018] , discrete distributions  Lavielle [1999] , etc.
+The case with  multiple change points  has been tackled later.
+For certain distributions (e.g. Gaussian), the solutions of the change point detection problems ( P1 ) (known number of change points) and ( P2 ) (unknown number of change points) have been proven to be asymptotically consistent  Fu and Curnow [1990] .
+The general case of multiple change points and a generic distribution family has been addressed decades after the change detection problem has been introduced: the solution of the change point detection problem with a known number of changes and a cost function set to  c i.i.d. c_{\mbox{i.i.d.}}  is asymptotically consistent  He and Severini [2010] .
+This is true if certain assumptions are satisfied: (i) the signal follows the model ( M1 ) for a distribution family that verifies some regularity assumptions (which are no different from the assumptions needed for generic maximum likelihood estimation, without any change point) and (ii) technical assumptions on the value of the cost function on homogeneous and heterogeneous sub-signals.
+As an example, distributions from the exponential family satisfy those assumptions. 
+ 
+ 
+ Related cost functions. 
+
+ 
+ The general model ( M1 ) has been applied with different families of distributions.
+We list below three notable examples and the associated cost functions: change in mean, change in mean and scale, and change in the rate parameter of count data.
+ 
+ 
+ 
+ 
+ •  
+ 
+ The mean-shift model is the earliest and one of the most studied model in the change point detection literature  Page [1955] ,  Chernoff and Zacks [1964] ,  Lorden [1971] ,  Mallows [1973] ,  Sen and Srivastava [1975] .
+Here, the distribution is Gaussian, with fixed variance.
+In other words, the signal  y y  is simply a sequence of independent normal random variables with piecewise constant mean and same variance.
+In this context, the cost function  c i.i.d. c_{\mbox{i.i.d.}}  becomes  c L 2 c_{L_{2}} , defined below.
+This cost function is also referred to as the quadratic error loss and has been applied for instance on DNA array data  Frick et al. [2014]  and geology signals  Chen and Gupta [2011b] . 
+ 
+ 
+ Cost function 2  ( c L 2 c_{L_{2}} ) 
+ 
+ The cost function  c L 2 c_{L_{2}}  is given by 
+ 
+
+ 
+ 
+ c L 2 ​ ( y a . . b ) := ∑ t = a + 1 b ‖ y t − y ¯ a . . b ‖ 2 2 c_{L_{2}}(y_{a..b}):=\sum_{t=a+1}^{b}\left\lVert y_{t}-\bar{y}_{a..b}\right\rVert^{2}_{2} 
+ 
+ (C2) 
+ 
+ where  y ¯ a . . b \bar{y}_{a..b}  is the empirical mean of the sub-signal  y a . . b y_{a..b} . 
+ 
+ 
+ •  
+ 
+ A natural extension to the mean-shift model consists in letting the variance abruptly change as well.
+In this context, the cost function  c i.i.d. c_{\mbox{i.i.d.}}  becomes  c Σ c_{\Sigma} , defined below.
+This cost function can be used to detect changes in the first two moments of random (not necessarily Gaussian) variables, even though it is the Gaussian likelihood that is plugged in  c i.i.d. c_{\mbox{i.i.d.}}   Lavielle [1999] ,  Jandhyala et al. [2013] .
+It has been applied for instance on stock market time series  Lavielle [1999] , biomedical data  Chen and Gupta [2011b] , and electric power consumption monitoring  Hébrail et al. [2010] . 
+ 
+ 
+ Cost function 3  ( c Σ c_{\Sigma} ) 
+ 
+ The cost function  c Σ c_{\Sigma}  is given by 
+ 
+
+ 
+ 
+ c Σ ​ ( y a . . b ) := ( b − a ) ​ log ​ det Σ ^ a . . b + ∑ t = a + 1 b ( y t − y ¯ a . . b ) ′ ​ Σ ^ a . . b − 1 ​ ( y t − y ¯ a . . b ) c_{\Sigma}(y_{a..b}):=(b-a)\log\det\widehat{\Sigma}_{a..b}+\sum_{t=a+1}^{b}(y_{t}-\bar{y}_{a..b})^{\prime}\widehat{\Sigma}_{a..b}^{-1}(y_{t}-\bar{y}_{a..b}) 
+ 
+ (C3) 
+ 
+ where  y ¯ a . . b \bar{y}_{a..b}  and  Σ ^ a . . b \widehat{\Sigma}_{a..b}  are respectively the empirical mean and the empirical covariance matrix of the sub-signal  y a . . b y_{a..b} . 
+ 
+ 
+ •  
+ 
+ Change point detection has also be applied on count data modelled by a Poisson distribution  Chib [1998] ,  Ko et al. [2015] .
+More precisely, the signal  y y  is a sequence of independent Poisson distributed random variables with piecewise constant rate parameter.
+In this context, the cost function  c i.i.d. c_{\mbox{i.i.d.}}  becomes  c Poisson c_{\mbox{Poisson}} , defined below. 
+ 
+ 
+ Cost function 4  ( c Poisson c_{\mbox{Poisson}} ) 
+ 
+ The cost function  c Poisson c_{\mbox{Poisson}}  is given by 
+ 
+
+ 
+ 
+ c Poisson ​ ( y a . . b ) := − ( b − a ) ​ y ¯ a . . b ​ log ⁡ y ¯ a . . b c_{\mbox{Poisson}}(y_{a..b}):=-(b-a)\bar{y}_{a..b}\log\bar{y}_{a..b} 
+ 
+ (C4) 
+ 
+ where  y ¯ a . . b \bar{y}_{a..b}  is the empirical mean of the sub-signal  y a . . b y_{a..b} . 
+ 
+ 
+ 
+ 
+ 
+ Remark 1 
+ 
+ A model slightly more general than ( M1 ) can be formulated by letting the signal samples to be dependant and the distribution function  f ( ⋅ | θ ) f(\cdot|\theta)  to change over time.
+This can in particular model the presence of unwanted changes in the statistical properties of the signal (for instance in the statistical structure of the noise  Lavielle [1999] ).
+The function  f ( ⋅ | θ ) f(\cdot|\theta)  is replaced in ( M1 ) by a sequence of distribution functions  f t ( ⋅ | θ ) f_{t}(\cdot|\theta)  which are not assumed to be identical for all indexes  t t .
+Changes in the functions  f t f_{t}  are considered nuisance parameters and only the variations of the parameter  θ \theta  must be detected.
+Properties on the asymptotic consistency of change point estimates can be obtained in this context.
+We refer the reader to  Lavielle [1999] ,  Lavielle [2005]  for theoretical results. 
+ 
+ 
+ 
+ 
+ 
+ 4.1.2  Piecewise linear regression 
+
+ 
+ Piecewise linear models are often found, most notably in the econometrics literature, to detect so-called “structural changes”  Bai [1994] ,  Bai [1995] ,  Bai [1996] .
+In this context, a linear relationship between a response variable and covariates exists, and this relationship changes abruptly at some unknown instants.
+Formally, the observed signal  y y  follows a piecewise linear model with change points located at the  t k ∗ t^{*}_{k} : 
+ 
+
+ 
+ 
+ ∀ t , t k ∗ < t ≤ t k + 1 ∗ , y t = x t ′ ​ u k + z t ′ ​ v + ε t ( k = 0 , … , K ∗ ) \forall\ t,\ t^{*}_{k}<t\leq t^{*}_{k+1},\hskip 10.00002pty_{t}=x_{t}^{\prime}u_{k}+z_{t}^{\prime}v+\varepsilon_{t}\hskip 10.00002pt(k=0,\dots,K^{*}) 
+ 
+ (M2) 
+ 
+ where the  u k ∈ ℝ p u_{k}\in\mathbb{R}^{p}  and  v ∈ ℝ q v\in\mathbb{R}^{q}  are unknown regression parameters and  ε t \varepsilon_{t}  is noise.
+Under this setting, the observed signal  y y  is regarded as a univariate response variable (ie  d = 1 d=1 ) and the signals  x = { x t } t = 1 T x=\{x_{t}\}_{t=1}^{T}  and  z = { z t } t = 1 T z=\{z_{t}\}_{t=1}^{T}  are observed covariates, respectively  ℝ p \mathbb{R}^{p} -valued and  ℝ q \mathbb{R}^{q} -valued.
+In this context, change point detection can be carried out by fitting a linear regression on each segment of the signal.
+To that end, the sum of costs is made equal to the sum of squared residuals.
+The corresponding cost function, denoted  c linear c_{\mbox{linear}} , is defined as follows. 
+ 
+ 
+ Cost function 5  ( c linear c_{\mbox{linear}} ) 
+ 
+ For a signal  y y  (response variable) and covariates  x x  and  z z , the cost function  c linear c_{\mbox{linear}}  is defined by 
+ 
+
+ 
+ 
+ c linear ​ ( y a . . b ) := min ⁡ ∑ t = a + 1 b u ∈ ℝ p , v ∈ ℝ q ⁡ ( y t − x t ′ ​ u − z t ′ ​ v ) 2 . c_{\mbox{linear}}(y_{a..b}):=\min_{u\in\mathbb{R}^{p},v\in\mathbb{R}^{q}}\ \sum_{t=a+1}^{b}(y_{t}-x_{t}^{\prime}u-z_{t}^{\prime}v)^{2}. 
+ 
+ (C5) 
+ 
+ 
+ 
+ 
+ In the literature, Model ( M2 ) is also known as a  partial  structural change model because the linear relationship between  y y  and  x x  changes abruptly, while the linear relationship between  y y  and  z z  remains constant.
+The  pure  structural change model is obtained by removing the term  z t ′ ​ v z_{t}^{\prime}v  from ( M2 ).
+This formulation generalizes several well-known models such as the autoregressive (AR) model  Angelosante and Giannakis [2012] ,  Bai [2000] , multiple regressions  Bai [1996] ,  Bai [1997a] , etc.
+A more general formulation of ( M2 ) that can accommodate a multivariate response variable  y y  exists  Qu and Perron [2007] , but is more involved, from a notational standpoint.
+ From a theoretical point of view, piecewise linear models are extensively studied in the context of change point detection by a series of important contributions  Bai [1994] ,  Bai [1995] ,  Bai [1996] ,  Bai [1997a] ,  Bai and Perron [1998] ,  Bai [1998] ,  Bai [1999] ,  Bai [2000] ,  Bai and Perron [2003b] ,  Perron [2006] ,  Bai [2010] .
+When the number of changes is known, the most general consistency result can be found in  Bai and Perron [1998] .
+A multivariate extension of this result has been demonstrated in  Qu and Perron [2007] .
+As for the more difficult situation of an unknown number of changes, statistical tests have been proposed for a single change  Bai et al. [1998]  and multiple changes  Bai [1999] .
+All of those results are obtained under various sets of general assumptions on the distributions of the covariates and the noise.
+The most general of those sets can be found in  Perron and Qu [2006] .
+Roughly, in addition to some technical assumptions, it imposes the processes  x x  and  z z  to be weakly stationary within each regime, and precludes the noise process to have a unit root. 
+ 
+ 
+ Related cost functions. 
+
+ 
+ In the rich literature related to piecewise linear models, the cost function  c linear c_{\mbox{linear}}  has been applied and extended in several different settings.
+Two related cost functions are listed below. 
+ 
+ •  
+ 
+ The first one is  c linear , L 1 c_{\mbox{linear},L_{1}} , which was introduced in order to accommodate certain noise distributions with heavy tails  Bai [1995] ,  Bai [1998]  and is defined as follows. 
+ 
+ 
+ Cost function 6  ( c linear , L 1 c_{\mbox{linear},L_{1}} ) 
+ 
+ For a signal  y y  (response variable) and covariates  x x  and  z z , the cost function  c linear , L 1 c_{\mbox{linear},L_{1}}  is defined by 
+ 
+
+ 
+ 
+ c linear , L 1 ​ ( y a . . b ) := min ⁡ ∑ t = a + 1 b u ∈ ℝ p , v ∈ ℝ q ⁡ | y t − x t ′ ​ u − z t ′ ​ v | . c_{\mbox{linear},L_{1}}(y_{a..b}):=\min_{u\in\mathbb{R}^{p},v\in\mathbb{R}^{q}}\ \sum_{t=a+1}^{b}|y_{t}-x_{t}^{\prime}u-z_{t}^{\prime}v|. 
+ 
+ (C6) 
+ 
+ 
+ 
+ 
+ The difference between  c linear , L 1 c_{\mbox{linear},L_{1}}  and  c linear c_{\mbox{linear}}  lies in the norm used to measure errors:  c linear , L 1 c_{\mbox{linear},L_{1}}  is based on a least absolute deviations criterion, while  c linear c_{\mbox{linear}}  is based on a least squares criterion.
+As a result,  c linear , L 1 c_{\mbox{linear},L_{1}}  is often applied on data with noise distributions with heavy tails  Maidstone [2013] ,  Jandhyala et al. [2013] .
+In practice, the cost function  c linear , L 1 c_{\mbox{linear},L_{1}}  is computationally less efficient than the cost function  c linear c_{\mbox{linear}} , because the associated minimization problem ( C6 ) has no analytical solution.
+Nevertheless, the cost function  c linear , L 1 c_{\mbox{linear},L_{1}}  is often applied on economic and financial data  Bai [1994] ,  Bai [1995] ,  Bai [1996] .
+For instance, changes in several economic parameters of the G-7 growth have been investigated using a piecewise linear model and  c linear , L 1 c_{\mbox{linear},L_{1}}   Doyle and Faust [2005] . 
+ 
+ •  
+ 
+ The second cost function related to  c linear c_{\mbox{linear}}  has been introduced to deal with piecewise autoregressive signals.
+The autoregressive model is a popular representation of random processes, where each variable depends linearly on the previous variables.
+The associated cost function, denoted  c A ​ R c_{AR} , is defined as follows. 
+ 
+ 
+ Cost function 7  ( c A ​ R c_{AR} ) 
+ 
+ For a signal  y y  and an order  p ≥ 1 p\geq 1 , the cost function  c A ​ R c_{AR}  is defined by 
+ 
+
+ 
+ 
+ c A ​ R ​ ( y a . . b ) := min ⁡ ∑ t = a + 1 b u ∈ ℝ p ⁡ ‖ y t − x t ′ ​ u ‖ 2 c_{AR}(y_{a..b}):=\min_{u\in\mathbb{R}^{p}}\ \sum_{t=a+1}^{b}\left\lVert y_{t}-x_{t}^{\prime}u\right\rVert^{2} 
+ 
+ (C7) 
+ 
+ where  x t := [ y t − 1 , y t − 2 , … , y t − p ] x_{t}:=[y_{t-1},y_{t-2},\dots,y_{t-p}]  is the vector of lagged samples. 
+ 
+ 
+ 
+ The piecewise autoregressive model is a special case of the generic piecewise linear model, where the term  z t ′ ​ v z_{t}^{\prime}v  is removed (yielding a pure structural change model) and the covariate signal  x x  is equal to the signal of lagged samples.
+The resulting cost function  c A ​ R c_{AR}  is able to detect shifts in the autoregressive coefficients of a non-stationary process  Bai [2000] ,  Chakar et al. [2017] .
+This model has been applied on EEG/ECG time series  Qu and Perron [2007] , functional magnetic resonance imaging (fMRI) time series  Nam et al. [2012]  and speech recognition tasks  Angelosante and Giannakis [2012] . 
+ 
+ 
+ 
+ 
+ 
+ 
+ 4.1.3  Mahalanobis-type metric 
+
+ 
+ The cost function  c L 2 c_{L_{2}}  ( C2 ), adapted for mean-shift detection, can be extended through the use of Mahalanobis-type pseudo-norm.
+Formally, for any symmetric positive semi-definite matrix  M ∈ ℝ d × d M\in\mathbb{R}^{d\times d} , the associated pseudo-norm  ‖ ⋅ ‖ M \left\lVert\cdot\right\rVert_{M}  is given by: 
+ 
+
+ 
+ 
+ ‖ y t ‖ M 2 := y t ′ ​ M ​ y t \left\lVert y_{t}\right\rVert^{2}_{M}:=y_{t}^{\prime}My_{t} 
+ 
+ (10) 
+ 
+ for any sample  y t y_{t} .
+The resulting cost function  c M c_{M}  is defined as follows. 
+ 
+ 
+ Cost function 8  ( c M c_{M} ) 
+ 
+ The cost function  c M c_{M} , parametrized by a symmetric positive semi-definite matrix  M ∈ ℝ d × d M\in\mathbb{R}^{d\times d} , is given by 
+ 
+
+ 
+ 
+ c M ​ ( y a . . b ) := ∑ t = a + 1 b ‖ y t − y ¯ a . . b ‖ M 2 c_{M}(y_{a..b}):=\sum_{t=a+1}^{b}\left\lVert y_{t}-\bar{y}_{a..b}\right\rVert^{2}_{M} 
+ 
+ (C8) 
+ 
+ where  y ¯ a . . b \bar{y}_{a..b}  is the empirical mean of the sub-signal  y a . . b y_{a..b} . 
+ 
+ 
+ 
+ Intuitively, measuring distances with the pseudo-norm  ‖ ⋅ ‖ M \left\lVert\cdot\right\rVert_{M}  is equivalent to applying a linear transformation on the data and using the regular (Euclidean) norm  ‖ ⋅ ‖ \left\lVert\cdot\right\rVert .
+Indeed, decomposing the matrix  M = U ′ ​ U M=U^{\prime}U  yields: 
+ 
+
+ 
+ 
+ ‖ y t − y s ‖ M 2 = ‖ U ​ y t − U ​ y s ‖ 2 . \left\lVert y_{t}-y_{s}\right\rVert^{2}_{M}=\left\lVert Uy_{t}-Uy_{s}\right\rVert^{2}. 
+ 
+ (11) 
+ 
+ Originally, the metric matrix  M M  was set equal to the inverse of the covariance matrix, yielding the Mahalanobis metric  Mahalanobis [1936] , ie 
+ 
+
+ 
+ 
+ M = Σ ^ − 1 M=\widehat{\Sigma}^{-1} 
+ 
+ (12) 
+ 
+ where  Σ ^ \widehat{\Sigma}  is the empirical covariance matrix of the signal  y y .
+By using  c M c_{M} , shifts in the mean of the transformed signal can be detected.
+In practice, the transformation  U U  (or equivalently, the matrix  M M ) is chosen to highlight relevant changes.
+This cost function generalizes all linear transformations of the data samples.
+In the context of change point detection, most of the transformations are unsupervised, for instance principal component analysis or linear discriminant analysis  Hastie et al. [2009] .
+Supervised strategies are more rarely found, even though there exist numerous methods to learn a task-specific matrix  M M  in the context of supervised classification  Hastie et al. [2009] ,  Xing et al. [2003] ,  Davis et al. [2007] .
+Those strategies fall under the umbrella of metric learning algorithms.
+In the change point detection literature, there is only one work that proposes a supervised procedure to calibrate a metric matrix  M M   Lajugie et al. [2014] .
+In this contribution, the authors use a training set of annotated signals (meaning that an expert has provided the change point locations) to learn  M M  iteratively.
+Roughly, at each step, a new matrix  M M  is generated in order to improve change point detection accuracy on the training signals.
+However, using the cost function  c M c_{M}  is not adapted to certain applications, where a linear treatment of the data is insufficient.
+In that situation, a well-chosen non-linear transformation of the data samples must be applied beforehand  Lajugie et al. [2014] . 
+ 
+ 
+ 
+ 
+ 4.2  Non-parametric models 
+
+ 
+ When the assumptions of parametric models are not adapted to the data at hand, non-parametric change point detection methods can be more robust.
+Three major approaches are presented here, each based on different non-parametric statistics, such as the empirical cumulative distribution function, rank statistics and kernel estimation. 
+ 
+ 
+ Signal model. 
+
+ 
+ Assume that the observed signal  y = { y 1 , … , y T } y=\{y_{1},\dots,y_{T}\}  is composed of independent random variables, such that 
+ 
+
+ 
+ 
+ y t ∼ ∑ k = 0 K ∗ F k ​  1 ​ ( t k ∗ < t ≤ t k + 1 ∗ ) y_{t}\sim\sum_{k=0}^{K^{*}}\ F_{k}\ \mathds{1}(t^{*}_{k}<t\leq t^{*}_{k+1}) 
+ 
+ (M3) 
+ 
+ where the  t k ∗ t^{*}_{k}  are change point indexes and the  F k F_{k}  are cumulative distribution functions (c.d.f.​), not necessarily parametric as in ( M1 ).
+Under this setting, the sub-signal  y t k ∗ . . t k + 1 ∗ y_{t^{*}_{k}..t^{*}_{k+1}} , bounded by two change points, is composed of iid variables with c.d.f.  F k F_{k} .
+When the  F k F_{k}  belong to a known parametric distribution family, change point detection is performed with the MLE approach described in Section  4.1.1 , which consists in applying the cost function  c i.i.d. c_{\mbox{i.i.d.}} .
+However, this approach is not possible when the distribution family is either non-parametric or not known beforehand. 
+ 
+ 
+ 
+ 4.2.1  Non-parametric maximum likelihood 
+
+ 
+ The first non-parametric cost function example, denoted  c F ^ c_{\widehat{F}} , has been introduced for the  single  change point detection problem in  Einmahl and McKeague [2003]  and extended for  multiple  change points in  Zou et al. [2014] .
+It relies on the empirical cumulative distribution function, estimated on sub-signals.
+Formally, the signal is assumed to be univariate (ie  d = 1 d=1 ) and the empirical cdf on the sub-signal  y a . . b y_{a..b}  is given by 
+ 
+
+ 
+ 
+ ∀ u ∈ ℝ , F ^ a . . b ​ ( u ) := 1 b − a ​ [ ∑ t = a + 1 b 𝟙 ​ ( y t < u ) + 0.5 × 𝟙 ​ ( y t = u ) ] . \forall u\in\mathbb{R},\hskip 10.00002pt\widehat{F}_{a..b}(u):=\frac{1}{b-a}\ \bigg[\sum_{t=a+1}^{b}\mathds{1}(y_{t}<u)+0.5\times\mathds{1}(y_{t}=u)\bigg]. 
+ 
+ (13) 
+ 
+ In order to derive a log-likelihood function that does not depend on the probability distribution of the data, ie the  f ( ⋅ | θ k ) f(\cdot|\theta_{k}) , the authors use the following fact: for a fixed  u ∈ ℝ u\in\mathbb{R} , the empirical cdf  F ^ \widehat{F}  of  n n  iid random variables, distributed from a certain cdf  F F  is such that  n ​ F ^ ​ ( u ) ∼ Binomial ​ ( n , F ⁡ ( u ) ) n\widehat{F}(u)\sim\mbox{Binomial}(n,F(u))   Zou et al. [2014] .
+This observation, combined with careful summation over  u u , allows a distribution-free maximum likelihood estimation.
+The resulting cost function  c F ^ c_{\widehat{F}}  is defined as follows.
+Interestingly, this strategy was first introduced to design non-parametric two-sample statistical tests, which were experimentally shown to be more powerful than classical tests such as Kolmogorov-Smirnov and Cramér-von Mises  Einmahl and McKeague [2003] ,  Zhang [2006] . 
+ 
+ 
+ Cost function 9  ( c F ^ c_{\widehat{F}} ) 
+ 
+ The cost function  c F ^ c_{\widehat{F}}  is given by 
+ 
+
+ 
+ 
+ c F ^ ( y a . . b ) := − ( b − a ) ∑ u = 1 T F ^ a . . b ​ ( u ) ​ log ⁡ F ^ a . . b ​ ( u ) + ( 1 − F ^ a . . b ​ ( u ) ) ​ log ⁡ ( 1 − F ^ a . . b ​ ( u ) ) ( u − 0.5 ) ​ ( T − u + 0.5 ) c_{\widehat{F}}(y_{a..b}):=-(b-a)\ \sum_{u=1}^{T}\frac{\widehat{F}_{a..b}(u)\log\widehat{F}_{a..b}(u)+(1-\widehat{F}_{a..b}(u))\log(1-\widehat{F}_{a..b}(u))}{(u-0.5)(T-u+0.5)} 
+ 
+ (C9) 
+ 
+ where the empirical cdf  F ^ a . . b \widehat{F}_{a..b}  is defined by ( 13 ). 
+ 
+ 
+ 
+ From a theoretical point of view, asymptotic consistency of change point estimates is verified, when the number of change points is either known or unknown  Zou et al. [2014] .
+However, solving either one of the detection problems can be computationally intensive, because calculating the value of the cost function  c F ^ c_{\widehat{F}}  on one sub-signal requires to sum  T T  terms, where  T T  is the signal length.
+As a result, the total complexity of change point detection is of the order of  𝒪 ⁡ ( T 3 ) \mathcal{O}(T^{3})   Zou et al. [2014] .
+To cope with this computational burden, several preliminary steps are proposed.
+For instance, irrelevant change point indexes can be removed before performing the detection, thanks to a screening step  Zou et al. [2014] .
+Also, the cost function  c F ^ c_{\widehat{F}}  can be approximated, by summing, in ( C9 ), over a few (carefully chosen) terms, instead of  T T  terms originally  Haynes et al. [2017b] .
+Thanks to those implementation techniques, the cost function  c F ^ c_{\widehat{F}}  has been applied on DNA sequences  Zou et al. [2014]  and heart-rate monitoring signals  Haynes et al. [2017b] . 
+ 
+ 
+ 
+ 4.2.2  Rank-based detection 
+
+ 
+ In statistical inference, a popular strategy to derive distribution-free statistics is to replaced the data samples by their ranks within the set of pooled observations  Lévy-Leduc and Roueff [2009] ,  Clemencon et al. [2009] ,  Friedman and Rafsky [1979] .
+In the context of change point detection, this strategy has first been applied to detect a  single  change point  Lévy-Leduc and Roueff [2009] ,  Lung-Yut-Fong et al. [2012] , and then has been extended by  Lung-Yut-Fong et al. [2015]  to find  multiple  change points.
+The associated cost function, denoted  c rank c_{\mbox{rank}} , is defined as follows.
+Formally, it relies on the centered  ℝ d \mathbb{R}^{d} -valued “rank signal”  r = { r t } t = 1 T r=\{r_{t}\}_{t=1}^{T} , given by 
+ 
+
+ 
+ 
+ r t , j := ∑ s = 1 T 𝟙 ​ ( y s , j ≤ y t , j ) − T + 1 2 , ∀ 1 ≤ t ≤ T , ∀ 1 ≤ j ≤ d . r_{t,j}:=\sum_{s=1}^{T}\mathds{1}(y_{s,j}\leq y_{t,j})\ -\ \frac{T+1}{2},\hskip 10.00002pt\forall 1\leq t\leq T,\ \forall 1\leq j\leq d. 
+ 
+ (14) 
+ 
+ In other words,  r t , j r_{t,j}  is the (centered) rank of the  j th j^{\mbox{th}}  coordinate of the  t th t^{\mbox{th}}  sample, ie  y t , j y_{t,j} , among the  { y 1 , j , y 2 , j , … , y T , j } \{y_{1,j},y_{2,j},\dots,y_{T,j}\} . 
+ 
+ 
+ Cost function 10  ( c rank c_{\mbox{rank}} ) 
+ 
+ The cost function  c rank c_{\mbox{rank}}  is given by 
+ 
+
+ 
+ 
+ c rank ​ ( y a . . b ) := − ( b − a ) ​ r ¯ a . . b ′ ​ Σ ^ r − 1 ​ r ¯ a . . b c_{\mbox{rank}}(y_{a..b}):=-(b-a)\ \bar{r}_{a..b}^{\prime}\ \widehat{\Sigma}_{r}^{-1}\ \bar{r}_{a..b} 
+ 
+ (C10) 
+ 
+ where the signal  r r  is defined in ( 14 ) and  Σ ^ r ∈ ℝ d × d \widehat{\Sigma}_{r}\in\mathbb{R}^{d\times d}  is the following matrix 
+ 
+
+ 
+ 
+ Σ ^ r := 1 T ​ ∑ t = 1 T ( r t + 1 / 2 ) ′ ​ ( r t + 1 / 2 ) . \widehat{\Sigma}_{r}:=\frac{1}{T}\sum_{t=1}^{T}(r_{t}+1/2)^{\prime}(r_{t}+1/2). 
+ 
+ (15) 
+ 
+ 
+ 
+ 
+ Intuitively,  c rank c_{\mbox{rank}}  measures changes in the joint behaviour of the marginal rank statistics of each coordinate, which are contained in  r r .
+One of the advantages of this cost function is that it is invariant under any monotonic transformation of the data.
+Several well-known statistical hypothesis testing procedures are based on this scheme, for instance the Wilcoxon-Mann-Whitney test  Wilcoxon [1945] , the Friedman test  Lehman and Romano [2006] , the Kruskal-Wallis test  Kendall [1970] , and several others  Clemencon et al. [2009] ,  Friedman and Rafsky [1979] .
+From a computational point of view, two steps must be performed before the change point detection: the calculation of the rank statistics, in  𝒪 ⁡ ( d ​ T ​ log ⁡ T ) \mathcal{O}(dT\log T)  operations, and the calculation of the matrix  Σ ^ r \widehat{\Sigma}_{r} , in  𝒪 ⁡ ( d 2 ​ T + d 3 ) \mathcal{O}(d^{2}T+d^{3})  operations.
+The resulting algorithm has been applied on DNA sequences  Lung-Yut-Fong et al. [2015]  and network traffic data  Lévy-Leduc and Roueff [2009] ,  Lung-Yut-Fong et al. [2012] . 
+ 
+ 
+ 
+ 4.2.3  Kernel-based detection 
+
+ 
+ A kernel-based method has been proposed by  Harchaoui and Cappé [2007]  to perform change point detection in a non-parametric setting.
+To that end, the original signal  y y  is mapped onto a reproducing Hilbert space (rkhs)  ℋ \mathcal{H}  associated with a user-defined kernel function  k ⁡ ( ⋅ , ⋅ ) : ℝ d × ℝ d → ℝ k(\cdot,\cdot):\mathbb{R}^{d}\times\mathbb{R}^{d}\to\mathbb{R} .
+The mapping function  ϕ : ℝ d → ℋ \phi:\mathbb{R}^{d}\to\mathcal{H}  onto this rkhs is implicitly defined by  ϕ ⁡ ( y t ) = k ⁡ ( y t , ⋅ ) ∈ ℋ \phi(y_{t})=k(y_{t},\cdot)\in\mathcal{H} , resulting in the following inner-product and norm: 
+ 
+
+ 
+ 
+ ⟨ ϕ ⁡ ( y s ) | ϕ ⁡ ( y t ) ⟩ ℋ = k ⁡ ( y s , y t ) and ‖ ϕ ⁡ ( y t ) ‖ ℋ 2 = k ⁡ ( y t , y t ) \left\langle\phi(y_{s})\middle|\phi(y_{t})\right\rangle_{\mathcal{H}}=k(y_{s},y_{t})\hskip 10.00002pt\mbox{and}\hskip 10.00002pt\left\lVert\phi(y_{t})\right\rVert_{\mathcal{H}}^{2}=k(y_{t},y_{t}) 
+ 
+ (16) 
+ 
+ for any samples  y s , y t ∈ ℝ d y_{s},y_{t}\in\mathbb{R}^{d} .
+The associated cost function, denoted  c kernel c_{\mbox{kernel}} , is defined as follows.
+This kernel-based mapping is central to many machine learning developments such as support vector machine or clustering  Schölkopf and Smola [2002] ,  Gretton et al. [2012] . 
+ 
+ 
+ Cost function 11  ( c kernel c_{\mbox{kernel}} ) 
+ 
+ For a given kernel function  k ⁡ ( ⋅ , ⋅ ) : ℝ d × ℝ d → ℝ k(\cdot,\cdot):\mathbb{R}^{d}\times\mathbb{R}^{d}\to\mathbb{R} , the cost function  c kernel c_{\mbox{kernel}}  is given by 
+ 
+
+ 
+ 
+ c kernel ​ ( y a . . b ) := ∑ t = a + 1 b ‖ ϕ ⁡ ( y t ) − μ ¯ a . . b ‖ ℋ 2 c_{\mbox{kernel}}(y_{a..b}):=\sum_{t=a+1}^{b}\left\lVert\phi(y_{t})-\bar{\mu}_{a..b}\right\rVert_{\mathcal{H}}^{2} 
+ 
+ (C11) 
+ 
+ where  μ ¯ a . . b ∈ ℋ \bar{\mu}_{a..b}\in\mathcal{H}  is the empirical mean of the embedded signal  { ϕ ⁡ ( y t ) } t = a + 1 b \{\phi(y_{t})\}_{t=a+1}^{b}  and  ‖ ⋅ ‖ ℋ \left\lVert\cdot\right\rVert_{\mathcal{H}}  is defined in ( 16 ). 
+ 
+ 
+ 
+ Remark 2  (Computing the cost function) 
+ 
+ Thanks to the well-known “kernel trick”, the explicit computation of the mapped data samples  ϕ ⁡ ( y t ) \phi(y_{t})  is not required to calculate the cost function value  Celisse et al. [2018] .
+Indeed, after simple algebraic manipulations,  c kernel ​ ( y a . . b ) c_{\mbox{kernel}}(y_{a..b})  can be rewritten as follows: 
+ 
+
+ 
+ 
+ c kernel ​ ( y a . . b ) = ∑ t = a + 1 b k ⁡ ( y t , y t ) − 1 b − a ​ ∑ s , t = a + 1 b k ⁡ ( y s , y t ) . c_{\mbox{kernel}}(y_{a..b})=\sum_{t=a+1}^{b}k(y_{t},y_{t})\ -\ \frac{1}{b-a}\sum_{s,t=a+1}^{b}k(y_{s},y_{t}). 
+ 
+ (17) 
+ 
+ 
+ 
+ 
+ Remark 3  (Intuition behind the cost function) 
+ 
+ Intuitively, the cost function  c kernel c_{\mbox{kernel}}  is able to detect mean-shifts in the transformed signal  { ϕ ⁡ ( y t ) } t \{\phi(y_{t})\}_{t} .
+Its use is motivated in the context of Model  M3  by the fact that, under certain conditions on the kernel function, changes in the probability distribution coincide with mean-shifts in the transformed signal.
+This connection has been investigated in several works on kernel methods  Sriperumbudur et al. [2008] ,  Schölkopf and Smola [2002] ,  Shawe-Taylor and Cristianini [2004] ,  Gretton et al. [2012] .
+Formally, let  ℙ \mathbb{P}  denote a probability distribution defined over  ℝ d \mathbb{R}^{d} .
+Then there exists a unique element  μ ℙ ∈ ℋ \mu_{\mathbb{P}}\in\mathcal{H}   Sriperumbudur et al. [2008] , called the mean embedding (of  ℙ \mathbb{P} ), such that 
+ 
+
+ 
+ 
+ μ ℙ = 𝔼 X ∼ ℙ ​ [ ϕ ⁡ ( X ) ] . \mu_{\mathbb{P}}=\mathbb{E}_{X\sim\mathbb{P}}\ [\phi(X)]. 
+ 
+ (18) 
+ 
+ In addition, the mapping  ℙ ↦ μ ℙ \mathbb{P}\mapsto\mu_{\mathbb{P}}  is injective (in which case the kernel is said to be  characteristic ), meaning that 
+ 
+
+ 
+ 
+ μ ℙ = μ ℚ ⟺ ℙ = ℚ , \mu_{\mathbb{P}}=\mu_{\mathbb{Q}}\Longleftrightarrow\mathbb{P}=\mathbb{Q}, 
+ 
+ (19) 
+ 
+ where  ℚ \mathbb{Q}  denotes a probability distribution defined over  ℝ d \mathbb{R}^{d} .
+In order to determine if a kernel is characteristic (and therefore, useful for change point detection), several conditions can be found in the literature  Sriperumbudur et al. [2008] ,  Schölkopf and Smola [2002] ,  Gretton et al. [2012] .
+For instance, if a kernel  k ⁡ ( ⋅ , ⋅ ) k(\cdot,\cdot)  is translation invariant, meaning that  k ⁡ ( y s , y t ) = ψ ⁡ ( y s − y t ) ​ ∀ s , t k(y_{s},y_{t})=\psi(y_{s}-y_{t})\ \forall s,t , where  ψ \psi  is a bounded continuous positive definite function on  ℝ d \mathbb{R}^{d} , then it is characteristic  Sriperumbudur et al. [2008] .
+This condition is verified by the commonly used Gaussian kernel.
+As a consequence, two transformed samples  ϕ ⁡ ( y s ) \phi(y_{s})  and  ϕ ⁡ ( y t ) \phi(y_{t})  are distributed around the  same  mean value if they belong to the same regime, and around  different  mean-values if they each belong to two consecutive regimes.
+To put it another way, a signal that follows ( M3 ) is mapped by  ϕ ⁡ ( ⋅ ) \phi(\cdot)  to a random signal with piecewise constant mean. 
+ 
+ 
+ 
+ From a theoretical point of view, asymptotic consistency of the change point estimates has been demonstrated for both a known and unknown number of change points in the recent work of  Garreau and Arlot [2017] .
+This result, as well as an important oracle inequality on the sum of cost  V ⁡ ( 𝒯 ) V(\mathcal{T})   Arlot et al. [2012] , also holds in a non-asymptotic setting.
+In addition, kernel change point detection was experimentally shown to be competitive in many different settings, in an unsupervised manner and with very few parameters to manually calibrate.
+For instance, the cost function  c kernel c_{\mbox{kernel}}  was applied on the Brain-Computer Interface (BCI) data set  Harchaoui and Cappé [2007] , on a video time series segmentation task  Arlot et al. [2012] , DNA sequences  Celisse et al. [2018]  and emotion recognition  Cabrieto et al. [2018] . 
+ 
+ 
+ Related cost functions. 
+
+ 
+ The cost function  c kernel c_{\mbox{kernel}}  can be combined with any kernel to accommodate various types of data (not just  ℝ d \mathbb{R}^{d} -valued signals).
+Notable examples of kernel functions include  Shawe-Taylor and Cristianini [2004] : 
+ 
+ •  
+ 
+ The linear kernel  k ⁡ ( x , y ) = ⟨ x | y ⟩ k(x,y)=\left\langle x\middle|y\right\rangle  with  x , y ∈ ℝ d x,y\in\mathbb{R}^{d} . 
+ 
+ •  
+ 
+ The polynomial kernel  k ⁡ ( x , y ) = ( ⟨ x | y ⟩ + C ) d ​ e ​ g k(x,y)=(\left\langle x\middle|y\right\rangle+C)^{deg}  with  x , y ∈ ℝ d x,y\in\mathbb{R}^{d} , and  C C  and  d ​ e ​ g deg  are parameters. 
+ 
+ •  
+ 
+ The Gaussian kernel  k ⁡ ( x , y ) = exp ⁡ ( − γ ​ ‖ x − y ‖ 2 ) k(x,y)=\exp(-\gamma\left\lVert x-y\right\rVert^{2})  with  x , y ∈ ℝ d x,y\in\mathbb{R}^{d}  and  γ > 0 \gamma>0  is the so-called bandwidth parameter. 
+ 
+ •  
+ 
+ The  χ 2 \chi^{2} -kernel  k ( x , y ) = exp ( − γ ∑ i [ ( x i − y i ) 2 / ( x i + y i ) ] ) k(x,y)=\exp(-\gamma\sum_{i}[(x_{i}-y_{i})^{2}/(x_{i}+y_{i})])  with  γ ∈ ℝ \gamma\in\mathbb{R}  a parameter.
+It is often used for histogram data. 
+ 
+ 
+ Arguably, the most commonly used kernels for numerical data are the linear kernel and the Gaussian kernel.
+When combined with the linear kernel, the cost function  c kernel c_{\mbox{kernel}}  is formally equivalent to  c L 2 c_{L_{2}} .
+As for the Gaussian kernel, the associated cost function, denoted  c rbf c_{\mbox{rbf}} , is defined as follows. 
+ 
+ 
+ Cost function 12  ( c rbf c_{\mbox{rbf}} ) 
+ 
+ The cost function  c rbf c_{\mbox{rbf}}  is given by 
+ 
+
+ 
+ 
+ c rbf ​ ( y a . . b ) := ( b − a ) − 1 b − a ​ ∑ s , t = a + 1 b exp ⁡ ( − γ ​ ‖ y s − y t ‖ 2 ) c_{\mbox{rbf}}(y_{a..b}):=(b-a)\ -\ \frac{1}{b-a}\sum_{s,t=a+1}^{b}\exp(-\gamma\left\lVert y_{s}-y_{t}\right\rVert^{2}) 
+ 
+ (C12) 
+ 
+ where  γ > 0 \gamma>0  is the so-called bandwidth parameter. 
+ 
+ 
+ 
+ The parametric cost function  c M c_{M}  (based on a Mahalanobis-type norm) can be extended to the non-parametric setting through the use of a kernel.
+Formally, the Mahalanobis-type norm  ‖ ⋅ ‖ ℋ , M \left\lVert\cdot\right\rVert_{\mathcal{H},M}  in the feature space  ℋ \mathcal{H}  is defined by 
+ 
+
+ 
+ 
+ ‖ ϕ ⁡ ( y s ) − ϕ ⁡ ( y t ) ‖ ℋ , M 2 = ( ϕ ⁡ ( y s ) − ϕ ⁡ ( y t ) ) ′ ​ M ​ ( ϕ ⁡ ( y s ) − ϕ ⁡ ( y t ) ) \left\lVert\phi(y_{s})-\phi(y_{t})\right\rVert^{2}_{\mathcal{H},M}=(\phi(y_{s})-\phi(y_{t}))^{\prime}\,M\,(\phi(y_{s})-\phi(y_{t})) 
+ 
+ (20) 
+ 
+ where  M M  is a (possibly infinite dimensional) symmetric positive semi-definite matrix defined on  ℋ \mathcal{H} .
+The associated cost function, denoted  c ℋ , M c_{\mathcal{H},M} , is defined below.
+Intuitively, using  c ℋ , M c_{\mathcal{H},M}  instead of  c M c_{M}  introduces a non-linear treatment of the data samples. 
+ 
+ 
+ Cost function 13  ( c ℋ , M c_{\mathcal{H},M} ) 
+ 
+ For a given kernel function  k ⁡ ( ⋅ , ⋅ ) : ℝ d × ℝ d → ℝ k(\cdot,\cdot):\mathbb{R}^{d}\times\mathbb{R}^{d}\to\mathbb{R}  and  M M  a symmetric positive semi-definite matrix defined on the associated rkhs  ℋ \mathcal{H} , the cost function  c ℋ , M c_{\mathcal{H},M}  is given by 
+ 
+
+ 
+ 
+ c ℋ , M ​ ( y a . . b ) := ∑ t = a + 1 b ‖ ϕ ⁡ ( y t ) − μ ¯ a . . b ‖ ℋ , M 2 c_{\mathcal{H},M}(y_{a..b}):=\sum_{t=a+1}^{b}\left\lVert\phi(y_{t})-\bar{\mu}_{a..b}\right\rVert^{2}_{\mathcal{H},M} 
+ 
+ (C13) 
+ 
+ where  μ a . . b \mu_{a..b}  is the empirical mean of the transformed sub-signal  { ϕ ⁡ ( y t ) } t = a + 1 b \{\phi(y_{t})\}_{t=a+1}^{b}  and  ‖ ⋅ ‖ ℋ , M \left\lVert\cdot\right\rVert_{\mathcal{H},M}  is defined in ( 20 ). 
+ 
+ 
+ 
+ 
+ 
+ 
+ 4.3  Summary table 
+
+ 
+ Reviewed cost functions (parametric and non-parametric) are summarized in Table  1 .
+For each cost, the name, expression and parameters of interest are given. 
+ 
+ 
+ 
+ 
+ 
+ Name 
+ c ⁡ ( y a . . b ) c(y_{a..b}) 
+ 
+ 
+ Parameters 
+ 
+ 
+ 
+ 
+ c i.i.d. c_{\mbox{i.i.d.}}  ( C1 ) 
+ − sup θ ∑ t = a + 1 b log f ( y t | θ ) -\sup_{\theta}\sum_{t=a+1}^{b}\log f(y_{t}|\theta) 
+ 
+ 
+ θ \theta : changing parameter; density function:  f ( ⋅ | θ ) f(\cdot|\theta) 
+ 
+ 
+ c L 2 c_{L_{2}}  ( C2 ) 
+ ∑ t = a + 1 b ‖ y t − y ¯ a . . b ‖ 2 2 \sum_{t=a+1}^{b}\left\lVert y_{t}-\bar{y}_{a..b}\right\rVert^{2}_{2} 
+ 
+ 
+ y ¯ a . . b \bar{y}_{a..b} : empirical mean of  y a . . b y_{a..b} 
+ 
+ 
+ c Σ c_{\Sigma}  ( C3 ) 
+ ( b − a ) ​ log ​ det Σ ^ a . . b + ∑ t = a + 1 b ( y t − y ¯ a . . b ) ′ ​ Σ ^ a . . b − 1 ​ ( y t − y ¯ a . . b ) (b-a)\log\det\widehat{\Sigma}_{a..b}+\sum_{t=a+1}^{b}(y_{t}-\bar{y}_{a..b})^{\prime}\widehat{\Sigma}_{a..b}^{-1}(y_{t}-\bar{y}_{a..b}) 
+ 
+ 
+ Σ ^ a . . b \widehat{\Sigma}_{a..b} : empirical covariance of  y a . . b y_{a..b} 
+ 
+ 
+ c Poisson c_{\mbox{Poisson}}  ( C4 ) 
+ − ( b − a ) ​ y ¯ a . . b ​ log ⁡ y ¯ a . . b -(b-a)\bar{y}_{a..b}\log\bar{y}_{a..b} 
+ 
+ 
+ y ¯ a . . b \bar{y}_{a..b} : empirical mean of  y a . . b y_{a..b} 
+ 
+ 
+ c linear c_{\mbox{linear}}  ( C5 ) 
+ min ⁡ ∑ t = a + 1 b u ∈ ℝ p , v ∈ ℝ q ⁡ ( y t − x t ′ ​ u − z t ′ ​ v ) 2 \min_{u\in\mathbb{R}^{p},v\in\mathbb{R}^{q}}\ \sum_{t=a+1}^{b}(y_{t}-x_{t}^{\prime}u-z_{t}^{\prime}v)^{2} 
+ 
+ 
+ x t ∈ ℝ p , z t ∈ ℝ q x_{t}\in\mathbb{R}^{p},z_{t}\in\mathbb{R}^{q} : covariates 
+ 
+ 
+ c linear , L 1 c_{\mbox{linear},L_{1}}  ( C6 ) 
+ min ⁡ ∑ t = a + 1 b u ∈ ℝ p , v ∈ ℝ q ⁡ | y t − x t ′ ​ u − z t ′ ​ v | \min_{u\in\mathbb{R}^{p},v\in\mathbb{R}^{q}}\ \sum_{t=a+1}^{b}|y_{t}-x_{t}^{\prime}u-z_{t}^{\prime}v| 
+ 
+ 
+ x t ∈ ℝ p , z t ∈ ℝ q x_{t}\in\mathbb{R}^{p},z_{t}\in\mathbb{R}^{q} : covariates 
+ 
+ 
+ c AR c_{\mbox{AR}}  ( C7 ) 
+ min ⁡ ∑ t = a + 1 b u ∈ ℝ p ⁡ ( y t − x t ′ ​ u ) 2 \min_{u\in\mathbb{R}^{p}}\ \sum_{t=a+1}^{b}(y_{t}-x_{t}^{\prime}u)^{2} 
+ 
+ 
+ x t = [ y t − 1 , y t − 2 , … , y t − p ] x_{t}=[y_{t-1},y_{t-2},\dots,y_{t-p}] : lagged samples 
+ 
+ 
+ c M c_{M}  ( C8 ) 
+ ∑ t = a + 1 b ‖ y t − y ¯ a . . b ‖ M 2 \sum_{t=a+1}^{b}\left\lVert y_{t}-\bar{y}_{a..b}\right\rVert^{2}_{M} 
+ 
+ 
+ M ∈ ℝ d × d M\in\mathbb{R}^{d\times d} : positive semi-definite matrix 
+ 
+ 
+ c F ^ c_{\widehat{F}}  ( C9 ) 
+ − ( b − a ) ∑ u = 1 T F ^ a . . b ​ ( u ) ​ log ⁡ F ^ a . . b ​ ( u ) + ( 1 − F ^ a . . b ​ ( u ) ) ​ log ⁡ ( 1 − F ^ a . . b ​ ( u ) ) ( u − 0.5 ) ​ ( T − u + 0.5 ) -(b-a)\ \sum_{u=1}^{T}\frac{\widehat{F}_{a..b}(u)\log\widehat{F}_{a..b}(u)+(1-\widehat{F}_{a..b}(u))\log(1-\widehat{F}_{a..b}(u))}{(u-0.5)(T-u+0.5)} 
+ 
+ 
+ F ^ \widehat{F} : empirical c.d.f. ( 13 ) 
+ 
+ 
+ c rank c_{\mbox{rank}}  ( C10 ) 
+ − ( b − a ) ​ r ¯ a . . b ′ ​ Σ ^ r − 1 ​ r ¯ a . . b -(b-a)\ \bar{r}_{a..b}^{\prime}\ \widehat{\Sigma}_{r}^{-1}\ \bar{r}_{a..b} 
+ 
+ 
+ r r : rank signal ( 14 );  Σ ^ r \widehat{\Sigma}_{r} : empirical covariance of  r r  ( 15 ) 
+ 
+ 
+ c kernel c_{\mbox{kernel}}  ( C11 ) 
+ ∑ t = a + 1 b k ⁡ ( y t , y t ) − 1 b − a ​ ∑ s , t = a + 1 b k ⁡ ( y s , y t ) \sum_{t=a+1}^{b}k(y_{t},y_{t})\ -\ \frac{1}{b-a}\sum_{s,t=a+1}^{b}k(y_{s},y_{t}) 
+ 
+ 
+ k ⁡ ( ⋅ , ⋅ ) : ℝ d × ℝ d ↦ ℝ k(\cdot,\cdot):\mathbb{R}^{d}\times\mathbb{R}^{d}\mapsto\mathbb{R} : kernel function 
+ 
+ 
+ c rbf c_{\mbox{rbf}}  ( C12 ) 
+ ( b − a ) − 1 b − a ​ ∑ s , t = a + 1 b exp ⁡ ( − γ ​ ‖ y s − y t ‖ 2 ) (b-a)\ -\ \frac{1}{b-a}\sum_{s,t=a+1}^{b}\exp(-\gamma\left\lVert y_{s}-y_{t}\right\rVert^{2}) 
+ 
+ 
+ γ > 0 \gamma>0 : bandwidth parameter 
+ 
+ 
+ c ℋ , M c_{\mathcal{H},M}  ( C13 ) 
+ ∑ t = a + 1 b ‖ y t − y ¯ a . . b ‖ ℋ , M 2 \sum_{t=a+1}^{b}\left\lVert y_{t}-\bar{y}_{a..b}\right\rVert^{2}_{\mathcal{H},M} 
+ 
+ 
+ M M : positive semi-definite matrix (in the feature space  ℋ \mathcal{H} ) 
+ 
+ 
+ 
+ Table 1:  Summary of cost reviewed functions 
+ 
+ 
+ 
+ 
+ 5  Search methods 
+
+ 
+ This section presents the second defining element of change detection methods, namely the search method.
+Reviewed search methods are organized in two general categories, as shown on Figure  7 : optimal methods, that yield the exact solution to the discrete optimization of ( P1 ) and ( P2 ), and the approximate methods, that yield an approximate solution.
+Described algorithms can be combined with cost functions from Section  4 .
+Note that, depending on the chosen cost function, the computational complexity of the complete algorithm changes.
+As a consequence, in the following, complexity analysis is done with the assumption that applying the cost function on a sub-signal requires  𝒪 ⁡ ( 1 ) \mathcal{O}(1)  operations.
+Also, the practical implementations of the most important algorithms are given in pseudo-code. 
+ 
+ 
+ Figure 7:  Typology of the search methods described in Section  5 . 
+ 
+ 
+ 5.1  Optimal detection 
+
+ 
+ Optimal detection methods find the exact solutions of Problem 1 ( P1 ) and Problem 2 ( P2 ).
+A naive approach consists in enumerating all possible segmentations of a signal, and returning the one that minimizes the objective function.
+However, for ( P1 ), minimization is carried out over the set  { 𝒯 s.t. | 𝒯 | = K } \{\mathcal{T}\ \mbox{s.t.}\ |\mathcal{T}|=K\}  (which contains  ( T − 1 K − 1 ) {\binom{T-1}{K-1}}  elements), and for ( P2 ), over the set  { 𝒯 s.t.  1 ≤ | 𝒯 | < T } \{\mathcal{T}\ \mbox{s.t.}\ 1\leq|\mathcal{T}|<T\}  (which contains  ∑ K = 1 T − 1 ( T − 1 K − 1 ) \sum_{K=1}^{T-1}{\binom{T-1}{K-1}}  elements).
+This makes exhaustive enumeration impractical, in both situations.
+We describe in this section two major approaches to efficiently find the exact solutions of ( P1 ) and ( P2 ). 
+ 
+ 
+ 5.1.1  Solution to Problem 1 ( P1 ):  Opt 
+
+ 
+ In ( P1 ), the number of change points to detect is fixed to a certain  K ≥ 1 K\geq 1 .
+The optimal solution to this problem can be computed efficiently, thanks to a method based on dynamic programming.
+The algorithm, denoted  Opt , relies on the additive nature of the objective function  V ⁡ ( ⋅ ) V(\cdot)  to recursively solve sub-problems.
+Precisely,  Opt  is based on the following observation: 
+ 
+
+ 
+ 
+ min | 𝒯 | = K ⁡ V ⁡ ( 𝒯 , y = y 0 . . T ) = min ⁡ ∑ k = 0 K 0 = t 0 < t 1 < ⋯ < t K < t K + 1 = T ⁡ c ⁡ ( y t k . . t k + 1 ) = min t ≤ T − K ⁡ [ c ⁡ ( y 0 . . t ) + min ⁡ ∑ k = 0 K − 1 t = t 0 < t 1 < ⋯ < t K − 1 < t K = T ⁡ c ⁡ ( y t k . . t k + 1 ) ] = min t ≤ T − K ⁡ [ c ⁡ ( y 0 . . t ) + min | 𝒯 | = K − 1 ⁡ V ⁡ ( 𝒯 , y t . . T ) ] \begin{split}\min_{|\mathcal{T}|=K}\ V(\mathcal{T},y=y_{0..T})&=\min_{0=t_{0}<t_{1}<\dots<t_{K}<t_{K+1}=T}\ \sum_{k=0}^{K}\ c(y_{t_{k}..t_{k+1}})\\
+&=\min_{t\leq T-K}\ \bigg[c(y_{0..t})\ +\ \min_{t=t_{0}<t_{1}<\dots<t_{K-1}<t_{K}=T}\sum_{k=0}^{K-1}\ c(y_{t_{k}..t_{k+1}})\bigg]\\
+&=\min_{t\leq T-K}\ \bigg[c(y_{0..t})\ +\ \min_{|\mathcal{T}|=K-1}V(\mathcal{T},y_{t..T})\bigg]\end{split} 
+ 
+ (21) 
+ 
+ Intuitively, Equation  21  means that the first change point of the optimal segmentation is easily computed if the optimal partitions with  K − 1 K-1  elements of all sub-signals  y t . . T y_{t..T}  are known.
+The complete segmentation is then computed by recursively applying this observation.
+This strategy, described in detail in Algorithm  1 , has a complexity of the order of  𝒪 ⁡ ( K ​ T 2 ) \mathcal{O}(KT^{2})   Kay and Oppenheim [1993] ,  Bai and Perron [2003c] .
+Historically,  Opt  was introduced for a non-related problem  Bellman [1955]  and later applied to change point detection, in many different contexts, such as EEG recordings  Lavielle [2005] ,  Lavielle [1998] , DNA sequences  Rigaill [2015] ,  Celisse et al. [2018] , tree growth monitoring  Guédon [2013] , financial time-series  Lavielle [1999] ,  Perron [2006] , radar waveforms  Hugueney et al. [2009] , etc. 
+ 
+ 
+ Algorithm 1    Algorithm  Opt 
+ 
+ 
+                
+                
+               Input:  signal  { y t } t = 1 T \{y_{t}\}_{t=1}^{T} , cost function  c ⁡ ( ⋅ ) c(\cdot) , number of regimes  K ≥ 2 K\geq 2 .
+
+ 
+ 
+                
+                
+               for all   ( u , v ) ,  1 ≤ u < v ≤ T (u,v),\ 1\leq u<v\leq T   do 
+
+ 
+ 
+                
+                
+                Initialize  C 1 ​ ( u , v ) ← c ⁡ ( { y t } t = u v ) . C_{1}(u,v)\leftarrow c(\{y_{t}\}_{t=u}^{v}). 
+
+ 
+ 
+                
+                
+               end   for 
+ 
+ 
+                
+                
+               for   k = 2 , … , K − 1 k=2,\dots,K-1   do 
+
+ 
+ 
+                
+                
+                 for all   u , v ∈ { 1 , … , T } , v − u ≥ k u,v\in\{1,\dots,T\},v-u\geq k   do 
+
+ 
+ 
+                
+                
+                  C k ​ ( u , v ) ← min u + k − 1 ≤ t < v ⁡ C k − 1 ​ ( u , t ) + C 1 ​ ( t + 1 , v ) C_{k}(u,v)\leftarrow\min\limits_{u+k-1\leq t<v}C_{k-1}(u,t)+C_{1}(t+1,v) 
+
+ 
+ 
+                
+                
+                 end   for 
+ 
+ 
+                
+                
+               end   for 
+ 
+ 
+                
+                
+              Initialize  L L , a list with  K K  elements.
+
+ 
+ 
+                
+                
+              Initialize the last element:  L ⁡ [ K ] ← T L[K]\leftarrow T .
+
+ 
+ 
+                
+                
+              Initialize  k ← K k\leftarrow K .
+
+ 
+ 
+                
+                
+               while   k > 1 k>1   do 
+
+ 
+ 
+                
+                
+                 s ← L ⁡ ( k ) s\leftarrow L(k) 
+
+ 
+ 
+                
+                
+                 t ∗ ← argmin k − 1 ≤ t < s ⁡ C k − 1 ​ ( 1 , t ) + C 1 ​ ( t + 1 , s ) t^{*}\leftarrow\operatorname{argmin}\limits_{k-1\leq t<s}C_{k-1}(1,t)+C_{1}(t+1,s) 
+
+ 
+ 
+                
+                
+                 L ⁡ ( k − 1 ) ← t ∗ L(k-1)\leftarrow t^{*} 
+
+ 
+ 
+                
+                
+                 k ← k − 1 k\leftarrow k-1 
+
+ 
+ 
+                
+                
+               end   while 
+ 
+ 
+                
+                
+              Remove  T T  from  L L 
+
+ 
+ 
+                
+                
+               Output:  set  L L  of estimated breakpoint indexes.
+
+ 
+ 
+ 
+ 
+ Related search methods. 
+
+ 
+ Several extensions of  Opt  have been proposed in the literature.
+The proposed methods still find the exact solution to ( P1 ). 
+ 
+ -  
+ 
+ The first extension is the “forward dynamic programming” algorithm  Guédon [2013] .
+Contrary to  Opt , which returns a single partition, the “forward dynamic programming” algorithm computes the top  L L  ( L ≥ 1 L\geq 1 ) most probable partitions (ie with lowest sum of costs).
+The resulting computational complexity is  𝒪 ⁡ ( L ​ K ​ T 2 ) \mathcal{O}(LKT^{2})  where  L L  is the number of computed partitions.
+This method is designed as a diagnostic tool: change points present in many of the top partitions are considered very likely, while change points present in only a few of the top partitions might not be as relevant.
+Thanks to “forward dynamic programming”, insignificant change points are trimmed and overestimation of the number of change point is corrected  Guédon [2013] , at the expense of a higher computational burden.
+It is applied on tree growth monitoring time series  Guédon [2013]  that are relatively short with around a hundred samples. 
+ 
+ -  
+ 
+ The “pruned optimal dynamic programming” procedure  Rigaill [2015]  is an extension of  Opt  that relies on a pruning rule to discard indexes that can never be change points.
+Thanks to this trick, the set of potential change point indexes is reduced.
+All described cost functions can be plugged into this method.
+As a result, longer signals can be handled, for instance long array-based DNA copy number data (up to  10 6 10^{6}  samples, with the quadratic error cost function)  Rigaill [2015] .
+However, worst case complexity remains of the order of  𝒪 ⁡ ( K ​ T 2 ) \mathcal{O}(KT^{2}) . 
+ 
+ 
+ 
+ 
+ 
+ 
+ 5.1.2  Solution to Problem 2 ( P2 ):  Pelt 
+
+ 
+ In ( P2 ), the number of changes point is unknown, and the objective function to minimize is the penalized sum of costs.
+A naive approach consists in applying  Opt  for  K = 1 , … , K max K=1,\dots,K_{\mbox{max}}  for a sufficiently large  K max K_{\mbox{max}} , then choosing among the computed segmentations the one that minimizes the penalized problem.
+This would prove computational cumbersome because of the quadratic complexity of the resolution method  Opt .
+Fortunately a faster method exists for a general class of penalty functions, namely linear penalties.
+Formally, linear penalties are linear functions of the number of change points, meaning that 
+ 
+
+ 
+ 
+ pen ​ ( 𝒯 ) = β ​ | 𝒯 | \mbox{pen}(\mathcal{T})=\beta|\mathcal{T}| 
+ 
+ (22) 
+ 
+ where  β > 0 \beta>0  is a smoothing parameter.
+(More details on such penalties can be found in Section  6.1 .)
+The algorithm  Pelt  (for “Pruned Exact Linear Time”)  Killick et al. [2012]  was introduced to find the exact solution of ( P2 ), when the penalty is linear ( 22 ).
+This approach considers each sample sequentially and, thanks to an explicit pruning rule, may or may not discard it from the set of potential change points.
+Precisely, for two indexes  t t  and  s s  ( t < s < T t<s<T ), the pruning rule is given by: 
+ 
+
+ 
+ 
+ if [ min 𝒯 ⁡ V ⁡ ( 𝒯 , y 0 . . t ) + β ​ | 𝒯 | ] + c ⁡ ( y t . . s ) ≥ [ min 𝒯 ⁡ V ⁡ ( 𝒯 , y 0 . . s ) + β ​ | 𝒯 | ] holds, then  ​ t ​  cannot be the last change point prior to  ​ T . \mbox{if}\quad\bigg[\min_{\mathcal{T}}V(\mathcal{T},y_{0..t})+\beta|\mathcal{T}|\bigg]+c(y_{t..s})\geq\bigg[\min_{\mathcal{T}}V(\mathcal{T},y_{0..s})+\beta|\mathcal{T}|\bigg]\quad\mbox{holds,}\\
+\mbox{then }t\mbox{ cannot be the last change point prior to }T. 
+ 
+ (23) 
+ 
+ This results in a considerable speed-up: under the assumption that regime lengths are randomly drawn from a uniform distribution, the complexity of  Pelt  is of the order  𝒪 ⁡ ( T ) \mathcal{O}(T) .
+The detailed algorithm can be found in Algorithm  2 .
+An extension of  Pelt  is described in  Haynes et al. [2017a]  to solve the linearly penalized change point detection for a range of smoothing parameter values  [ β min , β max ] [\beta_{\mbox{min}},\beta_{\mbox{max}}] .
+ Pelt  has been applied on DNA sequences  Hocking et al. [2013a] ,  Maidstone et al. [2017] , physiological signals  Haynes et al. [2017b] , and oceanographic data  Killick et al. [2012] . 
+ 
+ 
+ Algorithm 2    Algorithm  Pelt 
+ 
+ 
+                
+                
+               Input:  signal  { y t } t = 1 T \{y_{t}\}_{t=1}^{T} , cost function  c ⁡ ( ⋅ ) c(\cdot) , penalty value  β \beta .
+
+ 
+ 
+                
+                
+              Initialize  Z Z  a  ( T + 1 ) (T+1) -long array;  Z ⁡ [ 0 ] ← − β Z[0]\leftarrow-\beta .
+
+ 
+ 
+                
+                
+              Initialize  L ⁡ [ 0 ] ← ∅ L[0]\leftarrow\emptyset .
+
+ 
+ 
+                
+                
+              Initialize  χ ← { 0 } \chi\leftarrow\{0\} .  ⊳ \triangleright  Admissible indexes.
+ 
+ 
+ 
+                
+                
+               for   t = 1 , … , T t=1,\dots,T   do 
+
+ 
+ 
+                
+                
+                 t ^ ← argmin s ∈ χ ⁡ [ Z ⁡ [ s ] + c ⁡ ( y s . . t ) + β ] \hat{t}\leftarrow\operatorname{argmin}_{s\in\chi}\big[Z[s]+c(y_{s..t})+\beta\big] .
+
+ 
+ 
+                
+                
+                 Z ⁡ [ t ] ← [ Z ⁡ [ t ^ ] + c ⁡ ( y t ^ . . t ) + β ] Z[t]\leftarrow\big[Z[\hat{t}]+c(y_{\hat{t}..t})+\beta\big] 
+
+ 
+ 
+                
+                
+                 L ⁡ [ t ] ← L ⁡ [ t ^ ] ∪ { t ^ } L[t]\leftarrow L[\hat{t}]\cup\{\hat{t}\} .
+
+ 
+ 
+                
+                
+                 χ ← { s ∈ χ : Z ⁡ [ s ] + c ⁡ ( y s . . t ) ≤ Z ⁡ [ t ] } ∪ { t } \chi\leftarrow\{s\in\chi\;:\;Z[s]+c(y_{s..t})\leq Z[t]\}\cup\{t\} 
+
+ 
+ 
+                
+                
+               end   for 
+ 
+ 
+                
+                
+               Output:  set  L ⁡ [ T ] L[T]  of estimated breakpoint indexes.
+
+ 
+ 
+ 
+ 
+ 
+ 
+ 5.2  Approximate detection 
+
+ 
+ When the computational complexity of optimal methods is too great for the application at hand, one can resort to approximate methods.
+In this section, we describe three major types of approximate segmentation algorithms, namely window-based methods, binary segmentation and bottom-up segmentation.
+All described procedures fall into the category of sequential detection approaches, meaning that they return a single change point estimate  t ^ ( k ) \hat{t}^{(k)}  ( 1 ≤ t ^ ( k ) < T 1\leq\hat{t}^{(k)}<T ) at the  k k -th iteration.
+(In the following, the subscript  ⋅ ( k ) \cdot^{(k)}  refers to the  k k -th iteration of a sequential algorithm.)
+Such methods can be used to solve (approximately) either ( P1 ) or ( P2 ).
+Indeed, if the number  K ∗ K^{*}  of changes is known,  K ∗ K^{*}  iterations of a sequential algorithm are enough to retrieve a segmentation with the correct number of changes.
+If  K ∗ K^{*}  is unknown, the sequential algorithm is run until an appropriate stopping criterion is met. 
+ 
+ 
+ 5.2.1  Window sliding 
+
+ 
+ The window-sliding algorithm, denoted  Win , is a fast approximate alternative to optimal methods.
+It consists in computing the discrepancy between two adjacent windows that slide along the signal  y y .
+For a given cost function  c ⁡ ( ⋅ ) c(\cdot) , this discrepancy between two sub-signals is given by 
+ 
+
+ 
+ 
+ d ⁡ ( y a . . t , y t . . b ) = c ⁡ ( y a . . b ) − c ⁡ ( y a . . t ) − c ⁡ ( y t . . b ) ( 1 ≤ a < t < b ≤ T ) . d(y_{a..t},y_{t..b})=c(y_{a..b})-c(y_{a..t})-c(y_{t..b})\hskip 10.00002pt(1\leq a<t<b\leq T). 
+ 
+ (24) 
+ 
+ When the two windows cover dissimilar segments, the discrepancy reaches large values, resulting in a peak.
+In other other words, for each index  t t ,  Win  measures the discrepancy between the immediate past (“left window”) and the immediate future (“right window”).
+Once the complete discrepancy curve has been computed, a peak search procedure is performed to find change point indexes.
+The complete  Win  algorithm is given in Algorithm  3  and a schematic view is displayed on Figure  8 .
+The main benefits of  Win  are its low complexity (linear in the number of samples) and ease of implementation. 
+ 
+ 
+ Figure 8:  Schematic view of  Win 
+ 
+ 
+ Algorithm 3    Algorithm  Win 
+ 
+ 
+                
+                
+               Input:  signal  { y t } t = 1 T \{y_{t}\}_{t=1}^{T} , cost function  c ⁡ ( ⋅ ) c(\cdot) , half-window width  w w , peak search procedure  PKSearch .
+
+ 
+ 
+                
+                
+              Initialize  Z ← [ 0 , 0 , … ] Z\leftarrow[0,0,\dots]  a  T T -long array filled with  0 0 .  ⊳ \triangleright  Score list.
+ 
+ 
+ 
+                
+                
+               for   t = w , … , T − w t=w,\dots,T-w   do 
+
+ 
+ 
+                
+                
+                 p ← ( t − w ) . . t p\leftarrow(t-w)..t .
+
+ 
+ 
+                
+                
+                 q ← t . . ( t + w ) q\leftarrow t..(t+w) .
+
+ 
+ 
+                
+                
+                 r ← ( t − w ) . . ( t + w ) r\leftarrow(t-w)..(t+w) .
+
+ 
+ 
+                
+                
+                 Z ⁡ [ t ] ← c ⁡ ( y r ) − [ c ⁡ ( y p ) + c ⁡ ( y q ) ] Z[t]\leftarrow c(y_{r})-[c(y_{p})+c(y_{q})] .
+
+ 
+ 
+                
+                
+               end   for 
+ 
+ 
+                
+                
+               L ← PKSearch ​ ( Z ) L\leftarrow\mbox{\tt PKSearch}(Z)   ⊳ \triangleright  Peak search procedure.
+ 
+ 
+ 
+                
+                
+               Output:  set  L L  of estimated breakpoint indexes.
+
+ 
+ 
+ 
+ 
+ In the literature, the discrepancy measure  d ⁡ ( ⋅ , ⋅ ) d(\cdot,\cdot)  is often derived from a two-sample statistical test (see Remark  4 ), and not from a cost function, as in ( 24 ).
+However, the two standpoints are generally equivalent: for instance, using  c L 2 c_{L_{2}} ,  c i.i.d. c_{\mbox{i.i.d.}}  or  c kernel c_{\mbox{kernel}}  is respectively equivalent to applying a Student t-test  Basseville and Nikiforov [1993] , a generalized likelihood ratio (GLR)  Chen and Gupta [2011c]  test and a kernel Maximum Mean Discrepancy (MMD) test  Gretton et al. [2012] .
+As a consequence, practitioners can capitalize on the vast body of work in the field of statistical tests to obtain asymptotic distributions for the discrepancy measure  Gretton et al. [2012] ,  Chen and Gupta [1997] ,  Lung-Yut-Fong et al. [2012] ,  Lévy-Leduc and Roueff [2009] , and sensible calibration strategies for important parameters of  Win  (such as the window size or the peak search procedure).
+ Win  has been applied in numerous contexts: for instance, on biological signals  Vullings et al. [1997] ,  Brodsky et al. [1999] ,  Harchaoui et al. [2009] ,  Esteller et al. [2001] ,  Karagiannaki et al. [2017] , on network data  Lévy-Leduc and Roueff [2009] ,  Lung-Yut-Fong et al. [2012] , on speech time series  Adak [1998] ,  Desobry et al. [2005] ,  Harchaoui et al. [2009]  and on financial time series  Chen and Gopalakrishnan [1998] ,  Basseville and Nikiforov [1993] ,  Keogh et al. [2004] .
+It should be noted that certain window-based detection methods in the literature rely on a discrepancy measure which is not related to a cost function, as in ( 24 )  Harchaoui et al. [2009] ,  Harchaoui et al. [2008] ,  Liu et al. [2013] ,  Kifer et al. [2004] .
+As a result, those methods, initially introduced in the online detection setting, cannot be extended to work with optimal algorithms ( Opt ,  Pelt ). 
+ 
+ 
+ Remark 4  (Two-sample test) 
+ 
+ A two-sample test (or homogeneity test) is a statistical hypothesis testing procedure designed to assess whether two populations of samples are identical in distribution.
+Formally, consider two sets of iid  ℝ d \mathbb{R}^{d} -valued random samples  { x t } t \{x_{t}\}_{t}  and  { z t } t \{z_{t}\}_{t} .
+Denote by  ℙ x \mathbb{P}_{x}  the distribution function of the  x t x_{t}  and by  ℙ z \mathbb{P}_{z} , the distribution function of the  z t z_{t} .
+A two-sample test procedure compares the two following hypotheses: 
+ 
+
+ 
+ 
+ H 0 : ℙ x = ℙ z H 1 : ℙ x ≠ ℙ z . \begin{split}H_{0}&:\quad\mathbb{P}_{x}=\mathbb{P}_{z}\\
+H_{1}&:\quad\mathbb{P}_{x}\neq\mathbb{P}_{z}.\end{split} 
+ 
+ (25) 
+ 
+ A general approach is to consider a probability (pseudo)-metric  d ⁡ ( ⋅ , ⋅ ) d(\cdot,\cdot)  on the space of probability distributions on  ℝ d \mathbb{R}^{d} .
+Well-known examples of such a metric include the Kullback-Leibler divergence, the Kolmogorov-Smirnov distance, the Maximum Mean Discrepancy (MMD), etc.
+Observe that, under the null hypothesis,  d ⁡ ( ℙ x , ℙ z ) = 0 d(\mathbb{P}_{x},\mathbb{P}_{z})=0 .
+The testing procedure consists in computing the empirical estimates  ℙ ^ x \widehat{\mathbb{P}}_{x}  and  ℙ ^ z \widehat{\mathbb{P}}_{z}  and rejecting  H 0 H_{0}  for “large” values of the statistics  d ⁡ ( ℙ ^ x , ℙ ^ z ) d(\widehat{\mathbb{P}}_{x},\widehat{\mathbb{P}}_{z}) .
+This general formulation relies on a consistent estimation of arbitrary distributions from a finite number of samples.
+In the parametric setting, additional assumptions are made on the distribution functions: for instance, Gaussian assumption  Basseville and Nikiforov [1993] ,  Chen and Gupta [2011b] ,  Chen and Gupta [1997] , exponential family assumption  Frick et al. [2014] ,  Prescott Adams and MacKay [2007] , etc.
+In the non-parametric setting, the distributions are only assumed to be continuous.
+They are not directly estimated; instead, the statistics  d ⁡ ( ℙ ^ x , ℙ ^ z ) d(\widehat{\mathbb{P}}_{x},\widehat{\mathbb{P}}_{z})  are computed  Liu et al. [2013] ,  Clemencon et al. [2009] ,  Gretton et al. [2012] ,  Harchaoui et al. [2009] .
+ In the context of  single  change point detection, the two-sample test setting is adapted to assess whether a distribution change has occurred at some instant in the input signal.
+Practically, for a given index  t t , the homogeneity test is performed on the two populations  { y s } s ≤ t \{y_{s}\}_{s\leq t}  and  { y s } s > t \{y_{s}\}_{s>t} .
+The estimated change point location is given by 
+ 
+
+ 
+ 
+ t ^ = argmax t ⁡ d ⁡ ( ℙ ^ ∙ ≤ t , ℙ ^ ∙ > t ) \hat{t}=\operatorname{argmax}_{t}\ d(\widehat{\mathbb{P}}_{\bullet\leq t},\widehat{\mathbb{P}}_{\bullet>t}) 
+ 
+ (26) 
+ 
+ where  ℙ ^ ∙ ≤ t \widehat{\mathbb{P}}_{\bullet\leq t}  and  ℙ ^ ∙ > t \widehat{\mathbb{P}}_{\bullet>t}  are the empirical distributions of respectively  { y s } s ≤ t \{y_{s}\}_{s\leq t}  and  { y s } s > t \{y_{s}\}_{s>t} . 
+ 
+ 
+ 
+ 
+ 5.2.2  Binary segmentation 
+
+ 
+ Binary segmentation, denoted  BinSeg , is a well-known alternative to optimal methods  Sen and Srivastava [1975] , because it is conceptually simple and easy to implement  Olshen et al. [2004] ,  Chen and Gupta [2011b] ,  Killick et al. [2012] .
+ BinSeg  is a greedy sequential algorithm, outlined as follows.
+The first change point estimate  t ^ ( 1 ) \hat{t}^{(1)}  is given by 
+ 
+
+ 
+ 
+ t ^ ( 1 ) := argmin 1 ≤ t < T − 1 ⁡ c ⁡ ( y 0 . . t ) + c ⁡ ( y t . . T ) ⏟ V ⁡ ( 𝒯 = { t } ) . \hat{t}^{(1)}:=\operatorname{argmin}_{1\leq t<T-1}\ \underbrace{c(y_{0..t})+c(y_{t..T})}_{V(\mathcal{T}=\{t\})}. 
+ 
+ (27) 
+ 
+ This operation is “greedy”, in the sense that it searches the change point that lowers the most the sum of costs.
+The signal is then split in two at the position of  t ^ ( 1 ) \hat{t}^{(1)} ; the same operation is repeated on the resulting sub-signals until a stopping criterion is met.
+A schematic view of the algorithm is displayed on Figure  9  and an implementation is given in Algorithm  4 .
+The complexity of  BinSeg  is of the order of  𝒪 ⁡ ( T ​ log ⁡ T ) \mathcal{O}(T\log T) .
+This low complexity comes at the expense of optimality: in general,  BinSeg ’s output is only an approximation of the optimal solution.
+As argued in  Bai [1997b] ,  Killick et al. [2012] , the issue is that the estimated change points  t ^ ( k ) \hat{t}^{(k)}  are not estimated from homogeneous segments and each estimate depends on the previous ones.
+Change points that are close are imprecisely detected especially  Jandhyala et al. [2013] .
+Applications of  BinSeg  range from financial time series  Chen and Gupta [1997] ,  Chen and Gupta [2011b] ,  Bai [1997b] ,  Lavielle and Teyssière [2007] ,  Fryzlewicz [2014]  to context recognition for mobile devices  Himberg et al. [2001]  and array-based DNA copy number data  Picard et al. [2005] ,  Olshen et al. [2004] ,  Niu and Zhang [2012] . 
+ 
+ 
+ Figure 9:  Schematic example of  BinSeg 
+ 
+ 
+ Algorithm 4    Algorithm  BinSeg 
+ 
+ 
+                
+                
+               Input:  signal  { y t } t = 1 T \{y_{t}\}_{t=1}^{T} , cost function  c ⁡ ( ⋅ ) c(\cdot) , stopping criterion.
+
+ 
+ 
+                
+                
+              Initialize  L ← { } L\leftarrow\{\;\} .  ⊳ \triangleright  Estimated breakpoints.
+ 
+ 
+ 
+                
+                
+               repeat 
+ 
+ 
+                
+                
+                 k ← | L | k\leftarrow|L| .  ⊳ \triangleright  Number of breakpoints
+ 
+ 
+ 
+                
+                
+                 t 0 ← 0 t_{0}\leftarrow 0  and  t k + 1 ← T t_{k+1}\leftarrow T   ⊳ \triangleright  Dummy variables.
+ 
+ 
+ 
+                
+                
+                 if   k > 0 k>0   then 
+
+ 
+ 
+                
+                
+                 Denote by  t i t_{i}  ( i = 1 , … , k i=1,\dots,k ) the elements (in ascending order) of  L L , ie  L = { t 1 , … , t k } L=\{t_{1},\dots,t_{k}\} .
+
+ 
+ 
+                
+                
+                 end   if 
+ 
+ 
+                
+                
+                Initialize  G G  a  ( k + 1 ) (k+1) -long array.  ⊳ \triangleright  list of gains
+ 
+ 
+ 
+                
+                
+                 for   i = 0 , … , k i=0,\dots,\,k   do 
+
+ 
+ 
+                
+                
+                  G ⁡ [ i ] ← c ⁡ ( y t i . . t i + 1 ) − min t i < t < t i + 1 ⁡ [ c ⁡ ( y t i . . t ) + c ⁡ ( y t . . t i + 1 ) ] G[i]\leftarrow c(y_{t_{i}..t_{i+1}})-\min\limits_{t_{i}<t<t_{i+1}}[c(y_{t_{i}..t})+c(y_{t..t_{i+1}})]  .
+
+ 
+ 
+                
+                
+                 end   for 
+ 
+ 
+                
+                
+                 i ^ ← argmax i ⁡ G ⁡ [ i ] \widehat{i}\leftarrow\operatorname{argmax}_{i}G[i] 
+
+ 
+ 
+                
+                
+                 t ^ ← argmin t i ^ < t < t i ^ + 1 ⁡ [ c ⁡ ( y t i ^ . . t ) + c ⁡ ( y t . . t i ^ + 1 ) ] \hat{t}\leftarrow\operatorname{argmin}\limits_{t_{\widehat{i}}<t<t_{\widehat{i}+1}}\ [c(y_{t_{\widehat{i}}..t})+c(y_{t..t_{\widehat{i}+1}})] .
+
+ 
+ 
+                
+                
+                 L ← L ∪ { t ^ } L\leftarrow L\cup\{\hat{t}\} 
+
+ 
+ 
+                
+                
+               until  stopping criterion is met.
+
+ 
+ 
+                
+                
+               Output:  set  L L  of estimated breakpoint indexes.
+
+ 
+ 
+ 
+ 
+ Related search methods. 
+
+ 
+ Several extensions of  BinSeg  have been proposed to improve detection accuracy. 
+ 
+ -  
+ 
+ Circular binary segmentation  Olshen et al. [2004]  is a well-known extension of  BinSeg .
+This method is also a sequential detection algorithm that splits the original at each step.
+Instead of searching for a single change point in each sub-signal, circular binary segmentation searches two change points.
+Within each treated sub-segment, it assumes a so-called “epidemic change model”: the parameter of interest shifts from one value to another at the first change point and returns to the original value at the second change point.
+The algorithm is dubbed “circular” because, under this model, the sub-segment has its two ends (figuratively) joining to form a circle.
+Practically, this method has been combined with  c L 2 c_{L_{2}}   C2 , to detect changes in the mean of array-based DNA copy number data  Olshen et al. [2004] ,  Lai et al. [2005] ,  Willenbrock and Fridlyand [2005] .
+A faster version of the original algorithm is described in  Venkatraman and Olshen [2007] . 
+ 
+ -  
+ 
+ Another extension of  BinSeg  is the wild binary segmentation algorithm  Fryzlewicz [2014] .
+In a nutshell, a single point detection is performed on multiple intervals with start and end points that are drawn uniformly.
+Small segments are likely to contain at most one change but have lower statistical power, while the opposite is true for long segments.
+After a proper weighting of the change score to account for the differences on sub-signals’ length, the algorithm returns the most “pronounced” ones, ie those that lower the most the sum of costs.
+An important parameter of this method is the number of random sub-segments to draw.
+Wild binary search is combined with  c L 2 c_{L_{2}}   C2  to detect mean-shifts of univariate piecewise constant signals (up to 2000 samples)  Fryzlewicz [2014] . 
+ 
+ 
+ 
+ 
+ 
+ 
+ 5.2.3  Bottom-up segmentation 
+
+ 
+ Bottom-up segmentation, denoted  BotUp , is the natural counterpart of  BinSeg .
+Contrary to  BinSeg ,  BotUp  starts by splitting the original signal in many small sub-signals and sequentially merges them until there remain only  K K  change points.
+At every step, all potential change points (indexes separating adjacent sub-segments) are ranked by the discrepancy measure  d ⁡ ( ⋅ , ⋅ ) d(\cdot,\cdot) , defined in  24 , between the segments they separate.
+Change points with the lowest discrepancy are then deleted, meaning that the segments they separate are merged.
+ BotUp  is often dubbed a “generous” method, by opposition to  BinSeg , which is “greedy”  Keogh et al. [2001] .
+A schematic view of the algorithm is displayed on Figure  10  and an implementation is provided in Algorithm  5 .
+Its benefits are its linear computational complexity and conceptual simplicity.
+However, if a true change point does not belong to the original set of indexes,  BotUp  never considers it.
+Moreover, in the first iterations, the merging procedure can be unstable because it is performed on small segments, for which statistical significance is smaller.
+In the literature,  BotUp  is somewhat less studied than its counterpart,  BinSeg : no theoretical convergence study is available.
+It has been applied on speech time series to detect mean and scale shifts  Chen and Gopalakrishnan [1998] .
+Besides, the authors of  Keogh et al. [2001]  have found that  BotUp  outperforms  BinSeg  on ten different data sets such as physiological signals (ECG), financial time-series (exchange rate), industrial monitoring (water levels), etc. 
+ 
+ 
+ Figure 10:  Schematic view of  BotUp 
+ 
+ 
+ Algorithm 5    Algorithm  BotUp 
+ 
+ 
+                
+                
+               Input:  signal  { y t } t = 1 T \{y_{t}\}_{t=1}^{T} , cost function  c ⁡ ( ⋅ ) c(\cdot) , stopping criterion, grid size  δ > 2 \delta>2 .
+
+ 
+ 
+                
+                
+              Initialize  L ← { δ , 2 ​ δ , … , ( ⌊ T / δ ⌋ − 1 ) ​ δ } L\leftarrow\{\delta,2\delta,\dots,(\lfloor T/\delta\rfloor-1)\,\delta\} .  ⊳ \triangleright  Estimated breakpoints.
+ 
+ 
+ 
+                
+                
+               repeat 
+ 
+ 
+                
+                
+                 k ← | L | k\leftarrow|L| .  ⊳ \triangleright  Number of breakpoints
+ 
+ 
+ 
+                
+                
+                 t 0 ← 0 t_{0}\leftarrow 0  and  t k + 1 ← T t_{k+1}\leftarrow T   ⊳ \triangleright  Dummy variables.
+ 
+ 
+ 
+                
+                
+                Denote by  t i t_{i}  ( i = 1 , … , k i=1,\dots,k ) the elements (in ascending order) of  L L , ie  L = { t 1 , … , t k } L=\{t_{1},\dots,t_{k}\} .
+
+ 
+ 
+                
+                
+                Initialize  G G  a  ( k − 1 ) (k-1) -long array.  ⊳ \triangleright  list of gains
+ 
+ 
+ 
+                
+                
+                 for   i = 1 , … , k − 1 i=1,\dots,\,k-1   do 
+
+ 
+ 
+                
+                
+                  G ⁡ [ i − 1 ] ← c ⁡ ( y t i − 1 . . t i + 1 ) − [ c ⁡ ( y t i − 1 . . t i ) + c ⁡ ( y t i . . t i + 1 ) ] G[i-1]\leftarrow c(y_{t_{i-1}..t_{i+1}})-[c(y_{t_{i-1}..t_{i}})+c(y_{t_{i}..t_{i+1}})]  .
+
+ 
+ 
+                
+                
+                 end   for 
+ 
+ 
+                
+                
+                 i ^ ← argmin i ⁡ G ⁡ [ i ] \widehat{i}\leftarrow\operatorname{argmin}_{i}G[i] 
+
+ 
+ 
+                
+                
+                Remove  t i ^ + 1 t_{\widehat{i}+1}  from  L L .
+
+ 
+ 
+                
+                
+               until  stopping criterion is met.
+
+ 
+ 
+                
+                
+               Output:  set  L L  of estimated breakpoint indexes.
+
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 6  Estimating the number of changes 
+
+ 
+ This section presents the third defining element of change detection methods, namely the constraint on the number of change points.
+Here, the number of change points is assumed to be unknown ( P2 ).
+Existing procedures are organized by the penalty function that they are based on.
+Common heuristics are also described.
+The organization of this section is schematically shown in Figure  11 . 
+ 
+ 
+ Figure 11:  Typology of the constraints (on the number of change points) described in Section  6 . 
+ 
+ 
+ 6.1  Linear penalty 
+
+ 
+ Arguably the most popular choice of penalty  Killick et al. [2012] , the linear penalty (also known as  l 0 l_{0}  penalty) generalizes several well-known criteria from the literature such as the Bayesian Information Criterion (BIC) and the Akaike Information Criterion (AIC)  Yao [1988] ,  Yao and Au [1989] .
+The linear penalty, denoted  pen l 0 \mbox{pen}_{l_{0}} , is formally defined as follows. 
+ 
+ 
+ Penalty 1  ( pen l 0 \mbox{pen}_{l_{0}} ) 
+ 
+ The penalty function  pen l 0 \mbox{pen}_{l_{0}}  is given by 
+ 
+
+ 
+ 
+ pen l 0 ​ ( 𝒯 ) := β ​ | 𝒯 | \mbox{pen}_{l_{0}}(\mathcal{T}):=\beta|\mathcal{T}| 
+ 
+ (28) 
+ 
+ where  β > 0 \beta>0  is the smoothing parameter. 
+ 
+ 
+ 
+ Intuitively, the smoothing parameter controls the trade-off between complexity and goodness-of-fit (measured by the sum of costs): low values of  β \beta  favour segmentations with many regimes and high values of  β \beta  discard most change points. 
+ 
+ 
+ Calibration. 
+
+ 
+ From a practical standpoint, once the cost function has been chosen, the only parameter to calibrate is the smoothing parameter.
+Several approaches, based on model selection, can be found in the literature: they assume a model on the data, for instance ( M1 ), ( M2 ), ( M3 ), and choose a value of  β \beta  that optimizes a certain statistical criterion.
+The best-known example of such an approach is BIC, which aims at maximizing the constrained log-likelihood of the model.
+The exact formulas of several linear penalties, derived from model selection procedures, are given the following paragraph.
+Conversely, when no model is assumed, different heuristics are applied to tune the smoothing parameter.
+For instance, one can use a procedure based on cross-validation  Arlot and Celisse [2010]  or the slope heuristics  Birgé and Massart [2007] .
+In  Hocking et al. [2013b] ,  Truong et al. [2017] , supervised algorithms are proposed: the chosen  β \beta  is the one that minimizes an approximation of the segmentation error on an annotated set of signals. 
+ 
+ 
+ 
+ Related penalties. 
+
+ 
+ A number of model selection criteria are special cases of the linear penalty  pen l 0 \mbox{pen}_{l_{0}} .
+For instance, under Model ( M1 ) (iid with piecewise constant distribution), the constrained likelihood that is derived from the BIC and the penalized sum of costs are formally equivalent, upon setting  c = c i.i.d. c=c_{\mbox{i.i.d.}}  and  pen = pen BIC \mbox{pen}=\mbox{pen}_{\mbox{BIC}} , where  pen BIC \mbox{pen}_{\mbox{BIC}}  is defined as follows. 
+ 
+ 
+ Penalty 2  ( pen BIC \mbox{pen}_{\mbox{BIC}} ) 
+ 
+ The penalty function  pen BIC \mbox{pen}_{\mbox{BIC}}  is given by 
+ 
+
+ 
+ 
+ pen BIC ​ ( 𝒯 ) := p 2 ​ log ⁡ T ​ | 𝒯 | \mbox{pen}_{\mbox{BIC}}(\mathcal{T}):=\frac{p}{2}\log T\ |\mathcal{T}| 
+ 
+ (29) 
+ 
+ where  p ≥ 1 p\geq 1  is the dimension of the parameter space in ( M1 ). 
+ 
+ 
+ 
+ In the extensively studied model of an univariate Gaussian signal, with fixed variance  σ 2 \sigma^{2}  and piecewise constant mean, the penalty  pen BIC \mbox{pen}_{\mbox{BIC}}  becomes  pen L 2 \mbox{pen}_{L_{2}} , defined below.
+Historically, it was one of the first penalties introduced for change point detection  Schwarz [1978] ,  Yao [1988] . 
+ 
+ 
+ Penalty 3  ( pen BIC , L 2 \mbox{pen}_{\mbox{BIC},L_{2}} ) 
+ 
+ The penalty function  pen BIC , L 2 \mbox{pen}_{\mbox{BIC},L_{2}}  is given by 
+ 
+
+ 
+ 
+ pen BIC , L 2 ​ ( 𝒯 ) := σ 2 ​ log ⁡ T ​ | 𝒯 | . \mbox{pen}_{\mbox{BIC},L_{2}}(\mathcal{T}):=\sigma^{2}\log T\ |\mathcal{T}|. 
+ 
+ (30) 
+ 
+ where  σ \sigma  is the standard deviation and  T T  is the number of samples. 
+ 
+ 
+ 
+ In the same setting, AIC, which is a generalization of Mallows’  C p C_{p}   Mallows [1973] , also yields a linear penalty, namely  pen AIC , L 2 \mbox{pen}_{\mbox{AIC},L_{2}} , defined as follows. 
+ 
+ 
+ Penalty 4  ( pen AIC , L 2 \mbox{pen}_{\mbox{AIC},L_{2}} ) 
+ 
+ The penalty function  pen AIC , L 2 \mbox{pen}_{\mbox{AIC},L_{2}}  is given by 
+ 
+
+ 
+ 
+ pen AIC , L 2 ​ ( 𝒯 ) := σ 2 ​ | 𝒯 | . \mbox{pen}_{\mbox{AIC},L_{2}}(\mathcal{T}):=\sigma^{2}\ |\mathcal{T}|. 
+ 
+ (31) 
+ 
+ where  σ \sigma  is the standard deviation. 
+ 
+ 
+ 
+ 
+ 
+ 6.2  Fused lasso 
+
+ 
+ For the special case where the cost function is  c L 2 c_{L_{2}} , a faster alternative to  pen l 0 \mbox{pen}_{l_{0}}  can be used.
+To that end, the  l 0 l_{0}  penalty is relaxed to a  l 1 l_{1}  penalty  Harchaoui and Lévy-Leduc [2010] ,  Vert and Bleakley [2010] .
+The resulting penalty function, denoted  pen l 1 \mbox{pen}_{l_{1}} , is defined as follows. 
+ 
+ 
+ Penalty 5  ( pen l 1 \mbox{pen}_{l_{1}} ) 
+ 
+ The penalty function  pen l 1 \mbox{pen}_{l_{1}}  is given by 
+ 
+
+ 
+ 
+ pen l 1 ​ ( 𝒯 ) := β ​ ∑ k = 1 | 𝒯 | ‖ y ¯ t k − 1 . . t k − y ¯ t k . . t k + 1 ‖ 1 \mbox{pen}_{l_{1}}(\mathcal{T}):=\beta\sum_{k=1}^{|\mathcal{T}|}\left\lVert\bar{y}_{t_{k-1}..t_{k}}-\bar{y}_{t_{k}..t_{k+1}}\right\rVert_{1} 
+ 
+ (32) 
+ 
+ where  β > 0 \beta>0  is the smoothing parameter, the  t k t_{k}  are the elements of  𝒯 \mathcal{T}  and  y ¯ t k − 1 . . t k \bar{y}_{t_{k-1}..t_{k}}  is the empirical mean of sub-signal  y t k − 1 . . t k y_{t_{k-1}..t_{k}} . 
+ 
+ 
+ 
+ This relaxation strategy (from  l 0 l_{0}  to  l 1 l_{1} ) is shared with many developments in machine learning, for instance sparse regression, compressive sensing, sparse PCA, dictionary learning  Hastie et al. [2009] , where  pen l 1 \mbox{pen}_{l_{1}}  is also referred to as the fused lasso penalty.
+In numerical analysis and image denoising, it is also known as the total variation regularizer  Harchaoui and Lévy-Leduc [2010] ,  Seichepine et al. [2014] ,  Vert and Bleakley [2010] .
+Thanks to this relaxation, the optimization of the penalized sum of costs ( 1 ) in ( P2 ) is transformed into a convex optimization problem, which can be solved efficiently using Lars (for “least absolute shrinkage and selection operator”)  Harchaoui and Lévy-Leduc [2010] ,  Vert and Bleakley [2010] .
+The resulting complexity is of this order of  𝒪 ⁡ ( T ​ log ⁡ T ) \mathcal{O}(T\log T)   Tibshirani [1996] ,  Hastie et al. [2009] .
+From a theoretical standpoint, under the mean-shift model (piecewise constant signal with Gaussian white noise), the estimated change point fractions are asymptotically consistent  Harchaoui and Lévy-Leduc [2010] .
+This result is demonstrated for an appropriately converging sequence of values of  β \beta .
+This consistency property is obtained even though classical assumptions from the Lasso regression framework (such as the irrepresentable condition) are not satisfied  Harchaoui and Lévy-Leduc [2010] .
+In the literature,  pen l 1 \mbox{pen}_{l_{1}} , combined with  c L 2 c_{L_{2}} , is applied on DNA sequences  Vert and Bleakley [2010] ,  Hocking et al. [2013a] , speech signals  Angelosante and Giannakis [2012]  and climatological data  Jeon et al. [2016] . 
+ 
+ 
+ 
+ 6.3  Complex penalties 
+
+ 
+ Several other penalty functions can be found in the literature.
+However they are more complex, in the sense that the optimization of the penalized sum of cost is not tractable.
+In practice, the solution is found by computing the optimal segmentations with  K K  change points, with  K = 1 , 2 , … , K max K=1,2,\dots,K_{\max}  for a sufficiently large  K max K_{\max} , and returning the one that minimizes the penalized sum of costs.
+When possible, the penalty can also be approximated by a linear penalty, in which case,  Pelt  can be used.
+In this section, we describe two examples of complex penalties.
+Both originate from theoretical considerations, under the univariate mean-shift model, with the cost function  c L 2 c_{L_{2}} .
+The first example is the modified BIC criterion (mBIC)  Zhang and Siegmund [2007] , which consists in maximizing the asymptotic posterior probability of the data.
+The resulting penalty function, denoted  pen mBIC \mbox{pen}_{\mbox{mBIC}} , depends on the number and repartition of the change point indexes: intuitively, it favours evenly spaced change points. 
+ 
+ 
+ Penalty 6  ( pen mBIC \mbox{pen}_{\mbox{mBIC}} ) 
+ 
+ The penalty function  pen mBIC \mbox{pen}_{\mbox{mBIC}}  is given by 
+ 
+
+ 
+ 
+ pen mBIC ​ ( 𝒯 ) := 3 ​ | 𝒯 | ​ log ⁡ T + ∑ k = 0 | 𝒯 | + 1 log ⁡ ( t k + 1 − t k T ) \mbox{pen}_{\mbox{mBIC}}(\mathcal{T}):=3|\mathcal{T}|\log T+\sum_{k=0}^{|\mathcal{T}|+1}\log(\frac{t_{k+1}-t_{k}}{T}) 
+ 
+ (33) 
+ 
+ where the  t k t_{k}  are the elements of  𝒯 \mathcal{T} . 
+ 
+ 
+ 
+ In  Lebarbier [2005] , a model selection procedure leads to another complex penalty function, namely  pen Leb \mbox{pen}_{\mbox{Leb}} .
+Upon using this penalty function, the penalized sum of costs satisfied a so-called oracle inequality, which holds in a non-asymptotic setting, contrary to the other penalties previously described. 
+ 
+ 
+ Penalty 7  ( pen Leb \mbox{pen}_{\mbox{Leb}} ) 
+ 
+ The cost function  pen Leb \mbox{pen}_{\mbox{Leb}}  is given by 
+ 
+
+ 
+ 
+ pen Leb ​ ( 𝒯 ) := | 𝒯 | + 1 T ​ σ 2 ​ ( a 1 ​ log ⁡ | 𝒯 | + 1 T + a 2 ) \mbox{pen}_{\mbox{Leb}}(\mathcal{T}):=\frac{|\mathcal{T}|+1}{T}\sigma^{2}(a_{1}\log\frac{|\mathcal{T}|+1}{T}+a_{2}) 
+ 
+ (34) 
+ 
+ where  a 1 > 0 a_{1}>0  and  a 2 > 0 a_{2}>0  are positive parameters and  σ 2 \sigma^{2}  is the noise variance. 
+ 
+ 
+ 
+ 
+ 
+ 7  Summary table 
+
+ 
+ This literature review is summarized in Table  2 .
+When applicable, each publication is associated with a search method (such as  Opt ,  Pelt ,  BinSeg  or  Win ); this is a rough categorization rather than an exact implementation.
+Note that  Pelt  (introduced in  2012 ) is sometimes associated with publications prior to 2012.
+It is because some linear penalties  Mallows [1973] ,  Zhang and Siegmund [2007]  were introduced long before  Pelt  was, and authors then resorted to quadratic (at best) algorithms.
+Nowadays, the same results can be obtained faster with  Pelt .
+A guide of computational complexity is also provided.
+Quadratic methods are the slowest and have only one star while linear methods are given three stars.
+Algorithms for which the number of change points is an explicit input parameter work under the “known  K K ” assumption.
+Algorithms that can be used even if the number of change points is unknown work under the “unknown  K K ” assumption.
+(Certain methods can accommodate both situations.) 
+ 
+ 
+ 
+ 
+ 
+ Publication 
+ Search method 
+ Cost function 
+ Known  K K 
+ Scalability (wrt  T T ) 
+ Package 
+ Additional information 
+ 
+ 
+ 
+ 
+ 
+ 
+ Yes 
+ No 
+ 
+ 
+ 
+ 
+ Sen and Srivastava  ( 1975 ),  Vostrikova  ( 1981 ) 
+ BinSeg 
+ c L 2 c_{L_{2}} 
+ ✓ 
+ - 
+ ★★★ 
+ ✓ 
+ 
+ 
+ Yao  ( 1988 ) 
+ Opt 
+ c L 2 c_{L_{2}} 
+ - 
+ ✓ 
+ ★✩✩ 
+ - 
+ Bayesian information criterion (BIC) 
+ 
+ Basseville and Nikiforov  ( 1993 ) 
+ Opt 
+ c i.i.d. , c L 2 c_{\mbox{i.i.d.}},c_{L_{2}} 
+ - 
+ - 
+ ★★★ 
+ - 
+ single change point 
+ 
+ Bai  ( 1994 ),  Bai and Perron  ( 2003c ) 
+ Opt 
+ c linear , L 2 c_{\mbox{linear},L_{2}} 
+ - 
+ - 
+ ★★✩ 
+ - 
+ single change point 
+ 
+ Bai  ( 1995 ) 
+ Opt 
+ c linear , L 1 c_{\mbox{linear},L_{1}} 
+ - 
+ - 
+ ★★✩ 
+ - 
+ single change point 
+ 
+ Lavielle  ( 1998 ) 
+ Opt 
+ c A ​ R c_{AR} 
+ ✓ 
+ - 
+ ★✩✩ 
+ - 
+ 
+ 
+ Bai  ( 2000 ) 
+ Opt 
+ c A ​ R c_{AR} 
+ ✓ 
+ - 
+ ★✩✩ 
+ - 
+ 
+ 
+ Birgé and Massart  ( 2001 ),  Birgé and Massart  ( 2007 ) 
+ Opt 
+ c L 2 c_{L_{2}} 
+ - 
+ ✓ 
+ ★✩✩ 
+ - 
+ model selection 
+ 
+ Bai and Perron  ( 2003b ) 
+ Opt 
+ c L 2 c_{L_{2}} 
+ ✓ 
+ - 
+ ★✩✩ 
+ - 
+ 
+ 
+ Olshen et al.  ( 2004 ),  Venkatraman and Olshen  ( 2007 ) 
+ BinSeg 
+ c L 2 c_{L_{2}} 
+ ✓ 
+ ✓ 
+ ★★★ 
+ ✓ 
+ 
+ 
+ Lebarbier  ( 2005 ) 
+ Opt 
+ c L 2 c_{L_{2}} 
+ - 
+ ✓ 
+ ★✩✩ 
+ - 
+ model selection 
+ 
+ Desobry et al.  ( 2005 ) 
+ Win 
+ c k ​ e ​ r ​ n ​ e ​ l c_{kernel} 
+ - 
+ ✓ 
+ ★★★ 
+ - 
+ dissimilarity measure (one-class SVM), see Remark  4 
+ 
+ Harchaoui and Cappé  ( 2007 ) 
+ Opt 
+ c k ​ e ​ r ​ n ​ e ​ l , c r ​ b ​ f c_{kernel},c_{rbf} 
+ ✓ 
+ - 
+ ★✩✩ 
+ - 
+ 
+ 
+ Zhang and Siegmund  ( 2007 ) 
+ Pelt 
+ c L 2 c_{L_{2}} 
+ - 
+ ✓ 
+ ★★✩ 
+ - 
+ modified BIC 
+ 
+ Harchaoui et al.  ( 2009 ) 
+ Win 
+ - 
+ ✓ 
+ ✓ 
+ ★★★ 
+ - 
+ dissimilarity measure (Fisher discriminant), see Remark  4 
+ 
+ Lévy-Leduc and Roueff  ( 2009 ),  Lung-Yut-Fong et al.  ( 2012 ) 
+ Win 
+ c rank c_{\mbox{rank}} 
+ ✓ 
+ ✓ 
+ ★★★ 
+ ✓ 
+ dissimilarity measure (rank-based), see Remark  4 
+ 
+ Bai  ( 2010 ) 
+ Opt 
+ c L 2 , c Σ c_{L_{2}},c_{\Sigma} 
+ - 
+ - 
+ ★★✩ 
+ - 
+ single change point 
+ 
+ Vert and Bleakley  ( 2010 ) 
+ Fused Lasso 
+ c L 2 c_{L_{2}} 
+ - 
+ ✓ 
+ ★★★ 
+ - 
+ Tikhonov regularization 
+ 
+ Harchaoui and Lévy-Leduc  ( 2010 ) 
+ Fused Lasso 
+ c L 2 c_{L_{2}} 
+ - 
+ ✓ 
+ ★★★ 
+ - 
+ total variation regression ( pen l 1 \mbox{pen}_{l_{1}} ) 
+ 
+ Arlot et al.  ( 2012 ) 
+ Opt 
+ c k ​ e ​ r ​ n ​ e ​ l , c r ​ b ​ f c_{kernel},c_{rbf} 
+ ✓ 
+ ✓ 
+ ★✩✩ 
+ - 
+ 
+ 
+ Killick et al.  ( 2012 ) 
+ Pelt 
+ any  c ⁡ ( ⋅ ) c(\cdot) 
+ - 
+ ✓ 
+ ★★✩ 
+ ✓ 
+ 
+ 
+ Angelosante and Giannakis  ( 2012 ) 
+ Fused Lasso 
+ c A ​ R c_{AR} 
+ - 
+ ✓ 
+ ★★★ 
+ - 
+ Tikhonov regularization 
+ 
+ Liu et al.  ( 2013 ) 
+ Win 
+ - 
+ - 
+ ✓ 
+ ★★★ 
+ - 
+ dissimilarity measure (density ratio), see Remark  4 
+ 
+ Hocking et al.  ( 2013b ) 
+ Pelt 
+ c L 2 c_{L_{2}} 
+ - 
+ ✓ 
+ ★★✩ 
+ - 
+ supervised method to learn a penalty level ( pen l 0 \mbox{pen}_{l_{0}} ) 
+ 
+ Fryzlewicz  ( 2014 ) 
+ BinSeg 
+ c L 2 c_{L_{2}} 
+ ✓ 
+ ✓ 
+ ★★★ 
+ ✓ 
+ univariate signal 
+ 
+ Lajugie et al.  ( 2014 ) 
+ Opt 
+ c M c_{M} 
+ ✓ 
+ - 
+ ★✩✩ 
+ - 
+ supervised method to learn a suitable metric 
+ 
+ Frick et al.  ( 2014 ) 
+ BinSeg 
+ c i.i.d. c_{\mbox{i.i.d.}} 
+ ✓ 
+ ✓ 
+ ★★★ 
+ ✓ 
+ exponential distributions family 
+ 
+ Lung-Yut-Fong et al.  ( 2015 ) 
+ Opt 
+ c rank c_{\mbox{rank}} 
+ ✓ 
+ - 
+ ★✩✩ 
+ ✓ 
+ 
+ 
+ Garreau and Arlot  ( 2017 ) 
+ Pelt 
+ c k ​ e ​ r ​ n ​ e ​ l , c r ​ b ​ f c_{kernel},c_{rbf} 
+ ✓ 
+ ✓ 
+ ★✩✩ 
+ - 
+ 
+ 
+ Haynes et al.  ( 2017a ) 
+ Pelt 
+ any  c ⁡ ( ⋅ ) c(\cdot) 
+ - 
+ ✓ 
+ ★★✩ 
+ - 
+ 
+ 
+ Chakar et al.  ( 2017 ) 
+ Pelt 
+ c A ​ R c_{AR} 
+ ✓ 
+ ✓ 
+ ★✩✩ 
+ ✓ 
+ 
+ 
+ 
+ Table 2:  Summary table of literature review. 
+ 
+ 
+ 
+ 8  Presentation of the Python package 
+
+ 
+ Most of the approaches presented in this article are included in a Python scientific library for multiple change point detection in multivariate signals called  ruptures   Truong [2018] . The  ruptures  library is written in pure Python and available on Mac OS X, Linux and Windows platforms. Source code is available from  Truong [2018]  under the BSD license and deployed with a complete documentation that includes installation instructions and explanations with code snippets on advance use. 
+ 
+ 
+ A schematic view is displayed on Figure  12 .
+Each block of this diagram is described in the following brief overview of  ruptures ’ features. 
+ 
+ 
+ Figure 12:  Schematic view of the  ruptures  package. 
+ 
+ 
+ 
+ •  
+ 
+ Search methods  Our package includes the main algorithms from the literature, namely dynamic programming, detection with a  l 0 l_{0}  constraint, binary segmentation, bottom-up segmentation and window-based segmentation.
+This choice is the result of a trade-off between exhaustiveness and adaptiveness.
+Rather than providing as many methods as possible, only algorithms which have been used in several different settings are included.
+In particular, numerous “mean-shift only” detection procedures were not considered.
+Implemented algorithms have sensible default parameters that can be changed easily through the functions’ interface. 
+ 
+ •  
+ 
+ Cost functions  Cost functions are related to the type of change to detect.
+Within  ruptures , one has access to parametric cost functions that can detect shifts in standard statistical quantities (mean, scale, linear relationship between dimensions, autoregressive coefficients, etc.) and non-parametric cost functions (kernel-based or Mahalanobis-type metric) that can, for instance, detect distribution changes  [ Harchaoui and Cappé, 2007 ,  Lajugie et al., 2014 ] . 
+ 
+ •  
+ 
+ Constraints  All methods can be used whether the number of change points is known or not.
+In particular,  ruptures  implements change point detection under a cost budget and with a linear penalty term  [ Killick et al., 2012 ,  Maidstone et al., 2017 ] . 
+ 
+ •  
+ 
+ Evaluation  Evaluation metrics are available to quantitatively compare segmentations, as well as a display module to visually inspect algorithms’ performances. 
+ 
+ •  
+ 
+ Input  Change point detection can be performed on any univariate or multivariate signal that fits into a  Numpy  array.
+A few standard non-stationary signal generators are included. 
+ 
+ •  
+ 
+ Consistent interface and modularity  Discrete optimization methods and cost functions are the two main ingredients of change point detection.
+Practically, each is related to a specific object in the code, making the code highly modular: available optimization methods and cost functions can be connected and composed.
+An appreciable by-product of this approach is that a new contribution, provided its interface follows a few guidelines, can be integrated seamlessly into  ruptures . 
+ 
+ •  
+ 
+ Scalability  Data exploration often requires to run several times the same methods with different sets of parameters.
+To that end, a cache is implemented to keep intermediate results in memory, so that the computational cost of running the same algorithm several times on the same signal is greatly reduced.
+We also add the possibility for a user with speed constraints to sub-sample their signals and set a minimum distance between change points. 
+ 
+ 
+ 
+ 
+ 
+ 9  Conclusion 
+
+ 
+ In this article, we have reviewed numerous methods to perform change point detection, organized within a common framework.
+Precisely, all methods are described as a collection of three elements: a cost function, a search method and a constraint on the number of changes to detect.
+This approach is intended to facilitate prototyping of change point detection methods: for a given segmentation task, one can pick among the described elements to design an algorithm that fits its use-case.
+Most detection procedures described above are available within the Python language from the package  ruptures   Truong [2018] , which is the most comprehensive change point detection library.
+Its consistent interface and modularity allow painless comparison between methods and easy integration of new contributions.
+In addition, a thorough documentation is available for novice users.
+Thanks to the rich Python ecosystem,  ruptures  can be used in coordination with numerous other scientific libraries . 
+ 
+ 
+ 
+ 
+ References 
+
+ 
+      
+ Page [1954] 
+ 
+E. S. Page.
+ 
+ 
+ Continuous inspection schemes.
+ 
+ 
+ Biometrika , 41:100–105, 1954.
+ 
+ 
+      
+ Page [1955] 
+ 
+E. S. Page.
+ 
+ 
+ A test for a change in a parameter occurring at an unknown point.
+ 
+ 
+ Biometrika , 42:523–527, 1955.
+ 
+ 
+      
+ Basseville and Nikiforov [1993] 
+ 
+M. Basseville and I. Nikiforov.
+ 
+ 
+ Detection of abrupt changes: theory and application , volume
+104.
+ 
+ 
+ Prentice Hall Englewood Cliffs, 1993.
+ 
+ 
+      
+ Brodsky and Darkhovsky [1993] 
+ 
+B. E. Brodsky and B. S. Darkhovsky.
+ 
+ 
+ Nonparametric methods in change point problems .
+ 
+ 
+ Springer Netherlands, 1993.
+ 
+ 
+      
+ Csörgö and Horváth [1997] 
+ 
+M. Csörgö and L. Horváth.
+ 
+ 
+ Limit theorems in change-point analysis .
+ 
+ 
+ Chichester, New York, 1997.
+ 
+ 
+      
+ Chen and Gupta [2011a] 
+ 
+Jie Chen and Arjun K Gupta.
+ 
+ 
+ Parametric statistical change point analysis: With
+applications to genetics, medicine, and finance .
+ 
+ 
+ Springer Science & Business Media, 2011a.
+ 
+ 
+      
+ Lavielle and Teyssière [2007] 
+ 
+M. Lavielle and G. Teyssière.
+ 
+ 
+ Adaptive detection of multiple change-points in asset price
+volatility.
+ 
+ 
+ In  Long-Memory in Economics , pages 129–156. Springer Verlag,
+Berlin, Germany, 2007.
+ 
+ 
+      
+ Jandhyala et al. [2013] 
+ 
+V. Jandhyala, S. Fotopoulos, I. Macneill, and P. Liu.
+ 
+ 
+ Inference for single and multiple change-points in time series.
+ 
+ 
+ Journal of Time Series Analysis , 34(4):423–446, 2013.
+ 
+ 
+      
+ Haynes et al. [2017a] 
+ 
+K. Haynes, I. A. Eckley, and P. Fearnhead.
+ 
+ 
+ Computationally efficient changepoint detection for a range of
+penalties.
+ 
+ 
+ Journal of Computational and Graphical Statistics , 26(1):134–143, 2017a.
+ 
+ 
+      
+ Desobry et al. [2005] 
+ 
+F. Desobry, M. Davy, and C. Doncarli.
+ 
+ 
+ An online kernel change detection algorithm.
+ 
+ 
+ IEEE Transactions on Signal Processing , 53(8):2961–2974, 2005.
+ 
+ 
+      
+ Harchaoui et al. [2009] 
+ 
+Z. Harchaoui, F. Vallet, A. Lung-Yut-Fong, and O. Cappé.
+ 
+ 
+ A regularized kernel-based approach to unsupervised audio
+segmentation.
+ 
+ 
+ In  Proceedings of the IEEE International Conference on
+Acoustics, Speech and Signal Processing (ICASSP) , pages 1665–1668, Taipei,
+Taiwan, 2009.
+ 
+ 
+      
+ Angelosante and Giannakis [2012] 
+ 
+D. Angelosante and G. B. Giannakis.
+ 
+ 
+ Group lassoing change-points piece-constant AR processes.
+ 
+ 
+ EURASIP Journal on Advances in Signal Processing , 70, 2012.
+ 
+ 
+      
+ Seichepine et al. [2014] 
+ 
+N. Seichepine, S. Essid, C. Fevotte, and O. Cappé.
+ 
+ 
+ Piecewise constant nonnegative matrix factorization.
+ 
+ 
+ In  Proceedings of the IEEE International Conference on
+Acoustics, Speech and Signal Processing (ICASSP) , pages 6721–6725,
+Florence, Italy, 2014.
+ 
+ 
+      
+ Bai and Perron [1998] 
+ 
+J. Bai and P. Perron.
+ 
+ 
+ Estimating and testing linear models with multiple structural
+changes.
+ 
+ 
+ Econometrica , 66(1):47–78, 1998.
+ 
+ 
+      
+ Frick et al. [2014] 
+ 
+K. Frick, A. Munk, and H. Sieling.
+ 
+ 
+ Multiscale change point inference.
+ 
+ 
+ Journal of the Royal Statistical Society. Series B: Statistical
+Methodology , 76(3):495–580, 2014.
+ 
+ 
+      
+ Hocking et al. [2013a] 
+ 
+T. Hocking, G. Schleiermacher, I. Janoueix-Lerosey, V. Boeva, J. Cappo,
+O. Delattre, F. Bach, and J.-P. Vert.
+ 
+ 
+ Learning smoothing models of copy number profiles using breakpoint
+annotations.
+ 
+ 
+ BMC Bioinformatics , 14(1):164,
+2013a.
+ 
+ 
+      
+ Maidstone et al. [2017] 
+ 
+R. Maidstone, T. Hocking, G. Rigaill, and P. Fearnhead.
+ 
+ 
+ On optimal multiple changepoint algorithms for large data.
+ 
+ 
+ Statistics and Computing , 27(2):519–533,
+2017.
+ 
+ 
+      
+ Vert and Bleakley [2010] 
+ 
+J.-P. Vert and K. Bleakley.
+ 
+ 
+ Fast detection of multiple change-points shared by many signals
+using group LARS.
+ 
+ 
+ In  Advances in Neural Information Processing Systems 23 (NIPS
+2010) , volume 1, pages 2343–2351, Vancouver, Canada, 2010.
+ 
+ 
+      
+ Picard et al. [2005] 
+ 
+F. Picard, S. Robin, M. Lavielle, C. Vaisse, and J.-J. Daudin.
+ 
+ 
+ A statistical approach for array CGH data analysis.
+ 
+ 
+ BMC Bioinformatics , 6(1):27, 2005.
+ 
+ 
+      
+ Guédon [2013] 
+ 
+Y. Guédon.
+ 
+ 
+ Exploring the latent segmentation space for the assessment of
+multiple change-point models.
+ 
+ 
+ Computational Statistics , 28(6):2641–2678, 2013.
+ 
+ 
+      
+ Chakar et al. [2017] 
+ 
+S. Chakar, É. Lebarbier, C. Levy-Leduc, and S. Robin.
+ 
+ 
+ A robust approach for estimating change-points in the mean of an
+AR(1) process.
+ 
+ 
+ Bernouilli Society for Mathematical Statistics and
+Probability , 23(2):1408–1447, 2017.
+ 
+ 
+      
+ Oudre et al. [2015] 
+ 
+L. Oudre, R. Barrois-Müller, T. Moreau, C. Truong, R. Dadashi,
+T. Grégory, D. Ricard, N. Vayatis, C. De Waele, A. Yelnik, and P.-P.
+Vidal.
+ 
+ 
+ Détection automatique des pas à partir de capteurs
+inertiels pour la quantification de la marche en consultation.
+ 
+ 
+ Neurophysiologie Clinique/Clinical Neurophysiology ,
+45(4-5):394, 2015.
+ 
+ 
+      
+ Audiffren et al. [2015] 
+ 
+J. Audiffren, R. Barrois-Müller, C. Provost, É. Chiarovano,
+L. Oudre, T. Moreau, C. Truong, A. Yelnik, N. Vayatis, P.-P. Vidal, C. De
+Waele, S. Buffat, and D. Ricard.
+ 
+ 
+ Évaluation de l’équilibre et prédiction des
+risques de chutes en utilisant une Wii board balance.
+ 
+ 
+ Neurophysiologie Clinique/Clinical Neurophysiology ,
+45(4-5):403, 2015.
+ 
+ 
+      
+ Liu et al. [2018] 
+ 
+S. Liu, A. Wright, and M. Hauskrecht.
+ 
+ 
+ Change-point detection method for clinical decision support system
+rule monitoring.
+ 
+ 
+ Artificial Intelligence In Medicine , 91:49–56,
+2018.
+ 
+ 
+      
+ Maidstone [2013] 
+ 
+R. Maidstone.
+ 
+ 
+ Efficient Analysis of Complex Changepoint Models.
+ 
+ 
+ page 34, 2013.
+ 
+ 
+      
+ Verbesselt et al. [2010] 
+ 
+Jan Verbesselt, Rob Hyndman, Glenn Newnham, and Darius Culvenor.
+ 
+ 
+ Detecting trend and seasonal changes in satellite images time
+series.
+ 
+ 
+ Remote Sensing of Environment , (114):106–115, 2010.
+ 
+ 
+      
+ Reeves et al. [2007] 
+ 
+J. Reeves, J. Chen, X. L. Wang, R. Lund, and Q. Q. Lu.
+ 
+ 
+ A review and comparison of changepoint detection techniques for
+climate data.
+ 
+ 
+ Journal of Applied Meteorology and Climatology , 46(6):900–915, 2007.
+ 
+ 
+ ISSN 15588424.
+ 
+ 
+ doi:  10.1175/JAM2493.1 .
+ 
+ 
+      
+ Lévy-Leduc and Roueff [2009] 
+ 
+C. Lévy-Leduc and F. Roueff.
+ 
+ 
+ Detection and localization of change-points in high-dimensional
+network traffic data.
+ 
+ 
+ The Annals of Applied Statistics , 3(2):637–662, 2009.
+ 
+ 
+      
+ Lung-Yut-Fong et al. [2012] 
+ 
+A. Lung-Yut-Fong, C. Lévy-Leduc, and O. Cappé.
+ 
+ 
+ Distributed detection/localization of change-points in
+high-dimensional network traffic data.
+ 
+ 
+ Statistics and Computing , 22(2):485–496,
+2012.
+ 
+ 
+      
+ Lajugie et al. [2014] 
+ 
+R. Lajugie, F. Bach, and S. Arlot.
+ 
+ 
+ Large-margin metric learning for constrained partitioning problems.
+ 
+ 
+ In  Proceedings of the 31st International Conference on Machine
+Learning (ICML) , pages 297–395, Beijing, China, 2014.
+ 
+ 
+      
+ Hocking et al. [2015] 
+ 
+T. Hocking, G. Rigaill, and G. Bourque.
+ 
+ 
+ PeakSeg: constrained optimal segmentation and supervised penalty
+learning for peak detection in count data.
+ 
+ 
+ In  Proceedings of the International Conference on Machine
+Learning (ICML) , pages 324–332, Lille, France, 2015.
+ 
+ 
+      
+ Barrois-Müller et al. [2016a] 
+ 
+R. Barrois-Müller, D. Ricard, L. Oudre, L. Tlili, C. Provost, A. Vienne,
+P.-P. Vidal, S. Buffat, and A. Yelnik.
+ 
+ 
+ Étude observationnelle du demi-tour à l’aide de capteurs
+inertiels chez les sujets victimes d’AVC et relation avec le risque de
+chute.
+ 
+ 
+ Neurophysiologie Clinique/Clinical Neurophysiology ,
+46(4):244, 2016a.
+ 
+ 
+      
+ Barrois-Müller et al. [2016b] 
+ 
+R. Barrois-Müller, T. Gregory, L. Oudre, T. Moreau, C. Truong, A. Aram
+Pulini, A. Vienne, C. Labourdette, N. Vayatis, S. Buffat, A. Yelnik,
+C. de Waele, S. Laporte, P.-P. Vidal, and D. Ricard.
+ 
+ 
+ An automated recording method in clinical consultation to rate the
+limp in lower limb osteoarthritis.
+ 
+ 
+ PLoS One , 11(10):e0164975,
+2016b.
+ 
+ 
+      
+ Oudre et al. [2018] 
+ 
+L. Oudre, R. Barrois-Müller, T. Moreau, C. Truong, A. Vienne-Jumeau,
+D. Ricard, N. Vayatis, and P.-P. Vidal.
+ 
+ 
+ Template-Based Step Detection with Inertial Measurement Units.
+ 
+ 
+ Sensors , 18(11), 2018.
+ 
+ 
+      
+ Truong et al. [2015] 
+ 
+C. Truong, L. Oudre, and N. Vayatis.
+ 
+ 
+ Segmentation de signaux physiologiques par optimisation globale.
+ 
+ 
+ In  Proceedings of the Groupe de Recherche et d’Etudes en
+Traitement du Signal et des Images (GRETSI) , Lyon, France, 2015.
+ 
+ 
+      
+ Barrois-Müller et al. [2015] 
+ 
+R. Barrois-Müller, L. Oudre, T. Moreau, C. Truong, N. Vayatis, S. Buffat,
+A. Yelnik, C. de Waele, T. Gregory, S. Laporte, P. P. Vidal, and D. Ricard.
+ 
+ 
+ Quantify osteoarthritis gait at the doctor’s office: a simple pelvis
+accelerometer based method independent from footwear and aging.
+ 
+ 
+ Computer Methods in Biomechanics and Biomedical Engineering ,
+18 Suppl 1:1880–1881, 2015.
+ 
+ 
+      
+ Truong [2018] 
+ 
+Charles Truong.
+ 
+ 
+ ruptures: change point detection in python, 2018.
+ 
+ 
+ URL  http://ctruong.perso.math.cnrs.fr/ruptures .
+ 
+ 
+ [Online].
+ 
+ 
+      
+ Rabiner [1989] 
+ 
+L.R. Rabiner.
+ 
+ 
+ A tutorial on hidden Markov models and selected applications in
+speech recognition.
+ 
+ 
+ Proceedings of the IEEE , 77(2):257–286,
+1989.
+ 
+ 
+      
+ Ko et al. [2015] 
+ 
+S. I. M. Ko, T. T. L. Chong, and P. Ghosh.
+ 
+ 
+ Dirichlet process hidden Markov multiple change-point model.
+ 
+ 
+ Bayesian Analysis , 10(2):275–296, 2015.
+ 
+ 
+      
+ Martínez and Mena [2014] 
+ 
+A. F. Martínez and R. H. Mena.
+ 
+ 
+ On a Nonparametric Change Point Detection Model in Markovian
+Regimes.
+ 
+ 
+ Bayesian Analysis , 9(4):823–858, 2014.
+ 
+ 
+      
+ Barry and Hartigan [1992] 
+ 
+D. Barry and J. A. Hartigan.
+ 
+ 
+ Product partition models for change point problems.
+ 
+ 
+ The Annals of Statistics , 20(1):260–279,
+1992.
+ 
+ 
+      
+ Barry and Hartigan [1993] 
+ 
+D. Barry and J. A. Hartigan.
+ 
+ 
+ A bayesian analysis for change point problems.
+ 
+ 
+ Journal of the American Statistical Association , 88(421):309–319, 1993.
+ 
+ 
+      
+ Aminikhanghahi and Cook [2017] 
+ 
+S. Aminikhanghahi and D. J. Cook.
+ 
+ 
+ A survey of methods for time series change point detection.
+ 
+ 
+ Knowledge and information systems , 51(2):339–367, 2017.
+ 
+ 
+      
+ Niu et al. [2016] 
+ 
+Y. S. Niu, N. Hao, and H. Zhang.
+ 
+ 
+ Multiple change-point detection: a selective overview.
+ 
+ 
+ Statistica Sciences , 31(4):611–623, 2016.
+ 
+ 
+      
+ Bai and Perron [2003a] 
+ 
+J. Bai and P. Perron.
+ 
+ 
+ Multiple structural change models: a simulation analysis.
+ 
+ 
+ Journal of Applied Econometrics , 18:1–22,
+2003a.
+ 
+ 
+      
+ Chakar et al. [2014] 
+ 
+S. Chakar, É. Lebarbier, C. Levy-Leduc, and S. Robin.
+ 
+ 
+ AR1seg: segmentation of an autoregressive Gaussian process of order
+1, 2014.
+ 
+ 
+ URL  https://cran.r-project.org/package=AR1seg .
+ 
+ 
+      
+ Boysen et al. [2009] 
+ 
+L. Boysen, A. Kempe, V. Liebscher, A. Munk, and O. Wittich.
+ 
+ 
+ Consistencies and rates of convergence of jump-penalized least
+squares estimators.
+ 
+ 
+ The Annals of Statistics , 37(1):157–183,
+2009.
+ 
+ 
+      
+ Harchaoui and Lévy-Leduc [2010] 
+ 
+Z. Harchaoui and C. Lévy-Leduc.
+ 
+ 
+ Multiple Change-Point Estimation With a Total Variation Penalty.
+ 
+ 
+ Journal of the American Statistical Association , 105(492):1480–1493, 2010.
+ 
+ 
+      
+ Lavielle [1999] 
+ 
+M. Lavielle.
+ 
+ 
+ Detection of multiples changes in a sequence of dependant
+variables.
+ 
+ 
+ Stochastic Processes and their Applications , 83(1):79–102, 1999.
+ 
+ 
+      
+ Pein et al. [2017] 
+ 
+F. Pein, H. Sieling, and A. Munk.
+ 
+ 
+ Heterogeneous change point inference.
+ 
+ 
+ Journal of the Royal Statistical Society. Series B (Statistical
+Methodology) , 79(4):1207–1227, 2017.
+ 
+ 
+      
+ Keshavarz et al. [2018] 
+ 
+H. Keshavarz, C. Scott, and X. Nguyen.
+ 
+ 
+ Optimal change point detection in Gaussian processes.
+ 
+ 
+ Journal of Statistical Planning and Inference , 193:151–178, 2018.
+ 
+ 
+      
+ Lavielle and Moulines [2000] 
+ 
+M. Lavielle and É. Moulines.
+ 
+ 
+ Least-squares estimation of an unknown number of shifts in a time
+series.
+ 
+ 
+ Journal of Time Series Analysis , 21(1):33–59, 2000.
+ 
+ 
+      
+ Sen and Srivastava [1975] 
+ 
+A. Sen and M. S. Srivastava.
+ 
+ 
+ On tests for detecting change in mean.
+ 
+ 
+ The Annals of Statistics , 3(1):98–108,
+1975.
+ 
+ 
+      
+ Krishnaiah [1988] 
+ 
+P. R. Krishnaiah.
+ 
+ 
+ Review about estimation of change points.
+ 
+ 
+ Handbook of Statistics , 7:375–402, 1988.
+ 
+ 
+      
+ Aue and Horvàth [2012] 
+ 
+A. Aue and L. Horvàth.
+ 
+ 
+ Structural breaks in time series.
+ 
+ 
+ Journal of Time Series Analysis , 34:1–16, 2012.
+ 
+ 
+      
+ Fearnhead [2006] 
+ 
+P Fearnhead.
+ 
+ 
+ Exact and efficient Bayesian inference for multiple changepoint
+problems.
+ 
+ 
+ Statistics and Computing , 16(2):203–213,
+2006.
+ 
+ 
+      
+ Górecki et al. [2018] 
+ 
+T. Górecki, L. Horváth, and P. Kokoszka.
+ 
+ 
+ Change point detection in heteroscedastic time series.
+ 
+ 
+ Econometrics and Statistics , 7:63–88, 2018.
+ 
+ 
+      
+ Fu and Curnow [1990] 
+ 
+Y.-X. Fu and R. N. Curnow.
+ 
+ 
+ Maximum likelihood estimation of multiple change points.
+ 
+ 
+ Biometrika , 77(3):563–573, 1990.
+ 
+ 
+      
+ He and Severini [2010] 
+ 
+H. He and T. S. Severini.
+ 
+ 
+ Asymptotic properties of maximum likelihood estimators in models
+with multiple change points.
+ 
+ 
+ Bernoulli , 16(3):759–779, 2010.
+ 
+ 
+      
+ Chernoff and Zacks [1964] 
+ 
+H Chernoff and S Zacks.
+ 
+ 
+ Estimating the Current Mean of a Normal Distribution which is
+Subjected to Changes in Time.
+ 
+ 
+ The Annals of Mathematical Statistics , 35(3):999–1018, 1964.
+ 
+ 
+      
+ Lorden [1971] 
+ 
+G. Lorden.
+ 
+ 
+ Procedures for reacting to a change in distribution.
+ 
+ 
+ The Annals of Mathematical Statistics , 42(6):1897–1908, 1971.
+ 
+ 
+      
+ Mallows [1973] 
+ 
+C. L. Mallows.
+ 
+ 
+ Some comments on Cp.
+ 
+ 
+ Technometrics , 15(4):661–675, 1973.
+ 
+ 
+      
+ Chen and Gupta [2011b] 
+ 
+J. Chen and A. K. Gupta.
+ 
+ 
+ Parametric Statistical Change Point Analysis: With
+Applications to Genetics, Medicine, and Finance .
+ 
+ 
+ 2011b.
+ 
+ 
+      
+ Hébrail et al. [2010] 
+ 
+G. Hébrail, B. Hugueney, Y. Lechevallier, and F. Rossi.
+ 
+ 
+ Exploratory analysis of functional data via clustering and optimal
+segmentation.
+ 
+ 
+ Neurocomputing , 73(7-9):1125–1141, 2010.
+ 
+ 
+      
+ Chib [1998] 
+ 
+S. Chib.
+ 
+ 
+ Estimation and comparison of multiple change-point models.
+ 
+ 
+ Journal of Econometrics , 86(2):221–241,
+1998.
+ 
+ 
+      
+ Lavielle [2005] 
+ 
+M. Lavielle.
+ 
+ 
+ Using penalized contrasts for the change-point problem.
+ 
+ 
+ Signal Processing , 85(8):1501–1510, 2005.
+ 
+ 
+      
+ Bai [1994] 
+ 
+J. Bai.
+ 
+ 
+ Least squares estimation of a shift in linear processes.
+ 
+ 
+ Journal of Time Series Analysis , 15(5):453–472, 1994.
+ 
+ 
+      
+ Bai [1995] 
+ 
+J. Bai.
+ 
+ 
+ Least absolute deviation of a shift.
+ 
+ 
+ Econometric Theory , 11(3):403–436, 1995.
+ 
+ 
+      
+ Bai [1996] 
+ 
+J. Bai.
+ 
+ 
+ Testing for parameter constancy in linear regressions: an empirical
+distribution function approach.
+ 
+ 
+ Econometrica , 64(3):597–622, 1996.
+ 
+ 
+      
+ Bai [2000] 
+ 
+J. Bai.
+ 
+ 
+ Vector autoregressive models with structural changes in regression
+coefficients and in variance???covariance matrices.
+ 
+ 
+ Annals of Economics and Finance , 1(2):301–336, 2000.
+ 
+ 
+      
+ Bai [1997a] 
+ 
+J. Bai.
+ 
+ 
+ Estimation of a change-point in multiple regression models.
+ 
+ 
+ Review of Economic and Statistics , 79(4):551–563, 1997a.
+ 
+ 
+      
+ Qu and Perron [2007] 
+ 
+Z. Qu and P. Perron.
+ 
+ 
+ Estimating and testing structural changes in multivariate
+regressions.
+ 
+ 
+ Econometrica , 75(2):459–502, 2007.
+ 
+ 
+      
+ Bai [1998] 
+ 
+J. Bai.
+ 
+ 
+ Estimation of multiple-regime regressions with least absolutes
+deviation.
+ 
+ 
+ Journal of Statistical Planning and Inference , 74:103–134, 1998.
+ 
+ 
+      
+ Bai [1999] 
+ 
+J. Bai.
+ 
+ 
+ Likelihood ratio tests for multiple structural changes.
+ 
+ 
+ Journal of Econometrics , 91(2):299–323,
+1999.
+ 
+ 
+      
+ Bai and Perron [2003b] 
+ 
+J. Bai and P. Perron.
+ 
+ 
+ Critical values for multiple structural change tests.
+ 
+ 
+ Econometrics Journal , 6(1):72–78,
+2003b.
+ 
+ 
+      
+ Perron [2006] 
+ 
+P. Perron.
+ 
+ 
+ Dealing with structural breaks.
+ 
+ 
+ Palgrave handbook of econometrics , 1(2):278–352, 2006.
+ 
+ 
+      
+ Bai [2010] 
+ 
+J. Bai.
+ 
+ 
+ Common breaks in means and variances for panel data.
+ 
+ 
+ Journal of Econometrics , 157:78–92, 2010.
+ 
+ 
+      
+ Bai et al. [1998] 
+ 
+J. Bai, R. L. Lumsdaine, and J. H. Stock.
+ 
+ 
+ Testing for and dating common breaks in multivariate time series.
+ 
+ 
+ The Review of Economic Studies , 65(3):395–432, 1998.
+ 
+ 
+      
+ Perron and Qu [2006] 
+ 
+P. Perron and Z. Qu.
+ 
+ 
+ Estimating restricted structural change models.
+ 
+ 
+ Journal of Econometrics , 134(2):373–399,
+2006.
+ 
+ 
+      
+ Doyle and Faust [2005] 
+ 
+B. M. Doyle and J. Faust.
+ 
+ 
+ Breaks in the variability and comovement of G-7 economic growth.
+ 
+ 
+ The Review of Economics and Statistics , 87(4):721–740, 2005.
+ 
+ 
+      
+ Nam et al. [2012] 
+ 
+C. F. H. Nam, J. A. D. Aston, and A. M. Johansen.
+ 
+ 
+ Quantifying the uncertainty in change points.
+ 
+ 
+ Journal of Time Series Analysis , 33:807–823, 2012.
+ 
+ 
+      
+ Mahalanobis [1936] 
+ 
+P. C. Mahalanobis.
+ 
+ 
+ On the generalised distance in statistics.
+ 
+ 
+ Proceedings of the National Institute of Sciences of India ,
+2(1):49–55, 1936.
+ 
+ 
+      
+ Hastie et al. [2009] 
+ 
+T. Hastie, R. Tibshirani, and J. Friedman.
+ 
+ 
+ The elements of statistical learning , volume 1.
+ 
+ 
+ 2009.
+ 
+ 
+      
+ Xing et al. [2003] 
+ 
+E. P. Xing, M. I. Jordan, and S. J. Russell.
+ 
+ 
+ Distance metric learning, with application to clustering with
+side-Information.
+ 
+ 
+ In  Advances in Neural Information Processing Systems 21 (NIPS
+2003) , pages 521–528, 2003.
+ 
+ 
+      
+ Davis et al. [2007] 
+ 
+J. V. Davis, B. Kulis, P. Jain, S. Sra, and I. S. Dhillon.
+ 
+ 
+ Information-theoretic metric learning.
+ 
+ 
+ In  Proceedings of the 24th International Conference on Machine
+Learning (ICML) , pages 209–216, Corvalis, Oregon, USA, 2007.
+ 
+ 
+      
+ Einmahl and McKeague [2003] 
+ 
+J. H. J. Einmahl and I. W. McKeague.
+ 
+ 
+ Empirical likelihood based hypothesis testing.
+ 
+ 
+ Bernoulli , 9(2):267–290, 2003.
+ 
+ 
+      
+ Zou et al. [2014] 
+ 
+C. Zou, G. Yin, F. Long, and Z. Wang.
+ 
+ 
+ Nonparametric maximum likelihood approach to multiple change-point
+problems.
+ 
+ 
+ The Annals of Statistics , 42(3):970–1002,
+2014.
+ 
+ 
+      
+ Zhang [2006] 
+ 
+J. Zhang.
+ 
+ 
+ Powerful two-sample tests based on the likelihood ratio.
+ 
+ 
+ Technometrics , 48(1):95–103, 2006.
+ 
+ 
+      
+ Haynes et al. [2017b] 
+ 
+K. Haynes, P. Fearnhead, and I. A. Eckley.
+ 
+ 
+ A computationally efficient nonparametric approach for changepoint
+detection.
+ 
+ 
+ Statistics and Computing , 27:1293–1305,
+2017b.
+ 
+ 
+      
+ Clemencon et al. [2009] 
+ 
+S. Clemencon, M. Depecker, and N. Vayatis.
+ 
+ 
+ AUC optimization and the two-sample problem.
+ 
+ 
+ In  Advances in Neural Information Processing Systems 22 (NIPS
+2009) , pages 360–368, Vancouver, Canada, 2009.
+ 
+ 
+      
+ Friedman and Rafsky [1979] 
+ 
+J. H. Friedman and L. C. Rafsky.
+ 
+ 
+ Multivariate Generalizations of Wald-Wolfowitz and Smirnov
+two-sample tests.
+ 
+ 
+ The Annals of Statistics , 7(4):697–717,
+1979.
+ 
+ 
+      
+ Lung-Yut-Fong et al. [2015] 
+ 
+A. Lung-Yut-Fong, C. Lévy-Leduc, and O. Cappé.
+ 
+ 
+ Homogeneity and change-point detection tests for multivariate data
+using rank statistics.
+ 
+ 
+ Journal de la Société Française de
+Statistique , 156(4):133–162, 2015.
+ 
+ 
+      
+ Wilcoxon [1945] 
+ 
+F. Wilcoxon.
+ 
+ 
+ Individual comparisons by ranking methods.
+ 
+ 
+ Biometrics Bulletin , 1(6):80–83, 1945.
+ 
+ 
+      
+ Lehman and Romano [2006] 
+ 
+E. L. Lehman and J. P. Romano.
+ 
+ 
+ Testing Statistical Hypotheses , volume 101.
+ 
+ 
+ springer, 3 edition, 2006.
+ 
+ 
+      
+ Kendall [1970] 
+ 
+M. G. Kendall.
+ 
+ 
+ Rank correlation methods .
+ 
+ 
+ Charles Griffin, London, England, 1970.
+ 
+ 
+      
+ Harchaoui and Cappé [2007] 
+ 
+Z. Harchaoui and O. Cappé.
+ 
+ 
+ Retrospective mutiple change-point estimation with kernels.
+ 
+ 
+ In  Proceedings of the IEEE/SP Workshop on Statistical Signal
+Processing , pages 768–772, Madison, Wisconsin, USA, 2007.
+ 
+ 
+      
+ Schölkopf and Smola [2002] 
+ 
+B. Schölkopf and A. J. Smola.
+ 
+ 
+ Learning with kernels .
+ 
+ 
+ MIT Press, Cambridge, USA, 2002.
+ 
+ 
+      
+ Gretton et al. [2012] 
+ 
+A. Gretton, K. M. Borgwardt, M. J. Rasch, B. Schölkopf, and A. Smola.
+ 
+ 
+ A kernel two-sample test.
+ 
+ 
+ Journal of Machine Learning Research (JMLR) , 13:723–773, 2012.
+ 
+ 
+      
+ Celisse et al. [2018] 
+ 
+A. Celisse, G. Marot, M. Pierre-Jean, and G. Rigaill.
+ 
+ 
+ New efficient algorithms for multiple change-point detection with
+reproducing kernels.
+ 
+ 
+ Computational Statistics and Data Analysis , 128:200–220, 2018.
+ 
+ 
+      
+ Sriperumbudur et al. [2008] 
+ 
+B. K. Sriperumbudur, A. Gretton, K. Fukumizu, G. Lanckriet, and
+B. Schölkopf.
+ 
+ 
+ Injective Hilbert space embeddings of probability measures.
+ 
+ 
+ In  Proceedings of the 21st Conference on Learning Theory
+(COLT) , pages 9–12, Helsinki, Finland, 2008.
+ 
+ 
+      
+ Shawe-Taylor and Cristianini [2004] 
+ 
+J. Shawe-Taylor and N. Cristianini.
+ 
+ 
+ Kernel Methods for Pattern Analysis .
+ 
+ 
+ Cambridge university press, 2004.
+ 
+ 
+      
+ Garreau and Arlot [2017] 
+ 
+D. Garreau and S. Arlot.
+ 
+ 
+ Consistent change-point detection with kernels.
+ 
+ 
+ arXiv preprint arXiv:1612.04740v3 , pages 1–41, 2017.
+ 
+ 
+      
+ Arlot et al. [2012] 
+ 
+S. Arlot, A. Celisse, and Z. Harchaoui.
+ 
+ 
+ Kernel change-point detection.
+ 
+ 
+ arXiv preprint arXiv:1202.3878 , pages 1–26, 2012.
+ 
+ 
+      
+ Cabrieto et al. [2018] 
+ 
+J. Cabrieto, F. Tuerlinckx, P. Kuppens, F. H. Wilhelm, M. Liedlgruber, and
+E. Ceulemans.
+ 
+ 
+ Capturing correlation changes by applying kernel change point
+detection on the running correlations.
+ 
+ 
+ Information Sciences , 447:117–139, 2018.
+ 
+ 
+      
+ Kay and Oppenheim [1993] 
+ 
+S. M. Kay and A. V. Oppenheim.
+ 
+ 
+ Fundamentals of Statistical Signal Processing, Volume II:
+Detection Theory .
+ 
+ 
+ Prentice Hall, 1993.
+ 
+ 
+      
+ Bai and Perron [2003c] 
+ 
+J. Bai and P. Perron.
+ 
+ 
+ Computation and analysis of multiple structural change models.
+ 
+ 
+ Journal of Applied Econometrics , 18(1):1–22, 2003c.
+ 
+ 
+      
+ Bellman [1955] 
+ 
+R. Bellman.
+ 
+ 
+ On a routing problem.
+ 
+ 
+ Quaterly of Applied Mathematics , 16(1):87–90, 1955.
+ 
+ 
+      
+ Lavielle [1998] 
+ 
+M. Lavielle.
+ 
+ 
+ Optimal segmentation of random processes.
+ 
+ 
+ IEEE Transactions on Signal Processing , 46(5):1365–1373, 1998.
+ 
+ 
+      
+ Rigaill [2015] 
+ 
+G. Rigaill.
+ 
+ 
+ A pruned dynamic programming algorithm to recover the best
+segmentations with 1 to K_max change-points.
+ 
+ 
+ Journal de la Société Française de
+Statistique , 156(4):180–205, 2015.
+ 
+ 
+      
+ Hugueney et al. [2009] 
+ 
+B. Hugueney, G. Hébrail, Y. Lechevallier, and F. Rossi.
+ 
+ 
+ Simultaneous clustering and segmentation for functional data.
+ 
+ 
+ In  Proceedings of 16th European Symposium on Artificial Neural
+Networks (ESANN) , pages 281–286, Bruges, Belgium, 2009.
+ 
+ 
+      
+ Killick et al. [2012] 
+ 
+R. Killick, P. Fearnhead, and I. A. Eckley.
+ 
+ 
+ Optimal detection of changepoints with a linear computational cost.
+ 
+ 
+ Journal of the American Statistical Association , 107(500):1590–1598, 2012.
+ 
+ 
+      
+ Chen and Gupta [2011c] 
+ 
+Jie Chen and Arjun K. Gupta.
+ 
+ 
+ Parametric Statistical Change Point Analysis .
+ 
+ 
+ Birkhäuser Boston, 2011c.
+ 
+ 
+ doi:  10.1007/978-0-8176-4801-5 .
+ 
+ 
+      
+ Chen and Gupta [1997] 
+ 
+J. Chen and A. K. Gupta.
+ 
+ 
+ Testing and locating variance changepoints with application to stock
+prices.
+ 
+ 
+ Journal of the American Statistical Association , 92(438):739–747, 1997.
+ 
+ 
+      
+ Vullings et al. [1997] 
+ 
+H. Vullings, M. Verhaegen, and H. Verbruggen.
+ 
+ 
+ ECG segmentation using time-warping.
+ 
+ 
+ In  Lecture notes in computer science , pages 275–286.
+Springer, 1997.
+ 
+ 
+      
+ Brodsky et al. [1999] 
+ 
+B. E. Brodsky, B. S. Darkhovsky, A. Y. Kaplan, and S. L. Shishkin.
+ 
+ 
+ A nonparametric method for the segmentation of the EEG.
+ 
+ 
+ Computer Methods and Programs in Biomedicine , 60(2):93–106, 1999.
+ 
+ 
+      
+ Esteller et al. [2001] 
+ 
+R. Esteller, G. Vachtsevanos, J. Echauz, and B. Litt.
+ 
+ 
+ A Comparison of waveform fractal dimension algorithms.
+ 
+ 
+ IEEE Transactions on Circuits and Systems I: Fundamental Theory
+and Applications , 48(2):177–183, 2001.
+ 
+ 
+      
+ Karagiannaki et al. [2017] 
+ 
+K. Karagiannaki, A. Panousopoulou, and P. Tsakalides.
+ 
+ 
+ An online feature selection architecture for Human Activity
+Recognition.
+ 
+ 
+ In  Proceedings of the IEEE International Conference on
+Acoustics, Speech and Signal Processing (ICASSP) , pages 2522–2526, New
+Orleans, LA, USA, 2017.
+ 
+ 
+      
+ Adak [1998] 
+ 
+S. Adak.
+ 
+ 
+ Time-dependent spectral analysis of nonstationary time series.
+ 
+ 
+ Journal of the American Statistical Association , 93(444):1488–1501, 1998.
+ 
+ 
+      
+ Chen and Gopalakrishnan [1998] 
+ 
+S. S. Chen and P. S. Gopalakrishnan.
+ 
+ 
+ Speaker, environment and channel change detection and clustering via
+the bayesian information criterion.
+ 
+ 
+ In  Proceedings of the DARPA Broadcast News Transcription and
+Understanding Workshop , page 8, Landsdowne, VA, 1998.
+ 
+ 
+      
+ Keogh et al. [2004] 
+ 
+E. Keogh, S. Chu, D. Hart, and M. Pazzani.
+ 
+ 
+ Segmenting time series: a survey and novel approach.
+ 
+ 
+ Data Mining in Time Series Databases , 57(1):1–22, 2004.
+ 
+ 
+      
+ Harchaoui et al. [2008] 
+ 
+Z. Harchaoui, F. Bach, and É. Moulines.
+ 
+ 
+ Kernel change-point analysis.
+ 
+ 
+ In  Advances in Neural Information Processing Systems 21 (NIPS
+2008) , pages 609–616, Vancouver, Canada, 2008.
+ 
+ 
+      
+ Liu et al. [2013] 
+ 
+S. Liu, M. Yamada, N. Collier, and M. Sugiyama.
+ 
+ 
+ Change-point detection in time-series data by relative density-ratio
+estimation.
+ 
+ 
+ Neural Networks , 43:72–83, 2013.
+ 
+ 
+      
+ Kifer et al. [2004] 
+ 
+D. Kifer, S. Ben-David, and J. Gehrke.
+ 
+ 
+ Detecting change in data streams.
+ 
+ 
+ In  Proceedings of the Thirtieth International Conference on
+Very Large Data Bases (VLDB) - Volume 30 , pages 180–191, Toronto, Canada,
+2004.
+ 
+ 
+      
+ Prescott Adams and MacKay [2007] 
+ 
+R. Prescott Adams and D. J. C. MacKay.
+ 
+ 
+ Bayesian Online Changepoint Detection.
+ 
+ 
+ Technical report, 2007.
+ 
+ 
+      
+ Olshen et al. [2004] 
+ 
+A. B. Olshen, E. S. Venkatraman, R. Lucito, and M. Wigler.
+ 
+ 
+ Circular binary segmentation for the analysis of array-based DNA
+copy number data.
+ 
+ 
+ Biostatistics , 5(4):557–572, 2004.
+ 
+ 
+      
+ Bai [1997b] 
+ 
+J. Bai.
+ 
+ 
+ Estimating multiple breaks one at a time.
+ 
+ 
+ Econometric Theory , 13(3):315–352,
+1997b.
+ 
+ 
+      
+ Fryzlewicz [2014] 
+ 
+Piotr Fryzlewicz.
+ 
+ 
+ Wild binary segmentation for multiple change-point detection.
+ 
+ 
+ Annals of Statistics , 42(6):2243–2281,
+2014.
+ 
+ 
+      
+ Himberg et al. [2001] 
+ 
+J. Himberg, K. Korpiaho, H. Mannila, J. Tikanmaki, and H. T. Toivonen.
+ 
+ 
+ Time series segmentation for context recognition in mobile devices.
+ 
+ 
+ In  Proceedings of the IEEE International Conference on Data
+Mining (ICDM) , pages 203–210, 2001.
+ 
+ 
+      
+ Niu and Zhang [2012] 
+ 
+Y. S. Niu and H. Zhang.
+ 
+ 
+ The screening and ranking algorithm to detect DNA copy number
+variations.
+ 
+ 
+ The Annals of Applied Statistics , 6(3):1306–1326, 2012.
+ 
+ 
+      
+ Lai et al. [2005] 
+ 
+W. R. Lai, M. D. Johnson, R. Kucherlapati, and P. J. Park.
+ 
+ 
+ Comparative analysis of algorithms for identifying amplifications
+and deletions in array CGh data.
+ 
+ 
+ Bioinformatics , 21(19):3763–3770, 2005.
+ 
+ 
+      
+ Willenbrock and Fridlyand [2005] 
+ 
+H. Willenbrock and J. Fridlyand.
+ 
+ 
+ A comparison study: applying segmentation to array CGH data for
+downstream analyses.
+ 
+ 
+ Bioinformatics , 21(22):4084–4091, 2005.
+ 
+ 
+      
+ Venkatraman and Olshen [2007] 
+ 
+E. S. Venkatraman and A. B. Olshen.
+ 
+ 
+ A faster circular binary segmentation algorithm for the analysis of
+array CGH data.
+ 
+ 
+ Bioinformatics , 23(6):657–663, 2007.
+ 
+ 
+      
+ Keogh et al. [2001] 
+ 
+E. Keogh, S. Chu, D. Hart, and M. Pazzani.
+ 
+ 
+ An online algorithm for segmenting time series.
+ 
+ 
+ In  Proceedings of the IEEE International Conference on Data
+Mining (ICDM) , pages 289–296, 2001.
+ 
+ 
+      
+ Yao [1988] 
+ 
+Y.-C. Yao.
+ 
+ 
+ Estimating the number of change-points via Schwarz’ criterion.
+ 
+ 
+ Statistics and Probability Letters , 6(3):181–189, 1988.
+ 
+ 
+      
+ Yao and Au [1989] 
+ 
+Y.-C. Yao and S. T. Au.
+ 
+ 
+ Least-squares estimation of a step function.
+ 
+ 
+ Sankhy??: The Indian Journal of Statistics, Series A ,
+51(3):370–381, 1989.
+ 
+ 
+      
+ Arlot and Celisse [2010] 
+ 
+S. Arlot and A. Celisse.
+ 
+ 
+ A survey of cross-validation procedures for model selection.
+ 
+ 
+ Statistical Surveys , 4:40–79, 2010.
+ 
+ 
+      
+ Birgé and Massart [2007] 
+ 
+L. Birgé and P. Massart.
+ 
+ 
+ Minimal penalties for Gaussian model selection.
+ 
+ 
+ Probability Theory and Related Fields , 138(1):33–73, 2007.
+ 
+ 
+      
+ Hocking et al. [2013b] 
+ 
+T. Hocking, G Rigaill, J.-P. Vert, and F. Bach.
+ 
+ 
+ Learning sparse penalties for change-point detection using max
+margin interval regression.
+ 
+ 
+ In  Proceedings of the International Conference on Machine
+Learning (ICML) , pages 172–180, Atlanta, USA, 2013b.
+ 
+ 
+      
+ Truong et al. [2017] 
+ 
+C. Truong, L. Oudre, and N. Vayatis.
+ 
+ 
+ Penalty learning for changepoint detection.
+ 
+ 
+ In  Proceedings of the European Signal Processing Conference
+(EUSIPCO) , Kos, Greece, 2017.
+ 
+ 
+      
+ Schwarz [1978] 
+ 
+G. Schwarz.
+ 
+ 
+ Estimating the dimension of a model.
+ 
+ 
+ The Annals of Statistics , 6(2):461–464,
+1978.
+ 
+ 
+      
+ Tibshirani [1996] 
+ 
+R. Tibshirani.
+ 
+ 
+ Regression shrinkage and selection via the lasso.
+ 
+ 
+ Journal of the Royal Statistical Society. Series B
+(Methodological) , 58(1):267–288, 1996.
+ 
+ 
+      
+ Jeon et al. [2016] 
+ 
+J.-J. Jeon, J. Hyun Sung, and E.-S. Chung.
+ 
+ 
+ Abrupt change point detection of annual maximum precipitation using
+fused lasso.
+ 
+ 
+ Journal of Hydrology , 538:831–841, 2016.
+ 
+ 
+      
+ Zhang and Siegmund [2007] 
+ 
+N. R. Zhang and D. O. Siegmund.
+ 
+ 
+ A modified Bayes information criterion with applications to the
+analysis of comparative genomic hybridization data.
+ 
+ 
+ Biometrics , 63(1):22–32, 2007.
+ 
+ 
+      
+ Lebarbier [2005] 
+ 
+É. Lebarbier.
+ 
+ 
+ Detecting multiple change-points in the mean of gaussian process by
+model selection.
+ 
+ 
+ Signal Processing , 85(4):717–736, 2005.
+ 
+ 
+      
+ Vostrikova [1981] 
+ 
+L. Y. Vostrikova.
+ 
+ 
+ Detecting disorder in multidimensional random processes.
+ 
+ 
+ Soviet Math. Dokl. , 24:55–59, 1981.
+ 
+ 
+      
+ Birgé and Massart [2001] 
+ 
+L. Birgé and P. Massart.
+ 
+ 
+ Gaussian model selection.
+ 
+ 
+ Journal of the European Mathematical Society , 3(3):203–268, 2001.
+ 
+ 
+    
+ 
+ 
+ 
+ 
+ 
+ 
+   
+    Experimental support, please
+     view the build logs 
+    for errors. Generated by
+     
+       
+        L
+         A 
+        T
+         E 
+       
+       xml 
+       
+     .
+   
+   
+     Instructions for reporting errors 
+     We are continuing to improve HTML versions of papers, and your feedback helps enhance accessibility and mobile
+      support. To report errors in the HTML that will help us improve conversion and rendering, choose any of the
+      methods listed below: 
+     
+       Click the "Report Issue"  ( 
+             
+           )  button, located in the page header. 
+     
+     Tip:  You can select the relevant text first, to include it in your report. 
+     Our team has already identified  the following issues . We appreciate your time reviewing and reporting rendering errors we
+      may not have found yet. Your efforts will help us improve the HTML versions for all readers, because disability
+      should not be a barrier to accessing research. Thank you for your continued support in championing open access for
+      all. 
+     Have a free development cycle? Help support accessibility at arXiv! Our collaborators at LaTeXML maintain a  list of packages that need conversion , and welcome  developer contributions . 
+   
+ 
+   
+     
+       
+        We gratefully acknowledge support from
+        our  major funders ,
+         member institutions ,  ,
+        and all contributors.
+       
+       
+         About 
+         · 
+         Help 
+         · 
+         Contact 
+         · 
+         Subscribe 
+         · 
+         Copyright 
+         · 
+         Privacy 
+         · 
+         Accessibility 
+         · 
+         Operational Status  (opens in new tab) 
+       
+     
+
+     
+       Major funding support from 
+       
+         
+           
+         
+         
+           
+         
+         
+           
+         
+       
+     
+   
+ 
+   
+     
+       
+     
+   
+ 
+ 

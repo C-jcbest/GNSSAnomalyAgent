@@ -1,0 +1,217 @@
+{
+  "methods": {
+    "segment_pair_repair": {
+      "stations": 6,
+      "generic_daily_micro": {
+        "tp": 232,
+        "fp": 6,
+        "fn": 1,
+        "precision": 0.9747899159663865,
+        "recall": 0.9957081545064378,
+        "f1": 0.9851380042462845
+      },
+      "generic_daily_station_macro_f1": 0.8260660434573478,
+      "false_alarm_runs_per_normal_station_year": 0.5794553146483342,
+      "normal_stations": 1,
+      "false_alarm_runs_per_normal_station_year_controls": 0.0,
+      "types": {
+        "spike": {
+          "daily_micro": {
+            "tp": 2,
+            "fp": 0,
+            "fn": 0,
+            "precision": 1.0,
+            "recall": 1.0,
+            "f1": 1.0
+          },
+          "events_micro": {
+            "iou_0.3": {
+              "tp": 2,
+              "fp": 0,
+              "fn": 0,
+              "precision": 1.0,
+              "recall": 1.0,
+              "f1": 1.0
+            },
+            "iou_0.5": {
+              "tp": 2,
+              "fp": 0,
+              "fn": 0,
+              "precision": 1.0,
+              "recall": 1.0,
+              "f1": 1.0
+            },
+            "tolerance_3_days_secondary": {
+              "tp": 2,
+              "fp": 0,
+              "fn": 0,
+              "precision": 1.0,
+              "recall": 1.0,
+              "f1": 1.0
+            }
+          }
+        },
+        "step": {
+          "daily_micro": {
+            "tp": 2,
+            "fp": 0,
+            "fn": 0,
+            "precision": 1.0,
+            "recall": 1.0,
+            "f1": 1.0
+          },
+          "events_micro": {
+            "iou_0.3": {
+              "tp": 2,
+              "fp": 0,
+              "fn": 0,
+              "precision": 1.0,
+              "recall": 1.0,
+              "f1": 1.0
+            },
+            "iou_0.5": {
+              "tp": 2,
+              "fp": 0,
+              "fn": 0,
+              "precision": 1.0,
+              "recall": 1.0,
+              "f1": 1.0
+            },
+            "tolerance_3_days_secondary": {
+              "tp": 2,
+              "fp": 0,
+              "fn": 0,
+              "precision": 1.0,
+              "recall": 1.0,
+              "f1": 1.0
+            }
+          }
+        },
+        "transient": {
+          "daily_micro": {
+            "tp": 66,
+            "fp": 0,
+            "fn": 0,
+            "precision": 1.0,
+            "recall": 1.0,
+            "f1": 1.0
+          },
+          "events_micro": {
+            "iou_0.3": {
+              "tp": 2,
+              "fp": 0,
+              "fn": 0,
+              "precision": 1.0,
+              "recall": 1.0,
+              "f1": 1.0
+            },
+            "iou_0.5": {
+              "tp": 2,
+              "fp": 0,
+              "fn": 0,
+              "precision": 1.0,
+              "recall": 1.0,
+              "f1": 1.0
+            }
+          }
+        },
+        "deformation": {
+          "daily_micro": {
+            "tp": 186,
+            "fp": 6,
+            "fn": 1,
+            "precision": 0.96875,
+            "recall": 0.9946524064171123,
+            "f1": 0.9815303430079155
+          },
+          "events_micro": {
+            "iou_0.3": {
+              "tp": 2,
+              "fp": 0,
+              "fn": 0,
+              "precision": 1.0,
+              "recall": 1.0,
+              "f1": 1.0
+            },
+            "iou_0.5": {
+              "tp": 2,
+              "fp": 0,
+              "fn": 0,
+              "precision": 1.0,
+              "recall": 1.0,
+              "f1": 1.0
+            }
+          }
+        }
+      },
+      "types_daily_macro_f1": 0.9953825857519789,
+      "types_event_macro_f1": {
+        "iou_0.3": 1.0,
+        "iou_0.5": 1.0
+      }
+    }
+  },
+  "scope": "six seen validation stations; post-pilot offline method development",
+  "new_requests": 0,
+  "source_run": "C:\\Users\\JC\\.codex\\worktrees\\gnss-vlm-research\\GNSSAnomalyAgent-sim\\runs\\exp06-pilot-v1",
+  "source_registration_sha256": "de23886ecaceee66ac12f40278ac119335e18d0ee0c0b716d3640eb67a6b6ca9",
+  "source_hashes": {
+    "__init__.py": "9c1ecee1dd8350d88a13e3e542d0541a2448cd34e44ed9127c453b604970296f",
+    "baselines.py": "a8ca8c9b3f80ad376183ee7c1ee77501c543168f0cd4d5564fc78ae08df26861",
+    "cli.py": "5483b1976d756d5e006a2c4a931898c4d5916b8b8f6b7db55313dfd8e16cb4bf",
+    "data.py": "a0ac7ba8a3ed984e60965ca08ba93dc4ce696f2390f054fc7eb1c73afc47f45c",
+    "experiment.py": "069db23634db0edb072b73460e137e10dd7100cb140d0a978321ba991807a097",
+    "features.py": "8b6fed5af931113b10e1cf6a3759017e8bdbbf42891e5c6e92b5e245f7d80d8f",
+    "files.py": "fda1f5894c90c61a8d259c5aa67fc40a052b764634b6d60cf3c740be56b6637b",
+    "fusion.py": "5026d7da1a8e7b55f79070e6b5cc301508221a47846c4f26a3df49b0deb8bb36",
+    "guided.py": "a1c6c1ed183f614ef30879f0a13f00b9cafee6eb5f5f4b264c190787a5a65a92",
+    "localization.py": "287aa2a38d7e354486b7f42c11ead417d3a8264fc3dc2b35511247d6e9f18eab",
+    "metrics.py": "ee774e99262112dd043de5d19bb88bab69b46dc7422f2edb6988881a25fdc9f8",
+    "plots.py": "a3f3ee1852ea81e94aa321c27a9beef4ed96ef056cf4a6321d15e3e139a05708",
+    "provider.py": "ca0e9a594d59e9caf15d649815051ff652f39924ccc62ed0a6328db66eaf77f7",
+    "schema.py": "ff1477391c9ac4f3e5b9883e140451b204f5f5beca95f3795a90e13e65a3196f",
+    "segmentation.py": "3f139e94e4ba68a33665d8f77fbb85515ff741d73a7ad5709f38bac780166805",
+    "segmented_review.py": "775e9eeedae2019c809b5425318badb5b670c74fb4294bbe51ebb66b3e550f1c",
+    "temporal.py": "f594ebf0683ff4f717242f0325cc98430d7fec171787b5b478762a18bfcdd11c",
+    "upstream.py": "0d471248da8b6a2e01e8516b771c0c7b299c318194dd5ddcefccb984554a7e08",
+    "vision.py": "1fcf5ec56ca3a310ff11b4376ba8f81624cd354cdb9ca792510eb9206a9c2d28"
+  },
+  "receipts": [
+    {
+      "station_id": "s0024",
+      "source_result_sha256": "9c458e8ebf10689ab2fdc132aea66917a2cd223243af52df053f7a0ad1be0cdf",
+      "source_candidates_sha256": "01d1d44965dd22bad6ca1b6b2c353553e549071efb9f405c6688b84039a3b0af",
+      "visual_dependency_status": "success"
+    },
+    {
+      "station_id": "s0025",
+      "source_result_sha256": "b6f59b86f29e89e5587b01edbe1ae919a0d832e1e3ee79463e825fed20258d17",
+      "source_candidates_sha256": "0f08c9c343f51e2a4a0025dc5505114421891f203c41c18457cc8a8b0cc358eb",
+      "visual_dependency_status": "failed"
+    },
+    {
+      "station_id": "s0026",
+      "source_result_sha256": "06d07a92547e3d859cf1fb267d91477c11112f7bf75eff077ebe6715b5764733",
+      "source_candidates_sha256": "4c69e6fa82157612c381bba05857b542c377ebcf218f82c1a97b031ea05aa1d2",
+      "visual_dependency_status": "success"
+    },
+    {
+      "station_id": "s0027",
+      "source_result_sha256": "b475acdb921c6911cd4dcb19e7ace90a7934d8d01a79523c68b4fef70bc772f5",
+      "source_candidates_sha256": "7917b154864d8aa597f0db12641879d5109c151d54bd0e94d523b8525d631793",
+      "visual_dependency_status": "success"
+    },
+    {
+      "station_id": "s0028",
+      "source_result_sha256": "798f8f3412c6b2f954c6e1aa47ada5d3d429048ffa4cf4bede0ab8c4d6e8cedc",
+      "source_candidates_sha256": "cb177af2325572ffd361df66bc54bc9d6926b6c639e84db2d85b7e56ce994e28",
+      "visual_dependency_status": "success"
+    },
+    {
+      "station_id": "s0029",
+      "source_result_sha256": "de09762104002d40d8f5563a1a982b26b97b468581701ea98542be7d47e666bd",
+      "source_candidates_sha256": "71a10f3cc3cf682eb229ede99334a577683178c466487de2d0ec122a1bc7e0e8",
+      "visual_dependency_status": "success"
+    }
+  ]
+}

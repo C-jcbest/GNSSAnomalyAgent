@@ -24,7 +24,8 @@ from gnss_research.temporal import (
 
 NUMERICAL_METHODS = ("random_forest", "rf_balanced", "extra_trees", "isolation_forest",
                      "rf_gap", "rf_temporal", "rf_independent", "rf_independent_temporal",
-                     "rf_morphology", "rf_morphology_temporal", "rf_split", "rf_split_temporal")
+                     "rf_morphology", "rf_morphology_temporal", "rf_split", "rf_split_temporal",
+                     "segment_numeric")
 
 
 def contiguous_runs(mask: np.ndarray) -> list[tuple[int, int]]:
@@ -145,6 +146,11 @@ def predict_numerical(model, name: str, observation: dict,
                       evidence: Evidence | None = None) -> dict:
     if evidence is None:
         evidence = numerical_evidence(observation)
+    if name == "segment_numeric":
+        from gnss_research.segmentation import segment_proposals
+
+        spike_source = predict_numerical(model, "rf_split_temporal", observation, evidence)
+        return segment_proposals(observation, spike_source, evidence)
     if isinstance(model, PointIntervalForest):
         points = predict_numerical(model.point_model, "rf_morphology", observation, evidence)
         interval_name = "rf_temporal" if model.temporal else "rf_balanced"

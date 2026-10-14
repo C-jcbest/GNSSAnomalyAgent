@@ -38,13 +38,15 @@ def paired_micro(left: list[dict], right: list[dict], seed: int, kind: str) -> d
             "percentile_ci_95": np.quantile(differences, [.025, .975]).tolist()}
 
 
-def activity_errors(run: Path, dataset: Path, method: str) -> dict:
-    config = read_json(run / "registration.json")
+def activity_errors(run: Path, dataset: Path, method: str,
+                    station_ids: list[str] | None = None) -> dict:
+    if station_ids is None:
+        station_ids = read_json(run / "registration.json")["station_ids"]
     totals = {"observed_activity_days": 0, "missed_activity_days": 0,
               "false_activity_days_before_onset": 0, "false_activity_days_after_arrest": 0,
               "activity_stations": 0}
     for record in read_json(dataset / "manifest.json")["records"]:
-        if record["station_id"] not in config["station_ids"]:
+        if record["station_id"] not in station_ids:
             continue
         observation = read_json(dataset / record["observation"])
         truth = read_json(dataset / record["truth"])

@@ -6,6 +6,11 @@ import numpy as np
 from gnss_research.schema import Prediction, event_masks, observed_values
 
 DERIVED_METHODS = {
+    "segment_fusion": "segment_guided",
+    "segment_visual_bounds": "segment_guided",
+    "segment_pair_repair": "segment_guided",
+    "pair_focus_repair": "pair_focus",
+    "pair_raw_repair": "pair_raw",
     "anchored_fusion": "guided_fusion",
     "anchored_no_local": "guided_no_local",
     "anchored_no_scores": "guided_no_scores",

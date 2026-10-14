@@ -1,0 +1,14 @@
+{
+  "experiment_id": "GNSS-VLM-EXP06",
+  "name": "GNSS位移结构分解与视觉语义核验实验",
+  "protocol_version": "development-v2",
+  "protocol_path": "docs/experiment-exp06-development-v2.md",
+  "primary_method": "segment_pair_repair",
+  "primary_endpoint": "four-type macro daily F1: pool TP/FP/FN within each type, then average four type F1 scores equally; no point adjustment",
+  "primary_method_status": "provisional; retain numeric decisions, repair only ambiguous return pairs; choose on all 24 validation stations",
+  "development_seed": 2026101404,
+  "test_seeds": [2026101405, 2026101406],
+  "visual_failure_policy": "no semantic repair; independent numerical predictions remain; parent model failures separately disclosed",
+  "adjustments": ["all numerical segmentation parameters inherited from development-v1", "optional visual repair of ambiguous return pair types", "numeric activity retained regardless of visual omissions", "failed visual path supplies no repair; no retry"],
+  "note": "Development change triggered by first six stations; not a test result."
+}

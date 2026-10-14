@@ -1,10 +1,46 @@
 # GNSS 视觉大模型异常识别研究
 
+当前实验已推进到 **GNSS-VLM-EXP06：GNSS位移结构分解与视觉语义核验实验**。
+冻结主方法 **SDR-VLM** 对应`pair_focus_repair`：原始位移结构负责定位，视觉专门修复返回对类别歧义。
+先24站开发，后两个全新种子、48测试站；没有修改统一毫米/速率告警阈值。
+
+| 同组48站方法 | 四类等权日F1 | 四类事件F1≥.5 | 通用日F1 |
+|---|---:|---:|---:|
+| 平衡RF | .4330 | .2493 | .5112 |
+| 旧完整定位融合，同站重跑 | .5817 | .5157 | .6302 |
+| 新位移结构分解，无视觉 | .8323 | .8224 | .9141 |
+| **SDR-VLM，冻结主方法** | **.8652** | **.8523** | **.9178** |
+
+暂态/活动F1=.9372/.9002；主要收益来自结构分解，视觉额外提高主指标.0330，区间下界触及0。
+扣慢运动图的独立优势很小，正常控制出现1站假活动；错误配对与全部负结果保留。
+开发76、正式110，共186请求，无模型重试；主方法正式仅7个歧义站请求模型，其余41站明确不请求。
+作者PELT原API/README例子与GNSS适配已执行并单独按变点边缘任务分列，不伪造库的四类输出。
+
+- [EXP06正式结果与全部消融](results/exp06-main-v1/results.md)
+- [实际效果与论文使用判断](docs/exp06-assessment.md)
+- [冻结协议](docs/experiment-exp06.md)、[本轮文献与源码](docs/exp06-reading-notes.md)
+- [结果对照图](results/exp06-main-v1/comparison.png)
+
+复现第一个EXP06正式种子（以下为已使用种子的复现，不是新测试）：
+
+```powershell
+uv sync --locked
+uv run gnss-research generate --out data/reproduce-exp06-1405 --seed 2026101405 --per-split 24 --train-stations 96
+uv run gnss-research register --dataset data/reproduce-exp06-1405 --out runs/reproduce-exp06-1405 --methods random_forest rf_balanced extra_trees isolation_forest rf_split_temporal segment_numeric visual_only guided_fusion morphology_fusion localized_fusion pair_focus pair_focus_repair pair_raw pair_raw_repair --split test --seed 2026101405 --model qwen3.8-flash --max-requests 96 --workers 3 --identity configs/experiment-exp06.json
+uv run gnss-research run --run runs/reproduce-exp06-1405 --env-file .env
+```
+
+第二种子相同配置，数据/训练种子均改2026101406并使用新输出目录。
+96是每运行请求上限，实际按观测歧义条件请求；外部模型服务的重复响应可能变化。
+原始数据、图像、请求与响应在本地`data/exp06-*`及`runs/exp06-*`，冻结与评价凭据入库，密钥不入库。
+
+## 当前论文稿与EXP04历史证据
+
 已完成[24页中文Word论文语言润色稿](manuscript/GNSS多类型异常识别论文初稿_语言润色版.docx)，
 题为《融合数值形态候选与视觉大模型的GNSS多类型异常识别方法》。
 六章正文已按作者写作规则润色，突出形态分工与具体指标取舍，沿用无独立实验设置章的结构。章节分配、文献参考、内容审阅与版面检查见[论文材料](manuscript/README.md)。
 
-当前完成 **GNSS-VLM-EXP04-v1：GNSS形态分工视觉数值融合异常识别实验**。
+该稿仍对应 **GNSS-VLM-EXP04-v1：GNSS形态分工视觉数值融合异常识别实验**，尚未改写成EXP06结果。
 分支`codex/gnss-vlm-research`；主方法为`morphology_fusion`。
 尖峰交给数值分类，阶跃交给排名候选视觉确认，持续活动按原始位移复核边界。
 先新验证小批，后24验证站选定四类等权日F1，再冻结两个新种子、48测试站。
