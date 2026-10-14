@@ -1,0 +1,17 @@
+{
+  "experiment_id": "GNSS-VLM-EXP07",
+  "name": "GNSS非互斥视觉提示与配对修复正式复核实验",
+  "protocol_version": "test-v1",
+  "protocol_path": "docs/experiment-exp07-test.md",
+  "primary_method": "coexist_repair",
+  "primary_method_name": "SDR-VLM-NVR（待验证候选）",
+  "primary_endpoint": "four-type pooled daily macro F1; no point adjustment",
+  "development_seed": 2026101407,
+  "test_seeds": [2026101408, 2026101409],
+  "minimum_absolute_improvement": 0.02,
+  "require_both_seed_directions_positive": true,
+  "maximum_per_type_degradation": 0.05,
+  "stable_commit": "23be8da",
+  "changes": ["append explicit nonexclusive step/transient prompt", "retain only visually confirmed same-onset numerical step inside repaired pair"],
+  "unchanged_numerical_pipeline": "EXP06 segment_numeric; no ISC candidate in formal test"
+}

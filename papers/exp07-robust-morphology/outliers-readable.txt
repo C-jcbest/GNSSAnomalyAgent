@@ -1,0 +1,15163 @@
+
+
+
+
+
+
+Changepoint Detection in the Presence of Outliers
+
+
+
+
+
+
+
+
+ 
+
+
+
+  // Restore the saved color scheme preference, or
+  // enact the browser preference if "automatic", 
+  // without expecting DOM load to have completed.
+  //
+  // Also restore any saved readingmode and ToC display preferences.
+  function initializeReadingPreferences() {
+    let saved_theme = localStorage.getItem("ar5iv_theme") || "automatic";
+    if (saved_theme === "automatic") {
+      if (window.matchMedia("(prefers-color-scheme: dark)").matches) {
+        saved_theme = "dark";
+      }
+    }
+    if (saved_theme == "dark") {
+      document.documentElement.setAttribute("data-theme", "dark");
+    } else {
+      document.documentElement.setAttribute("data-theme", "light");
+    }
+
+    const tocDisplay = localStorage.getItem('arxiv_html_paper_toc_display');
+    if (tocDisplay) {
+      document.documentElement.setAttribute("data-toc-display", tocDisplay);
+    }
+    const readingMode = localStorage.getItem('arxiv_html_paper_reading_mode');
+    if (readingMode) {
+      document.documentElement.setAttribute("data-reading-mode", readingMode);
+    }
+    // Pre-apply spinout-banner dismissal here, before the banner paints, so it
+    // never flashes in only to be hidden later by the deferred arxiv-header.js.
+    // Key matches arxiv-header.js: "arxiv-banner-dismissed:" + data-banner-name.
+    if (localStorage.getItem('arxiv-banner-dismissed:spinout-nonprofit')) {
+      document.documentElement.setAttribute("data-banner-dismissed", "");
+    }
+  }
+  // Run as soon as JS starts, to minimize repainting
+  initializeReadingPreferences();
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  /* Banner pre-dismissal (set above before paint -> no flash-then-hide) and
+     reading-mode chrome hiding. */
+  html[data-banner-dismissed] .ds-announcement { display: none; }
+  html[data-reading-mode="enabled"] .ds-announcement,
+  html[data-reading-mode="enabled"] .ds-site-footer { display: none; }
+  /* Keep the announcement text dark on the Open-Blue band in both colour themes
+     (otherwise it inherits the paper's warm-wash text in dark mode and washes out). */
+  .ds-announcement-text { color: var(--arxiv-ink, #1c1a17); }
+
+
+
+
+
+
+
+
+
+
+  
+
+    
+
+      
+Report GitHub Issue
+
+      
+×
+
+    
+
+
+    
+
+      
+Title:
+
+      
+
+
+      
+Content selection saved. Describe the issue below:
+
+
+      
+Description:
+
+      
+
+    
+
+
+    
+
+      
+Submit without GitHub
+
+      
+Submit in GitHub
+
+    
+
+  
+
+
+
+    
+
+    
+arXiv is now an independent nonprofit!
+
+    
+Learn more
+
+    
+×
+
+  
+
+
+
+
+  
+
+    
+
+      
+Back to arXiv
+
+    
+
+  
+
+  
+
+  
+
+    
+Why HTML?
+
+    
+
+      
+
+        
+
+      
+
+      
+Report Issue
+
+    
+
+    
+
+      
+
+        
+
+        
+
+      
+
+      
+Back to Abstract
+
+    
+
+    
+
+    
+
+      
+
+        
+
+      
+
+      
+Download PDF
+
+    
+
+    
+
+      
+
+        
+
+        
+
+      
+
+    
+
+    
+
+    
+
+      
+
+        
+
+      
+
+    
+
+    
+
+    
+
+      
+
+        
+
+          
+
+          
+
+        
+
+      
+
+      
+
+        
+
+          
+
+          
+
+        
+
+      
+
+      
+
+        
+
+          
+
+          
+
+        
+
+      
+
+    
+
+  
+
+
+
+
+
+
+
+
+1 
+Introduction
+
+
+2 
+Model Definition
+
+
+
+
+2.1 
+Penalised Costs based on M-estimation
+
+
+2.2 
+Consistency under Biweight Loss
+
+
+2.3 
+Alternative Robust Changepoint Methods
+
+
+
+
+3 
+Minimising the Penalised Cost
+
+
+
+
+3.1 
+A Dynamic Programming Recursion
+
+
+3.2 
+Solving the Recursion
+
+
+
+
+4 
+Computational Cost of R-FPOP
+
+
+5 
+Results
+
+
+
+
+5.1 
+Simulation Study: Computational Cost
+
+
+5.2 
+Simulation Study: Accuracy
+
+
+5.3 
+Online analysis of well-log data
+
+
+5.4 
+Estimating Copy Number Variation
+
+
+5.5 
+Wireless Tampering
+
+
+
+
+6 
+Discussion
+
+
+References
+
+
+A 
+Proof of Theorem 
+
+
+B 
+Proofs from Section 
+
+
+C 
+Proofs from Section 
+
+
+D 
+Pseudo Code for R-FPOP
+
+
+E 
+ROC curve for all tumor fractions
+
+
+References
+
+
+
+
+
+
+
+
+
+  
+
+    License: arXiv.org perpetual non-exclusive license
+  
+
+  
+
+arXiv:1609.07363v2 [stat.ME] 11 Jul 2017
+
+
+
+
+
+
+Changepoint Detection in the Presence of Outliers
+
+
+
+
+
+
+Paul Fearnhead
+
+
+
+Affiliation: 
+Department of Mathematics and Statistics, Lancaster University
+
+
+
+  
+
+
+Guillem Rigaill
+
+
+
+Affiliation: 
+Institute of Plant Sciences Paris-Saclay, UMR 9213/UMR1403, CNRS, INRA, Université Paris-Sud, Université d’Evry,
+Université Paris-Diderot, Sorbonne Paris-Cité
+
+
+
+Affiliation: 
+Laboratoire de Mathématiques at Modélisation d’Evry (LaMME), Université d’Evry Val d’Essonne, UMR CNRS 8071, ENSIIE, USC INRA 
+
+
+
+
+
+Affiliation: 
+Correspondence: p.fearnhead@lancaster.ac.uk
+
+
+
+
+
+
+Abstract
+
+
+
+
+
+
+Many traditional methods for identifying changepoints can struggle in the presence of outliers, or when the noise is heavy-tailed. Often they will infer additional changepoints in order to fit the outliers. To overcome this problem, data often needs to be pre-processed to remove outliers, though this is difficult for applications where the data needs to be analysed online. We present an approach to changepoint detection that is robust to the presence of outliers. The idea is to adapt existing penalised cost approaches for detecting changes so that they use loss functions that are less sensitive to outliers. We argue that loss functions that are bounded, such as the classical biweight loss, are particularly suitable – as we show that only bounded loss functions are robust to arbitrarily extreme outliers. We present an efficient dynamic programming algorithm that can find the optimal segmentation under our penalised cost criteria. Importantly, this algorithm can be used in settings where the data needs to be analysed online. We show that we can consistently estimate the number of changepoints, and accurately estimate their locations, using the biweight loss function. We demonstrate the usefulness of our approach for applications such as analysing well-log data, detecting copy number variation, and detecting tampering of wireless devices.
+
+
+
+
+
+
+Keywords:
+ Binary Segmentation, Biweight loss, Cusum, M-estimation, Penalised likelihood, Robust Statistics
+
+
+
+
+
+
+1 
+Introduction
+
+
+
+
+
+Changepoint detection has been identified as one of the major challenges for modern, big data applications 
+National Research Council, (2013)
+. The problem arises when analysing data that can be ordered, for example time-series or genomics
+data where observations are ordered by time or position on a chromosome respectively. Changepoint detection refers to locating points in time or position where some aspect of the data of interest, such as location, scale or distribution,
+changes. There has been a recent explosion in methods for detecting changes 
+(e.g. 
+Frick et al.,, 2014
+; 
+Fryzlewicz,, 2014
+; 
+Cao and Wu,, 2015
+; 
+Haynes et al., 2017b, 
+; 
+Ma and Yau,, 2016
+, and references therein)
+
+in recent years, in part motivated by the range of applications for which changepoint detection is important. Exemplar areas
+of application include bioinformatics 
+Olshen et al., (2004)
+; 
+Futschik et al., (2014)
+, ion channels 
+Hotz et al., (2013)
+, climate records 
+Reeves et al., (2007)
+, oceonagraphic data 
+Killick et al., (2010)
+; 
+Killick et al., (2012)
+
+and finance 
+Kim et al., (2005)
+.
+
+
+
+
+
+
+What has received less attention is the problem of distinguishing between changepoints and outliers.
+To give an example of the issue outliers can cause when attempting to detect changepoint, consider the problem of detecting changes in well-log data. An example of such data, taken
+originally from 
+Ó Ruanaidh and Fitzgerald, (1996)
+, is shown in Figure 
+1
+. This data was collected from a probe being lowered into a bore-hole. As it is lowered the probe takes measurements of the rock
+that it is passing through. As the probe moves from one type of rock strata to another, there is an abrupt change in the measurements. It is these changes in rock strata that we wish to detect. The real motivation for
+collecting this data was to detect these changes in real-time. This would enable changes in rock strata that are being drilled through to be quickly detected, so that appropriate changes to the settings of the drill
+can be made.
+
+
+
+
+
+
+The data in the top-left plot in Figure 
+1
+ has been analysed by many different change detection methods 
+(
+Ó Ruanaidh and Fitzgerald,, 1996
+; 
+Fearnhead,, 2006
+; 
+Adams and MacKay,, 2007
+; 
+Wyse et al.,, 2011
+; 
+Ruggieri and Antonellis,, 2016
+, e.g.)
+. However, this plot actually shows data that has been pre-processed to remove outliers.
+The real data that was collected by the probe is shown in the top-right plot of Figure 
+1
+. There are a number of short periods of time where the probe mis-functions, and very low measurements are
+recorded. These are examples of what we are calling outliers. The real challenge with detecting the changes is to distinguish between actual changes and these outliers. Most existing methods for changepoint detection are
+unable to do so; hence the reason that most analysis of this data has used the “cleaned” data set in the top-left plot. For example in the bottom row of Figure 
+1
+ we show the results of estimating the changepoints based on minimising a square-error-loss criteria with a penalty for each
+detected changepoint. Whilst this method performs well when analysing the cleaned dataset, it is unable to distinguish between changes and outliers when analysing the real data.
+
+
+
+
+
+
+Figure 1: 
+ Well-log data: data with outliers removed (left column) and with outliers included (right column). Bottom row shows segmentations of the data under a least squares loss.
+
+
+
+
+
+
+
+This lack of robustness for detecting a change in mean in the presence of outliers for many changepoint methods stems from explicit or implicit modelling assumptions of Gaussian noise. For example, methods
+based on a likelihood-ratio test for detecting a change 
+Worsley, (1979)
+, or that use a penalised likelihood approach to detect multiple changes 
+Killick et al., (2012)
+, or that do a Bayesian analysis 
+Yao, (1984)
+,
+may be based on a Gaussian likelihood and thus explicitly assume Gaussian noise.
+Alternative methods, such as using an 
+L
+2
+L_{2}
+ (square error) loss or a cusum based approach 
+Page, (1954)
+, may not make such an assumption explicitly. However the resulting method are closely related to
+those based on a Gaussian likelihood 
+(
+Hinkley,, 1971
+, see e.g.)
+,
+and thus are implicitly making similar assumptions. Whilst these methods show some robustness to heavier-tailed noise 
+Lavielle and Moulines, (2000)
+, in practice they can seriously over-estimate the number of changes in the presence of outliers.
+
+
+
+
+
+
+Our approach is based on ideas from robust statistics, namely replacing an 
+L
+2
+L_{2}
+ loss with an alternative loss function that is less sensitive to outliers. We then use such a loss function within a
+penalised cost approach to estimating multiple changepoints. The use of alternative loss functions as a way to make changepoint detection robust to ouliers has been considered before
+
+(
+Hušková and Sen,, 1989
+; 
+Hušková,, 1991
+; 
+Hušková and Picek,, 2005
+; 
+Hušková,, 2013
+, e.g.)
+. That work
+derives cusum-like tests for a single changepoint. Such a test for a single changepoint can then be used with binary segmentation to find multiple changes. As we discuss more fully in Section 
+2.3
+, this
+approach suffers from the draw-back that the test statistic is based upon how well the data can be modelled as not having a change, and does not directly compare this with
+how well we can fit the data with one or more changepoints. Thus it could spuriously infer a change if we have a cluster of outliers at consecutive time-points, even if the value of those outliers are not consistent
+with them coming from the same distribution.
+
+
+
+
+
+
+One challenge with the penalised cost approach that we suggest is minimising this cost, which we need to do to infer the changepoints. We show how recent efficient dynamic programming algorithms
+
+Maidstone et al., (2017)
+; 
+Rigaill, (2015)
+ can
+be adapted to solve this minimisation problem. Our algorithm can use any loss function provided we are interested in the change of univariate parameter, such as the location parameter for univariate data, and the
+loss function is piecewise quadratic. Importantly these algorithms are sequential in nature, and thus can be directly applied in situations which need an online analysis of the data.
+
+
+
+
+
+
+Whilst our approach can be used with a range of loss functions, we particularly recommend using a loss function that is bounded. We present a theoretical result that shows that we need a bounded loss function
+if we wish our method to be robust to any single outlier. The simplest such loss function is the biweight loss 
+Huber, (2011)
+ which is the pointwise minimum of an 
+L
+2
+L_{2}
+ loss and a constant.
+We show that, under mild conditions, we can consistently estimate the number of changepoints, and accurately estimate their locations, if we use a penalised cost approach with the biweight loss.
+
+
+
+
+
+
+To illustrate the usefulness of our approach, with the biweight loss, in practice, we present its use for three distinct applications. The first is for the online analysis of the well-log data of Figure 
+1
+.
+Secondly we show that it out-performs existing methods for detecting copy number variation. This includes performing better than methods that pre-process the data in an attempt to remove outliers. By comparison
+our approach is easier to implement as it does not require any pre-processing steps. Finally we consider the problem of detecting tampering of wireless security devices. Results here show our method can reliably
+distinguish between actual tampering events and changes in the data caused by short-term environmental factors.
+
+
+
+
+
+
+Proofs of results are given in the Appendices in the supplementary material.
+Code implementing the new methods in this paper is available from 
+https://github.com/guillemr/robust-fpop
+.
+
+
+
+
+
+
+
+
+2 
+Model Definition
+
+
+
+
+
+Assume we have data ordered by some covariate, such as time or position along a chromosome.
+Denote the data by 
+𝐲
+=
+(
+y
+1
+,
+…
+,
+y
+n
+)
+\mathbf{y}=(y_{1},\ldots,y_{n})
+. We will use the notation that, for 
+s
+≤
+t
+s\leq t
+, the set of observations from time 
+s
+s
+ to time 
+t
+t
+ is 
+𝐲
+s
+:
+t
+=
+(
+y
+s
+,
+…
+,
+y
+t
+)
+\mathbf{y}_{s:t}=(y_{s},...,y_{t})
+.
+If we assume that there are 
+k
+k
+ changepoints in the data, this will correspond to the data being split into 
+k
++
+1
+k+1
+ distinct segments.
+We let the location of the 
+j
+j
+th changepoint be 
+τ
+j
+\tau_{j}
+ for 
+j
+=
+1
+,
+…
+,
+k
+j=1,\ldots,k
+, and set 
+τ
+0
+=
+0
+\tau_{0}=0
+ and 
+τ
+k
++
+1
+=
+n
+\tau_{k+1}=n
+. The 
+j
+j
+th segment will consist of data points 
+y
+τ
+j
+−
+1
++
+1
+,
+…
+,
+y
+τ
+j
+y_{\tau_{j-1}+1},\ldots,y_{\tau_{j}}
+. We let
+
+𝝉
+=
+(
+τ
+0
+,
+…
+,
+τ
+k
++
+1
+)
+\bm{\tau}=(\tau_{0},\ldots,\tau_{k+1})
+ be the set of changepoints.
+
+
+
+
+
+
+The statistical problem we are considering is how to infer both the number of changepoints and their locations. We assume the changepoints correspond to abrupt changes in the location, that is mean,
+median or other quantile, of the data. We will focus on a minimum penalised cost approach to the problem. This approach encompasses penalised likelihood approaches to changepoint
+detection amongst others.
+
+
+
+
+
+
+To define our penalised cost, we first introduce a loss function for a single observation, 
+y
+y
+, and a segment-specific location parameter 
+θ
+\theta
+. We denote this as 
+γ
+⁡
+(
+y
+,
+θ
+)
+\gamma(y;\theta)
+. For a penalised likelihood
+approach this loss would be equal to minus the log-likelihood. The class of losses we will consider are discussed below.
+
+
+
+
+
+
+We can now define the cost associated with a segment of data, 
+y
+s
+:
+t
+y_{s:t}
+. This is
+
+
+
+
+
+
+
+
+
+𝒞
+(
+y
+s
+:
+t
+)
+=
+min
+θ
+∑
+i
+=
+s
+t
+γ
+(
+y
+i
+;
+θ
+)
+,
+\mathcal{C}(y_{s:t})=\min_{\theta}\sum_{i=s}^{t}\gamma(y_{i};\theta),
+
+
+
+
+
+
+the minimum, over the segment-specific parameter 
+θ
+\theta
+, of the sum of the losses associated with each observation in the segment. The penalised cost for a segmentation is then
+
+
+
+
+
+
+
+
+
+Q
+(
+y
+1
+:
+n
+;
+τ
+1
+:
+k
+)
+=
+∑
+i
+=
+0
+k
+{
+𝒞
+(
+y
+τ
+i
++
+1
+:
+τ
+i
++
+1
+)
++
+β
+}
+,
+Q(y_{1:n};\tau_{1:k})=\sum_{i=0}^{k}\left\{\mathcal{C}(y_{\tau_{i}+1:\tau_{i+1}})+\beta\right\},
+
+
+
+
+(1)
+
+
+
+
+where 
+β
+>
+0
+\beta>0
+ is a chosen constant that penalises the introduction of changepoints. We estimate the number and position of the changepoints by the value of 
+k
+k
+ and 
+τ
+1
+:
+k
+\tau_{1:k}
+ that minimise this penalised
+cost. The value of 
+β
+\beta
+ has a substantial impact on the number of changepoints that are estimated 
+(see 
+Haynes et al., 2017a, 
+, for examples of this)
+,
+with larger values of 
+β
+\beta
+ leading to fewer estimated changepoints.
+
+
+
+
+
+
+For inferring changes in the mean of the data, it is common to use the squared-error loss function 
+(
+Yao and Au,, 1989
+; 
+Lavielle and Moulines,, 2000
+, e.g.)
+
+
+
+
+
+
+
+
+
+γ
+⁡
+(
+y
+,
+θ
+)
+=
+(
+y
+−
+θ
+)
+2
+.
+\gamma(y;\theta)=(y-\theta)^{2}.
+
+
+
+
+
+
+In this case, the penalised cost approach corresponds to a penalised likelihood approach where the data within a segment are IID Gaussian with common variance.
+Minimising a penalised cost of this form is closely related to binary segmentation procedures based on cusum statistics 
+(
+Vostrikova,, 1981
+; 
+Bai,, 1997
+; 
+Fryzlewicz,, 2014
+, e.g.)
+,
+as discussed in 
+Killick et al., (2012)
+. Use of the square-error loss function results in an approach that is very sensitive to outliers. For example, this loss function was the one used in the analysis of the well-log data in Figure 
+1
+, where we
+saw that it struggles to distinguish outliers from actual changes of interest.
+
+
+
+
+
+
+2.1 
+Penalised Costs based on M-estimation
+
+
+
+
+
+To develop a changepoint approach that can reliably detect changepoints in
+the presence of outliers we need a loss function that increases at a slower rate in 
+|
+y
+−
+θ
+|
+|y-\theta|
+.
+Standard examples 
+Huber, (2011)
+ are absolute error, 
+γ
+⁡
+(
+y
+,
+θ
+)
+=
+|
+y
+−
+θ
+|
+\gamma(y;\theta)=|y-\theta|
+, Huber loss
+
+
+
+
+
+
+
+
+
+γ
+⁡
+(
+y
+,
+θ
+)
+=
+{
+(
+y
+−
+θ
+)
+2
+if 
+​
+|
+y
+−
+θ
+|
+<
+K
+,
+2
+​
+K
+​
+|
+y
+−
+θ
+|
+−
+K
+2
+otherwise,
+\gamma(y;\theta)=\left\{\begin{array}[]{cl}(y-\theta)^{2}&\mbox{if }|y-\theta|<K,\\
+2K|y-\theta|-K^{2}&\mbox{otherwise,}\end{array}\right.
+
+
+
+
+
+
+and the biweight loss,
+
+
+
+
+
+
+
+
+
+γ
+⁡
+(
+y
+,
+θ
+)
+=
+{
+(
+y
+−
+θ
+)
+2
+if 
+​
+|
+y
+−
+θ
+|
+<
+K
+,
+K
+2
+otherwise,
+\gamma(y;\theta)=\left\{\begin{array}[]{cl}(y-\theta)^{2}&\mbox{if }|y-\theta|<K,\\
+K^{2}&\mbox{otherwise,}\end{array}\right.
+
+
+
+
+(2)
+
+
+
+
+or if interest lies in changes in the 
+u
+u
+th quantile for 
+0
+<
+u
+<
+1
+0<u<1
+,
+
+
+
+
+
+
+
+
+
+γ
+⁡
+(
+y
+,
+θ
+)
+=
+{
+2
+​
+u
+​
+(
+y
+−
+θ
+)
+if 
+​
+y
+>
+θ
+,
+2
+​
+(
+1
+−
+u
+)
+​
+(
+θ
+−
+y
+)
+otherwise.
+\gamma(y;\theta)=\left\{\begin{array}[]{cl}2u(y-\theta)&\mbox{if }y>\theta,\\
+2(1-u)(\theta-y)&\mbox{otherwise.}\end{array}\right.
+
+
+
+
+
+
+These are summarised in Figure 
+2
+.
+
+
+
+
+
+
+Figure 2: 
+ Example of different losses. (a) The square error loss (full-line), and the related Huber loss (red dashed) and biweight loss (blue dotted).
+(b) The absolute error loss (full-line), and its generalisation for detecting change in quantiles for 
+u
+=
+0.1
+u=0.1
+ (red dashed) and 
+u
+=
+0.25
+u=0.25
+ (blue dotted).
+
+
+
+
+
+
+We will develop an algorithm for finding the best segmentation under a penalised cost criteria that can deal with any of these choices for the loss. In practice we particularly advocate the use
+of the biweight loss.
+For a penalised cost approach to detecting changepoints to be robust to extreme outliers we will need the loss function to be bounded. For unbounded loss functions, such as the absolute error loss or Huber loss, a penalised cost approach will place an outlier in a segment on its own if that outlier is sufficiently extreme. This is shown by the following result.
+
+
+
+
+
+
+Theorem 2.1
+
+
+
+
+Assume that the loss function satisfies 
+γ
+⁡
+(
+y
+,
+θ
+)
+=
+g
+⁡
+(
+|
+y
+−
+θ
+|
+)
+\gamma(y;\theta)=g(|y-\theta|)
+ where 
+g
+⁡
+(
+0
+)
+=
+0
+g(0)=0
+ and 
+g
+⁡
+(
+⋅
+)
+g(\cdot)
+ is an unbounded, increasing function.
+Choose any 
+t
+∈
+{
+1
+,
+…
+,
+n
+}
+t\in\{1,\ldots,n\}
+ and fix the set of other observations, 
+y
+s
+y_{s}
+ for 
+s
+≠
+t
+s\neq t
+. Then there exists values of 
+y
+t
+y_{t}
+ such that the segmentation that minimises the penalised cost (
+1
+) will have changepoints at 
+t
+−
+1
+t-1
+ and 
+t
+t
+.
+
+
+
+
+
+
+
+
+If we choose a loss function, such as the biweight loss, that is bounded, then this will impose a minimum segment length on the segmentations that we infer using the penalised cost function.
+Providing this minimum segment length is greater than 1, our inference procedure will be robust to the presence of extreme outliers – unless these outliers cluster at similar values, and for
+a number of consecutive time-points greater than our minimum segment length.
+
+
+
+
+
+
+Theorem 2.2
+
+
+
+
+If the loss function satisfies 
+0
+≤
+γ
+⁡
+(
+y
+,
+θ
+)
+≤
+K
+0\leq\gamma(y;\theta)\leq K
+, and we infer changepoints by minimising the penalised cost function (
+1
+) with penalty 
+β
+\beta
+ for adding a changepoint, then all inferred segments will be of length greater than 
+β
+/
+K
+\beta/K
+.
+
+
+
+
+
+
+
+
+The other conclusion to draw from this result is that, for any choice of 
+K
+K
+ and 
+β
+\beta
+, we would want the minimum segment length to be smaller than any segment we expect, or that we wish to detect, in the data.
+Any real segments shorter than the minimum segment length are unlikely to be detected, with the observations in such short segments being identified as outliers instead. Furthermore our procedure can lose power
+to detect real segments that are only slightly longer than the minimum segment length (see empirical results for scenario 4 in Section 
+5.2
+).
+
+
+
+
+
+
+
+
+2.2 
+Consistency under Biweight Loss
+
+
+
+
+
+As mentioned above, and as suggested by Theorem 
+2.1
+, a particular focus will be on the use of the biweight loss (
+2
+). Here we give conditions under which we can consistently estimate the number and location of changepoints when using this loss.
+
+
+
+
+
+
+We will consider the standard in-fill asymptotics, as we let the number of data points, 
+n
+n
+, increase. To be able to consistently estimate the number of changepoints we will need the penalty for adding a changepoint, 
+β
+\beta
+ in (
+1
+), to increase with 
+n
+n
+. We will thus denote the choice of penalty for a given number of data points to be 
+β
+n
+\beta_{n}
+.
+
+
+
+
+
+
+We assume a fixed number of changepoints, 
+k
+0
+k_{0}
+, and fixed constants 
+0
+<
+u
+1
+<
+⋯
+<
+u
+k
+0
+<
+1
+0<u_{1}<\cdots<u_{k_{0}}<1
+ so that for a data set of size 
+n
+n
+ we have the 
+i
+i
+th changepoint at 
+τ
+i
+=
+⌊
+n
+​
+u
+i
+⌋
+\tau_{i}=\lfloor nu_{i}\rfloor
+, for
+
+i
+=
+1
+,
+…
+,
+k
+0
+i=1,\ldots,k_{0}
+. As above we let 
+τ
+0
+=
+0
+\tau_{0}=0
+ and 
+τ
+k
+0
++
+1
+=
+n
+\tau_{k_{0}+1}=n
+. We further assume fixed segment-specific location parameters, 
+μ
+0
+,
+…
+,
+μ
+k
+0
+\mu_{0},\ldots,\mu_{k_{0}}
+, with the obvious constraint that
+
+μ
+i
+≠
+μ
+i
+−
+1
+\mu_{i}\neq\mu_{i-1}
+ for 
+i
+=
+1
+,
+…
+,
+k
+0
+i=1,\ldots,k_{0}
+. Finally we let 
+Z
+1
+,
+Z
+2
+,
+…
+Z_{1},Z_{2},\ldots
+ be IID noise random variables, so that for 
+t
+=
+1
+,
+…
+,
+n
+t=1,\ldots,n
+ the observations are realisations of
+
+
+
+
+
+
+
+
+
+Y
+t
+=
+μ
+i
++
+Z
+t
+,
+Y_{t}=\mu_{i}+Z_{t},
+
+
+
+
+
+
+where 
+i
+i
+ is such that 
+τ
+i
+<
+t
+≤
+τ
+i
++
+1
+\tau_{i}<t\leq\tau_{i+1}
+.
+
+
+
+
+
+
+Our results require two mild conditions on the distribution of the noise random variables. Firstly introduce the mean of the loss function, 
+M
+⁡
+(
+θ
+)
+=
+E
+​
+{
+γ
+⁡
+(
+Z
+i
+,
+θ
+)
+}
+M(\theta)=\mbox{E}\{\gamma(Z_{i};\theta)\}
+. We assume 
+M
+⁡
+(
+θ
+)
+M(\theta)
+ takes it minimum value at 
+θ
+=
+0
+\theta=0
+. We can make this assumption without loss of generality, as if 
+M
+⁡
+(
+θ
+)
+M(\theta)
+ has its minimum at 
+θ
+∗
+\theta^{*}
+ we can just re-parameterise our model with new noise random variables set to 
+Z
+i
+−
+θ
+∗
+Z_{i}-\theta^{*}
+ and with location parameters re-defined to be 
+μ
+i
++
+θ
+∗
+\mu_{i}+\theta^{*}
+.
+
+
+
+
+
+
+Our first condition is that there exists constants 
+c
+1
+>
+0
+c_{1}>0
+ and 
+c
+2
+>
+0
+c_{2}>0
+ such that
+
+
+
+
+
+
+
+
+
+M
+⁡
+(
+θ
+)
+=
+E
+​
+[
+min
+⁡
+{
+(
+Z
+i
+−
+θ
+)
+2
+,
+K
+2
+}
+]
+≥
+M
+⁡
+(
+0
+)
++
+min
+⁡
+{
+c
+1
+​
+θ
+2
+,
+c
+2
+}
+.
+M(\theta)=\mbox{E}\left[\min\left\{(Z_{i}-\theta)^{2},K^{2}\right\}\right]\geq M(0)+\min\left\{c_{1}\theta^{2},c_{2}\right\}.
+
+
+
+
+(3)
+
+
+
+
+This is a weak assumption, and will hold if 
+M
+⁡
+(
+θ
+)
+M(\theta)
+ has a positive second derivative for all 
+θ
+\theta
+ in a neighbourhood around 
+0
+0
+ and that 
+M
+⁡
+(
+θ
+)
+−
+M
+⁡
+(
+0
+)
+≥
+c
+2
+>
+0
+M(\theta)-M(0)\geq c_{2}>0
+
+for all 
+θ
+\theta
+ outside this region. The latter requirement is a common assumption made to ensure identifiability of estimates of a location parameter when using a given loss function.
+
+
+
+
+
+
+Our second condition is slightly stronger. Let 
+p
+=
+Pr
+⁡
+(
+|
+Z
+i
+|
+>
+K
+)
+p=\Pr(|Z_{i}|>K)
+ and 
+σ
+2
+=
+E
+​
+(
+Z
+i
+2
+∣
+|
+Z
+i
+|
+≤
+K
+)
+\sigma^{2}=\mbox{E}(Z_{i}^{2}\mid|Z_{i}|\leq K)
+, then we need
+
+
+
+
+
+
+
+
+
+K
+2
+​
+(
+1
+−
+2
+​
+p
+)
+−
+(
+1
+−
+p
+)
+​
+σ
+2
+>
+0
+.
+K^{2}(1-2p)-(1-p)\sigma^{2}>0.
+
+
+
+
+(4)
+
+
+
+
+This condition can be achieved by taking 
+K
+K
+ large enough. If the noise has finite variance then, using Chebyshev’s inequality, it is easy to show that any choice with 
+K
+>
+3
+​
+E
+​
+(
+Z
+i
+2
+)
+K>\sqrt{3}\mbox{E}(Z_{i}^{2})
+ will ensure this
+condition holds. However we do not need the noise to have a variance. For example it is sufficient to choose 
+K
+>
+3
+​
+E
+​
+(
+min
+⁡
+{
+Z
+i
+2
+,
+K
+2
+}
+)
+K>\sqrt{3}\mbox{E}(\min\{Z_{i}^{2},K^{2}\})
+, or, if 
+Z
+i
+Z_{i}
+ has a unimodal density function with mode at 
+0
+0
+,
+then 
+σ
+2
+≤
+K
+2
+/
+3
+\sigma^{2}\leq K^{2}/3
+ and it suffices to choose 
+K
+K
+ so that 
+p
+=
+Pr
+⁡
+(
+|
+Z
+i
+|
+>
+K
+)
+<
+2
+/
+5
+p=\Pr(|Z_{i}|>K)<2/5
+. By comparison, we would recommend taking 
+K
+K
+ sufficiently large that 
+|
+Z
+i
+|
+>
+K
+|Z_{i}|>K
+ is relatively rare, and thus 
+p
+≈
+0
+p\approx 0
+.
+In line with Theorem 
+2.1
+, this condition does not depend on the distribution of the noise conditional on 
+|
+Z
+i
+|
+>
+K
+|Z_{i}|>K
+.
+
+
+
+
+
+
+Theorem 2.3
+
+
+
+
+Assume (
+3
+) and (
+4
+) and the model described above. For a given 
+n
+n
+ let 
+k
+^
+n
+\hat{k}_{n}
+ be the estimate of the
+number of changepoints, and 
+τ
+^
+1
+,
+…
+,
+τ
+^
+k
+^
+n
+\hat{\tau}_{1},\ldots,\hat{\tau}_{\hat{k}_{n}}
+ their estimated locations, obtained by minimising the penalised cost (
+1
+) using the biweight loss function and a penalty 
+β
+n
+\beta_{n}
+.
+
+
+
+
+
+
+There exists constants 
+C
+1
+>
+0
+C_{1}>0
+ and 
+C
+2
+>
+0
+C_{2}>0
+
+such that as 
+n
+→
+∞
+n\rightarrow\infty
+, if 
+β
+n
+>
+C
+1
+​
+log
+⁡
+(
+n
+)
+\beta_{n}>C_{1}\log(n)
+ and 
+β
+n
+=
+o
+⁡
+(
+n
+)
+\beta_{n}=o(n)
+ then
+
+
+
+
+
+
+
+
+
+Pr
+[
+k
+^
+n
+=
+k
+0
+ and 
+max
+i
+=
+1
+,
+…
+,
+k
+0
+{
+min
+j
+=
+1
+,
+…
+,
+k
+^
+n
+|
+τ
+i
+−
+τ
+^
+j
+|
+}
+≤
+C
+2
+log
+(
+n
+)
+]
+→
+1
+.
+\Pr\left[\hat{k}_{n}=k_{0}\mbox{ and }\max_{i=1,\ldots,k_{0}}\left\{\min_{j=1,\ldots,\hat{k}_{n}}\left|\tau_{i}-\hat{\tau}_{j}\right|\right\}\leq C_{2}\log(n)\right]\rightarrow 1.
+
+
+
+
+
+
+
+
+
+
+
+
+The theorem shows that for an appropriate choice of 
+β
+n
+\beta_{n}
+ we can obtain a consistent estimate of the true number of parameters, and that the error in estimating any of the changepoint locations will
+be less than 
+C
+2
+​
+log
+⁡
+(
+n
+)
+C_{2}\log(n)
+ with probability 1. The latter order of error is in line with asymptotic results for the accuracy of changepoint estimates using wild binary segmentation with the cusum test
+
+Fryzlewicz, (2014)
+. We require much weaker conditions on the distribution of the noise, but our result assumes stronger conditions on the number of changes, the segment lengths and the size of change of mean at each changepoint than, for example, results in 
+Fryzlewicz, (2014)
+ and 
+Baranowski et al., (2016)
+.
+The result supports the use of a penalty, 
+β
+n
+\beta_{n}
+, that is proportional to 
+log
+⁡
+(
+n
+)
+\log(n)
+, a choice that is common for other penalised cost procedures,
+but it does not specify the constant of proportionality.
+
+
+
+
+
+
+
+
+2.3 
+Alternative Robust Changepoint Methods
+
+
+
+
+
+There have been other proposed 
+M
+M
+-procedures for robust detection of changepoints 
+Hušková and Sen, (1989)
+; 
+Hušková, (1991)
+; 
+Hušková and Picek, (2005)
+; 
+Hušková, (2013)
+.
+These differ from our approach in that they are based on sequentially applying tests for single changepoints. One approach is to use a Wald-type test.
+For a convex loss function 
+γ
+⁡
+(
+y
+,
+θ
+)
+\gamma(y;\theta)
+ which depends only on 
+y
+−
+θ
+y-\theta
+, define 
+γ
+⁡
+(
+y
+,
+θ
+)
+=
+ρ
+⁡
+(
+y
+−
+θ
+)
+\gamma(y;\theta)=\rho(y-\theta)
+ and define 
+ϕ
+\phi
+ to be the first derivative of 
+ρ
+\rho
+.
+Then we can estimate a common 
+θ
+\theta
+ for data 
+y
+1
+:
+n
+y_{1:n}
+ by minimising
+
+
+
+
+
+
+
+
+
+∑
+i
+=
+1
+n
+ρ
+⁡
+(
+y
+i
+−
+θ
+)
+,
+\sum_{i=1}^{n}\rho(y_{i}-\theta),
+
+
+
+
+
+
+with respect to 
+θ
+\theta
+. In many cases this is equivalent to solving
+
+
+
+
+
+
+
+
+
+∑
+i
+=
+1
+n
+ϕ
+⁡
+(
+y
+i
+−
+θ
+)
+=
+0
+.
+\sum_{i=1}^{n}\phi(y_{i}-\theta)=0.
+
+
+
+
+
+
+If 
+θ
+^
+\hat{\theta}
+ denotes the estimate we obtain,
+we can define residuals as 
+ϕ
+⁡
+(
+y
+i
+−
+θ
+^
+)
+\phi(y_{i}-\hat{\theta})
+, and their partial sums, or cusums, by
+
+
+
+
+
+
+
+
+
+S
+m
+=
+∑
+i
+=
+1
+m
+ϕ
+⁡
+(
+y
+i
+−
+θ
+^
+)
+.
+S_{m}=\sum_{i=1}^{m}\phi(y_{i}-\hat{\theta}).
+
+
+
+
+
+
+A Wald-type test is then based on a test-statistic of the form
+
+
+
+
+
+
+
+
+
+T
+n
+=
+max
+1
+≤
+m
+≤
+n
+−
+1
+⁡
+n
+m
+⁡
+(
+n
+−
+m
+)
+​
+S
+m
+2
+,
+T_{n}=\max_{1\leq m\leq n-1}\frac{n}{m(n-m)}S_{m}^{2},
+
+
+
+
+
+
+where the term 
+n
+/
+(
+m
+⁡
+(
+n
+−
+m
+)
+)
+n/(m(n-m))
+ is introduced so that the variability of the term on the right-hand side will be similar for each value of 
+m
+m
+.
+Large values of 
+T
+n
+T_{n}
+ are taken as evidence for a change. The position of a changepoint is then inferred at the position 
+m
+m
+ which maximises the right-hand side.
+To detect multiple changepoints, this Wald-type test needs is currently used within a binary segmentation procedure; though it can also be used with improved versions
+of binary segmentation, such as
+wild binary segmentation 
+Fryzlewicz, (2014)
+.
+
+
+
+
+
+
+There are two main differences between the Wald-type test approach and our penalised cost approach. The first is that the Wald-type test statistic is appropriate only for convex loss functions.
+So, for example, the biweight loss is not appropriate for use with this approach. To see this note that the derivative of the biweight loss satisfies 
+ϕ
+⁡
+(
+x
+)
+=
+0
+\phi(x)=0
+ for 
+|
+x
+|
+>
+K
+|x|>K
+.
+Thus large abrupt changes in the data will lead to 
+M
+M
+-residuals which are 0, and hence provide no evidence for a change in the test statistic.
+
+
+
+
+
+
+Secondly any loss function which increases linearly in 
+|
+y
+−
+θ
+|
+|y-\theta|
+ for sufficiently large 
+|
+y
+−
+θ
+|
+|y-\theta|
+ will result in 
+ϕ
+⁡
+(
+y
+i
+−
+θ
+)
+\phi(y_{i}-\theta)
+ being constant for large 
+|
+y
+i
+−
+θ
+|
+|y_{i}-\theta|
+.
+Thus, large residuals will have a bounded contribution to the test statistic. To see this consider the Wald-type test with the Huber loss. To calculate this test statistic we first
+calculate our estimate of the location parameter for the data, 
+θ
+^
+\hat{\theta}
+, assuming the data is from a single segment. The 
+i
+i
+th residual is then 
+K
+K
+ if 
+y
+i
+>
+θ
+^
++
+K
+y_{i}>\hat{\theta}+K
+, 
+−
+K
+-K
+ if 
+y
+i
+<
+θ
+^
+−
+K
+y_{i}<\hat{\theta}-K
+,
+and 
+y
+i
+−
+θ
+^
+y_{i}-\hat{\theta}
+ otherwise. The cusum statistic is just the sum of these residuals. This is equivalent to winsorizing the data, where we shrink extreme positive or negative values to be 
+K
+K
+ above or below our
+estimate of the location parameter, and then using a cusum test for detecting a changepoint. The actual value of the data points that are above 
+θ
+^
++
+K
+\hat{\theta}+K
+ or below 
+θ
+^
+−
+K
+\hat{\theta}-K
+ will not
+affect the cusum values, and hence not affect the value of the Wald-type test statistic.
+
+
+
+
+
+
+The use of Huber loss within a Wald-type test will thus have a similar robustness to extreme outliers that bounded loss functions have for the penalised cost approach.
+The main difference is that the Wald-type test statistic does not consider whether the data after a putative changepoint is consistent with data from a single segment.
+Thus a cluster of outliers of the same sign that occur concurrently but which are very different in value, such as we observe for the well-log data,
+will produce a similar value for the test-statistic as a set of concurrent observations that are very different to the other data points but are also very similar to one another.
+By comparison, the penalised cost based approach would, correctly, say the latter provided substantially more evidence for the presence of a change.
+
+
+
+
+
+
+
+
+
+
+3 
+Minimising the Penalised Cost
+
+
+
+
+
+An issue with detecting changepoints using any of these loss functions, is how can we efficiently minimise the resulting penalised cost over all segmentations?
+We present an efficient dynamic programming algorithm for performing this minimisation exactly. This algorithm is an extension of the pruned DP algorithm of 
+Rigaill, (2015)
+ and the FPOP
+algorithm of 
+Maidstone et al., (2017)
+ 
+(
+Johnson,, 2013
+, see also)
+ to the robust loss functions. We will call the resulting algorithm R-FPOP.
+
+
+
+
+
+
+3.1 
+A Dynamic Programming Recursion
+
+
+
+
+
+We develop a recursion for finding the minimum cost (
+1
+) of segmenting data 
+y
+1
+:
+t
+y_{1:t}
+ for 
+t
+=
+1
+,
+…
+,
+n
+t=1,\ldots,n
+. In the following we let 
+𝝉
+\bm{\tau}
+ denote a vector of changepoints. Furthermore we let 
+𝒮
+t
+\mathcal{S}_{t}
+ denote the set of possible changepoints for the 
+y
+1
+:
+t
+y_{1:t}
+, so
+
+
+
+
+
+
+
+
+
+𝒮
+t
+=
+{
+𝝉
+=
+τ
+1
+:
+k
+:
+0
+<
+τ
+1
+<
+⋯
+<
+τ
+k
+<
+t
+}
+.
+\mathcal{S}_{t}=\left\{\bm{\tau}=\tau_{1:k}:0<\tau_{1}<\cdots<\tau_{k}<t\right\}.
+
+
+
+
+
+
+Note that 
+𝒮
+t
+\mathcal{S}_{t}
+ has 
+2
+t
+−
+1
+2^{t-1}
+ elements. Define
+
+
+
+
+
+
+
+
+
+Q
+t
+=
+min
+𝝉
+∈
+𝒮
+t
+Q
+(
+y
+1
+:
+t
+;
+τ
+1
+:
+k
+)
+=
+min
+𝝉
+∈
+𝒮
+t
+∑
+i
+=
+0
+k
+{
+𝒞
+(
+y
+τ
+i
++
+1
+:
+τ
+i
++
+1
+)
++
+β
+}
+,
+Q_{t}=\min_{\bm{\tau}\in\mathcal{S}_{t}}Q(y_{1:t};\tau_{1:k})=\min_{\bm{\tau}\in\mathcal{S}_{t}}\sum_{i=0}^{k}\left\{\mathcal{C}(y_{\tau_{i}+1:\tau_{i+1}})+\beta\right\},
+
+
+
+
+
+
+where here and later we use the convention that 
+k
+k
+ is the number of changepoints in 
+𝝉
+\bm{\tau}
+, and that 
+τ
+0
+=
+0
+\tau_{0}=0
+ and 
+τ
+k
++
+1
+=
+t
+\tau_{k+1}=t
+.
+First we introduce the minimum penalised cost of segmenting 
+y
+1
+:
+t
+y_{1:t}
+ conditional on the most recent segment having parameter 
+θ
+\theta
+,
+
+
+
+
+
+
+
+
+
+Q
+t
+(
+θ
+)
+=
+min
+𝝉
+∈
+𝒮
+t
+[
+∑
+i
+=
+0
+k
+−
+1
+{
+𝒞
+(
+y
+τ
+i
++
+1
+:
+τ
+i
++
+1
+)
++
+β
+}
++
+∑
+j
+=
+τ
+k
++
+1
+t
+γ
+(
+y
+j
+;
+θ
+)
++
+β
+]
+,
+Q_{t}(\theta)=\min_{\bm{\tau}\in\mathcal{S}_{t}}\left[\sum_{i=0}^{k-1}\left\{\mathcal{C}(y_{\tau_{i}+1:\tau_{i+1}})+\beta\right\}+\sum_{j=\tau_{k}+1}^{t}\gamma(y_{j};\theta)+\beta\right],
+
+
+
+
+
+
+where we take the first summation on the right-hand side to be 0 if 
+k
+=
+0
+k=0
+.
+Trivially we have 
+Q
+t
+=
+min
+θ
+⁡
+Q
+t
+​
+(
+θ
+)
+Q_{t}=\min_{\theta}Q_{t}(\theta)
+ and 
+Q
+1
+​
+(
+θ
+)
+=
+γ
+⁡
+(
+y
+1
+,
+θ
+)
++
+β
+Q_{1}(\theta)=\gamma(y_{1};\theta)+\beta
+.
+
+
+
+
+
+
+The idea is to recursively calculate 
+Q
+t
+​
+(
+θ
+)
+Q_{t}(\theta)
+ for increasing values of 
+t
+t
+. To do this, we note that each element in 
+𝒮
+t
+\mathcal{S}_{t}
+ is either an element in 
+𝒮
+t
+−
+1
+\mathcal{S}_{t-1}
+ or an element in 
+𝒮
+t
+−
+1
+\mathcal{S}_{t-1}
+ with the addition of a changepoint at 
+t
+−
+1
+t-1
+. So
+
+
+
+
+
+
+
+
+
+Q
+t
+​
+(
+θ
+)
+\displaystyle Q_{t}(\theta)
+
+
+=
+\displaystyle=
+
+
+min
+𝝉
+∈
+𝒮
+t
+−
+1
+[
+min
+{
+∑
+i
+=
+0
+k
+−
+1
+(
+𝒞
+(
+y
+τ
+i
++
+1
+:
+τ
+i
++
+1
+)
++
+β
+)
++
+∑
+j
+=
+τ
+k
++
+1
+t
+γ
+(
+y
+j
+;
+θ
+)
++
+β
+,
+\displaystyle\min_{\bm{\tau}\in\mathcal{S}_{t-1}}\left[\min\left\{\sum_{i=0}^{k-1}\left(\mathcal{C}(y_{\tau_{i}+1:\tau_{i+1}})+\beta\right)+\sum_{j=\tau_{k}+1}^{t}\gamma(y_{j};\theta)+\beta,\right.\right.
+
+
+
+
+(5)
+
+
+
+
+
+
+
+
+
+
+∑
+i
+=
+0
+k
+(
+𝒞
+(
+y
+τ
+i
++
+1
+:
+τ
+i
++
+1
+)
++
+β
+)
++
+γ
+(
+y
+t
+;
+θ
+)
++
+β
+}
+]
+\displaystyle\left.\left.\sum_{i=0}^{k}\left(\mathcal{C}(y_{\tau_{i}+1:\tau_{i+1}})+\beta\right)+\gamma(y_{t};\theta)+\beta\right\}\right]
+
+
+
+
+
+
+
+
+
+
+=
+\displaystyle=
+
+
+min
+{
+min
+𝝉
+∈
+𝒮
+t
+−
+1
+[
+∑
+i
+=
+0
+k
+−
+1
+(
+𝒞
+(
+y
+τ
+i
++
+1
+:
+τ
+i
++
+1
+)
++
+β
+)
++
+∑
+j
+=
+τ
+k
++
+1
+t
+−
+1
+γ
+(
+y
+j
+;
+θ
+)
++
+β
+]
+,
+\displaystyle\min\left\{\min_{\bm{\tau}\in\mathcal{S}_{t-1}}\left[\sum_{i=0}^{k-1}\left(\mathcal{C}(y_{\tau_{i}+1:\tau_{i+1}})+\beta\right)+\sum_{j=\tau_{k}+1}^{t-1}\gamma(y_{j};\theta)+\beta\right],\right.
+
+
+
+
+
+
+
+
+
+
+
+
+min
+𝝉
+∈
+𝒮
+t
+−
+1
+[
+∑
+i
+=
+0
+k
+(
+𝒞
+(
+y
+τ
+i
++
+1
+:
+τ
+i
++
+1
+)
++
+β
+)
++
+β
+]
+}
++
+γ
+(
+y
+t
+;
+θ
+)
+\displaystyle\left.\min_{\bm{\tau}\in\mathcal{S}_{t-1}}\left[\sum_{i=0}^{k}\left(\mathcal{C}(y_{\tau_{i}+1:\tau_{i+1}})+\beta\right)+\beta\right]\right\}+\gamma(y_{t};\theta)
+
+
+
+
+
+
+
+
+
+
+=
+\displaystyle=
+
+
+min
+⁡
+{
+Q
+t
+−
+1
+​
+(
+θ
+)
+,
+Q
+t
+−
+1
++
+β
+}
++
+γ
+⁡
+(
+y
+t
+,
+θ
+)
+.
+\displaystyle\min\left\{Q_{t-1}(\theta),Q_{t-1}+\beta\right\}+\gamma(y_{t};\theta).
+
+
+
+
+
+
+The first equality comes from splitting the minimisation into the minimisation over the changepoints for 
+y
+1
+:
+t
+−
+1
+y_{1:t-1}
+ and then whether there is or is not a changepoint at 
+t
+−
+1
+t-1
+.
+The second equality comes from interchanging the order of the minimisations, and taking out the common 
+γ
+⁡
+(
+y
+t
+,
+θ
+)
+\gamma(y_{t};\theta)
+ term. The final equality comes from the definitions of 
+Q
+t
+−
+1
+​
+(
+θ
+)
+Q_{t-1}(\theta)
+ and 
+Q
+t
+−
+1
+Q_{t-1}
+.
+The right-hand side just depends on 
+Q
+t
+−
+1
+​
+(
+θ
+)
+Q_{t-1}(\theta)
+, as 
+Q
+t
+−
+1
+=
+min
+θ
+⁡
+Q
+t
+−
+1
+​
+(
+θ
+)
+Q_{t-1}=\min_{\theta}Q_{t-1}(\theta)
+.
+
+
+
+
+
+
+
+
+3.2 
+Solving the Recursion
+
+
+
+
+
+We now show how we can efficiently solve the dynamic programming recursion from the previous section for loss functions like those introduced in Section 
+2
+. We make the assumption that the loss for any observation, 
+γ
+⁡
+(
+y
+t
+,
+θ
+)
+\gamma(y_{t};\theta)
+,
+viewed as function of 
+θ
+\theta
+, can be written as a piecewise quadratic in 
+θ
+\theta
+. Note that by quadratic we include the special cases of linear or constant functions of 
+θ
+\theta
+, and this definition covers all the loss functions introduced in Section 
+2
+.
+
+
+
+
+
+
+As the set of piecewise quadratics is closed under both addition and minimsation, it follows that 
+C
+t
+​
+(
+θ
+)
+C_{t}(\theta)
+ can be written as a piecewise quadratic for all 
+t
+t
+. We summarise 
+C
+t
+​
+(
+θ
+)
+C_{t}(\theta)
+ by 
+N
+t
+N_{t}
+ intervals
+
+(
+a
+i
+(
+t
+)
+,
+b
+i
+(
+t
+)
+]
+(a^{(t)}_{i},b^{(t)}_{i}]
+, and associated quadratics 
+q
+i
+(
+t
+)
+​
+(
+θ
+)
+q^{(t)}_{i}(\theta)
+. We assume that the intervals are ordered, so 
+a
+1
+(
+t
+)
+=
+−
+∞
+a^{(t)}_{1}=-\infty
+, 
+a
+i
+(
+t
+)
+=
+b
+i
+−
+1
+(
+t
+)
+a^{(t)}_{i}=b^{(t)}_{i-1}
+ for 
+i
+=
+2
+,
+…
+,
+N
+t
+i=2,\ldots,N_{t}
+ and 
+b
+N
+t
+(
+t
+)
+=
+∞
+b^{(t)}_{N_{t}}=\infty
+. To make this summary of 
+C
+t
+​
+(
+θ
+)
+C_{t}(\theta)
+ unique we further assume that 
+q
+i
+(
+t
+)
+​
+(
+θ
+)
+≠
+q
+i
+−
+1
+(
+t
+)
+​
+(
+θ
+)
+q_{i}^{(t)}(\theta)\neq q_{i-1}^{(t)}(\theta)
+ for 
+i
+=
+2
+,
+…
+,
+N
+t
+i=2,\ldots,N_{t}
+. If this were not the case we could merge the neighbouring intervals.
+
+
+
+
+
+
+We can split (
+5
+) into two steps. The first is
+
+
+
+
+
+
+
+
+
+Q
+t
+∗
+​
+(
+θ
+)
+=
+min
+⁡
+{
+Q
+t
+−
+1
+​
+(
+θ
+)
+,
+Q
+t
+−
+1
++
+β
+}
+,
+Q_{t}^{*}(\theta)=\min\left\{Q_{t-1}(\theta),Q_{t-1}+\beta\right\},
+
+
+
+
+(6)
+
+
+
+
+and the second is
+
+
+
+
+
+
+
+
+
+Q
+t
+​
+(
+θ
+)
+=
+Q
+t
+∗
+​
+(
+θ
+)
++
+γ
+⁡
+(
+y
+t
+,
+θ
+)
+.
+Q_{t}(\theta)=Q_{t}^{*}(\theta)+\gamma(y_{t};\theta).
+
+
+
+
+
+
+
+
+
+
+For the first step we first calculate 
+Q
+t
+−
+1
+Q_{t-1}
+ by first minimising the 
+N
+t
+−
+1
+N_{t-1}
+ quadratics defining 
+Q
+t
+−
+1
+​
+(
+θ
+)
+Q_{t-1}(\theta)
+ on their respective intervals, and then calculating the minimum of these minima. We then
+solve the minimisation problem (
+6
+) on each of the 
+N
+t
+−
+1
+N_{t-1}
+ intervals. For interval 
+i
+i
+, the solution will either be 
+q
+i
+(
+t
+)
+​
+(
+θ
+)
+q_{i}^{(t)}(\theta)
+, 
+Q
+t
+−
+1
++
+β
+Q_{t-1}+\beta
+ or we will need to split the interval into two or
+three smaller intervals, on which the solution will change between 
+q
+i
+(
+t
+)
+​
+(
+θ
+)
+q_{i}^{(t)}(\theta)
+ and 
+Q
+t
+−
+1
++
+β
+Q_{t-1}+\beta
+. Thus we will end with a set of 
+N
+t
+−
+1
+N_{t-1}
+, or more, ordered intervals and corresponding quadratics that define
+
+Q
+t
+∗
+​
+(
+θ
+)
+Q_{t}^{*}(\theta)
+. We then prune these intervals by checking whether any neighbouring intervals both take the value 
+Q
+t
+−
+1
++
+β
+Q_{t-1}+\beta
+, and merging these if they do. This will lead to a new set of 
+N
+t
+∗
+N_{t}^{*}
+, say,
+ordered intervals, and associated quadratics, 
+q
+t
+,
+i
+∗
+​
+(
+θ
+)
+q_{t,i}^{*}(\theta)
+ say.
+
+
+
+
+
+
+For each of the 
+N
+t
+∗
+N_{t}^{*}
+ intervals from the output of the minimisation problem we then add 
+γ
+⁡
+(
+y
+t
+,
+θ
+)
+\gamma(y_{t};\theta)
+ to the corresponding 
+q
+t
+,
+i
+∗
+​
+(
+θ
+)
+q^{*}_{t,i}(\theta)
+. This may involve splitting the 
+i
+i
+th interval into two
+or more smaller intervals if one or more of the points of change of the function 
+γ
+⁡
+(
+y
+t
+,
+θ
+)
+\gamma(y_{t};\theta)
+ are contained in it. This will lead to the 
+N
+t
+N_{t}
+ intervals and corresponding quadratics that define 
+Q
+t
+​
+(
+θ
+)
+Q_{t}(\theta)
+.
+
+
+
+
+
+
+The above describes how we recursively calculate 
+Q
+t
+​
+(
+θ
+)
+Q_{t}(\theta)
+. In practice we also want to then extract the optimal segmentation under our criteria. This is straightforward to do. For each of the intervals
+corresponding to different pieces of 
+Q
+t
+​
+(
+θ
+)
+Q_{t}(\theta)
+ we can associate a value of the most recent changepoint prior to 
+t
+t
+. When we evaluate 
+Q
+t
+Q_{t}
+, we need to find which interval contains this value, and then the
+optimal value for the most recent changepoint prior to 
+t
+t
+ is the value associated with that interval. We can store these optimal values for all 
+t
+t
+, and after processing all data we can recursively track back
+through these values to extract the optimal segmentation. So we would first find the value of the most recent changepoint prior to 
+n
+n
+, 
+τ
+\tau
+ say, then find the value of the most recent changepoint prior to 
+τ
+\tau
+.
+We repeat this until the most recent changepoint is at 0, corresponding to no earlier changepoints.
+
+
+
+
+
+
+Pseudo-code for R-FPOP is given in Appendix 
+D
+. An example of the steps involved in one iteration is given in Figure 
+3
+.
+
+
+
+
+
+
+Figure 3: 
+ Example of one iteration of R-FPOP: (a) 
+Q
+t
+−
+1
+​
+(
+θ
+)
+Q_{t-1}(\theta)
+ (black solid line), and set of intervals stored (split by vertical red lines) at start of iteration. (b) Find the pointwise
+minimum of 
+Q
+t
+−
+1
+​
+(
+θ
+)
+Q_{t-1}(\theta)
+ and 
+Q
+t
+−
+1
++
+β
+Q_{t-1}+\beta
+ (blue dashed line). (c) This is done by solving the minimisation on each interval, which splits some intervals into two or three. New splits are shown by blue dashed vertical lines.
+(d) Merge neighbouring intervals if they both take the value 
+Q
+t
+−
+1
++
+β
+Q_{t-1}+\beta
+. (e) Now add the loss for the new observation (blue dashed curve). (f) This further splits intervals at the points where the form
+of 
+γ
+⁡
+(
+y
+t
+,
+θ
+)
+\gamma(y_{t};\theta)
+ changes, the blue vertical lines in plot (e). Shown is the final representation of 
+Q
+t
+​
+(
+θ
+)
+Q_{t}(\theta)
+. At all stages only piecewise quadratic functions need to be stored.
+
+
+
+
+
+
+
+
+
+
+4 
+Computational Cost of R-FPOP
+
+
+
+
+
+We now present results which bound the computational cost and storage requirements of R-FPOP. As above we will assume that 
+γ
+⁡
+(
+y
+,
+θ
+)
+\gamma(y;\theta)
+ can be written as a piecewise quadratic with 
+L
+L
+ pieces. The bounds that
+we get differ depending on whether, for a given 
+y
+y
+, 
+γ
+⁡
+(
+y
+,
+θ
+)
+\gamma(y;\theta)
+ is convex in 
+θ
+\theta
+. We first consider the convex case, which includes all the examples in Section 
+2
+ except the biweight loss.
+
+
+
+
+
+
+Theorem 4.1
+
+
+
+
+If 
+γ
+\gamma
+ is convex in 
+θ
+\theta
+ and defined in 
+L
+L
+ pieces R-FPOP stores at most 
+2
+​
+t
+−
+1
++
+t
+⁡
+(
+L
+−
+1
+)
+2t-1+t(L-1)
+
+quadratics and intervals at step 
+t
+t
+.
+
+
+
+
+
+
+
+
+Corollary 4.2
+
+
+
+
+If 
+γ
+\gamma
+ is convex in 
+θ
+\theta
+ and defined in 
+L
+L
+ pieces, the space complexity of R-FPOP is 
+𝒪
+⁡
+(
+n
+)
+\mathcal{O}(n)
+,
+and the time complexity of R-FPOP is 
+𝒪
+⁡
+(
+n
+2
+)
+\mathcal{O}(n^{2})
+.
+
+
+
+
+
+
+
+
+For the biweight loss, which is not convex, we get worse bounds on the complexity of R-FPOP.
+
+
+
+
+
+
+Theorem 4.3
+
+
+
+
+For the biweight loss R-FPOP stores 
+𝒪
+⁡
+(
+t
+2
+)
+\mathcal{O}(t^{2})
+ intervals at step 
+t
+t
+.
+
+
+
+
+
+
+
+
+Corollary 4.4
+
+
+
+
+For the biweight loss R-FPOP has worst-case space complexity that is 
+𝒪
+⁡
+(
+n
+2
+)
+\mathcal{O}(n^{2})
+, and time complexity that is 
+𝒪
+⁡
+(
+n
+3
+)
+\mathcal{O}(n^{3})
+.
+
+
+
+
+
+
+
+
+These results give worst-case bounds on the time and storage complexity of R-FPOP. Below we investigate empirically the time and
+storage cost and observe an average computational cost that is linear in 
+n
+n
+
+when the number of changepoints is large and less than quadratic when there is no changepoint.
+
+
+
+
+
+
+
+
+5 
+Results
+
+
+
+
+
+5.1 
+Simulation Study: Computational Cost
+
+
+
+
+
+This paper is mostly concerned with the statistical performances of our robust estimators.
+Thus an in-depth analysis of the runtime of our approach is outside the scope of this paper.
+In this section we just aim at showing that our approach is easily applicable to
+large profiles (
+n
+=
+10
+3
+n=10^{3}
+ to 
+n
+=
+10
+6
+n=10^{6}
+) in the sense that its runtime is comparable to other
+commonly used approach like FPOP 
+Maidstone et al., (2017)
+, PELT 
+Killick et al., (2012)
+, WBS 
+Fryzlewicz, (2014)
+ or smuceR 
+Frick et al., (2014)
+.
+
+
+
+
+
+
+We used a standard laptop with an Intel Core i7-3687U CPU with 2.10GHz x 4 Core and 7.7 Gb of Ram.
+For the biweight loss, for a profile of length 
+n
+=
+10
+6
+n=10^{6}
+ and in the absence of any true change the runtime
+is around 4 seconds (slightly larger than FPOP see Figure 
+4
+ left 
+L
+2
+L_{2}
+).
+As a matter of comparison on the same computer the runtime of competitor methods WBS, PELT and smuceR for a profile of length 
+n
+=
+10
+5
+n=10^{5}
+
+are respectively around 7 seconds, 40 seconds and 175 seconds.
+For an increasing number of changes runtimes are smaller (see Figure 
+4
+ right).
+Runtimes for the 
+L
+1
+L_{1}
+ and Huber loss are quite a bit larger:
+in the absence of changes and for 
+n
+=
+10
+6
+n=10^{6}
+ the 
+L
+1
+L_{1}
+ runtime is around 500 seconds and the Huber runtime is around 200 seconds (see Figure 
+4
+ left).
+
+
+
+
+
+
+Most importantly, we see that with many changepoints, the average CPU cost of all penalised cost approaches increases only linearly with the number of data points (parallel to the dashed black line in Figure 
+4
+ right).
+With no changepoints, the average CPU cost increases faster in particular for the 
+L
+1
+L_{1}
+ and Huber losses however it is less than quadratic (slopes smaller than the dotted black line
+in Figure 
+4
+ left). The CPU cost of the biweight loss is very close to the CPU cost of the 
+L
+2
+L_{2}
+ loss.
+
+
+
+
+
+
+
+
+
+
+
+
+No change, 
+K
+=
+0
+K=0
+
+
+Many changes, 
+K
+=
+n
+100
+K=\frac{n}{100}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Figure 4: 
+Runtime in seconds of R-FPOP for different loss functions. We simulated profiles with 
+n
+n
+ going from 
+2000
+2000
+ to 
+1024000
+1024000
+, with or without changes and using IID Gaussian noise.
+The axes use a log-scale, and we have added lines of slope 1 (dashed) and 2 (dotted).
+
+
+
+
+
+
+
+
+5.2 
+Simulation Study: Accuracy
+
+
+
+
+
+We assessed the performance of our robust estimators using the simulation benchmark proposed in the WBS paper
+
+(
+Fryzlewicz,, 2014
+)
+. In that paper 5 scenarios are considered. These vary in length from 
+n
+=
+150
+n=150
+ to 
+n
+=
+2048
+n=2048
+ and contain a variety
+of short and long segments, and a variety of sizes of the change in location from one segment to the next.
+We considered an additional scenario
+from 
+Frick et al., (2014)
+ corresponding to scenario 2 of WBS with a standard deviation of 0.2 rather than 0.3.
+In our simulation study we are interested to see how the presence of outliers or heavy tailed noise affect different changepoint methods, and so
+we will test each method assuming t-distributed noise.
+The underlying signals and example data for the three scenarios are shown in Figure 
+5
+.
+
+
+
+
+
+
+Figure 5: 
+ The signal, and example data, for each of the scenarios considered for the simulation study. Data was generated with the noise having a 
+t
+t
+-distribution with 5 degrees of freedom.
+
+
+
+
+
+
+For all approaches we need to choose the value 
+K
+K
+ in the loss function and the
+penalty/threshold for adding a changepoint. These will depend on the standard deviation of the noise. Our approach is to estimate this standard deviation using the median absolute deviation of the differenced
+time-series, as in 
+Fryzlewicz, (2014)
+, which we denote as 
+σ
+^
+\hat{\sigma}
+.
+We compared our various robust estimators (Huber and biweight loss) to binary segmentation using the robust cusum test 
+Hušková and Sen, (1989)
+, described in Section 
+2.3
+ (Cusum).
+For the biweight loss we chose 
+K
+=
+3
+​
+σ
+^
+K=3\hat{\sigma}
+, so that extreme residuals according to a Gaussian model are treated as outliers. For the Huber loss we chose 
+K
+=
+1.345
+​
+σ
+^
+K=1.345\hat{\sigma}
+,
+a standard choice for trading statistical efficiency of estimation with robustness.
+We further set the penalty/threshold to
+be 
+β
+=
+2
+​
+σ
+^
+2
+​
+log
+⁡
+(
+n
+)
+​
+E
+​
+(
+ϕ
+​
+(
+Z
+)
+2
+)
+\beta=2\hat{\sigma}^{2}\log(n)\mbox{E}(\phi(Z)^{2})
+, where 
+ϕ
+\phi
+ is the gradient of the loss function and 
+Z
+Z
+ is a standard Gaussian random variable. This is based on the Schwarz information
+criteria, adapted to account for the variability of loss function that is used 
+(see, e.g., theoretical results in 
+Hušková and Marušiaková,, 2012
+, for further justification of this)
+, and for the biweight loss this
+is inline with Theorem 
+2.3
+, which suggested the use of a penalty that is proportional to 
+log
+⁡
+(
+n
+)
+\log(n)
+.
+We also compared to just using the standard square-error loss: implemented using FPOP 
+(
+Maidstone et al.,, 2017
+)
+; and to
+the WBS 
+(
+Fryzlewicz,, 2014
+)
+ approach that uses a standard cusum test statistic for detecting changepoints.
+Again we used 
+β
+=
+2
+​
+σ
+^
+2
+​
+log
+⁡
+(
+n
+)
+​
+E
+​
+(
+ϕ
+​
+(
+Z
+)
+2
+)
+\beta=2\hat{\sigma}^{2}\log(n)\mbox{E}(\phi(Z)^{2})
+, which in this case simplifies to the standard BIC penalty 
+β
+=
+2
+​
+σ
+^
+2
+​
+log
+⁡
+(
+n
+)
+\beta=2\hat{\sigma}^{2}\log(n)
+,
+and is the value that gave the best results for these methods across the 6 scenarios when there is normal noise
+
+(
+Maidstone et al.,, 2017
+, see)
+.
+
+
+
+
+
+
+We consider analysing data where the noise was from a t-distribution. We vary the degrees of freedom
+from 3 to 100 to see of how varying how heavy-tailed the noise is affects the performance of different methods.
+
+
+
+
+
+
+In Figures 
+6
+ and 
+7
+ we show the results of all approaches as a function of the degrees of freedom. We compare methods based on how they estimate
+the underlying piecewise constant mean function, measured in terms of mean square error; and how well they estimate the segmentation, measured using the normalized rand-index.
+The normalized rand-index measures the overlap between
+the true segmentation and the inferred segmentation, with larger values indicating a better estimation of the segmentation.
+
+
+
+
+
+
+In terms of mean square error, for almost all scenarios we consider the biweight loss performs best when the degrees of freedom is small.
+It also appears to lose little in terms of accuracy when the degrees of freedom is large, and
+the noise is close to Gaussian. The robust cusum approach also performs well when the degrees of freedom are small, but in most cases it shows a marked drop in accuracy relative to the alternative methods
+when the noise is close to Gaussian. The one scenario where the biweight loss performs poorly when the noise is close to Gaussian is Scenario 4. In this case we have short segments, only slightly larger than
+the minimum segment length for the biweight loss, with the segment mean being the
+same for all odd segments. We can get a reasonable fit under the biweight loss by, for example, ignoring the changepoints and treating all observations in the even
+segments as outliers. The problem of distinguishing between this case and the presence of actual changepoints causes the poor performance.
+
+
+
+
+
+
+The results in terms of the quality of the segmentation, as measured using the rand-index, are more mixed. The biweight loss is clearly best in scenarios 1 and 2, but performs
+poorly for scenario 3. Here the use of the Huber loss appears to give best results across the different scenarios. Again we see that the use of the L2 loss, using either FPOP or WBS, performs poorly when the degrees
+of freedom are small.
+
+
+
+
+
+
+
+
+
+
+
+
+Scenario 1
+
+
+Scenario 2
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Scenario 2’
+
+
+Scenario 3
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Scenario 4
+
+
+Scenario 5
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Figure 6: 
+Smoothed log MSE of all tested approaches on the 6 scenarios using a student-noise with the degrees of freedom ranging from 3 to 100.
+
+
+
+
+
+
+
+
+
+
+
+
+
+Scenario 1
+
+
+Scenario 2
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Scenario 2’
+
+
+Scenario 3
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Scenario 4
+
+
+Scenario 5
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Figure 7: 
+Smoothed normalized Rand-index of all tested approaches on the 6 scenarios using student-noise with the degrees of freedom varying from 3 to 100.
+
+
+
+
+
+
+
+
+
+5.3 
+Online analysis of well-log data
+
+
+
+
+
+We return to the well-log data of Figure 
+1
+. For this data, due to the presence of substantial outliers, we choose to use the biweight loss function.
+We set the threshold, 
+K
+K
+ in (
+2
+), to be twice an estimate of the standard deviation of the observation noise. We set 
+β
+\beta
+
+to be 70 times the estimated variance of the noise. This is larger than that of the BIC penalty, but this is needed due to the presence of auto-correlation in the observation noise 
+Lavielle and Moulines, (2000)
+, and is the same penalty used
+for the analysis presented in Figure 
+1
+.
+
+
+
+
+
+
+Figure 
+8
+ shows the estimated changepoints we obtain from a batch analysis of the data. As we can see, using the biweight penalty makes the changepoint detection robust to the presence of the outliers. All
+obvious changes are detected, and we do not detect a change at any point where the outliers cluster.
+
+
+
+
+
+
+Figure 8: 
+ Estimated changepoints from batch analysis of the well-log data (left-hand plot) under biweight loss. Estimate of location of most-recent changepoint from online analysis (right-hand plot).
+The black line shows the estimate of the most-recent changepoint against the number of data points analysed. The red dashed horizontal lines show the locations of the changepoints detected from the batch analysis.
+
+
+
+
+
+
+
+As mentioned in the introduction, the motivation for analysing this data requires an online analysis. We present output from such an online analysis in the right-hand plot of Figure 
+8
+. Here we plot the
+estimate of the most recent changepoint prior to 
+t
+t
+, given data 
+y
+1
+:
+t
+y_{1:t}
+, as a function of 
+t
+t
+. To help interpret the result we also show the locations of the changepoints inferred from the batch analysis. We see that
+we are able to quickly detect changes when they happen, and we have only one region where there is some fluctuation in where we estimate the most recent changepoint. Whilst by eye the plot may suggest we immediately
+detect the changes, there is actually some lag. This is inevitable when using the biweight loss, due to the presence of a minimum segment length that can be inferred (see Theorem 
+2.2
+). The lag in detecting
+the changepoint is between 21 and 27 observations for all except the final changepoint. The final inferred changepoint is less pronounced, and is not detected until after a lag of 40 observations. This lag
+can be reduced by increasing 
+K
+K
+, but at the expense of less robustness to outliers. The region of fluctuation over the estimate of the most recent changepoint corresponds to uncertainty about whether there
+are changepoints in the last inferred segment (corresponding to the final two changepoints inferred in the bottom-left plot of Figure 
+1
+). One disadvantage of detection methods that involve minimising
+a penalised cost, and of other methods that produce a single estimate of the changepoint locations, is that they do not quantify the uncertainty in the estimate.
+
+
+
+
+
+
+
+
+5.4 
+Estimating Copy Number Variation
+
+
+
+
+
+Healthy human cells have two copies of DNA.
+In tumor cells, parts of chromosomes of various sizes
+(from kilobases to a chromosome arm) may be
+deleted or amplified several times, and this can lead to the copy number of the DNA from such regions being different from 2.
+Copy numbers (CN) can be measured
+using microarray or sequencing experiments. They are piecewise constant
+along the genome, and interest lies in detecting whether, and where, the copy number changes.
+For many samples we would have a mixture of healthy and
+tumor cells, and the signal to noise ratio for changes in copy number will go down with the tumor fraction.
+The detection of changes in copy number is further complicated by the presence of outliers.
+We illustrate
+this in Figure 
+9
+ using output from the jointseg package 
+(
+Pierre-Jean et al.,, 2015
+)
+ which enables simulation of
+realistic CN profiles by resampling real datasets for which the truth is known.
+
+
+
+
+
+
+
+
+
+
+
+
+Tumor Fraction = 1
+
+
+Tumor Fraction = 0.5
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Figure 9: 
+Two DNA copy number profiles obtained using the jointseg package with a tumor fraction of 1 (left) and
+0.5 (right). The true change-points are represented
+with red dotted lines. It can be seen
+that a number of data-points are quite far from from the blue line. The size of each jump is larger when the tumor fraction is larger.
+
+
+
+
+
+
+A standard way to analyse such data is to use the smooth.CNA function of the well known DNAcopy package 
+Bengtsson et al., (2016)
+. This function shrinks outliers towards the value of its neighbors. Once this
+is done one can run a preferred segmentation approach. As we will see below, this heuristic preprocessing procedure greatly improves changepoint detection. We want to compare such a two-stage approach to
+a simpler analysis where we analyse data using our penalised cost approach with the biweight loss.
+
+
+
+
+
+
+To assess the performance of our approach on DNA copy number data we used the jointseg package. We simulated profiles of length 
+n
+=
+4000
+n=4000
+ with
+10 change-points with segments of at least 40 data-points. The package propose two real datasets,
+GSE11976 and GSE29172, to resample from. For both we considered four levels of difficulty corresponding to different
+tumor fractions: 0.34, 0.50, 0.79 and 1 for GSE11976; and 0.3, 0.5, 0.7 and 1 for GSE29172.
+
+
+
+
+
+
+We consider four approaches: FPOP (L2), FPOP after using smooth.CNA to remove outliers (Rout L2), robust binary segmentation (Cusum)
+and our biweight loss with a threshold value of 3.
+All approaches are implemented for a range of penalty values. For every simulated profile and each run of a method we computed the number of true positive (TP) and false positive (FP) change-points.
+For all true change-point we counted one TP if there is at least one change-point identified within a window of 15 data-points.
+We then computed the number of FPs as the number of predicted changes minus the number of TPs. We then average, over 200 simulated profiles, the number of TPs and FPs per approach, penalty value and difficulty to recover ROC curves.
+
+
+
+
+
+
+Overall our robust biweight loss outperforms the L2 loss following outlier removal and the Cusum
+approach. For low tumor fractions (0.3 and 0.5 GSE29172 and 0.34 GSE11976) the biweight loss is possibly slightly better than the Cusum approach.
+For a tumor fraction of 1 the biweight loss is slightly better
+than the L2 following outlier removal. In other cases it is clearly better.
+Results are shown for the two datasets and a tumor fraction of 0.7 and 0.79 in Figure 
+10
+.
+Results for other tumor fractions are provided in figures in Appendix 
+E
+.
+
+
+
+
+
+
+
+
+
+
+
+
+GSE11976 (TF=0.79)
+
+
+GSE29172 (TF=0.7)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Figure 10: 
+Average ROC curve on the GSE11976 and GSE29172 datasets for a tumor fraction of respectively 0.79 and 0.7,
+for the Cusum, L2, L2 with outlier removal (Rout L2) and our robust biweight loss (Biweight 3).
+
+
+
+
+
+
+
+
+5.5 
+Wireless Tampering
+
+
+
+
+
+We now consider an application which looks at security of the Internet of Things (IoT). Many IoT devices use WiFi to communicate. Often, for example with surveillance systems, these need a high level of security.
+Thus it is important to be able to
+detect if a device has been tampered with. WiFi signals include a “preamble” which is used by the receiver to determine channel state. One approach that can be used to detect tampering is to monitor channel state
+variation 
+Bagci, (2016)
+.
+Abrupt changes in it could indicate some tampering event. However changes can also be caused by less sinister events, such as movement of people within the communication environment.
+Thus the challenge is to detect a change caused by tampering as opposed to any “outliers” caused by such temporary environmental factors.
+
+
+
+
+
+
+Figure 
+11
+ shows some time-series of channel state information (CSI) that has been extracted from the preamable from a signal sent by a single IoT device.
+This data is taken from 
+Bagci et al., (2015)
+, where a
+controlled experiment was performed, with an actual tampering event occurring after 22 minutes. Before this tampering event, there was movement of people around the device, which has a short-term effect on the
+time-series data.
+
+
+
+
+
+
+In practice the channel state information from an IoT device is multi-dimensional, and we show time-series for 6 out of 90 dimensions.
+Whilst ideally we would jointly analyse the data from all 90 time-series that we get from the device, we will just consider analysing each time-series individually. Our interest is to see how viable it is
+to use our approach, with the biweight loss, to accurately distinguish between tampering event and any effects due to temporary environmental factors. The six time-series we show each show different patterns, both
+in terms of the change caused by tampering, and the effect of people walking near the device. As such they give a thorough testing of any approach.
+We implemented the biweight loss with the SIC penalty for a change, and with 
+K
+K
+ chosen so that the minimum segment length (see Theorem 
+2.2
+) corresponds to a period of 20 seconds. Results are shown in Figure
+
+11
+, where we see that we accurately only detect the change that corresponds to the tampering event in all cases.
+
+
+
+
+
+
+Figure 11: 
+ Examples from the analysis of the wireless tampering data. We show six examples of the data, with different structure before and after a change, and with different patterns of
+outliers caused by temporary environmental factors. In each case there is a single changepoint, after 22 minutes (denoted by the triangle). The inferred changepoint (vertical dashed line) and inferred mean function
+(green full horizonal line) from our method with the biweight loss function are shown in each case.
+
+
+
+
+
+
+
+
+
+
+
+6 
+Discussion
+
+
+
+
+
+We have presented an algorithm for detecting changepoints by minimising a penalised cost which measures fit to the data by a loss function that is piecewise quadratic. In particular we have shown that by using
+bounded loss functions we can develop algorithms that are robust to the presence of arbitrarily large outliers. We particular recommend the use of the biweight loss function, and have shown that using such a loss
+function can lead to consistent esimation of the number of changepoints and accurate estimation of their location under weak conditions on the noise distribution.
+
+
+
+
+
+
+If we use the biweight loss we have to choose an appropriate value for 
+K
+K
+. To some extent this is a modelling decision, but a reasonable default is to choose this to be around 2 to 3 times an estimate of the
+standard deviation of the noise. This will mean the loss performs similarly to the square error loss, as most observations will be within 
+K
+K
+ of the segment location parameter, but with the added benefit of
+robustness to extreme outliers.
+
+
+
+
+
+
+We have shown that using the biweight loss with a penalty for adding a changepoint that is 
+C
+1
+​
+log
+⁡
+(
+n
+)
+C_{1}\log(n)
+ for some suitable constant 
+C
+1
+C_{1}
+ can lead to consistent estimation of the number of changepoints. If 
+K
+K
+ is chosen
+as suggested, it is natural to choose 
+C
+1
+C_{1}
+ to be similar to choices that are known to work well with the square-error loss, as we did within Section 
+5.2
+. Such choices are not guaranteed to produce large
+enough constants to ensure consistency. If this is a concern, it is possible to use the idea behind that strengthened Schwarz information criteria of 
+Fryzlewicz, (2014)
+, and choose a penalty 
+C
+1
+​
+(
+log
+⁡
+n
+)
+1
++
+ϵ
+C_{1}(\log n)^{1+\epsilon}
+ for some small
+
+ϵ
+>
+0
+\epsilon>0
+.
+
+
+
+
+
+
+Care must be taken if there are violations
+of the IID assumption for the noise. In such cases it is known that consistent estimation of the number of changepoints is still possible if we appropriately inflate the penalty 
+Lavielle and Moulines, (2000)
+, and
+we would suggest using a similar inflation when using the biweight loss. Choosing how much to inflate is difficult in practice, and thus it makes sense to try a range of penalties 
+(
+Haynes et al., 2017a, 
+, which can be done efficiently,
+e.g. using the CROPS algorithm of)
+. For applications which involve analysing multiple similar data sets, we would recommend using a small set of training data to help choose an appropriate constant
+
+(
+Rigaill et al.,, 2013
+, see e.g.)
+.
+
+
+
+
+
+
+Finally, the joint choice of 
+K
+K
+ and 
+β
+\beta
+ can be informed by the minimum segment length that can be inferred for such a choice; see Theorem 
+2.2
+. To have robustness to extreme outliers we need this
+minimum segment length to be greater than 1. Equally it should be chosen to be smaller than the shortest segment we wish to identify. This choice is linked to the question of how many similar observations would we
+require before we would classify them as coming from a new segment as opposed to being correlated outliers.
+
+
+
+
+
+
+Acknowledgements
+ We thank Utz Roedig and Ethem Bagci for supplying and discussions around the wireless tampering data, and to Lawrence Bardwell for help with analysing this data.
+This work was supported by EPSRC grant EP/N031938/1 (StatScale) and an ATIGE grant from Génopole.
+
+
+
+
+
+
+
+
+References
+
+
+
+
+      
+
+Adams and MacKay,  (2007)
+
+
+
+Adams, R. P. and MacKay, D. J. (2007).
+
+
+
+
+Bayesian online changepoint detection.
+
+
+
+
+arXiv:0710.3742
+.
+
+
+
+      
+
+Bagci,  (2016)
+
+
+
+Bagci, I. E. (2016).
+
+
+
+
+Novel security mechanisms for wireless sensor networks
+.
+
+
+
+
+PhD thesis, Lancaster University, Lancaster, UK.
+
+
+
+      
+
+Bagci et al.,  (2015)
+
+
+
+Bagci, I. E., Roedig, U., Martinovic, I., Schulz, M., and Hollick, M. (2015).
+
+
+
+
+Using channel state information for tamper detection in the internet
+of things.
+
+
+
+
+In 
+Proceedings of the 31st Annual Computer Security Applications
+Conference
+, pages 131–140. ACM.
+
+
+
+      
+
+Bai,  (1997)
+
+
+
+Bai, J. (1997).
+
+
+
+
+Estimating multiple breaks one at a time.
+
+
+
+
+Econometric theory
+, 13(3):315–352.
+
+
+
+      
+
+Baranowski et al.,  (2016)
+
+
+
+Baranowski, R., Chen, Y., and Fryzlewicz, P. (2016).
+
+
+
+
+Narrowest-over-threshold detection of multiple change-points and
+change-point-like features.
+
+
+
+
+arXiv:1609.00293
+.
+
+
+
+      
+
+Bengtsson et al.,  (2016)
+
+
+
+Bengtsson, H., Neuvial, P., Seshan, V. E., Olshen, A. B., Spellman, P. T., and
+Olshen, R. A. (2016).
+
+
+
+
+Package ‘pscbs’.
+
+
+
+      
+
+Cao and Wu,  (2015)
+
+
+
+Cao, H. and Wu, W. B. (2015).
+
+
+
+
+Changepoint estimation: another look at multiple testing problems.
+
+
+
+
+Biometrika
+, 102(4):974–980.
+
+
+
+      
+
+Fearnhead,  (2006)
+
+
+
+Fearnhead, P. (2006).
+
+
+
+
+Exact and efficient inference for multiple changepoint problems.
+
+
+
+
+Statistics and Computing
+, 16:203–213.
+
+
+
+      
+
+Frick et al.,  (2014)
+
+
+
+Frick, K., Munk, A., and Sieling, H. (2014).
+
+
+
+
+Multiscale change-point inference.
+
+
+
+
+Journal of the Royal Statistical Society: Series B
+,
+76(3):495–580.
+
+
+
+      
+
+Fryzlewicz,  (2014)
+
+
+
+Fryzlewicz, P. (2014).
+
+
+
+
+Wild binary segmentation for multiple change-point detection.
+
+
+
+
+Annals of Statistics
+, 42:2243–2281.
+
+
+
+      
+
+Futschik et al.,  (2014)
+
+
+
+Futschik, A., Hotz, T., Munk, A., and Sieling, H. (2014).
+
+
+
+
+Multiscale DNA partitioning: statistical evidence for segments.
+
+
+
+
+Bioinformatics
+, 30:2255–2262.
+
+
+
+      
+
+(12)
+
+
+
+Haynes, K., Eckley, I. A., and Fearnhead, P. (2017a).
+
+
+
+
+Computationally efficient changepoint detection for a range of
+penalties.
+
+
+
+
+Journal of Computational and Graphical Statistics
+, 26:134–143.
+
+
+
+      
+
+(13)
+
+
+
+Haynes, K., P, F., and Eckley, I. (2017b).
+
+
+
+
+A computationally efficient nonparametric approach for changepoint
+detection.
+
+
+
+
+Statistics and Computing
+, 27:1293–1305.
+
+
+
+      
+
+Hinkley,  (1971)
+
+
+
+Hinkley, D. V. (1971).
+
+
+
+
+Inference about the change-point from cumulative sum tests.
+
+
+
+
+Biometrika
+, 58(3):509–523.
+
+
+
+      
+
+Hotz et al.,  (2013)
+
+
+
+Hotz, T., Schütte, O. M., Sieling, H., Polupanow, T., Diederichsen, U.,
+Steinem, C., and Munk, A. (2013).
+
+
+
+
+Idealizing ion channel recordings by a jump segmentation
+multiresolution filter.
+
+
+
+
+IEEE Transactions on Nanobioscience
+, 12(4):376–386.
+
+
+
+      
+
+Huber,  (2011)
+
+
+
+Huber, P. J. (2011).
+
+
+
+
+Robust statistics
+.
+
+
+
+
+Springer.
+
+
+
+      
+
+Hušková,  (1991)
+
+
+
+Hušková, M. (1991).
+
+
+
+
+Recursive M-tests for the change-point problem.
+
+
+
+
+In 
+Economic Structural Change
+, pages 13–33. Springer.
+
+
+
+      
+
+Hušková,  (2013)
+
+
+
+Hušková, M. (2013).
+
+
+
+
+Robust change point analysis.
+
+
+
+
+In 
+Robustness and Complex Data Structures
+, pages 171–190.
+Springer.
+
+
+
+      
+
+Hušková and Marušiaková,  (2012)
+
+
+
+Hušková, M. and Marušiaková, M. (2012).
+
+
+
+
+M-procedures for detection of changes for dependent observations.
+
+
+
+
+Communications in Statistics-Simulation and Computation
+,
+41(7):1032–1050.
+
+
+
+      
+
+Hušková and Picek,  (2005)
+
+
+
+Hušková, M. and Picek, J. (2005).
+
+
+
+
+Bootstrap in detection of changes in linear regression.
+
+
+
+
+Sankhyā: The Indian Journal of Statistics
+, pages 200–226.
+
+
+
+      
+
+Hušková and Sen,  (1989)
+
+
+
+Hušková, M. and Sen, P. K. (1989).
+
+
+
+
+Nonparametric tests for shift and change in regression at an unknown
+time point.
+
+
+
+
+In 
+Statistical Analysis and Forecasting of Economic Structural
+Change
+, pages 71–85. Springer.
+
+
+
+      
+
+Johnson,  (2013)
+
+
+
+Johnson, N. A. (2013).
+
+
+
+
+A dynamic programming algorithm for the fused lasso and
+
+l
+0
+l_{0}
+-segmentation.
+
+
+
+
+Journal of Computational and Graphical Statistics
+,
+22(2):246–260.
+
+
+
+      
+
+Killick et al.,  (2010)
+
+
+
+Killick, R., Eckley, I. A., Ewans, K., and Jonathan, P. (2010).
+
+
+
+
+Detection of changes in variance of oceanographic time-series using
+changepoint analysis.
+
+
+
+
+Ocean Engineering
+, 37(13):1120–1126.
+
+
+
+      
+
+Killick et al.,  (2012)
+
+
+
+Killick, R., Fearnhead, P., and Eckley, I. A. (2012).
+
+
+
+
+Optimal detection of changepoints with a linear computational cost.
+
+
+
+
+Journal of the American Statistical Association
+,
+107(500):1590–1598.
+
+
+
+      
+
+Kim et al.,  (2005)
+
+
+
+Kim, C.-J., Morley, J. C., and Nelson, C. R. (2005).
+
+
+
+
+The structural break in the equity premium.
+
+
+
+
+Journal of Business & Economic Statistics
+, 23:181–191.
+
+
+
+      
+
+Lavielle and Moulines,  (2000)
+
+
+
+Lavielle, M. and Moulines, E. (2000).
+
+
+
+
+Least-squares estimation of an unknown number of shifts in a time
+series.
+
+
+
+
+Journal of time series analysis
+, 21(1):33–59.
+
+
+
+      
+
+Ma and Yau,  (2016)
+
+
+
+Ma, T. F. and Yau, C. Y. (2016).
+
+
+
+
+A pairwise likelihood-based approach for changepoint detection in
+multivariate time series models.
+
+
+
+
+Biometrika
+, 103(2):409–421.
+
+
+
+      
+
+Maidstone et al.,  (2017)
+
+
+
+Maidstone, R., Hocking, T., Rigaill, G., and Fearnhead, P. (2017).
+
+
+
+
+On optimal multiple changepoint algorithms for large data.
+
+
+
+
+Statistics and Computing
+, 27:519–533.
+
+
+
+      
+
+National Research Council,  (2013)
+
+
+
+National Research Council (2013).
+
+
+
+
+Frontiers in massive data analysis.
+
+
+
+      
+
+Olshen et al.,  (2004)
+
+
+
+Olshen, A. B., Venkatraman, E. S., Lucito, R., and Wigler, M. (2004).
+
+
+
+
+Circular binary segmentation for the analysis of array-based DNA
+copy number data.
+
+
+
+
+Biostatistics
+, 5(4):557–72.
+
+
+
+      
+
+Ó Ruanaidh and Fitzgerald,  (1996)
+
+
+
+Ó Ruanaidh, J. J. K. and Fitzgerald, W. J. (1996).
+
+
+
+
+Numerical Bayesion Methods Applied to Signal Processing
+.
+
+
+
+
+New York: Springer.
+
+
+
+      
+
+Page,  (1954)
+
+
+
+Page, E. (1954).
+
+
+
+
+Continuous inspection schemes.
+
+
+
+
+Biometrika
+, 41(1/2):100–115.
+
+
+
+      
+
+Pierre-Jean et al.,  (2015)
+
+
+
+Pierre-Jean, M., Rigaill, G., and Neuvial, P. (2015).
+
+
+
+
+Performance evaluation of DNA copy number segmentation methods.
+
+
+
+
+Briefings in Bioinformatics
+, 16:600–615.
+
+
+
+      
+
+Reeves et al.,  (2007)
+
+
+
+Reeves, J., Chen, J., Wang, X. L., Lund, R., and Lu, Q. Q. (2007).
+
+
+
+
+A review and comparison of changepoint detection techniques for
+climate data.
+
+
+
+
+Journal of Applied Meteorology and Climatology
+, 46(6):900–915.
+
+
+
+      
+
+Rigaill,  (2015)
+
+
+
+Rigaill, G. (2015).
+
+
+
+
+A pruned dynamic programming algorithm to recover the best
+segmentations with 1 to 
+K
+max
+K_{\mbox{max}}
+ change-points.
+
+
+
+
+Journal de la Société Française de Statistique
+,
+156(4):180–205.
+
+
+
+      
+
+Rigaill et al.,  (2013)
+
+
+
+Rigaill, G., Hocking, T. D., Bach, F., and Vert, J.-P. (2013).
+
+
+
+
+Learning sparse penalties for change-point detection using max margin
+interval regression.
+
+
+
+
+In 
+Proceedings of the 30th International Conference on Machine
+Learning, JMLR W&CP
+, volume 28, pages 172–180.
+
+
+
+      
+
+Ruggieri and Antonellis,  (2016)
+
+
+
+Ruggieri, E. and Antonellis, M. (2016).
+
+
+
+
+An exact approach to Bayesian sequential change point detection.
+
+
+
+
+Computational Statistics & Data Analysis
+, 97:71–86.
+
+
+
+      
+
+Vostrikova,  (1981)
+
+
+
+Vostrikova, L. (1981).
+
+
+
+
+Detection of the disorder in multidimensional random-processes.
+
+
+
+
+Doklady Akademii Nauk SSSR
+, 259(2):270–274.
+
+
+
+      
+
+Worsley,  (1979)
+
+
+
+Worsley, K. (1979).
+
+
+
+
+On the likelihood ratio test for a shift in location of normal
+populations.
+
+
+
+
+Journal of the American Statistical Association
+,
+74(366a):365–367.
+
+
+
+      
+
+Wyse et al.,  (2011)
+
+
+
+Wyse, J., Friel, N., et al. (2011).
+
+
+
+
+Approximate simulation-free Bayesian inference for multiple
+changepoint models with dependence within segments.
+
+
+
+
+Bayesian Analysis
+, 6(4):501–528.
+
+
+
+      
+
+Yao,  (1984)
+
+
+
+Yao, Y.-C. (1984).
+
+
+
+
+Estimation of a noisy discrete-time step function: Bayes and
+empirical Bayes approaches.
+
+
+
+
+The Annals of Statistics
+, pages 1434–1447.
+
+
+
+      
+
+Yao and Au,  (1989)
+
+
+
+Yao, Y.-C. and Au, S. (1989).
+
+
+
+
+Least-squares estimation of a step function.
+
+
+
+
+Sankhyā: The Indian Journal of Statistics, Series A
+, pages
+370–381.
+
+
+
+    
+
+
+
+
+
+
+
+
+
+Supplementary Material for Changepoint Detection in the Presence of Outliers
+
+
+
+
+
+
+Appendix A 
+Proof of Theorem 
+2.3
+ 
+
+
+
+
+
+We first introduce notation, and present some basic properties that will be used within the proof. Let 
+γ
+⁡
+(
+y
+,
+θ
+)
+\gamma(y;\theta)
+ be the biweight loss, so 
+γ
+⁡
+(
+y
+,
+θ
+)
+=
+min
+⁡
+{
+(
+y
+−
+θ
+)
+2
+,
+K
+2
+}
+\gamma(y;\theta)=\min\{(y-\theta)^{2},K^{2}\}
+, and we will keep 
+K
+K
+ fixed throughout. To simplify notation we will write 
+γ
+⁡
+(
+y
+,
+0
+)
+=
+γ
+⁡
+(
+y
+)
+\gamma(y;0)=\gamma(y)
+, and further note that 
+γ
+⁡
+(
+y
+,
+θ
+)
+=
+γ
+⁡
+(
+y
+−
+θ
+,
+0
+)
+=
+γ
+⁡
+(
+y
+−
+θ
+)
+\gamma(y;\theta)=\gamma(y-\theta;0)=\gamma(y-\theta)
+. We also note that 
+γ
+⁡
+(
+y
+)
+\gamma(y)
+ is bounded, 
+0
+≤
+γ
+⁡
+(
+y
+)
+≤
+K
+2
+0\leq\gamma(y)\leq K^{2}
+, and satisfies a Lipschitz property
+
+
+
+
+
+
+
+
+
+|
+γ
+⁡
+(
+y
+1
+)
+−
+γ
+⁡
+(
+y
+2
+)
+|
+≤
+2
+​
+K
+​
+|
+y
+1
+−
+y
+2
+|
+.
+|\gamma(y_{1})-\gamma(y_{2})|\leq 2K|y_{1}-y_{2}|.
+
+
+
+
+
+
+
+
+
+
+Let 
+Z
+1
+,
+Z
+2
+,
+…
+Z_{1},Z_{2},\ldots
+ be independent, identically distributed (IID) random variables whose distribution is that of the residual process within our model. The following random functions will play an important role
+
+
+
+
+
+
+
+
+
+X
+i
+​
+(
+θ
+)
+=
+γ
+⁡
+(
+Z
+i
+−
+θ
+)
+−
+γ
+⁡
+(
+Z
+i
+)
+.
+X_{i}(\theta)=\gamma(Z_{i}-\theta)-\gamma(Z_{i}).
+
+
+
+
+
+
+By assumption (
+3
+), we have
+
+
+
+
+
+
+
+
+
+E
+​
+{
+X
+i
+​
+(
+θ
+)
+}
+=
+M
+⁡
+(
+θ
+)
+−
+M
+⁡
+(
+0
+)
+=
+≥
+min
+⁡
+{
+c
+1
+​
+θ
+2
+,
+c
+2
+}
+,
+\mbox{E}\{X_{i}(\theta)\}=M(\theta)-M(0)=\geq\min\{c_{1}\theta^{2},c_{2}\},
+
+
+
+
+
+
+for constants 
+c
+1
+>
+0
+c_{1}>0
+ and 
+c
+2
+>
+0
+c_{2}>0
+. Define 
+v
+⁡
+(
+θ
+)
+=
+E
+​
+{
+X
+i
+​
+(
+θ
+)
+2
+}
+v(\theta)=\mbox{E}\{X_{i}(\theta)^{2}\}
+.
+By the bounded and Lipschitz properties of 
+γ
+⁡
+(
+y
+)
+\gamma(y)
+ we have
+
+
+
+
+
+
+
+
+
+v
+⁡
+(
+θ
+)
+=
+E
+​
+{
+X
+i
+​
+(
+θ
+)
+2
+}
+≤
+min
+⁡
+{
+4
+​
+K
+2
+​
+θ
+2
+,
+K
+4
+}
+.
+v(\theta)=\mbox{E}\left\{X_{i}(\theta)^{2}\right\}\leq\min\{4K^{2}\theta^{2},K^{4}\}.
+
+
+
+
+
+
+We will be interested in sums of 
+X
+i
+​
+(
+θ
+)
+X_{i}(\theta)
+, and thus define
+
+
+
+
+
+
+
+
+
+S
+l
+​
+(
+θ
+)
+=
+∑
+i
+=
+1
+l
+X
+i
+​
+(
+θ
+)
+.
+S_{l}(\theta)=\sum_{i=1}^{l}X_{i}(\theta).
+
+
+
+
+
+
+To simplify notation in the following we will use 
+C
+1
+C_{1}
+, 
+C
+2
+C_{2}
+, 
+α
+\alpha
+, 
+α
+′
+\alpha^{\prime}
+ etc. to denote constants, and allow these constants to differ for different results and for different parts of the proofs.
+
+
+
+
+
+
+Our consistency results states that asymptotically we estimate the correct number of changepoints and that each changepoint location is estimated within some degree of accuracy.
+The proof of consistency requires two preliminary results – the proofs of which appear at the end of this section. The first is used to bound how much the un-penalised cost can be reduced by adding extra changepoints,
+and is used to show that asymptotically we do not over-estimate the number of changepoints.
+
+
+
+
+
+
+Lemma A.1
+
+
+
+
+Under assumptions (
+3
+) and (
+4
+),
+there exists strictly positive constants 
+α
+\alpha
+, 
+C
+1
+C_{1}
+ and 
+δ
+\delta
+ such for any 
+l
+≤
+n
+l\leq n
+,
+
+
+
+
+
+
+
+
+
+Pr
+{
+min
+θ
+S
+l
+(
+θ
+)
+<
+−
+α
+log
+(
+n
+)
+}
+≤
+C
+1
+n
+−
+2
+−
+δ
+.
+\Pr\left\{\min_{\theta}S_{l}(\theta)<-\alpha\log(n)\right\}\leq C_{1}n^{-2-\delta}.
+
+
+
+
+
+
+
+
+
+
+
+
+The second lemma will give us a probabilistic bound on the increase in the cost we get if we miss a true changepoint. This will be used to show both that asymptotically we cannot under-estimate the number of changepoints, and that any estimated segmentation must have an estimated changepoint “close to” a real changepoint.
+
+
+
+
+
+
+Lemma A.2
+
+
+
+
+Let 
+S
+l
+′
+​
+(
+θ
+)
+S_{l}^{\prime}(\theta)
+ be an independent copy of 
+S
+l
+​
+(
+θ
+)
+S_{l}(\theta)
+. Then under assumptions (
+3
+) and (
+4
+), for any 
+Δ
+>
+0
+\Delta>0
+, there exists positive constants, 
+C
+1
+C_{1}
+, 
+C
+2
+C_{2}
+ and 
+α
+\alpha
+ such that
+
+
+
+
+
+
+
+
+
+Pr
+⁡
+(
+min
+θ
+⁡
+{
+S
+l
+​
+(
+θ
+)
++
+S
+l
+′
+​
+(
+θ
+−
+Δ
+)
+}
+≤
+l
+​
+α
+)
+≤
+C
+1
+​
+exp
+⁡
+{
+−
+C
+2
+​
+l
+}
+.
+\Pr\left(\min_{\theta}\left\{S_{l}(\theta)+S_{l}^{\prime}(\theta-\Delta)\right\}\leq l\alpha\right)\leq C_{1}\exp\{-C_{2}l\}.
+
+
+
+
+
+
+
+
+
+
+
+
+Remember that our asymptotic results are for esimators of the changepoints obtained by minimising a penalised cost
+
+
+
+
+
+
+
+
+
+Q
+(
+y
+1
+:
+n
+;
+τ
+^
+1
+:
+k
+)
+=
+∑
+i
+=
+0
+k
+{
+𝒞
+(
+y
+τ
+^
+i
++
+1
+:
+τ
+^
+i
++
+1
+)
++
+β
+n
+}
+,
+Q(y_{1:n};\hat{\tau}_{1:k})=\sum_{i=0}^{k}\left\{\mathcal{C}(y_{\hat{\tau}_{i}+1:\hat{\tau}_{i+1}})+\beta_{n}\right\},
+
+
+
+
+
+
+where we allow the penalty for adding a changepoint, 
+β
+n
+\beta_{n}
+, to depend on 
+n
+n
+. To simplify the notation we will write this
+cost function as 
+Q
+(
+τ
+^
+1
+:
+k
+)
+Q(\hat{\tau}_{1:k})
+ from now on. We will further introduce the notation
+
+
+
+
+
+
+
+
+
+Q
+0
+(
+τ
+^
+1
+:
+k
+)
+=
+∑
+i
+=
+0
+k
+𝒞
+(
+y
+τ
+^
+i
++
+1
+:
+τ
+^
+i
++
+1
+)
+,
+Q_{0}(\hat{\tau}_{1:k})=\sum_{i=0}^{k}\mathcal{C}(y_{\hat{\tau}_{i}+1:\hat{\tau}_{i+1}}),
+
+
+
+
+
+
+to denote the un-penalised cost of a segmentation. We will extend both these functions to be defined when the argument is a set of un-ordered changepoints. Thus for an unordered vector 
+τ
+^
+1
+:
+k
+\hat{\tau}_{1:k}
+, if we let 
+τ
+^
+(
+1
+)
+<
+τ
+^
+(
+2
+)
+<
+⋯
+<
+τ
+^
+​
+(
+k
+)
+\hat{\tau}_{(1)}<\hat{\tau}_{(2)}<\cdots<\hat{\tau}{(k)}
+ be the ordered changepoint locations then, for example,
+
+
+
+
+
+
+
+
+
+Q
+0
+(
+τ
+^
+1
+:
+k
+)
+=
+∑
+i
+=
+0
+k
+𝒞
+(
+y
+τ
+^
+(
+i
+)
++
+1
+:
+τ
+^
+(
+i
++
+1
+)
+)
+,
+Q_{0}(\hat{\tau}_{1:k})=\sum_{i=0}^{k}\mathcal{C}(y_{\hat{\tau}_{(i)}+1:\hat{\tau}_{(i+1)}}),
+
+
+
+
+
+
+where as before 
+τ
+(
+0
+)
+=
+0
+\tau_{(0)}=0
+ and 
+τ
+(
+k
++
+1
+)
+=
+n
+\tau_{(k+1)}=n
+. Finally we will use, for example, 
+Q
+0
+(
+τ
+^
+1
+:
+k
+,
+τ
+^
+1
+:
+k
+′
+′
+)
+Q_{0}(\hat{\tau}_{1:k},\hat{\tau}^{\prime}_{1:k^{\prime}})
+ to be the unpenalised cost for a segmentation with changepoints given by the union of 
+τ
+^
+1
+:
+k
+\hat{\tau}_{1:k}
+ and 
+τ
+^
+′
+1
+:
+k
+′
+\hat{\tau}^{\prime}_{1:k^{\prime}}
+.
+
+
+
+
+
+
+Proof of Theorem 
+2.3
+ 
+
+
+
+
+
+
+The proof has three parts. Each showing that the probability of “bad” segmentations, for a different definition of “bad”, goes to 0 as 
+n
+n
+ increases. In each case the idea is to show that the penalised cost for such “bad” segmentations must be greater than
+some other segmentation. The segmentation we compare with will either be the true segmentation of the data, or a slight adaptation of the “bad” segmentation which adds one or more true changepoints. Furthermore we can upper bound the un-penalised cost of, say, the correct segmentation as
+
+
+
+
+
+
+
+
+
+Q
+0
+(
+τ
+1
+:
+k
+0
+)
+≤
+∑
+i
+=
+1
+n
+γ
+(
+Z
+i
+)
+,
+Q_{0}(\tau_{1:k_{0}})\leq\sum_{i=1}^{n}\gamma(Z_{i}),
+
+
+
+
+(7)
+
+
+
+
+where 
+Z
+1
+,
+…
+,
+Z
+n
+Z_{1},\ldots,Z_{n}
+ are the noise random variables used to generate the data. This upper bound comes from the fact it is the cost if we fix the segment location
+parameter for each segment to be the true value for that segment, as opposed to minimising the cost over all possible location parameter values. A similar bound will
+also be used to bound the contribution to the cost function from individual segments that are subsets of a true segment. We also repeatedly used the fact that if we add
+changepoints then the un-penalised cost can never increase.
+
+
+
+
+
+
+Part 1
+
+
+
+
+
+
+The first part is to show that the estimated number of changepoints, 
+k
+^
+n
+\hat{k}_{n}
+, satisfies
+
+
+
+
+
+
+
+
+
+Pr
+⁡
+(
+k
+^
+>
+k
+0
+)
+→
+0
+\Pr(\hat{k}>k_{0})\rightarrow 0
+
+
+
+
+
+
+as 
+n
+→
+∞
+n\rightarrow\infty
+, provided 
+β
+n
+>
+C
+1
+​
+log
+⁡
+(
+n
+)
+\beta_{n}>C_{1}\log(n)
+ for a suitable 
+C
+1
+C_{1}
+. To do this we use Lemma 
+A.1
+.
+
+
+
+
+
+
+Let 
+E
+n
+{E}_{n}
+ be the event that
+
+
+
+
+
+
+
+
+
+min
+1
+≤
+s
+<
+t
+≤
+n
+⁡
+min
+⁡
+∑
+i
+=
+s
+t
+θ
+⁡
+{
+γ
+⁡
+(
+Z
+i
+−
+θ
+)
+−
+γ
+⁡
+(
+Z
+i
+)
+}
+>
+−
+α
+​
+log
+⁡
+(
+n
+)
+,
+\min_{1\leq s<t\leq n}\min_{\theta}\sum_{i=s}^{t}\left\{\gamma(Z_{i}-\theta)-\gamma(Z_{i})\right\}>-\alpha\log(n),
+
+
+
+
+
+
+where 
+α
+\alpha
+ is defined as in Lemma 
+A.1
+. Then by Lemma 
+A.1
+ it follows that
+
+Pr
+⁡
+(
+E
+n
+)
+→
+1
+\Pr(E_{n})\rightarrow 1
+ as 
+n
+→
+∞
+n\rightarrow\infty
+.
+
+
+
+
+
+
+Now assume that 
+E
+n
+E_{n}
+ occurs and
+consider a segmentation 
+τ
+^
+1
+:
+k
+^
+\hat{\tau}_{1:\hat{k}}
+ with 
+k
+^
+>
+k
+\hat{k}>k
+. We have
+
+
+
+
+
+
+
+
+
+Q
+0
+(
+τ
+^
+1
+:
+k
+^
+)
+\displaystyle Q_{0}(\hat{\tau}_{1:\hat{k}})
+
+
+≥
+\displaystyle\geq
+
+
+Q
+0
+(
+τ
+^
+1
+:
+k
+^
+,
+τ
+1
+:
+k
+0
+)
+\displaystyle Q_{0}(\hat{\tau}_{1:\hat{k}},\tau_{1:k_{0}})
+
+
+
+
+
+
+
+
+
+
+=
+\displaystyle=
+
+
+∑
+j
+=
+0
+k
+∗
+𝒞
+(
+Y
+τ
+(
+j
+)
+∗
++
+1
+:
+τ
+(
+j
++
+1
+)
+∗
+)
+\displaystyle\sum_{j=0}^{k^{*}}\mathcal{C}(Y_{\tau_{(j)}^{*}+1:\tau_{(j+1)}^{*}})
+
+
+
+
+
+
+
+
+
+
+=
+\displaystyle=
+
+
+∑
+j
+=
+0
+k
+∗
+min
+⁡
+∑
+i
+=
+τ
+(
+j
+)
+∗
++
+1
+τ
+(
+j
++
+1
+)
+∗
+θ
+⁡
+γ
+⁡
+(
+Z
+i
+−
+θ
+)
+,
+\displaystyle\sum_{j=0}^{k^{*}}\min_{\theta}\sum_{i=\tau_{(j)}^{*}+1}^{\tau_{(j+1)}^{*}}\gamma(Z_{i}-\theta),
+
+
+
+
+
+
+where 
+k
+∗
+≤
+k
+0
++
+k
+^
+k^{*}\leq k_{0}+\hat{k}
+ is the number of distinct changepoints in the union of 
+τ
+^
+1
+:
+k
+^
+\hat{\tau}_{1:\hat{k}}
+ and 
+τ
+1
+:
+k
+0
+\tau_{1:k_{0}}
+, and 
+τ
+(
+1
+)
+∗
+,
+…
+,
+τ
+(
+k
+∗
+)
+∗
+\tau_{(1)}^{*},\ldots,\tau_{(k^{*})}^{*}
+ are the ordered changepoint locations.
+
+
+
+
+
+
+As 
+E
+n
+E_{n}
+ occurs, and using (
+7
+),
+
+
+
+
+
+
+
+
+
+Q
+0
+(
+τ
+^
+1
+:
+k
+^
+)
+−
+Q
+0
+(
+τ
+1
+:
+k
+0
+)
+\displaystyle Q_{0}(\hat{\tau}_{1:\hat{k}})-Q_{0}(\tau_{1:k_{0}})
+
+
+≥
+\displaystyle\geq
+
+
+Q
+0
+(
+τ
+^
+1
+:
+k
+^
+)
+−
+∑
+i
+=
+1
+n
+γ
+(
+Z
+i
+)
+\displaystyle Q_{0}(\hat{\tau}_{1:\hat{k}})-\sum_{i=1}^{n}\gamma(Z_{i})
+
+
+
+
+
+
+
+
+
+
+=
+\displaystyle=
+
+
+∑
+j
+=
+0
+k
+∗
+min
+⁡
+∑
+i
+=
+τ
+(
+j
+)
+∗
++
+1
+τ
+(
+j
++
+1
+)
+∗
+θ
+⁡
+{
+γ
+⁡
+(
+Z
+i
+−
+θ
+)
+−
+γ
+⁡
+(
+Z
+i
+)
+}
+\displaystyle\sum_{j=0}^{k^{*}}\min_{\theta}\sum_{i=\tau_{(j)}^{*}+1}^{\tau_{(j+1)}^{*}}\left\{\gamma(Z_{i}-\theta)-\gamma(Z_{i})\right\}
+
+
+
+
+
+
+
+
+
+
+>
+\displaystyle>
+
+
+−
+(
+k
+∗
++
+1
+)
+​
+α
+​
+log
+⁡
+(
+n
+)
+.
+\displaystyle-(k^{*}+1)\alpha\log(n).
+
+
+
+
+
+
+Thus for the penalised costs,
+
+
+
+
+
+
+
+
+
+Q
+(
+τ
+^
+1
+:
+k
+^
+)
+−
+Q
+(
+τ
+1
+:
+k
+0
+)
+>
+−
+(
+k
+∗
++
+1
+)
+α
+log
+(
+n
+)
++
+(
+k
+^
+−
+k
+0
+)
+β
+n
+.
+Q(\hat{\tau}_{1:\hat{k}})-Q(\tau_{1:k_{0}})>-(k^{*}+1)\alpha\log(n)+(\hat{k}-k_{0})\beta_{n}.
+
+
+
+
+
+
+Now as 
+k
+∗
+≤
+k
+0
++
+k
+^
+k^{*}\leq k_{0}+\hat{k}
+ we have that the right-hand side will be positive if 
+β
+n
+>
+2
+​
+(
+k
+0
++
+1
+)
+​
+α
+​
+log
+⁡
+(
+n
+)
+\beta_{n}>2(k_{0}+1)\alpha\log(n)
+.
+For such a 
+β
+n
+\beta_{n}
+ we have that the true segmentation will have a lower penalised cost than any segmentation with more than 
+k
+0
+k_{0}
+ changepoints if 
+E
+n
+E_{n}
+ occurs. As 
+Pr
+⁡
+(
+E
+n
+)
+→
+1
+\Pr(E_{n})\rightarrow 1
+ we have that 
+Pr
+⁡
+(
+k
+^
+n
+>
+k
+0
+)
+→
+0
+\Pr(\hat{k}_{n}>k_{0})\rightarrow 0
+ as required.
+
+
+
+
+
+
+Part 2
+
+
+
+
+
+
+The second part of the proof is to show that asymptotically we cannot underestimate the number of changepoints if 
+β
+n
+=
+o
+⁡
+(
+n
+)
+\beta_{n}=o(n)
+.
+
+
+
+
+
+
+Let 
+l
+l
+ be the largest integer less than half the length of the smallest segment. Let
+
+E
+~
+n
+\tilde{E}_{n}
+ be the event that
+
+
+
+
+
+
+
+
+
+min
+j
+∈
+{
+1
+,
+…
+,
+k
+0
+}
+⁡
+min
+⁡
+∑
+i
+=
+τ
+j
+−
+l
++
+1
+τ
+j
++
+l
+θ
+⁡
+{
+γ
+⁡
+(
+Y
+i
+−
+θ
+)
+−
+γ
+⁡
+(
+Z
+i
+)
+}
+>
+α
+′
+​
+l
+,
+\min_{j\in\{1,\ldots,k_{0}\}}\min_{\theta}\sum_{i=\tau_{j}-l+1}^{\tau_{j}+l}\left\{\gamma(Y_{i}-\theta)-\gamma(Z_{i})\right\}>\alpha^{\prime}l,
+
+
+
+
+
+
+for some suitable 
+α
+′
+\alpha^{\prime}
+ which is specified below. Now
+
+
+
+
+
+
+
+
+
+min
+⁡
+∑
+i
+=
+τ
+j
+−
+l
++
+1
+τ
+j
++
+l
+θ
+′
+⁡
+γ
+⁡
+(
+Y
+i
+−
+θ
+′
+)
+\displaystyle\min_{\theta^{\prime}}\sum_{i=\tau_{j}-l+1}^{\tau_{j}+l}\gamma(Y_{i}-\theta^{\prime})
+
+
+=
+\displaystyle=
+
+
+min
+θ
+′
+⁡
+{
+∑
+i
+=
+1
+l
+γ
+⁡
+(
+μ
+j
+−
+1
++
+Z
+τ
+j
+−
+l
++
+i
+−
+θ
+′
+)
++
+γ
+⁡
+(
+μ
+j
++
+Z
+τ
+j
++
+i
+−
+θ
+′
+)
+}
+\displaystyle\min_{\theta^{\prime}}\left\{\sum_{i=1}^{l}\gamma(\mu_{j-1}+Z_{\tau_{j}-l+i}-\theta^{\prime})+\gamma(\mu_{j}+Z_{\tau_{j}+i}-\theta^{\prime})\right\}
+
+
+
+
+
+
+
+
+
+
+=
+\displaystyle=
+
+
+min
+θ
+⁡
+{
+∑
+i
+=
+1
+l
+γ
+⁡
+(
+Z
+τ
+j
+−
+l
++
+i
+−
+θ
+)
++
+γ
+⁡
+(
+Z
+τ
+j
++
+i
+−
+θ
++
+Δ
+j
+)
+}
+\displaystyle\min_{\theta}\left\{\sum_{i=1}^{l}\gamma(Z_{\tau_{j}-l+i}-\theta)+\gamma(Z_{\tau_{j}+i}-\theta+\Delta_{j})\right\}
+
+
+
+
+
+
+where 
+μ
+j
+−
+1
+\mu_{j-1}
+ and 
+μ
+j
+\mu_{j}
+ are the segment location parameters before and after the 
+j
+j
+th changepoint and 
+Δ
+j
+=
+μ
+j
+−
+μ
+j
+−
+1
+\Delta_{j}=\mu_{j}-\mu_{j-1}
+ is
+the change at the 
+j
+j
+th changepoint. We have 
+|
+Δ
+j
+|
+>
+0
+|\Delta_{j}|>0
+ for each 
+j
+j
+ as by assumption 
+μ
+j
+≠
+μ
+j
+−
+1
+\mu_{j}\neq\mu_{j-1}
+.
+
+
+
+
+
+
+If we choose 
+α
+′
+>
+0
+\alpha^{\prime}>0
+ to be a value such that the statement of Lemma 
+A.2
+ holds for all 
+Δ
+=
+|
+Δ
+j
+|
+\Delta=|\Delta_{j}|
+, then, as 
+l
+→
+∞
+l\rightarrow\infty
+ as 
+n
+→
+∞
+n\rightarrow\infty
+, we have that 
+Pr
+⁡
+(
+E
+~
+n
+)
+→
+1
+\Pr(\tilde{E}_{n})\rightarrow 1
+ as 
+n
+→
+∞
+n\rightarrow\infty
+.
+
+
+
+
+
+
+Now assume event 
+E
+~
+n
+\tilde{E}_{n}
+ occurs. Consider a segmentation 
+τ
+^
+1
+:
+k
+^
+\hat{\tau}_{1:\hat{k}}
+ with 
+k
+^
+<
+k
+0
+\hat{k}<k_{0}
+. As 
+k
+^
+<
+k
+0
+\hat{k}<k_{0}
+
+there exists a changepoint 
+τ
+j
+\tau_{j}
+ such that no estimated changepoint is within 
+l
+l
+ of 
+τ
+j
+\tau_{j}
+. We can bound the un-penalised cost of the segmentation 
+τ
+^
+1
+:
+k
+^
+\hat{\tau}_{1:\hat{k}}
+ by comparing with a segmentation that also includes changes at 
+τ
+j
+−
+l
+\tau_{j}-l
+, 
+τ
+j
+\tau_{j}
+ and 
+τ
+j
++
+l
+\tau_{j}+l
+:
+
+
+
+
+
+
+
+
+
+Q
+0
+(
+τ
+^
+1
+:
+k
+^
+)
+\displaystyle Q_{0}(\hat{\tau}_{1:\hat{k}})
+
+
+≥
+\displaystyle\geq
+
+
+Q
+0
+(
+τ
+^
+1
+:
+k
+^
+,
+τ
+j
+−
+l
+,
+τ
+j
++
+l
+)
+\displaystyle Q_{0}(\hat{\tau}_{1:\hat{k}},\tau_{j}-l,\tau_{j}+l)
+
+
+
+
+
+
+
+
+
+
+≥
+\displaystyle\geq
+
+
+Q
+0
+(
+τ
+^
+1
+:
+k
+^
+,
+τ
+j
+−
+l
+,
+τ
+j
+,
+τ
+j
++
+l
+)
++
+min
+θ
+∑
+i
+=
+τ
+j
+−
+l
++
+1
+τ
+j
++
+l
+{
+γ
+(
+Y
+i
+−
+θ
+)
+−
+γ
+(
+Z
+i
+)
+}
+\displaystyle Q_{0}(\hat{\tau}_{1:\hat{k}},\tau_{j}-l,\tau_{j},\tau_{j}+l)+\min_{\theta}\sum_{i=\tau_{j}-l+1}^{\tau_{j}+l}\left\{\gamma(Y_{i}-\theta)-\gamma(Z_{i})\right\}
+
+
+
+
+
+
+
+
+
+
+>
+\displaystyle>
+
+
+Q
+0
+(
+τ
+^
+1
+:
+k
+^
+,
+τ
+j
+−
+l
+,
+τ
+j
+,
+τ
+j
++
+l
+)
++
+α
+′
+l
+.
+\displaystyle Q_{0}(\hat{\tau}_{1:\hat{k}},\tau_{j}-l,\tau_{j},\tau_{j}+l)+\alpha^{\prime}l.
+
+
+
+
+
+
+The second inequality comes from a bound on the reduction in the un-penalised cost from adding a changepoint at 
+τ
+j
+\tau_{j}
+.
+It is obtained using (
+7
+) for data 
+Y
+τ
+j
+−
+l
++
+1
+:
+τ
+j
++
+l
+Y_{\tau_{j}-l+1:\tau_{j}+l}
+ with a change at 
+τ
+j
+\tau_{j}
+.
+
+
+
+
+
+
+Thus the penalised cost satisfies
+
+
+
+
+
+
+
+
+
+Q
+(
+τ
+^
+1
+:
+k
+^
+)
+−
+Q
+(
+τ
+^
+1
+:
+k
+^
+,
+τ
+j
+−
+l
+,
+τ
+j
++
+l
+)
+>
+α
+l
+−
+3
+β
+n
+,
+Q(\hat{\tau}_{1:\hat{k}})-Q(\hat{\tau}_{1:\hat{k}},\tau_{j}-l,\tau_{j}+l)>\alpha l-3\beta_{n},
+
+
+
+
+
+
+where the 
+3
+​
+β
+n
+3\beta_{n}
+ term comes from adding 3 changepoints.
+
+
+
+
+
+
+Now 
+l
+l
+ increases linearly in 
+n
+n
+, thus the right-hand side is positive for large enough 
+n
+n
+ providing 
+β
+n
+=
+o
+⁡
+(
+n
+)
+\beta_{n}=o(n)
+. Thus for large enough 
+n
+n
+, the segmentation 
+τ
+^
+1
+:
+k
+^
+\hat{\tau}_{1:\hat{k}}
+ cannot minimise the penalised cost if 
+E
+~
+n
+\tilde{E}_{n}
+ occurs. This
+argument applies for all such segmentations with fewer than 
+k
+0
+k_{0}
+ changes. Thus as 
+Pr
+⁡
+(
+E
+~
+n
+)
+→
+1
+\Pr(\tilde{E}_{n})\rightarrow 1
+ we have that 
+Pr
+⁡
+(
+k
+^
+n
+<
+k
+0
+)
+→
+0
+\Pr(\hat{k}_{n}<k_{0})\rightarrow 0
+ as required.
+
+
+
+
+
+
+Part 3
+
+
+
+
+
+
+Taken together, the first two parts of the proof show that 
+Pr
+⁡
+(
+k
+^
+n
+=
+k
+0
+)
+→
+1
+\Pr(\hat{k}_{n}=k_{0})\rightarrow 1
+. The third part of the proof relates to the accuracy of the estimated changepoint locations. As 
+Pr
+⁡
+(
+k
+^
+n
+=
+k
+0
+)
+→
+1
+\Pr(\hat{k}_{n}=k_{0})\rightarrow 1
+ we need consider only segmentations of the data with 
+k
+0
+k_{0}
+ changepoints.
+
+
+
+
+
+
+We introduce an event 
+E
+¯
+n
+\bar{E}_{n}
+ similar to 
+E
+~
+n
+\tilde{E}_{n}
+ used in the second part of the proof, but with 
+l
+=
+⌊
+C
+2
+​
+log
+⁡
+(
+n
+)
+⌋
+l=\lfloor C_{2}\log(n)\rfloor
+. Consider this event only for 
+n
+n
+ sufficiently large that 
+l
+l
+ is less than the smallest segment length. That is 
+E
+¯
+n
+\bar{E}_{n}
+ is the event
+
+
+
+
+
+
+
+
+
+min
+j
+∈
+{
+1
+,
+…
+,
+k
+0
+}
+⁡
+min
+⁡
+∑
+i
+=
+τ
+j
+−
+l
++
+1
+τ
+j
++
+l
+θ
+⁡
+{
+γ
+⁡
+(
+Y
+i
+−
+θ
+)
+−
+γ
+⁡
+(
+Z
+i
+)
+}
+>
+α
+′
+​
+l
+,
+\min_{j\in\{1,\ldots,k_{0}\}}\min_{\theta}\sum_{i=\tau_{j}-l+1}^{\tau_{j}+l}\left\{\gamma(Y_{i}-\theta)-\gamma(Z_{i})\right\}>\alpha^{\prime}l,
+
+
+
+
+
+
+where 
+α
+′
+\alpha^{\prime}
+ is a constant. By the same argument as in Part 2 of the proof, we can choose 
+α
+′
+>
+0
+\alpha^{\prime}>0
+ such that, by Lemma 
+A.2
+, 
+Pr
+⁡
+(
+E
+¯
+n
+)
+→
+1
+\Pr(\bar{E}_{n})\rightarrow 1
+.
+
+
+
+
+
+
+Now assume both 
+E
+¯
+n
+\bar{E}_{n}
+ and 
+E
+n
+{E}_{n}
+, which was defined in the first part of the proof, occur. Consider any segmentation with 
+k
+0
+k_{0}
+ changepoints, 
+τ
+^
+1
+:
+k
+0
+\hat{\tau}_{1:k_{0}}
+,
+for which
+
+
+
+
+
+
+
+
+
+max
+i
+=
+1
+,
+…
+,
+k
+0
+⁡
+{
+min
+j
+=
+1
+,
+…
+,
+k
+^
+n
+⁡
+|
+τ
+i
+−
+τ
+^
+j
+|
+}
+>
+C
+2
+​
+log
+⁡
+(
+n
+)
+.
+\max_{i=1,\ldots,k_{0}}\left\{\min_{j=1,\ldots,\hat{k}_{n}}\left|\tau_{i}-\hat{\tau}_{j}\right|\right\}>C_{2}\log(n).
+
+
+
+
+
+
+Let 
+i
+i
+ be the index of a changepoint for which
+
+
+
+
+
+
+
+
+
+min
+j
+=
+1
+,
+…
+,
+k
+^
+n
+⁡
+|
+τ
+i
+−
+τ
+^
+j
+|
+>
+C
+2
+​
+log
+⁡
+(
+n
+)
+,
+\min_{j=1,\ldots,\hat{k}_{n}}\left|\tau_{i}-\hat{\tau}_{j}\right|>C_{2}\log(n),
+
+
+
+
+
+
+and let 
+τ
+1
+:
+k
+0
++
+1
+′
+=
+(
+τ
+1
+:
+i
+−
+1
+,
+τ
+i
+−
+l
+,
+τ
+i
++
+l
+,
+τ
+i
++
+1
+:
+k
+0
+)
+\tau^{\prime}_{1:k_{0}+1}=(\tau_{1:i-1},\tau_{i}-l,\tau_{i}+l,\tau_{i+1:k_{0}})
+. This is the set of all actual changepoints except the 
+i
+i
+th one together with
+the two changes at a distance 
+l
+l
+ from 
+τ
+i
+\tau_{i}
+. We will compare the penalised cost of segmentation 
+τ
+^
+1
+:
+k
+0
+\hat{\tau}_{1:k_{0}}
+ with the cost of the true segmentation:
+
+
+
+
+
+
+
+
+
+Q
+(
+τ
+^
+1
+:
+k
+0
+)
+−
+Q
+(
+τ
+1
+:
+k
+0
+)
+\displaystyle Q(\hat{\tau}_{1:k_{0}})-Q(\tau_{1:k_{0}})
+
+
+=
+\displaystyle=
+
+
+Q
+0
+(
+τ
+^
+1
+:
+k
+0
+)
+−
+Q
+0
+(
+τ
+1
+:
+k
+0
+)
+\displaystyle Q_{0}(\hat{\tau}_{1:k_{0}})-Q_{0}(\tau_{1:k_{0}})
+
+
+
+
+
+
+
+
+
+
+≥
+\displaystyle\geq
+
+
+Q
+0
+(
+τ
+^
+1
+:
+k
+0
+,
+τ
+1
+:
+k
+0
++
+1
+′
+)
+−
+∑
+j
+=
+1
+n
+γ
+(
+Z
+j
+)
+,
+\displaystyle Q_{0}(\hat{\tau}_{1:k_{0}},\tau^{\prime}_{1:k_{0}+1})-\sum_{j=1}^{n}\gamma(Z_{j}),
+
+
+
+
+
+
+where the last inequality comes from using (
+7
+). We can write the final term as a sum over the 
+k
+∗
++
+1
+k^{*}+1
+ segments of the segmentation with change-points given by the union
+of 
+τ
+^
+1
+:
+k
+0
+\hat{\tau}_{1:k_{0}}
+ and 
+τ
+′
+1
+:
+k
+0
++
+1
+\tau^{\prime}_{1:k_{0}+1}
+. This union contains all true changepoints except for 
+τ
+i
+\tau_{i}
+. Thus the 
+k
+∗
+k^{*}
+ segments that do not contain 
+τ
+i
+\tau_{i}
+ will contribute a term
+
+
+
+
+
+
+
+
+
+min
+θ
+⁡
+{
+∑
+j
+=
+s
+t
+γ
+⁡
+(
+Z
+j
+−
+θ
+)
+−
+γ
+⁡
+(
+Z
+j
+)
+}
+,
+\min_{\theta}\left\{\sum_{j=s}^{t}\gamma(Z_{j}-\theta)-\gamma(Z_{j})\right\},
+
+
+
+
+
+
+for some suitable 
+t
+>
+s
+t>s
+, to this sum. As event 
+E
+n
+E_{n}
+ holds, this term is bounded below by 
+−
+α
+​
+log
+⁡
+(
+n
+)
+-\alpha\log(n)
+.
+The remaining term is of the form
+
+
+
+
+
+
+
+
+
+min
+⁡
+∑
+j
+=
+τ
+i
+−
+l
++
+1
+τ
+i
++
+l
+θ
+⁡
+{
+γ
+⁡
+(
+Y
+j
+−
+θ
+)
+−
+γ
+⁡
+(
+Z
+j
+)
+}
+\min_{\theta}\sum_{j=\tau_{i}-l+1}^{\tau_{i}+l}\left\{\gamma(Y_{j}-\theta)-\gamma(Z_{j})\right\}
+
+
+
+
+
+
+and this is bounded below by 
+α
+′
+​
+l
+\alpha^{\prime}l
+. Thus we have
+
+
+
+
+
+
+
+
+
+Q
+(
+τ
+^
+1
+:
+k
+0
+)
+−
+Q
+(
+τ
+1
+:
+k
+0
+)
+>
+α
+′
+⌊
+C
+2
+log
+(
+n
+)
+⌋
+−
+(
+2
+k
+0
++
+1
+)
+α
+log
+(
+n
+)
+,
+Q(\hat{\tau}_{1:k_{0}})-Q(\tau_{1:k_{0}})>\alpha^{\prime}\lfloor C_{2}\log(n)\rfloor-(2k_{0}+1)\alpha\log(n),
+
+
+
+
+
+
+where the first term on the right-hand side comes from the bound on the term for the segment that include 
+τ
+i
+\tau_{i}
+, the other term is from the 
+k
+∗
+≤
+2
+​
+k
+0
++
+1
+k^{*}\leq 2k_{0}+1
+ other terms. Thus for 
+C
+2
+>
+(
+2
+​
+k
+0
++
+1
+)
+​
+α
+/
+α
+′
+C_{2}>(2k_{0}+1)\alpha/\alpha^{\prime}
+ this will be positive for large enough 
+n
+n
+, and the penalised cost would prefer the true segmentation to 
+τ
+^
+1
+:
+k
+0
+\hat{\tau}_{1:k_{0}}
+. This will hold for all 
+τ
+^
+1
+:
+k
+0
+\hat{\tau}_{1:k_{0}}
+ for which the error in estimating at least one changepoint is greater than 
+C
+2
+​
+log
+⁡
+(
+n
+)
+C_{2}\log(n)
+. Thus if 
+E
+n
+E_{n}
+ and 
+E
+¯
+n
+\bar{E}_{n}
+ hold then for large enough 
+n
+n
+ all
+segmentations with 
+k
+0
+k_{0}
+ changepoints will have
+
+
+
+
+
+
+
+
+
+max
+i
+=
+1
+,
+…
+,
+k
+0
+⁡
+{
+min
+j
+=
+1
+,
+…
+,
+k
+^
+n
+⁡
+|
+τ
+i
+−
+τ
+^
+j
+|
+}
+≤
+C
+2
+​
+log
+⁡
+(
+n
+)
+,
+\max_{i=1,\ldots,k_{0}}\left\{\min_{j=1,\ldots,\hat{k}_{n}}\left|\tau_{i}-\hat{\tau}_{j}\right|\right\}\leq C_{2}\log(n),
+
+
+
+
+
+
+as required.
+ 
+□
+\Box
+
+
+
+
+
+
+We finish by giving the proofs of our two lemmas.
+
+
+
+
+
+
+Proof of Lemma 
+A.1
+.
+
+
+
+
+
+
+The proof proceeds in two parts. The first involves considering 
+min
+θ
+⁡
+S
+l
+​
+(
+θ
+)
+\min_{\theta}S_{l}(\theta)
+ for 
+−
+2
+​
+K
+≤
+θ
+≤
+2
+​
+K
+-2K\leq\theta\leq 2K
+, and the second considers 
+|
+θ
+|
+>
+2
+​
+K
+|\theta|>2K
+. In each case we need to show that there is a sufficiently large 
+α
+\alpha
+ such that the probability of the minimum of 
+S
+l
+​
+(
+θ
+)
+S_{l}(\theta)
+, for the respective ranges of 
+θ
+\theta
+, being less than 
+−
+α
+​
+log
+⁡
+(
+n
+)
+-\alpha\log(n)
+ is bounded by a constant times 
+n
+−
+2
+−
+δ
+n^{-2-\delta}
+.
+
+
+
+
+
+
+For the first part, we initially give a bound on the probability of small values for 
+S
+l
+​
+(
+θ
+)
+S_{l}(\theta)
+ for a fixed value of 
+θ
+\theta
+. To do this we use Bennett’s inequality 
+(
+Boucheron et al.,, 2013
+, see Theorem 2.9 in)
+ for
+
+
+
+
+
+
+
+
+
+S
+~
+=
+∑
+i
+=
+1
+l
+{
+X
+i
+​
+(
+θ
+)
+−
+M
+⁡
+(
+θ
+)
+}
+=
+S
+l
+​
+(
+θ
+)
+−
+l
+​
+M
+​
+(
+θ
+)
+.
+\tilde{S}=\sum_{i=1}^{l}\{X_{i}(\theta)-M(\theta)\}=S_{l}(\theta)-lM(\theta).
+
+
+
+
+
+
+As 
+X
+i
+​
+(
+θ
+)
+≥
+−
+K
+2
+X_{i}(\theta)\geq-K^{2}
+ and 
+E
+​
+{
+X
+i
+​
+(
+θ
+)
+2
+}
+=
+v
+⁡
+(
+θ
+)
+\mbox{E}\{X_{i}(\theta)^{2}\}=v(\theta)
+, Bennett’s inequality gives us
+
+
+
+
+
+
+
+
+
+Pr
+⁡
+(
+S
+~
+≤
+−
+t
+)
+≤
+exp
+⁡
+(
+−
+t
+2
+2
+​
+(
+l
+​
+v
+​
+(
+θ
+)
++
+K
+2
+​
+t
+/
+3
+)
+)
+.
+\Pr(\tilde{S}\leq-t)\leq\exp\left(-\frac{t^{2}}{2(lv(\theta)+K^{2}t/3)}\right).
+
+
+
+
+
+
+Now the event 
+S
+l
+​
+(
+θ
+)
+≤
+−
+α
+′
+​
+log
+⁡
+(
+n
+)
+S_{l}(\theta)\leq-\alpha^{\prime}\log(n)
+ is equivalent to the event 
+S
+~
+≤
+−
+α
+′
+​
+log
+⁡
+(
+n
+)
+−
+l
+​
+M
+​
+(
+θ
+)
+\tilde{S}\leq-\alpha^{\prime}\log(n)-lM(\theta)
+, so
+
+
+
+
+
+
+
+
+
+Pr
+{
+S
+l
+(
+θ
+)
+≤
+−
+α
+′
+log
+(
+n
+)
+}
+\displaystyle\Pr\left\{S_{l}(\theta)\leq-\alpha^{\prime}\log(n)\right\}
+
+
+≤
+\displaystyle\leq
+
+
+exp
+⁡
+(
+−
+{
+α
+′
+​
+log
+⁡
+(
+n
+)
++
+l
+​
+M
+​
+(
+θ
+)
+}
+2
+2
+​
+[
+l
+​
+v
+​
+(
+θ
+)
++
+K
+2
+​
+{
+α
+′
+​
+n
+​
+log
+⁡
+(
+n
+)
++
+l
+​
+M
+​
+(
+θ
+)
+}
+/
+3
+]
+)
+\displaystyle\exp\left(-\frac{\{\alpha^{\prime}\log(n)+lM(\theta)\}^{2}}{2[lv(\theta)+K^{2}\{\alpha^{\prime}n\log(n)+lM(\theta)\}/3]}\right)
+
+
+
+
+
+
+
+
+
+
+=
+\displaystyle=
+
+
+exp
+⁡
+{
+−
+α
+′
+​
+log
+⁡
+(
+n
+)
+​
+[
+α
+′
+​
+log
+⁡
+(
+n
+)
++
+2
+​
+l
+​
+M
+​
+(
+θ
+)
++
+l
+2
+​
+M
+​
+(
+θ
+)
+2
+/
+{
+α
+′
+​
+log
+⁡
+(
+n
+)
+}
+2
+​
+l
+​
+v
+​
+(
+θ
+)
++
+2
+​
+K
+2
+​
+{
+α
+′
+​
+log
+⁡
+(
+n
+)
++
+l
+​
+M
+​
+(
+θ
+)
+}
+/
+3
+]
+}
+.
+\displaystyle\exp\left\{-\alpha^{\prime}\log(n)\left[\frac{\alpha^{\prime}\log(n)+2lM(\theta)+l^{2}M(\theta)^{2}/\{\alpha^{\prime}\log(n)\}}{2lv(\theta)+2K^{2}\{\alpha^{\prime}\log(n)+lM(\theta)\}/3}\right]\right\}.
+
+
+
+
+
+
+Now there exists a 
+D
+>
+0
+D>0
+ such that 
+v
+⁡
+(
+θ
+)
+<
+D
+​
+M
+​
+(
+θ
+)
+v(\theta)<DM(\theta)
+ for all 
+θ
+\theta
+. If we further write 
+ψ
+=
+l
+​
+M
+​
+(
+θ
+)
+/
+{
+α
+′
+​
+log
+⁡
+(
+n
+)
+}
+\psi=lM(\theta)/\{\alpha^{\prime}\log(n)\}
+, and note that 
+ψ
+≥
+0
+\psi\geq 0
+, we get
+
+
+
+
+
+
+
+
+
+Pr
+{
+S
+l
+(
+θ
+)
+≤
+−
+α
+′
+log
+(
+n
+)
+}
+\displaystyle\Pr\left\{S_{l}(\theta)\leq-\alpha^{\prime}\log(n)\right\}
+
+
+≤
+\displaystyle\leq
+
+
+exp
+⁡
+{
+−
+α
+′
+​
+log
+⁡
+(
+n
+)
+​
+(
+1
++
+2
+​
+ψ
++
+ψ
+2
+2
+​
+K
+2
+/
+3
++
+(
+2
+​
+D
++
+2
+​
+K
+2
+/
+3
+)
+​
+ψ
+)
+}
+\displaystyle\exp\left\{-\alpha^{\prime}\log(n)\left(\frac{1+2\psi+\psi^{2}}{2K^{2}/3+(2D+2K^{2}/3)\psi}\right)\right\}
+
+
+
+
+
+
+For 
+ψ
+≥
+0
+\psi\geq 0
+, we can lower bound the bracketed term in the exponent by some strictly positive constant.
+Thus for sufficiently large 
+α
+′
+\alpha^{\prime}
+ we will have that this probability is less than 
+n
+−
+3
+−
+δ
+n^{-3-\delta}
+.
+
+
+
+
+
+
+Now the above argument is for 
+S
+l
+​
+(
+θ
+)
+S_{l}(\theta)
+ at a specific value of 
+θ
+\theta
+, but we are interested in 
+min
+|
+θ
+|
+≤
+2
+​
+K
+⁡
+S
+l
+​
+(
+θ
+)
+\min_{|\theta|\leq 2K}S_{l}(\theta)
+. To deal with this minimisation we use the Lipschitz property of 
+γ
+⁡
+(
+y
+)
+\gamma(y)
+, which gives that
+
+
+
+
+
+
+
+
+
+|
+S
+l
+​
+(
+θ
+)
+−
+S
+l
+​
+(
+θ
+′
+)
+|
+≤
+2
+​
+K
+​
+l
+​
+|
+θ
+−
+θ
+′
+|
+.
+|S_{l}(\theta)-S_{l}(\theta^{\prime})|\leq 2Kl|\theta-\theta^{\prime}|.
+
+
+
+
+
+
+Thus if we choose 
+ϵ
+>
+0
+\epsilon>0
+ we can partition the interval 
+[
+−
+2
+​
+K
+,
+2
+​
+K
+]
+[-2K,2K]
+ into 
+⌈
+4
+​
+K
+2
+​
+n
+/
+ϵ
+⌉
+\lceil 4K^{2}n/\epsilon\rceil
+ intervals of width at most 
+ϵ
+/
+(
+K
+​
+n
+)
+\epsilon/(Kn)
+. For one such interval, as 
+l
+≤
+n
+l\leq n
+,
+
+
+
+
+
+
+
+
+
+Pr
+{
+min
+θ
+:
+|
+θ
+−
+θ
+′
+|
+<
+ϵ
+/
+(
+2
+​
+K
+​
+n
+)
+S
+l
+(
+θ
+)
+≤
+−
+α
+log
+(
+n
+)
+}
+≤
+Pr
+{
+S
+l
+(
+θ
+′
+)
+≤
+−
+α
+log
+(
+n
+)
++
+ϵ
+}
+.
+\Pr\left\{\min_{\theta:|\theta-\theta^{\prime}|<\epsilon/(2Kn)}S_{l}(\theta)\leq-\alpha\log(n)\right\}\leq\Pr\left\{S_{l}(\theta^{\prime})\leq-\alpha\log(n)+\epsilon\right\}.
+
+
+
+
+
+
+Thus if we choose 
+α
+>
+α
+′
+\alpha>\alpha^{\prime}
+ such that, for sufficiently large 
+n
+n
+, 
+−
+α
+​
+log
+⁡
+(
+n
+)
++
+ϵ
+<
+−
+α
+′
+​
+log
+⁡
+(
+n
+)
+-\alpha\log(n)+\epsilon<-\alpha^{\prime}\log(n)
+, we have that, for sufficiently large 
+n
+n
+, this probability is less than 
+n
+−
+3
+−
+δ
+n^{-3-\delta}
+. We require the bound to hold for all 
+O
+⁡
+(
+n
+)
+O(n)
+ intervals, and thus we get that
+
+
+
+
+
+
+
+
+
+Pr
+(
+min
+θ
+:
+|
+θ
+|
+≤
+2
+​
+K
+S
+l
+(
+θ
+)
+≤
+−
+α
+log
+(
+n
+)
+)
+≤
+C
+2
+1
+n
+2
++
+δ
+,
+\Pr\left(\min_{\theta:|\theta|\leq 2K}S_{l}(\theta)\leq-\alpha\log(n)\right)\leq C_{2}\frac{1}{n^{2+\delta}},
+
+
+
+
+
+
+for some constant 
+C
+2
+C_{2}
+, as required.
+
+
+
+
+
+
+We now consider the case where 
+|
+θ
+|
+>
+2
+​
+K
+|\theta|>2K
+. We will use the following bound
+
+
+
+
+
+
+
+
+
+X
+i
+​
+(
+θ
+)
+=
+γ
+⁡
+(
+Z
+i
+−
+θ
+)
+−
+γ
+⁡
+(
+Z
+i
+)
+≥
+{
+K
+2
+−
+Z
+i
+2
+if 
+|
+Z
+i
+|
+<
+K
+,
+−
+K
+2
+otherwise
+,
+X_{i}(\theta)=\gamma(Z_{i}-\theta)-\gamma(Z_{i})\geq\left\{\begin{array}[]{cl}K^{2}-Z_{i}^{2}&\mbox{if $|Z_{i}|<K$},\\
+-K^{2}&\mbox{otherwise},\end{array}\right.
+
+
+
+
+
+
+for 
+|
+θ
+|
+>
+2
+​
+K
+|\theta|>2K
+.
+Let 
+X
+~
+i
+\tilde{X}_{i}
+ be the random variable defined by the right-hand side of this equation, and 
+S
+~
+l
+=
+∑
+i
+=
+1
+l
+X
+~
+i
+\tilde{S}_{l}=\sum_{i=1}^{l}\tilde{X}_{i}
+. Then we have
+
+
+
+
+
+
+
+
+
+Pr
+{
+min
+θ
+:
+|
+θ
+|
+>
+2
+​
+K
+S
+l
+(
+θ
+)
+<
+−
+α
+log
+(
+n
+)
+}
+≤
+Pr
+{
+S
+~
+l
+<
+−
+α
+log
+(
+n
+)
+}
+.
+\Pr\left\{\min_{\theta:|\theta|>2K}S_{l}(\theta)<-\alpha\log(n)\right\}\leq\Pr\left\{\tilde{S}_{l}<-\alpha\log(n)\right\}.
+
+
+
+
+
+
+
+
+
+
+Using the notation in assumption (
+4
+), where 
+p
+=
+Pr
+⁡
+(
+|
+Z
+i
+|
+>
+K
+)
+p=\Pr(|Z_{i}|>K)
+ and, if 
+Z
+~
+\tilde{Z}
+ is a random variable whose distribution is that of 
+Z
+i
+Z_{i}
+ conditional on 
+|
+Z
+i
+|
+≤
+K
+|Z_{i}|\leq K
+, 
+σ
+2
+=
+E
+​
+(
+Z
+~
+2
+)
+\sigma^{2}=\mbox{E}(\tilde{Z}^{2})
+, we have
+
+
+
+
+
+
+
+
+
+E
+​
+(
+X
+~
+i
+)
+≥
+K
+2
+​
+(
+1
+−
+2
+​
+p
+)
+−
+(
+1
+−
+p
+)
+​
+σ
+2
+,
+\mbox{E}(\tilde{X}_{i})\geq K^{2}(1-2p)-(1-p)\sigma^{2},
+
+
+
+
+
+
+which we will denote by 
+M
+~
+\tilde{M}
+. By assumption (
+4
+), 
+M
+~
+>
+0
+\tilde{M}>0
+. As 
+|
+X
+~
+i
+|
+≤
+K
+2
+|\tilde{X}_{i}|\leq K^{2}
+ we have 
+E
+​
+(
+X
+~
+i
+2
+)
+<
+K
+4
+\mbox{E}(\tilde{X}_{i}^{2})<K^{4}
+.
+
+
+
+
+
+
+Thus using Bennett’s inequality, and a similar argument to above,
+
+
+
+
+
+
+
+
+
+Pr
+{
+S
+~
+l
+<
+−
+α
+log
+(
+n
+)
+}
+\displaystyle\Pr\left\{\tilde{S}_{l}<-\alpha\log(n)\right\}
+
+
+≤
+\displaystyle\leq
+
+
+exp
+⁡
+{
+−
+{
+α
+​
+log
+⁡
+(
+n
+)
++
+l
+​
+M
+~
+}
+2
+2
+​
+[
+l
+​
+K
+4
++
+K
+2
+​
+{
+α
+​
+log
+⁡
+(
+n
+)
++
+l
+​
+M
+~
+}
+/
+3
+]
+}
+\displaystyle\exp\left\{\frac{-\{\alpha\log(n)+l\tilde{M}\}^{2}}{2[lK^{4}+K^{2}\{\alpha\log(n)+l\tilde{M}\}/3]}\right\}
+
+
+
+
+
+
+
+
+
+
+=
+\displaystyle=
+
+
+exp
+⁡
+{
+−
+α
+​
+log
+⁡
+(
+n
+)
+​
+[
+(
+1
++
+ψ
+)
+2
+2
+​
+(
+D
+​
+ψ
++
+K
+2
+​
+(
+1
++
+ψ
+)
+/
+3
+)
+]
+}
+,
+\displaystyle\exp\left\{-\alpha\log(n)\left[\frac{(1+\psi)^{2}}{2(D\psi+K^{2}(1+\psi)/3)}\right]\right\},
+
+
+
+
+
+
+where 
+ψ
+=
+l
+​
+M
+~
+/
+{
+α
+​
+log
+⁡
+(
+n
+)
+}
+\psi=l\tilde{M}/\{\alpha\log(n)\}
+, and 
+D
+=
+K
+4
+/
+M
+~
+D=K^{4}/\tilde{M}
+. We can bound from below the bracketed term in the exponent for all 
+ψ
+>
+0
+\psi>0
+. Thus we can choose 
+α
+\alpha
+ large enough so that the right-hand side is less than 
+n
+−
+2
+−
+δ
+n^{-2-\delta}
+ for all 
+l
+l
+ as required.  
+□
+\Box
+
+
+
+
+
+
+Proof of Lemma 
+A.2
+.
+
+
+
+
+
+
+Fix 
+Δ
+>
+0
+\Delta>0
+. Let 
+Z
+1
+′
+,
+Z
+2
+′
+,
+…
+Z_{1}^{\prime},Z_{2}^{\prime},\ldots
+ be IID copies of 
+Z
+1
+Z_{1}
+. Let 
+X
+i
+′
+​
+(
+θ
+)
+=
+γ
+⁡
+(
+Z
+i
+′
+−
+θ
+)
+−
+γ
+⁡
+(
+Z
+i
+′
+)
+X^{\prime}_{i}(\theta)=\gamma(Z_{i}^{\prime}-\theta)-\gamma(Z_{i}^{\prime})
+. Then
+
+
+
+
+
+
+
+
+
+S
+l
+​
+(
+θ
+)
++
+S
+l
+′
+​
+(
+θ
+−
+Δ
+)
+=
+∑
+i
+=
+1
+l
+{
+γ
+⁡
+(
+Z
+i
+−
+θ
+)
+−
+γ
+⁡
+(
+Z
+i
+)
++
+γ
+⁡
+(
+Z
+i
+′
+−
+θ
++
+Δ
+)
+−
+γ
+⁡
+(
+Z
+i
+′
+)
+}
+=
+∑
+i
+=
+1
+l
+{
+X
+i
+​
+(
+θ
+)
++
+X
+i
+′
+​
+(
+θ
+−
+Δ
+)
+}
+.
+S_{l}(\theta)+S_{l}^{\prime}(\theta-\Delta)=\sum_{i=1}^{l}\left\{\gamma(Z_{i}-\theta)-\gamma(Z_{i})+\gamma(Z_{i}^{\prime}-\theta+\Delta)-\gamma(Z_{i}^{\prime})\right\}=\sum_{i=1}^{l}\left\{X_{i}(\theta)+X_{i}^{\prime}(\theta-\Delta)\right\}.
+
+
+
+
+
+
+As we have fixed 
+Δ
+\Delta
+, we will write 
+X
+¯
+i
+​
+(
+θ
+)
+=
+X
+i
+​
+(
+θ
+)
++
+X
+i
+′
+​
+(
+θ
+−
+Δ
+)
+\bar{X}_{i}(\theta)=X_{i}(\theta)+X_{i}^{\prime}(\theta-\Delta)
+, and 
+S
+¯
+l
+​
+(
+θ
+)
+=
+∑
+i
+=
+1
+l
+X
+¯
+i
+​
+(
+θ
+)
+\bar{S}_{l}(\theta)=\sum_{i=1}^{l}\bar{X}_{i}(\theta)
+. We are thus interested in bounding
+
+
+
+
+
+
+
+
+
+Pr
+⁡
+(
+min
+θ
+⁡
+S
+¯
+l
+<
+α
+​
+l
+)
+.
+\Pr\left(\min_{\theta}\bar{S}_{l}<\alpha l\right).
+
+
+
+
+
+
+
+
+
+
+To get the required bound, our argument will closely follow that of Lemma 
+A.1
+. In particular we will show that we get the required exponential bound on this probability first for the case where we minimise 
+θ
+\theta
+ over 
+|
+θ
+|
+≤
+Δ
++
+2
+​
+K
+|\theta|\leq\Delta+2K
+ and second for the case where we minimise 
+θ
+\theta
+ over 
+|
+θ
+|
+>
+Δ
++
+2
+​
+K
+|\theta|>\Delta+2K
+.
+
+
+
+
+
+
+By condition (
+3
+) we have that, for any 
+θ
+\theta
+,
+
+
+
+
+
+
+
+
+
+E
+​
+{
+X
+¯
+i
+​
+(
+θ
+)
+}
+=
+M
+⁡
+(
+θ
+)
++
+M
+⁡
+(
+θ
+−
+Δ
+)
+≥
+min
+⁡
+{
+c
+1
+​
+Δ
+2
+2
+,
+c
+2
+}
+,
+\mbox{E}\{\bar{X}_{i}(\theta)\}=M(\theta)+M(\theta-\Delta)\geq\min\left\{c_{1}\frac{\Delta^{2}}{2},c_{2}\right\},
+
+
+
+
+
+
+and we denote the right-hand side, which is a constant as we have fixed 
+Δ
+\Delta
+, by 
+M
+¯
+\bar{M}
+. As 
+|
+X
+¯
+i
+​
+(
+θ
+)
+|
+≤
+2
+​
+K
+|\bar{X}_{i}(\theta)|\leq 2K
+ we have 
+E
+​
+{
+X
+¯
+i
+​
+(
+θ
+)
+2
+}
+≤
+4
+​
+K
+2
+\mbox{E}\{\bar{X}_{i}(\theta)^{2}\}\leq 4K^{2}
+.
+
+
+
+
+
+
+Thus, for any chosen 
+θ
+\theta
+, we can use Bennett’s inequality to bound the lower tail for 
+S
+¯
+l
+​
+(
+θ
+)
+\bar{S}_{l}(\theta)
+. We get
+
+
+
+
+
+
+
+
+
+Pr
+{
+S
+¯
+l
+(
+θ
+)
+≤
+l
+M
+¯
+/
+2
+}
+\displaystyle\Pr\left\{\bar{S}_{l}(\theta)\leq l\bar{M}/2\right\}
+
+
+=
+\displaystyle=
+
+
+Pr
+{
+S
+¯
+l
+(
+θ
+)
+−
+l
+M
+¯
+≤
+−
+l
+M
+¯
+/
+2
+}
+\displaystyle\Pr\left\{\bar{S}_{l}(\theta)-l\bar{M}\leq-l\bar{M}/2\right\}
+
+
+
+
+
+
+
+
+
+
+≤
+\displaystyle\leq
+
+
+exp
+⁡
+{
+−
+l
+2
+​
+M
+¯
+2
+8
+​
+(
+4
+​
+l
+​
+K
+4
++
+K
+​
+l
+​
+M
+¯
+/
+3
+)
+}
+\displaystyle\exp\left\{-\frac{l^{2}\bar{M}^{2}}{8(4lK^{4}+Kl\bar{M}/3)}\right\}
+
+
+
+
+
+
+
+
+
+
+≤
+\displaystyle\leq
+
+
+exp
+⁡
+{
+−
+l
+​
+C
+2
+′
+}
+,
+\displaystyle\exp\left\{-lC_{2}^{\prime}\right\},
+
+
+
+
+
+
+where 
+C
+2
+′
+=
+M
+¯
+2
+/
+(
+32
+​
+K
+4
++
+8
+​
+K
+​
+M
+¯
+/
+3
+)
+C_{2}^{\prime}=\bar{M}^{2}/(32K^{4}+8K\bar{M}/3)
+.
+
+
+
+
+
+
+The above inequality is for a single, fixed, value of 
+θ
+\theta
+. To deal with the minimisation over 
+θ
+\theta
+ such
+that 
+|
+θ
+|
+≤
+Δ
++
+2
+​
+K
+|\theta|\leq\Delta+2K
+ we partition this interval into intervals of length 
+M
+¯
+/
+(
+8
+​
+K
+)
+\bar{M}/(8K)
+, or smaller. As
+
+X
+¯
+i
+​
+(
+θ
+)
+\bar{X}_{i}(\theta)
+ is Lipschitz in 
+θ
+\theta
+, with constant 
+4
+​
+K
+4K
+, we have that for 
+θ
+\theta
+ in an interval of length 
+M
+¯
+/
+(
+8
+​
+K
+)
+\bar{M}/(8K)
+ the value of 
+S
+¯
+l
+​
+(
+θ
+)
+\bar{S}_{l}(\theta)
+ can vary by at most 
+l
+​
+M
+¯
+/
+4
+l\bar{M}/4
+ from the value in the centre of the interval. Thus if
+
+S
+¯
+l
+​
+(
+θ
+)
+≤
+l
+​
+M
+¯
+/
+2
+\bar{S}_{l}(\theta)\leq l\bar{M}/2
+ then we must have 
+S
+¯
+l
+​
+(
+θ
+′
+)
+≤
+l
+​
+M
+¯
+/
+4
+\bar{S}_{l}(\theta^{\prime})\leq l\bar{M}/4
+ for all 
+θ
+′
+∈
+[
+θ
+−
+M
+¯
+/
+(
+8
+​
+K
+)
+,
+θ
++
+M
+¯
+/
+(
+8
+​
+K
+)
+]
+\theta^{\prime}\in[\theta-\bar{M}/(8K),\theta+\bar{M}/(8K)]
+.
+
+
+
+
+
+
+Our partition of the region 
+|
+θ
+|
+≤
+Δ
++
+2
+​
+K
+|\theta|\leq\Delta+2K
+ requires a fixed number of intervals of length at most 
+M
+¯
+/
+(
+8
+​
+K
+)
+\bar{M}/(8K)
+. Thus we have
+
+
+
+
+
+
+
+
+
+Pr
+{
+min
+θ
+:
+|
+θ
+|
+<
+Δ
++
+2
+​
+K
+S
+¯
+l
+(
+θ
+)
+≤
+l
+M
+¯
+/
+4
+}
+≤
+C
+1
+′
+exp
+{
+−
+l
+C
+2
+′
+}
+,
+\Pr\left\{\min_{\theta:|\theta|<\Delta+2K}\bar{S}_{l}(\theta)\leq l\bar{M}/4\right\}\leq C_{1}^{\prime}\exp\left\{-lC_{2}^{\prime}\right\},
+
+
+
+
+
+
+where 
+C
+1
+C_{1}
+ is the number of intervals.
+
+
+
+
+
+
+We now consider the case where we minimise 
+S
+¯
+l
+​
+(
+θ
+)
+\bar{S}_{l}(\theta)
+ over 
+|
+θ
+|
+>
+Δ
++
+2
+​
+K
+|\theta|>\Delta+2K
+. As in the proof to Lemma 
+A.1
+, for such 
+θ
+\theta
+ we can bound from below both 
+X
+i
+​
+(
+θ
+)
+X_{i}(\theta)
+ and 
+X
+i
+​
+(
+θ
+−
+Δ
+)
+X_{i}(\theta-\Delta)
+ by a random variable that takes the value 
+K
+2
+−
+Z
+i
+2
+K^{2}-Z_{i}^{2}
+ if 
+|
+Z
+i
+|
+<
+K
+|Z_{i}|<K
+ and that takes the value 
+−
+K
+2
+-K^{2}
+ otherwise. Let 
+X
+~
+i
+\tilde{X}_{i}
+ denote this random variable, and 
+X
+~
+i
+′
+\tilde{X}_{i}^{\prime}
+ the corresponding random variable defined from 
+Z
+i
+′
+Z^{\prime}_{i}
+. We then have that for any 
+α
+\alpha
+
+
+
+
+
+
+
+
+
+Pr
+{
+min
+θ
+:
+|
+θ
+|
+>
+Δ
++
+2
+​
+K
+S
+¯
+l
+(
+θ
+)
+≤
+α
+l
+}
+≤
+Pr
+{
+∑
+i
+=
+1
+l
+(
+X
+~
+i
++
+X
+~
+i
+′
+)
+≤
+α
+l
+}
+.
+\Pr\left\{\min_{\theta:|\theta|>\Delta+2K}\bar{S}_{l}(\theta)\leq\alpha l\right\}\leq\Pr\left\{\sum_{i=1}^{l}(\tilde{X}_{i}+\tilde{X}_{i}^{\prime})\leq\alpha l\right\}.
+
+
+
+
+
+
+Defining 
+M
+~
+\tilde{M}
+ to be the lower bound on 
+E
+​
+(
+X
+~
+i
+)
+\mbox{E}(\tilde{X}_{i})
+ that was given in the proof of Lemma 
+A.1
+ we
+have, using Bennett’s inequality again,
+
+
+
+
+
+
+
+
+
+Pr
+{
+∑
+i
+=
+1
+l
+(
+X
+~
+i
++
+X
+~
+i
+′
+)
+≤
+l
+M
+~
+}
+\displaystyle\Pr\left\{\sum_{i=1}^{l}(\tilde{X}_{i}+\tilde{X}_{i}^{\prime})\leq l\tilde{M}\right\}
+
+
+=
+\displaystyle=
+
+
+Pr
+{
+∑
+i
+=
+1
+l
+(
+X
+~
+i
++
+X
+~
+i
+′
+−
+2
+M
+~
+)
+≤
+−
+l
+M
+~
+}
+\displaystyle\Pr\left\{\sum_{i=1}^{l}(\tilde{X}_{i}+\tilde{X}_{i}^{\prime}-2\tilde{M})\leq-l\tilde{M}\right\}
+
+
+
+
+
+
+
+
+
+
+≤
+\displaystyle\leq
+
+
+exp
+⁡
+{
+−
+l
+2
+​
+M
+~
+2
+​
+(
+4
+​
+K
+4
+​
+l
++
+2
+​
+K
+​
+M
+~
+​
+l
+/
+3
+)
+}
+.
+\displaystyle\exp\left\{-\frac{l^{2}\tilde{M}}{2(4K^{4}l+2K\tilde{M}l/3)}\right\}.
+
+
+
+
+
+
+The final expression can be written as 
+exp
+⁡
+{
+−
+l
+​
+C
+2
+′′
+}
+\exp\{-lC_{2}^{\prime\prime}\}
+ for some suitable 
+C
+2
+′′
+C_{2}^{\prime\prime}
+.
+
+
+
+
+
+
+Putting this together with the result when we minimise over 
+|
+θ
+|
+≤
+Δ
++
+2
+​
+K
+|\theta|\leq\Delta+2K
+ we get the required inequality with
+
+α
+=
+min
+⁡
+{
+M
+¯
+/
+4
+,
+M
+~
+}
+\alpha=\min\{\bar{M}/4,\tilde{M}\}
+,
+
+C
+1
+=
+C
+1
+′
++
+1
+C_{1}=C_{1}^{\prime}+1
+ and 
+C
+2
+=
+min
+⁡
+{
+C
+2
+′
+,
+C
+2
+′′
+}
+C_{2}=\min\{C_{2}^{\prime},C_{2}^{\prime\prime}\}
+.  
+□
+\Box
+
+
+
+
+
+
+
+
+Appendix B 
+Proofs from Section 
+2
+
+
+
+
+
+Proof of Theorem 
+2.1
+.
+
+Consider any segmentation of the data that does not include changepoints at both 
+t
+−
+1
+t-1
+ and 
+t
+t
+. We will show that for sufficiently large 
+y
+t
+y_{t}
+, that adding changepoints at both 
+t
+−
+1
+t-1
+ and 
+t
+t
+ (or at just one of these if the segmentation has a change at the other time-point) will reduce the penalised cost. Thus the optimal segmentation must have changes at both 
+t
+−
+1
+t-1
+ and 
+t
+t
+.
+
+
+
+
+
+
+Let the segment in the original segmentation that contains 
+y
+t
+y_{t}
+ contain 
+y
+s
+:
+u
+y_{s:u}
+ for 
+s
+<
+t
+s<t
+ and 
+u
+>
+t
+u>t
+. The change in cost between this segmentation and one with changepoints added at 
+t
+−
+1
+t-1
+ and 
+t
+t
+ will be
+
+
+
+
+
+
+
+
+
+min
+⁡
+∑
+i
+=
+s
+t
+−
+1
+θ
+⁡
+γ
+⁡
+(
+y
+i
+,
+θ
+)
++
+min
+⁡
+∑
+i
+=
+t
++
+1
+u
+θ
+⁡
+γ
+⁡
+(
+y
+i
+,
+θ
+)
++
+2
+​
+β
+−
+min
+⁡
+∑
+i
+=
+s
+u
+θ
+⁡
+γ
+⁡
+(
+y
+i
+,
+θ
+)
+.
+\min_{\theta}\sum_{i=s}^{t-1}\gamma(y_{i};\theta)+\min_{\theta}\sum_{i=t+1}^{u}\gamma(y_{i};\theta)+2\beta-\min_{\theta}\sum_{i=s}^{u}\gamma(y_{i};\theta).
+
+
+
+
+(8)
+
+
+
+
+Here we have used the fact that the only change in cost will be for fitting 
+y
+u
+:
+t
+y_{u:t}
+ as the other segmentations are unchanged. The new segmentation has segments which include 
+y
+s
+:
+t
+−
+1
+y_{s:t-1}
+, 
+y
+t
+y_{t}
+ and 
+y
+t
++
+1
+:
+u
+y_{t+1:u}
+ and introduces two extra changepoints. The cost of the segmentation which just includes 
+y
+t
+y_{t}
+ is 0. We need to show that for large enough 
+y
+t
+y_{t}
+ this will always be negative. To see this we use the fact that
+
+
+
+
+
+
+
+
+
+min
+⁡
+∑
+i
+=
+s
+u
+θ
+⁡
+γ
+⁡
+(
+y
+i
+,
+θ
+)
+≥
+min
+⁡
+{
+γ
+⁡
+(
+y
+t
+,
+(
+y
+t
++
+y
+t
++
+1
+)
+/
+2
+)
+,
+γ
+⁡
+(
+y
+t
++
+1
+,
+(
+y
+t
++
+y
+t
++
+1
+)
+/
+2
+)
+}
+,
+\min_{\theta}\sum_{i=s}^{u}\gamma(y_{i};\theta)\geq\min\{\gamma(y_{t};(y_{t}+y_{t+1})/2),\gamma(y_{t+1};(y_{t}+y_{t+1})/2)\},
+
+
+
+
+
+
+and this tends to infinity as 
+y
+t
+→
+∞
+y_{t}\rightarrow\infty
+. The other terms in (
+8
+) do not depend on 
+y
+t
+y_{t}
+, and hence (
+8
+) will be negative for sufficiently large 
+y
+t
+y_{t}
+.
+
+
+
+
+
+
+The proof for 
+s
+≤
+t
+s\leq t
+ or 
+u
+≥
+t
+u\geq t
+ follows similarly. 
+■
+\hfill\blacksquare
+
+
+
+
+
+
+Proof of Theorem 
+2.2
+.
+
+We will prove this by showing that for any segmentation with a segment which is shorter than 
+β
+/
+K
+\beta/K
+, we can reduce the penalised cost by removing the changepoint at either the start or end of the segment.
+
+
+
+
+
+
+Consider a segmentation of the data with neighbouring segments 
+y
+s
+:
+t
+y_{s:t}
+ and 
+y
+t
++
+1
+:
+u
+y_{t+1:u}
+. If either 
+t
+−
+s
+<
+β
+/
+K
+t-s<\beta/K
+ or 
+u
+−
+t
+−
+1
+<
+β
+/
+K
+u-t-1<\beta/K
+ then removing the changepoint at 
+t
+t
+ will reduce the penalised cost. Without loss of generality assume 
+t
+−
+s
+<
+β
+/
+K
+t-s<\beta/K
+. The change in cost of removing the changepoint at 
+t
+t
+ is
+
+
+
+
+
+
+
+
+
+min
+⁡
+∑
+i
+=
+s
+u
+θ
+⁡
+γ
+⁡
+(
+y
+i
+,
+θ
+)
+−
+min
+⁡
+∑
+i
+=
+s
+t
+θ
+⁡
+γ
+⁡
+(
+y
+i
+,
+θ
+)
+−
+min
+⁡
+∑
+i
+=
+t
++
+1
+u
+θ
+⁡
+γ
+⁡
+(
+y
+i
+,
+θ
+)
+−
+β
+\displaystyle\min_{\theta}\sum_{i=s}^{u}\gamma(y_{i};\theta)-\min_{\theta}\sum_{i=s}^{t}\gamma(y_{i};\theta)-\min_{\theta}\sum_{i=t+1}^{u}\gamma(y_{i};\theta)-\beta
+
+
+
+
+
+
+
+
+
+
+<
+\displaystyle<
+
+
+(
+t
+−
+s
+)
+​
+K
++
+min
+⁡
+∑
+i
+=
+t
++
+1
+u
+θ
+⁡
+γ
+⁡
+(
+y
+i
+,
+θ
+)
+−
+min
+⁡
+∑
+i
+=
+s
+t
+θ
+⁡
+γ
+⁡
+(
+y
+i
+,
+θ
+)
+−
+min
+⁡
+∑
+i
+=
+t
++
+1
+u
+θ
+⁡
+γ
+⁡
+(
+y
+i
+,
+θ
+)
+−
+β
+\displaystyle(t-s)K+\min_{\theta}\sum_{i=t+1}^{u}\gamma(y_{i};\theta)-\min_{\theta}\sum_{i=s}^{t}\gamma(y_{i};\theta)-\min_{\theta}\sum_{i=t+1}^{u}\gamma(y_{i};\theta)-\beta
+
+
+
+
+
+
+
+
+
+
+=
+\displaystyle=
+
+
+(
+t
+−
+s
+)
+​
+K
+−
+β
+\displaystyle(t-s)K-\beta
+
+
+
+
+
+
+The first inequality uses the fact that the cost for segmenting 
+y
+s
+:
+u
+y_{s:u}
+ is less than the cost if we fix 
+θ
+\theta
+ to the optimal value for segmenting 
+y
+t
++
+1
+:
+u
+y_{t+1:u}
+. We then bound the contribution of the cost for each of 
+y
+s
+:
+t
+y_{s:t}
+ by 
+K
+K
+ .The second inequality the fact that the costs are positive. We have that this change in cost is negative, as required, because 
+(
+t
+−
+s
+)
+<
+β
+/
+K
+(t-s)<\beta/K
+.
+
+■
+\hfill\blacksquare
+
+
+
+
+
+
+
+
+Appendix C 
+Proofs from Section 
+4
+
+
+
+
+
+Proof of Theorem 
+4.1
+.
+
+Given that 
+γ
+\gamma
+ is convex then, following the proof of the worst case complexity of the pDPA (
+Rigaill, (2015)
+ appendix A),
+we get that the function 
+Q
+t
+​
+(
+θ
+)
+Q\hskip 0.43057pt_{t}(\theta)
+ can be described in at most 
+2
+​
+t
+−
+1
+2t-1
+ intervals such that for each interval
+there is a single value for the best time of the most recent changepoint. That is we can define intervals
+
+I
+k
+I_{k}
+ for 
+k
+=
+1
+,
+…
+,
+K
+k=1,\ldots,K
+, with 
+K
+<
+2
+​
+t
+K<2t
+, such that for a given 
+k
+k
+ there exists 
+s
+s
+ such that
+∀
+θ
+ ∈I_k = [s_k, e_k]   Q_s + ∑_i=s+1^n 
+γ
+(y_i;
+θ
+)+ 
+β
+= Q_t(
+θ
+).
+
+
+
+
+
+
+All 
+c
+~
+t
++
+1
+:
+n
+(
+θ
+)
+\tilde{c}\hskip 0.43057pt_{t+1:n}(\theta)
+ are themselves
+defined in pieces, as sums of 
+γ
+⁡
+(
+y
+i
+,
+θ
+)
+\gamma(y_{i},\theta)
+.
+For each 
+γ
+⁡
+(
+y
+i
+,
+θ
+)
+\gamma(y_{i},\theta)
+ we need to consider 
+L
+L
+ intervals
+and thus 
+L
+−
+1
+L-1
+ points between intervals.
+We call these points 
+T
+i
+,
+j
+T_{i,j}
+ for 
+j
+j
+ in 
+1
+1
+ to 
+L
+−
+1
+L-1
+. For a given 
+I
+k
+=
+[
+s
+k
+,
+e
+k
+]
+I_{k}=[s_{k},e_{k}]
+
+define 
+N
+k
+N_{k}
+ to be the number of the 
+T
+i
+,
+j
+T_{i,j}
+ points that are
+in the open interval 
+(
+s
+k
+,
+e
+k
+)
+(s_{k},e_{k})
+.
+As all 
+I
+k
+I_{k}
+ are disjoint then each 
+T
+i
+,
+j
+T_{i,j}
+ can only appear in a single interval. So
+
+∑
+k
+=
+1
+K
+N
+k
+≤
+t
+⁡
+(
+L
+−
+1
+)
+\sum_{k=1}^{K}N_{k}\leq t(L-1)
+.
+
+
+
+
+
+
+On 
+I
+k
+I_{k}
+ R-FPOP will thus define 
+Q
+t
+​
+(
+θ
+)
+Q\hskip 0.43057pt_{t}(\theta)
+ using 
+N
+k
++
+1
+N_{k}+1
+ intervals.
+Thus R-FPOP uses
+
+
+
+
+
+
+
+
+
+∑
+k
+=
+1
+K
+(
+N
+k
++
+1
+)
+≤
+t
+⁡
+(
+L
+−
+1
+)
++
+2
+​
+t
+−
+1
+\sum_{k=1}^{K}(N_{k}+1)\leq t(L-1)+2t-1
+
+
+
+
+
+
+intervals to define 
+Q
+t
+​
+(
+θ
+)
+Q\hskip 0.43057pt_{t}(\theta)
+
+
+■
+\blacksquare
+.
+
+
+
+
+
+
+Proof of Corollary 
+4.2
+.
+
+The space complexity is obtained using the fact that the number
+of intervals is bounded by 
+2
+​
+n
+−
+1
++
+n
+⁡
+(
+L
+−
+1
+)
+2n-1+n(L-1)
+ and the fact that on
+each interval we need to store a quadratic.
+
+
+
+
+
+
+As for the time complexity, at step 
+t
+t
+ R-FPOP needs to consider
+at most 
+2
+​
+t
+−
+1
++
+t
+⁡
+(
+L
+−
+1
+)
+2t-1+t(L-1)
+ ordered intervals. The key to bounding the time-complexity is that
+we can split up the operations at step 
+t
+t
+ of R-FPOP into a series of operations on each interval.
+The cost for each operations on an interval is 
+𝒪
+⁡
+(
+1
+)
+\mathcal{O}(1)
+, and as there are 
+𝒪
+⁡
+(
+t
+)
+\mathcal{O}(t)
+ intervals the
+overall cost of the 
+t
+t
+ iteration is 
+𝒪
+⁡
+(
+t
+)
+\mathcal{O}(t)
+. The details are as follows.
+
+
+
+
+
+
+On each of these intervals we will compute the roots of 
+Q
+t
+​
+(
+θ
+)
+Q\hskip 0.43057pt_{t}(\theta)
+ minus a constant function.
+According to the number of roots the interval will
+be split in at most three (because on each interval 
+Q
+t
+​
+(
+θ
+)
+Q\hskip 0.43057pt_{t}(\theta)
+ is convex).
+Calculating these roots can be done in 
+𝒪
+⁡
+(
+1
+)
+\mathcal{O}(1)
+ for each interval.
+Thus we get a new ordered list of intervals in 
+𝒪
+⁡
+(
+t
+)
+\mathcal{O}(t)
+ time.
+Iterating on this list, successive intervals having the same analytical
+decomposition can be fused in 
+𝒪
+⁡
+(
+t
+)
+\mathcal{O}(t)
+ time.
+Once this is done, it is possible to add 
+γ
+⁡
+(
+y
+t
+,
+μ
+)
+\gamma(y_{t},\mu)
+ to 
+Q
+t
+​
+(
+μ
+)
+Q\hskip 0.43057pt_{t}(\mu)
+
+on all intervals in 
+𝒪
+⁡
+(
+t
+)
+\mathcal{O}(t)
+ time.
+Finally the minimum of 
+Q
+t
++
+1
+​
+(
+θ
+)
+Q\hskip 0.43057pt_{t+1}(\theta)
+ on each interval is recovered
+in 
+𝒪
+⁡
+(
+t
+)
+\mathcal{O}(t)
+ time.
+Overall, step 
+t
+t
+ is performed in 
+𝒪
+⁡
+(
+t
+)
+\mathcal{O}(t)
+. Summing over all 
+t
+t
+
+we get a quadratic complexity 
+■
+\blacksquare
+
+
+
+
+
+
+Proof of Theorem 
+4.3
+.
+
+From observations up to and including time 
+t
+t
+, the biweight loss function will define (at most) 
+2
+​
+t
++
+1
+2t+1
+ intervals which
+are separated by points of non-diffentiability of the loss function, 
+y
+i
+−
+K
+y_{i}-K
+ and 
+y
+i
++
+K
+y_{i}+K
+ for 
+i
+=
+1
+,
+…
+,
+t
+i=1,\ldots,t
+.
+Denote these intervals as 
+I
+k
+I_{k}
+, 
+k
+=
+1
+,
+…
+,
+2
+​
+t
++
+1
+k=1,\ldots,2t+1
+.
+Following the proof of the worst case complexity of the pDPA (
+Rigaill, (2015)
+ appendix A)
+we see that R-FPOP will need at most 
+2
+​
+t
+−
+1
+2t-1
+ intervals to describe 
+Q
+t
+​
+(
+θ
+)
+Q\hskip 0.43057pt_{t}(\theta)
+ on any given 
+I
+k
+I_{k}
+.
+Summing over 
+k
+k
+ we recover a quadratic complexity. 
+■
+\blacksquare
+
+
+
+
+
+
+Proof of Corollary 
+4.4
+
+The proof followa the proof of corollary 
+4.2
+ replacing the 
+𝒪
+⁡
+(
+n
+)
+\mathcal{O}(n)
+ bound on the number of intervals
+by the 
+𝒪
+⁡
+(
+n
+2
+)
+\mathcal{O}(n^{2})
+ bound on the number of intervals. 
+■
+\blacksquare
+
+
+
+
+
+
+
+
+Appendix D 
+Pseudo Code for R-FPOP
+
+
+
+
+
+Here we provide some pseudo-code of the algorithm. In FPOP the algorithm is working on candidate change-points 
+τ
+\tau
+.
+Each of those change can be associated to one or more intervals on which it is optimal. In R-FPOP we directly work
+on these intervals. R-FPOP essentially relies on three sub-routines or sub-algorithms
+that manipulate the functions 
+Q
+t
+∗
+​
+(
+θ
+)
+Q^{*}_{t}(\theta)
+ and 
+Q
+t
+​
+(
+θ
+)
+Q_{t}(\theta)
+:
+
+
+
+
+•
+ 
+
+
+
+Sub-routine 
+2
+ to compute the function 
+Q
+t
+​
+(
+θ
+)
+=
+Q
+t
+∗
+​
+(
+θ
+)
++
+γ
+⁡
+(
+y
+t
+,
+θ
+)
+Q_{t}(\theta)=Q^{*}_{t}(\theta)+\gamma(y_{t},\theta)
+ ;
+
+
+
+
+•
+ 
+
+
+
+Sub-routine 
+3
+ to recover the minimum and best change of the function 
+Q
+t
+​
+(
+θ
+)
+Q_{t}(\theta)
+ ;
+
+
+
+
+•
+ 
+
+
+
+Sub-routine 
+4
+ to compare the function 
+Q
+t
+​
+(
+θ
+)
+Q_{t}(\theta)
+ to a constant and recover the function 
+Q
+t
++
+1
+∗
+​
+(
+θ
+)
+Q^{*}_{t+1}(\theta)
+.
+
+
+
+
+
+
+Using these sub-routines the pseudo-code of R-FPOP is fairly simple and provided below in Algorithm 
+1
+.
+We then provide the pseudo-code of each sub-routine in Algorithms 
+2
+, 
+3
+ and 
+4
+.
+
+
+
+
+
+
+Algorithm 1
+ 
+Robust FPOP algorithm
+
+
+
+
+Input
+ : Set of data of the form 
+𝐲
+1
+:
+n
+=
+(
+y
+1
+,
+…
+,
+y
+n
+)
+\mathbf{y}_{1:n}=(y_{1},\ldots,y_{n})
+,
+
+
+
+A measure of fit 
+γ
+⁡
+(
+⋅
+,
+⋅
+)
+\gamma(\cdot,\cdot)
+ dependent on the data and the mean,
+
+
+
+A penalty 
+β
+\beta
+ which does not depend on the number or location of the changepoints.
+
+
+
+Set 
+Q
+1
+∗
+​
+(
+θ
+)
+=
+0
+Q^{*}_{1}(\theta)=0
+ on the interval 
+(
+min
+i
+⁡
+{
+y
+i
+}
+,
+max
+i
+⁡
+{
+y
+i
+}
+]
+(\min_{i}\{y_{i}\},\max_{i}\{y_{i}\}]
+ ;
+
+
+
+for
+ 
+t
+=
+1
+,
+…
+,
+n
+t=1,\ldots,n
+ 
+do
+
+
+
+
+ 
+ 
+ Compute 
+Q
+t
+​
+(
+θ
+)
+=
+Q
+t
+∗
+​
+(
+θ
+)
++
+γ
+⁡
+(
+y
+t
+,
+θ
+)
+Q_{t}(\theta)=Q^{*}_{t}(\theta)+\gamma(y_{t},\theta)
+ using sub-routine 
+2
+ ;
+
+
+
+ 
+ 
+ Compute 
+Q
+t
+Q_{t}
+ and 
+τ
+t
+\tau_{t}
+ the 
+min
+\min
+ and 
+arg
+⁡
+min
+\arg\min
+ of 
+Q
+t
+​
+(
+θ
+)
+Q_{t}(\theta)
+ using sub-routine 
+3
+ ;
+
+
+
+ 
+ 
+ Set 
+c
+​
+p
+​
+(
+t
+)
+=
+(
+Q
+t
+,
+τ
+t
+)
+cp(t)=(Q_{t},\tau_{t})
+ ;
+
+
+
+ 
+ 
+ Compute 
+Q
+t
++
+1
+∗
+​
+(
+θ
+)
+Q^{*}_{t+1}(\theta)
+ by comparing the function 
+Q
+t
+​
+(
+θ
+)
+Q_{t}(\theta)
+ to 
+Q
+t
++
+β
+Q_{t}+\beta
+ using sub-routine 
+4
+ ;
+
+
+
+Output
+ : The changepoints recorded in 
+c
+​
+p
+​
+(
+n
+)
+cp(n)
+.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Algorithm 2
+ 
+Sub-routine to compute 
+Q
+t
+​
+(
+θ
+)
+=
+Q
+t
+∗
+​
+(
+θ
+)
++
+γ
+⁡
+(
+y
+t
+,
+θ
+)
+Q_{t}(\theta)=Q^{*}_{t}(\theta)+\gamma(y_{t},\theta)
+
+
+
+
+Input
+ : 
+Q
+t
+∗
+​
+(
+θ
+)
+Q^{*}_{t}(\theta)
+ a function defined on 
+N
+t
+∗
+N^{*}_{t}
+ intervals: 
+(
+a
+i
+(
+t
+)
+,
+b
+i
+(
+t
+)
+]
+(a_{i}^{(t)},b_{i}^{(t)}]
+ 
+
+
+
+For each interval we also have a change: 
+τ
+i
+∗
+(
+t
+)
+\tau_{i}^{*(t)}
+ 
+
+
+
+γ
+⁡
+(
+y
+t
+,
+θ
+)
+\gamma(y_{t},\theta)
+ a function defined on l intervals: 
+(
+c
+j
+(
+t
+)
+,
+d
+j
+(
+t
+)
+]
+(c_{j}^{(t)},d_{j}^{(t)}]
+ 
+
+
+
+We assume 
+a
+1
+(
+t
+)
+=
+c
+1
+(
+t
+)
+a_{1}^{(t)}=c_{1}^{(t)}
+ and 
+b
+N
+t
+∗
+(
+t
+)
+=
+d
+l
+(
+t
+)
+b_{N^{*}_{t}}^{(t)}=d_{l}^{(t)}
+
+
+
+
+
+Set current number of intervals for 
+Q
+t
+​
+(
+θ
+)
+Q_{t}(\theta)
+ to 
+N
+t
+=
+0
+N_{t}=0
+ ;
+
+
+
+Set current 
+Q
+t
+∗
+Q^{*}_{t}
+ interval to 
+i
+=
+1
+i=1
+ ;
+
+
+
+Set current 
+γ
+⁡
+(
+y
+t
+,
+θ
+)
+\gamma(y_{t},\theta)
+ interval to 
+j
+=
+1
+j=1
+ ;
+
+
+
+while
+ 
+ 
+i
+≤
+N
+t
+∗
+i\leq N^{*}_{t}
+ and 
+j
+≤
+l
+j\leq l
+ 
+ 
+do
+
+
+
+
+ 
+ 
+ 
+N
+t
+=
+N
+t
++
+1
+N_{t}=N_{t}+1
+ ;
+
+
+
+ 
+ 
+ Create the new interval 
+(
+A
+N
+t
+(
+t
+)
+,
+B
+N
+t
+(
+t
+)
+]
+=
+(
+max
+⁡
+{
+a
+i
+(
+t
+)
+,
+c
+j
+(
+t
+)
+}
+,
+min
+⁡
+{
+b
+i
+(
+t
+)
+,
+d
+j
+(
+t
+)
+}
+]
+(A_{N_{t}}^{(t)},B_{N_{t}}^{(t)}]=\left(\max\{a_{i}^{(t)},c_{j}^{(t)}\},\min\{b_{i}^{(t)},d_{j}^{(t)}\}\right]
+ ;
+
+
+
+ 
+ 
+ For 
+θ
+\theta
+ in interval 
+(
+A
+N
+t
+(
+t
+)
+,
+B
+N
+t
+(
+t
+)
+]
+(A_{N_{t}}^{(t)},B_{N_{t}}^{(t)}]
+ set 
+Q
+t
+​
+(
+θ
+)
+=
+Q
+t
+∗
+​
+(
+θ
+)
++
+γ
+⁡
+(
+y
+t
+,
+θ
+)
+Q_{t}(\theta)=Q^{*}_{t}(\theta)+\gamma(y_{t},\theta)
+ ;
+
+
+
+ 
+ 
+ Set 
+τ
+N
+t
+(
+t
+)
+=
+τ
+i
+∗
+(
+t
+)
+\tau_{N_{t}}^{(t)}=\tau_{i}^{*(t)}
+ ;
+
+
+
+ 
+ 
+ 
+if
+ 
+ 
+B
+N
+t
+(
+t
+)
+=
+b
+i
+(
+t
+)
+B_{N_{t}}^{(t)}=b_{i}^{(t)}
+ 
+ 
+then
+
+
+
+
+ 
+ 
+  
+ 
+ 
+i
+=
+i
++
+1
+i=i+1
+;
+
+
+
+ 
+ 
+ 
+if
+ 
+ 
+B
+N
+t
+(
+t
+)
+=
+d
+j
+(
+t
+)
+B_{N_{t}}^{(t)}=d_{j}^{(t)}
+ 
+ 
+then
+
+
+
+
+ 
+ 
+  
+ 
+ 
+j
+=
+j
++
+1
+j=j+1
+;
+
+
+
+Output
+ : The function 
+Q
+t
+​
+(
+θ
+)
+=
+Q
+t
+∗
+​
+(
+θ
+)
++
+γ
+⁡
+(
+y
+t
+,
+θ
+)
+Q_{t}(\theta)=Q^{*}_{t}(\theta)+\gamma(y_{t},\theta)
+ defined on 
+N
+t
+N_{t}
+ intervals: 
+(
+A
+i
+(
+t
+)
+,
+B
+i
+(
+t
+)
+]
+(A_{i}^{(t)},B_{i}^{(t)}]
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Algorithm 3
+ 
+Sub-routine to recover the minimum 
+Q
+t
+Q_{t}
+ and best change 
+τ
+t
+\tau_{t}
+ of 
+Q
+t
+​
+(
+θ
+)
+Q_{t}(\theta)
+ 
+
+
+
+
+Input
+ : 
+Q
+t
+​
+(
+θ
+)
+Q_{t}(\theta)
+ a function defined on 
+N
+t
+N_{t}
+ intervals: 
+(
+A
+i
+(
+t
+)
+,
+B
+i
+(
+t
+)
+]
+(A_{i}^{(t)},B_{i}^{(t)}]
+ 
+
+
+
+For each 
+(
+A
+i
+(
+t
+)
+,
+B
+i
+(
+t
+)
+]
+(A_{i}^{(t)},B_{i}^{(t)}]
+ we also have an associated change: 
+τ
+i
+(
+t
+)
+\tau_{i}^{(t)}
+ 
+
+
+
+Set 
+Q
+t
+=
+∞
+Q_{t}=\infty
+ ;
+
+
+
+Set 
+τ
+t
+=
+0
+\tau_{t}=0
+ ;
+
+
+
+while
+ 
+ 
+i
+≤
+N
+t
+i\leq N_{t}
+ 
+ 
+do
+
+
+
+
+ 
+ 
+ On the intervals 
+(
+A
+i
+(
+t
+)
+,
+B
+i
+(
+t
+)
+]
+(A_{i}^{(t)},B_{i}^{(t)}]
+ recover 
+m
+=
+min
+⁡
+{
+Q
+t
+​
+(
+θ
+)
+}
+m=\min\{Q_{t}(\theta)\}
+ ;
+
+
+
+ 
+ 
+ 
+if
+ 
+ 
+m
+<
+Q
+t
+m<Q_{t}
+ 
+then
+
+
+
+
+ 
+ 
+  
+ 
+ Set 
+Q
+t
+=
+m
+Q_{t}=m
+ ;
+
+
+
+ 
+ 
+  
+ 
+ Set 
+τ
+t
+=
+τ
+i
+(
+t
+)
+\tau_{t}=\tau_{i}^{(t)}
+
+
+
+
+
+ 
+ 
+ 
+i
+=
+i
++
+1
+i=i+1
+ ;
+
+
+
+Output
+ : 
+Q
+t
+Q_{t}
+ and 
+τ
+t
+\tau_{t}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Algorithm 4
+ 
+Sub-routine to compare 
+Q
+t
+​
+(
+θ
+)
+Q_{t}(\theta)
+ to a constant function and recover 
+Q
+t
++
+1
+∗
+​
+(
+θ
+)
+Q^{*}_{t+1}(\theta)
+
+
+
+
+Input
+ : 
+Q
+t
+​
+(
+θ
+)
+Q_{t}(\theta)
+ a function defined on 
+N
+t
+N_{t}
+ intervals: 
+(
+A
+i
+(
+t
+)
+,
+B
+i
+(
+t
+)
+]
+(A_{i}^{(t)},B_{i}^{(t)}]
+ 
+
+
+
+For each 
+(
+A
+i
+(
+t
+)
+,
+B
+i
+(
+t
+)
+]
+(A_{i}^{(t)},B_{i}^{(t)}]
+ we have an associated change: 
+τ
+i
+(
+t
+)
+\tau_{i}^{(t)}
+ 
+
+
+
+C
+C
+ a constant function (
+=
+Q
+t
++
+β
+=Q_{t}+\beta
+)
+
+
+
+Set current number of intervals for 
+Q
+t
++
+1
+∗
+​
+(
+θ
+)
+Q^{*}_{t+1}(\theta)
+ to 
+N
+t
++
+1
+∗
+=
+0
+N^{*}_{t+1}=0
+ ;
+
+
+
+while
+ 
+ 
+i
+≤
+N
+t
+i\leq N_{t}
+ 
+ 
+do
+
+
+
+
+ 
+ 
+ Find the 
+n
+t
+n_{t}
+ roots of 
+(
+Q
+t
+​
+(
+θ
+)
+−
+C
+)
+(Q_{t}(\theta)-C)
+ in the intervals 
+(
+A
+i
+(
+t
+)
+,
+B
+i
+(
+t
+)
+)
+(A_{i}^{(t)},B_{i}^{(t)})
+ ;
+
+
+
+ 
+ 
+ Sort the 
+n
+t
+n_{t}
+ roots and store them in a vector 
+R
+t
+​
+m
+​
+p
+R_{tmp}
+ ;
+
+
+
+ 
+ 
+ Create the vector 
+R
+=
+(
+A
+i
+(
+t
+)
+,
+R
+t
+​
+m
+​
+p
+,
+B
+i
+(
+t
+)
+)
+R=(A_{i}^{(t)},R_{tmp},B_{i}^{(t)})
+ ;
+
+
+
+ 
+ 
+ 
+for
+ 
+ 
+j
+=
+1
+j=1
+ to 
+j
+=
+n
+t
++
+1
+j=n_{t}+1
+ 
+ 
+do
+
+
+
+
+ 
+ 
+  
+ 
+ 
+N
+t
++
+1
+∗
+=
+N
+t
++
+1
+∗
++
+1
+N^{*}_{t+1}=N^{*}_{t+1}+1
+ ;
+
+
+
+ 
+ 
+  
+ 
+ Create a new interval 
+(
+a
+N
+t
++
+1
+∗
+(
+t
++
+1
+)
+,
+b
+N
+t
++
+1
+∗
+(
+t
++
+1
+)
+]
+=
+(
+R
+j
+,
+R
+j
++
+1
+]
+\left(a_{N^{*}_{t+1}}^{(t+1)},b_{N^{*}_{t+1}}^{(t+1)}\right]=(R_{j},R_{j+1}]
+ ;
+
+
+
+ 
+ 
+  
+ 
+ 
+if
+ 
+ 
+Q
+t
+​
+(
+θ
+)
+≥
+C
+Q_{t}(\theta)\geq C
+ on 
+(
+R
+j
+,
+R
+j
++
+1
+]
+(R_{j},R_{j+1}]
+ 
+ 
+then
+
+
+
+
+ 
+ 
+  
+ 
+  
+ 
+ For 
+θ
+\theta
+ in 
+(
+R
+j
+,
+R
+j
++
+1
+]
+(R_{j},R_{j+1}]
+ set 
+Q
+t
+∗
+​
+(
+θ
+)
+=
+C
+Q^{*}_{t}(\theta)=C
+ ;
+
+
+
+ 
+ 
+  
+ 
+  
+ 
+ Set 
+τ
+t
++
+1
+∗
+(
+N
+t
++
+1
+∗
+)
+=
+t
+\tau_{t+1}^{*(N^{*}_{t+1})}=t
+ ;
+
+
+
+ 
+ 
+  
+ 
+ 
+else
+
+
+
+
+ 
+ 
+  
+ 
+  
+ 
+ For 
+θ
+\theta
+ in 
+(
+R
+j
+,
+R
+j
++
+1
+]
+(R_{j},R_{j+1}]
+ set 
+Q
+t
+∗
+​
+(
+θ
+)
+=
+Q
+t
+​
+(
+θ
+)
+Q^{*}_{t}(\theta)=Q_{t}(\theta)
+ ;
+
+
+
+ 
+ 
+  
+ 
+  
+ 
+ Set 
+τ
+t
++
+1
+∗
+(
+N
+t
++
+1
+∗
+)
+=
+τ
+t
+(
+i
+)
+\tau_{t+1}^{*(N^{*}_{t+1})}=\tau_{t}^{(i)}
+ ;
+
+
+
+ 
+ 
+ 
+i
+=
+i
++
+1
+i=i+1
+ ;
+
+
+
+Output
+ : The function 
+Q
+t
++
+1
+∗
+​
+(
+θ
+)
+Q^{*}_{t+1}(\theta)
+ defined on 
+N
+t
++
+1
+∗
+N^{*}_{t+1}
+ intervals: 
+(
+a
+i
+(
+t
++
+1
+)
+,
+b
+i
+(
+t
++
+1
+)
+]
+(a_{i}^{(t+1)},b_{i}^{(t+1)}]
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Appendix E 
+ROC curve for all tumor fractions
+
+
+
+
+
+
+
+
+
+
+
+Tumor Fraction = 0.34
+
+
+Tumor Fraction = 0.5
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Tumor Fraction = 0.79
+
+
+Tumor Fraction = 1
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Figure 12: 
+Average ROC on the GSE11976 datasets for the Cusum, L2, L2 with outlier removal (Rout L2) and our robust biweight loss (Biweight 3) for four tumor fraction.
+
+
+
+
+
+
+
+
+
+
+
+
+Tumor Fraction = 0.3
+
+
+Tumor Fraction = 0.5
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Tumor Fraction = 0.7
+
+
+Tumor Fraction = 1
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Figure 13: 
+Average ROC on the GSE29172 datasets for the Cusum, L2, L2 with outlier removal (Rout L2) and our robust biweight loss (Biweight 3) for four tumor fraction.
+
+
+
+
+
+
+
+
+References
+
+
+
+
+      
+
+Boucheron et al.,  (2013)
+
+
+
+Boucheron, S., Lugosi, G., and Massart, P. (2013).
+
+
+
+
+Concentration inequalities: A nonasymptotic theory of
+independence
+.
+
+
+
+
+Oxford University Press.
+
+
+
+      
+
+Rigaill,  (2015)
+
+
+
+Rigaill, G. (2015).
+
+
+
+
+A pruned dynamic programming algorithm to recover the best
+segmentations with 1 to 
+K
+max
+K_{\mbox{max}}
+ change-points.
+
+
+
+
+Journal de la Société Française de Statistique
+,
+156(4):180–205.
+
+
+
+    
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+    Experimental support, please
+    
+view the build logs
+
+    for errors. Generated by
+    
+
+      
+
+        L
+        
+A
+
+        T
+        
+E
+
+      
+
+      
+xml
+
+      
+
+    
+.
+  
+
+  
+
+    
+Instructions for reporting errors
+
+    
+We are continuing to improve HTML versions of papers, and your feedback helps enhance accessibility and mobile
+      support. To report errors in the HTML that will help us improve conversion and rendering, choose any of the
+      methods listed below:
+
+    
+
+      
+Click the "Report Issue" 
+(
+
+            
+
+          
+)
+ button, located in the page header.
+
+    
+
+    
+Tip:
+ You can select the relevant text first, to include it in your report.
+
+    
+Our team has already identified 
+the following issues
+. We appreciate your time reviewing and reporting rendering errors we
+      may not have found yet. Your efforts will help us improve the HTML versions for all readers, because disability
+      should not be a barrier to accessing research. Thank you for your continued support in championing open access for
+      all.
+
+    
+Have a free development cycle? Help support accessibility at arXiv! Our collaborators at LaTeXML maintain a 
+list of packages that need conversion
+, and welcome 
+developer contributions
+.
+
+  
+
+
+
+  
+
+    
+
+      
+
+        We gratefully acknowledge support from
+        our 
+major funders
+,
+        
+member institutions
+, 
+,
+        and all contributors.
+      
+
+      
+
+        
+About
+
+        
+·
+
+        
+Help
+
+        
+·
+
+        
+Contact
+
+        
+·
+
+        
+Subscribe
+
+        
+·
+
+        
+Copyright
+
+        
+·
+
+        
+Privacy
+
+        
+·
+
+        
+Accessibility
+
+        
+·
+
+        
+Operational Status
+ (opens in new tab)
+
+      
+
+    
+
+
+    
+
+      
+Major funding support from
+
+      
+
+        
+
+          
+
+        
+
+        
+
+          
+
+        
+
+        
+
+          
+
+        
+
+      
+
+    
+
+  
+
+
+
+  
+
+    
+
+      
+
+    
+
+  
+
+
+
+
+

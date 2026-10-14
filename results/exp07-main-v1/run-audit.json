@@ -1,0 +1,54 @@
+{
+  "registrations": [
+    {
+      "run": "exp07-development-numeric-v1",
+      "production_source_match": true,
+      "registration_sha256": "6d264eb0d97c43b998cceacc1981920c4e05fcb4c009a35a0e23834fa33d6a21"
+    },
+    {
+      "run": "exp07-seed2026101408-baseline-v1",
+      "production_source_match": true,
+      "registration_sha256": "6a77cc79d4a3092581c46776a518f626d69aa9dc5916ed963906f5acbdbad17f"
+    },
+    {
+      "run": "exp07-seed2026101409-baseline-v1",
+      "production_source_match": true,
+      "registration_sha256": "bbef716dac4a4c6c7ecc8eb02d1e29860a420709684c535ed3219c95a5403e21"
+    },
+    {
+      "run": "exp07-development-visual-v2",
+      "production_source_match": true,
+      "candidate_snapshot_match": true,
+      "registration_sha256": "36da44640fc6d2c44ba5561d947f1a18897194d19d0bc571ad700742a1787bc3"
+    },
+    {
+      "run": "exp07-seed2026101408-nvr-v1",
+      "production_source_match": true,
+      "candidate_snapshot_match": true,
+      "registration_sha256": "75ea9e730edc9a5777d99fb2c34dc29c121f2a5984ea00a8ce31ab49dc3b3c65"
+    },
+    {
+      "run": "exp07-seed2026101409-nvr-v1",
+      "production_source_match": true,
+      "candidate_snapshot_match": true,
+      "registration_sha256": "a8a2013f324a23f6629a935d296d97dc932b5e3fdb40ae3735de1ab9a96c0dbd"
+    }
+  ],
+  "same_visual_inputs_except_prompt": true,
+  "missing_mask_records_verified": 96,
+  "production_modules_unchanged": true,
+  "stable_vs_numeric": {
+    "endpoint": "four-type pooled daily macro F1 difference",
+    "difference": 0.05554770656787755,
+    "percentile_ci_95": [
+      -0.003566851260903053,
+      0.11572972032656194
+    ],
+    "resamples": 5000,
+    "seed": 2026101407,
+    "note": "Descriptive paired station bootstrap; development selection not corrected. Resampled stations share fitted training models."
+  },
+  "tests": "39 passed",
+  "model_retry_policy": "none",
+  "preparation_failure": "visual-v1 exclusive-write collision; zero requests; preserved; explicit visual-v2 used"
+}

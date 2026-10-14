@@ -1,6 +1,6 @@
 # GNSS 视觉大模型异常识别研究
 
-当前实验已推进到 **GNSS-VLM-EXP06：GNSS位移结构分解与视觉语义核验实验**。
+当前保留的稳定方案为 **GNSS-VLM-EXP06：GNSS位移结构分解与视觉语义核验实验**。
 冻结主方法 **SDR-VLM** 对应`pair_focus_repair`：原始位移结构负责定位，视觉专门修复返回对类别歧义。
 先24站开发，后两个全新种子、48测试站；没有修改统一毫米/速率告警阈值。
 
@@ -20,6 +20,14 @@
 - [实际效果与论文使用判断](docs/exp06-assessment.md)
 - [冻结协议](docs/experiment-exp06.md)、[本轮文献与源码](docs/exp06-reading-notes.md)
 - [结果对照图](results/exp06-main-v1/comparison.png)
+
+2026-10-14另完成 **EXP07：GNSS非互斥视觉提示与配对修复正式复核**。
+先备份稳定版`EXP06_SDR-VLM_v1_20261014_23be8da`，再进行新开发与两个新种子48站复核。
+新候选类型日F1=.8291，原SDR-VLM=.8665，同组无视觉分解=.8110；候选两种子均下降，
+取消集成，生产源码保留EXP06。尖峰补检及组合亦未达到开发收益条件，全部负结果保留。
+本轮24实际模型请求、39业务测试通过；这批新站可补充原方案稳定性证据。
+[完整决定与备份](docs/exp07-assessment.md)、[新48站结果](results/exp07-main-v1/results.md)、
+[本轮论文调研](docs/exp07-reading-notes.md)、[备份SHA凭据](docs/backup-exp06-receipt.json)。
 
 复现第一个EXP06正式种子（以下为已使用种子的复现，不是新测试）：
 
