@@ -1,0 +1,29 @@
+{
+  "id": "chatcmpl-9e06a186-a8cf-9a1c-a213-bbbd0ebabf6b",
+  "object": "chat.completion",
+  "created": 1791949823,
+  "model": "qwen3.8-flash",
+  "choices": [
+    {
+      "index": 0,
+      "message": {
+        "role": "assistant",
+        "reasoning_content": "",
+        "content": "{\n\"events\": [\n{\n\"kind\": \"spike\",\n\"start\": 365,\n\"end\": 365,\n\"status\": \"confirmed\",\n\"evidence\": \"Isolated negative excursion in the N component at index 365 (dropping to -0.97 mm) that immediately returns to the baseline trajectory on the next day.\"\n},\n{\n\"kind\": \"step\",\n\"start\": 487,\n\"end\": 487,\n\"status\": \"uncertain\",\n\"evidence\": \"Abrupt shift observed across all three components (N, E, U) at index 487, followed by a return to the previous local trend level at index 489.\"\n},\n{\n\"kind\": \"transient\",\n\"start\": 538,\n\"end\": 539,\n\"status\": \"confirmed\",\n\"evidence\": \"A sharp positive excursion in the E and U components at indices 538-539, which subsequently reverses direction as part of the larger step onset.\"\n},\n{\n\"kind\": \"deformation\",\n\"start\": 540,\n\"end\": 729,\n\"status\": \"confirmed\",\n\"evidence\": \"Sustained displacement activity beginning at index 540, characterized by an abrupt negative offset in the N component and a persistent positive offset in the U component relative to the historical background trend.\"\n}\n]\n}"
+      },
+      "finish_reason": "stop",
+      "logprobs": null
+    }
+  ],
+  "usage": {
+    "prompt_tokens": 9628,
+    "total_tokens": 9960,
+    "completion_tokens": 332,
+    "prompt_tokens_details": {
+      "cached_tokens": 768,
+      "image_tokens": 6862,
+      "text_tokens": 2766
+    },
+    "completion_tokens_details": {}
+  }
+}

@@ -1,0 +1,91 @@
+{
+  "experiment_id": "GNSS-VLM-EXP06",
+  "methods": {
+    "author_api_defaults_l2_pen10": {
+      "strict": {
+        "tp": 11,
+        "fp": 258,
+        "fn": 66,
+        "precision": 0.040892193308550186,
+        "recall": 0.14285714285714285,
+        "f1": 0.06358381502890173
+      },
+      "tolerance3": {
+        "tp": 52,
+        "fp": 217,
+        "fn": 25,
+        "precision": 0.19330855018587362,
+        "recall": 0.6753246753246753,
+        "f1": 0.30057803468208094
+      }
+    },
+    "author_readme_rbf_pen10": {
+      "strict": {
+        "tp": 8,
+        "fp": 45,
+        "fn": 69,
+        "precision": 0.1509433962264151,
+        "recall": 0.1038961038961039,
+        "f1": 0.12307692307692308
+      },
+      "tolerance3": {
+        "tp": 38,
+        "fp": 15,
+        "fn": 39,
+        "precision": 0.7169811320754716,
+        "recall": 0.4935064935064935,
+        "f1": 0.5846153846153846
+      }
+    },
+    "gnss_displacement_structure_adapter": {
+      "strict": {
+        "tp": 48,
+        "fp": 35,
+        "fn": 29,
+        "precision": 0.5783132530120482,
+        "recall": 0.6233766233766234,
+        "f1": 0.6
+      },
+      "tolerance3": {
+        "tp": 59,
+        "fp": 24,
+        "fn": 18,
+        "precision": 0.7108433734939759,
+        "recall": 0.7662337662337663,
+        "f1": 0.7375
+      }
+    }
+  },
+  "scope": "change-point edges only, excluding spikes; not the primary typed daily anomaly task",
+  "library_version": "v1.1.10",
+  "pelt_source_sha256": "f2a06555cd32ca3e279574e8abb3fef77d5f7525d29e24bc5ec51ed432978120",
+  "original_parameters": {
+    "Pelt defaults": "model=l2, min_size=2, jump=5",
+    "README example": "model=rbf, pen=10, other constructor defaults",
+    "penalty_note": "pen=10 is the README example value, not an automatic GNSS default"
+  },
+  "shared_input_adapter": "normal-prefix residual MAD standardization; missing observations excluded with original index mapping; normal tail=90 days",
+  "adapted_parameters": {
+    "library": "ruptures 1.1.10 Pelt",
+    "cost": "project three-axis linear",
+    "min_observations": 7,
+    "jump": 1,
+    "penalty": 43.16662110660201,
+    "penalty_rule": "6 log(3n)",
+    "normal_tail_days": 90,
+    "jump_refinement_days": 3,
+    "jump_fit_half_window": 21,
+    "pair_max_separation_days": 120,
+    "pair_context_days": 30,
+    "activity_shapes": [
+      "linear",
+      "smoothstep"
+    ],
+    "activity_max_components": 1,
+    "activity_min_duration_days": 15,
+    "activity_grid_days": 7,
+    "activity_refinement_days": 7,
+    "activity_penalty": "5 log(3n) + 2 log(2)"
+  },
+  "new_model_requests": 0
+}

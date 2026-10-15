@@ -1,0 +1,29 @@
+{
+  "id": "chatcmpl-05c9076b-a823-936a-8a0b-b026a879f84d",
+  "object": "chat.completion",
+  "created": 1792042735,
+  "model": "qwen3.8-flash",
+  "choices": [
+    {
+      "index": 0,
+      "message": {
+        "role": "assistant",
+        "reasoning_content": "",
+        "content": "Based on the visual analysis of the time series plot, here are the detected points of anomalies:\n\n1.  **x ≈ 85**: There is a distinct downward spike (a sharp drop in value) that deviates significantly from the surrounding noise pattern.\n2.  **x ≈ 250**: There is a prominent upward spike followed immediately by a downward dip, creating a sharp vertical disturbance compared to the relatively stable baseline around it.\n3.  **x ≈ 495 - 500**: There is a sudden step-like drop or discontinuity in the trend line just before x=500, where the value falls sharply below the expected trajectory of the decline.\n\nTherefore, the list of anomaly coordinates is:\n`[85, 250, 498]`"
+      },
+      "finish_reason": "stop",
+      "logprobs": null
+    }
+  ],
+  "usage": {
+    "prompt_tokens": 506,
+    "total_tokens": 678,
+    "completion_tokens": 172,
+    "prompt_tokens_details": {
+      "cached_tokens": 0,
+      "image_tokens": 407,
+      "text_tokens": 99
+    },
+    "completion_tokens_details": {}
+  }
+}
