@@ -1,5 +1,30 @@
 # 新分支研究状态
 
+## EXP29完成：视觉自主补漏有范围收益，多轮终审不采纳（2026-10-15）
+
+分支`codex/exp29-visual-first-agent`，父版本fc9bf26；稳定备份标签
+`backup/exp28-before-visual-first-20261015`，EXP28 ZIP SHA重验通过。
+新720站：三种子各120开发、120独立test；原简单生成机制不改，复用EXP28独立96站模型，未重训。
+新数据与EXP28的816个case seed不重复。没有跨站统一物理阈值，生产src与旧Word不改。
+
+原预选VFN视觉先行→数值细化/硬验证→近邻互补未带来任何新增TP/FP；
+S1联合有序边界仅多1TP/22FP日，S2视觉→数值→局部视觉终审Aff降至.7427，均取消集成。
+开发后单独登记S3确认已列出的去硬验证变体，方法、提示、模型与融合冻结后才进入新test。
+**VRC-GNSS**（`vf_vl_image_raw_complement`）test暂态Aff .9514，高于近邻.9254和文字.9236；
+但日F1 .9089<.9246、四类.8431<.8559，3站新增10TP日、27站增加154FP日。
+Aff两个种子正向、一个轻微反向；日F1下降1.57个百分点超出预设1个百分点容限，综合确认false。
+按用户范围识别目标保留为研究变体，不替换强数值，不将补充收益写成原预选方法成功。
+两站仅Aff提高、实际TP不增，负站误报完整披露；形变没有视觉新增收益。
+
+新读AnomaMind、TimeRLM、DAST、SAGE、TimeEvo及VisualTime指定版本；实际作者源码读取范围、
+版本和SHA留证，本轮没有执行完整作者训练/推理框架，不填写其GNSS比较分数。
+总1659请求（开发809、S2开发130、独立test720），全部HTTP200，1615成功、44输出失败，0重试。
+81项测试和脚本Ruff通过；数据、请求、失败、工具证据及正反图均备份。
+本轮test已使用；下一轮仅在新数据检验视觉新增候选的局部证据与误报控制，不在现test选门槛。
+[完整判断](exp29-assessment.md)、[方法与指标](exp29-methods-and-metrics.md)、
+[文献笔记](exp29-reading-notes.md)、[独立测试15方法](../results/exp29-s3-test-full-v1/results.md)、
+[备份](exp29-backup.json)。以下为历史状态。
+
 ## EXP28扩大评估完成：VL图像有范围指标收益，Flash主方案不升级（2026-10-15）
 
 分支`codex/exp28-expanded-competing-review`，父版本134738c；

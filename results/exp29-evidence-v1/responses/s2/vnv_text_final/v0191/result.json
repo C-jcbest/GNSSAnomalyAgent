@@ -1,0 +1,28 @@
+{
+  "status": "success",
+  "requested_model": "qwen3-vl-plus",
+  "request_count": 1,
+  "retry_count": 0,
+  "http_status": 200,
+  "served_model": "qwen3-vl-plus",
+  "usage": {
+    "prompt_tokens": 12239,
+    "completion_tokens": 289,
+    "total_tokens": 12528,
+    "completion_tokens_details": {
+      "text_tokens": 289
+    },
+    "prompt_tokens_details": {
+      "text_tokens": 12239,
+      "cached_tokens": 0
+    }
+  },
+  "elapsed_seconds": 9.094830899994122,
+  "adjudication": {
+    "decision": "replace_ranges",
+    "pair_ids": [
+      "P3"
+    ],
+    "evidence": "P1 (476-489) shows a sharp drop at index 486 (N/E/U: -8.36, -6.30, 2.69) followed by recovery over next few points; however, P2 is a single-point spike at 486 with large N/E offsets (-7.2, -7.4) inconsistent with smooth return—likely noise or outlier, not part of platform. P3 and P4 overlap (573-618 vs 574-615); onset offsets differ slightly but interior observations (574–615) show sustained elevated N/E/U (~-5 to -4, ~12–15, ~23–24) with gradual decay after 615, supporting one genuine temporary offset. The interior is coherent and distinct from surrounding motion; missing indices at 576,579 do not break continuity. Thus only one genuine platform: P3 (or P4), but P3 has broader support (starts at 573, includes first stable point after prior motion). P1’s return is incomplete and contaminated by nearby step; not a clean platform. Replace with {P3}."
+  }
+}

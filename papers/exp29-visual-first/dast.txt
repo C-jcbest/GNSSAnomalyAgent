@@ -1,0 +1,1059 @@
+DAST: A VLM–LLM Framework for Cross-Interface Anomaly Detection in O-RAN
+Report GitHub Issue
+×
+Title:
+Content selection saved. Describe the issue below:
+Description:
+Submit without GitHub
+Submit in GitHub
+arXiv is now an independent nonprofit!
+Learn more
+×
+Back to arXiv
+Why HTML?
+Report Issue
+Back to Abstract
+Download PDF
+Abstract
+I
+Introduction
+II
+Background and Related Work
+II-A
+O-RAN Disaggregation and Attack Surface
+II-B
+From Traditional TSAD to Foundation Models
+III
+DAST
+: Detecting anomalies in O-RAN enabled 5G networks.
+IV
+Evaluation
+IV-A
+Testbed and Scenario
+IV-B
+Benchmarks
+IV-C
+Results
+V
+Future Directions
+VI
+Conclusion
+VII
+Acknowledgement
+References
+License: arXiv.org perpetual non-exclusive license
+arXiv:2606.06261v1 [cs.NI] 04 Jun 2026
+DAST
+: A VLM–LLM Framework for Cross-Interface Anomaly Detection in O-RAN
+Francesco Spinelli
+Esteban Municio
+Pau Baguer
+Gines Garcia-Aviles
+Xavier Costa-Perez
+†
+†
+thanks:
+Francesco Spinelli, Esteban Municio, Pau Baguer and Gines Garcia-Aviles are with i2CAT Foundation
+†
+†
+thanks:
+Xavier Costa-Perez is with i2CAT Foundation, NEC Laboratories Europe and ICREA
+Abstract
+O-RAN enables a disaggregated baseband stack with programmable functions that communicate over standardized open interfaces. The same openness that enables multi-vendor composition also expands the attack surface across logically decoupled tiers that make up the compute continuum. Among these threats, Denial-of-Service and performance-degradation attacks, which account for the majority of catalogued O-RAN threats, are particularly difficult to detect. Traditional Time-Series Anomaly Detection (TSAD) methods fail in this new regime where labelled baselines are scarce, threats evolve faster than detectors can be retrained, and the high-dimensional multivariate telemetry overwhelms monolithic inference models. To address these challenges, we present
+DAST
+, a zero-shot multi-agent framework for cross-interface anomaly detection in O-RAN that chains a three-stage VLM
+→
+\rightarrow
+LLM
+→
+\rightarrow
+VLM pipeline.
+DAST
+converts multivariate KPI streams into visual representations, scores textual per-interface descriptions against O-RAN domain knowledge, and verifies suspects on high-resolution heatmaps to output the problematic interfaces, the anomalous time intervals, an indicative O-RAN WG11-aligned operational impact rating and the decision rationale. We evaluate
+DAST
+on real network traces collected from an O-RAN testbed under representative performance degradation scenarios, achieving
+0.910
+0.910
+F1-Score and
+0.843
+0.843
+Accuracy, outperforming state-of-the-art TSAD baselines.
+Index Terms:
+LLMs, VLMs, Multivariate anomaly detection, O-RAN, Multi-Agents Systems
+I
+Introduction
+The transition to sixth-generation (6G) mobile networks is being conceived not only as a faster air interface but as a distributed compute fabric in which connectivity, computation and control are co-designed across a device-edge-cloud continuum. Within this continuum, the Radio Access Network (RAN) ceases to be a monolithic appliance and becomes a set of virtualized functions that compete for, and collaborate over, shared heterogeneous compute resources. Observability of this fabric is no longer a per-box concern; rather, faults or attacks can surface several tiers or interfaces away from their origin.
+Driven by this shift, the RAN is evolving into a
+software-driven, programmable layer of a distributed edge-cloud system in which RAN
+functions co-exist with other virtual functions within edge servers and centralized cloud
+resources. This architectural convergence is enabled by the Open RAN (O-RAN) paradigm,
+which disaggregates the baseband stack into functional units (i.e., the O-CU, O-DU and O-RU)
+and includes RAN Intelligent Controllers (RICs), all interconnected through open,
+standardized interfaces (e.g., E2, A1, F1-c, F1-u) and deployable across
+heterogeneous compute tiers. However, the same openness and disaggregation that unlock
+the flexibility of 6G also create a complex operational problem.
+Multi-vendor disaggregation exposes every open interface as a potential entry point,
+and third-party xApps/rApps inject external code directly into the radio control loop,
+enabling adversaries to perform signaling storms and stealthy Denial-of-Service
+(DoS) attacks. Detecting them is of utmost importance, since 60% of all identified
+O-RAN threats correspond to DoS and performance degradation attacks, whose effects cascade across the RAN without triggering coarse-grained alarms
+[
+1
+]
+.
+Traditional approaches to RAN anomaly detection rely on Time-Series Anomaly Detection (TSAD) methods such as supervised and unsupervised Machine Learning (ML) models. While they perform well on clean, stationary benchmarks (e.g.,
+[
+2
+,
+3
+]
+),
+they can sharply degrade when faced with evolving threats and
+network architectures.
+Labelled ground-truth data is scarce and prohibitively expensive to collect at scale across multi-vendor, dynamically configured deployments.
+Furthermore, evaluating each interface in isolation leaves these detectors blind to the cross-interface cascades driven by O-RAN’s closed control loops.
+For instance, a subtle latency degradation on F1-c may later evolve into an F1-u throughput collapse due to attachment failure. These constraints make supervised/unsupervised ML ill-suited to the compute continuum regime where large volumes of unlabelled, non-stationary telemetry data are available.
+Applying Foundation Models such as Large Language Models (LLMs) and Vision Language Models (VLMs) directly to KPI telemetry partially avoids the labelling problem
+[
+4
+,
+5
+]
+. However, deploying a single LLM or VLM as the sole inference engine reintroduces the same dimensionality bottleneck, inheriting the well-documented weakness of current LLMs in reasoning over high-dimensional numerical data
+[
+6
+]
+, and treating each series in isolation and ignoring the semantics of the interfaces being monitored
+[
+5
+]
+.
+In this article, we show the potential in combining Foundation Models into a prompt-grounded reasoning pipeline leveraging
+(i)
+visual perception,
+(ii)
+language reasoning, and
+(iii)
+O-RAN domain knowledge the way a human network expert would do
+[
+7
+]
+. To this end, we present
+DAST
+(
+Detecting Anomalies and Security Threats in the RAN
+), a Network Intelligence (NI) solution designed within the scope of the Compute Continuum Layer (CCL)
+[
+8
+]
+for detecting anomalies in O-RAN.
+DAST
+is a
+multi-modal reasoning pipeline
+where VLMs and LLMs operate as collaborative diagnostic agents. It has a three-stage VLM
+→
+\rightarrow
+LLM
+→
+\rightarrow
+VLM chain that mimics the reasoning of a human network expert: a first VLM ingests the plot of each time series coming from O-RAN interfaces, visually profiling them. Then, an O-RAN-grounded LLM compares the profile to the expected behaviour, giving a score. Finally, a second VLM verifies suspect time series on high-resolution heatmaps. The pipeline outputs, as machine-readable report, the exact time intervals of detected anomalies, the involved interfaces, an operational
+impact
+rating, and a chain-of-thought rationale, which is intended to feed downstream root-cause analysis and SRE-style troubleshooting
+[
+7
+]
+.
+Decomposing the task across specialised agents bypasses the dimensionality and numerical-reasoning bottlenecks of any single foundation model, while explicit domain grounding replaces the need for retraining: the pipeline is fully zero-shot, requires no fine-tuning or clean baseline datasets, and ingests O-RAN domain knowledge that can be easily updated as the specifications evolve.
+The main contributions of this work are:
+•
+We present
+DAST
+, which, to the best of our knowledge, represents the first zero-shot multi-agent VLM-LLM architecture for cross-interface anomaly detection in O-RAN.
+DAST
+is designed to generalise across multi-vendor configurations and zero-day performance degradation patterns without labelled data or fine-tuning.
+•
+We evaluate
+DAST
+on real network traces obtained from an open-source O-RAN testbed under representative performance degradation scenarios.
+•
+We compare
+DAST
+against several well-known state-of-the-art anomaly detection benchmarks.
+II
+Background and Related Work
+II-A
+O-RAN Disaggregation and Attack Surface
+The Open RAN architecture promoted by the O-RAN Alliance decomposes the
+gNB and exposes its internal interactions through a set of open,
+standardized interfaces, with control delegated to two RICs. The Near-RT RIC hosts
+xApps
+on control loops
+of
+10
+10
+–
+1000
+1000
+ms over the E2 interface, while the Non-RT RIC hosts
+rApps
+on loops above
+1
+1
+s and pushes policies to the Near-RT
+RIC through the A1 interface. Operations and maintenance flows are
+carried over O1, while the O-CU/O-DU/O-RU split is realized over the 3GPP F1-c/F1-u interfaces and Open Fronthaul, typically using eCPRI.
+While this openness and modularity enables multi-vendor RAN composition and control, it also enlarges the exposed surface: each open interface becomes an externally reachable boundary, third-party rApps/xApps inject external code into the RAN control loop, and the underlying O-Cloud introduces infrastructure-level attack vectors
+[
+9
+]
+.
+Among these events, many are stealthy by design, converting moderate latency or packet-loss injection on A1, E2 or F1-c/F1-u into degradation of end-user QoE without raising threshold alarms. These types of subtle DoS attacks are notably difficult to detect since they may not originate in the actual O-RAN components, interfaces often do not show clear signs of malfunctioning, and anomalies in one interface can degrade other interfaces, propagating through O-RAN’s closed control loops. For example, a signalling-storm or DoS attack initiated on E2 typically cascades onto F1-c and F1-u within seconds, and even moderate packet delays on F1-c can terminate the underlying SCTP association and detach UEs from the network, as well as disrupt attaching procedures
+[
+9
+]
+.
+Reliably detecting such events therefore requires correlated
+observation across multiple interfaces simultaneously and a deep understanding of O-RAN architecture.
+II-B
+From Traditional TSAD to Foundation Models
+Most traditional TSAD approaches rely on uncontaminated traces and flag deviations at inference.
+For instance,
+MSCRED
+couples convolutional encoders with recurrent decoders to detect anomalies and localise root causes in multivariate streams
+[
+2
+]
+, while
+SpotLight
+delivers explainable detection on a carrier-grade O-RAN testbed
+[
+3
+]
+.
+Despite strong in-distribution performance, applying traditional TSAD approaches faces three structural limitations in the O-RAN regime:
+(L1)
+Labelled ground truth is scarce
+:
+uncontaminated traces are prohibitively expensive to acquire and keep updated, especially across the combinatorial space of vendors, slices and topologies that real deployments span. Furthermore, zero-day attacks causing performance degradation by definition have no previous examples.
+(L2)
+Distribution shift overwhelms retraining
+:
+multi-vendor integration and dynamic slice reconfiguration produce non-stationary telemetry on a timescale shorter than any feasible retraining cycle. Thus, accuracy
+degrades substantially over time
+[
+10
+]
+.
+(L3)
+Per-interface detectors are blind to cascades
+:
+Traditional TSAD approaches evaluate O-RAN interfaces in isolation, treating telemetry as decoupled systems. This architecture is blind to the cross-interface cascade effects driven by O-RAN’s closed control loops. Lacking a structural and temporal understanding, isolated detectors treat propagating symptoms as disconnected events, flooding operators with a storm of alerts.
+A way to bypass these constraints could be to leverage Foundation Models. Indeed, LLMs and VLMs are pre-trained on internet-scale text and image corpora data and present remarkable zero-shot and few-shot capabilities (i.e., they can provide anomaly detection even if not trained on that specific task). It is possible to pretrain LLMs to perform anomaly detection; however these steps generally require a substantial compute infrastructure.
+Instead, other approaches leverage the innate natural language processing capabilities of Foundation Models, directly prompting numerical sequences into LLMs
+[
+4
+]
+, rendering time series images (e.g., line plots) and sending them to a VLM
+[
+5
+,
+11
+]
+, or creating a flexible multi-agent system to detect different types of anomalies
+[
+6
+]
+.
+Fig. 1
+:
+DAST
+architecture. KPI streams from the four O-RAN interfaces are rendered into stacked line plots (Stage 1) and described in text by VLM-1. An O-RAN-grounded LLM (Stage 2) scores per-interface descriptions against expected behaviour. A second VLM (Stage 3) verifies high-scoring suspects on per-metric heatmaps and emits time intervals plus a WG11-aligned impact rating.
+Within the O-RAN domain, at the time of writing, papers use Foundation Models just as post-hoc explanations on top of trained classifiers
+[
+12
+]
+rather than as anomaly detectors. However, leveraging a single LLM/VLM to process O-RAN telemetry is not feasible, since concatenating high-rate telemetry from all O-RAN interfaces could exceed the effective context window of current models
+(i)
+forcing lossy aggregation and/or
+(ii)
+degrading LLM performance due to the large multi-dimensional numerical arrays.
+III
+DAST
+: Detecting anomalies in O-RAN enabled 5G networks.
+When a seasoned network engineer is handed a wall of O-RAN telemetry, they do not scrutinize every counter against a learned baseline. They first check the plots to sense which signals look unusual, then reason about whether that visual impression is genuinely abnormal given what each interface is supposed to do.
+DAST
+mirrors this workflow directly. Instead of forcing a single model to do everything, it distributes the task across three specialized, collaborative agents (visual observer, domain-grounded reasoner and fine-grained visual verifier), each of them operating on the metrics representation it handles best, moving from global inspection to interval-level localization (Fig.
+1
+). The agents are fully zero-shot (no training on O-RAN traces), and all O-RAN specific knowledge is supplied as an external, updatable domain-knowledge artefact rather than as labelled examples. The workflow operates through the following stages:
+Stage 1: Visual Interface Profiling (VLM).
+The pipeline begins by ingesting the complete multivariate time series representing raw metric data from different O-RAN network interfaces (e.g., UL latency of E2, DL throughput of F1-c, DL packet loss of A1, etc.), and rendering a single, vertically stacked line-plot image to preserve temporal alignment across all channels. A VLM (VLM-1 in Fig.
+1
+) acts as the first-pass observer. It generates a report highlighting the metric label, the axis ranges, and the general behaviour (e.g., steady from
+t
+=
+0
+t=0
+to
+t
+=
+70
+t=70
+, then bursty until
+t
+=
+120
+t=120
+, finally oscillations until the end of the time window) of each time series. This translates dense visual signals into a structured, explainable textual summary. In parallel, we prepare the O-RAN domain knowledge. It includes comprehensive information about interfaces in O-RAN networks such as their roles (e.g., control plane or user plane), what type of traffic they usually have (e.g., light sporadic, heavy stochastic, periodic), what protocols are used by each interface, etc.
+Stage 2: Domain-Aware Semantic Evaluation (LLM).
+Rather than performing a direct, pixel-by-pixel visual study of the raw time-series and directly trying to detect the anomalies, an LLM ingests the text reports generated in the first stage (LLM-1 in Fig.
+1
+), to decide which time series present the most remarkable anomalies. To help with this decision and narrow the search space, we leverage O-RAN domain knowledge to help the LLM reasoning agent. By grounding the system with explicit O-RAN knowledge, and detailing the expected behaviours of O-RAN interfaces (e.g., the high-volume stochastic nature of F1-u versus the strict reliability bounds of F1-c), the LLM can now cross-reference the VLM’s visual observations expressed as text against this domain knowledge. As a result, the LLM identifies the most suspicious metrics and assigns each of them a score requiring no labelled training data.
+Stage 3: Targeted Visual Verification (VLM).
+Then, the system applies a filtering threshold. For any metric flagged by the LLM with a high certainty score (i.e.,
+>
+0.9
+>0.9
+), the framework dynamically retrieves the heatmap figures of the selected metrics. These heatmap images of the suspicious time series, along with the O-RAN domain knowledge, will be used to query the VLM again (VLM-2 in Fig.
+1
+). This second VLM pinpoints the exact time interval where anomalies happen, taking into account possible cascade effects between time series. Finally, the VLM outputs the precise boundaries of the estimated anomaly time intervals. Besides the anomalous time intervals, VLM-2 includes an
+impact
+rating and a text description of the
+thinking
+process in its output. The impact rating roughly estimates how critical the anomaly is, i.e., ‘low’, ‘medium’ and ‘high’. The impact is calculated within the VLM by leveraging the O-RAN domain knowledge, which includes generic O-RAN WG11 specifications as well as domain-specific guidelines existing in the literature
+[
+9
+]
+. Additionally, the output includes the
+thinking
+process of the VLM, for both increasing the reasoning performance (i.e., applying Chain-of-Thought) and helping in the interpretation of the results (e.g., by a human operator or external RCA algorithms).
+Deployment Options:
+DAST
+is designed as a non-real time TSAD service operating over windows of approximately 200s. This latency is dominated by VLM inference and is therefore matched to the non-RT RIC control loop (
+>
+>
+1s) rather than to latency-critical control loops. In this sense,
+DAST
+is an anomaly-diagnosis layer for SMO-level reasoning, not a sub-second mitigation loop. In a real-world deployment, the pipeline is built as an rApp within the Non-RT RIC, ingesting cross-interface KPIs through the O1 interface and Virtual Event Streaming (VES) as the telemetry wrapper. The O-RAN domain knowledge may be maintained and updated within the rApp as specifications evolve. The emitted machine-readable outputs of anomalous events are then mapped onto standard SRE troubleshooting workflows
+[
+7
+]
+, which decompose incident response into problem reporting, triage, examination and diagnosis.
+DAST
+is designed to operate as the
+first
+stage of this pipeline as the outputs serve as problem reports (localized intervals and responsible interfaces).
+IV
+Evaluation
+TABLE I
+:
+Aggregated anomaly detection performance of
+DAST
+compared with state-of-the-art benchmarks.
+Method
+F1-Score
+Accuracy
+MSCRED
+[
+2
+]
+0.187
+0.103
+TAMA
+[
+11
+]
+0.429
+0.275
+VLM4TS
+[
+5
+]
+0.408
+0.258
+TSAD Agents
+[
+6
+]
+0.500
+0.338
+DAST
+0.910
+0.843
+IV-A
+Testbed and Scenario
+In order to evaluate the
+DAST
+framework, we deploy an experimental O-RAN testbed to generate real network traces with anomalies as shown in Fig.
+2
+. The O-RU, O-DU and O-CU components of the gNB are deployed using the srsRAN software stack
+1
+1
+1
+https://www.srsran.com/5g
+, Accessed: January 2026
+implementing the functional split 8, while the near-RT RIC and non-RT RIC are built using the O-RAN SC projects
+2
+2
+2
+https://o-ran-sc.org/
+, Accessed: January 2026
+and the core network with Open5GS
+3
+3
+3
+https://open5gs.org/
+, Accessed: January 2026
+. We use Ettus USRP B210s for the 5G radio frontend and two Quectel RM520N-GL serving as UEs.
+To create a realistic network environment, the testbed implements FALCON
+[
+13
+]
+to reproduce mobile traffic patterns captured in a real commercial network through MGEN. We selectively perform network performance degradation attacks on the F1-u, F1-c, A1, and E2 interfaces, increasing packet latency and packet loss with various degrees of impact (e.g., low, medium and high). Fig.
+2
+shows the probe location at these interfaces where network metrics were monitored.
+Fig. 2
+:
+O-RAN testbed used for
+DAST
+evaluation.
+DAST
+framework is running in a separate server with access to both the testbed and an Ollama instance running on a high performance server (Intel Xeon Silver 32 CPU cores, 72 GB of RAM and two RTX Nvidia A5000 GPUs), where we make available the
+qwen3.6:35b
+open-weight model used as both LLM and VLM.
+IV-B
+Benchmarks
+We compare our approach against the following four benchmarks. We implemented approaches following classical TSAD methods and novel state-of-the-art solutions that rely on LLM/VLM frameworks specifically tailored for detecting anomalies in time series:
+TABLE II
+:
+Results per different O-RAN interfaces.
+Solution
+Method
+E2
+F1-c
+F1-u
+A1
+Precision
+Recall
+F1-Score
+Precision
+Recall
+F1-Score
+Precision
+Recall
+F1-Score
+Precision
+Recall
+F1-Score
+MSCRED
+[
+2
+]
+Standard
+0.000
+0.000
+0.000
+0.000
+0.000
+0.000
+0.560
+0.226
+0.322
+0.789
+0.333
+0.469
+Range-Wise
+0.423
+0.211
+0.282
+0.445
+0.177
+0.254
+0.552
+0.420
+0.477
+0.641
+0.536
+0.584
+TAMA
+[
+11
+]
+Standard
+1.000
+0.657
+0.792
+0.958
+0.238
+0.381
+0.000
+0.000
+0.000
+0.967
+0.345
+0.508
+Range-Wise
+0.946
+0.802
+0.868
+0.964
+0.415
+0.579
+0.950
+0.317
+0.475
+0.957
+0.581
+0.723
+VLM4TS
+[
+5
+]
+Standard
+1.000
+0.381
+0.549
+0.905
+0.214
+0.346
+1.000
+0.363
+0.525
+0.952
+0.195
+0.323
+Range-Wise
+0.721
+0.874
+0.790
+0.667
+0.774
+0.716
+0.762
+0.862
+0.808
+0.636
+0.865
+0.733
+TSAD Agents
+[
+6
+]
+Standard
+1.000
+0.400
+0.571
+1.000
+0.214
+0.353
+1.000
+0.441
+0.612
+0.929
+0.464
+0.619
+Range-Wise
+0.846
+0.705
+0.769
+0.729
+0.739
+0.734
+0.794
+0.801
+0.797
+0.750
+0.743
+0.746
+DAST
+Standard
+0.997
+0.875
+0.932
+1.000
+0.679
+0.808
+1.000
+0.828
+0.905
+1.000
+0.889
+0.941
+Range-Wise
+0.990
+0.846
+0.912
+0.995
+0.703
+0.822
+0.978
+0.854
+0.901
+0.987
+0.868
+0.924
+MSCRED
+[
+2
+]
+: It uses a Multi-Scale Convolutional Recurrent Encoder-Decoder architecture to provide multivariate unsupervised anomaly detection. Requires training.
+TAMA
+[
+11
+]
+: It is based on a 3-step (i.e., Reference Learning, Analyzing, and Self-reflection) multimodal VLM framework to detect anomalies in univariate timeseries, using labelled examples to learn normal data patterns. We extended the original framework to perform multivariate anomaly detection for a fair comparison.
+VLM4TS
+[
+5
+]
+: This zero-shot framework is a combination of a Vision Encoder to detect local candidate anomalies in univariate time series and a VLM-based step to refine the preliminary detections with global timeseries knowledge. We extended the original framework to consider multivariate time series.
+TSAD Agents
+[
+6
+]
+: This zero-shot solution is a multi-agent, multi-variate framework containing four agents that reason about anomaly types and adaptively route detection tasks to either traditional ML algorithms or VLMs using textual and visual inputs.
+IV-C
+Results
+We evaluate
+DAST
+and the above mentioned benchmarks with two different sets of metrics. First, we use standard Recall, Precision, F1-Score and Accuracy, where a predicted interval counts as a True Positive only when it overlaps at least 70% of the ground truth anomaly period while not exceeding its extent by more than 30%. This regime is deliberately strict, since it rewards detections that pinpoint the anomaly exact boundaries.
+However, this standard approach collapses each interval to a single binary hit, which can be misleading for anomalies of unequal duration and is susceptible to the well-documented Point-Adjustment illusion
+[
+14
+]
+. We therefore additionally report Range-Wise Precision, Recall, F1-Score and Accuracy
+[
+15
+]
+, which operate at the level of time ranges and assign proportional credit based on how much of each ground-truth interval is detected and how much of each prediction is correct.
+Fig. 3
+:
+Per-interface confusion matrices for
+DAST
+(E2, F1-c, F1-u, A1, and the non-anomalous baseline).
+Table
+I
+provides an aggregated overview of F1-Scores and Accuracy across all monitored interfaces.
+DAST
+improves F1-Score by about 0.41 and Accuracy by 0.51 over the strongest baseline.
+TAMA
+and
+VLM4TS
+achieve worse performance because they were originally conceived for univariate detection and are not able to generalize to a multivariate O-RAN setting. Also, loading many numerical arrays into a single visual prompt induces hallucinations and dilutes the VLM’s attention.
+On the other hand, multi-agent approaches (
+TSAD Agents
+,
+DAST
+) consistently dominate, confirming that the multivariate nature of O-RAN telemetry is best handled by multi-agent architecture, spreading detection tasks across specialised sub-agents rather than relying on a single foundation-model call. Still both approaches differ. While
+TSAD Agents
+is based on a general-purpose 4-stage setup that uses both VLMs and traditional ML algorithms,
+DAST
+uses a VLM
+→
+\rightarrow
+LLM
+→
+\rightarrow
+VLM pipeline.
+In this sense,
+DAST
+achieves better performance due to its explicit integration of O-RAN domain knowledge, which narrows down the anomaly search space, and the use of temporally aligned multi-channel plots, which helps to better capture cross-interface anomalies. Regarding
+MSCRED
+, despite being a well-established unsupervised multivariate detector, it performs the worst. This is because the highly stochastic profile of real O-RAN traces (from commercial base stations) creates an unsuitable scenario for reconstruction-based detectors that assume a stable baseline that can be learned offline. This result reinforces the case for zero-shot pipelines such as
+DAST
+, which inject O-RAN domain knowledge at inference time rather than depending on representative training traces.
+Fig. 4
+:
+By leveraging O-RAN domain knowledge,
+DAST
+is able to realize that latency in F1-u is the actual anomaly, rather than sporadic packet loss in F1-u, which is actually the consequence.
+Next, Table
+II
+shows the Precision, Recall and F1-Score for the interfaces considered in our testbed.
+DAST
+shows a superior performance compared to other benchmarks for all interfaces, with F1-c being the interface whose anomalies are more difficult to predict due to the inherent difficulty of isolating subtle anomalies on a low-traffic signalling control plane. Anomalies in other interfaces with periodic traffic such as E2 or with bulky stochastic traffic such as F1-u, detection and delimitation are effective.
+On average, the Range-wise metric obtains higher values than the standard metric, since it calculates proportional overlaps and gives them partial credit, while standard has a strict threshold rule that penalizes more severely to not provide the exact overlap. While others can have a significant drop
+in terms of performance,
+DAST
+remains robust. This shows not only that
+DAST
+can detect anomaly intervals but that its detections precisely match the exact anomalous time interval.
+Fig.
+3
+reports per-interface confusion matrices, which add further insights on Table
+II
+by exposing the structure of
+DAST
+’s errors.
+The dominant pattern is asymmetric. Across the four interfaces under test,
+DAST
+produces only a few false positives, with the majority of errors concentrated in false negatives, a vital feature for mitigating alert fatigue in live network operations
+[
+7
+]
+. Notably, there is a relatively higher proportion of false negatives observed on the F1-c interface than in the other interfaces, in line with the intuition provided about Table
+II
+.
+On the non-anomalous baseline traces,
+DAST
+raises 9 false positives out of 48 samples, setting a non-zero floor on its false-alarm rate but well below the over-triggering behaviour of the considered benchmarks (see again Table
+I
+).
+Finally, beyond aggregate scores, Fig.
+4
+illustrates why domain grounding matters in practice. In a scenario with high packet-delay on the F1-u, a purely visual detector such as TAMA is drawn to the most significant deviations (e.g., flags the packet loss region in F1-u).
+DAST
+, by contrast, cross-references the visual profile against the O-RAN domain knowledge, and therefore recognizes that the packet-loss spikes in F1-u are a downstream consequence, and the elevated and sustained F1-u latency is the actual root anomaly.
+V
+Future Directions
+While
+DAST
+demonstrates that domain-grounded multi-agent reasoning is an effective basis for O-RAN anomaly detection, there are still open directions:
+Multi-vendor and zero-day validation
+: Our evaluation uses a single open-source stack. A natural next step is to validate DAST across heterogeneous, multi-vendor O-RAN deployments and expand the performance degradation patterns considered in our evaluation. This will reinforce the results and substantiate the zero-shot generalization.
+Closing the autonomous loop
+:
+DAST
+produces reports and triage tags to be consumed downstream. A compelling extension is to close the loop by using this information to identify the root cause and generate policies to address the identified anomaly.
+VI
+Conclusion
+Detecting performance degradation patterns in disaggregated O-RAN deployments is structurally hard given that ground truth baselines are scarce, distribution shift outpaces any feasible retraining cycle, and cross-interface cascade effects make per-interface detectors unreliable.
+DAST
+addresses all three by decomposing the detection across a zero-shot, three-stage VLM
+→
+\rightarrow
+LLM
+→
+\rightarrow
+VLM cascade in which each agent operates on the representation it is best suited to (visual profiling, textual reasoning and high-resolution visual identification). Evaluated on an open-source O-RAN testbed under representative latency and packet loss injection effects,
+DAST
+achieves an aggregated F1-Score of 0.910, outperforming both unsupervised multivariate detectors and recent LLM/VLM-based baselines. The broader implication is methodological. Our results suggest that anomaly detection in the disaggregated, multi-vendor RAN is better treated as multi-agent reasoning grounded in domain knowledge than as a single-model numerical-fitting problem, specifically gaining by injecting O-RAN semantics and from temporally aligned multi-channel plots that expose all anomalous behaviours across interfaces. For operators, this points to a practical observability primitive that can be maintained by editing a knowledge base rather than by collecting and labelling traces every time a vendor, slice, or performance degradation pattern changes. By emitting machine-readable problem reports,
+DAST
+is positioned not as a standalone classifier but as the entry point of an autonomous, SRE-style troubleshooting pipeline for the 6G compute continuum.
+VII
+Acknowledgement
+This work has been supported by the European Commission through grant no. SNS-JU-101139270 (ORIGAMI Project).
+References
+[1]
+O-RAN Alliance Working Group 11
+(2022)
+O-RAN Security Threat Modeling and Remediation Analysis 4.0
+.
+Note:
+https://orandownloadsweb.azurewebsites.net/download?id=356
+Accessed: Jan 2026
+Cited by:
+§I
+.
+[2]
+C. Zhang, D. Song, Y. Chen, X. Feng, C. Lumezanu, W. Cheng, J. Ni, B. Zong, H. Chen, and N. V. Chawla
+(2019)
+A Deep Neural Network for Unsupervised Anomaly Detection and Diagnosis in Multivariate Time Series Data
+.
+Proceedings of the AAAI Conference on Artificial Intelligence
+33
+(
+01
+),
+pp. 1409–1416
+.
+External Links:
+Link
+,
+Document
+Cited by:
+§I
+,
+§II-B
+,
+§IV-B
+,
+TABLE I
+,
+TABLE II
+.
+[3]
+C. Sun, U. Pawar, M. Khoja, X. Foukas, M. K. Marina, and B. Radunovic
+(2024)
+SpotLight: Accurate, Explainable and Efficient Anomaly Detection for Open RAN
+.
+In
+Proceedings of the 30th Annual International Conference on Mobile Computing and Networking
+,
+ACM MobiCom ’24
+,
+New York, NY, USA
+,
+pp. 923–937
+.
+External Links:
+ISBN 9798400704895
+,
+Link
+,
+Document
+Cited by:
+§I
+,
+§II-B
+.
+[4]
+J. Liu, C. Zhang, J. Qian, M. Ma, S. Qin, C. Bansal, Q. Lin, S. Rajmohan, and D. Zhang
+(2025)
+Large Language Models can Deliver Accurate and Interpretable Time Series Anomaly Detection
+.
+In
+Proceedings of the 31st ACM SIGKDD Conference on Knowledge Discovery and Data Mining V.2
+,
+KDD 25
+,
+New York, NY, USA
+,
+pp. 4623–4634
+.
+External Links:
+ISBN 9798400714542
+,
+Link
+,
+Document
+Cited by:
+§I
+,
+§II-B
+.
+[5]
+Z. He, S. Alnegheimish, and M. Reimherr
+(2026)
+Harnessing Vision-Language Models for Time Series Anomaly Detection
+.
+Proceedings of the AAAI Conference on Artificial Intelligence
+40
+(
+26
+),
+pp. 21690–21698
+.
+External Links:
+Link
+,
+Document
+Cited by:
+§I
+,
+§II-B
+,
+§IV-B
+,
+TABLE I
+,
+TABLE II
+.
+[6]
+X. Xu, H. Wang, Y. Liang, P. S. Yu, Y. Zhao, and K. Shu
+(2026)
+Can Multimodal LLMs Perform Time Series Anomaly Detection?
+.
+In
+Proceedings of the ACM Web Conference 2026
+,
+pp. 5392–5403
+.
+Cited by:
+§I
+,
+§II-B
+,
+§IV-B
+,
+TABLE I
+,
+TABLE II
+.
+[7]
+C. Jones
+(2016)
+Effective troubleshooting
+.
+In
+Site Reliability Engineering: How Google Runs Production Systems
+,
+B. Beyer, C. Jones, J. Petoff, and N. R. Murphy (Eds.)
+,
+Cited by:
+§I
+,
+§III
+,
+§IV-C
+.
+[8]
+L. E. Chatzieleftheriou, M. Gramaglia, A. Garcia-Saavedra, S. Gebert, G. Garcia-Aviles, S. Geissler, M. Fiore, P. Patras, A. Lutu, D. Tsolkas,
+et al.
+(2024)
+Towards 6G: Architectural Innovations and Challenges in the ORIGAMI Framework
+.
+In
+2024 Joint European Conference on Networks and Communications & 6G Summit (EuCNC/6G Summit)
+,
+pp. 1139–1144
+.
+Cited by:
+§I
+.
+[9]
+P. Baguer, G. M. Yilma, E. Municio, G. Garcia-Aviles, A. Garcia-Saavedra, M. Liebsch, and X. Costa-Pérez
+(2024)
+Attacking O-RAN Interfaces: Threat Modeling, Analysis and Practical Experimentation
+.
+IEEE Open Journal of the Communications Society
+.
+Cited by:
+§II-A
+,
+§II-A
+,
+§III
+.
+[10]
+F. Pendlebury, F. Pierazzi, R. Jordaney, J. Kinder, and L. Cavallaro
+(2019)
+TESSERACT: Eliminating Experimental Bias in Malware Classification across Space and Time
+.
+In
+28th USENIX security symposium (USENIX Security 19)
+,
+pp. 729–746
+.
+Cited by:
+§II-B
+.
+[11]
+J. Zhuang, L. Yan, Z. Zhang, R. Wang, J. Zhang, and Y. Gu
+(2024)
+See it, Think it, Sorted: Large Multimodal Models are Few-shot Time Series Anomaly Analyzers
+.
+External Links:
+2411.02465
+,
+Link
+Cited by:
+§II-B
+,
+§IV-B
+,
+TABLE I
+,
+TABLE II
+.
+[12]
+S. Chatzimiltis, M. Shojafar, M. B. Mashhadi, and R. Tafazolli
+(2026)
+AI-on-RAN for cyber defense: an XAI-LLM framework for interpretable anomaly detection
+.
+IEEE Transactions on Network Science and Engineering
+13
+,
+pp. 3301–3319
+.
+External Links:
+Document
+Cited by:
+§II-B
+.
+[13]
+R. Falkenberg and C. Wietfeld
+(2019)
+FALCON: An Accurate Real-Time Monitor for Client-based Mobile Network Data Analytics
+.
+In
+2019 IEEE Global Communications Conference (GLOBECOM)
+,
+pp. 1–7
+.
+Cited by:
+§IV-A
+.
+[14]
+M. S. Sarfraz, M. Chen, L. Layer, K. Peng, and M. Koulakis
+(2024)
+Position: Quo Vadis, Unsupervised Time Series Anomaly Detection?
+.
+In
+Proceedings of the 41st International Conference on Machine Learning
+,
+ICML’24
+.
+Cited by:
+§IV-C
+.
+[15]
+N. Tatbul, T. J. Lee, S. Zdonik, M. Alam, and J. Gottschlich
+(2018)
+Precision and recall for time series
+.
+Advances in neural information processing systems
+31
+.
+Cited by:
+§IV-C
+.
+Francesco Spinelli is a Researcher at i2CAT foundation, Barcelona, Spain, working on applying GenAI techniques to O-RAN. He received the Ph.D. degree from University Carlos III of Madrid (UC3M), Spain, while conducting his doctoral research at IMDEA Networks Institute, Madrid. He was a visiting researcher at the University of California Santa Cruz. Before joining IMDEA, he was a Research Engineer with Telecom Paris, France. His research interests also include Edge Computing, Machine Learning and renewable-energy systems.
+Esteban Municio is a Telecommunication Engineer and Senior Researcher specialized in wireless networks currently working in the AI-driven System group of the i2CAT Foundation. He obtained his Ph.D. degree from the University of Antwerp (Belgium) in 2020 within imec’s research group IDLab. He then continued in imec as postdoctoral researcher for two more years. Since January 2022, he has been with i2CAT, where currently he is Senior Researcher at the AI-driven Systems group. He is currently Adjunct Professor at Universidad Carlos III de Madrid (UC3M) in the Master in Connected Industry 4.0. He has been working in a number of EU projects within FP7, H2020, Horizon Europe and ESA-ARTES. His research interests are in the field of AI-driven programmable open networks, Open RAN, TSN, ultra-reliable Industrial IoT and Non-Terrestrial Networks. He is also interested in testbed deployments, community networks and connectivity provision in rural environments.
+Pau Baguer is a passionate researcher currently pursuing an MS in Artificial Intelligence at UPC, with a strong background in Artificial Intelligence, Aerospace Systems Engineering, and Network Engineering. My specialized expertise lies in the integration of intelligent systems into Open RAN and UAV systems , with hands-on work experience at research institutions like i2CAT and UPC. In my current role as a Junior Researcher at i2CAT (AlS) for over 3 years, my main responsibilities include developing an indoor localization system within the O-RAN architecture, leveraging smart surfaces, and conducting research on the optimization of Open 5G/6G networks to enable BVLOS UAV operations.
+Gines Garcia-Aviles received his M.Sc. in Telematics engineering from the University Carlos III of Madrid, Spain in 2018. In 2021, he obtained his Ph.D. (cum laude) in Telematics engineering at the University Carlos III of Madrid, Spain. Within this period, he was part of the wireless networking research group at IMDEA Networks Institute and the telematics department at the University Carlos III of Madrid, while pursuing his Ph.D. In 2019 he did a research visit at Imec R&D in Antwerp, Belgium. Moreover, he has been contributing to different H2020 projects in the 5G research field. In January 2021, he joined the i2CAT Foundation where he is currently working as a post-doctoral researcher. His main research interests lie in the field of wireless communications, Network Functions Virtualization, Network Slicing, resources orchestration and Artificial Intelligence.
+Xavier Costa-Pérez is an ICREA Research Professor and Scientific Director at the i2cat Research Center, concurrently leading Space and Terrestrial Systems (ASTRO) R&D at NEC Laboratories Europe. His research spearheads the digital transformation of society through the convergence of Space and Mobile Networks together with Artificial Intelligence. His team consistently delivers impactful research, evidenced by publications in top-tier scientific venues and numerous awards for successful technology transfers. He actively secures funding through internal and external competitive R&D programs and contributed significantly to standardization bodies, including 3GPP, O-RAN, ETSI ISAC, and IETF. Notably, his innovations have been integrated into commercial mobile phones, base stations, and network management systems, and have spurred the creation of multiple start-ups. Dr. Costa-Pérez has held various leadership roles across industry and research, including Deputy General Manager, Chief Researcher, and member of Technology and Scientific Advisory Boards. He is a recognized contributor to multiple standard specifications who actively participated in bodies such as IEEE 802.11, 802.16, WiFi Alliance, and 3GPP. He has also served on organizing committees for prominent conferences (e.g., AAAI, ACM MOBICOM, IEEE INFOCOM) and as an Editor for leading journals like IEEE Transactions on Mobile Computing (TMC), IEEE Transactions on Communications (TCOM), as well as Elsevier Computer Communications (COMCOM). Dr. Costa-Pérez holds M.Sc. and Ph.D. degrees in Telecommunications from the Polytechnic University of Catalonia (UPC), receiving a national award for his doctoral thesis. He is the inventor of approximately 100 granted patents, some standard essential (SEP).
+Experimental support, please
+view the build logs
+for errors. Generated by
+L
+A
+T
+E
+xml
+.
+Instructions for reporting errors
+We are continuing to improve HTML versions of papers, and your feedback helps enhance accessibility and mobile
+      support. To report errors in the HTML that will help us improve conversion and rendering, choose any of the
+      methods listed below:
+Click the "Report Issue"
+(
+)
+button, located in the page header.
+Tip:
+You can select the relevant text first, to include it in your report.
+Our team has already identified
+the following issues
+. We appreciate your time reviewing and reporting rendering errors we
+      may not have found yet. Your efforts will help us improve the HTML versions for all readers, because disability
+      should not be a barrier to accessing research. Thank you for your continued support in championing open access for
+      all.
+Have a free development cycle? Help support accessibility at arXiv! Our collaborators at LaTeXML maintain a
+list of packages that need conversion
+, and welcome
+developer contributions
+.
+We gratefully acknowledge support from
+        our
+major funders
+,
+member institutions
+,
+,
+        and all contributors.
+About
+·
+Help
+·
+Contact
+·
+Subscribe
+·
+Copyright
+·
+Privacy
+·
+Accessibility
+·
+Operational Status
+(opens in new tab)
+Major funding support from

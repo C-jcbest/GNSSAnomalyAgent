@@ -1,0 +1,30 @@
+{
+  "status": "success",
+  "requested_model": "qwen3-vl-plus",
+  "request_count": 1,
+  "retry_count": 0,
+  "http_status": 200,
+  "served_model": "qwen3-vl-plus",
+  "usage": {
+    "prompt_tokens": 11508,
+    "completion_tokens": 581,
+    "total_tokens": 12089,
+    "completion_tokens_details": {
+      "text_tokens": 581
+    },
+    "prompt_tokens_details": {
+      "text_tokens": 11508,
+      "cached_tokens": 0
+    }
+  },
+  "elapsed_seconds": 16.248565100002452,
+  "range_decision": {
+    "intervals": [
+      {
+        "start": 540,
+        "end": 545
+      }
+    ],
+    "evidence": "A clear temporary offset appears in N/E/U around indices 540–546: at index 540, N jumps from ~-2.3 to -11.6, E from ~-0.9 to 10.5, U from ~-4.2 to -17.4; the trajectory remains elevated for 6 samples (indices 540–545), then at index 546 returns toward pre-offset levels (N ~-4.4, E ~14.2, U ~-23.9) — but note this is not a full return; however, the *next* major shift at index 547 (N ~-9.3, E ~10.8, U ~-18.3) continues the recovery trend, and by index 550 (N ~-11.2, E ~13.3, U ~-20.2) the system is still offset. Crucially, after index 552 (N ~-9.96, E ~11.7, U ~-18.6), values gradually drift back toward the pre-540 baseline over many samples, but no sharp opposing jump occurs. However, a second candidate is indices 700–702: at 700, N=15.619, E=0.248, U=1.323 (abrupt jump from prior ~-7 to +15 in N); sustained for 2 samples (700–701), then at 702 N=13.643, E=1.102, U=3.544 — still elevated, but the jump is not reversed sharply. Re-examining: the only interval with an abrupt shift *sustained over multiple samples* and followed by an *opposing return across same components* is **indices 540–545**, where the offset is clearly held for 6 samples and then a multi-sample recovery begins at 546 onward — but per instructions, the 'end' must be the last shifted sample *before* the return. The return starts at 546, so end=545. No other interval satisfies the strict definition of temporary offset (abrupt shift, sustained, then opposing return). Evidence: observed shape shows a 6-sample plateau at extreme values starting at index 540, distinct from surrounding smooth motion or isolated spikes."
+  }
+}

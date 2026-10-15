@@ -1,0 +1,533 @@
+{
+  "v0029": {
+    "selection": [
+      "raw_added_tp"
+    ],
+    "diagnosis": {
+      "station": "v0029",
+      "scenario": "mixed",
+      "cohort_seed": 2026101532,
+      "positive_transient": true,
+      "modes": {
+        "vf_vl_image": {
+          "status": "success",
+          "visual_intervals": 1,
+          "snapped_intervals": 1,
+          "verified_intervals": 0,
+          "rejection_reasons": [
+            "independent_wins"
+          ],
+          "outside_free_graph": 1,
+          "outside_all_pelt_edges": 1,
+          "pure": {
+            "tp_days": 14,
+            "fp_days": 0
+          },
+          "snap": {
+            "tp_days": 19,
+            "fp_days": 1
+          },
+          "verified": {
+            "tp_days": 0,
+            "fp_days": 0
+          },
+          "complement": {
+            "tp_days": 0,
+            "fp_days": 32,
+            "added_tp_days": 0,
+            "added_fp_days": 0
+          },
+          "raw_complement": {
+            "tp_days": 14,
+            "fp_days": 32,
+            "added_tp_days": 14,
+            "added_fp_days": 0
+          }
+        },
+        "vf_vl_text": {
+          "status": "success",
+          "visual_intervals": 0,
+          "snapped_intervals": 0,
+          "verified_intervals": 0,
+          "rejection_reasons": [],
+          "outside_free_graph": 0,
+          "outside_all_pelt_edges": 0,
+          "pure": {
+            "tp_days": 0,
+            "fp_days": 0
+          },
+          "snap": {
+            "tp_days": 0,
+            "fp_days": 0
+          },
+          "verified": {
+            "tp_days": 0,
+            "fp_days": 0
+          },
+          "complement": {
+            "tp_days": 0,
+            "fp_days": 32,
+            "added_tp_days": 0,
+            "added_fp_days": 0
+          },
+          "raw_complement": {
+            "tp_days": 0,
+            "fp_days": 32,
+            "added_tp_days": 0,
+            "added_fp_days": 0
+          }
+        }
+      }
+    },
+    "truth_events": [
+      {
+        "kind": "deformation",
+        "start": 416,
+        "end": 544,
+        "status": "confirmed",
+        "evidence": "simulation mechanism",
+        "phases": [
+          {
+            "kind": "acceleration",
+            "start": 416,
+            "end": 458
+          },
+          {
+            "kind": "steady",
+            "start": 459,
+            "end": 501
+          },
+          {
+            "kind": "deceleration",
+            "start": 502,
+            "end": 544
+          }
+        ]
+      },
+      {
+        "kind": "spike",
+        "start": 427,
+        "end": 427,
+        "status": "confirmed",
+        "evidence": "simulation mechanism",
+        "phases": []
+      },
+      {
+        "kind": "step",
+        "start": 467,
+        "end": 467,
+        "status": "confirmed",
+        "evidence": "simulation mechanism",
+        "phases": []
+      },
+      {
+        "kind": "transient",
+        "start": 499,
+        "end": 519,
+        "status": "confirmed",
+        "evidence": "simulation mechanism",
+        "phases": []
+      }
+    ],
+    "method_predictions": {
+      "Truth": {
+        "events": [
+          {
+            "kind": "deformation",
+            "start": 416,
+            "end": 544,
+            "status": "confirmed",
+            "evidence": "simulation mechanism",
+            "phases": [
+              {
+                "kind": "acceleration",
+                "start": 416,
+                "end": 458
+              },
+              {
+                "kind": "steady",
+                "start": 459,
+                "end": 501
+              },
+              {
+                "kind": "deceleration",
+                "start": 502,
+                "end": 544
+              }
+            ]
+          },
+          {
+            "kind": "spike",
+            "start": 427,
+            "end": 427,
+            "status": "confirmed",
+            "evidence": "simulation mechanism",
+            "phases": []
+          },
+          {
+            "kind": "step",
+            "start": 467,
+            "end": 467,
+            "status": "confirmed",
+            "evidence": "simulation mechanism",
+            "phases": []
+          },
+          {
+            "kind": "transient",
+            "start": 499,
+            "end": 519,
+            "status": "confirmed",
+            "evidence": "simulation mechanism",
+            "phases": []
+          }
+        ]
+      },
+      "Visual raw": {
+        "events": [
+          {
+            "start": 504,
+            "end": 518,
+            "kind": "transient",
+            "status": "confirmed",
+            "evidence": "short observations",
+            "phases": []
+          }
+        ]
+      },
+      "Visual + numerical complement": {
+        "events": [
+          {
+            "start": 427,
+            "end": 427,
+            "kind": "spike",
+            "status": "confirmed",
+            "evidence": "default classifier decision on GNSS observation features",
+            "phases": []
+          },
+          {
+            "start": 512,
+            "end": 526,
+            "kind": "deformation",
+            "status": "confirmed",
+            "evidence": "Bounded raw-displacement trajectory improves information criterion over background plus jumps",
+            "phases": []
+          },
+          {
+            "start": 467,
+            "end": 498,
+            "kind": "transient",
+            "status": "confirmed",
+            "evidence": "Disclosed untuned numerical opposite-vector nearest pairing",
+            "phases": []
+          }
+        ]
+      },
+      "Numerical nearest": {
+        "events": [
+          {
+            "start": 427,
+            "end": 427,
+            "kind": "spike",
+            "status": "confirmed",
+            "evidence": "default classifier decision on GNSS observation features",
+            "phases": []
+          },
+          {
+            "start": 512,
+            "end": 526,
+            "kind": "deformation",
+            "status": "confirmed",
+            "evidence": "Bounded raw-displacement trajectory improves information criterion over background plus jumps",
+            "phases": []
+          },
+          {
+            "start": 467,
+            "end": 498,
+            "kind": "transient",
+            "status": "confirmed",
+            "evidence": "Disclosed untuned numerical opposite-vector nearest pairing",
+            "phases": []
+          }
+        ]
+      }
+    }
+  },
+  "v0101": {
+    "selection": [
+      "raw_added_fp"
+    ],
+    "diagnosis": {
+      "station": "v0101",
+      "scenario": "mixed",
+      "cohort_seed": 2026101532,
+      "positive_transient": true,
+      "modes": {
+        "vf_vl_image": {
+          "status": "success",
+          "visual_intervals": 2,
+          "snapped_intervals": 1,
+          "verified_intervals": 0,
+          "rejection_reasons": [
+            "independent_wins",
+            "unordered_or_same_edge"
+          ],
+          "outside_free_graph": 1,
+          "outside_all_pelt_edges": 0,
+          "pure": {
+            "tp_days": 2,
+            "fp_days": 14
+          },
+          "snap": {
+            "tp_days": 0,
+            "fp_days": 23
+          },
+          "verified": {
+            "tp_days": 0,
+            "fp_days": 0
+          },
+          "complement": {
+            "tp_days": 32,
+            "fp_days": 0,
+            "added_tp_days": 0,
+            "added_fp_days": 0
+          },
+          "raw_complement": {
+            "tp_days": 32,
+            "fp_days": 14,
+            "added_tp_days": 0,
+            "added_fp_days": 14
+          }
+        },
+        "vf_vl_text": {
+          "status": "success",
+          "visual_intervals": 0,
+          "snapped_intervals": 0,
+          "verified_intervals": 0,
+          "rejection_reasons": [],
+          "outside_free_graph": 0,
+          "outside_all_pelt_edges": 0,
+          "pure": {
+            "tp_days": 0,
+            "fp_days": 0
+          },
+          "snap": {
+            "tp_days": 0,
+            "fp_days": 0
+          },
+          "verified": {
+            "tp_days": 0,
+            "fp_days": 0
+          },
+          "complement": {
+            "tp_days": 32,
+            "fp_days": 0,
+            "added_tp_days": 0,
+            "added_fp_days": 0
+          },
+          "raw_complement": {
+            "tp_days": 32,
+            "fp_days": 0,
+            "added_tp_days": 0,
+            "added_fp_days": 0
+          }
+        }
+      }
+    },
+    "truth_events": [
+      {
+        "kind": "deformation",
+        "start": 611,
+        "end": 688,
+        "status": "confirmed",
+        "evidence": "simulation mechanism",
+        "phases": [
+          {
+            "kind": "acceleration",
+            "start": 611,
+            "end": 636
+          },
+          {
+            "kind": "steady",
+            "start": 637,
+            "end": 662
+          },
+          {
+            "kind": "deceleration",
+            "start": 663,
+            "end": 688
+          }
+        ]
+      },
+      {
+        "kind": "spike",
+        "start": 632,
+        "end": 632,
+        "status": "confirmed",
+        "evidence": "simulation mechanism",
+        "phases": []
+      },
+      {
+        "kind": "step",
+        "start": 638,
+        "end": 638,
+        "status": "confirmed",
+        "evidence": "simulation mechanism",
+        "phases": []
+      },
+      {
+        "kind": "transient",
+        "start": 661,
+        "end": 692,
+        "status": "confirmed",
+        "evidence": "simulation mechanism",
+        "phases": []
+      }
+    ],
+    "method_predictions": {
+      "Truth": {
+        "events": [
+          {
+            "kind": "deformation",
+            "start": 611,
+            "end": 688,
+            "status": "confirmed",
+            "evidence": "simulation mechanism",
+            "phases": [
+              {
+                "kind": "acceleration",
+                "start": 611,
+                "end": 636
+              },
+              {
+                "kind": "steady",
+                "start": 637,
+                "end": 662
+              },
+              {
+                "kind": "deceleration",
+                "start": 663,
+                "end": 688
+              }
+            ]
+          },
+          {
+            "kind": "spike",
+            "start": 632,
+            "end": 632,
+            "status": "confirmed",
+            "evidence": "simulation mechanism",
+            "phases": []
+          },
+          {
+            "kind": "step",
+            "start": 638,
+            "end": 638,
+            "status": "confirmed",
+            "evidence": "simulation mechanism",
+            "phases": []
+          },
+          {
+            "kind": "transient",
+            "start": 661,
+            "end": 692,
+            "status": "confirmed",
+            "evidence": "simulation mechanism",
+            "phases": []
+          }
+        ]
+      },
+      "Visual raw": {
+        "events": [
+          {
+            "start": 644,
+            "end": 657,
+            "kind": "transient",
+            "status": "confirmed",
+            "evidence": "short observations",
+            "phases": []
+          },
+          {
+            "start": 686,
+            "end": 687,
+            "kind": "transient",
+            "status": "confirmed",
+            "evidence": "short observations",
+            "phases": []
+          }
+        ]
+      },
+      "Visual + numerical complement": {
+        "events": [
+          {
+            "start": 632,
+            "end": 632,
+            "kind": "spike",
+            "status": "confirmed",
+            "evidence": "default classifier decision on GNSS observation features",
+            "phases": []
+          },
+          {
+            "start": 661,
+            "end": 692,
+            "kind": "transient",
+            "status": "confirmed",
+            "evidence": "Paired shift-and-return regression wins information criterion",
+            "phases": []
+          },
+          {
+            "start": 638,
+            "end": 638,
+            "kind": "step",
+            "status": "confirmed",
+            "evidence": "Unpaired segmented displacement level jump",
+            "phases": []
+          },
+          {
+            "start": 622,
+            "end": 673,
+            "kind": "deformation",
+            "status": "confirmed",
+            "evidence": "Bounded raw-displacement trajectory improves information criterion over background plus jumps",
+            "phases": []
+          }
+        ]
+      },
+      "Numerical nearest": {
+        "events": [
+          {
+            "start": 632,
+            "end": 632,
+            "kind": "spike",
+            "status": "confirmed",
+            "evidence": "default classifier decision on GNSS observation features",
+            "phases": []
+          },
+          {
+            "start": 661,
+            "end": 692,
+            "kind": "transient",
+            "status": "confirmed",
+            "evidence": "Paired shift-and-return regression wins information criterion",
+            "phases": []
+          },
+          {
+            "start": 638,
+            "end": 638,
+            "kind": "step",
+            "status": "confirmed",
+            "evidence": "Unpaired segmented displacement level jump",
+            "phases": []
+          },
+          {
+            "start": 622,
+            "end": 673,
+            "kind": "deformation",
+            "status": "confirmed",
+            "evidence": "Bounded raw-displacement trajectory improves information criterion over background plus jumps",
+            "phases": []
+          }
+        ]
+      }
+    }
+  }
+}

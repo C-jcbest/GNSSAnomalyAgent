@@ -1,0 +1,389 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<feed xmlns:opensearch="http://a9.com/-/spec/opensearch/1.1/" xmlns:arxiv="http://arxiv.org/schemas/atom" xmlns="http://www.w3.org/2005/Atom">
+  <id>https://arxiv.org/api/zxXENTWPySm3kNF5s4+6zGZ+R7s</id>
+  <title>arXiv Query: search_query=all:"time series" AND all:anomaly AND all:agent&amp;id_list=&amp;start=0&amp;max_results=12</title>
+  <updated>2026-10-15T08:20:25Z</updated>
+  <link href="https://arxiv.org/api/query?search_query=all:%22time+series%22+AND+(all:anomaly+AND+all:agent)&amp;start=0&amp;max_results=12&amp;id_list=" type="application/atom+xml"/>
+  <opensearch:itemsPerPage>12</opensearch:itemsPerPage>
+  <opensearch:totalResults>30</opensearch:totalResults>
+  <opensearch:startIndex>0</opensearch:startIndex>
+  <entry>
+    <id>http://arxiv.org/abs/2610.02255v1</id>
+    <title>MACTS-EM: Multi-Agent Collaborative Time Series Forecasting with Emergent Memory</title>
+    <updated>2026-09-30T19:30:32Z</updated>
+    <link href="https://arxiv.org/abs/2610.02255v1" rel="alternate" type="text/html"/>
+    <link href="https://arxiv.org/pdf/2610.02255v1" rel="related" type="application/pdf" title="pdf"/>
+    <summary>Time series forecasting remains a critical challenge across numerous domains. Despite significant advancements, existing approaches struggle with complex phenomena such as regime shifts, cross-domain knowledge transfer, and multimodal data integration. This paper introduces Multi-Agent Collaborative Time Series Forecasting with Emergent Memory (MACTS-EM), a novel framework where specialised agents collaborate to achieve superior forecasting performance. The MACTS-EM architecture integrates: (1) domain-specialised forecasting agents for pattern recognition, anomaly detection, causal inference, and uncertainty quantification; (2) a meta-cognitive layer for dynamic agent allocation; (3) an emergent memory mechanism enabling cross-domain pattern transfer; (4) multimodal contextual integration; and (5) adversarial robustness components. Evaluation across financial markets, climate patterns, energy consumption, and pandemic propagation demonstrates that MACTS-EM outperforms existing approaches in most scenarios, with 8-12% improvement in forecasting accuracy, 22-27% better zero-shot transfer capability, 16-21% enhanced resilience during regime shifts, and 15-18% faster recovery after distribution shifts. Our findings suggest that collaborative, agentic approaches to time series forecasting represent a promising direction beyond traditional architectures, particularly for complex real-world scenarios requiring multi-resolution temporal understanding and contextual adaptation.</summary>
+    <category term="cs.LG" scheme="http://arxiv.org/schemas/atom"/>
+    <category term="cs.MA" scheme="http://arxiv.org/schemas/atom"/>
+    <published>2026-09-30T19:30:32Z</published>
+    <arxiv:comment>16 pages, 3 figures, 5 tables</arxiv:comment>
+    <arxiv:primary_category term="cs.LG"/>
+    <author>
+      <name>Ahmad Shahi</name>
+    </author>
+    <author>
+      <name>Mamehgol Yousefi</name>
+    </author>
+  </entry>
+  <entry>
+    <id>http://arxiv.org/abs/2609.27277v1</id>
+    <title>TimeEvo: Failure-Driven Self-Evolution of a Time Series Agent</title>
+    <updated>2026-09-23T03:08:12Z</updated>
+    <link href="https://arxiv.org/abs/2609.27277v1" rel="alternate" type="text/html"/>
+    <link href="https://arxiv.org/pdf/2609.27277v1" rel="related" type="application/pdf" title="pdf"/>
+    <summary>Time series agents answer analytical questions by calling external tools, and which tools they carry is decided by people before the agent runs. However, we identify two failures in this setup. Human-Agent Tool Misalignment: a library of 21 expert-curated tools helps on some tasks and hurts on others, dropping anomaly accuracy under every backbone we test. Silent Harm: one round of generic self-revision changes 147 answers and breaks 56 of them, while the final score moves by less than a point. Both follow from the same gap: whether a tool helps is decided question by question at runtime, while tools are supplied in advance and judged by a single average. To address this, we propose TimeEvo, which clusters an agent's diagnosed failures into capability gaps, plans a measurement for each, synthesizes evidence-only tools that fill them, and admits the candidate library only through a paired admission gate. Experiments on ten time series QA tasks and three backbones show that TimeEvo, starting from an empty library, improves accuracy on every task and every backbone, and that a library grown on a cheap model still gains when it is installed into stronger ones. Code is available at https://github.com/Muyiiiii/TimeEvo.</summary>
+    <category term="cs.AI" scheme="http://arxiv.org/schemas/atom"/>
+    <category term="cs.LG" scheme="http://arxiv.org/schemas/atom"/>
+    <published>2026-09-23T03:08:12Z</published>
+    <arxiv:primary_category term="cs.AI"/>
+    <author>
+      <name>Jie Yang</name>
+    </author>
+    <author>
+      <name>Yan Zheng</name>
+    </author>
+    <author>
+      <name>Jiarui Sun</name>
+    </author>
+    <author>
+      <name>Xiran Fan</name>
+    </author>
+    <author>
+      <name>Junpeng Wang</name>
+    </author>
+    <author>
+      <name>Liang Wang</name>
+    </author>
+    <author>
+      <name>Zelin Xu</name>
+    </author>
+    <author>
+      <name>Qinghua Liu</name>
+    </author>
+    <author>
+      <name>Zhengyu Fang</name>
+    </author>
+    <author>
+      <name>Yiwei Cai</name>
+    </author>
+    <author>
+      <name>Philip S. Yu</name>
+    </author>
+  </entry>
+  <entry>
+    <id>http://arxiv.org/abs/2608.27182v1</id>
+    <title>TraceBench: Controlled Evaluation of LLM Agents for Time-Series Root-Cause Attribution</title>
+    <updated>2026-08-27T14:29:13Z</updated>
+    <link href="https://arxiv.org/abs/2608.27182v1" rel="alternate" type="text/html"/>
+    <link href="https://arxiv.org/pdf/2608.27182v1" rel="related" type="application/pdf" title="pdf"/>
+    <summary>LLM agents are increasingly applied to anomaly detection and root-cause analysis in time-series observations collected from real-world systems; however, their performance on these tasks has not been systematically evaluated under controlled conditions. We introduce TraceBench, a simulation-based framework for generating controlled root-cause attribution tasks. In each generated task, an agent receives time-series observations produced by simulating a physical dynamical system and must determine whether a system parameter was altered during the simulation and, if so, which one. Using TraceBench, we generate tasks from three interpretable mechanical systems and systematically evaluate four LLM agents across controlled experimental conditions, yielding new insights into how these agents analyze time-series observations from dynamical systems. Our results show that agents benefit substantially from domain context and explore data primarily through numerical console output rather than visualizations. We also find that agents generally perform worse when required to produce a Python script that maps each time-series sample to a predicted root-cause label than when they submit predictions directly. We release our datasets, agent trajectories, experimental results, and a leaderboard on our website, tracebench.github.io.</summary>
+    <category term="cs.LG" scheme="http://arxiv.org/schemas/atom"/>
+    <published>2026-08-27T14:29:13Z</published>
+    <arxiv:primary_category term="cs.LG"/>
+    <author>
+      <name>Tommaso Bendinelli</name>
+    </author>
+    <author>
+      <name>Artur Dox</name>
+    </author>
+    <author>
+      <name>Christian Holz</name>
+    </author>
+  </entry>
+  <entry>
+    <id>http://arxiv.org/abs/2608.26226v1</id>
+    <title>LLM Agents for Time-Series: A Survey</title>
+    <updated>2026-08-26T15:48:35Z</updated>
+    <link href="https://arxiv.org/abs/2608.26226v1" rel="alternate" type="text/html"/>
+    <link href="https://arxiv.org/pdf/2608.26226v1" rel="related" type="application/pdf" title="pdf"/>
+    <summary>LLM-based agents are increasingly being developed for time-series problems, but their design choices vary substantially across task settings. This survey adopts a problem-driven taxonomy that organizes these systems by the time-series problems they address rather than by isolated technical components. We group existing systems into four categories: forecasting and reasoning, augmentation and synthesis, anomaly detection and diagnosis, and decision support. Within each category, we examine how task requirements shape agent architecture, tool use, and memory design. We further summarize representative datasets and environments, and compare reported model performance under shared or closely related settings. Overall, this survey offers a task-oriented guide to designing LLM-based agents for time-series problems and identifies open gaps for future work.</summary>
+    <category term="cs.AI" scheme="http://arxiv.org/schemas/atom"/>
+    <published>2026-08-26T15:48:35Z</published>
+    <arxiv:comment>Accepted to Findings of EMNLP 2026</arxiv:comment>
+    <arxiv:primary_category term="cs.AI"/>
+    <author>
+      <name>Yilong Chen</name>
+    </author>
+    <author>
+      <name>Xiao Qin</name>
+    </author>
+    <author>
+      <name>Chenghao Liu</name>
+    </author>
+    <author>
+      <name>Liang Wu</name>
+    </author>
+    <author>
+      <name>Noelle I. Samia</name>
+    </author>
+    <author>
+      <name>Kaize Ding</name>
+    </author>
+  </entry>
+  <entry>
+    <id>http://arxiv.org/abs/2608.08859v1</id>
+    <title>Agentic Anomaly Detection with ORCA-Style Dynamic Inductive Bias Adaptation in Multimodal Wearable Time Series Data</title>
+    <updated>2026-08-09T18:49:13Z</updated>
+    <link href="https://arxiv.org/abs/2608.08859v1" rel="alternate" type="text/html"/>
+    <link href="https://arxiv.org/pdf/2608.08859v1" rel="related" type="application/pdf" title="pdf"/>
+    <summary>Wireless Body Area Networks (WBANs) generate multivariate physiological time series that are highly nonstationary and must often be processed under strict computational and memory constraints. A critical yet underexplored challenge in this setting is selecting an appropriate temporal receptive field, which serves as a strong inductive bias for anomaly detection models. Existing approaches typically rely on fixed temporal contexts, which can perform inconsistently across heterogeneous signal regimes and require dataset-specific tuning. We propose ORCA, an agentically controlled anomaly detection framework that dynamically adapts the temporal receptive field at inference time based on lightweight signal statistics. Rather than introducing additional trainable parameters or learned policies, ORCA employs a supervisory controller that autonomously selects among discrete temporal contexts, enabling state-dependent inductive bias adaptation without retraining. Across a custom WBAN dataset, ORCA achieves performance comparable to the strongest fixed-context baselines (AUROC = 0.99) while eliminating the need to tune temporal horizons in advance. We further evaluate ORCA on MIMIC-IV as a challenging out-of-distribution benchmark, observing conservative generalization behavior without performance collapse under heterogeneous clinical conditions. These results highlight adaptive temporal inductive bias control as a practical and robust design principle for anomaly detection in resource-constrained, nonstationary physiological time series.</summary>
+    <category term="cs.LG" scheme="http://arxiv.org/schemas/atom"/>
+    <category term="cs.AI" scheme="http://arxiv.org/schemas/atom"/>
+    <published>2026-08-09T18:49:13Z</published>
+    <arxiv:primary_category term="cs.LG"/>
+    <author>
+      <name>Anushka Roy</name>
+    </author>
+    <author>
+      <name>Jyotirmoy Singh</name>
+    </author>
+    <author>
+      <name>Shreea Bose</name>
+    </author>
+    <author>
+      <name>Chittaranjan Hota</name>
+    </author>
+  </entry>
+  <entry>
+    <id>http://arxiv.org/abs/2608.03391v2</id>
+    <title>TimeRLM: Recursive Language Models Enable Precise Anomaly Localization in Long-Context Time-Series</title>
+    <updated>2026-09-06T17:11:58Z</updated>
+    <link href="https://arxiv.org/abs/2608.03391v2" rel="alternate" type="text/html"/>
+    <link href="https://arxiv.org/pdf/2608.03391v2" rel="related" type="application/pdf" title="pdf"/>
+    <summary>Precise anomaly localization over long-context time series is a crucial task in monitoring applications across clinical care, industrial operations, financial services, and logistics, where brief evidence may hide inside long spans of high-frequency data. Time-Series Language Models (TSLMs) are able to ingest time series data and verbalize findings on anomalies in natural language; however, recent benchmarks report a decrease in retrieval performance at long contexts, mirroring failure modes in text, vision, and audio. In the text domain, Recursive Language Models (RLMs) can recover much of this lost performance by keeping context external to the large language model (LLM), allowing the model to query it through code. We present TimeRLM, an RLM formulation for time-series that sequentially manipulates the signal using code and vision capabilities. We further introduce AnomalyXL, a synthetic long-context anomaly localization benchmark with programmatically injected anomalies that require precise retrieval. We implement five different task categories and two variants: AnomalyXL-MCQ and AnomalyXL-Localize. TimeRLM outperforms every evaluated TSLM and single-pass baseline on four of the five AnomalyXL-Localize tasks, reaching 0.682 IoU on localization and 0.745 on classify-with-evidence, versus at most 0.329 and 0.072 across all baselines. We post-train TimeRLM using reinforcement learning. The resulting model further improves performance and requires approximately one-third as many agent interaction turns as its untrained base model to produce a final answer. On unseen real-world ECG, sleep and software observability recordings, the post-trained TimeRLM retains or improves performance, surpassing TSLMs despite being trained exclusively on synthetic data. Our findings suggest recursive interaction with time-series is an effective approach for long-horizon retrieval.</summary>
+    <category term="cs.LG" scheme="http://arxiv.org/schemas/atom"/>
+    <published>2026-08-04T09:40:45Z</published>
+    <arxiv:comment>Open source code and datasets: https://github.com/OpenTSLM/TimeRLM</arxiv:comment>
+    <arxiv:primary_category term="cs.LG"/>
+    <author>
+      <name>Nicolas Zumarraga</name>
+    </author>
+    <author>
+      <name>Lorenzo Steno</name>
+    </author>
+    <author>
+      <name>Ning Wang</name>
+    </author>
+    <author>
+      <name>Max Rosenblattl</name>
+    </author>
+    <author>
+      <name>Thomas Kaar</name>
+    </author>
+    <author>
+      <name>Maxwell A. Xu</name>
+    </author>
+    <author>
+      <name>Kevin O'Sullivan</name>
+    </author>
+    <author>
+      <name>Markus Kreft</name>
+    </author>
+    <author>
+      <name>Elgar Fleisch</name>
+    </author>
+    <author>
+      <name>Paul Schmiedmayer</name>
+    </author>
+    <author>
+      <name>Patrick Langer</name>
+    </author>
+    <author>
+      <name>Robert Jakob</name>
+    </author>
+  </entry>
+  <entry>
+    <id>http://arxiv.org/abs/2606.28467v1</id>
+    <title>An Agentic AI Pipeline for Appliance-Level Energy Anomaly Detection and LLM-Driven Recommendations</title>
+    <updated>2026-06-26T14:15:51Z</updated>
+    <link href="https://arxiv.org/abs/2606.28467v1" rel="alternate" type="text/html"/>
+    <link href="https://arxiv.org/pdf/2606.28467v1" rel="related" type="application/pdf" title="pdf"/>
+    <summary>Appliance-level energy monitoring in office buildings produces noisy alerts that non-expert facility managers struggle to use. This paper proposes an end-to-end agentic pipeline that combines deep time-series forecasting, variational anomaly detection, and LLM-based reasoning to generate prioritized, actionable maintenance recommendations. The system tracks seven office appliances using a hybrid Singular Spectrum Analysis (SSA) and Long Short-Term Memory (LSTM) forecasting model, and applies a per-appliance LSTM Variational Autoencoder (VAE) with attention to flag abnormal daily consumption episodes. A three-stage LangChain pipeline begins with a Context Agent that always retrieves three core RAG sources (model reliability, hourly baseline, and expert knowledge) and conditionally adds up to three more (forecast context, anomaly history, global baseline) based on event characteristics, capped at eight reasoning steps. A Diagnosis Agent converts the evidence into a structured JSON diagnosis, and a Report Agent renders a human-readable narrative. A reflective memory layer incorporates operator feedback. The dashboard shows real-time 30-minute forecasts, intraday consumption, the previous day anomaly report, and a feedback form. We evaluate the forecasting model, anomaly detector with appliance-specific thresholds, and LLM reasoning on a 16-scenario benchmark including sustained and transient spikes, unexpected shutdowns, and systemic events, comparing five LLM backends under static vs. dynamic retrieval. Dynamic retrieval matches full static retrieval across all backends while cutting average context from six to three-six sources per event. The best backend scores 90.4/100 with a 100% pass rate at a 70-point threshold, and a fully local 7B-parameter model passes all 16 scenarios.</summary>
+    <category term="cs.LG" scheme="http://arxiv.org/schemas/atom"/>
+    <category term="cs.AI" scheme="http://arxiv.org/schemas/atom"/>
+    <category term="cs.CL" scheme="http://arxiv.org/schemas/atom"/>
+    <published>2026-06-26T14:15:51Z</published>
+    <arxiv:comment>07 pages, 01 figure, accepted for presentation at the IEEE International Conference on Communication, Computing, Networking, and Control in Cyber-Physical Systems (CCNCPS 2026)</arxiv:comment>
+    <arxiv:primary_category term="cs.LG"/>
+    <author>
+      <name>Dihia Falouz</name>
+    </author>
+    <author>
+      <name>Aida Douaibia</name>
+    </author>
+    <author>
+      <name>Amine Bechar</name>
+    </author>
+    <author>
+      <name>Youssef Elmir</name>
+    </author>
+    <author>
+      <name>Abbes Amira</name>
+    </author>
+    <author>
+      <name>Adel Oulefki</name>
+    </author>
+  </entry>
+  <entry>
+    <id>http://arxiv.org/abs/2606.06261v1</id>
+    <title>DAST: A VLM-LLM Framework for Cross-Interface Anomaly Detection in O-RAN</title>
+    <updated>2026-06-04T15:05:04Z</updated>
+    <link href="https://arxiv.org/abs/2606.06261v1" rel="alternate" type="text/html"/>
+    <link href="https://arxiv.org/pdf/2606.06261v1" rel="related" type="application/pdf" title="pdf"/>
+    <summary>O-RAN enables a disaggregated baseband stack with programmable functions that communicate over standardized open interfaces. The same openness that enables multi-vendor composition also expands the attack surface across logically decoupled tiers that make up the compute continuum. Among these threats, Denial-of-Service and performance-degradation attacks, which account for the majority of catalogued O-RAN threats, are particularly difficult to detect. Traditional Time-Series Anomaly Detection (TSAD) methods fail in this new regime where labelled baselines are scarce, threats evolve faster than detectors can be retrained, and the high-dimensional multivariate telemetry overwhelms monolithic inference models. To address these challenges, we present DAST, a zero-shot multi-agent framework for cross-interface anomaly detection in O-RAN that chains a three-stage VLM $\rightarrow$ LLM $\rightarrow$ VLM pipeline. DAST converts multivariate KPI streams into visual representations, scores textual per-interface descriptions against O-RAN domain knowledge, and verifies suspects on high-resolution heatmaps to output the problematic interfaces, the anomalous time intervals, an indicative O-RAN WG11-aligned operational impact rating and the decision rationale. We evaluate DAST on real network traces collected from an O-RAN testbed under representative performance degradation scenarios, achieving 0.910 F1-Score and 0.843 Accuracy, outperforming state-of-the-art TSAD baselines.</summary>
+    <category term="cs.NI" scheme="http://arxiv.org/schemas/atom"/>
+    <category term="cs.AI" scheme="http://arxiv.org/schemas/atom"/>
+    <category term="cs.ET" scheme="http://arxiv.org/schemas/atom"/>
+    <category term="cs.MA" scheme="http://arxiv.org/schemas/atom"/>
+    <published>2026-06-04T15:05:04Z</published>
+    <arxiv:comment>7 pages, 5 figures. This work has been submitted to the IEEE for possible publication</arxiv:comment>
+    <arxiv:primary_category term="cs.NI"/>
+    <author>
+      <name>Francesco Spinelli</name>
+    </author>
+    <author>
+      <name>Esteban Municio</name>
+    </author>
+    <author>
+      <name>Pau Baguer</name>
+    </author>
+    <author>
+      <name>Gines Garcia-Aviles</name>
+    </author>
+    <author>
+      <name>Xavier Costa-Perez</name>
+    </author>
+  </entry>
+  <entry>
+    <id>http://arxiv.org/abs/2606.05860v2</id>
+    <title>GenAutoML: An Agentic Framework for Dynamic Architecture Generation and Optimization in Time-Series Analysis</title>
+    <updated>2026-06-11T12:39:42Z</updated>
+    <link href="https://arxiv.org/abs/2606.05860v2" rel="alternate" type="text/html"/>
+    <link href="https://arxiv.org/pdf/2606.05860v2" rel="related" type="application/pdf" title="pdf"/>
+    <summary>Designing neural architectures for time-series forecasting and anomaly detection remains a resource-intensive task that often requires substantial domain expertise. Traditional Automated Machine Learning (AutoML) systems typically rely on static, predefined search spaces, limiting their ability to adapt to diverse data characteristics. We present GenAutoML, an agentic framework that leverages Large Language Models (LLMs) as neural architects to bridge natural-language requirements and executable PyTorch implementations. The framework incorporates a Sandboxed Reflection Loop for autonomous code refinement and a Signature-Aware Runtime that enforces architectural consistency and execution safety. To improve robustness under non-stationary conditions, we further introduce a Dynamic Reversible Instance Normalization (Dyn-RevIN) wrapper. Experiments on the ETTh1, ETTm1, and Weather benchmarks demonstrate that GenAutoML can dynamically generate task-specific neural architectures tailored to dataset characteristics. Among the generated models, WaveInterferenceNet achieves inference latency below 0.01 ms per sample while maintaining competitive predictive performance. By emphasizing computational efficiency, architectural adaptability, and stable optimization behavior, GenAutoML enables the creation of ultra-lightweight neural networks suitable for resource-constrained and latency-sensitive Edge AI deployments.</summary>
+    <category term="cs.LG" scheme="http://arxiv.org/schemas/atom"/>
+    <published>2026-06-04T08:35:40Z</published>
+    <arxiv:comment>26 pages, 17 figures, 12 tables. Under review</arxiv:comment>
+    <arxiv:primary_category term="cs.LG"/>
+    <author>
+      <name>Oleeviya Babu Poikarayil</name>
+    </author>
+    <author>
+      <name>Cédric Schockaert</name>
+    </author>
+    <author>
+      <name>Abdulrahman Nahhas</name>
+    </author>
+    <author>
+      <name>Christian Daase</name>
+    </author>
+    <author>
+      <name>Mursal Dawodi</name>
+    </author>
+    <author>
+      <name>Jawid Ahmad Baktash</name>
+    </author>
+  </entry>
+  <entry>
+    <id>http://arxiv.org/abs/2606.01925v2</id>
+    <title>QoEReasoner: An Agentic Reasoning Framework for Automated and Explainable QoE Diagnosis in RANs</title>
+    <updated>2026-06-02T13:36:36Z</updated>
+    <link href="https://arxiv.org/abs/2606.01925v2" rel="alternate" type="text/html"/>
+    <link href="https://arxiv.org/pdf/2606.01925v2" rel="related" type="application/pdf" title="pdf"/>
+    <summary>Diagnosing Quality-of-Experience (QoE) degradations in operational Radio Access Networks (RANs) is a critical but notoriously complex task, traditionally requiring labor-intensive expert analysis over high-dimensional, cross-layer telemetry. While Large Language Models (LLMs) offer unprecedented reasoning capabilities, they are fundamentally unsuited for raw RANs troubleshooting: they fail at numeric time-series analysis, hallucinate protocol-violating causal links, and lack the stateful rigor required for multi-step fault localization. To bridge this gap, we present QoEReasoner, an end-to-end, LLM-driven agentic system designed for automated and explainable QoE diagnosis. QoEReasoner tames the inherent unpredictability of LLMs by grounding their reasoning in the physical realities of the network. It employs deterministic tools to reliably translate raw numeric KPIs into structured evidence, enforces protocol-consistent fault propagation through a domain-specific Knowledge Base, and leverages a Historical Bank of expert-validated cases to guide hypothesis generation. A stateful central planner orchestrates this closed-loop process across anomaly detection, causal tracing, and root-cause localization. Evaluations on real-world operational RANs datasets demonstrate that QoEReasoner outperforms strong baselines by 18\%-40\% in accuracy across multiple diagnostic tasks. Furthermore, it reduces diagnostic time from approximately 30 minutes of manual expert analysis to just 3 minutes per session, delivering highly interpretable, expert-grade reports while remaining robust across diverse LLM backbones.</summary>
+    <category term="cs.MA" scheme="http://arxiv.org/schemas/atom"/>
+    <published>2026-06-01T08:58:07Z</published>
+    <arxiv:primary_category term="cs.MA"/>
+    <author>
+      <name>Qizhe Li</name>
+    </author>
+    <author>
+      <name>Haolong Chen</name>
+    </author>
+    <author>
+      <name>Shan Dai</name>
+    </author>
+    <author>
+      <name>Zhuo Li</name>
+    </author>
+    <author>
+      <name>Zhiwei Hu</name>
+    </author>
+    <author>
+      <name>Xuan Li</name>
+    </author>
+    <author>
+      <name>Guangxu Zhu</name>
+    </author>
+    <author>
+      <name>Qingjiang Shi</name>
+    </author>
+  </entry>
+  <entry>
+    <id>http://arxiv.org/abs/2606.01498v1</id>
+    <title>TimeSage-MT: A Multi-Turn Benchmark for Evaluating Agentic Time Series Reasoning</title>
+    <updated>2026-05-31T23:34:35Z</updated>
+    <link href="https://arxiv.org/abs/2606.01498v1" rel="alternate" type="text/html"/>
+    <link href="https://arxiv.org/pdf/2606.01498v1" rel="related" type="application/pdf" title="pdf"/>
+    <summary>Time series data inform critical decisions across many real-world domains. While large language model (LLM) agents can analyze data through natural language and tools, it remains unclear whether they can conduct reliable time series analysis across multi-turn conversations. Existing benchmarks focus on single-step tasks such as forecasting and anomaly detection, overlooking practical workflows where user goals evolve, agents must build on prior analyses, and conclusions emerge from accumulated evidence. In this work, we introduce TimeSage-MT, a multi-turn benchmark for agentic time series reasoning with 240 tasks and 2,680 dialogue turns across 8 real-world domains, spanning basic exploration to decision-oriented analysis. TimeSage-MT is built through a reproducible pipeline that converts real-world time series data into multi-turn conversations with verifiable answers. It provides a unified evaluation protocol and public leaderboard for comparing time series agentic systems. To demonstrate the benchmark's utility, we evaluate frontier LLMs alongside TimeSage, a novel structured agent equipped with a comprehensive time series skill library. The results show sharp performance drops on decision-oriented tasks, driven by failures in memory, uncertainty handling, and domain-based decision making. TimeSage-MT exposes critical gaps in current agentic reasoning and provides a rigorous foundation for future development.</summary>
+    <category term="cs.CL" scheme="http://arxiv.org/schemas/atom"/>
+    <category term="cs.AI" scheme="http://arxiv.org/schemas/atom"/>
+    <published>2026-05-31T23:34:35Z</published>
+    <arxiv:primary_category term="cs.CL"/>
+    <author>
+      <name>Yaxuan Kong</name>
+    </author>
+    <author>
+      <name>Qingren Yao</name>
+    </author>
+    <author>
+      <name>Yuqi Nie</name>
+    </author>
+    <author>
+      <name>Yichen Li</name>
+    </author>
+    <author>
+      <name>Yilei Shao</name>
+    </author>
+    <author>
+      <name>Stefan Zohren</name>
+    </author>
+    <author>
+      <name>Anna Vettoruzzo</name>
+    </author>
+    <author>
+      <name>Joaquin Vanschoren</name>
+    </author>
+    <author>
+      <name>Ming Jin</name>
+    </author>
+    <author>
+      <name>Qingsong Wen</name>
+    </author>
+  </entry>
+  <entry>
+    <id>http://arxiv.org/abs/2605.05725v2</id>
+    <title>Detecting Time Series Anomalies Like an Expert: A Multi-Agent LLM Framework with Specialized Analyzers</title>
+    <updated>2026-09-25T11:54:45Z</updated>
+    <link href="https://arxiv.org/abs/2605.05725v2" rel="alternate" type="text/html"/>
+    <link href="https://arxiv.org/pdf/2605.05725v2" rel="related" type="application/pdf" title="pdf"/>
+    <summary>Time-series anomaly detection often returns scores or intervals, while analysts need to understand the abnormal behavior and the evidence supporting it. We introduce SAGE (Specialized Analyzer Group for Expert-like Detection), a multi-agent framework for evidence-grounded diagnosis of univariate time series. Four specialized Analyzers examine point, structural, seasonal, and pattern anomalies using numerical tools and diagnostic visualizations. A Detector integrates their evidence into intervals, candidate types, and evidence-strength confidence scores; a Supervisor translates these records into analyst-facing reports. Synthetic in-context references are constructed from normal-reference training segments, reducing dependence on real anomalous demonstrations. Across Yahoo S5, KPI, and WSD, SAGE achieves an average Point-F1 of 66.26, the highest among the evaluated methods. Controlled synthetic evaluation examines localization and type diagnosis, while component ablations support the detection contribution of specialized evidence generation. In a method-blind human study, evaluators rate SAGE's diagnostic outputs as more useful than those of the compared methods.</summary>
+    <category term="cs.AI" scheme="http://arxiv.org/schemas/atom"/>
+    <published>2026-05-07T06:17:35Z</published>
+    <arxiv:comment>Preprint. 8 pages main text, 28 pages total, with appendix</arxiv:comment>
+    <arxiv:primary_category term="cs.AI"/>
+    <author>
+      <name>Hyeongwon Kang</name>
+    </author>
+    <author>
+      <name>Jeongseob Kim</name>
+    </author>
+    <author>
+      <name>Jinwoo Park</name>
+    </author>
+    <author>
+      <name>Pilsung Kang</name>
+    </author>
+  </entry>
+</feed>

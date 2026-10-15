@@ -1,0 +1,2377 @@
+AnomaMind: Agentic Time Series Anomaly Detection with Tool-Augmented Reasoning
+Report GitHub Issue
+×
+Title:
+Content selection saved. Describe the issue below:
+Description:
+Submit without GitHub
+Submit in GitHub
+arXiv is now an independent nonprofit!
+Learn more
+×
+Back to arXiv
+Why HTML?
+Report Issue
+Back to Abstract
+Download PDF
+Abstract.
+1
+Introduction
+2
+Related Work
+2.1
+Conventional Anomaly Detection
+2.2
+LLM-based Anomaly Detection
+3
+Preliminaries
+3.1
+Problem Formulation
+3.2
+Thinking Process for Anomaly Detection
+4
+The Proposed AnomaMind
+4.1
+Framework Overview
+4.2
+Detection Tool Construction
+Interval Localization
+Feature Extraction
+Knowledge Memory
+4.3
+Coarse-to-Fine Detection Workflow
+Coarse Evidence Acquisition
+Adaptive Evidence Construction
+Anomaly Detection
+Iterative Refinement
+4.4
+Hybrid Decision Mechanism
+General–Specialized Hybrid Reasoning
+Reinforcement Learning for Anomaly Decision Learning
+5
+Experiments
+5.1
+Experimental Settings
+5.1.1
+Datasets
+5.1.2
+Baselines
+5.1.3
+Implemention Details
+5.2
+Main Results
+5.3
+Ablation Studies
+5.3.1
+Detection Tool Ablation.
+5.3.2
+Workflow Component Ablation.
+5.3.3
+Reinforcement Learning Ablation.
+5.4
+Exploration Analysis
+5.4.1
+Impact of Backbone Size.
+5.4.2
+Impact of Reward Component.
+5.4.3
+Impact of General-Purpose Models
+5.4.4
+Impact of Different Specialized Modules.
+5.4.5
+Impact of Different Training Convergence.
+5.5
+Case Studies
+6
+Conclusion
+References
+A
+Dataset Details
+B
+Baseline Details
+C
+Extended Analysis and Experimental Results
+C.1
+Visualization Case
+C.2
+Feature Extraction Component Ablation
+C.3
+Temperature Sensitivity Analysis
+D
+Additional Implementation Details
+D.1
+Data Preprocessing
+D.1.1
+Normalization
+D.1.2
+Indexing
+D.1.3
+Detrending
+D.2
+Sample Construction
+D.3
+Evaluation Metrics
+D.3.1
+F1-Score
+D.3.2
+Best-F1
+D.4
+Prompt Templates
+License: CC BY 4.0
+arXiv:2602.13807v1 [cs.LG] 14 Feb 2026
+AnomaMind: Agentic Time Series Anomaly Detection with Tool-Augmented Reasoning
+DOI:
+XXXXXXX.XXXXXXX
+Conference:
+Make sure to enter the correct
+conference title from your rights confirmation email; June 03–05,
+2018; Woodstock, NY
+ISBN:
+978-1-4503-XXXX-X/2018/06
+Xiaoyu Tao
+Affiliation:
+State Key Laboratory of Cognitive Intelligence, University of Science and Technology of China
+,
+Hefei, Anhui Province
+,
+China
+email:
+txytiny@mail.ustc.edu.cn
+,
+Yuchong Wu
+Affiliation:
+State Key Laboratory of Cognitive Intelligence, University
+of Science and Technology of China
+,
+Hefei, Anhui Province
+,
+China
+email:
+wu3091455397@mail.ustc.edu.cn
+,
+Mingyue Cheng
+Affiliation:
+State Key Laboratory of Cognitive Intelligence, University of Science and Technology of China
+,
+Hefei, Anhui Province
+,
+China
+email:
+mycheng@ustc.edu.cn
+,
+Ze Guo
+Affiliation:
+State Key Laboratory of Cognitive Intelligence, University
+of Science and Technology of China
+,
+Hefei, Anhui Province
+,
+China
+email:
+gz1504921411@mail.ustc.edu.cn
+and
+Tian Gao
+Affiliation:
+State Key Laboratory of Cognitive Intelligence, University
+of Science and Technology of China
+,
+Hefei, Anhui Province
+,
+China
+email:
+ustc25gt@mail.ustc.edu.cn
+Received  5 June 2009
+Abstract.
+Time series anomaly detection is critical in many real-world applications, where effective solutions must localize anomalous regions and support reliable decision-making under complex settings. However, most existing methods frame anomaly detection as a purely discriminative prediction task with fixed feature inputs, rather than an evidence-driven diagnostic process. As a result, they often struggle when anomalies exhibit strong context dependence or diverse patterns. We argue that these limitations stem from the lack of adaptive feature preparation, reasoning-aware detection, and iterative refinement during inference. To address these challenges, we propose AnomaMind, an agentic time series anomaly detection framework that reformulates anomaly detection as a sequential decision-making process. AnomaMind operates through a structured workflow that progressively localizes anomalous intervals in a coarse-to-fine manner, augments detection through multi-turn tool interactions for adaptive feature preparation, and refines anomaly decisions via self-reflection. The workflow is supported by a set of reusable tool engines, enabling context-aware diagnostic analysis. A key design of AnomaMind is an explicitly designed hybrid inference mechanism for tool-augmented anomaly detection. In this mechanism, general-purpose models are responsible for autonomous tool interaction and self-reflective refinement, while core anomaly detection decisions are learned through reinforcement learning under verifiable workflow-level feedback, enabling task-specific optimization within a flexible reasoning framework. Extensive experiments across diverse settings demonstrate that AnomaMind consistently improves anomaly detection performance. The code is available at
+https://github.com/Xiaoyu-Tao/AnomaMind-TS
+.
+Keywords:
+Anomaly Detection, Agentic Workflow, Tool-augmented Reasoning
+1.
+Introduction
+Time series anomaly detection (TSAD) plays a critical role in many real-world systems, where detected anomalies often trigger downstream actions such as alarms, diagnosis, or intervention
+(
+Zamanzadeh Darban et al., 2024
+)
+. In such settings, effective anomaly detection requires more than assigning anomaly scores to individual observations. Practical solutions need to localize anomalous intervals, interpret diagnostic evidence, and support decision-making under evolving contextual conditions with limited or uncertain information
+(
+Zhou et al., 2023
+)
+. As time series data become increasingly diverse and context-dependent, these requirements place growing demands on anomaly detection methods beyond pure predictive accuracy, calling for evidence-driven and decision-oriented detection paradigms
+(
+Schmidl et al., 2022
+)
+.
+Despite substantial progress
+(
+Zamanzadeh Darban et al., 2024
+;
+Chandola et al., 2009
+)
+, most existing time series anomaly detection methods remain model-centric. They typically frame anomaly detection as a purely discriminative prediction task
+(
+Gupta et al., 2013
+)
+with fixed and predefined feature inputs, rather than as an evidence-driven diagnostic process. Such formulations rely on rigid feature representations and scoring mechanisms, offering limited flexibility during inference. As a result, these methods often struggle when anomalies exhibit strong context dependence, evolve over time, or require careful analysis across different temporal resolutions
+(
+Dong et al., 2024
+)
+. More fundamentally, they lack mechanisms to adaptively prepare informative features, reason over intermediate evidence, or revise earlier decisions as new information becomes available, which limits their effectiveness in complex real-world settings under concept shift.
+We argue that these limitations stem from a fundamental mismatch between how anomaly detection is commonly formulated and how it is carried out in practice
+(
+Cheng et al., 2026
+)
+. In real-world scenarios, anomaly detection rarely reduces to a single scoring or prediction step. Instead, it typically unfolds as a sequential decision-making process, in which analysts progressively narrow down suspicious intervals, selectively examine informative signals, and refine judgments based on intermediate findings
+(
+Goswami et al., 2025
+)
+. Decisions made at earlier stages directly influence what evidence is gathered next and how subsequent analyses are conducted
+(
+Jiang et al., 2024
+)
+. However, such iterative and adaptive processes are difficult to capture within conventional model-centric formulations, which treat anomaly detection as a static mapping from inputs to anomaly scores and provide limited support for dynamic reasoning or decision revision during inference
+(
+Russell-Gilbert et al., 2024
+;
+Liu et al., 2025
+)
+. These observations motivate moving beyond isolated predictive models toward agentic time series systems that organize anomaly detection as a system-level reasoning and decision process, integrating evidence acquisition, analysis, and refinement within a coherent and adaptive workflow.
+While this perspective motivates a shift toward agentic time series systems, realizing such an anomaly detection process in practice poses substantial challenges. Effective anomaly reasoning requires access to diverse and reusable analytical capabilities, which calls for the careful design of tool engines that support adaptive feature preparation and diagnostic analysis without relying on hard-coded, task-specific pipelines
+(
+Wu et al., 2026
+)
+. In addition, the detection workflow must be explicitly structured to support progressive decision-making, in which coarse localization and fine-grained analysis are coherently integrated rather than treated as isolated stages
+(
+Xu et al., 2022
+)
+. Such a coarse-to-fine workflow is essential for balancing efficiency, accuracy, and interpretability. Beyond workflow design, inference in agentic settings introduces fundamental challenges related to stability and optimization. While general-purpose models offer flexibility for open-ended reasoning and autonomous tool coordination, they often lack the inductive biases and task-specific learning signals required for reliable anomaly detection decisions
+(
+Alnegheimish et al., 2024
+)
+. Ignoring these complementary strengths and limitations can lead to brittle or inefficient inference behaviors. Addressing this challenge calls for a hybrid inference paradigm that explicitly separates flexible reasoning from task-specific decision learning, combining general-purpose models with explicit and verifiable learning objectives to enable effective anomaly reasoning.
+To address these challenges, we propose AnomaMind, an agentic time series anomaly detection framework that explicitly formulates anomaly detection as a sequential decision-making process. AnomaMind operates through a structured agentic workflow that incrementally constructs diagnostic evidence and refines anomaly decisions over multiple steps. Rather than relying on fixed feature inputs, AnomaMind progressively localizes anomalous intervals in a coarse-to-fine manner and gradually augments detection via multi-turn interactions with reusable analysis tools for adaptive feature preparation and diagnostic support. Crucially, AnomaMind adopts a hybrid inference mechanism: general-purpose models handle tool invocation and self-reflective refinement, while core anomaly detection decisions are optimized through reinforcement learning under verifiable workflow-level feedback. This design enables AnomaMind to integrate flexible reasoning with task-specific optimization, while preserving effectiveness in complex anomaly detection scenarios.
+Our main contributions are summarized as follows:
+•
+We reformulate the task of TSAD as a sequential decision-making problem, moving beyond discriminative formulations toward an evidence-driven diagnostic process.
+•
+We propose
+AnomaMind
+, an agentic time series anomaly detection framework that realizes this reformulation through a structured coarse-to-fine workflow, tool-augmented adaptive feature preparation, and a hybrid inference mechanism that combines general-purpose reasoning with task-specific anomaly decision learning.
+•
+We conduct extensive experiments across diverse time series anomaly detection settings, demonstrating that AnomaMind consistently improves detection performance and validating the effectiveness of agentic, tool-augmented reasoning for TSAD.
+2.
+Related Work
+In this section, we first review conventional anomaly detection methods, and then introduce recent advances in LLM–based TSAD.
+2.1.
+Conventional Anomaly Detection
+Existing time series anomaly detection methods span several modeling paradigms
+(
+Gupta et al., 2013
+;
+Chandola et al., 2009
+)
+. Early statistical approaches detect anomalies by assuming that normal time series follow predefined distributional or structural patterns
+(
+Hyndman and Athanasopoulos, 2018
+;
+Roberts, 2000
+)
+. Classical detectors model regular temporal components such as trend and seasonality, and identify anomalies by thresholding residuals between observed values and model-based predictions, as exemplified by ARIMA-based residual analysis
+(
+Rousseeuw and Leroy, 2003
+)
+. Density-based approaches estimate data distributions or relative sample densities and treat sparse observations as anomalies
+(
+Schölkopf et al., 2001
+;
+Breunig et al., 2000
+)
+.
+These methods offer clear interpretability but rely heavily on handcrafted assumptions.
+To alleviate this limitation, data-driven deep learning methods adopt representation learning to model temporal patterns more flexibly
+(
+Su et al., 2019
+)
+. Reconstruction-based approaches, exemplified by USAD
+(
+Audibert et al., 2020
+)
+, learn compact representations of normal time series using autoencoder architectures and treat large reconstruction errors as indicators of anomalies. In contrast, forecasting-based approaches, such as LSTM-based predictors
+(
+Chauhan and Vig, 2015
+)
+, model temporal dynamics by predicting future values from historical observations and identify anomalies through large deviations between predicted and actual outcomes.
+2.2.
+LLM-based Anomaly Detection
+More recently, LLM-based approaches have been explored for time series anomaly detection (TSAD)
+(
+Bhat et al., 2025
+)
+. Early studies predominantly convert numerical sequences into textual representations and directly feed them into pre-trained LLMs for zero-shot or few-shot anomaly identification. Representative methods such as SigLLM
+(
+Alnegheimish et al., 2024
+)
+and prompt-based GPT-4 detectors
+(
+Liu et al., 2026
+)
+demonstrate that LLMs can capture coarse abnormal patterns without task-specific training, leveraging the rich prior knowledge. However, these detection-only approaches essentially operate as static input–output mappings, lacking explicit modeling of temporal structure and iterative diagnostic reasoning.
+In contrast, training-based strategies introduce task-specific adaptation mechanisms, typically via parameter-efficient fine-tuning or learnable adapters, to better align with anomaly detection objectives
+(
+Dong et al., 2024
+;
+Jin et al., 2024
+)
+. A representative example is AnomalyLLM
+(
+Liu et al., 2024
+)
+, which targets TSAD by distilling anomaly-aware representations from a pre-trained LLM into a lightweight student network and detecting anomalies through teacher–student feature discrepancies. More recently, agentic and tool-augmented LLM frameworks have been proposed to further advance TSAD by reframing detection as a multi-step decision-making process. For instance, ARGOS
+(
+Gu et al., 2025
+)
+employs multiple LLM-based agents to iteratively generate, validate, and refine anomaly detection rules through interaction with external tools and contextual data sources.
+Figure 1.
+Overview of AnomaMind, an agentic TSAD framework that adopts a structured coarse-to-fine workflow built upon a toolkit box and supported by hybrid inference.
+3.
+Preliminaries
+In this section, we first formalize time series anomaly detection from a sequential decision-making perspective, and then discuss the underlying reasoning process that motivates agentic detection.
+3.1.
+Problem Formulation
+We formalize time series anomaly detection as a
+sequential decision-making process
+that unfolds over multiple interaction steps. Given an input time series
+𝐱
+1
+:
+T
+=
+{
+x
+1
+,
+x
+2
+,
+…
+,
+x
+T
+}
+\mathbf{x}_{1:T}=\{x_{1},x_{2},\dots,x_{T}\}
+together with optional contextual information
+𝐜
+1
+:
+T
+\mathbf{c}_{1:T}
+, anomaly detection is no longer driven by fixed feature inputs. Instead, detection is carried out through a sequence of decisions under
+evolving inputs
+, where newly acquired evidence is incrementally incorporated during inference. Specifically, the detection process proceeds over discrete steps
+k
+=
+1
+,
+…
+,
+K
+k=1,\dots,K
+. At each step, the decision-making process operates on the information currently available, which may include the original observations, contextual signals, intermediate analysis results, and outputs produced by external analytical tools. Based on this evolving information, an action
+a
+k
+a_{k}
+is selected from a structured action space. Actions may correspond to operations such as refining candidate anomalous regions, invoking diagnostic analyses, or updating anomaly judgments. Importantly, intermediate findings and tool outputs are treated as part of the effective input for subsequent steps, allowing anomaly decisions to be iteratively refined as new evidence becomes available.
+3.2.
+Thinking Process for Anomaly Detection
+To better understand the limitations of static anomaly detection formulations, it is instructive to examine how anomaly detection is typically performed in practice. Rather than making an immediate and definitive judgment, anomaly detection often follows an iterative reasoning process that gradually constructs evidence and refines decisions
+(
+Pimentel et al., 2014
+;
+Chandrayan et al.,
+)
+. The process commonly begins with coarse screening, where the goal is to quickly identify regions (or intervals) that are potentially suspicious while filtering out large portions of evidently normal behavior
+(
+Jiang et al., 2025
+)
+. At this stage, decisions are intentionally conservative and uncertainty-aware, favoring broad candidate regions over precise localization. Subsequently, targeted analysis is performed on the selected regions. This stage involves selectively examining informative signals, such as statistical irregularities, temporal patterns, or contextual inconsistencies, to assess whether the observed behavior can be reasonably explained. Importantly, such analysis is adaptive: different regions may require different types of examination depending on their characteristics and surrounding context. Throughout this process, anomaly judgments are rarely final at the moment they are made. Early decisions are often provisional and may be revised as new evidence becomes available
+(
+Gu et al., 2024
+;
+Zhang et al., 2025
+)
+. Additional analysis can either strengthen an initial suspicion or invalidate it, leading to decision refinement or rollback. This iterative reasoning process highlights that anomaly detection is fundamentally evidence-driven and decision-oriented, rather than a single-pass scoring operation. Viewed from this perspective, time series anomaly detection can be naturally formulated as a sequential procedure of candidate localization, evidence construction, and decision refinement, motivating agentic approaches that explicitly model anomaly detection as a sequential decision-making process in real-world practice.
+4.
+The Proposed AnomaMind
+Building on the sequential decision-making formulation and evidence-driven reasoning introduced earlier, we present AnomaMind, an agentic framework for time series anomaly detection. AnomaMind operationalizes anomaly detection through adaptive feature preparation, tool-augmented reasoning, and iterative decision refinement, as detailed in the following sections.
+4.1.
+Framework Overview
+Figure
+1
+illustrates the overall framework of AnomaMind. The framework is built upon a unified toolkit that provides structured analytical capabilities for perception, evidence construction, and reasoning support, including interval localization, feature extraction, and knowledge memory. Leveraging this toolkit, AnomaMind organizes anomaly detection as a progressive decision workflow consisting of coarse-grained interval localization, fine-grained detection, and iterative refinement. Within this workflow, different functional roles coordinate to support sequential decision-making. To support this progressive workflow, AnomaMind adopts a hybrid inference mechanism that combines general-purpose LLM-based reasoning with task-specific model learning. The general-purpose LLM is responsible for autonomous tool invocation and self-reflection, while anomaly detection decisions are optimized through reinforcement learning under workflow-level feedback. The following subsections detail each component.
+4.2.
+Detection Tool Construction
+To support evidence-driven and sequential anomaly detection, AnomaMind is equipped with a structured collection of analytical tools that provide complementary capabilities for perception, numerical analysis, and contextual reasoning. Rather than embedding all functionality into a single model, these tools are designed as modular and reusable components that can be flexibly invoked during the detection workflow. Each tool focuses on a distinct aspect of anomaly analysis, enabling coarse evidence acquisition, fine-grained verification, and semantic interpretation to be carried out in a coordinated manner. Together, they form the foundation of the tool-augmented workflow, allowing anomaly detection decisions to be informed by diverse and progressively refined evidence.
+Interval Localization
+The interval localization
+𝒯
+p
+\mathcal{T}_{p}
+is designed to perform visual-aware interval localization on a normalized time series
+𝐱
+1
+:
+T
+\mathbf{x}_{1:T}
+.
+Specifically, this tool is implemented using a vision–language model (VLM)
+(
+Zhu et al., 2023
+)
+, which operates on visualized representations of the time series to perceptually identify anomalous regions. By analyzing visual cues such as shape irregularities, abrupt changes, and distributional shifts in the plotted sequences,
+𝒯
+p
+\mathcal{T}_{p}
+produces a set of coarse-grained candidate intervals that potentially contain anomalous behavior. By leveraging visual perception rather than raw numerical comparison, the tool provides an initial narrowing of the search space, allowing subsequent stages to focus on informative regions instead of the entire sequence.
+Feature Extraction
+The feature extraction
+𝒯
+v
+\mathcal{T}_{v}
+is responsible for fine-grained analysis of candidate intervals
+𝒮
+\mathcal{S}
+through rigorous numerical examination.
+Specifically, it performs statistical feature extraction as well as local and global structural pattern analysis, providing concrete numerical evidence to support subsequent anomaly confirmation or rejection.
+These tools are sensitive to numerical deviations and structural irregularities, enabling precise discrimination between true anomalies and benign fluctuations.
+By explicitly exposing verification operations, the framework ensures that anomaly detection decisions are grounded in measurable criteria, forming the basis for reliable fine-grained analysis and iterative refinement.
+Knowledge Memory
+The knowledge memory
+𝒯
+k
+\mathcal{T}_{k}
+provides semantic and contextual support by supplying anomaly type explanations, domain knowledge descriptions, and tool semantics.
+These tools offer high-level contextual features
+𝒞
+\mathcal{C}
+that complement numerical evidence, helping the framework interpret intermediate patterns and guide subsequent decision-making.
+By grounding detection results in domain-relevant knowledge,
+𝒯
+k
+\mathcal{T}_{k}
+supports informed reasoning and facilitates tool-oriented planning.
+This explicit grounding helps bridge the gap between numerical observations
+𝐱
+1
+:
+T
+\mathbf{x}_{1:T}
+and interpretable anomaly characterization, improving reasoning consistency across interaction steps.
+4.3.
+Coarse-to-Fine Detection Workflow
+AnomaMind realizes anomaly detection through a structured coarse-to-fine workflow that unfolds over multiple interaction steps.
+Rather than producing anomaly decisions in a single pass, the workflow progressively constructs diagnostic evidence and refines decisions as new information becomes available.
+The workflow is organized into four key stages, each addressing a distinct role in the detection process: coarse evidence acquisition to localize suspicious intervals, adaptive evidence construction to gather informative cues, reasoning-based anomaly detection to produce fine-grained decisions, and iterative refinement to evaluate and revise intermediate outcomes.
+These stages are tightly coupled and executed in a sequential manner, allowing earlier decisions to guide subsequent analysis while enabling principled revision when necessary.
+Together, this coarse-to-fine design provides a unified mechanism for efficient localization, context-aware analysis, and accurate decision-making under complex and evolving conditions.
+Coarse Evidence Acquisition
+The workflow begins with coarse evidence acquisition, whose goal is to efficiently narrow down potentially anomalous regions from the full time series.
+At this stage, AnomaMind leverages visual perception to identify suspicious temporal intervals based on salient pattern irregularities, abrupt changes, or distributional shifts.
+Rather than performing precise anomaly judgments, this stage prioritizes recall and uncertainty awareness, producing a set of coarse candidate intervals that are likely to contain abnormal behavior.
+By filtering out evidently normal regions early on, coarse evidence acquisition significantly reduces the subsequent search space and enables focused analysis.
+Adaptive Evidence Construction
+Given the candidate intervals identified in the coarse stage, AnomaMind proceeds to adaptive evidence construction.
+In this stage, large language models autonomously orchestrate tool interactions to gather informative numerical and contextual evidence relevant to the detected candidates.
+The selection and invocation of tools are driven by intermediate observations and accumulated context, allowing different intervals to be analyzed using different diagnostic strategies.
+This adaptive process enables flexible feature preparation and evidence accumulation, ensuring that subsequent detection decisions are grounded in task-relevant and context-aware information rather than fixed feature pipelines.
+Anomaly Detection
+Based on the constructed evidence, AnomaMind performs reasoning-based anomaly detection to produce fine-grained decisions.
+This stage is responsible for assessing whether candidate intervals exhibit anomalous behavior, given the numerical features, structural patterns, and contextual cues collected earlier.
+Unlike rule-based or purely discriminative approaches, the detection policy is optimized through reinforcement learning under workflow-level feedback, allowing it to adapt to the sequential and interdependent nature of detection decisions.
+As a result, anomaly detection decisions reflect both local evidence and the broader diagnostic context accumulated across interaction steps.
+Iterative Refinement
+AnomaMind further incorporates an iterative refinement mechanism to evaluate and revise detection outcomes when necessary.
+Through self-reflection, intermediate decisions are examined for potential inconsistency, uncertainty, or insufficient evidence.
+If refinement is triggered, the workflow may return to earlier stages to acquire additional evidence, adjust analysis strategies, or reconsider candidate intervals.
+This iterative process enables principled decision revision and prevents premature or brittle conclusions, allowing anomaly detection to progressively converge toward more reliable results.
+4.4.
+Hybrid Decision Mechanism
+AnomaMind adopts a hybrid decision mechanism to support effective and stable inference across the coarse-to-fine detection workflow.
+The key idea is to explicitly separate general-purpose reasoning from task-specific anomaly decision learning, allowing different components of the workflow to leverage their respective strengths.
+Specifically, AnomaMind combines (i) general-purpose large language models for flexible reasoning and tool invocation, and (ii) a detection-specific anomaly decision module optimized through reinforcement learning under workflow-level feedback.
+General–Specialized Hybrid Reasoning
+In AnomaMind, general-purpose LLMs are responsible for driving reasoning-intensive and structurally flexible components of the workflow. These components include coarse-grained interval localization based on visual perception, autonomous invocation of feature extraction and diagnostic tools, and self-reflective assessment of intermediate detection results. Such stages require adaptive reasoning, dynamic control flow, and the ability to integrate heterogeneous evidence, which are well supported by general-purpose models without task-specific retraining. By contrast, these components do not require precise anomaly decision boundaries or strong task-specific inductive biases. Instead of enforcing rigid prediction objectives at this level, AnomaMind leverages the expressive reasoning capability of LLMs to flexibly explore suspicious regions, construct informative evidence, and guide subsequent decision steps. This design avoids over-constraining early-stage reasoning and enables the workflow to adapt to diverse anomaly patterns and contextual variations.
+Reinforcement Learning for Anomaly Decision Learning
+While general-purpose reasoning is effective for evidence construction and workflow control, accurate anomaly detection decisions demand task-specific learning signals and stable optimization for precise boundary localization.
+To this end, AnomaMind introduces a dedicated anomaly detection module whose decision policies are trained through reinforcement learning. Unlike prior approaches
+(
+Cheng et al., 2025
+)
+that apply multi-turn reinforcement learning to train the entire detection workflow end-to-end, AnomaMind restricts reinforcement learning to this local decision module
+(
+Li et al., 2025
+)
+, significantly reducing training complexity. The reinforcement learning objective is defined based on workflow-level feedback rather than isolated prediction errors. Specifically, rewards are computed by evaluating the quality of anomaly detection decisions in the context of the full workflow, taking into account factors such as consistency with verification evidence, alignment with diagnostic outcomes, and the effectiveness of subsequent refinement steps. By grounding rewards in workflow-level feedback, the learned detection policy captures task-relevant inductive biases while remaining compatible with the surrounding reasoning-driven workflow.
+5.
+Experiments
+In this section, we introduce the experimental settings, followed by the main results, exploratory analyses, and finally a case study.
+Table 1.
+Statistics of time series anomaly detection datasets with different annotation levels.
+Dataset
+All Points
+Test Points
+Train Points
+Anomalies
+Category
+YAHOO
+404,092
+75,000
+120,000
+0.6%
+P&Seq
+TODS
+75,000
+35,000
+40,000
+6.3%
+P&Seq
+IOPS
+655,131
+61,800
+81,400
+1.3%
+Seq
+WSD
+1,936,340
+65,700
+120,000
+0.6%
+Seq
+Table 2.
+Comparison of anomaly detection performance on multiple benchmark datasets.
+Bold
+and
+underlined
+values indicate the best and second-best performance, respectively.
+Method
+YAHOO
+TODS
+IOPS
+WSD
+Precision
+Recall
+F1
+Best-F1
+Average
+Precision
+Recall
+F1
+Best-F1
+Average
+Precision
+Recall
+F1
+Best-F1
+Average
+Precision
+Recall
+F1
+Best-F1
+Average
+FFT-AD
+0.134
+0.225
+0.135
+0.193
+0.172
+0.589
+0.110
+0.174
+0.319
+0.298
+0.511
+0.186
+0.220
+0.368
+0.321
+0.438
+0.571
+0.428
+0.542
+0.495
+SR
+0.499
+0.678
+0.531
+0.714
+0.606
+0.398
+0.057
+0.098
+0.380
+0.233
+0.317
+0.256
+0.237
+0.294
+0.276
+0.467
+0.402
+0.370
+0.472
+0.428
+CNN
+0.355
+0.478
+0.399
+0.515
+0.437
+0.026
+0.009
+0.013
+0.252
+0.075
+0.502
+0.186
+0.218
+0.309
+0.304
+0.781
+0.350
+0.407
+0.545
+0.521
+M2N2
+0.230
+0.459
+0.296
+0.490
+0.369
+0.354
+0.014
+0.024
+0.162
+0.138
+0.435
+0.151
+0.171
+0.323
+0.270
+0.445
+0.268
+0.261
+0.414
+0.347
+LSTMAD
+0.394
+0.449
+0.360
+0.504
+0.427
+0.010
+0.006
+0.007
+0.252
+0.069
+0.492
+0.178
+0.186
+0.337
+0.298
+0.738
+0.355
+0.397
+0.397
+0.513
+TransAD
+0.007
+0.015
+0.082
+0.113
+0.054
+0.340
+0.031
+0.078
+0.116
+0.142
+0.216
+0.107
+0.101
+0.399
+0.206
+0.545
+0.177
+0.237
+0.290
+0.312
+LLMAD
+0.261
+0.536
+0.352
+0.371
+0.380
+0.428
+0.078
+0.139
+0.139
+0.196
+0.601
+0.180
+0.277
+0.234
+0.323
+0.265
+0.152
+0.193
+0.194
+0.201
+LLM-TSAD
+0.196
+0.734
+0.255
+0.255
+0.360
+0.603
+0.356
+0.424
+0.424
+0.452
+0.129
+0.427
+0.157
+0.157
+0.218
+0.145
+0.338
+0.133
+0.133
+0.187
+OFA
+0.023
+0.193
+0.103
+0.153
+0.118
+0.284
+0.091
+0.135
+0.219
+0.182
+0.145
+0.191
+0.136
+0.274
+0.186
+0.343
+0.520
+0.461
+0.461
+0.446
+TimesFM
+0.551
+0.868
+0.653
+0.850
+0.730
+0.650
+0.187
+0.283
+0.421
+0.385
+0.693
+0.115
+0.162
+0.264
+0.308
+0.757
+0.247
+0.307
+0.464
+0.444
+Chronos
+0.610
+0.859
+0.684
+0.812
+0.741
+0.642
+0.191
+0.286
+0.411
+0.383
+0.615
+0.111
+0.150
+0.254
+0.282
+0.763
+0.231
+0.298
+0.442
+0.433
+AnomaMind
+0.841
+0.837
+0.821
+0.835
+0.834
+0.454
+0.439
+0.464
+0.475
+0.458
+0.635
+0.446
+0.467
+0.468
+0.504
+0.740
+0.486
+0.570
+0.590
+0.597
+5.1.
+Experimental Settings
+5.1.1.
+Datasets
+Table
+1
+summarizes the statistics and annotation granularity of the datasets used in our experiments. We evaluate our method on four widely used TSAD benchmarks. Notably, P denotes point anomalies, while Seq indicates sequence anomalies. The Yahoo
+(
+Laptev et al., 2015
+)
+dataset released by Yahoo Labs consists of real and synthetic time series derived from production traffic. WSD
+(
+Zhang et al., 2022
+)
+contains real-world key performance indicators collected from large-scale web services, while IOPS
+(
+Xu et al., 2018
+)
+includes system-level performance metrics reflecting service scale, quality, and machine health. TODS
+(
+Lai et al., 2021
+)
+is a synthetic benchmark that covers diverse anomaly types, including point anomalies, contextual anomalies, and collective anomalies, and is designed to provide controlled yet challenging evaluation across varying temporal patterns and anomaly characteristics.
+5.1.2.
+Baselines
+We compare our method with a diverse set of state-of-the-art time-series anomaly detection approaches, spanning statistical-based, deep learning–based, foundation model–based, and LLM-based paradigms. The statistical baselines include FFT-AD
+1
+1
+1
+https://github.com/TimeEval/TimeEval-algorithms
+and SR
+(
+Ren et al., 2019
+)
+, which detects anomalies based on spectral characteristics in the frequency domain. Deep learning–based methods consist of CNN
+(
+Munir et al., 2018
+)
+, M2N2
+(
+Kim et al., 2024
+)
+, LSTMAD
+(
+Malhotra et al., 2015
+)
+, and TransAD
+(
+Tuli et al., 2022
+)
+, covering supervised, unsupervised, and test-time adaptive settings. We further include recent LLM-based approaches, including LLM-TSAD
+(
+Park et al.,
+)
+, LLMAD
+(
+Liu et al., 2025
+)
+, and OFA
+(
+Zhou et al., 2023
+)
+, which adapt large language models to time series anomaly detection through prompting, alignment, or in-context reasoning.
+We also compare with foundation models, including TimesFM
+(
+Das et al., 2024
+)
+and Chronos
+(
+Ansari et al., 2024
+)
+, which leverage large-scale pretraining to detect anomalies via forecasting deviations or direct anomaly inference.
+Table 3.
+Ablation study of the different detection tool variants across diverse datasets.
+Model
+YAHOO
+TODS
+IOPS
+WSD
+F1
+Best-F1
+F1
+Best-F1
+F1
+Best-F1
+F1
+Best-F1
+w/o Feature Extraction
+0.315
+0.327
+0.258
+0.259
+0.161
+0.176
+0.264
+0.266
+w/o Knowledge Memory
+0.661
+0.704
+0.274
+0.274
+0.254
+0.287
+0.396
+0.408
+w/o Interval Localization
+0.697
+0.699
+0.382
+0.383
+0.424
+0.439
+0.465
+0.467
+Ours
+0.713
+0.715
+0.388
+0.389
+0.449
+0.458
+0.551
+0.559
+5.1.3.
+Implemention Details
+Our framework consists of several specialized components. For fine-grained reasoning, we employ Qwen3-8B
+(
+Bai et al., 2023
+)
+as the backbone, while all other modules use grok-4 as the default LLM. The workflow is optimized via full fine-tuning within the agent-lightning framework, with a learning rate of
+2
+×
+10
+−
+5
+2\times 10^{-5}
+and a batch size of 8, and trained on four NVIDIA A800 GPUs (80GB). We follow official implementations and hyperparameters for all baselines.
+The goal of TSAD is to detect true anomalies while minimizing false alarms, requiring both high recall and precision. We therefore adopt F1 as the primary metric and additionally report Best-F1 by sweeping the detection threshold over a predefined range, following standard TSAD practice.
+5.2.
+Main Results
+As shown in Table
+2
+, AnomaMind consistently demonstrates competitive average performance across the four evaluation metrics. The performance gains are particularly evident on datasets with more complex anomaly characteristics, where static detection methods often struggle to adapt to evolving temporal patterns and contextual dependencies. A closer examination across different baseline categories reveals several notable advantages of the proposed framework.
+Conventional single-pass architectures exhibit limited effectiveness in these settings, suggesting that static input–output discrimination is insufficient for capturing evolving temporal contexts. Foundation models, while effective at achieving high recall, tend to suffer from reduced precision in zero-shot settings, reflecting a tendency to flag benign irregularities as anomalies in the absence of task-specific adaptation. In contrast, AnomaMind attains a more balanced precision–recall trade-off by adopting an agentic reinforcement learning strategy that enables the internalization of task-specific inductive biases.
+Furthermore, compared with existing LLM-based detectors that lack explicit verification mechanisms and often display unstable numerical sensitivity, AnomaMind benefits from a tool-augmented reasoning workflow that supports iterative refinement and decision revision. Overall, these results suggest that reframing anomaly detection as a sequential, evidence-driven decision process—supported by adaptive reasoning, feedback-driven refinement, and specialized tool interaction—provides a promising alternative to conventional model-centric paradigms. conventional model-centric paradigms conventional model-centric paradigms
+5.3.
+Ablation Studies
+5.3.1.
+Detection Tool Ablation.
+As shown in Table
+3
+, the full AnomaMind consistently outperforms all ablated variants across datasets, highlighting the effectiveness of the proposed detection tools. Removing any component leads to a clear performance drop, indicating that each tool contributes complementary information. In particular, excluding feature extraction causes the most severe degradation, underscoring its importance for informative representation learning, while removing knowledge memory or interval localization also degrades performance by limiting historical context modeling and coarse-grained candidate localization. Overall, these results suggest that coordinated tool interaction is essential for effective coarse-to-fine anomaly detection across diverse scenarios.
+Figure 2.
+Performance comparison with and without the evaluator in coarse-to-fine detection workflow.
+5.3.2.
+Workflow Component Ablation.
+As shown in Figure
+2
+, removing the evaluator results in a consistent performance degradation across all datasets, highlighting its importance in the proposed coarse-to-fine detection workflow. The degradation is more pronounced on IOPS and WSD, suggesting that the evaluator plays a key role in validating intermediate detection hypotheses and reducing false alarms through structured verification. In the absence of this component, detection decisions rely solely on coarse signals and are more susceptible to error accumulation across steps. By providing explicit feedback to refine earlier decisions, the evaluator enables the full framework to perform more reliable iterative refinement, leading to more stable detection performance across diverse time series scenarios.
+Figure 3.
+Performance comparison with and without reinforcement learning for anomaly decision learning.
+5.3.3.
+Reinforcement Learning Ablation.
+As shown in Figure
+3
+, removing reinforcement learning results in a consistent and substantial performance degradation across all evaluated datasets, highlighting its importance in the proposed framework. Without reinforcement learning, the model relies primarily on fixed supervision signals and lacks the ability to revise or correct earlier decisions based on downstream outcomes.
+By incorporating reinforcement learning, the agent is able to exploit outcome-driven feedback to refine its decision-making strategy over multiple steps. This allows the model to adjust its reasoning trajectory, suppress false alarms, and progressively improve anomaly judgments beyond coarse initial predictions. As a result, the full framework achieves consistently higher F1 and Best-F1 scores across datasets. Overall, these results indicate that reinforcement learning plays a crucial role in enabling adaptive policy optimization and iterative decision refinement within the agentic anomaly detection workflow.
+5.4.
+Exploration Analysis
+5.4.1.
+Impact of Backbone Size.
+Model scale plays a critical role in the performance of the proposed framework. As shown in Table
+4
+, increasing the backbone size consistently improves detection performance across most datasets, with Qwen3-8B achieving the best F1 and Best-F1 scores. This trend suggests that larger models offer stronger representation and reasoning capacity, enabling more accurate anomaly characterization and refinement. In contrast, smaller variants show inferior performance on complex datasets, indicating limited capacity to capture intricate temporal patterns. Overall, these results demonstrate that sufficient model capacity is essential for fully leveraging the proposed agentic workflow.
+Table 4.
+Impact of backbone model size on anomaly detection performance under specialized reinforcement learning.
+Model
+YAHOO
+TODS
+IOPS
+WSD
+F1
+Best-F1
+F1
+Best-F1
+F1
+Best-F1
+F1
+Best-F1
+Qwen3-0.6B
+0.713
+0.715
+0.388
+0.389
+0.449
+0.458
+0.551
+0.559
+Qwen3-1.7B
+0.749
+0.759
+0.369
+0.389
+0.439
+0.448
+0.542
+0.561
+Qwen3-4B
+0.762
+0.797
+0.394
+0.399
+0.478
+0.479
+0.553
+0.598
+Qwen3-8B
+0.793
+0.821
+0.417
+0.433
+0.531
+0.537
+0.555
+0.630
+5.4.2.
+Impact of Reward Component.
+Reward design plays a crucial role in guiding learning and final performance. As shown in Table
+5
+, the full model consistently outperforms variants that remove individual reward components. Removing the false-positive penalty causes a notable performance drop, indicating the importance of suppressing spurious alarms. Excluding the rule-matching component also degrades performance, highlighting its role in enforcing structural consistency. The most severe degradation occurs when the two-sided reward is removed, leading to near-random detection behavior and underscoring its fundamental role in stabilizing learning. Overall, these results confirm that the integration of all reward components is essential for accurate anomaly detection.
+5.4.3.
+Impact of General-Purpose Models
+As shown in Table
+6
+, instantiating the proposed framework with different general-purpose model variants leads to observable performance, while the overall detection performance remains competitive. Grok-4 exhibits relatively strong performance across benchmarks, indicating its effectiveness as a general-purpose backbone. In contrast, Deepseek-V3.2 performs competitively on IOPS but shows a noticeable performance drop on WSD, reflecting a higher sensitivity to dataset characteristics and anomaly patterns. Overall, these results indicate that the proposed framework is not tightly coupled to a specific general-purpose model, while stronger backbones tend to yield more consistent detection performance across diverse scenarios.
+Table 5.
+Impact of reward component design on reinforcement learning across different datasets.
+Model
+YAHOO
+TODS
+IOPS
+WSD
+F1
+Best-F1
+F1
+Best-F1
+F1
+Best-F1
+F1
+Best-F1
+w/o Two
+0.049
+0.089
+0.343
+0.343
+0.048
+0.082
+0.038
+0.038
+w/o FalsePositive
+0.212
+0.402
+0.377
+0.378
+0.092
+0.200
+0.042
+0.056
+w/o RuleMatching
+0.698
+0.704
+0.366
+0.367
+0.434
+0.434
+0.434
+0.434
+Ours
+0.713
+0.715
+0.388
+0.389
+0.449
+0.458
+0.551
+0.559
+Table 6.
+Experimental results with different general-purpose model variants under the proposed framework.
+Model
+YAHOO
+TODS
+IOPS
+WSD
+F1
+Best-F1
+F1
+Best-F1
+F1
+Best-F1
+F1
+Best-F1
+Grok-4
+0.768
+0.778
+0.397
+0.397
+0.443
+0.445
+0.513
+0.515
+Gemini-2.5
+0.714
+0.723
+0.402
+0.420
+0.414
+0.427
+0.510
+0.535
+Deepseek-V3.2
+0.654
+0.785
+0.410
+0.410
+0.519
+0.523
+0.356
+0.500
+Figure 4.
+An illustrative example of a structured coarse-to-fine workflow for agentic time series anomaly detection.
+5.4.4.
+Impact of Different Specialized Modules.
+As shown in Figure
+5
+, comparing variants that only train the locator or the detector reveals that effective anomaly detection relies on training the detection component. While the LLM-based locator alone demonstrates a strong capability in identifying coarse anomaly candidates, its performance remains limited when reasoning-based anomaly detection is required. This suggests that the LLM lacks the task-specific inductive biases necessary for reliable anomaly discrimination.
+In contrast, training the detector enables the model to internalize anomaly-specific decision boundaries, leading to consistently improved performance across datasets.
+Overall, these results indicate that strong localization alone is insufficient and that explicitly training the detector is essential for compensating for the missing inductive biases of general-purpose LLMs. This further highlights the necessity of agentic anomaly detection frameworks.
+Figure 5.
+Evaluation of distinct specialized module variants during reinforcement learning.
+5.4.5.
+Impact of Different Training Convergence.
+As shown in Figure
+6
+, AnomaMind demonstrates stable training convergence across different datasets and backbone model scales. The reward consistently increases with training steps on all datasets, indicating effective policy optimization through iterative interaction and feedback. While convergence speed varies across datasets, the overall upward trends suggest stable learning behavior. In addition, larger backbone models tend to converge faster and achieve slightly higher rewards, while smaller models still exhibit smooth convergence.
+Overall, these results confirm the effectiveness of the proposed framework. This stability further verifies the effectiveness of reinforcement learning–based optimization.
+Figure 6.
+Effect of different datasets and backbone models on training convergence.
+5.5.
+Case Studies
+Figure
+4
+illustrates a representative example of the proposed tool-augmented, multi-turn agentic anomaly detection process on a periodic time series. The framework first performs coarse localization by combining visual cues with global sinusoidal trends, identifying a suspicious interval where a sharp acceleration disrupts the expected smooth pattern.
+The locator then applies domain-aware verification by focusing on rate-of-change statistics while discarding unstable amplitude-based signals. Guided by this strategy, the actor extracts quantitative evidence using global and local difference Z-scores, revealing a dense outlier cluster indicative of sustained acceleration. The detector integrates multi-level evidence to confirm a violation of the smoothness constraint, and the evaluator further refines the anomaly boundaries by checking logical consistency across visual observations, tool outputs, and domain constraints. The final output is a refined anomaly interval with an interpretable diagnosis, demonstrating the effectiveness of multi-turn reasoning and tool interaction for precise anomaly detection.
+6.
+Conclusion
+In this work, we revisit TSAD from an agentic perspective and argue that effective anomaly detection should be treated as an evidence-driven diagnostic process rather than a static discriminative task. We propose AnomaMind, an agentic TSAD framework that reformulates anomaly detection as a sequential decision-making process with tool-augmented reasoning. By organizing detection into a structured coarse-to-fine workflow, AnomaMind enables adaptive feature preparation through multi-turn tool interactions and improves detection via self-reflective refinement. A key contribution is the hybrid inference mechanism, which decouples flexible reasoning from task-specific decision optimization, allowing general-purpose models to orchestrate tools while anomaly detection policies are learned through reinforcement learning under verifiable workflow-level feedback. Extensive experiments across diverse benchmarks demonstrate consistent performance gains, especially in complex scenarios. We believe AnomaMind represents a promising step toward more reliable, interpretable, and extensible TSAD systems and highlights the broader potential of agentic, tool-augmented reasoning.
+References
+Alnegheimish
+et al.
+(2024)
+S. Alnegheimish, L. Nguyen, L. Berti-Equille, and K. Veeramachaneni
+Large language models can be zero-shot anomaly detectors for time series?
+.
+arXiv preprint arXiv:2405.14755
+.
+Cited by:
+§1
+,
+§2.2
+.
+Ansari
+et al.
+(2024)
+A. F. Ansari, L. Stella, C. Turkmen, X. Zhang, P. Mercado, H. Shen, O. Shchur, S. S. Rangapuram, S. P. Arango, S. Kapoor,
+et al.
+Chronos: learning the language of time series
+.
+arXiv preprint arXiv:2403.07815
+.
+Cited by:
+§5.1.2
+.
+Audibert
+et al.
+(2020)
+J. Audibert, P. Michiardi, F. Guyard, S. Marti, and M. A. Zuluaga
+Usad: unsupervised anomaly detection on multivariate time series
+.
+In
+Proceedings of the 26th ACM SIGKDD international conference on knowledge discovery & data mining
+,
+pp. 3395–3404
+.
+Cited by:
+§2.1
+.
+Bai
+et al.
+(2023)
+J. Bai, S. Bai, Y. Chu, Z. Cui, K. Dang, X. Deng, Y. Fan, W. Ge, Y. Han, F. Huang,
+et al.
+Qwen technical report
+.
+arXiv preprint arXiv:2309.16609
+.
+Cited by:
+§5.1.3
+.
+Bhat
+et al.
+(2025)
+A. Bhat, A. Kumar, A. Chekodu, B. Chandana, and S. Shylaja
+Enhanced anomaly detection in time-series data: a comparative study of univariate approach with transformer and llm methods
+.
+In
+International Conference on Information and Communication Technology for Intelligent Systems
+,
+pp. 261–271
+.
+Cited by:
+§2.2
+.
+Breunig
+et al.
+(2000)
+M. M. Breunig, H. Kriegel, R. T. Ng, and J. Sander
+LOF: identifying density-based local outliers
+.
+In
+Proceedings of the 2000 ACM SIGMOD international conference on Management of data
+,
+pp. 93–104
+.
+Cited by:
+§2.1
+.
+Chandola
+et al.
+(2009)
+V. Chandola, A. Banerjee, and V. Kumar
+Anomaly detection: a survey
+.
+ACM computing surveys (CSUR)
+41
+(
+3
+),
+pp. 1–58
+.
+Cited by:
+§1
+,
+§2.1
+.
+[8]
+A. Chandrayan, Z. Amir, M. Reimherr, A. Mjirda, and A. Pradhan
+LEAD-framework for efficient time-series anomaly detection on large scale data using llms
+.
+In
+1st ICML Workshop on Foundation Models for Structured Data
+,
+Cited by:
+§3.2
+.
+Chauhan and Vig (2015)
+S. Chauhan and L. Vig
+Anomaly detection in ecg time signals via deep long short-term memory networks
+.
+In
+2015 IEEE international conference on data science and advanced analytics (DSAA)
+,
+pp. 1–7
+.
+Cited by:
+§2.1
+.
+Cheng
+et al.
+(2025)
+M. Cheng, J. Ouyang, S. Yu, R. Yan, Y. Luo, Z. Liu, D. Wang, Q. Liu, and E. Chen
+Agent-r1: training powerful llm agents with end-to-end reinforcement learning
+.
+arXiv preprint arXiv:2511.14460
+.
+Cited by:
+§4.4
+.
+Cheng
+et al.
+(2026)
+M. Cheng, X. Tao, Q. Liu, Z. Guo, and E. Chen
+Position: beyond model-centric prediction–agentic time series forecasting
+.
+arXiv preprint arXiv:2602.01776
+.
+Cited by:
+§1
+.
+Das
+et al.
+(2024)
+A. Das, W. Kong, R. Sen, and Y. Zhou
+A decoder-only foundation model for time-series forecasting
+.
+In
+Forty-first International Conference on Machine Learning
+,
+Cited by:
+§5.1.2
+.
+Dong
+et al.
+(2024)
+M. Dong, H. Huang, and L. Cao
+Can llms serve as time series anomaly detectors?
+.
+arXiv preprint arXiv:2408.03475
+.
+Cited by:
+§1
+,
+§2.2
+.
+Goswami
+et al.
+(2025)
+M. Goswami, K. Szafer, A. Choudhry, Y. Cai, S. Li, and A. Dubrawski
+MOMENT: a family of open time-series foundation models
+.
+In
+Forty-first International Conference on Machine Learning
+,
+Cited by:
+§1
+.
+Gu
+et al.
+(2025)
+Y. Gu, Y. Xiong, J. Mace, Y. Jiang, Y. Hu, B. Kasikci, and P. Cheng
+Argos: agentic time-series anomaly detection with autonomous rule generation via large language models
+.
+arXiv preprint arXiv:2501.14170
+.
+Cited by:
+§2.2
+.
+Gu
+et al.
+(2024)
+Z. Gu, B. Zhu, G. Zhu, Y. Chen, M. Tang, and J. Wang
+Anomalygpt: detecting industrial anomalies using large vision-language models
+.
+In
+Proceedings of the AAAI conference on artificial intelligence
+,
+Vol.
+38
+,
+pp. 1932–1940
+.
+Cited by:
+§3.2
+.
+Gupta
+et al.
+(2013)
+M. Gupta, J. Gao, C. C. Aggarwal, and J. Han
+Outlier detection for temporal data: a survey
+.
+IEEE Transactions on Knowledge and data Engineering
+26
+(
+9
+),
+pp. 2250–2267
+.
+Cited by:
+§1
+,
+§2.1
+.
+Hyndman and Athanasopoulos (2018)
+R. J. Hyndman and G. Athanasopoulos
+Forecasting: principles and practice
+.
+OTexts
+.
+Cited by:
+§2.1
+.
+Jiang
+et al.
+(2025)
+C. Jiang, M. Cheng, X. Tao, Q. Mao, J. Ouyang, and Q. Liu
+Tablemind: an autonomous programmatic agent for tool-augmented table reasoning
+.
+arXiv preprint arXiv:2509.06278
+.
+Cited by:
+§3.2
+.
+Jiang
+et al.
+(2024)
+Y. Jiang, Z. Pan, X. Zhang, S. Garg, A. Schneider, Y. Nevmyvaka, and D. Song
+Empowering time series analysis with large language models: a survey
+.
+In
+Proceedings of the Thirty-Third International Joint Conference on Artificial Intelligence
+,
+pp. 8095–8103
+.
+Cited by:
+§1
+.
+Jin
+et al.
+(2024)
+M. Jin, S. Wang, L. Ma, Z. Chu, J. Y. Zhang, X. Shi, P. Chen, Y. Liang, Y. Li, S. Pan,
+et al.
+Time-llm: time series forecasting by reprogramming large language models
+.
+In
+The Twelfth International Conference on Learning Representations
+,
+Cited by:
+§2.2
+.
+Kim
+et al.
+(2024)
+D. Kim, S. Park, and J. Choo
+When model meets new normals: test-time adaptation for unsupervised time-series anomaly detection
+.
+In
+Proceedings of the AAAI conference on artificial intelligence
+,
+Vol.
+38
+,
+pp. 13113–13121
+.
+Cited by:
+§5.1.2
+.
+Lai
+et al.
+(2021)
+K. Lai, D. Zha, G. Wang, J. Xu, Y. Zhao, D. Kumar, Y. Chen, P. Zumkhawaka, M. Wan, D. Martinez,
+et al.
+Tods: an automated time series outlier detection system
+.
+In
+Proceedings of the aaai conference on artificial intelligence
+,
+Vol.
+35
+,
+pp. 16060–16062
+.
+Cited by:
+§5.1.1
+.
+Laptev
+et al.
+(2015)
+N. Laptev, S. Amizadeh, and I. Flint
+Generic and scalable framework for automated time-series anomaly detection
+.
+In
+Proceedings of the 21th ACM SIGKDD international conference on knowledge discovery and data mining
+,
+pp. 1939–1947
+.
+Cited by:
+§5.1.1
+.
+Li
+et al.
+(2025)
+Z. Li, H. Zhang, S. Han, S. Liu, J. Xie, Y. Zhang, Y. Choi, J. Zou, and P. Lu
+In-the-flow agentic system optimization for effective planning and tool use
+.
+arXiv preprint arXiv:2510.05592
+.
+Cited by:
+§4.4
+.
+Liu
+et al.
+(2024)
+C. Liu, S. He, Q. Zhou, S. Li, and W. Meng
+Large language model guided knowledge distillation for time series anomaly detection
+.
+In
+Proceedings of the Thirty-Third International Joint Conference on Artificial Intelligence
+,
+pp. 2162–2170
+.
+Cited by:
+§2.2
+.
+Liu
+et al.
+(2025)
+J. Liu, C. Zhang, J. Qian, M. Ma, S. Qin, C. Bansal, Q. Lin, S. Rajmohan, and D. Zhang
+Large language models can deliver accurate and interpretable time series anomaly detection
+.
+In
+Proceedings of the 31st ACM SIGKDD Conference on Knowledge Discovery and Data Mining V. 2
+,
+pp. 4623–4634
+.
+Cited by:
+§1
+,
+§5.1.2
+.
+Liu
+et al.
+(2026)
+Y. Liu, Y. Luo, X. Li, X. Dong, B. Gu, and Z. Jin
+Evaluating large language models for time series anomaly detection in aerospace software
+.
+arXiv preprint arXiv:2601.12448
+.
+Cited by:
+§2.2
+.
+Malhotra
+et al.
+(2015)
+P. Malhotra, L. Vig, G. Shroff, P. Agarwal,
+et al.
+Long short term memory networks for anomaly detection in time series
+.
+In
+Proceedings
+,
+Vol.
+89
+,
+pp. 94
+.
+Cited by:
+§5.1.2
+.
+Munir
+et al.
+(2018)
+M. Munir, S. A. Siddiqui, A. Dengel, and S. Ahmed
+DeepAnT: a deep learning approach for unsupervised anomaly detection in time series
+.
+Ieee Access
+7
+,
+pp. 1991–2005
+.
+Cited by:
+§5.1.2
+.
+[31]
+J. Park, K. Jung, D. Lee, H. Lee, D. Gwak, C. Park, J. Choo, and J. Cho
+Delving into large language models for effective time-series anomaly detection
+.
+In
+The Thirty-ninth Annual Conference on Neural Information Processing Systems
+,
+Cited by:
+§5.1.2
+.
+Pimentel
+et al.
+(2014)
+M. A. Pimentel, D. A. Clifton, L. Clifton, and L. Tarassenko
+A review of novelty detection
+.
+Signal processing
+99
+,
+pp. 215–249
+.
+Cited by:
+§3.2
+.
+Ren
+et al.
+(2019)
+H. Ren, B. Xu, Y. Wang, Q. Yi,
+et al.
+Time-series anomaly detection service at microsoft
+.
+In
+Proceedings of the 25th ACM SIGKDD International Conference on Knowledge Discovery & Data Mining
+,
+pp. 3009–3017
+.
+External Links:
+Document
+Cited by:
+§5.1.2
+.
+Roberts (2000)
+S. W. Roberts
+Control chart tests based on geometric moving averages
+.
+Technometrics
+42
+(
+1
+),
+pp. 97–101
+.
+Cited by:
+§2.1
+.
+Rousseeuw and Leroy (2003)
+P. J. Rousseeuw and A. M. Leroy
+Robust regression and outlier detection
+.
+John wiley & sons
+.
+Cited by:
+§2.1
+.
+Russell-Gilbert
+et al.
+(2024)
+A. Russell-Gilbert, A. Sommers, A. Thompson, L. Cummins, S. Mittal, S. Rahimi, M. Seale, J. Jaboure, T. Arnold, and J. Church
+Aad-llm: adaptive anomaly detection using large language models
+.
+In
+2024 IEEE International Conference on Big Data (BigData)
+,
+pp. 4194–4203
+.
+Cited by:
+§1
+.
+Schmidl
+et al.
+(2022)
+S. Schmidl, P. Wenig, and T. Papenbrock
+Anomaly detection in time series: a comprehensive evaluation
+.
+Proceedings of the VLDB Endowment
+15
+(
+9
+),
+pp. 1779–1797
+.
+Cited by:
+§1
+.
+Schölkopf
+et al.
+(2001)
+B. Schölkopf, J. C. Platt, J. Shawe-Taylor, A. J. Smola, and R. C. Williamson
+Estimating the support of a high-dimensional distribution
+.
+Neural computation
+13
+(
+7
+),
+pp. 1443–1471
+.
+Cited by:
+§2.1
+.
+Su
+et al.
+(2019)
+Y. Su, Y. Zhao, C. Niu, R. Liu, W. Sun, and D. Pei
+Robust anomaly detection for multivariate time series through stochastic recurrent neural network
+.
+In
+Proceedings of the 25th ACM SIGKDD international conference on knowledge discovery & data mining
+,
+pp. 2828–2837
+.
+Cited by:
+§2.1
+.
+Tuli
+et al.
+(2022)
+S. Tuli, G. Casale, and N. R. Jennings
+Tranad: deep transformer networks for anomaly detection in multivariate time series data
+.
+arXiv preprint arXiv:2201.07284
+.
+Cited by:
+§5.1.2
+.
+Wu
+et al.
+(2026)
+X. Wu, J. Lu, Z. Li, X. Qiu, J. Hu, C. Guo, C. S. Jensen, and B. Yang
+TimeART: towards agentic time series reasoning via tool-augmentation
+.
+arXiv preprint arXiv:2601.13653
+.
+Cited by:
+§1
+.
+Xu
+et al.
+(2018)
+H. Xu, W. Chen, N. Zhao, Z. Li, J. Bu, Z. Li, Y. Liu, Y. Zhao, D. Pei, Y. Feng,
+et al.
+Unsupervised anomaly detection via variational auto-encoder for seasonal kpis in web applications
+.
+In
+Proceedings of the 2018 world wide web conference
+,
+pp. 187–196
+.
+Cited by:
+§5.1.1
+.
+Xu
+et al.
+(2022)
+J. Xu, H. Wu, J. Wang, and M. Long
+Anomaly transformer: time series anomaly detection with association discrepancy
+.
+In
+International Conference on Learning Representations
+,
+Cited by:
+§1
+.
+Zamanzadeh Darban
+et al.
+(2024)
+Z. Zamanzadeh Darban, G. I. Webb, S. Pan, C. Aggarwal, and M. Salehi
+Deep learning for time series anomaly detection: a survey
+.
+ACM Computing Surveys
+57
+(
+1
+),
+pp. 1–42
+.
+Cited by:
+§1
+,
+§1
+.
+Zhang
+et al.
+(2022)
+S. Zhang, Z. Zhong, D. Li, Q. Fan, Y. Sun, M. Zhu, Y. Zhang, D. Pei, J. Sun, Y. Liu,
+et al.
+Efficient kpi anomaly detection through transfer learning for large-scale web services
+.
+IEEE Journal on Selected Areas in Communications
+40
+(
+8
+),
+pp. 2440–2455
+.
+Cited by:
+§5.1.1
+.
+Zhang
+et al.
+(2025)
+X. Zhang, T. Gao, M. Cheng, B. Pan, Z. Guo, Y. Liu, and X. Tao
+AlphaCast: a human wisdom-llm intelligence co-reasoning framework for interactive time series forecasting
+.
+arXiv preprint arXiv:2511.08947
+.
+Cited by:
+§3.2
+.
+Zhou
+et al.
+(2023)
+T. Zhou, P. Niu, L. Sun, R. Jin,
+et al.
+One fits all: power general time series analysis by pretrained lm
+.
+Advances in neural information processing systems
+36
+,
+pp. 43322–43355
+.
+Cited by:
+§1
+,
+§5.1.2
+.
+Zhu
+et al.
+(2023)
+D. Zhu, J. Chen, X. Shen, X. Li, and M. Elhoseiny
+Minigpt-4: enhancing vision-language understanding with advanced large language models
+.
+arXiv preprint arXiv:2304.10592
+.
+Cited by:
+§4.2
+.
+Appendix A
+Dataset Details
+To rigorously evaluate the effectiveness of our method, we selected four widely used benchmarks in the field of time series anomaly detection. These datasets span from real-world production data to diverse synthetic scenarios, covering a broad spectrum of anomaly types, including point, contextual, collective, and pattern anomalies. A detailed description of each dataset follows:
+•
+YAHOO
+: The Yahoo S5 dataset (2015) serves as a standard benchmark for univariate time series anomaly detection, derived from Yahoo’s production traffic. It comprises a real-world subset (A1) featuring genuine traffic spikes and drops, alongside three synthetic subsets (A2, A3, A4). These synthetic series are designed to mimic realistic temporal patterns while providing precise control over point, contextual, and collective anomalies.
+•
+TODS
+: The TODS benchmark is a synthetic dataset designed to evaluate outlier detection under diverse and controlled scenarios. It contains univariate series featuring five distinct anomaly types from a behavior-driven taxonomy: point-global (single extreme deviations), pattern-contextual (locally anomalous subsequences), pattern-shapelet (unusual motifs), pattern-seasonal (disrupted periodicity), and pattern-trend (long-term trend deviations).
+•
+IOPS
+: The IOPS dataset (AIOps KPI Anomaly Detection dataset) is a widely adopted real-world benchmark for evaluating anomaly detection in cloud and web service monitoring. It features Key Performance Indicators (KPIs) such as traffic, latency, and CPU usage, reflecting the health and scale of massive online systems. The dataset contains hundreds of labeled anomalies—including spikes, drops, and drifts—encompassing point, contextual, and collective types, making it essential for assessing automated incident detection in complex IT environments.
+•
+WSD
+: The WSD dataset is a real-world benchmark consisting of KPIs collected from large-scale internet companies, including metrics like traffic, response times, and error rates. It reflects actual system health in high-traffic environments and is characterized by realistic production noise and a very low anomaly density (
+∼
+\sim
+0.6%). The data includes labeled spikes, contextual shifts, and long-term drifts grounded in real incidents, often set against pronounced periodic and seasonal patterns.
+Appendix B
+Baseline Details
+To comprehensively evaluate our method, we benchmark against 10 competitive approaches, categorized into statistical methods, deep learning models, foundation models, and LLM-based agents.
+Statistical Approaches.
+FFT
+detects anomalies by decomposing time series into frequency components. It retains low-frequency coefficients to reconstruct a smoothed signal, identifying anomalies through large deviations in high-frequency residuals.
+SR
+(Spectral Residual) utilizes the Fourier transform to calculate log-amplitude deviations from local averages in the frequency domain. It then reconstructs the saliency map via inverse transform to pinpoint anomalous points.
+Deep Learning Baselines.
+CNN
+employs 1D convolutional layers to extract local temporal features and forecasts future values via fully connected layers, detecting anomalies based on prediction error thresholds.
+LSTMAD
+utilizes an LSTM-based encoder-decoder architecture to learn latent representations of normal patterns. It identifies anomalies by thresholding reconstruction errors, as deviations yield significantly higher losses.
+TransAD
+leverages a Transformer encoder-decoder with multi-head self-attention to capture global temporal dependencies, using reconstruction error for anomaly detection.
+M2N2
+is a test-time adaptation method that handles distribution shifts. It detrends sequences via exponential moving averages and selectively updates parameters on low-error instances through self-supervision.
+Foundation Models.
+TimesFM
+is a decoder-only foundation model that patches input sequences into fixed-length tokens. It autoregressively generates future values, detecting anomalies via point-wise prediction errors.
+OFA
+(One Fits All) utilizes a frozen pretrained transformer backbone with lightweight task-specific adapters. It processes sequences through the frozen encoder and uses adapter heads to reconstruct inputs for anomaly identification.
+Chronos
+is a language-model-based forecaster that tokenizes time series values. Operating in a zero-shot setup, it produces probabilistic forecasts via a transformer encoder-decoder, flagging anomalies based on prediction deviations.
+LLM-based Approaches.
+LLMAD
+employs in-context learning by retrieving similar time series segments as exemplars. It feeds these into an LLM with chain-of-thought prompts to directly infer anomaly locations, types, and explanations.
+LLM-TSAD
+decomposes time series into trend, seasonal, and residual components, converting them into text descriptions. Using few-shot prompts, the LLM reasons over the decomposed signals to identify anomalies.
+Appendix C
+Extended Analysis and Experimental Results
+In this section, we provide a comprehensive analysis to further validate the effectiveness and accurateness of AnomaMind. We begin with a qualitative visualization comparison to demonstrate the model’s superior precision in localizing anomalies against baseline methods. Subsequently, we conduct a fine-grained ablation study on the verification tool components to elucidate the specific contributions of multi-granular evidence. Finally, we examine the model’s sensitivity to sampling temperature, verifying its stability and practicality for real-world deployment.
+Figure 7.
+Visualization of detection results demonstrating the superior precision of AnomaMind compared to leading baselines.
+C.1.
+Visualization Case
+We visualize the detection results of our method alongside baseline approaches in Figure
+7
+. Observations indicate that while baselines such as FFT, TimesFM, M2N2, and LLM-TSAD successfully capture all anomalous regions, they suffer from a notably high false positive rate. Conversely, other baselines produce fewer false alarms but fail to detect the specific anomalous high plateau. In contrast, our approach, empowered by tool-augmented reasoning, accurately identifies all anomalous intervals with zero false positives, demonstrating superior precision and accuracy.
+C.2.
+Feature Extraction Component Ablation
+Table 7.
+Ablation study on verification Tool
+Model
+YAHOO
+TODS
+IOPS
+WSD
+F1
+Best-F1
+F1
+Best-F1
+F1
+Best-F1
+F1
+Best-F1
+w/o Local Structural Feature Recognition
+0.679
+0.683
+0.363
+0.363
+0.354
+0.376
+0.490
+0.490
+w/o Global Structural
+Feature Recognition
+0.562
+0.575
+0.327
+0.328
+0.125
+0.125
+0.277
+0.287
+w/o Statistical Feature Extraction
+0.666
+0.666
+0.375
+0.375
+0.355
+0.360
+0.493
+0.498
+Ours
+0.713
+0.715
+0.388
+0.389
+0.449
+0.458
+0.551
+0.559
+Table
+7
+presents the ablation study of the verification tools. The full AnomaMind framework, equipped with the complete toolset, consistently outperforms variants lacking specific components.
+Specifically, excluding
+local structural feature recognition
+results in relatively minor performance drops on YAHOO and WSD. This suggests that segment-level and descriptive analyses can partially compensate for the absence of local statistical cues.
+However, the removal of
+global structural feature recognition
+leads to severe degradation, particularly on IOPS and WSD, where F1 scores drop sharply to 0.125 and 0.277, respectively. This underscores the critical role of structural consistency checks in capturing long-range temporal deviations.
+Furthermore, the omission of
+statistical feature extraction
+causes a substantial performance decline on the IOPS dataset (with F1 falling to 0.355), highlighting the importance of distributional characterization for accurate verification.
+Collectively, these results confirm that the coordinated integration of multi-granular verification tools—spanning point-level detection, segment-level structural analysis, and descriptive statistics—is essential for achieving reliable and accurate anomaly detection across diverse temporal patterns.
+C.3.
+Temperature Sensitivity Analysis
+Figure
+8
+illustrates the sensitivity of our framework to the sampling temperature hyperparameter. Across all datasets, the model exhibits remarkable stability over a broad range of temperature settings, indicating that AnomaMind is not highly sensitive to this parameter.
+We observe that moderate temperature values generally yield optimal performance, striking a favorable balance between exploration and deterministic reasoning.
+At lower temperatures, the generation process tends to be overly conservative, limiting the diversity of candidate decisions and slightly distinct performance. Conversely, excessively high temperatures introduce stochasticity, resulting in inconsistent anomaly judgments and marginal performance drops.
+Figure 8.
+Hyperparameter sensitivity analysis regarding sampling temperature on F1 and Best-F1.
+Appendix D
+Additional Implementation Details
+D.1.
+Data Preprocessing
+Time series data often exhibit significant variations in numerical magnitude and timestamp formats. To ensure accurate anomaly pattern recognition across diverse datasets and enhance model stability, we implement the following preprocessing steps:
+D.1.1.
+Normalization
+We normalize numerical values to the range
+[
+0
+,
+1
+]
+[0,1]
+via min-max scaling:
+x
+′
+=
+x
+−
+a
+b
+−
+a
+x^{\prime}=\frac{x-a}{b-a}
+where
+a
+a
+and
+b
+b
+represent the minimum and maximum values of the time series, respectively.
+D.1.2.
+Indexing
+To mitigate the inconsistencies caused by varying timestamp formats and sampling frequencies across datasets, we abstract absolute time into a unified zero-based integer index. Formally, we map the raw time series into an ordered sequence of index-value pairs
+𝒳
+=
+{
+(
+t
+,
+v
+t
+)
+}
+t
+=
+0
+T
+−
+1
+\mathcal{X}=\{(t,v_{t})\}_{t=0}^{T-1}
+, where
+t
+t
+represents the relative temporal step and
+T
+T
+denotes the sequence length. This standardized representation ensures that the agents focus on relative temporal patterns and output consistent interval coordinates (e.g.,
+[
+t
+s
+​
+t
+​
+a
+​
+r
+​
+t
+,
+t
+e
+​
+n
+​
+d
+]
+[t_{start},t_{end}]
+) regardless of the original time format.
+D.1.3.
+Detrending
+To mitigate the influence of global trends that are irrelevant to local anomalies, we remove the linear component:
+x
+′
+=
+x
+−
+x
+^
+trend
+x^{\prime}=x-\hat{x}_{\text{trend}}
+Here,
+x
+^
+trend
+\hat{x}_{\text{trend}}
+denotes the linear trend estimated via least squares regression.
+D.2.
+Sample Construction
+For traditional self-supervised and semi-supervised baselines, we adhere to the TSB-AD benchmark protocol, utilizing the anomaly-free initial segment of the test sequence for training. In contrast, for our proposed method, we incorporate additional distinct sequences from the same dataset as training samples to enhance generalization.
+To balance the model’s capacity for processing long-term context with computational efficiency, we set the sample length to 100 and segment the time series using a step size of 100.
+D.3.
+Evaluation Metrics
+D.3.1.
+F1-Score
+The primary goal of time series anomaly detection is to identify anomalous points while minimizing false alarms. We adopt the standard definitions for Recall, Precision, and F1-score:
+•
+Recall
+: Measures the proportion of actual anomalies that are correctly detected. It assesses the model’s ability to capture all relevant instances.
+Recall
+=
+TP
+TP
++
+FN
+\text{Recall}=\frac{\mathrm{TP}}{\mathrm{TP}+\mathrm{FN}}
+•
+Precision
+: Quantifies the reliability of the reported anomalies. It indicates the ratio of true anomalies among all positive predictions, reflecting the model’s ability to avoid false alarms.
+Precision
+=
+TP
+TP
++
+FP
+\text{Precision}=\frac{\mathrm{TP}}{\mathrm{TP}+\mathrm{FP}}
+•
+F1-score
+: Provides a balanced metric of overall detection performance. It is calculated as the harmonic mean of Precision and Recall, making it suitable for scenarios with imbalanced data.
+F1-score
+=
+2
+×
+Precision
+×
+Recall
+Precision
++
+Recall
+\text{F1-score}=2\times\frac{\text{Precision}\times\text{Recall}}{\text{Precision}+\text{Recall}}
+For traditional models that output continuous anomaly scores, we apply the widely adopted threshold of
+μ
++
+3
+​
+σ
+\mu+3\sigma
+; points exceeding this threshold are classified as anomalous. For LLM-based models, points are considered anomalous if they fall within the intervals explicitly generated by the model.
+D.3.2.
+Best-F1
+•
+Traditional methods
+: Best-F1 represents the maximum F1-score obtained by sweeping over possible anomaly score thresholds.
+•
+Our method
+: We classify intervals as anomalous only if their associated confidence score meets or exceeds a specific threshold. Consequently, Best-F1 is determined by finding the maximum F1-score across all possible confidence thresholds.
+•
+Other LLM-based methods
+: We adhere to the Best-F1 calculation procedures specified in their respective implementations.
+D.4.
+Prompt Templates
+To facilitate reproducibility and provide insight into the underlying reasoning mechanisms of our framework, we present the detailed prompt templates designed for each agentic component. These structured instructions serve as the cognitive blueprint for the system, strictly defining the functional roles, operational constraints, and expected interaction protocols. By standardizing the input-output formats and reasoning pathways, these prompts ensure that the workflow progresses coherently from coarse-grained visual perception to fine-grained evidence analysis.
+Locator Prompt
+Role:
+You are an expert anomaly detection planner. Your objective is to formulate a precise, executable analysis plan by synthesizing visual cues and raw time series data.
+Input Context:
+You are provided with the following information to guide your planning:
+•
+Visual Analysis:
+A description from the Coarse-grained Agent (use as a reference; note that it may flag the entire period or contain false positives).
+•
+Data Stream:
+The complete time series values and specific
+{Vision anomaly intervals}
+candidates.
+•
+Toolkit:
+A list of
+{Available Tools}
+for execution.
+•
+Knowledge:
+Domain-specific constraints and patterns provided in
+{Domain Knowledge}
+.
+Planning Guidelines:
+Adhere to the following rules when constructing the plan:
+•
+Tool-Centricity:
+The executing agent is restricted to invoking existing tools. Do not plan complex methods that cannot be directly implemented via the available toolkit.
+•
+Specificity:
+Tailor tool selection to the specific characteristics of the time series. Avoid generic or meaningless steps.
+•
+Thresholding:
+Explicitly set thresholds for tool outputs. Instruct the action agent to disregard fluctuations below these thresholds to reduce false alarms.
+•
+Scoping:
+Strictly limit the analysis to the accessible intervals provided.
+Output Protocol:
+Structure your response in two strict parts:
+•
+<think>
+: An internal reasoning process to deduce the optimal strategy (this will not be executed).
+•
+<Plan>
+: The final detailed plan wrapped in tags.
+Actor Prompt
+Role:
+You are a time series anomaly detection expert responsible for tool execution. Your primary function is to translate the high-level analysis plan into concrete tool invocations.
+Input Context:
+•
+Directive:
+The specific
+{Plan}
+generated by the Planner.
+•
+Data:
+The
+{Time Series Values}
+covering the index range
+{range}
+.
+Execution Protocol:
+Adhere to the following strict rules:
+•
+Index Fidelity:
+The index values provided are the actual indices from the source CSV. Use these exact values when referencing data points or parameterizing tool calls.
+•
+Batch Execution:
+Efficiency is paramount. Identify all necessary tools required by the plan and invoke them together in a single turn.
+•
+Compliance:
+Do not deviate from the plan; focus solely on execution logic.
+Detector Prompt
+Role:
+You are the core anomaly detector. Your task is to synthesize tool execution results, the original analysis plan, and raw time series data to render a final, reasoned verdict.
+Input Context:
+•
+Execution History:
+The results from previous tool calls (
+{Used_Tool_Description}
+).
+•
+Strategy:
+The original
+{Plan}
+guiding the analysis.
+•
+Knowledge:
+Domain-specific rules for fine-grained reasoning (
+{Domain Knowledge}
+).
+Response Structure:
+Your output must strictly follow this format:
+•
+<think>
+: A concise analysis of how the tool results support or refute the anomaly hypothesis.
+•
+JSON Array
+: A list of detected anomalies (or an empty array
+[]
+if none). Each object must include:
+⋅
+\cdot
+"interval"
+:
+[start_index, end_index]
+(Use actual data indices).
+⋅
+\cdot
+"type"
+: The specific name of the anomaly type.
+⋅
+\cdot
+"explanation"
+: Concrete reasoning for the decision.
+⋅
+\cdot
+"confidence"
+: An integer score from 1 (Low) to 3 (High).
+Critical Constraints:
+•
+Evidence-Based:
+Decisions must be grounded in the provided tool results and data values.
+•
+Index Fidelity:
+Strictly strictly adhere to the original data index values.
+Evaluator Prompt
+Role:
+You are the final reviewer responsible for quality assurance. Your task is to evaluate the detection results for logical consistency and critical errors.
+Input Context:
+•
+Plan:
+The original analysis strategy (
+{Plan}
+).
+•
+Result:
+The detection outcome and reasoning provided by the Detector (
+{Detector Result}
+).
+Evaluation Criteria:
+Adopt a
+lenient
+evaluation stance. Intervention is required
+only
+for critical failures.
+•
+Pass Condition:
+If the analysis is generally reasonable, set
+needs_refinement
+to
+false
+.
+•
+Fail Condition:
+Trigger refinement (
+true
+)
+only
+for major errors (e.g., critical logic flaws, hallucinated data, or complete absence of reasoning).
+•
+Rating Scale:
+Use "poor" strictly for severe issues. Default to "good" or "acceptable" for minor imperfections.
+Output Protocol:
+Return a strict JSON object containing the following keys:
+•
+"issues"
+: A list of strings describing critical errors (if any).
+•
+"suggestions"
+: Actionable advice for correction.
+•
+"needs_refinement"
+: Boolean (
+true
+/
+false
+).
+•
+"quality_metrics"
+: Ratings for
+"planning"
+,
+"tool_usage"
+, and
+"reasoning"
+(Value: "good"/"acceptable"/"poor").
+Experimental support, please
+view the build logs
+for errors. Generated by
+L
+A
+T
+E
+xml
+.
+Instructions for reporting errors
+We are continuing to improve HTML versions of papers, and your feedback helps enhance accessibility and mobile
+      support. To report errors in the HTML that will help us improve conversion and rendering, choose any of the
+      methods listed below:
+Click the "Report Issue"
+(
+)
+button, located in the page header.
+Tip:
+You can select the relevant text first, to include it in your report.
+Our team has already identified
+the following issues
+. We appreciate your time reviewing and reporting rendering errors we
+      may not have found yet. Your efforts will help us improve the HTML versions for all readers, because disability
+      should not be a barrier to accessing research. Thank you for your continued support in championing open access for
+      all.
+Have a free development cycle? Help support accessibility at arXiv! Our collaborators at LaTeXML maintain a
+list of packages that need conversion
+, and welcome
+developer contributions
+.
+We gratefully acknowledge support from
+        our
+major funders
+,
+member institutions
+,
+,
+        and all contributors.
+About
+·
+Help
+·
+Contact
+·
+Subscribe
+·
+Copyright
+·
+Privacy
+·
+Accessibility
+·
+Operational Status
+(opens in new tab)
+Major funding support from

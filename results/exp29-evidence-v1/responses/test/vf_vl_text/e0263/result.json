@@ -1,0 +1,30 @@
+{
+  "status": "success",
+  "requested_model": "qwen3-vl-plus",
+  "request_count": 1,
+  "retry_count": 0,
+  "http_status": 200,
+  "served_model": "qwen3-vl-plus",
+  "usage": {
+    "prompt_tokens": 11431,
+    "completion_tokens": 185,
+    "total_tokens": 11616,
+    "completion_tokens_details": {
+      "text_tokens": 185
+    },
+    "prompt_tokens_details": {
+      "text_tokens": 11431,
+      "cached_tokens": 0
+    }
+  },
+  "elapsed_seconds": 6.16856320000079,
+  "range_decision": {
+    "intervals": [
+      {
+        "start": 692,
+        "end": 700
+      }
+    ],
+    "evidence": "A temporary offset is visible in N/E/U between indices 692 and 701: at index 692, N jumps from ~-0.8 to ~21.3 (a large positive shift), while E and U also shift abruptly; the trajectory remains elevated for 9 samples (692–700), then at index 701 returns sharply toward prior levels (N drops to ~-2.6, E and U similarly revert). The offset is sustained over multiple samples and reversed across all three components, with no smooth motion bridging the jump and return — consistent with a temporary observation offset. No other multi-sample sustained shifts followed by opposing returns are evident."
+  }
+}
