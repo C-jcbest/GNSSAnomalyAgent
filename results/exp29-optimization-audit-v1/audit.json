@@ -1,0 +1,3850 @@
+{
+  "experiment_id": "EXP29-optimization-audit-v1",
+  "scope": "Posthoc development-only diagnosis; no new predictions or causal attribution.",
+  "new_model_requests": 0,
+  "manifest_sha256": "14cf0d5d8690c6ff0e69b0de4e8b8e081843191070b4cca16f874177ffe53451",
+  "totals": {
+    "stations": 360,
+    "positive_stations": 120,
+    "positive_without_proposal": 70,
+    "positive_without_second_stage_request": 70,
+    "proposals": 71,
+    "proposals_with_true_day": 47,
+    "one_day_proposals": 9,
+    "three_or_fewer_day_proposals": 26,
+    "proposals_blocked_by_existing_range": 43,
+    "blocked_proposals_with_uncovered_true_days": 1,
+    "unblocked_one_day_proposals": 7,
+    "unblocked_one_day_true_days": 1,
+    "unblocked_one_day_false_days": 6,
+    "collapsed_or_reversed_refinements": 42,
+    "collapsed_proposals_with_true_day": 19
+  },
+  "proposal_duration_histogram": {
+    "1": 9,
+    "2": 10,
+    "3": 7,
+    "4": 7,
+    "5": 2,
+    "6": 1,
+    "7": 1,
+    "8": 1,
+    "13": 5,
+    "14": 6,
+    "15": 2,
+    "28": 1,
+    "29": 3,
+    "41": 1,
+    "42": 2,
+    "43": 5,
+    "45": 1,
+    "56": 4,
+    "57": 1,
+    "58": 1,
+    "69": 1
+  },
+  "literal_short_observations_evidence_count": 351,
+  "successful_first_stage_requests": 351,
+  "second_stage_images_per_request": {
+    "requests": 60,
+    "median": 3.0,
+    "maximum": 8,
+    "histogram": {
+      "2": 1,
+      "3": 34,
+      "4": 13,
+      "5": 3,
+      "6": 8,
+      "8": 1
+    }
+  },
+  "stations": [
+    {
+      "station": "v0000",
+      "positive": false,
+      "first_stage_status": "success",
+      "proposals": [],
+      "second_stage_status": "not_requested"
+    },
+    {
+      "station": "v0001",
+      "positive": false,
+      "first_stage_status": "success",
+      "proposals": [],
+      "second_stage_status": "not_requested"
+    },
+    {
+      "station": "v0002",
+      "positive": false,
+      "first_stage_status": "success",
+      "proposals": [],
+      "second_stage_status": "not_requested"
+    },
+    {
+      "station": "v0003",
+      "positive": true,
+      "first_stage_status": "success",
+      "proposals": [],
+      "second_stage_status": "not_requested"
+    },
+    {
+      "station": "v0004",
+      "positive": false,
+      "first_stage_status": "success",
+      "proposals": [],
+      "second_stage_status": "not_requested"
+    },
+    {
+      "station": "v0005",
+      "positive": true,
+      "first_stage_status": "success",
+      "proposals": [],
+      "second_stage_status": "not_requested"
+    },
+    {
+      "station": "v0006",
+      "positive": false,
+      "first_stage_status": "success",
+      "proposals": [],
+      "second_stage_status": "not_requested"
+    },
+    {
+      "station": "v0007",
+      "positive": false,
+      "first_stage_status": "success",
+      "proposals": [],
+      "second_stage_status": "not_requested"
+    },
+    {
+      "station": "v0008",
+      "positive": false,
+      "first_stage_status": "success",
+      "proposals": [
+        {
+          "interval": {
+            "start": 420,
+            "end": 420
+          },
+          "duration": 1,
+          "raw_tp_days": 0,
+          "uncovered_true_days": 0,
+          "uncovered_false_days": 1,
+          "calendar_overlap_blocks_addition": false,
+          "observed_overlap": false,
+          "refined_edges": [
+            420,
+            420
+          ],
+          "hard_verification_accepted": false
+        }
+      ],
+      "second_stage_status": "success"
+    },
+    {
+      "station": "v0009",
+      "positive": true,
+      "first_stage_status": "success",
+      "proposals": [
+        {
+          "interval": {
+            "start": 560,
+            "end": 573
+          },
+          "duration": 14,
+          "raw_tp_days": 13,
+          "uncovered_true_days": 0,
+          "uncovered_false_days": 1,
+          "calendar_overlap_blocks_addition": true,
+          "observed_overlap": true,
+          "refined_edges": [
+            549,
+            584
+          ],
+          "hard_verification_accepted": false
+        }
+      ],
+      "second_stage_status": "success"
+    },
+    {
+      "station": "v0010",
+      "positive": false,
+      "first_stage_status": "success",
+      "proposals": [],
+      "second_stage_status": "not_requested"
+    },
+    {
+      "station": "v0011",
+      "positive": true,
+      "first_stage_status": "success",
+      "proposals": [
+        {
+          "interval": {
+            "start": 645,
+            "end": 685
+          },
+          "duration": 41,
+          "raw_tp_days": 37,
+          "uncovered_true_days": 0,
+          "uncovered_false_days": 4,
+          "calendar_overlap_blocks_addition": true,
+          "observed_overlap": true,
+          "refined_edges": [
+            649,
+            690
+          ],
+          "hard_verification_accepted": true
+        }
+      ],
+      "second_stage_status": "success"
+    },
+    {
+      "station": "v0012",
+      "positive": false,
+      "first_stage_status": "success",
+      "proposals": [],
+      "second_stage_status": "not_requested"
+    },
+    {
+      "station": "v0013",
+      "positive": false,
+      "first_stage_status": "success",
+      "proposals": [],
+      "second_stage_status": "not_requested"
+    },
+    {
+      "station": "v0014",
+      "positive": false,
+      "first_stage_status": "failed",
+      "proposals": [],
+      "second_stage_status": "not_requested"
+    },
+    {
+      "station": "v0015",
+      "positive": true,
+      "first_stage_status": "success",
+      "proposals": [
+        {
+          "interval": {
+            "start": 448,
+            "end": 475
+          },
+          "duration": 28,
+          "raw_tp_days": 28,
+          "uncovered_true_days": 0,
+          "uncovered_false_days": 0,
+          "calendar_overlap_blocks_addition": true,
+          "observed_overlap": true,
+          "refined_edges": [
+            448,
+            476
+          ],
+          "hard_verification_accepted": true
+        }
+      ],
+      "second_stage_status": "success"
+    },
+    {
+      "station": "v0016",
+      "positive": false,
+      "first_stage_status": "success",
+      "proposals": [],
+      "second_stage_status": "not_requested"
+    },
+    {
+      "station": "v0017",
+      "positive": true,
+      "first_stage_status": "success",
+      "proposals": [],
+      "second_stage_status": "not_requested"
+    },
+    {
+      "station": "v0018",
+      "positive": false,
+      "first_stage_status": "success",
+      "proposals": [],
+      "second_stage_status": "not_requested"
+    },
+    {
+      "station": "v0019",
+      "positive": false,
+      "first_stage_status": "success",
+      "proposals": [],
+      "second_stage_status": "not_requested"
+    },
+    {
+      "station": "v0020",
+      "positive": false,
+      "first_stage_status": "success",
+      "proposals": [
+        {
+          "interval": {
+            "start": 489,
+            "end": 490
+          },
+          "duration": 2,
+          "raw_tp_days": 0,
+          "uncovered_true_days": 0,
+          "uncovered_false_days": 2,
+          "calendar_overlap_blocks_addition": false,
+          "observed_overlap": false,
+          "refined_edges": [
+            496,
+            496
+          ],
+          "hard_verification_accepted": false
+        }
+      ],
+      "second_stage_status": "success"
+    },
+    {
+      "station": "v0021",
+      "positive": true,
+      "first_stage_status": "success",
+      "proposals": [
+        {
+          "interval": {
+            "start": 420,
+            "end": 462
+          },
+          "duration": 43,
+          "raw_tp_days": 42,
+          "uncovered_true_days": 0,
+          "uncovered_false_days": 0,
+          "calendar_overlap_blocks_addition": true,
+          "observed_overlap": true,
+          "refined_edges": [
+            415,
+            470
+          ],
+          "hard_verification_accepted": true
+        }
+      ],
+      "second_stage_status": "success"
+    },
+    {
+      "station": "v0022",
+      "positive": false,
+      "first_stage_status": "success",
+      "proposals": [],
+      "second_stage_status": "not_requested"
+    },
+    {
+      "station": "v0023",
+      "positive": true,
+      "first_stage_status": "success",
+      "proposals": [
+        {
+          "interval": {
+            "start": 558,
+            "end": 560
+          },
+          "duration": 3,
+          "raw_tp_days": 0,
+          "uncovered_true_days": 0,
+          "uncovered_false_days": 3,
+          "calendar_overlap_blocks_addition": false,
+          "observed_overlap": false,
+          "refined_edges": [
+            564,
+            564
+          ],
+          "hard_verification_accepted": false
+        },
+        {
+          "interval": {
+            "start": 587,
+            "end": 588
+          },
+          "duration": 2,
+          "raw_tp_days": 2,
+          "uncovered_true_days": 0,
+          "uncovered_false_days": 0,
+          "calendar_overlap_blocks_addition": true,
+          "observed_overlap": true,
+          "refined_edges": [
+            600,
+            600
+          ],
+          "hard_verification_accepted": false
+        },
+        {
+          "interval": {
+            "start": 600,
+            "end": 601
+          },
+          "duration": 2,
+          "raw_tp_days": 0,
+          "uncovered_true_days": 0,
+          "uncovered_false_days": 2,
+          "calendar_overlap_blocks_addition": false,
+          "observed_overlap": false,
+          "refined_edges": [
+            600,
+            600
+          ],
+          "hard_verification_accepted": false
+        }
+      ],
+      "second_stage_status": "success"
+    },
+    {
+      "station": "v0024",
+      "positive": false,
+      "first_stage_status": "success",
+      "proposals": [],
+      "second_stage_status": "not_requested"
+    },
+    {
+      "station": "v0025",
+      "positive": false,
+      "first_stage_status": "success",
+      "proposals": [],
+      "second_stage_status": "not_requested"
+    },
+    {
+      "station": "v0026",
+      "positive": false,
+      "first_stage_status": "success",
+      "proposals": [],
+      "second_stage_status": "not_requested"
+    },
+    {
+      "station": "v0027",
+      "positive": true,
+      "first_stage_status": "success",
+      "proposals": [],
+      "second_stage_status": "not_requested"
+    },
+    {
+      "station": "v0028",
+      "positive": false,
+      "first_stage_status": "success",
+      "proposals": [],
+      "second_stage_status": "not_requested"
+    },
+    {
+      "station": "v0029",
+      "positive": true,
+      "first_stage_status": "success",
+      "proposals": [
+        {
+          "interval": {
+            "start": 504,
+            "end": 518
+          },
+          "duration": 15,
+          "raw_tp_days": 14,
+          "uncovered_true_days": 14,
+          "uncovered_false_days": 0,
+          "calendar_overlap_blocks_addition": false,
+          "observed_overlap": false,
+          "refined_edges": [
+            499,
+            521
+          ],
+          "hard_verification_accepted": false
+        }
+      ],
+      "second_stage_status": "success"
+    },
+    {
+      "station": "v0030",
+      "positive": false,
+      "first_stage_status": "success",
+      "proposals": [],
+      "second_stage_status": "not_requested"
+    },
+    {
+      "station": "v0031",
+      "positive": false,
+      "first_stage_status": "success",
+      "proposals": [],
+      "second_stage_status": "not_requested"
+    },
+    {
+      "station": "v0032",
+      "positive": false,
+      "first_stage_status": "success",
+      "proposals": [],
+      "second_stage_status": "not_requested"
+    },
+    {
+      "station": "v0033",
+      "positive": true,
+      "first_stage_status": "success",
+      "proposals": [],
+      "second_stage_status": "not_requested"
+    },
+    {
+      "station": "v0034",
+      "positive": false,
+      "first_stage_status": "success",
+      "proposals": [],
+      "second_stage_status": "not_requested"
+    },
+    {
+      "station": "v0035",
+      "positive": true,
+      "first_stage_status": "success",
+      "proposals": [],
+      "second_stage_status": "not_requested"
+    },
+    {
+      "station": "v0036",
+      "positive": false,
+      "first_stage_status": "success",
+      "proposals": [],
+      "second_stage_status": "not_requested"
+    },
+    {
+      "station": "v0037",
+      "positive": false,
+      "first_stage_status": "success",
+      "proposals": [],
+      "second_stage_status": "not_requested"
+    },
+    {
+      "station": "v0038",
+      "positive": false,
+      "first_stage_status": "success",
+      "proposals": [],
+      "second_stage_status": "not_requested"
+    },
+    {
+      "station": "v0039",
+      "positive": true,
+      "first_stage_status": "failed",
+      "proposals": [],
+      "second_stage_status": "not_requested"
+    },
+    {
+      "station": "v0040",
+      "positive": false,
+      "first_stage_status": "success",
+      "proposals": [],
+      "second_stage_status": "not_requested"
+    },
+    {
+      "station": "v0041",
+      "positive": true,
+      "first_stage_status": "success",
+      "proposals": [
+        {
+          "interval": {
+            "start": 542,
+            "end": 546
+          },
+          "duration": 5,
+          "raw_tp_days": 0,
+          "uncovered_true_days": 0,
+          "uncovered_false_days": 5,
+          "calendar_overlap_blocks_addition": false,
+          "observed_overlap": false,
+          "refined_edges": [
+            543,
+            543
+          ],
+          "hard_verification_accepted": false
+        }
+      ],
+      "second_stage_status": "success"
+    },
+    {
+      "station": "v0042",
+      "positive": false,
+      "first_stage_status": "success",
+      "proposals": [],
+      "second_stage_status": "not_requested"
+    },
+    {
+      "station": "v0043",
+      "positive": false,
+      "first_stage_status": "success",
+      "proposals": [],
+      "second_stage_status": "not_requested"
+    },
+    {
+      "station": "v0044",
+      "positive": false,
+      "first_stage_status": "success",
+      "proposals": [],
+      "second_stage_status": "not_requested"
+    },
+    {
+      "station": "v0045",
+      "positive": true,
+      "first_stage_status": "success",
+      "proposals": [
+        {
+          "interval": {
+            "start": 532,
+            "end": 539
+          },
+          "duration": 8,
+          "raw_tp_days": 7,
+          "uncovered_true_days": 7,
+          "uncovered_false_days": 1,
+          "calendar_overlap_blocks_addition": false,
+          "observed_overlap": false,
+          "refined_edges": [
+            539,
+            539
+          ],
+          "hard_verification_accepted": false
+        }
+      ],
+      "second_stage_status": "success"
+    },
+    {
+      "station": "v0046",
+      "positive": false,
+      "first_stage_status": "success",
+      "proposals": [],
+      "second_stage_status": "not_requested"
+    },
+    {
+      "station": "v0047",
+      "positive": true,
+      "first_stage_status": "success",
+      "proposals": [],
+      "second_stage_status": "not_requested"
+    },
+    {
+      "station": "v0048",
+      "positive": false,
+      "first_stage_status": "success",
+      "proposals": [],
+      "second_stage_status": "not_requested"
+    },
+    {
+      "station": "v0049",
+      "positive": false,
+      "first_stage_status": "success",
+      "proposals": [],
+      "second_stage_status": "not_requested"
+    },
+    {
+      "station": "v0050",
+      "positive": false,
+      "first_stage_status": "success",
+      "proposals": [],
+      "second_stage_status": "not_requested"
+    },
+    {
+      "station": "v0051",
+      "positive": true,
+      "first_stage_status": "failed",
+      "proposals": [],
+      "second_stage_status": "not_requested"
+    },
+    {
+      "station": "v0052",
+      "positive": false,
+      "first_stage_status": "success",
+      "proposals": [],
+      "second_stage_status": "not_requested"
+    },
+    {
+      "station": "v0053",
+      "positive": true,
+      "first_stage_status": "success",
+      "proposals": [
+        {
+          "interval": {
+            "start": 476,
+            "end": 518
+          },
+          "duration": 43,
+          "raw_tp_days": 38,
+          "uncovered_true_days": 0,
+          "uncovered_false_days": 0,
+          "calendar_overlap_blocks_addition": true,
+          "observed_overlap": true,
+          "refined_edges": [
+            475,
+            527
+          ],
+          "hard_verification_accepted": true
+        }
+      ],
+      "second_stage_status": "success"
+    },
+    {
+      "station": "v0054",
+      "positive": false,
+      "first_stage_status": "success",
+      "proposals": [],
+      "second_stage_status": "not_requested"
+    },
+    {
+      "station": "v0055",
+      "positive": false,
+      "first_stage_status": "success",
+      "proposals": [],
+      "second_stage_status": "not_requested"
+    },
+    {
+      "station": "v0056",
+      "positive": false,
+      "first_stage_status": "success",
+      "proposals": [],
+      "second_stage_status": "not_requested"
+    },
+    {
+      "station": "v0057",
+      "positive": true,
+      "first_stage_status": "success",
+      "proposals": [
+        {
+          "interval": {
+            "start": 490,
+            "end": 545
+          },
+          "duration": 56,
+          "raw_tp_days": 53,
+          "uncovered_true_days": 0,
+          "uncovered_false_days": 3,
+          "calendar_overlap_blocks_addition": true,
+          "observed_overlap": true,
+          "refined_edges": [
+            490,
+            543
+          ],
+          "hard_verification_accepted": true
+        }
+      ],
+      "second_stage_status": "success"
+    },
+    {
+      "station": "v0058",
+      "positive": false,
+      "first_stage_status": "success",
+      "proposals": [],
+      "second_stage_status": "not_requested"
+    },
+    {
+      "station": "v0059",
+      "positive": true,
+      "first_stage_status": "success",
+      "proposals": [],
+      "second_stage_status": "not_requested"
+    },
+    {
+      "station": "v0060",
+      "positive": false,
+      "first_stage_status": "success",
+      "proposals": [],
+      "second_stage_status": "not_requested"
+    },
+    {
+      "station": "v0061",
+      "positive": false,
+      "first_stage_status": "success",
+      "proposals": [],
+      "second_stage_status": "not_requested"
+    },
+    {
+      "station": "v0062",
+      "positive": false,
+      "first_stage_status": "success",
+      "proposals": [],
+      "second_stage_status": "not_requested"
+    },
+    {
+      "station": "v0063",
+      "positive": true,
+      "first_stage_status": "success",
+      "proposals": [],
+      "second_stage_status": "not_requested"
+    },
+    {
+      "station": "v0064",
+      "positive": false,
+      "first_stage_status": "success",
+      "proposals": [],
+      "second_stage_status": "not_requested"
+    },
+    {
+      "station": "v0065",
+      "positive": true,
+      "first_stage_status": "success",
+      "proposals": [],
+      "second_stage_status": "not_requested"
+    },
+    {
+      "station": "v0066",
+      "positive": false,
+      "first_stage_status": "success",
+      "proposals": [],
+      "second_stage_status": "not_requested"
+    },
+    {
+      "station": "v0067",
+      "positive": false,
+      "first_stage_status": "success",
+      "proposals": [],
+      "second_stage_status": "not_requested"
+    },
+    {
+      "station": "v0068",
+      "positive": false,
+      "first_stage_status": "success",
+      "proposals": [],
+      "second_stage_status": "not_requested"
+    },
+    {
+      "station": "v0069",
+      "positive": true,
+      "first_stage_status": "success",
+      "proposals": [
+        {
+          "interval": {
+            "start": 448,
+            "end": 489
+          },
+          "duration": 42,
+          "raw_tp_days": 38,
+          "uncovered_true_days": 0,
+          "uncovered_false_days": 3,
+          "calendar_overlap_blocks_addition": true,
+          "observed_overlap": true,
+          "refined_edges": [
+            447,
+            487
+          ],
+          "hard_verification_accepted": true
+        }
+      ],
+      "second_stage_status": "success"
+    },
+    {
+      "station": "v0070",
+      "positive": false,
+      "first_stage_status": "success",
+      "proposals": [],
+      "second_stage_status": "not_requested"
+    },
+    {
+      "station": "v0071",
+      "positive": true,
+      "first_stage_status": "success",
+      "proposals": [],
+      "second_stage_status": "not_requested"
+    },
+    {
+      "station": "v0072",
+      "positive": false,
+      "first_stage_status": "success",
+      "proposals": [],
+      "second_stage_status": "not_requested"
+    },
+    {
+      "station": "v0073",
+      "positive": false,
+      "first_stage_status": "success",
+      "proposals": [],
+      "second_stage_status": "not_requested"
+    },
+    {
+      "station": "v0074",
+      "positive": false,
+      "first_stage_status": "success",
+      "proposals": [],
+      "second_stage_status": "not_requested"
+    },
+    {
+      "station": "v0075",
+      "positive": true,
+      "first_stage_status": "success",
+      "proposals": [
+        {
+          "interval": {
+            "start": 470,
+            "end": 475
+          },
+          "duration": 6,
+          "raw_tp_days": 6,
+          "uncovered_true_days": 6,
+          "uncovered_false_days": 0,
+          "calendar_overlap_blocks_addition": false,
+          "observed_overlap": false,
+          "refined_edges": [
+            482,
+            482
+          ],
+          "hard_verification_accepted": false
+        }
+      ],
+      "second_stage_status": "success"
+    },
+    {
+      "station": "v0076",
+      "positive": false,
+      "first_stage_status": "success",
+      "proposals": [],
+      "second_stage_status": "not_requested"
+    },
+    {
+      "station": "v0077",
+      "positive": true,
+      "first_stage_status": "failed",
+      "proposals": [],
+      "second_stage_status": "not_requested"
+    },
+    {
+      "station": "v0078",
+      "positive": false,
+      "first_stage_status": "success",
+      "proposals": [],
+      "second_stage_status": "not_requested"
+    },
+    {
+      "station": "v0079",
+      "positive": false,
+      "first_stage_status": "success",
+      "proposals": [],
+      "second_stage_status": "not_requested"
+    },
+    {
+      "station": "v0080",
+      "positive": false,
+      "first_stage_status": "success",
+      "proposals": [],
+      "second_stage_status": "not_requested"
+    },
+    {
+      "station": "v0081",
+      "positive": true,
+      "first_stage_status": "success",
+      "proposals": [],
+      "second_stage_status": "not_requested"
+    },
+    {
+      "station": "v0082",
+      "positive": false,
+      "first_stage_status": "success",
+      "proposals": [],
+      "second_stage_status": "not_requested"
+    },
+    {
+      "station": "v0083",
+      "positive": true,
+      "first_stage_status": "success",
+      "proposals": [],
+      "second_stage_status": "not_requested"
+    },
+    {
+      "station": "v0084",
+      "positive": false,
+      "first_stage_status": "success",
+      "proposals": [],
+      "second_stage_status": "not_requested"
+    },
+    {
+      "station": "v0085",
+      "positive": false,
+      "first_stage_status": "success",
+      "proposals": [],
+      "second_stage_status": "not_requested"
+    },
+    {
+      "station": "v0086",
+      "positive": false,
+      "first_stage_status": "success",
+      "proposals": [],
+      "second_stage_status": "not_requested"
+    },
+    {
+      "station": "v0087",
+      "positive": true,
+      "first_stage_status": "success",
+      "proposals": [],
+      "second_stage_status": "not_requested"
+    },
+    {
+      "station": "v0088",
+      "positive": false,
+      "first_stage_status": "success",
+      "proposals": [],
+      "second_stage_status": "not_requested"
+    },
+    {
+      "station": "v0089",
+      "positive": true,
+      "first_stage_status": "success",
+      "proposals": [],
+      "second_stage_status": "not_requested"
+    },
+    {
+      "station": "v0090",
+      "positive": false,
+      "first_stage_status": "success",
+      "proposals": [],
+      "second_stage_status": "not_requested"
+    },
+    {
+      "station": "v0091",
+      "positive": false,
+      "first_stage_status": "success",
+      "proposals": [],
+      "second_stage_status": "not_requested"
+    },
+    {
+      "station": "v0092",
+      "positive": false,
+      "first_stage_status": "success",
+      "proposals": [],
+      "second_stage_status": "not_requested"
+    },
+    {
+      "station": "v0093",
+      "positive": true,
+      "first_stage_status": "failed",
+      "proposals": [],
+      "second_stage_status": "not_requested"
+    },
+    {
+      "station": "v0094",
+      "positive": false,
+      "first_stage_status": "success",
+      "proposals": [],
+      "second_stage_status": "not_requested"
+    },
+    {
+      "station": "v0095",
+      "positive": true,
+      "first_stage_status": "success",
+      "proposals": [
+        {
+          "interval": {
+            "start": 504,
+            "end": 517
+          },
+          "duration": 14,
+          "raw_tp_days": 11,
+          "uncovered_true_days": 5,
+          "uncovered_false_days": 3,
+          "calendar_overlap_blocks_addition": true,
+          "observed_overlap": true,
+          "refined_edges": [
+            510,
+            532
+          ],
+          "hard_verification_accepted": false
+        }
+      ],
+      "second_stage_status": "success"
+    },
+    {
+      "station": "v0096",
+      "positive": false,
+      "first_stage_status": "success",
+      "proposals": [],
+      "second_stage_status": "not_requested"
+    },
+    {
+      "station": "v0097",
+      "positive": false,
+      "first_stage_status": "success",
+      "proposals": [],
+      "second_stage_status": "not_requested"
+    },
+    {
+      "station": "v0098",
+      "positive": false,
+      "first_stage_status": "success",
+      "proposals": [],
+      "second_stage_status": "not_requested"
+    },
+    {
+      "station": "v0099",
+      "positive": true,
+      "first_stage_status": "success",
+      "proposals": [],
+      "second_stage_status": "not_requested"
+    },
+    {
+      "station": "v0100",
+      "positive": false,
+      "first_stage_status": "success",
+      "proposals": [],
+      "second_stage_status": "not_requested"
+    },
+    {
+      "station": "v0101",
+      "positive": true,
+      "first_stage_status": "success",
+      "proposals": [
+        {
+          "interval": {
+            "start": 644,
+            "end": 657
+          },
+          "duration": 14,
+          "raw_tp_days": 0,
+          "uncovered_true_days": 0,
+          "uncovered_false_days": 14,
+          "calendar_overlap_blocks_addition": false,
+          "observed_overlap": false,
+          "refined_edges": [
+            638,
+            661
+          ],
+          "hard_verification_accepted": false
+        },
+        {
+          "interval": {
+            "start": 686,
+            "end": 687
+          },
+          "duration": 2,
+          "raw_tp_days": 2,
+          "uncovered_true_days": 0,
+          "uncovered_false_days": 0,
+          "calendar_overlap_blocks_addition": true,
+          "observed_overlap": true,
+          "refined_edges": [
+            693,
+            693
+          ],
+          "hard_verification_accepted": false
+        }
+      ],
+      "second_stage_status": "success"
+    },
+    {
+      "station": "v0102",
+      "positive": false,
+      "first_stage_status": "success",
+      "proposals": [],
+      "second_stage_status": "not_requested"
+    },
+    {
+      "station": "v0103",
+      "positive": false,
+      "first_stage_status": "success",
+      "proposals": [],
+      "second_stage_status": "not_requested"
+    },
+    {
+      "station": "v0104",
+      "positive": false,
+      "first_stage_status": "success",
+      "proposals": [],
+      "second_stage_status": "not_requested"
+    },
+    {
+      "station": "v0105",
+      "positive": true,
+      "first_stage_status": "success",
+      "proposals": [],
+      "second_stage_status": "not_requested"
+    },
+    {
+      "station": "v0106",
+      "positive": false,
+      "first_stage_status": "success",
+      "proposals": [],
+      "second_stage_status": "not_requested"
+    },
+    {
+      "station": "v0107",
+      "positive": true,
+      "first_stage_status": "success",
+      "proposals": [],
+      "second_stage_status": "not_requested"
+    },
+    {
+      "station": "v0108",
+      "positive": false,
+      "first_stage_status": "success",
+      "proposals": [],
+      "second_stage_status": "not_requested"
+    },
+    {
+      "station": "v0109",
+      "positive": false,
+      "first_stage_status": "success",
+      "proposals": [],
+      "second_stage_status": "not_requested"
+    },
+    {
+      "station": "v0110",
+      "positive": false,
+      "first_stage_status": "success",
+      "proposals": [
+        {
+          "interval": {
+            "start": 612,
+            "end": 615
+          },
+          "duration": 4,
+          "raw_tp_days": 0,
+          "uncovered_true_days": 0,
+          "uncovered_false_days": 4,
+          "calendar_overlap_blocks_addition": false,
+          "observed_overlap": false,
+          "refined_edges": [
+            612,
+            612
+          ],
+          "hard_verification_accepted": false
+        }
+      ],
+      "second_stage_status": "success"
+    },
+    {
+      "station": "v0111",
+      "positive": true,
+      "first_stage_status": "success",
+      "proposals": [],
+      "second_stage_status": "not_requested"
+    },
+    {
+      "station": "v0112",
+      "positive": false,
+      "first_stage_status": "success",
+      "proposals": [],
+      "second_stage_status": "not_requested"
+    },
+    {
+      "station": "v0113",
+      "positive": true,
+      "first_stage_status": "success",
+      "proposals": [
+        {
+          "interval": {
+            "start": 546,
+            "end": 546
+          },
+          "duration": 1,
+          "raw_tp_days": 1,
+          "uncovered_true_days": 0,
+          "uncovered_false_days": 0,
+          "calendar_overlap_blocks_addition": true,
+          "observed_overlap": true,
+          "refined_edges": [
+            544,
+            544
+          ],
+          "hard_verification_accepted": false
+        }
+      ],
+      "second_stage_status": "success"
+    },
+    {
+      "station": "v0114",
+      "positive": false,
+      "first_stage_status": "success",
+      "proposals": [],
+      "second_stage_status": "not_requested"
+    },
+    {
+      "station": "v0115",
+      "positive": false,
+      "first_stage_status": "success",
+      "proposals": [],
+      "second_stage_status": "not_requested"
+    },
+    {
+      "station": "v0116",
+      "positive": false,
+      "first_stage_status": "success",
+      "proposals": [
+        {
+          "interval": {
+            "start": 512,
+            "end": 518
+          },
+          "duration": 7,
+          "raw_tp_days": 0,
+          "uncovered_true_days": 0,
+          "uncovered_false_days": 7,
+          "calendar_overlap_blocks_addition": false,
+          "observed_overlap": false,
+          "refined_edges": [
+            523,
+            523
+          ],
+          "hard_verification_accepted": false
+        }
+      ],
+      "second_stage_status": "success"
+    },
+    {
+      "station": "v0117",
+      "positive": true,
+      "first_stage_status": "success",
+      "proposals": [],
+      "second_stage_status": "not_requested"
+    },
+    {
+      "station": "v0118",
+      "positive": false,
+      "first_stage_status": "success",
+      "proposals": [],
+      "second_stage_status": "not_requested"
+    },
+    {
+      "station": "v0119",
+      "positive": true,
+      "first_stage_status": "success",
+      "proposals": [],
+      "second_stage_status": "not_requested"
+    },
+    {
+      "station": "v0120",
+      "positive": false,
+      "first_stage_status": "success",
+      "proposals": [],
+      "second_stage_status": "not_requested"
+    },
+    {
+      "station": "v0121",
+      "positive": false,
+      "first_stage_status": "success",
+      "proposals": [],
+      "second_stage_status": "not_requested"
+    },
+    {
+      "station": "v0122",
+      "positive": false,
+      "first_stage_status": "success",
+      "proposals": [],
+      "second_stage_status": "not_requested"
+    },
+    {
+      "station": "v0123",
+      "positive": true,
+      "first_stage_status": "success",
+      "proposals": [
+        {
+          "interval": {
+            "start": 532,
+            "end": 587
+          },
+          "duration": 56,
+          "raw_tp_days": 52,
+          "uncovered_true_days": 0,
+          "uncovered_false_days": 4,
+          "calendar_overlap_blocks_addition": true,
+          "observed_overlap": true,
+          "refined_edges": [
+            534,
+            586
+          ],
+          "hard_verification_accepted": true
+        }
+      ],
+      "second_stage_status": "success"
+    },
+    {
+      "station": "v0124",
+      "positive": false,
+      "first_stage_status": "success",
+      "proposals": [],
+      "second_stage_status": "not_requested"
+    },
+    {
+      "station": "v0125",
+      "positive": true,
+      "first_stage_status": "success",
+      "proposals": [
+        {
+          "interval": {
+            "start": 558,
+            "end": 560
+          },
+          "duration": 3,
+          "raw_tp_days": 0,
+          "uncovered_true_days": 0,
+          "uncovered_false_days": 3,
+          "calendar_overlap_blocks_addition": false,
+          "observed_overlap": false,
+          "refined_edges": [
+            563,
+            563
+          ],
+          "hard_verification_accepted": false
+        }
+      ],
+      "second_stage_status": "success"
+    },
+    {
+      "station": "v0126",
+      "positive": false,
+      "first_stage_status": "success",
+      "proposals": [],
+      "second_stage_status": "not_requested"
+    },
+    {
+      "station": "v0127",
+      "positive": false,
+      "first_stage_status": "success",
+      "proposals": [],
+      "second_stage_status": "not_requested"
+    },
+    {
+      "station": "v0128",
+      "positive": false,
+      "first_stage_status": "success",
+      "proposals": [],
+      "second_stage_status": "not_requested"
+    },
+    {
+      "station": "v0129",
+      "positive": true,
+      "first_stage_status": "success",
+      "proposals": [
+        {
+          "interval": {
+            "start": 588,
+            "end": 632
+          },
+          "duration": 45,
+          "raw_tp_days": 43,
+          "uncovered_true_days": 0,
+          "uncovered_false_days": 0,
+          "calendar_overlap_blocks_addition": true,
+          "observed_overlap": true,
+          "refined_edges": [
+            582,
+            639
+          ],
+          "hard_verification_accepted": true
+        }
+      ],
+      "second_stage_status": "success"
+    },
+    {
+      "station": "v0130",
+      "positive": false,
+      "first_stage_status": "success",
+      "proposals": [],
+      "second_stage_status": "not_requested"
+    },
+    {
+      "station": "v0131",
+      "positive": true,
+      "first_stage_status": "success",
+      "proposals": [],
+      "second_stage_status": "not_requested"
+    },
+    {
+      "station": "v0132",
+      "positive": false,
+      "first_stage_status": "success",
+      "proposals": [],
+      "second_stage_status": "not_requested"
+    },
+    {
+      "station": "v0133",
+      "positive": false,
+      "first_stage_status": "success",
+      "proposals": [],
+      "second_stage_status": "not_requested"
+    },
+    {
+      "station": "v0134",
+      "positive": false,
+      "first_stage_status": "success",
+      "proposals": [
+        {
+          "interval": {
+            "start": 433,
+            "end": 433
+          },
+          "duration": 1,
+          "raw_tp_days": 0,
+          "uncovered_true_days": 0,
+          "uncovered_false_days": 1,
+          "calendar_overlap_blocks_addition": false,
+          "observed_overlap": false,
+          "refined_edges": [
+            432,
+            432
+          ],
+          "hard_verification_accepted": false
+        }
+      ],
+      "second_stage_status": "success"
+    },
+    {
+      "station": "v0135",
+      "positive": true,
+      "first_stage_status": "success",
+      "proposals": [],
+      "second_stage_status": "not_requested"
+    },
+    {
+      "station": "v0136",
+      "positive": false,
+      "first_stage_status": "success",
+      "proposals": [],
+      "second_stage_status": "not_requested"
+    },
+    {
+      "station": "v0137",
+      "positive": true,
+      "first_stage_status": "success",
+      "proposals": [],
+      "second_stage_status": "not_requested"
+    },
+    {
+      "station": "v0138",
+      "positive": false,
+      "first_stage_status": "success",
+      "proposals": [],
+      "second_stage_status": "not_requested"
+    },
+    {
+      "station": "v0139",
+      "positive": false,
+      "first_stage_status": "success",
+      "proposals": [],
+      "second_stage_status": "not_requested"
+    },
+    {
+      "station": "v0140",
+      "positive": false,
+      "first_stage_status": "success",
+      "proposals": [
+        {
+          "interval": {
+            "start": 445,
+            "end": 447
+          },
+          "duration": 3,
+          "raw_tp_days": 0,
+          "uncovered_true_days": 0,
+          "uncovered_false_days": 3,
+          "calendar_overlap_blocks_addition": false,
+          "observed_overlap": false,
+          "refined_edges": [
+            443,
+            443
+          ],
+          "hard_verification_accepted": false
+        }
+      ],
+      "second_stage_status": "success"
+    },
+    {
+      "station": "v0141",
+      "positive": true,
+      "first_stage_status": "success",
+      "proposals": [
+        {
+          "interval": {
+            "start": 463,
+            "end": 475
+          },
+          "duration": 13,
+          "raw_tp_days": 9,
+          "uncovered_true_days": 0,
+          "uncovered_false_days": 4,
+          "calendar_overlap_blocks_addition": true,
+          "observed_overlap": true,
+          "refined_edges": [
+            467,
+            488
+          ],
+          "hard_verification_accepted": false
+        }
+      ],
+      "second_stage_status": "success"
+    },
+    {
+      "station": "v0142",
+      "positive": false,
+      "first_stage_status": "success",
+      "proposals": [],
+      "second_stage_status": "not_requested"
+    },
+    {
+      "station": "v0143",
+      "positive": true,
+      "first_stage_status": "success",
+      "proposals": [],
+      "second_stage_status": "not_requested"
+    },
+    {
+      "station": "v0144",
+      "positive": false,
+      "first_stage_status": "success",
+      "proposals": [],
+      "second_stage_status": "not_requested"
+    },
+    {
+      "station": "v0145",
+      "positive": false,
+      "first_stage_status": "success",
+      "proposals": [],
+      "second_stage_status": "not_requested"
+    },
+    {
+      "station": "v0146",
+      "positive": false,
+      "first_stage_status": "success",
+      "proposals": [],
+      "second_stage_status": "not_requested"
+    },
+    {
+      "station": "v0147",
+      "positive": true,
+      "first_stage_status": "success",
+      "proposals": [],
+      "second_stage_status": "not_requested"
+    },
+    {
+      "station": "v0148",
+      "positive": false,
+      "first_stage_status": "success",
+      "proposals": [],
+      "second_stage_status": "not_requested"
+    },
+    {
+      "station": "v0149",
+      "positive": true,
+      "first_stage_status": "success",
+      "proposals": [],
+      "second_stage_status": "not_requested"
+    },
+    {
+      "station": "v0150",
+      "positive": false,
+      "first_stage_status": "success",
+      "proposals": [],
+      "second_stage_status": "not_requested"
+    },
+    {
+      "station": "v0151",
+      "positive": false,
+      "first_stage_status": "success",
+      "proposals": [],
+      "second_stage_status": "not_requested"
+    },
+    {
+      "station": "v0152",
+      "positive": false,
+      "first_stage_status": "success",
+      "proposals": [],
+      "second_stage_status": "not_requested"
+    },
+    {
+      "station": "v0153",
+      "positive": true,
+      "first_stage_status": "success",
+      "proposals": [],
+      "second_stage_status": "not_requested"
+    },
+    {
+      "station": "v0154",
+      "positive": false,
+      "first_stage_status": "success",
+      "proposals": [],
+      "second_stage_status": "not_requested"
+    },
+    {
+      "station": "v0155",
+      "positive": true,
+      "first_stage_status": "success",
+      "proposals": [
+        {
+          "interval": {
+            "start": 542,
+            "end": 546
+          },
+          "duration": 5,
+          "raw_tp_days": 0,
+          "uncovered_true_days": 0,
+          "uncovered_false_days": 5,
+          "calendar_overlap_blocks_addition": false,
+          "observed_overlap": false,
+          "refined_edges": [
+            549,
+            549
+          ],
+          "hard_verification_accepted": false
+        }
+      ],
+      "second_stage_status": "success"
+    },
+    {
+      "station": "v0156",
+      "positive": false,
+      "first_stage_status": "success",
+      "proposals": [],
+      "second_stage_status": "not_requested"
+    },
+    {
+      "station": "v0157",
+      "positive": false,
+      "first_stage_status": "success",
+      "proposals": [],
+      "second_stage_status": "not_requested"
+    },
+    {
+      "station": "v0158",
+      "positive": false,
+      "first_stage_status": "success",
+      "proposals": [],
+      "second_stage_status": "not_requested"
+    },
+    {
+      "station": "v0159",
+      "positive": true,
+      "first_stage_status": "success",
+      "proposals": [],
+      "second_stage_status": "not_requested"
+    },
+    {
+      "station": "v0160",
+      "positive": false,
+      "first_stage_status": "success",
+      "proposals": [],
+      "second_stage_status": "not_requested"
+    },
+    {
+      "station": "v0161",
+      "positive": true,
+      "first_stage_status": "success",
+      "proposals": [],
+      "second_stage_status": "not_requested"
+    },
+    {
+      "station": "v0162",
+      "positive": false,
+      "first_stage_status": "success",
+      "proposals": [],
+      "second_stage_status": "not_requested"
+    },
+    {
+      "station": "v0163",
+      "positive": false,
+      "first_stage_status": "success",
+      "proposals": [],
+      "second_stage_status": "not_requested"
+    },
+    {
+      "station": "v0164",
+      "positive": false,
+      "first_stage_status": "success",
+      "proposals": [],
+      "second_stage_status": "not_requested"
+    },
+    {
+      "station": "v0165",
+      "positive": true,
+      "first_stage_status": "success",
+      "proposals": [
+        {
+          "interval": {
+            "start": 547,
+            "end": 560
+          },
+          "duration": 14,
+          "raw_tp_days": 9,
+          "uncovered_true_days": 0,
+          "uncovered_false_days": 5,
+          "calendar_overlap_blocks_addition": true,
+          "observed_overlap": true,
+          "refined_edges": [
+            552,
+            552
+          ],
+          "hard_verification_accepted": false
+        }
+      ],
+      "second_stage_status": "success"
+    },
+    {
+      "station": "v0166",
+      "positive": false,
+      "first_stage_status": "success",
+      "proposals": [],
+      "second_stage_status": "not_requested"
+    },
+    {
+      "station": "v0167",
+      "positive": true,
+      "first_stage_status": "success",
+      "proposals": [
+        {
+          "interval": {
+            "start": 501,
+            "end": 503
+          },
+          "duration": 3,
+          "raw_tp_days": 0,
+          "uncovered_true_days": 0,
+          "uncovered_false_days": 3,
+          "calendar_overlap_blocks_addition": false,
+          "observed_overlap": false,
+          "refined_edges": [
+            505,
+            505
+          ],
+          "hard_verification_accepted": false
+        }
+      ],
+      "second_stage_status": "success"
+    },
+    {
+      "station": "v0168",
+      "positive": false,
+      "first_stage_status": "success",
+      "proposals": [],
+      "second_stage_status": "not_requested"
+    },
+    {
+      "station": "v0169",
+      "positive": false,
+      "first_stage_status": "success",
+      "proposals": [],
+      "second_stage_status": "not_requested"
+    },
+    {
+      "station": "v0170",
+      "positive": false,
+      "first_stage_status": "success",
+      "proposals": [],
+      "second_stage_status": "not_requested"
+    },
+    {
+      "station": "v0171",
+      "positive": true,
+      "first_stage_status": "success",
+      "proposals": [
+        {
+          "interval": {
+            "start": 589,
+            "end": 589
+          },
+          "duration": 1,
+          "raw_tp_days": 1,
+          "uncovered_true_days": 1,
+          "uncovered_false_days": 0,
+          "calendar_overlap_blocks_addition": false,
+          "observed_overlap": false,
+          "refined_edges": [
+            596,
+            596
+          ],
+          "hard_verification_accepted": false
+        }
+      ],
+      "second_stage_status": "success"
+    },
+    {
+      "station": "v0172",
+      "positive": false,
+      "first_stage_status": "success",
+      "proposals": [],
+      "second_stage_status": "not_requested"
+    },
+    {
+      "station": "v0173",
+      "positive": true,
+      "first_stage_status": "success",
+      "proposals": [],
+      "second_stage_status": "not_requested"
+    },
+    {
+      "station": "v0174",
+      "positive": false,
+      "first_stage_status": "success",
+      "proposals": [],
+      "second_stage_status": "not_requested"
+    },
+    {
+      "station": "v0175",
+      "positive": false,
+      "first_stage_status": "success",
+      "proposals": [],
+      "second_stage_status": "not_requested"
+    },
+    {
+      "station": "v0176",
+      "positive": false,
+      "first_stage_status": "success",
+      "proposals": [],
+      "second_stage_status": "not_requested"
+    },
+    {
+      "station": "v0177",
+      "positive": true,
+      "first_stage_status": "success",
+      "proposals": [
+        {
+          "interval": {
+            "start": 598,
+            "end": 601
+          },
+          "duration": 4,
+          "raw_tp_days": 2,
+          "uncovered_true_days": 0,
+          "uncovered_false_days": 2,
+          "calendar_overlap_blocks_addition": true,
+          "observed_overlap": true,
+          "refined_edges": [
+            600,
+            600
+          ],
+          "hard_verification_accepted": false
+        },
+        {
+          "interval": {
+            "start": 640,
+            "end": 643
+          },
+          "duration": 4,
+          "raw_tp_days": 0,
+          "uncovered_true_days": 0,
+          "uncovered_false_days": 4,
+          "calendar_overlap_blocks_addition": false,
+          "observed_overlap": false,
+          "refined_edges": [
+            639,
+            639
+          ],
+          "hard_verification_accepted": false
+        }
+      ],
+      "second_stage_status": "failed"
+    },
+    {
+      "station": "v0178",
+      "positive": false,
+      "first_stage_status": "success",
+      "proposals": [],
+      "second_stage_status": "not_requested"
+    },
+    {
+      "station": "v0179",
+      "positive": true,
+      "first_stage_status": "success",
+      "proposals": [
+        {
+          "interval": {
+            "start": 617,
+            "end": 685
+          },
+          "duration": 69,
+          "raw_tp_days": 58,
+          "uncovered_true_days": 0,
+          "uncovered_false_days": 5,
+          "calendar_overlap_blocks_addition": true,
+          "observed_overlap": true,
+          "refined_edges": [
+            622,
+            686
+          ],
+          "hard_verification_accepted": false
+        }
+      ],
+      "second_stage_status": "success"
+    },
+    {
+      "station": "v0180",
+      "positive": false,
+      "first_stage_status": "success",
+      "proposals": [],
+      "second_stage_status": "not_requested"
+    },
+    {
+      "station": "v0181",
+      "positive": false,
+      "first_stage_status": "success",
+      "proposals": [],
+      "second_stage_status": "not_requested"
+    },
+    {
+      "station": "v0182",
+      "positive": false,
+      "first_stage_status": "success",
+      "proposals": [],
+      "second_stage_status": "not_requested"
+    },
+    {
+      "station": "v0183",
+      "positive": true,
+      "first_stage_status": "success",
+      "proposals": [
+        {
+          "interval": {
+            "start": 586,
+            "end": 587
+          },
+          "duration": 2,
+          "raw_tp_days": 1,
+          "uncovered_true_days": 0,
+          "uncovered_false_days": 1,
+          "calendar_overlap_blocks_addition": true,
+          "observed_overlap": true,
+          "refined_edges": [
+            587,
+            587
+          ],
+          "hard_verification_accepted": false
+        },
+        {
+          "interval": {
+            "start": 642,
+            "end": 643
+          },
+          "duration": 2,
+          "raw_tp_days": 1,
+          "uncovered_true_days": 0,
+          "uncovered_false_days": 1,
+          "calendar_overlap_blocks_addition": true,
+          "observed_overlap": true,
+          "refined_edges": [
+            643,
+            643
+          ],
+          "hard_verification_accepted": false
+        }
+      ],
+      "second_stage_status": "failed"
+    },
+    {
+      "station": "v0184",
+      "positive": false,
+      "first_stage_status": "success",
+      "proposals": [],
+      "second_stage_status": "not_requested"
+    },
+    {
+      "station": "v0185",
+      "positive": true,
+      "first_stage_status": "success",
+      "proposals": [],
+      "second_stage_status": "not_requested"
+    },
+    {
+      "station": "v0186",
+      "positive": false,
+      "first_stage_status": "success",
+      "proposals": [],
+      "second_stage_status": "not_requested"
+    },
+    {
+      "station": "v0187",
+      "positive": false,
+      "first_stage_status": "success",
+      "proposals": [],
+      "second_stage_status": "not_requested"
+    },
+    {
+      "station": "v0188",
+      "positive": false,
+      "first_stage_status": "success",
+      "proposals": [],
+      "second_stage_status": "not_requested"
+    },
+    {
+      "station": "v0189",
+      "positive": true,
+      "first_stage_status": "success",
+      "proposals": [
+        {
+          "interval": {
+            "start": 532,
+            "end": 546
+          },
+          "duration": 15,
+          "raw_tp_days": 9,
+          "uncovered_true_days": 0,
+          "uncovered_false_days": 6,
+          "calendar_overlap_blocks_addition": true,
+          "observed_overlap": true,
+          "refined_edges": [
+            518,
+            559
+          ],
+          "hard_verification_accepted": false
+        }
+      ],
+      "second_stage_status": "success"
+    },
+    {
+      "station": "v0190",
+      "positive": false,
+      "first_stage_status": "success",
+      "proposals": [],
+      "second_stage_status": "not_requested"
+    },
+    {
+      "station": "v0191",
+      "positive": true,
+      "first_stage_status": "success",
+      "proposals": [
+        {
+          "interval": {
+            "start": 476,
+            "end": 489
+          },
+          "duration": 14,
+          "raw_tp_days": 0,
+          "uncovered_true_days": 0,
+          "uncovered_false_days": 14,
+          "calendar_overlap_blocks_addition": false,
+          "observed_overlap": false,
+          "refined_edges": [
+            486,
+            486
+          ],
+          "hard_verification_accepted": false
+        },
+        {
+          "interval": {
+            "start": 574,
+            "end": 615
+          },
+          "duration": 42,
+          "raw_tp_days": 40,
+          "uncovered_true_days": 0,
+          "uncovered_false_days": 0,
+          "calendar_overlap_blocks_addition": true,
+          "observed_overlap": true,
+          "refined_edges": [
+            573,
+            619
+          ],
+          "hard_verification_accepted": true
+        }
+      ],
+      "second_stage_status": "success"
+    },
+    {
+      "station": "v0192",
+      "positive": false,
+      "first_stage_status": "success",
+      "proposals": [],
+      "second_stage_status": "not_requested"
+    },
+    {
+      "station": "v0193",
+      "positive": false,
+      "first_stage_status": "success",
+      "proposals": [],
+      "second_stage_status": "not_requested"
+    },
+    {
+      "station": "v0194",
+      "positive": false,
+      "first_stage_status": "success",
+      "proposals": [],
+      "second_stage_status": "not_requested"
+    },
+    {
+      "station": "v0195",
+      "positive": true,
+      "first_stage_status": "success",
+      "proposals": [],
+      "second_stage_status": "not_requested"
+    },
+    {
+      "station": "v0196",
+      "positive": false,
+      "first_stage_status": "success",
+      "proposals": [],
+      "second_stage_status": "not_requested"
+    },
+    {
+      "station": "v0197",
+      "positive": true,
+      "first_stage_status": "success",
+      "proposals": [
+        {
+          "interval": {
+            "start": 463,
+            "end": 520
+          },
+          "duration": 58,
+          "raw_tp_days": 53,
+          "uncovered_true_days": 0,
+          "uncovered_false_days": 4,
+          "calendar_overlap_blocks_addition": true,
+          "observed_overlap": true,
+          "refined_edges": [
+            467,
+            527
+          ],
+          "hard_verification_accepted": true
+        }
+      ],
+      "second_stage_status": "success"
+    },
+    {
+      "station": "v0198",
+      "positive": false,
+      "first_stage_status": "success",
+      "proposals": [],
+      "second_stage_status": "not_requested"
+    },
+    {
+      "station": "v0199",
+      "positive": false,
+      "first_stage_status": "success",
+      "proposals": [],
+      "second_stage_status": "not_requested"
+    },
+    {
+      "station": "v0200",
+      "positive": false,
+      "first_stage_status": "success",
+      "proposals": [],
+      "second_stage_status": "not_requested"
+    },
+    {
+      "station": "v0201",
+      "positive": true,
+      "first_stage_status": "success",
+      "proposals": [
+        {
+          "interval": {
+            "start": 533,
+            "end": 545
+          },
+          "duration": 13,
+          "raw_tp_days": 6,
+          "uncovered_true_days": 0,
+          "uncovered_false_days": 7,
+          "calendar_overlap_blocks_addition": true,
+          "observed_overlap": true,
+          "refined_edges": [
+            540,
+            540
+          ],
+          "hard_verification_accepted": false
+        },
+        {
+          "interval": {
+            "start": 575,
+            "end": 587
+          },
+          "duration": 13,
+          "raw_tp_days": 13,
+          "uncovered_true_days": 0,
+          "uncovered_false_days": 0,
+          "calendar_overlap_blocks_addition": true,
+          "observed_overlap": true,
+          "refined_edges": [
+            588,
+            588
+          ],
+          "hard_verification_accepted": false
+        }
+      ],
+      "second_stage_status": "success"
+    },
+    {
+      "station": "v0202",
+      "positive": false,
+      "first_stage_status": "success",
+      "proposals": [],
+      "second_stage_status": "not_requested"
+    },
+    {
+      "station": "v0203",
+      "positive": true,
+      "first_stage_status": "success",
+      "proposals": [],
+      "second_stage_status": "not_requested"
+    },
+    {
+      "station": "v0204",
+      "positive": false,
+      "first_stage_status": "success",
+      "proposals": [],
+      "second_stage_status": "not_requested"
+    },
+    {
+      "station": "v0205",
+      "positive": false,
+      "first_stage_status": "success",
+      "proposals": [],
+      "second_stage_status": "not_requested"
+    },
+    {
+      "station": "v0206",
+      "positive": false,
+      "first_stage_status": "success",
+      "proposals": [],
+      "second_stage_status": "not_requested"
+    },
+    {
+      "station": "v0207",
+      "positive": true,
+      "first_stage_status": "success",
+      "proposals": [
+        {
+          "interval": {
+            "start": 476,
+            "end": 518
+          },
+          "duration": 43,
+          "raw_tp_days": 35,
+          "uncovered_true_days": 0,
+          "uncovered_false_days": 8,
+          "calendar_overlap_blocks_addition": true,
+          "observed_overlap": true,
+          "refined_edges": [
+            484,
+            524
+          ],
+          "hard_verification_accepted": true
+        }
+      ],
+      "second_stage_status": "success"
+    },
+    {
+      "station": "v0208",
+      "positive": false,
+      "first_stage_status": "success",
+      "proposals": [],
+      "second_stage_status": "not_requested"
+    },
+    {
+      "station": "v0209",
+      "positive": true,
+      "first_stage_status": "success",
+      "proposals": [
+        {
+          "interval": {
+            "start": 560,
+            "end": 573
+          },
+          "duration": 14,
+          "raw_tp_days": 11,
+          "uncovered_true_days": 0,
+          "uncovered_false_days": 3,
+          "calendar_overlap_blocks_addition": true,
+          "observed_overlap": true,
+          "refined_edges": [
+            563,
+            585
+          ],
+          "hard_verification_accepted": false
+        }
+      ],
+      "second_stage_status": "success"
+    },
+    {
+      "station": "v0210",
+      "positive": false,
+      "first_stage_status": "success",
+      "proposals": [],
+      "second_stage_status": "not_requested"
+    },
+    {
+      "station": "v0211",
+      "positive": false,
+      "first_stage_status": "success",
+      "proposals": [],
+      "second_stage_status": "not_requested"
+    },
+    {
+      "station": "v0212",
+      "positive": false,
+      "first_stage_status": "success",
+      "proposals": [
+        {
+          "interval": {
+            "start": 574,
+            "end": 574
+          },
+          "duration": 1,
+          "raw_tp_days": 0,
+          "uncovered_true_days": 0,
+          "uncovered_false_days": 1,
+          "calendar_overlap_blocks_addition": false,
+          "observed_overlap": false,
+          "refined_edges": [
+            577,
+            577
+          ],
+          "hard_verification_accepted": false
+        }
+      ],
+      "second_stage_status": "success"
+    },
+    {
+      "station": "v0213",
+      "positive": true,
+      "first_stage_status": "success",
+      "proposals": [
+        {
+          "interval": {
+            "start": 574,
+            "end": 574
+          },
+          "duration": 1,
+          "raw_tp_days": 0,
+          "uncovered_true_days": 0,
+          "uncovered_false_days": 1,
+          "calendar_overlap_blocks_addition": false,
+          "observed_overlap": false,
+          "refined_edges": [
+            577,
+            577
+          ],
+          "hard_verification_accepted": false
+        },
+        {
+          "interval": {
+            "start": 630,
+            "end": 630
+          },
+          "duration": 1,
+          "raw_tp_days": 1,
+          "uncovered_true_days": 0,
+          "uncovered_false_days": 0,
+          "calendar_overlap_blocks_addition": true,
+          "observed_overlap": true,
+          "refined_edges": [
+            632,
+            632
+          ],
+          "hard_verification_accepted": false
+        }
+      ],
+      "second_stage_status": "success"
+    },
+    {
+      "station": "v0214",
+      "positive": false,
+      "first_stage_status": "success",
+      "proposals": [],
+      "second_stage_status": "not_requested"
+    },
+    {
+      "station": "v0215",
+      "positive": true,
+      "first_stage_status": "success",
+      "proposals": [],
+      "second_stage_status": "not_requested"
+    },
+    {
+      "station": "v0216",
+      "positive": false,
+      "first_stage_status": "success",
+      "proposals": [],
+      "second_stage_status": "not_requested"
+    },
+    {
+      "station": "v0217",
+      "positive": false,
+      "first_stage_status": "success",
+      "proposals": [],
+      "second_stage_status": "not_requested"
+    },
+    {
+      "station": "v0218",
+      "positive": false,
+      "first_stage_status": "failed",
+      "proposals": [],
+      "second_stage_status": "not_requested"
+    },
+    {
+      "station": "v0219",
+      "positive": true,
+      "first_stage_status": "success",
+      "proposals": [],
+      "second_stage_status": "not_requested"
+    },
+    {
+      "station": "v0220",
+      "positive": false,
+      "first_stage_status": "success",
+      "proposals": [],
+      "second_stage_status": "not_requested"
+    },
+    {
+      "station": "v0221",
+      "positive": true,
+      "first_stage_status": "success",
+      "proposals": [],
+      "second_stage_status": "not_requested"
+    },
+    {
+      "station": "v0222",
+      "positive": false,
+      "first_stage_status": "success",
+      "proposals": [],
+      "second_stage_status": "not_requested"
+    },
+    {
+      "station": "v0223",
+      "positive": false,
+      "first_stage_status": "success",
+      "proposals": [],
+      "second_stage_status": "not_requested"
+    },
+    {
+      "station": "v0224",
+      "positive": false,
+      "first_stage_status": "success",
+      "proposals": [],
+      "second_stage_status": "not_requested"
+    },
+    {
+      "station": "v0225",
+      "positive": true,
+      "first_stage_status": "success",
+      "proposals": [],
+      "second_stage_status": "not_requested"
+    },
+    {
+      "station": "v0226",
+      "positive": false,
+      "first_stage_status": "success",
+      "proposals": [],
+      "second_stage_status": "not_requested"
+    },
+    {
+      "station": "v0227",
+      "positive": true,
+      "first_stage_status": "success",
+      "proposals": [],
+      "second_stage_status": "not_requested"
+    },
+    {
+      "station": "v0228",
+      "positive": false,
+      "first_stage_status": "success",
+      "proposals": [],
+      "second_stage_status": "not_requested"
+    },
+    {
+      "station": "v0229",
+      "positive": false,
+      "first_stage_status": "success",
+      "proposals": [],
+      "second_stage_status": "not_requested"
+    },
+    {
+      "station": "v0230",
+      "positive": false,
+      "first_stage_status": "success",
+      "proposals": [],
+      "second_stage_status": "not_requested"
+    },
+    {
+      "station": "v0231",
+      "positive": true,
+      "first_stage_status": "success",
+      "proposals": [],
+      "second_stage_status": "not_requested"
+    },
+    {
+      "station": "v0232",
+      "positive": false,
+      "first_stage_status": "success",
+      "proposals": [],
+      "second_stage_status": "not_requested"
+    },
+    {
+      "station": "v0233",
+      "positive": true,
+      "first_stage_status": "success",
+      "proposals": [],
+      "second_stage_status": "not_requested"
+    },
+    {
+      "station": "v0234",
+      "positive": false,
+      "first_stage_status": "success",
+      "proposals": [],
+      "second_stage_status": "not_requested"
+    },
+    {
+      "station": "v0235",
+      "positive": false,
+      "first_stage_status": "success",
+      "proposals": [],
+      "second_stage_status": "not_requested"
+    },
+    {
+      "station": "v0236",
+      "positive": false,
+      "first_stage_status": "success",
+      "proposals": [],
+      "second_stage_status": "not_requested"
+    },
+    {
+      "station": "v0237",
+      "positive": true,
+      "first_stage_status": "success",
+      "proposals": [],
+      "second_stage_status": "not_requested"
+    },
+    {
+      "station": "v0238",
+      "positive": false,
+      "first_stage_status": "success",
+      "proposals": [],
+      "second_stage_status": "not_requested"
+    },
+    {
+      "station": "v0239",
+      "positive": true,
+      "first_stage_status": "success",
+      "proposals": [],
+      "second_stage_status": "not_requested"
+    },
+    {
+      "station": "v0240",
+      "positive": false,
+      "first_stage_status": "success",
+      "proposals": [],
+      "second_stage_status": "not_requested"
+    },
+    {
+      "station": "v0241",
+      "positive": false,
+      "first_stage_status": "success",
+      "proposals": [],
+      "second_stage_status": "not_requested"
+    },
+    {
+      "station": "v0242",
+      "positive": false,
+      "first_stage_status": "success",
+      "proposals": [],
+      "second_stage_status": "not_requested"
+    },
+    {
+      "station": "v0243",
+      "positive": true,
+      "first_stage_status": "success",
+      "proposals": [
+        {
+          "interval": {
+            "start": 489,
+            "end": 517
+          },
+          "duration": 29,
+          "raw_tp_days": 29,
+          "uncovered_true_days": 0,
+          "uncovered_false_days": 0,
+          "calendar_overlap_blocks_addition": true,
+          "observed_overlap": true,
+          "refined_edges": [
+            487,
+            519
+          ],
+          "hard_verification_accepted": true
+        }
+      ],
+      "second_stage_status": "success"
+    },
+    {
+      "station": "v0244",
+      "positive": false,
+      "first_stage_status": "success",
+      "proposals": [],
+      "second_stage_status": "not_requested"
+    },
+    {
+      "station": "v0245",
+      "positive": true,
+      "first_stage_status": "success",
+      "proposals": [
+        {
+          "interval": {
+            "start": 462,
+            "end": 465
+          },
+          "duration": 4,
+          "raw_tp_days": 3,
+          "uncovered_true_days": 0,
+          "uncovered_false_days": 1,
+          "calendar_overlap_blocks_addition": true,
+          "observed_overlap": true,
+          "refined_edges": [
+            451,
+            452
+          ],
+          "hard_verification_accepted": false
+        },
+        {
+          "interval": {
+            "start": 517,
+            "end": 519
+          },
+          "duration": 3,
+          "raw_tp_days": 0,
+          "uncovered_true_days": 0,
+          "uncovered_false_days": 3,
+          "calendar_overlap_blocks_addition": false,
+          "observed_overlap": false,
+          "refined_edges": [
+            529,
+            529
+          ],
+          "hard_verification_accepted": false
+        }
+      ],
+      "second_stage_status": "success"
+    },
+    {
+      "station": "v0246",
+      "positive": false,
+      "first_stage_status": "success",
+      "proposals": [],
+      "second_stage_status": "not_requested"
+    },
+    {
+      "station": "v0247",
+      "positive": false,
+      "first_stage_status": "success",
+      "proposals": [],
+      "second_stage_status": "not_requested"
+    },
+    {
+      "station": "v0248",
+      "positive": false,
+      "first_stage_status": "success",
+      "proposals": [],
+      "second_stage_status": "not_requested"
+    },
+    {
+      "station": "v0249",
+      "positive": true,
+      "first_stage_status": "success",
+      "proposals": [],
+      "second_stage_status": "not_requested"
+    },
+    {
+      "station": "v0250",
+      "positive": false,
+      "first_stage_status": "success",
+      "proposals": [],
+      "second_stage_status": "not_requested"
+    },
+    {
+      "station": "v0251",
+      "positive": true,
+      "first_stage_status": "success",
+      "proposals": [],
+      "second_stage_status": "not_requested"
+    },
+    {
+      "station": "v0252",
+      "positive": false,
+      "first_stage_status": "success",
+      "proposals": [],
+      "second_stage_status": "not_requested"
+    },
+    {
+      "station": "v0253",
+      "positive": false,
+      "first_stage_status": "success",
+      "proposals": [],
+      "second_stage_status": "not_requested"
+    },
+    {
+      "station": "v0254",
+      "positive": false,
+      "first_stage_status": "success",
+      "proposals": [],
+      "second_stage_status": "not_requested"
+    },
+    {
+      "station": "v0255",
+      "positive": true,
+      "first_stage_status": "success",
+      "proposals": [],
+      "second_stage_status": "not_requested"
+    },
+    {
+      "station": "v0256",
+      "positive": false,
+      "first_stage_status": "success",
+      "proposals": [],
+      "second_stage_status": "not_requested"
+    },
+    {
+      "station": "v0257",
+      "positive": true,
+      "first_stage_status": "success",
+      "proposals": [],
+      "second_stage_status": "not_requested"
+    },
+    {
+      "station": "v0258",
+      "positive": false,
+      "first_stage_status": "success",
+      "proposals": [],
+      "second_stage_status": "not_requested"
+    },
+    {
+      "station": "v0259",
+      "positive": false,
+      "first_stage_status": "success",
+      "proposals": [],
+      "second_stage_status": "not_requested"
+    },
+    {
+      "station": "v0260",
+      "positive": false,
+      "first_stage_status": "success",
+      "proposals": [],
+      "second_stage_status": "not_requested"
+    },
+    {
+      "station": "v0261",
+      "positive": true,
+      "first_stage_status": "success",
+      "proposals": [
+        {
+          "interval": {
+            "start": 463,
+            "end": 475
+          },
+          "duration": 13,
+          "raw_tp_days": 12,
+          "uncovered_true_days": 0,
+          "uncovered_false_days": 1,
+          "calendar_overlap_blocks_addition": true,
+          "observed_overlap": true,
+          "refined_edges": [
+            464,
+            488
+          ],
+          "hard_verification_accepted": false
+        }
+      ],
+      "second_stage_status": "success"
+    },
+    {
+      "station": "v0262",
+      "positive": false,
+      "first_stage_status": "success",
+      "proposals": [],
+      "second_stage_status": "not_requested"
+    },
+    {
+      "station": "v0263",
+      "positive": true,
+      "first_stage_status": "success",
+      "proposals": [
+        {
+          "interval": {
+            "start": 658,
+            "end": 660
+          },
+          "duration": 3,
+          "raw_tp_days": 3,
+          "uncovered_true_days": 0,
+          "uncovered_false_days": 0,
+          "calendar_overlap_blocks_addition": true,
+          "observed_overlap": true,
+          "refined_edges": [
+            647,
+            647
+          ],
+          "hard_verification_accepted": false
+        }
+      ],
+      "second_stage_status": "success"
+    },
+    {
+      "station": "v0264",
+      "positive": false,
+      "first_stage_status": "success",
+      "proposals": [],
+      "second_stage_status": "not_requested"
+    },
+    {
+      "station": "v0265",
+      "positive": false,
+      "first_stage_status": "success",
+      "proposals": [],
+      "second_stage_status": "not_requested"
+    },
+    {
+      "station": "v0266",
+      "positive": false,
+      "first_stage_status": "success",
+      "proposals": [],
+      "second_stage_status": "not_requested"
+    },
+    {
+      "station": "v0267",
+      "positive": true,
+      "first_stage_status": "success",
+      "proposals": [],
+      "second_stage_status": "not_requested"
+    },
+    {
+      "station": "v0268",
+      "positive": false,
+      "first_stage_status": "success",
+      "proposals": [],
+      "second_stage_status": "not_requested"
+    },
+    {
+      "station": "v0269",
+      "positive": true,
+      "first_stage_status": "success",
+      "proposals": [],
+      "second_stage_status": "not_requested"
+    },
+    {
+      "station": "v0270",
+      "positive": false,
+      "first_stage_status": "success",
+      "proposals": [],
+      "second_stage_status": "not_requested"
+    },
+    {
+      "station": "v0271",
+      "positive": false,
+      "first_stage_status": "success",
+      "proposals": [],
+      "second_stage_status": "not_requested"
+    },
+    {
+      "station": "v0272",
+      "positive": false,
+      "first_stage_status": "success",
+      "proposals": [
+        {
+          "interval": {
+            "start": 560,
+            "end": 560
+          },
+          "duration": 1,
+          "raw_tp_days": 0,
+          "uncovered_true_days": 0,
+          "uncovered_false_days": 1,
+          "calendar_overlap_blocks_addition": false,
+          "observed_overlap": false,
+          "refined_edges": [
+            559,
+            559
+          ],
+          "hard_verification_accepted": false
+        }
+      ],
+      "second_stage_status": "success"
+    },
+    {
+      "station": "v0273",
+      "positive": true,
+      "first_stage_status": "failed",
+      "proposals": [],
+      "second_stage_status": "not_requested"
+    },
+    {
+      "station": "v0274",
+      "positive": false,
+      "first_stage_status": "success",
+      "proposals": [],
+      "second_stage_status": "not_requested"
+    },
+    {
+      "station": "v0275",
+      "positive": true,
+      "first_stage_status": "success",
+      "proposals": [],
+      "second_stage_status": "not_requested"
+    },
+    {
+      "station": "v0276",
+      "positive": false,
+      "first_stage_status": "success",
+      "proposals": [],
+      "second_stage_status": "not_requested"
+    },
+    {
+      "station": "v0277",
+      "positive": false,
+      "first_stage_status": "success",
+      "proposals": [],
+      "second_stage_status": "not_requested"
+    },
+    {
+      "station": "v0278",
+      "positive": false,
+      "first_stage_status": "success",
+      "proposals": [],
+      "second_stage_status": "not_requested"
+    },
+    {
+      "station": "v0279",
+      "positive": true,
+      "first_stage_status": "success",
+      "proposals": [
+        {
+          "interval": {
+            "start": 547,
+            "end": 559
+          },
+          "duration": 13,
+          "raw_tp_days": 2,
+          "uncovered_true_days": 0,
+          "uncovered_false_days": 8,
+          "calendar_overlap_blocks_addition": true,
+          "observed_overlap": true,
+          "refined_edges": [
+            555,
+            555
+          ],
+          "hard_verification_accepted": false
+        },
+        {
+          "interval": {
+            "start": 598,
+            "end": 601
+          },
+          "duration": 4,
+          "raw_tp_days": 4,
+          "uncovered_true_days": 0,
+          "uncovered_false_days": 0,
+          "calendar_overlap_blocks_addition": true,
+          "observed_overlap": true,
+          "refined_edges": [
+            602,
+            602
+          ],
+          "hard_verification_accepted": false
+        }
+      ],
+      "second_stage_status": "success"
+    },
+    {
+      "station": "v0280",
+      "positive": false,
+      "first_stage_status": "success",
+      "proposals": [],
+      "second_stage_status": "not_requested"
+    },
+    {
+      "station": "v0281",
+      "positive": true,
+      "first_stage_status": "success",
+      "proposals": [],
+      "second_stage_status": "not_requested"
+    },
+    {
+      "station": "v0282",
+      "positive": false,
+      "first_stage_status": "success",
+      "proposals": [],
+      "second_stage_status": "not_requested"
+    },
+    {
+      "station": "v0283",
+      "positive": false,
+      "first_stage_status": "success",
+      "proposals": [],
+      "second_stage_status": "not_requested"
+    },
+    {
+      "station": "v0284",
+      "positive": false,
+      "first_stage_status": "success",
+      "proposals": [],
+      "second_stage_status": "not_requested"
+    },
+    {
+      "station": "v0285",
+      "positive": true,
+      "first_stage_status": "success",
+      "proposals": [
+        {
+          "interval": {
+            "start": 574,
+            "end": 616
+          },
+          "duration": 43,
+          "raw_tp_days": 39,
+          "uncovered_true_days": 0,
+          "uncovered_false_days": 2,
+          "calendar_overlap_blocks_addition": true,
+          "observed_overlap": true,
+          "refined_edges": [
+            576,
+            622
+          ],
+          "hard_verification_accepted": true
+        }
+      ],
+      "second_stage_status": "success"
+    },
+    {
+      "station": "v0286",
+      "positive": false,
+      "first_stage_status": "success",
+      "proposals": [],
+      "second_stage_status": "not_requested"
+    },
+    {
+      "station": "v0287",
+      "positive": true,
+      "first_stage_status": "success",
+      "proposals": [
+        {
+          "interval": {
+            "start": 545,
+            "end": 546
+          },
+          "duration": 2,
+          "raw_tp_days": 0,
+          "uncovered_true_days": 0,
+          "uncovered_false_days": 2,
+          "calendar_overlap_blocks_addition": false,
+          "observed_overlap": false,
+          "refined_edges": [
+            550,
+            550
+          ],
+          "hard_verification_accepted": false
+        }
+      ],
+      "second_stage_status": "success"
+    },
+    {
+      "station": "v0288",
+      "positive": false,
+      "first_stage_status": "success",
+      "proposals": [],
+      "second_stage_status": "not_requested"
+    },
+    {
+      "station": "v0289",
+      "positive": false,
+      "first_stage_status": "success",
+      "proposals": [],
+      "second_stage_status": "not_requested"
+    },
+    {
+      "station": "v0290",
+      "positive": false,
+      "first_stage_status": "success",
+      "proposals": [],
+      "second_stage_status": "not_requested"
+    },
+    {
+      "station": "v0291",
+      "positive": true,
+      "first_stage_status": "success",
+      "proposals": [
+        {
+          "interval": {
+            "start": 545,
+            "end": 546
+          },
+          "duration": 2,
+          "raw_tp_days": 2,
+          "uncovered_true_days": 0,
+          "uncovered_false_days": 0,
+          "calendar_overlap_blocks_addition": true,
+          "observed_overlap": true,
+          "refined_edges": [
+            551,
+            551
+          ],
+          "hard_verification_accepted": false
+        }
+      ],
+      "second_stage_status": "success"
+    },
+    {
+      "station": "v0292",
+      "positive": false,
+      "first_stage_status": "success",
+      "proposals": [],
+      "second_stage_status": "not_requested"
+    },
+    {
+      "station": "v0293",
+      "positive": true,
+      "first_stage_status": "success",
+      "proposals": [],
+      "second_stage_status": "not_requested"
+    },
+    {
+      "station": "v0294",
+      "positive": false,
+      "first_stage_status": "success",
+      "proposals": [],
+      "second_stage_status": "not_requested"
+    },
+    {
+      "station": "v0295",
+      "positive": false,
+      "first_stage_status": "success",
+      "proposals": [],
+      "second_stage_status": "not_requested"
+    },
+    {
+      "station": "v0296",
+      "positive": false,
+      "first_stage_status": "success",
+      "proposals": [
+        {
+          "interval": {
+            "start": 462,
+            "end": 462
+          },
+          "duration": 1,
+          "raw_tp_days": 0,
+          "uncovered_true_days": 0,
+          "uncovered_false_days": 1,
+          "calendar_overlap_blocks_addition": false,
+          "observed_overlap": false,
+          "refined_edges": [
+            470,
+            470
+          ],
+          "hard_verification_accepted": false
+        }
+      ],
+      "second_stage_status": "success"
+    },
+    {
+      "station": "v0297",
+      "positive": true,
+      "first_stage_status": "success",
+      "proposals": [
+        {
+          "interval": {
+            "start": 463,
+            "end": 518
+          },
+          "duration": 56,
+          "raw_tp_days": 50,
+          "uncovered_true_days": 0,
+          "uncovered_false_days": 5,
+          "calendar_overlap_blocks_addition": true,
+          "observed_overlap": true,
+          "refined_edges": [
+            466,
+            517
+          ],
+          "hard_verification_accepted": true
+        }
+      ],
+      "second_stage_status": "success"
+    },
+    {
+      "station": "v0298",
+      "positive": false,
+      "first_stage_status": "success",
+      "proposals": [],
+      "second_stage_status": "not_requested"
+    },
+    {
+      "station": "v0299",
+      "positive": true,
+      "first_stage_status": "success",
+      "proposals": [],
+      "second_stage_status": "not_requested"
+    },
+    {
+      "station": "v0300",
+      "positive": false,
+      "first_stage_status": "success",
+      "proposals": [],
+      "second_stage_status": "not_requested"
+    },
+    {
+      "station": "v0301",
+      "positive": false,
+      "first_stage_status": "success",
+      "proposals": [],
+      "second_stage_status": "not_requested"
+    },
+    {
+      "station": "v0302",
+      "positive": false,
+      "first_stage_status": "success",
+      "proposals": [],
+      "second_stage_status": "not_requested"
+    },
+    {
+      "station": "v0303",
+      "positive": true,
+      "first_stage_status": "success",
+      "proposals": [],
+      "second_stage_status": "not_requested"
+    },
+    {
+      "station": "v0304",
+      "positive": false,
+      "first_stage_status": "success",
+      "proposals": [],
+      "second_stage_status": "not_requested"
+    },
+    {
+      "station": "v0305",
+      "positive": true,
+      "first_stage_status": "success",
+      "proposals": [
+        {
+          "interval": {
+            "start": 462,
+            "end": 518
+          },
+          "duration": 57,
+          "raw_tp_days": 13,
+          "uncovered_true_days": 0,
+          "uncovered_false_days": 0,
+          "calendar_overlap_blocks_addition": true,
+          "observed_overlap": true,
+          "refined_edges": [
+            461,
+            533
+          ],
+          "hard_verification_accepted": false
+        }
+      ],
+      "second_stage_status": "success"
+    },
+    {
+      "station": "v0306",
+      "positive": false,
+      "first_stage_status": "success",
+      "proposals": [],
+      "second_stage_status": "not_requested"
+    },
+    {
+      "station": "v0307",
+      "positive": false,
+      "first_stage_status": "success",
+      "proposals": [],
+      "second_stage_status": "not_requested"
+    },
+    {
+      "station": "v0308",
+      "positive": false,
+      "first_stage_status": "success",
+      "proposals": [],
+      "second_stage_status": "not_requested"
+    },
+    {
+      "station": "v0309",
+      "positive": true,
+      "first_stage_status": "success",
+      "proposals": [
+        {
+          "interval": {
+            "start": 476,
+            "end": 518
+          },
+          "duration": 43,
+          "raw_tp_days": 38,
+          "uncovered_true_days": 0,
+          "uncovered_false_days": 3,
+          "calendar_overlap_blocks_addition": true,
+          "observed_overlap": true,
+          "refined_edges": [
+            479,
+            527
+          ],
+          "hard_verification_accepted": true
+        }
+      ],
+      "second_stage_status": "success"
+    },
+    {
+      "station": "v0310",
+      "positive": false,
+      "first_stage_status": "success",
+      "proposals": [],
+      "second_stage_status": "not_requested"
+    },
+    {
+      "station": "v0311",
+      "positive": true,
+      "first_stage_status": "success",
+      "proposals": [],
+      "second_stage_status": "not_requested"
+    },
+    {
+      "station": "v0312",
+      "positive": false,
+      "first_stage_status": "success",
+      "proposals": [],
+      "second_stage_status": "not_requested"
+    },
+    {
+      "station": "v0313",
+      "positive": false,
+      "first_stage_status": "success",
+      "proposals": [],
+      "second_stage_status": "not_requested"
+    },
+    {
+      "station": "v0314",
+      "positive": false,
+      "first_stage_status": "success",
+      "proposals": [],
+      "second_stage_status": "not_requested"
+    },
+    {
+      "station": "v0315",
+      "positive": true,
+      "first_stage_status": "success",
+      "proposals": [],
+      "second_stage_status": "not_requested"
+    },
+    {
+      "station": "v0316",
+      "positive": false,
+      "first_stage_status": "success",
+      "proposals": [],
+      "second_stage_status": "not_requested"
+    },
+    {
+      "station": "v0317",
+      "positive": true,
+      "first_stage_status": "success",
+      "proposals": [
+        {
+          "interval": {
+            "start": 686,
+            "end": 714
+          },
+          "duration": 29,
+          "raw_tp_days": 26,
+          "uncovered_true_days": 0,
+          "uncovered_false_days": 3,
+          "calendar_overlap_blocks_addition": true,
+          "observed_overlap": true,
+          "refined_edges": [
+            685,
+            712
+          ],
+          "hard_verification_accepted": true
+        }
+      ],
+      "second_stage_status": "failed"
+    },
+    {
+      "station": "v0318",
+      "positive": false,
+      "first_stage_status": "success",
+      "proposals": [],
+      "second_stage_status": "not_requested"
+    },
+    {
+      "station": "v0319",
+      "positive": false,
+      "first_stage_status": "success",
+      "proposals": [],
+      "second_stage_status": "not_requested"
+    },
+    {
+      "station": "v0320",
+      "positive": false,
+      "first_stage_status": "failed",
+      "proposals": [],
+      "second_stage_status": "not_requested"
+    },
+    {
+      "station": "v0321",
+      "positive": true,
+      "first_stage_status": "success",
+      "proposals": [],
+      "second_stage_status": "not_requested"
+    },
+    {
+      "station": "v0322",
+      "positive": false,
+      "first_stage_status": "success",
+      "proposals": [],
+      "second_stage_status": "not_requested"
+    },
+    {
+      "station": "v0323",
+      "positive": true,
+      "first_stage_status": "success",
+      "proposals": [
+        {
+          "interval": {
+            "start": 588,
+            "end": 643
+          },
+          "duration": 56,
+          "raw_tp_days": 55,
+          "uncovered_true_days": 0,
+          "uncovered_false_days": 0,
+          "calendar_overlap_blocks_addition": true,
+          "observed_overlap": true,
+          "refined_edges": [
+            584,
+            647
+          ],
+          "hard_verification_accepted": true
+        }
+      ],
+      "second_stage_status": "success"
+    },
+    {
+      "station": "v0324",
+      "positive": false,
+      "first_stage_status": "success",
+      "proposals": [],
+      "second_stage_status": "not_requested"
+    },
+    {
+      "station": "v0325",
+      "positive": false,
+      "first_stage_status": "success",
+      "proposals": [],
+      "second_stage_status": "not_requested"
+    },
+    {
+      "station": "v0326",
+      "positive": false,
+      "first_stage_status": "success",
+      "proposals": [],
+      "second_stage_status": "not_requested"
+    },
+    {
+      "station": "v0327",
+      "positive": true,
+      "first_stage_status": "success",
+      "proposals": [
+        {
+          "interval": {
+            "start": 518,
+            "end": 520
+          },
+          "duration": 3,
+          "raw_tp_days": 0,
+          "uncovered_true_days": 0,
+          "uncovered_false_days": 3,
+          "calendar_overlap_blocks_addition": false,
+          "observed_overlap": false,
+          "refined_edges": [
+            532,
+            532
+          ],
+          "hard_verification_accepted": false
+        }
+      ],
+      "second_stage_status": "success"
+    },
+    {
+      "station": "v0328",
+      "positive": false,
+      "first_stage_status": "success",
+      "proposals": [],
+      "second_stage_status": "not_requested"
+    },
+    {
+      "station": "v0329",
+      "positive": true,
+      "first_stage_status": "success",
+      "proposals": [],
+      "second_stage_status": "not_requested"
+    },
+    {
+      "station": "v0330",
+      "positive": false,
+      "first_stage_status": "success",
+      "proposals": [],
+      "second_stage_status": "not_requested"
+    },
+    {
+      "station": "v0331",
+      "positive": false,
+      "first_stage_status": "success",
+      "proposals": [],
+      "second_stage_status": "not_requested"
+    },
+    {
+      "station": "v0332",
+      "positive": false,
+      "first_stage_status": "success",
+      "proposals": [
+        {
+          "interval": {
+            "start": 519,
+            "end": 520
+          },
+          "duration": 2,
+          "raw_tp_days": 0,
+          "uncovered_true_days": 0,
+          "uncovered_false_days": 2,
+          "calendar_overlap_blocks_addition": false,
+          "observed_overlap": false,
+          "refined_edges": [
+            526,
+            526
+          ],
+          "hard_verification_accepted": false
+        }
+      ],
+      "second_stage_status": "success"
+    },
+    {
+      "station": "v0333",
+      "positive": true,
+      "first_stage_status": "success",
+      "proposals": [],
+      "second_stage_status": "not_requested"
+    },
+    {
+      "station": "v0334",
+      "positive": false,
+      "first_stage_status": "success",
+      "proposals": [],
+      "second_stage_status": "not_requested"
+    },
+    {
+      "station": "v0335",
+      "positive": true,
+      "first_stage_status": "success",
+      "proposals": [],
+      "second_stage_status": "not_requested"
+    },
+    {
+      "station": "v0336",
+      "positive": false,
+      "first_stage_status": "success",
+      "proposals": [],
+      "second_stage_status": "not_requested"
+    },
+    {
+      "station": "v0337",
+      "positive": false,
+      "first_stage_status": "success",
+      "proposals": [],
+      "second_stage_status": "not_requested"
+    },
+    {
+      "station": "v0338",
+      "positive": false,
+      "first_stage_status": "success",
+      "proposals": [],
+      "second_stage_status": "not_requested"
+    },
+    {
+      "station": "v0339",
+      "positive": true,
+      "first_stage_status": "success",
+      "proposals": [],
+      "second_stage_status": "not_requested"
+    },
+    {
+      "station": "v0340",
+      "positive": false,
+      "first_stage_status": "success",
+      "proposals": [],
+      "second_stage_status": "not_requested"
+    },
+    {
+      "station": "v0341",
+      "positive": true,
+      "first_stage_status": "success",
+      "proposals": [],
+      "second_stage_status": "not_requested"
+    },
+    {
+      "station": "v0342",
+      "positive": false,
+      "first_stage_status": "success",
+      "proposals": [],
+      "second_stage_status": "not_requested"
+    },
+    {
+      "station": "v0343",
+      "positive": false,
+      "first_stage_status": "success",
+      "proposals": [],
+      "second_stage_status": "not_requested"
+    },
+    {
+      "station": "v0344",
+      "positive": false,
+      "first_stage_status": "success",
+      "proposals": [],
+      "second_stage_status": "not_requested"
+    },
+    {
+      "station": "v0345",
+      "positive": true,
+      "first_stage_status": "success",
+      "proposals": [
+        {
+          "interval": {
+            "start": 500,
+            "end": 503
+          },
+          "duration": 4,
+          "raw_tp_days": 2,
+          "uncovered_true_days": 0,
+          "uncovered_false_days": 2,
+          "calendar_overlap_blocks_addition": true,
+          "observed_overlap": true,
+          "refined_edges": [
+            502,
+            502
+          ],
+          "hard_verification_accepted": false
+        },
+        {
+          "interval": {
+            "start": 544,
+            "end": 547
+          },
+          "duration": 4,
+          "raw_tp_days": 4,
+          "uncovered_true_days": 0,
+          "uncovered_false_days": 0,
+          "calendar_overlap_blocks_addition": true,
+          "observed_overlap": true,
+          "refined_edges": [
+            555,
+            555
+          ],
+          "hard_verification_accepted": false
+        }
+      ],
+      "second_stage_status": "success"
+    },
+    {
+      "station": "v0346",
+      "positive": false,
+      "first_stage_status": "success",
+      "proposals": [],
+      "second_stage_status": "not_requested"
+    },
+    {
+      "station": "v0347",
+      "positive": true,
+      "first_stage_status": "success",
+      "proposals": [],
+      "second_stage_status": "not_requested"
+    },
+    {
+      "station": "v0348",
+      "positive": false,
+      "first_stage_status": "success",
+      "proposals": [],
+      "second_stage_status": "not_requested"
+    },
+    {
+      "station": "v0349",
+      "positive": false,
+      "first_stage_status": "success",
+      "proposals": [],
+      "second_stage_status": "not_requested"
+    },
+    {
+      "station": "v0350",
+      "positive": false,
+      "first_stage_status": "success",
+      "proposals": [],
+      "second_stage_status": "not_requested"
+    },
+    {
+      "station": "v0351",
+      "positive": true,
+      "first_stage_status": "success",
+      "proposals": [
+        {
+          "interval": {
+            "start": 616,
+            "end": 644
+          },
+          "duration": 29,
+          "raw_tp_days": 29,
+          "uncovered_true_days": 0,
+          "uncovered_false_days": 0,
+          "calendar_overlap_blocks_addition": true,
+          "observed_overlap": true,
+          "refined_edges": [
+            612,
+            655
+          ],
+          "hard_verification_accepted": true
+        }
+      ],
+      "second_stage_status": "success"
+    },
+    {
+      "station": "v0352",
+      "positive": false,
+      "first_stage_status": "success",
+      "proposals": [],
+      "second_stage_status": "not_requested"
+    },
+    {
+      "station": "v0353",
+      "positive": true,
+      "first_stage_status": "success",
+      "proposals": [],
+      "second_stage_status": "not_requested"
+    },
+    {
+      "station": "v0354",
+      "positive": false,
+      "first_stage_status": "success",
+      "proposals": [],
+      "second_stage_status": "not_requested"
+    },
+    {
+      "station": "v0355",
+      "positive": false,
+      "first_stage_status": "success",
+      "proposals": [],
+      "second_stage_status": "not_requested"
+    },
+    {
+      "station": "v0356",
+      "positive": false,
+      "first_stage_status": "failed",
+      "proposals": [],
+      "second_stage_status": "not_requested"
+    },
+    {
+      "station": "v0357",
+      "positive": true,
+      "first_stage_status": "success",
+      "proposals": [
+        {
+          "interval": {
+            "start": 572,
+            "end": 573
+          },
+          "duration": 2,
+          "raw_tp_days": 0,
+          "uncovered_true_days": 0,
+          "uncovered_false_days": 2,
+          "calendar_overlap_blocks_addition": false,
+          "observed_overlap": false,
+          "refined_edges": [
+            571,
+            571
+          ],
+          "hard_verification_accepted": false
+        }
+      ],
+      "second_stage_status": "success"
+    },
+    {
+      "station": "v0358",
+      "positive": false,
+      "first_stage_status": "success",
+      "proposals": [],
+      "second_stage_status": "not_requested"
+    },
+    {
+      "station": "v0359",
+      "positive": true,
+      "first_stage_status": "success",
+      "proposals": [],
+      "second_stage_status": "not_requested"
+    }
+  ]
+}
