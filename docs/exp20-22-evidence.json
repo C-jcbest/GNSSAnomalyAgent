@@ -1,0 +1,41 @@
+{
+  "branch": "codex/exp20-range-visual-evaluation",
+  "parent": "f42d1c2",
+  "pre_backup_tag": "backup/pre-exp20-range-evaluation-20261015-f42d1c2",
+  "reports": "results/exp20-22-assessment/evidence.json",
+  "request_totals": {
+    "request_count": 51,
+    "failed_count": 4,
+    "http_success_count": 50,
+    "retry_count": 0
+  },
+  "protocols": {
+    "docs\\experiment-exp20.md": "4f45bb8abaf7e48f2848dd86a64f89e9791e1b3406d561d7acc3da18cad18147",
+    "docs\\experiment-exp21.md": "79ed4ce866a24adf62737f44e2ab03b7c15b1d5cb4fdbd08d2a5bfbb70f995f7",
+    "docs\\experiment-exp22-completion-amendment.md": "fac0e7051a53f3b0d45ff4902d5d04f5db21d42a799d54d0d52ff7693b8e4c4a",
+    "docs\\experiment-exp22.md": "759574c2a914a0d99ab2737e46e4d85301634169ff22b5284c1db2a18e1b6168"
+  },
+  "new_scripts": {
+    "scripts/exp20_range_metrics.py": "549fa2f46f6cd975d948dafa671ee07bece28baef907b9c3763d26a924e2f3c6",
+    "scripts/experiment_exp20.py": "eef92ce7c4867d803cd6b358d1476ca661333c18513a824917694555390d6210",
+    "scripts/exp21_range_localization.py": "a2bf0a1015d19fabbd535ecc75af87deab5738a06e8a527f98b5c3e0287aed36",
+    "scripts/experiment_exp21.py": "04bb0df23d069fc9232eb7c277ff1a486c5fedf78b0e10dfcb81e3c11e019acf",
+    "scripts/experiment_exp22.py": "fd76814883c2fba1e3bf8d7264251c9983067ccd625dc347d4f063d7a54d5702",
+    "scripts/complete_exp22_ablation.py": "a35c432481148f243cc0b85d51b7291246e1ab965bb85cfcb426553549c26f82",
+    "scripts/report_exp20_22.py": "ef597f008e444ba382b36fa365e3b0228bccbecff6db115f3f6f3663dfeab6d1"
+  },
+  "upstream_lock": "papers/exp20-range-evaluation/upstream-lock.json",
+  "validation": {
+    "project_pytest_passed": 60,
+    "author_unittest_passed": 60,
+    "new_script_ruff": "passed",
+    "production_and_manuscript_diff_from_parent": "empty",
+    "author_files_byte_verified_in_git": 41
+  },
+  "backup": {
+    "path": "artifacts/backups/EXP20-22_RangeAndImageAblation_20261015_f42d1c2_v2.zip",
+    "receipt": "artifacts/backups/EXP20-22_RangeAndImageAblation_20261015_f42d1c2_v2.receipt.json",
+    "contents": "Controlled source/reports; complete new runs/data; old JSON predictions/candidates and evaluated observations/truth for EXP20 replay; no credentials"
+  },
+  "interpretation": "Post-hoc old-data range evaluation; EXP21 six-station new development pilot; EXP22 fresh paired image ablation of historical cohort; no adopted method change."
+}

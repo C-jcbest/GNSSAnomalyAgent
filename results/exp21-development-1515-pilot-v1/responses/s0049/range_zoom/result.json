@@ -1,0 +1,40 @@
+{
+  "status": "success",
+  "requested_model": "qwen3-vl-plus",
+  "request_count": 1,
+  "retry_count": 0,
+  "http_status": 200,
+  "served_model": "qwen3-vl-plus",
+  "usage": {
+    "prompt_tokens": 12479,
+    "completion_tokens": 251,
+    "total_tokens": 12730,
+    "completion_tokens_details": {
+      "text_tokens": 251
+    },
+    "prompt_tokens_details": {
+      "image_tokens": 11401,
+      "text_tokens": 1078,
+      "cached_tokens": 0
+    }
+  },
+  "elapsed_seconds": 8.943924300001527,
+  "range_decision": {
+    "events": [
+      {
+        "start": 585,
+        "end": 589,
+        "kind": "transient",
+        "status": "uncertain",
+        "evidence": "Abrupt downward spike in U component at index 585, with raw displacement dropping sharply below the normal fit; recovery begins at 590, so last transient day is 589. N and E components show no matching offset, but U residual confirms an isolated transient. Gap at 586 prevents precise onset; start retained as 585 (first shifted day)."
+      },
+      {
+        "start": 590,
+        "end": 600,
+        "kind": "deformation",
+        "status": "confirmed",
+        "evidence": "U component departs from normal fit at ~590 into a sustained steeper upward trajectory, clearly visible in both original displacement and residual; motion continues through 600, then arrests into a stationary plateau. N and E remain within ordinary noise bounds, but U alone suffices for deformation. Last active day before plateau is 600."
+      }
+    ]
+  }
+}

@@ -1,0 +1,40 @@
+{
+  "status": "success",
+  "requested_model": "qwen3-vl-plus",
+  "request_count": 1,
+  "retry_count": 0,
+  "http_status": 200,
+  "served_model": "qwen3-vl-plus",
+  "usage": {
+    "prompt_tokens": 14730,
+    "completion_tokens": 213,
+    "total_tokens": 14943,
+    "completion_tokens_details": {
+      "text_tokens": 213
+    },
+    "prompt_tokens_details": {
+      "image_tokens": 13658,
+      "text_tokens": 1072,
+      "cached_tokens": 0
+    }
+  },
+  "elapsed_seconds": 8.279452599999786,
+  "range_decision": {
+    "events": [
+      {
+        "start": 600,
+        "end": 652,
+        "kind": "deformation",
+        "status": "confirmed",
+        "evidence": "E and U components show sustained downward displacement from day 600, clearly deviating from the historical normal fit; N remains near zero but residual shows coherent trend. Activity arrests after day 652 with a plateau forming (visible in original displacement and residuals)."
+      },
+      {
+        "start": 660,
+        "end": 669,
+        "kind": "transient",
+        "status": "uncertain",
+        "evidence": "Transient offset in E and U around day 660: abrupt drop followed by partial recovery before day 669; N shows minor correlated shift. Return not fully completed by end of interval, but opposite change initiates before day 669, as seen in residuals and original curves."
+      }
+    ]
+  }
+}

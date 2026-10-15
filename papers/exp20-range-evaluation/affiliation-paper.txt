@@ -1,0 +1,2009 @@
+ 
+ 
+ 
+ Local Evaluation of Time Series Anomaly Detection Algorithms 
+ 
+ 
+ 
+
+ 
+
+ 
+ 
+ 
+ 
+ 
+ 
+
+ 
+ 
+ 
+ 
+ 
+ Report GitHub Issue 
+ × 
+ 
+
+ 
+ Title: 
+ 
+
+ Content selection saved. Describe the issue below: 
+
+ Description: 
+ 
+ 
+
+ 
+ Submit without GitHub 
+ Submit in GitHub 
+ 
+ 
+ 
+ 
+ arXiv is now an independent nonprofit! 
+ Learn more 
+ × 
+ 
+
+ 
+ 
+ 
+ Back to arXiv 
+ 
+ 
+ 
+ 
+ Why HTML? 
+ 
+ 
+ 
+ 
+ Report Issue 
+ 
+ 
+ 
+ 
+ 
+ 
+ Back to Abstract 
+ 
+ 
+ 
+ 
+ 
+ 
+ Download PDF 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ Abstract. 
+ 1 Introduction 
+ 2 Background and motivation 
+ 
+ Limitations of the classical metrics for time series tasks 
+ Recent time series evaluation metrics 
+ Characteristics and limitations of the existing metrics 
+ Interpretability and robustness against adversary algorithms or naive random predictions 
+ Design targets 
+ 
+ 3 Local evaluation based on affiliation 
+ 
+ 3.1 Average distance between sets 
+ 3.2 Local affiliation to the closest ground truth 
+ 3.3 Comparison against random sampling 
+ 
+ Individual precision probability 
+ Individual recall probability 
+ Illustrative example 
+ Interpretation and understanding 
+ Averaging of the individual precision/recall probabilities 
+ 
+ 3.4 Practical settings 
+ 
+ 4 Evaluation and properties 
+ 
+ 4.1 Evaluation settings 
+ 
+ Benchmark anomaly detection algorithms 
+ Datasets 
+ 
+ 4.2 Adversary predictions 
+ 
+ Adversary algorithm 
+ Results for the RP/RR and TaP/TaR metrics 
+ Results for the classical and affiliation metrics 
+ 
+ 4.3 Event-level comparison 
+ 4.4 Theoretical properties 
+ 
+ Predicting the whole interval as anomalous 
+ Expected precision and recall given a single random prediction 
+ Single prediction at a defined position 
+ 
+ 
+ 5 Discussion 
+ 
+ Shape of the ground truth labels 
+ Expressiveness of the metrics 
+ Theoretical properties 
+ Practical deployment 
+ 
+ 6 Conclusion 
+ References 
+ A Closed-form of the affiliation metrics 
+ 
+ A.1 Survival functions 
+ A.2 Closed-form of the integrals 
+ 
+ A.2.1 Integral over the samples for the precision 
+ A.2.2 Integral over the samples for the recall 
+ 
+ 
+ B Particularization to point anomalies 
+ C Proof of the properties 
+ 
+ C.1 Predicting the whole interval as anomalous 
+ C.2 Expected precision and recall given a single random prediction 
+ C.3 Single prediction at a defined position 
+ 
+ D Reproducibility 
+ 
+ 
+ 
+ 
+ 
+ License: arXiv.org perpetual non-exclusive license
+ 
+ 
+arXiv:2206.13167v1 [cs.LG] 27 Jun 2022 
+ 
+ 
+ Local Evaluation of Time Series Anomaly Detection Algorithms 
+ Conference:  Proceedings of the 28th ACM
+SIGKDD Conference on Knowledge Discovery and Data Mining; August 14–18,
+2022; Washington, DC, USA Proceedings of the 28th ACM SIGKDD Conference on Knowledge
+Discovery and Data Mining (KDD ’22), August 14–18, 2022, Washington, DC, USA Price:  15.00 DOI:  10.1145/3534678.3539339 ISBN:  978-1-4503-9385-0/22/08 rtfp1155 CCS:  General and reference Evaluation CCS:  General and reference Metrics CCS:  Mathematics of computing Time series analysis CCS:  Computing methodologies Anomaly detection 
+ 
+ 
+ Alexis Huet
+ 
+ Affiliation:  Huawei Technologies Co., Ltd. , France 
+ 
+ email: alexis.huet@huawei.com 
+ 
+ , 
+ Jose Manuel Navarro
+ 
+ Affiliation:  Huawei Technologies Co., Ltd. , France 
+ 
+ email: jose.manuel.navarro@huawei.com 
+ 
+ and 
+ Dario Rossi
+ 
+ Affiliation:  Huawei Technologies Co., Ltd. , France 
+ 
+ email: dario.rossi@huawei.com 
+ 
+ © acmcopyright 
+
+ Abstract. 
+ 
+ In recent years, specific evaluation metrics for time series anomaly detection algorithms have been developed to handle the limitations of the classical precision and recall. However, such metrics are heuristically built as an aggregate of multiple desirable aspects, introduce parameters and wipe out the interpretability of the output. In this article, we first highlight the limitations of the classical precision/recall, as well as the main issues of the recent event-based metrics – for instance, we show that an adversary algorithm can reach high precision and recall on almost any dataset under weak assumption.
+To cope with the above problems, we propose a theoretically grounded, robust, parameter-free and interpretable extension to precision/recall metrics, based on the concept of “affiliation” between the ground truth and the prediction sets. Our metrics leverage measures of duration between ground truth and predictions, and have thus an intuitive interpretation. By further comparison against random sampling, we obtain a normalized precision/recall, quantifying how much a given set of results is better than a random baseline prediction.
+By construction, our approach keeps the evaluation local regarding ground truth events, enabling fine-grained visualization and interpretation of algorithmic results.
+We compare our proposal against various public time series anomaly detection datasets, algorithms and metrics. We further derive theoretical properties of the affiliation metrics that give explicit expectations about their behavior and ensure robustness against adversary strategies. 
+ 
+ 
+ 
+ Keywords:  time series; anomaly detection; evaluation; metrics; precision; recall
+ 
+ 
+ 1. Introduction 
+
+ 
+ Time series anomaly detection is the field consisting in detecting elements of a time series that behave differently from the rest of the data.
+This field attracted interest in recent years with the rise of monitoring systems collecting a large amount of data over time, mainly for the purpose of troubleshooting and security.
+Many scientific domains are involved: water control industrial systems  Goh et al., 2016 ; Shin et al., 2020 , Web traffic  Laptev et al., 2015 ; Xu et al., 2018 , servers of Internet companies  Ren et al., 2019 ; Su et al., 2019 , spacecraft telemetry  Hundman et al., 2018 , and also medicine or robotics  Wu & Keogh, 2021 ; Ahmad et al., 2017 .
+Due to the nature of the series, each anomaly (referred as an event in the context of time series) can be a point in time (point-based anomaly) or occupy a range of consecutive samples (range-based anomaly).
+The detection is performed in a supervised or in a unsupervised way, but the resulting performance of the algorithm is generally always assessed against ground truth labels that have been previously collected (either in controlled environments or labeled by experts in the field).
+This assessment is realized with evaluation metrics taking as input both the ground truth and the predicted labels, and outputting one or multiple scores.
+The most common metrics for anomaly detection are the classical precision and recall, computed by comparing the predicted and the ground truth outputs for each sample.
+In the usual terminology, the positive samples refer to the samples that are predicted as positive, and are partitioned into the true positives (TP, positive samples that are also anomalous in the ground truth) and false positives (FP). Likewise, the samples predicted as negative are partitioned into false negatives (FN) and true negatives (TN).
+The precision measures the proportion TP / ( TP + FP ) \text{TP}/(\text{TP}+\text{FP}) of positive predicted samples that are correct, whereas the recall measures the proportion TP / ( TP + FN ) \text{TP}/(\text{TP}+\text{FN}) of positive ground truth samples that have been retrieved.
+Those classical metrics are convenient for the tasks that regard each sample separately, however this does not hold for time series datasets, where the time component is intrinsically continuous.
+Researchers developing detection algorithms have realized this challenge during the evaluation process and have come up with metrics fitting their specific use-case: range precision/recall  Tatbul et al., 2018 for evaluating the Greenhouse algorithm  Lee et al., 2018 , time-aware precision/recall  Hwang et al., 2019 for evaluating the HAI dataset  Shin et al., 2020 , Numenta benchmark  Lavin & Ahmad, 2015 for evaluating the Numenta corpus  Ahmad et al., 2017 , etc. 
+ 
+ 
+ In this paper, we first provide a comprehensive picture of the limitations of the classical metrics, along with the different directions of research that have been explored to handle them.
+Against this background, we introduce a new pair of precision/recall metrics named the affiliation metrics – that exhibit a series of important properties as they are theoretically principled, parameter-free, robust against adversary predictions, retain a physical meaning (as they are connected to quantities expressed in time units), and are locally interpretable (allowing to troubleshoot detection at individual event level). Summarizing our main contributions: 
+ 
+ • 
+ 
+ We show that existing range-based metrics for anomaly detection are easily gamed by adversary predictions: this complements dataset flaws outlined in  Wu & Keogh, 2021 , and concur in creating an “illusion of progress”. 
+ 
+ • 
+ 
+ We introduce the affiliation metrics, an extension of the classical precision/recall for time series anomaly detection that is local, parameter-free, and applicable generically on both point and range-based anomalies. 
+ 
+ • 
+ 
+ We produce closed-form expectations of the affiliation metrics in theoretical scenarios, proving their robustness against adversary strategies. 
+ 
+ • 
+ 
+ We contrast the affiliation metrics to existing metrics in real datasets, and further show local interpretability at the event level, giving visual clues for algorithmic comparison. 
+ 
+ 
+ 
+ 
+ In the following sections, we detail the background for extending the metrics for time series (Sec.  2 ) before introducing the affiliation metrics (Sec.  3 ). We then evaluate theoretical and practical properties of the proposed metrics (Sec.  4 ). We conclude by discussing the application scope of the affiliation metrics (Sec.  5 and Sec.  6 ). 
+ 
+ 
+ 
+ 2. Background and motivation 
+
+ 
+ We first introduce the limitations of the classical metrics for time series anomaly detection, which led to the design of new metrics that we briefly overview. We next illustrate the main limits of those proposed metrics, and sum up the main desirable goals for proper metrics definition, which motivated our work in the first place. 
+ 
+ 
+ Limitations of the classical metrics for time series tasks 
+
+ 
+ As summarized in Tab.  1 and illustrated in Fig.  1 , two main limitations have been observed in the literature for dealing with time series tasks (e.g., point or range anomaly detection, segmentation, or change point detection).
+The (A)  unawareness of temporal adjacency prevents the metric from valuing the proximity between the samples. For instance, a prediction closely located in time to a ground truth label is adding both a FP and a FN samples instead of being considered as a TP, even for a one sample miss  Gensler & Sick, 2014 ; Scharw\"achter & M\"uller, 2020 ; Lavin & Ahmad, 2015 ; Gharghabi et al., 2017 .
+Similarly, the predictions located closely after the end of a ground truth event (dubbed as “ambiguous samples” by Hwang et al.  Hwang et al., 2019 ) are immediately penalized without any tolerance.
+The other aspect concerns the (B)  unawareness of the events durations , which relates to evaluation of the individual samples without considering each event as a single unit.
+Adverse consequences include the overrating of long events, in the sense that correctly detecting such event will be rewarded much more than correctly detecting another single-sample outlier  Tatbul et al., 2018 ; Hwang et al., 2019 . 
+ 
+ 
+ 
+ Recent time series evaluation metrics 
+
+ 
+ To cope with the above problems, numerous evaluation metrics have been recently introduced to better handle the time component, that can be grouped into three main categories: (i) distance-based metrics, (ii) window-based metrics, and (iii) metrics specific to range-based anomalies. 
+ 
+ 
+ The first direction to handle near detection, i.e. limitation (A), has been to employ direct measurement of the distances between the elements from the two sets to derive a single score. This score is usually measured as a total deviation distance and is meant to be minimized. Since the Hausdorff distance is sensitive to the presence of any outlier, it is not suitable for evaluating the time series prediction tasks  Fujita, 2013 ; James et al., 2020 .
+Further work have therefore carried out modified Hausdorff distances  James et al., 2020 built on metrics introduced for computer vision tasks  Dubuisson & Jain, 1994 ; Deza & Deza, 2009 . 
+ 
+ 
+ An orthogonal direction of research to handle limitation (A) has been to surround each ground truth event by a window . Each window containing a predicted element is considered as a TP, relaxing the difficulty to obtain it compared to the classical matrix of confusion. The precision and recall are then deduced from this new counting.
+For point anomaly detection, Gensler and Sick  Gensler & Sick, 2014 propose to count the predictions within a ground truth window as a TP, but only once for each window.
+The same principle has been used in the context of change point detections  Truong et al., 2020 .
+The scoring of the ambiguous samples located after the anomalous point or range is also performed from ground truth windows: both in the Numenta Anomaly Benchmark (NAB) scoring  Lavin & Ahmad, 2015 and in the time-aware precision/recall (TaP/TaR) metrics  Hwang et al., 2019 , predictions are mapped to a score based on a decaying sigmoid function.
+Finally, Scharwächter and Müller  Scharw\"achter & M\"uller, 2020 compute the TP differently depending on the selected point of view, either from the predictions or from the ground truth. 
+ 
+ 
+ To handle limitation (B), range-based metrics have recently been proposed  Tatbul et al., 2018 ; Hwang et al., 2019 ; Xu et al., 2018 ; Kim et al., 2021 .
+The range precision/recall (RP/RR)  Tatbul et al., 2018 and the TaP/TaR  Hwang et al., 2019 are designed for anomaly detection events.
+The common idea consists in rewarding both the presence and the size of an overlap between the predicted and the ground truth events. For those metrics, each event is considered as a single unit irrespective of its length.
+Finally, the point adjust metrics  Xu et al., 2018 and an extension  Kim et al., 2021 have been introduced to ease the scoring of the range-based events: the computation consists in sticking to the classical metrics, after initially extending each TP sample to the whole corresponding ground truth event. As  Xu et al., 2018 ; Kim et al., 2021 however do not deal with limitation (A) nor (B), this yield to a recent adaptation named F1-composite metric  Garg et al., 2021 . 
+ 
+ 
+ Table 1 . Limitations of the classical precision and recall for evaluating time series tasks as exposed in the literature. 
+ 
+ 
+ 
+ 
+ Limitation 
+ Aspect 
+ Mentions 
+ 
+ (A) 
+ 
+ 
+ 
+ Unawareness of the 
+ 
+ temporal adjacency 
+ 
+ Inter-events 
+ Gensler & Sick,2014 ; Scharw\"achter & M\"uller,2020 ; Lavin & Ahmad,2015 ; Gharghabi et al.,2017 ; Hwang et al.,2019 
+ 
+ (B) 
+ 
+ 
+ 
+ Unawareness of the 
+ 
+ events durations 
+ 
+ Intra-event 
+ Tatbul et al.,2018 ; Hwang et al.,2019 
+ 
+ 
+ 
+ 
+ Figure 1 . The classical precision/recall of predictions 1 and 2 against ground truth are 0.50 / 0.09 0.50/0.09 and 1.00 / 0.91 1.00/0.91 , illustrating resp. limitations (A), since each ground truth event is approximately detected but the scores are low, and (B), since only a single event is correctly detected but the scores are high. 
+ 
+ 
+ Table 2 . Characteristics of the recent metrics extending the classical precision/recall for time series anomaly detection. 
+ 
+ 
+ 
+ (Class) Metric 
+ 
+ 
+ 
+ P/R 
+ 
+ form? 
+ 
+ 
+ 
+ 
+ mainly 
+ 
+ for 
+ 
+ 
+ 
+ 
+ handles 
+ 
+ (A)   (B) 
+ 
+ 
+ 
+ 
+ # \# 
+ 
+ param. 
+ 
+ 
+ 
+ 
+ (i)   distance  Fujita,2013 ; James et al.,2020 ; Gharghabi et al.,2017 
+ ✗ 
+ point 
+ ✓  ✗ 
+ 0 
+ 
+ (ii) window  Gensler & Sick,2014 ; Lavin & Ahmad,2015 ; Scharw\"achter & M\"uller,2020 
+ ✓ 
+ point 
+ ✓  ✗ 
+ 1 
+ 
+       RP/RR  Tatbul et al.,2018 
+ ✓ 
+ range 
+ ✗  ✓ 
+ 4 
+ 
+ (iii) TaP/TaR  Hwang et al.,2019 
+ ✓ 
+ range 
+ ✓  ✓ 
+ 3 
+ 
+       point adjust  Xu et al.,2018 ; Kim et al.,2021 
+ ✓ 
+ range 
+ ✗  ✗ 
+ 0 
+ 
+ (—) affiliation (this work) 
+ ✓ 
+ both 
+ ✓  ✓ 
+ 0 
+ 
+ 
+ 
+ 
+ 
+ Characteristics and limitations of the existing metrics 
+
+ 
+ The characteristics of the existing metrics are summarized in Tab.  2 . Most of the metrics (except distance based) take the form of a precision and recall pair. Except TaP/TaR  Hwang et al., 2019 , no metric handles both limitations (A) and (B). Distance-based and windowed metrics are mostly limited to point anomalies and cannot handle (B), while RP/RR and point adjust metrics are not able to handle limitation (A), e.g. a one sample miss, since the overlap is empty in this case. 
+ 
+ 
+ Remarkably, with the exception of distance-based and point adjust metrics, one or multiple parameters have to be selected to control several aspects of the scoring process, adding a number of parameters in the anomaly detection pipeline, likely leading to a lack of generality.
+While their purpose can be understood, fine-tuning or overspecializing the metric may be counterproductive for real use-cases. Conversely while most of those parameters have default values, their setting is not always trivial. For instance, to handle (A) both TaP/TaR and window-based metrics select a window size which is tuned for each dataset and drastically impacts the evaluation  Scharw\"achter & M\"uller, 2020 ; Singh & Olinsky, 2017 . It even prevents the well-definition of the metrics when two windows overlap (i.e. leading to a precision possibly greater than one, as mentioned in  Truong et al., 2020 , and occurring but not discussed for  Gensler & Sick, 2014 ; Lavin & Ahmad, 2015 ; Hwang et al., 2019 ). 
+ 
+ 
+ 
+ Interpretability and robustness against adversary algorithms or naive random predictions 
+
+ 
+ A core issue finally concerns the interpretability of the recent range-based metrics. For instance RP/RR and TaP/TaR derive per event quantities, averaged over the whole dataset.
+Individual quantities are however difficult to understand, as they combine multiple aspects: existence of an overlap, proportion of the overlap, relative positions, or ambiguous samples. Additionally, each predicted event is considered as an individual element, which is detrimental for the global meaning of the score, since the number of predicted events and their positions are not controlled: the resulting metric is not considering each region equally, that is any cluster of predictions in a specific region can impact globally the final score. This lack of locality allows the development of adversary algorithms reaching both high recall and high precision, as we show in Sec.  4.2 . 
+ 
+ 
+ Another aspect related to interpretability concerns the lack of statistical properties constraining the behavior of the metrics. Overestimation of the scores has been shown for window metrics using Monte Carlo simulations  Scharw\"achter & M\"uller, 2020 , while for the point adjust metrics it has been recently pointed out that “even a random anomaly score can easily turn into a state-of-the-art time series anomaly detection method”  Kim et al., 2021 – while in our proposal, random scores define the lower bound baseline as we formalize in
+Sec.  4.4 and demonstrate in Appendix  C . 
+ 
+ 
+ 
+ Design targets 
+
+ 
+ To sum up, a convenient precision/recall pair for time series anomaly detection should include the following desirable targets, that have not been jointly addressed in prior art: 
+ 
+ • 
+ 
+ handle the limitations (A) and (B) introduced by the presence of time (only addressed by TaP/TaR); 
+ 
+ • 
+ 
+ parameter-free definition (only available with distance and point adjust metrics); 
+ 
+ • 
+ 
+ expressiveness of the scores, in the sense that a slight improve of the predictions should result in a slight improve of the scores (only addressed by the distance metrics); 
+ 
+ • 
+ 
+ local interpretability of the scores (not addressed so far); 
+ 
+ • 
+ 
+ existence of statistical bounds of the scores (only addressed by simulation for window-based metrics). 
+ 
+ 
+ 
+ 
+ 
+ 
+ 3. Local evaluation based on affiliation 
+
+ 
+ In this section, we introduce and describe the reasoning of the affiliation metrics for evaluating anomalous events. Three concepts are developed. First, we define a directed average distance between sets, to measure how far the events are one from each other (Sec.  3.1 ). Then, each prediction is affiliated to the closest ground truth event, allowing a local perspective and maintaining the interpretability even for outlying predictions (Sec.  3.2 ).
+Finally, the observed temporal distances are locally converted into probabilities, by comparing them against random sampling, and are averaged into a precision/recall pair (Sec.  3.3 ). The practical aspects are detailed at the end of the section (Sec.  3.4 ). 
+ 
+ 
+ We limitedly detail description for anomalous events consisting of ranges (particularization to the case of point anomalies is deferred to the Appendix  B ).
+An anomalous event is described by a continuous time interval [ t start , t stop ) [t_{\text{start}},t_{\text{stop}}) with t stop > t start t_{\text{stop}}>t_{\text{start}} . Both prediction and ground truth are represented by a set of disjoint anomalous events, respectively noted pred 1 , … ​ pred m \text{pred}_{1},\ldots\text{pred}_{m} and gt 1 , … ​ gt n \text{gt}_{1},\ldots\text{gt}_{n} . 
+ 
+ 
+ 3.1. Average distance between sets 
+
+ 
+ The distance from a point x x to a set Y Y is defined, as usual, by: dist ​ ( x , Y ) := min y ∈ Y ⁡ | x − y | \text{dist}(x,Y):=\min_{y\in Y}|x-y| . For measuring the distance from a set X X to another, we consider the average directed distance defined by:
+ dist ​ ( X , Y ) := 1 | X | ​ ∫ x ∈ X dist ​ ( x , Y ) ​ 𝑑 x . \text{dist}(X,Y):=\frac{1}{|X|}\int_{x\in X}\text{dist}(x,Y)dx. 
+For the corner cases, we have dist ​ ( X , ∅ ) = + ∞ \text{dist}(X,\varnothing)=+\infty for nonempty X X , and we keep dist ​ ( ∅ , Y ) \text{dist}(\varnothing,Y) undefined for all Y Y .
+This function is not a metric in the mathematical sense because it does not satisfy symmetry nor the triangle inequality, however is nonnegative and, for the case where X , Y X,Y are sets of disjoint anomalous events, verifies dist ​ ( X , Y ) = 0 ⇔ ( X ⊂ Y ​  and  ​ X ≠ ∅ ) \text{dist}(X,Y)=0\Leftrightarrow(X\subset Y\text{ and }X\neq\varnothing) . It has been introduced as a part of the modified Hausdorff distance  Dubuisson & Jain, 1994 used in computer vision. 
+ 
+ 
+ This directed distance has been selected for smoothness and interpretability reasons. First, contrary to the Hausdorff metric or to a simple threshold based on a window size, it satisfies smooth variation  Dubuisson & Jain, 1994 ; James et al., 2020 since each sample contributes to the total score.
+Then, it has a clear interpretation as an average and retains a physical meaning as a time. Additionally, the distance is not converted into an undirected one – such as taking the maximum over the two directions in the modified Hausdorff distance – to prevent the dilution of the interpretation by an additional layer.
+Indeed, our main idea in using this function is to relate the directed distance from prediction to ground truth events to a precision, and the one from the predicted events to the ground truth to a recall. 
+ 
+ 
+ This idea is illustrated through the example in Fig.  2(a) . The prediction comprises three events whereas the ground truth is a single event.
+From the predicted events to the ground truth (left of Fig.  2(a) ), the directed distance is short, since 80 % 80\% of the prediction area matches with the ground truth while the remaining predicted event (accounting for 20 % 20\% ) is at a distance of 1 ​ min ​ 30 ​ s 1\text{min}30\text{s} in average. In total, the directed distance is 18 ​ s 18\text{s} .
+This short distance is interpreted as a good precision of the predictions.
+Improving the precision would be possible by removing the last predicted event and would lead to an average distance of zero corresponding to a perfect precision.
+From the ground truth to the predicted events (right of Fig.  2(a) ), the directed distance is computed in the other direction, giving a directed distance of 76.5 ​ s 76.5\text{s} .
+This distance is interpreted as a recall, currently expressed in time.
+In that case, removing the last predicted event would not change the directed distance nor the recall. 
+ 
+ 
+ 
+ 3.2. Local affiliation to the closest ground truth 
+
+ 
+ The time axis is partitioned by assigning each time t t to the closest ground truth event gt j \text{gt}_{j} , j ∈ ⟦ 1 , n ⟧ j\in\llbracket 1,n\rrbracket .
+The resulting partition consists of n n intervals, and the j j -th one I j I_{j} is called the zone of affiliation of the ground truth event j j .
+On each zone of affiliation, the ground truth and predictions belonging to it are obtained and the average directed distances described in Sec.  3.1 are computed to retrieve the individual precision/recall distances .
+Formally, the union of all predictions is noted pred := ⋃ i = 1 m pred i \text{pred}:=\bigcup_{i=1}^{m}\text{pred}_{i} and the formulas are given, for j ∈ ⟦ 1 , n ⟧ j\in\llbracket 1,n\rrbracket , as follows: 
+ 
+
+ 
+ (1) 
+ 
+ D precision j := \displaystyle\text{D}_{\text{precision}_{j}}:= 
+ dist ​ ( pred ∩ I j , gt j ) , \displaystyle\text{dist}\left(\text{pred}\cap I_{j},~\text{gt}_{j}\right), 
+ 
+ 
+ (2) 
+ 
+ D recall j := \displaystyle\text{D}_{\text{recall}_{j}}:= 
+ dist ​ ( gt j , pred ∩ I j ) . \displaystyle\text{dist}\left(\text{gt}_{j},~\text{pred}\cap I_{j}\right). 
+ 
+ 
+ The choice made by isolating each zone of affiliation from the ground truth perspective (for both precision/recall) is
+driven by the difference of reliability expected regarding the ground truth and the predictions.
+For the ground truth, upstream control measures can be taken in place to assess its quality, for instance by ensuring that each labeled event corresponds to a separate anomaly that would need to be identified.
+On the other hand, there should not be expectation for the shape of the predicted events, particularly on their distribution along the time line. As a consequence, taking the perspective of the ground truth is preventing the possibility for multiple short predictions stacked in a local area to bias globally the evaluation metric (cf. Sec.  4.2 ).
+Overall, each individual distance is related to a single ground truth and can be interpreted locally. 
+ 
+ 
+ 
+ 
+ 
+ (a) Average distance between sets : example of the directed distance computed from predicted events to ground truth (left) and from ground truth to predicted events (right). 
+ 
+ 
+ (b) Local affiliation to the closest ground truth event : example resulting in zones delimited by the dashed lines. The zones are similar for both directions: precision (left), and recall (right). 
+ 
+ 
+ 
+ 
+ x ↦ F ¯ precision j ​ ( dist ​ ( x , gt j ) ) x\mapsto\bar{F}_{\text{precision}_{j}}(\text{dist}(x,\text{gt}_{j}))   y ↦ F ¯ y , recall j ​ ( dist ​ ( y , pred ∩ I j ) ) y\mapsto\bar{F}_{y,\text{recall}_{j}}(\text{dist}(y,\text{pred}\cap I_{j})) 
+ 
+ (c) Comparison against random sampling : example for converting each predicted sample to a precision score (left) and each ground truth sample to a recall score (right). 
+ 
+ Figure 2 . Illustration of the three steps for computing the affiliation metrics. 
+ 
+ 
+ A practical derivation of the individual precision/recall distances is presented for the example shown in Fig.  2(b) . First, the total timeline is cut into the zones of affiliation: ( − ∞ , 3:30 ) , [ 3:30 , 5:00 ) , [ 5:00 , + ∞ ) (-\infty,\text{3:30}),[\text{3:30},\text{5:00}),[\text{5:00},+\infty) . Then the individual precision/recall distances are computed on each zone. For the first zone, it corresponds exactly to the case shown in Fig.  2(a) , giving 18 ​ s 18\text{s}  /  76.5 ​ s 76.5\text{s} for respectively the precision and the recall. The results are 11 ​ min ​ 30 ​ s 11\text{min}30\text{s}  /  2 ​ min ​ 30 ​ s 2\text{min}30\text{s} for the second zone and 31 ​ min ​ 15 ​ s 31\text{min}15\text{s}  /  2 ​ min ​ 30 ​ s 2\text{min}30\text{s} for the third one. 
+ 
+ 
+ Individual distances are providing a summarized view of each ground truth event expressed in a meaningful unit (i.e., time), and can be used as they are by practitioners and domain experts. However, for comparing the different ground truth events of a dataset, it would be desirable to convert each individual value to the [ 0 , 1 ] [0,1] range, by assuming that each ground truth event is equally important (as opposed to the classical metrics that consider each sample as equally important). This normalization step is presented in Sec.  3.3 . 
+ 
+ 
+ 
+ 3.3. Comparison against random sampling 
+
+ 
+ The final normalization step consists in replacing each distance measured at the sample level with a probability [ 0 , 1 ] [0,1] , by comparing this distance against the random sampling of a prediction.
+We here introduce the main concept of this step, but we point out that the survival functions and the integrals involved in the computations have closed-form expressions, that are detailed in Appendix  A . 
+ 
+ 
+ Individual precision probability 
+
+ 
+ As previously expressed, each affiliation zone is considered separately. On each zone, the ground truth gt j \text{gt}_{j} is fixed and a random prediction is made: this prediction X X is a random variable corresponding to a single point in time uniformly sampled within the affiliation zone. For the precision, the distance from X X to the ground truth gt j \text{gt}_{j} is a random variable with a cumulative distribution function F precision j F_{\text{precision}_{j}} (that only depends on four time elements: the current zone and ground truth intervals).
+The value of an observed distance d ≥ 0 d\geq 0 against this random prediction is defined by the survival function: 
+ 
+
+ 
+ (3) 
+ 
+ F ¯ precision j ​ ( d ) := 1 − F precision j ​ ( d − ) . \displaystyle\bar{F}_{\text{precision}_{j}}(d):=1-F_{\text{precision}_{j}}(d-). 
+ 
+ 
+ Applying this function on each predicted sample, we derive the individual precision probability (see also Appendix A.2.1 ) as follows: 
+ 
+
+ 
+ (4) 
+ 
+ P precision j := 1 | pred ∩ I j | ​ ∫ x ∈ pred ∩ I j F ¯ precision j ​ ( dist ​ ( x , gt j ) ) ​ 𝑑 x . \displaystyle P_{\text{precision}_{j}}:=\frac{1}{|\text{pred}\cap I_{j}|}\int_{x\in\text{pred}\cap I_{j}}\bar{F}_{\text{precision}_{j}}(\text{dist}(x,\text{gt}_{j}))dx. 
+ 
+ 
+ 
+ 
+ 
+ Individual recall probability 
+
+ 
+ For the recall, the distance depends on the considered ground truth sample y ∈ gt j y\in\text{gt}_{j} .
+Knowing it, along with the affiliation zone interval, the distance from y y to X X is a random variable with a distribution F y , recall j F_{y,\text{recall}_{j}} .
+As before, the value of an observed distance is defined by the survival function, and by applying this function on each ground truth sample, we derive the individual recall probability as follows (see also Appendix A.2.2 ): 
+ 
+
+ 
+ (5) 
+ 
+ P recall j := 1 | gt j | ​ ∫ y ∈ gt j F ¯ y , recall j ​ ( dist ​ ( y , pred ∩ I j ) ) ​ 𝑑 y . \displaystyle P_{\text{recall}_{j}}:=\frac{1}{|\text{gt}_{j}|}\int_{y\in\text{gt}_{j}}\bar{F}_{y,\text{recall}_{j}}(\text{dist}(y,\text{pred}\cap I_{j}))dy. 
+ 
+ 
+ 
+ 
+ 
+ Illustrative example 
+
+ 
+ The computation for the second affiliation zone of Fig.  2(b) is detailed with the help of Fig.  2(c) .
+For the precision, the function x ↦ F ¯ precision j ​ ( dist ​ ( x , gt j ) ) x\mapsto\bar{F}_{\text{precision}_{j}}(\text{dist}(x,\text{gt}_{j})) is deduced from the survival distribution (left of Fig.  2(c) ). We observe that any predicted sample located inside the ground truth area would get a value of 1 1 , while this value decreases to 0 0 as the distance to the ground truth event increases. For instance, the value of the predicted time 3:40 is 0.556 0.556 (illustrated by a gray arrow). Taking the average over all the predicted elements, we obtain an individual precision probability of 0.672 0.672 .
+For the recall, the function y ↦ F ¯ y , recall j ​ ( dist ​ ( y , pred ∩ I j ) ) y\mapsto\bar{F}_{y,\text{recall}_{j}}(\text{dist}(y,\text{pred}\cap I_{j})) is computed for each ground truth sample y y (right of Fig.  2(c) ).
+Any ground truth element inside the predicted area has a value of 1 1 , that decreases as the distance to the predicted elements increases. 
+ 
+ 
+ In the case of y = 04:10 y=\text{04:10} , the evaluation gives a value of 0.778 0.778 (illustrated by a gray arrow).
+Taking the average over all the ground truth elements, we obtain an individual recall probability of 0.944 0.944 . 
+ 
+ 
+ 
+ Interpretation and understanding 
+
+ 
+ The baseline for the random prediction has been selected with the lightest possible a priori on the predicted samples, namely by selecting a single predicted sample randomly in each affiliation zone.
+In particular, no information about the shape, the distribution, or the number of the predicted events is used. 
+ 
+ 
+ Some observations can be directly made from the construction. First, we note that a precision of 1 1 is equivalent to pred ⊂ gt \text{pred}\subset\text{gt} , while a recall of 1 1 corresponds to gt ⊂ pred \text{gt}\subset\text{pred} , which is in alignment with the classical metrics.
+Then, a precision or a recall lower than 0.5 0.5 (resp. around 0.5 0.5 ) is interpreted as doing worse than (resp. as bad as) a random prediction, meaning that the predictions made have not been able to provide information about the location of the event.
+The exact formulation of those interpretations constraining the behavior of the affiliation metrics are formalized through properties in Sec.  4.4 . 
+ 
+ 
+ 
+ Averaging of the individual precision/recall probabilities 
+
+ 
+ The precision/recall are defined as the mean over the defined individual probabilities. Following the corner cases about the average distance between sets, an individual precision probability is undefined only when there is not any predicted element affiliated to gt j \text{gt}_{j} . We let S := { j ∈ ⟦ 1 , n ⟧ ; pred ∩ I j ≠ ∅ } S:=\{j\in\llbracket 1,n\rrbracket~;~\text{pred}\cap I_{j}\neq\varnothing\} , and obtain: 
+ 
+ 
+ 
+
+ 
+ (6) 
+ 
+ P precision := 1 | S | ​ ∑ j ∈ S P precision j , P recall := 1 n ​ ∑ j = 1 n P recall j . \displaystyle P_{\text{precision}}:=\frac{1}{|S|}\sum_{j\in S}P_{\text{precision}_{j}},\quad P_{\text{recall}}:=\frac{1}{n}\sum_{j=1}^{n}P_{\text{recall}_{j}}. 
+ 
+ 
+ 
+ 
+ 
+ 
+ 3.4. Practical settings 
+
+ 
+ In real settings, the affiliation metrics can be applied on evenly or unevenly-spaced time series.
+The ground truth and the predictions have the form of a binary vector of same length N N , where the anomalous samples are indicated by 1 1 and the normal ones by 0 0 , each index i i corresponding to a timestamp t ⁡ ( i ) t(i) , as depicted in Tab.  3 . 
+ 
+ 
+ Table 3 . Illustration of the practical input shape for calculating the affiliation metrics, here corresponding to Fig.  2(a) 
+ 
+ 
+ 
+ index i i 
+ 1 
+ 2 
+ 3 
+ 4 
+ 5 
+ 6 
+ 7 
+ 8 
+ 
+ gt 
+ 1 
+ 1 
+ 1 
+ 1 
+ 1 
+ 0 
+ 0 
+ 0 
+ 
+ pred 
+ 0 
+ 0 
+ 1 
+ 0 
+ 1 
+ 0 
+ 1 
+ 0 
+ 
+ t ⁡ ( i ) t(i) 
+ 3:00 
+ 3:02 
+ 3:05 
+ 3:06 
+ 3:07 
+ 3:10 
+ 3:11 
+ 3:12 
+ 
+ 
+ 
+ 
+ A consistent way to convert those indexes into range-based events is to match any positive index i i to the corresponding interval [ t ⁡ ( i ) , t ⁡ ( i + 1 ) ) [t(i),t(i+1)) . The last timestamp t ⁡ ( N + 1 ) t(N+1) is clear for evenly spaced measures, otherwise it needs to be selected. In the example of Tab.  3 , it gives the events pred 1 = [ 3:05 , 3:06 ) \text{pred}_{1}=[\text{3:05},\text{3:06}) , pred 2 = [ 3:07 , 3:10 ) \text{pred}_{2}=[\text{3:07},\text{3:10}) , pred 3 = [ 3:11 , 3:12 ) \text{pred}_{3}=[\text{3:11},\text{3:12}) and gt 1 = [ 3:00 , 3:10 ) \text{gt}_{1}=[\text{3:00},\text{3:10}) . It corresponds to the example of Fig.  2(a) .
+Given those intervals, the individual precision/recall distances are available. With the additional knowledge of the total range [ t ⁡ ( 1 ) , t ⁡ ( N + 1 ) ] [t(1),t(N+1)] , the precision/recall probabilities can be computed. Moreover, due
+to the closed-form expressions developed in Appendix  A ,
+their implementation is computationally efficient. Further practical considerations for reproducibility, including pointers to code, etc. are discussed in Appendix  D . 
+ 
+ 
+ 
+ 
+ 4. Evaluation and properties 
+
+ 
+ The evaluation of the affiliated metrics is performed against the range-based anomaly detection metrics RP/RR and TaP/TaR, along with the classical sample-based metrics on a set of algorithms and datasets (Sec.  4.1 ).
+We first show that adversary predictions easily fool range metrics, whereas affiliated metrics are local and robust (Sec.  4.2 ).
+Second, we show that this local construction
+further allows a detailed per-event interpretation and comparison of the results given by the anomaly detection algorithms (Sec.  4.3 ). Finally, we formalize (Sec.  4.4 ) and prove (Appendix  C ) theoretical properties of the affiliated metrics in typical prediction scenarios. 
+ 
+ 
+ 4.1. Evaluation settings 
+
+ 
+ Benchmark anomaly detection algorithms 
+
+ 
+ As our primary aim is to contrast metrics for algorithmic evaluation, we rely on the anomaly detection algorithms that were selected by the previous authors  Tatbul et al., 2018 ; Hwang et al., 2019 . For the datasets Machine-Temp, NYC-Taxi, and Twitter-AAPL, the predicted events are deduced from three algorithms: Greenhouse  Lee et al., 2018 , LSTM-AD  Malhotra et al., 2015 , both based on neural networks, and one implemented in the Luminol library based on time series bitmaps  Wei et al., 2005 ; LinkedIn, 2018 (Luminol TSB). For the SWaT dataset, two unsupervised algorithms are selected (iForest  Liu et al., 2008 and OCSVM  Sch\"olkopf et al., 2001 ) along with a neural network approach (seq2seq  Kim et al., 2019 ). 
+ 
+ 
+ 
+ Datasets 
+
+ 
+ Similarly, we select the four time series datasets used in  Tatbul et al., 2018 ; Hwang et al., 2019 for the comparison.
+Three of them are those used by authors of the RP/RR metrics  Tatbul et al., 2018 , and taken from the publicly available Numenta Anomaly Benchmark Data Corpus  Ahmad et al., 2017 : Machine-Temp (temperature sensor data of an industrial machine), NYC-Taxi (number of New York City taxi passengers), and Twitter-AAPL (collection of Twitter mentions of the ticker symbol AAPL). The other dataset
+has been used by authors of the TaP/TaR metrics  Hwang et al., 2019 , and is a secure water treatment testbed known as SWaT   Goh et al., 2016 .
+A short description of the number of samples, percentage of anomalies, and number of anomalous events is available in Tab.  4 . 
+ 
+ 
+ 
+ 
+ 4.2. Adversary predictions 
+
+ 
+ Adversary algorithm 
+
+ 
+ We design an algorithm to deceive metrics that consider each predicted event as a unit, by aggregating numerous predictions within a local region in order to impact the score globally.
+Following the definition coined and discussed by Wu and Keogh  Wu & Keogh, 2021 , an anomalous event is said trivial if it can be identified with a single elementary line of code (e.g., a threshold) 1 1 
+ 1 
+ 
+ 
+ 
+ Note that the threshold can be on the original data or from a new time series derived from it using basic primitive operations, such as a moving average of the series. .
+The function applied to derive a trivial event for the selected datasets is reported in Tab.  4 . Regarding SWaT, since we do not have direct access to the raw data, we simply consider one of the events, for instance the first one containing 940 samples, as trivial. 
+ 
+ 
+ Knowing any such trivial event, the adversary predictions are defined in two steps: (i) within the trivial event , set the maximum possible number of predicted events by alternating positive and negative samples. (ii) outside the trivial event , label all the samples as positive. We denote this methodology for producing the predicted events as adversary algorithm 2 2 
+ 2 
+ 
+ 
+ 
+ We stress that similar adversary strategies can be defined for other metrics non included in the evaluation, such as point adjust F1-composite metric  Garg et al., 2021 . The adversary in this case would (i) keep the trivial event of duration T T and (ii) add N N additional predictions of length T 10 ​ N \frac{T}{10N} regularly spaced over the rest of the interval, so that the precision is at least T / ( T + N ⁡ ( T / ( 10 ​ N ) ) ) = 1 / ( 1 + 1 / 10 ) ≈ 0.91 T/(T+N(T/(10N)))=1/(1+1/10)\approx 0.91 , while the recall is 1 1 for sufficiently large N N . . 
+ 
+ 
+ The construction of the adversary is shown for the NYC-Taxi dataset in Fig.  3 . First, given the raw values of the series, a trivial event is identified (it does not need to cover entirely the true event). Then, the adversary algorithm is applied to produce the predictions, resulting in thirteen predicted events. 
+ 
+ 
+ Trivial and adversary predictions are reported along with the other anomaly detection algorithms in Tab.  5 . 
+ 
+ 
+ Table 4 . Description of the datasets and of the corresponding base trivial events for the adversary algorithm. 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ Machine 
+ 
+ Temp 
+ 
+ 
+ 
+ 
+ NYC 
+ 
+ Taxi 
+ 
+ 
+ 
+ 
+ Twitter 
+ 
+ AAPL 
+ 
+ SWaT 
+ 
+ samples 
+ 17682 
+ 2307 
+ 11889 
+ 449919 
+ 
+ anom. 
+ 6% 
+ 27% 
+ 7% 
+ 12% 
+ 
+ # events 
+ 2 
+ 3 
+ 2 
+ 35 
+ 
+ trivial 
+ Y t < 40 Y_{t}<40 
+ Y t < 1250 Y_{t}<1250 
+ Y t > 12000 Y_{t}>12000 
+ First event 
+ 
+ 
+ 
+ 
+ 
+ 
+ Figure 3 . Construction of the adversary predictions for the NYC-Taxi dataset, with a zoom on the interval t ∈ [ 2060 , 2090 ) t\in[2060,2090) containing the trivial event Y t < 1250 Y_{t}<1250 . The predicted events (bottom row) are calculated using the adversary algorithm given a trivial event (middle row). The predictions are evaluated against the ground truth (top row). 
+ 
+ 
+
+ Table 5 . Comparison of the metrics using datasets and algorithm predictions selected by  Tatbul et al., 2018 ; Hwang et al., 2019 , against a trivial prediction and an adversary algorithm. Each cell shows the precision/recall/F1-score w.r.t. a certain metric, algorithm, and dataset. The algorithm reaching the best F1-score is shown in bold for each metric and dataset. 
+ 
+ 
+ 
+ 
+ Metric 
+ Algorithm 
+ Dataset 
+ 
+ Machine-Temp 
+ NYC-Taxi 
+ Twitter-AAPL 
+ 
+ 
+ 
+ 
+ trivial 
+ 1.00/0.34/0.50 
+ 1.00/0.03/0.07 
+ 1.00/0.13/0.23 
+ 
+ Classical 
+ adversary 
+ 0.05/0.83/0.10 
+ 0.27/0.98/0.42 
+ 0.06/0.93/0.12 
+ 
+ (sample-based 
+ Greenhouse 
+ 0.33/0.42/0.37 
+ 0.23/0.43/0.30 
+ 0.50/0.06/0.11 
+ 
+ precision/recall) 
+ LSTM-AD 
+ 0.06/1.00/0.12 
+ 0.24/0.49/0.32 
+ 0.24/0.13/0.17 
+ 
+ 
+ Luminol TSB 
+ 0.10/0.04/0.06 
+ 0.15/0.02/0.04 
+ 0.37/0.07/0.11 
+ 
+ 
+ trivial 
+ 1.00/0.46/0.63 
+ 1.00/0.18/0.31 
+ 1.00/0.31/0.48 
+ 
+ 
+ adversary 
+ 0.99/0.75/0.85 
+ 0.88/0.85/0.86 
+ 0.96/0.75/0.85 
+ 
+ RP/RR 
+ Greenhouse 
+ 0.15/0.57/0.24 
+ 0.23/0.52/0.32 
+ 0.26/0.51/0.35 
+ 
+ 
+ LSTM-AD 
+ 0.03/1.00/0.06 
+ 0.27/0.51/0.35 
+ 0.10/0.51/0.17 
+ 
+ 
+ Luminol TSB 
+ 0.08/0.50/0.14 
+ 0.14/0.34/0.20 
+ 0.24/0.51/0.32 
+ 
+ 
+ trivial 
+ 1.00/0.42/0.59 
+ 1.00/0.02/0.03 
+ 1.00/0.06/0.12 
+ 
+ 
+ adversary 
+ 0.99/0.96/0.97 
+ 0.93/1.00/0.96 
+ 0.96/1.00/0.98 
+ 
+ TaP/TaR 
+ Greenhouse 
+ 0.17/0.47/0.25 
+ 0.32/0.64/0.43 
+ 0.42/0.04/0.07 
+ 
+ 
+ LSTM-AD 
+ 0.04/1.00/0.07 
+ 0.36/0.66/0.47 
+ 0.13/0.08/0.10 
+ 
+ 
+ Luminol TSB 
+ 0.10/0.02/0.04 
+ 0.23/0.02/0.03 
+ 0.26/0.04/0.07 
+ 
+ 
+ trivial 
+ 1.00/0.50/0.66 
+ 1.00/0.30/0.46 
+ 1.00/0.49/0.66 
+ 
+ 
+ adversary 
+ 0.49/1.00/0.66 
+ 0.54/1.00/0.70 
+ 0.50/1.00/0.67 
+ 
+ Affiliation 
+ Greenhouse 
+ 0.71/0.99/0.83 
+ 0.51/0.99/0.67 
+ 0.78/0.98/0.87 
+ 
+ 
+ LSTM-AD 
+ 0.50/1.00/0.67 
+ 0.51/1.00/0.67 
+ 0.66/0.99/0.79 
+ 
+ 
+ Luminol TSB 
+ 0.54/0.99/0.70 
+ 0.38/0.79/0.51 
+ 0.73/0.98/0.83 
+ 
+ 
+ 
+ 
+ 
+ Algorithm 
+ Dataset 
+ 
+ SWaT 
+ 
+ trivial 
+ 1.00/0.02/0.03 
+ 
+ adversary 
+ 0.12/0.99/0.21 
+ 
+ iForest 
+ 0.30/0.74/0.43 
+ 
+ OCSVM 
+ 0.17/0.85/0.28 
+ 
+ seq2seq 
+ 0.59/0.25/0.35 
+ 
+ trivial 
+ 1.00/0.03/0.06 
+ 
+ adversary 
+ 1.00/0.99/0.99 
+ 
+ iForest 
+ 0.04/0.52/0.08 
+ 
+ OCSVM 
+ 0.14/0.61/0.23 
+ 
+ seq2seq 
+ 0.35/0.66/0.46 
+ 
+ trivial 
+ 1.00/0.03/0.06 
+ 
+ adversary 
+ 1.00/0.99/1.00 
+ 
+ iForest 
+ 0.05/0.40/0.09 
+ 
+ OCSVM 
+ 0.17/0.55/0.26 
+ 
+ seq2seq 
+ 0.44/0.65/0.52 
+ 
+ trivial 
+ 1.00/0.03/0.06 
+ 
+ adversary 
+ 0.53/1.00/0.69 
+ 
+ iForest 
+ 0.52/0.84/0.64 
+ 
+ OCSVM 
+ 0.65/0.70/0.68 
+ 
+ seq2seq 
+ 0.86/0.79/0.83 
+ 
+ 
+ 
+ 
+
+ Table 6 . Tabulated and visual per-event comparison between iForest and seq2seq on the SWaT dataset for the first six ground truth events, using the affiliation metrics. The affiliation zones are indicated with dashed lines. 
+ 
+ 
+ 
+ 
+ Algorithm 
+ Mean of 35 events 
+ Ev. 1 
+ Ev. 2 
+ Ev. 3 
+ Ev. 4 
+ Ev. 5 
+ Ev. 6 
+ 
+ 
+ 
+ iForest 
+ 0.52/0.84/0.64 
+ 0.37/0.53/0.44 
+ 1.00/0.91/0.95 
+ 0.76/0.99/0.86 
+ NaN/0/NaN 
+ 0.38/0.60/0.46 
+ 0.09/0.21/0.12 
+ 
+ seq2seq 
+ 0.86/0.79/0.83 
+ 0.96/1.00/0.98 
+ 0.86/1.00/0.93 
+ 0.73/0.78/0.75 
+ 0.39/0.71/0.50 
+ 0.71/0.97/0.82 
+ 0.88/1.00/0.94 
+ 
+ 
+ 
+ 
+ 
+ Results for the RP/RR and TaP/TaR metrics 
+
+ 
+ The second and third rows of Tab.  5 show that the adversary algorithm beats by far any other tested algorithms, although this adversary algorithm being unable to provide any informative content about the position of the anomalies, since almost all the samples are labelled positively. In this way, those algorithms are unable to provide reliable results in a conceivable situation. 
+ 
+ 
+ The results of the evaluation for the adversary algorithm can be retrieved theoretically, for a dataset containing n n ground truth events and where the trivial event is cut into k k pieces. First, n − 1 n-1 events are fully recalled, while the remaining one overlaps 50 % 50\% of the trivial event, giving a recall around 1 − 1 2 ​ n 1-\frac{1}{2n} for RP/RR and at least 1 − 1 4 ​ n 1-\frac{1}{4n} for TaP/TaR (using default parameters).
+Then, the precision is perfect for k k pieces and uncontrolled for the two remaining ones, giving a total precision of at least k k + 2 \frac{k}{k+2} .
+Globally, both precision and recall are close to 1 1 for k k and n n sufficiently large. 
+ 
+ 
+ 
+ Results for the classical and affiliation metrics 
+
+ 
+ We observe in Tab.  5 that the classical and the affiliation metrics are not sensitive to the adversary algorithm. 
+ 
+ 
+ For the classical metrics, that operate at the sample level , the trivial algorithm has a precision of one while the recall covers the proportion of correctly identified samples . The adversary algorithm increases the recall but drastically impacts the precision, since most of the elements are now FP. 
+ 
+ 
+ For the affiliation metrics, that operate at the event level , the trivial algorithm has also precision of one while the recall covers the proportion of correctly identified events (e.g. 1 / 35 ≈ 0.03 1/35\approx 0.03 for the SWaT dataset). The adversary algorithm increases the recall but reduces the precision to 0.50 0.50 , meaning that the predictions are not better compared to a random prediction (by definition of the construction of the metric, as developed in Sec.  4.4 ). 
+ 
+ 
+ Regarding the other algorithms, we consider for instance Greenhouse and observe that it did not provide informative predictions for the NYC-Taxi (affiliation metrics with a precision around 0.50 0.50 ), while performing better for both Machine-Temp and Twitter-AAPL.
+For this latter, Greenhouse performs fewer predictions that do not cover the whole ground truth events but are overlapping or close to them, explaining the small classical recall (0.06) compared to the high affiliated recall (0.98).
+This also holds for the SWaT dataset, for which we give a detailed event level interpretation in Sec.  4.3 . 
+ 
+ 
+ 
+ 
+ 4.3. Event-level comparison 
+
+ 
+ Since affiliation metrics have a local significance, each anomalous event can be analyzed individually from both precision and recall viewpoints, which is not possible with the other range-based metrics.
+An example of the results obtained using iForest and seq2seq for the 6 initial events of the 35 35 overall anomalous events of the SWaT dataset is shown in Tab.  6 . The illustration intentionally mimics the one reported in  Hwang et al., 2019 , where however the judgement of algorithmic performance at individual events level is left to the eye of the reader. In contrast, affiliation precisely quantifies in an unbiased and unequivocal manner the detection performance of each event, offering a new light in the algorithmic evaluation through this new detailed view. 
+ 
+ 
+ For events 1 1 and 6 6 of Tab.  6 , iForest misses the ground truth events by far, while seq2seq predictions locate near and within the anomalous region. This translates into a poor precision/recall for iForest (worse than a random prediction for the precision, as bad as a random prediction for the recall) while for seq2seq the precision is good, with a perfect recall.
+Event 2 2 depicts the situation with a perfect precision (for iForest) or an almost perfect recall (for seq2seq), leading to similar performance since in both cases the main region has been correctly identified.
+For event 3 3 , iForest has better identified the ground truth, even if both predictions are better than a random prediction.
+For event 4 4 , the prediction is either missing (for iForest) or poor (for seq2seq).
+For event 5 5 , most the predictions made by iForest are close to the limit of the affiliation zone, impacting the overall precision, whereas seq2seq also captures most of the ground truth event inducing a boost in the precision and in the recall. 
+ 
+ 
+ Overall, seq2seq gives better results for 21 events (13 for both precision and recall, and 8 only for the precision), equivocal results for 4 events (increase of the precision while the recall decreases, or the contrary) and a worse performance for 2 events. The remaining events are either completely undetected by iForest (for 2 events) or by seq2seq (for 6 events). 
+ 
+ 
+ Globally, iForest, OCSVM, and adversary algorithms do not provide better results compared to a random guess. Locally, e.g. for events 2 and 3, the iForest algorithm is better (in terms of F1-score) compared to seq2seq.
+This behavior highlights the difference in the algorithm to deduce the anomalies (per sample for iForest and in-context for seq2seq) and can help for understanding the strengths and weaknesses of the algorithms and design better ones (for example for doing ensembles). 
+ 
+ 
+ In an operational perspective, non-normalized distances can complement the understanding for each event by providing the individual time distances for precision/recall (optionally considering directionality, i.e., in case from a practical viewpoint an early detection is preferable to a late one). 
+ 
+ 
+ 
+ 4.4. Theoretical properties 
+
+ 
+ In addition with the practical results, we provide theoretical properties supporting the correct behavior of the affiliation metrics.
+Since each affiliated zone is considered independently, we consider a single ground truth event gt j \text{gt}_{j} included in the affiliation zone I j I_{j} .
+We let p = | gt j | / | I j | p=|\text{gt}_{j}|/|I_{j}| the proportion taken by the ground truth event within its affiliation zone, which is also the proportion of positive samples.
+As we consider an anomalous detection task, we are expecting rare events and p ≪ 1 p\ll 1 in most of the cases. 
+ 
+ 
+ In the following, we derive a closed-form of the metrics in three scenarios: first (i) when the whole interval is predicted as anomalous, then (ii) for a random prediction within the affiliation zone, and finally (iii) for a single prediction located at specific locations on the interval. Details of the proofs are available in the Appendix  C . 
+ 
+ 
+ Predicting the whole interval as anomalous 
+
+ 
+ In this case, the precision and recall are given by (cf. Appendix  C.1 for proof): 
+ 
+
+ 
+ (7) 
+ 
+ P precision = 1 2 + p 2 2 , P recall = 1 . \displaystyle P_{\text{precision}}=\frac{1}{2}+\frac{p^{2}}{2},\quad P_{\text{recall}}=1. 
+ 
+ 
+ 
+ 
+ In the p ≪ 1 p\ll 1 regime, the precision is close to 1 / 2 1/2 which corresponds to a poor detector (as poor as a random predictor).
+For all values of p p , this behavior can be put in parallel with the classical precision/recall, in which predicting all samples would give precision of p p and a recall of 1 1 . 
+ 
+ 
+ 
+ Expected precision and recall given a single random prediction 
+
+ 
+ The expected precision and recall are given by: 
+ 
+ 
+ 
+
+ 
+ (8) 
+ 
+ P precision = 1 2 + p 2 2 , P recall = 1 2 . \displaystyle P_{\text{precision}}=\frac{1}{2}+\frac{p^{2}}{2},\quad P_{\text{recall}}=\frac{1}{2}. 
+ 
+ 
+ 
+ 
+ This property confirms that scores around 1 / 2 1/2 corresponds to a random detector (cf. Appendix  C.2 for proof). In this case, the classical precision/recall would give a precision of p p and a recall close to 0 0 assuming a large number of samples. 
+ 
+ 
+ 
+ Single prediction at a defined position 
+
+ 
+ We consider different single predictions located at four different positions on the affiliation zone: (a) the border of the affiliation zone, (b) the position halfway between the border and the ground truth event, (c) the first element of the event, and (d) the center of the event.
+The latter case (d) corresponds to the best possible single-element prediction.
+Since the position of the ground truth event also impacts the results, for simplification we assume it centered within the affiliation zone. 
+ 
+ 
+ We defer a derivation of closed-form expression for (a)-(d) in Appendix  C.3 , and report here an intuitive example. The scores as a function of p p are reported in Fig.  4 , along with an illustration of the four positions for p = 1 / 5 p=1/5 .
+For p ≪ 1 p\ll 1 , we observe that both precision and recall are 0 0 for distant predictions (a), and increase until reaching 1 1 for close predictions (c, d). In the other regimes, the precision is always 1 1 for overlapping predictions (c, d) but the recall decreases as p p increases, representing the impossibility for a single prediction to reach a perfect recall of a large event.
+For instance, the results for the best single-element prediction (d) are given by (with x + := max ⁡ ( 0 , x ) x_{+}:=\max\left(0,x\right) the positive part): 
+ 
+
+ 
+ (9) 
+ 
+ P precision = 1 , P recall = 1 − p 2 + 1 2 ​ p ​ ( p − 1 2 ) + 2 . \displaystyle P_{\text{precision}}=1,\quad P_{\text{recall}}=1-\frac{p}{2}+\frac{1}{2p}\left(p-\frac{1}{2}\right)_{+}^{2}. 
+ 
+ 
+ 
+ 
+ Figure 4 . Given a ground truth centered in the affiliation zone and filling a proportion p p , result of the affiliated metrics for a single-point prediction located at the: (a) border of the affiliation zone, (b) position halfway between the border and the event, (c) first element of the event, (d) center of the event. 
+ 
+ 
+ 
+ 
+ 
+ 5. Discussion 
+
+ 
+ We finally discuss the proposed affiliation metrics along complementary aspects. 
+ 
+ 
+ Shape of the ground truth labels 
+
+ 
+ The most important factor towards a correct evaluation is the ground truth labels themselves.
+The intended purpose and a description of the labeling strategy are necessary requirements, but other factors impact the quality of the evaluation.
+First, the actual output should represent an anomaly detection task, i.e. labeled events need to be rare.
+Furthermore, we expect that each event corresponds to a single anomaly. For this purpose, the merge of fragmented events related to a single anomaly have been proposed  Wu & Keogh, 2021 .
+However, the amplitude of the labeled zone may remain imprecise: even for controlled experiments  Goh et al., 2016 ; Shin et al., 2020 for which the start date is known, the time at which the system returns to a steady state remains subjective.
+By design, the affiliation metrics are less sensitive to precise labeling compared to the previous range or window-based metrics. 
+ 
+ 
+ 
+ Expressiveness of the metrics 
+
+ 
+ The affiliation metrics have been built to handle the two main limitations of the classical precision/recall.
+As for algorithmic comparison, we have shown that they are expressive enough to perform a fair comparison without the need for introducing additional parameters.
+The modification of the metrics to handle additional features (such as focusing on overlaps only, or giving more importance to the beginning of an event) is possible by modifying the survival functions – but, at the same time, this is not encouraged. The main reason is the additional layer of complexity needed to select those parameters, in the context of small volume of labeled events, would render evaluation arbitrary. 
+ 
+ 
+ 
+ Theoretical properties 
+
+ 
+ The affiliation metrics focus on a single aspect of the evaluation: the assessment of the proximity between the predicted and the ground truth labels, which is the primary aspect to compare anomaly detection algorithms from a research point of view. Summarizations of the precision/recall as a single quantity that exist for the classical metrics (such as the F-score or the Average Precision) are straightforward to derive for the affiliation metrics.
+In order to properly characterize the behavior of such summarized metrics, further research is needed to gather theoretical bounds on the variance. 
+ 
+ 
+ 
+ Practical deployment 
+
+ 
+ From a deployment perspective, complementary measures need to be considered, similarly to those introduced by Gensler and Sick  Gensler & Sick, 2014 , such as the number of predicted events in each segmentation zone and the direction tendency of the predictions.
+In this context, the trade-offs between those measures remain in the hand of the field expert. In order to assist decisions (e.g., algorithm selection and score thresholding), further development of an interactive visualization library leveraging the affiliation metrics would be beneficial. 
+ 
+ 
+ 
+ 
+ 6. Conclusion 
+
+ 
+ For evaluating time series anomaly detection tasks, we proposed a precision/recall pair that handles the limitations encountered with the classical metrics.
+Contrary to the existing metrics, it is generic (parameter-free, applicable on all datasets),
+and local (each ground truth event is considered separately). In turn, locality makes it both
+expressive (possible to break down the final score into individual interpretable and visualizable bricks) and robust (e.g., not sensitive to adversary predictions).
+Finally, its construction makes it both theoretically principled, as well as practically useful – overall, we hope that the research community will find them a useful contribution for the unbiased evaluation of time series anomaly detection tasks. 
+ 
+ 
+ 
+ References 
+
+ 
+ 
+ Ahmad et al. (2017) 
+ Subutai Ahmad, Alexander Lavin, Scott Purdy and Zuha Agha
+ 
+ “Unsupervised real-time anomaly detection for streaming data”
+ 
+ In Neurocomputing 262 
+ 
+ Elsevier, 2017, pp. 134–147
+ 
+ 
+ Deza & Deza (2009) 
+ Michel Deza and Elena Deza
+ 
+ “Encyclopedia of distances”
+ 
+ Springer, 2009
+ 
+ 
+ Dubuisson & Jain (1994) 
+ Marie-Pierre Dubuisson and Anil. Jain
+ 
+ “A modified Hausdorff distance for object matching”
+ 
+ In IEEE ICPR 1 , 1994, pp. 566–568
+ 
+ 
+ Fujita (2013) 
+ Osamu Fujita
+ 
+ “Metrics based on average distance between sets”
+ 
+ In Japan Journal of Industrial and Applied Mathematics 30.1 
+ 
+ Springer, 2013, pp. 1–19
+ 
+ 
+ Garg et al. (2021) 
+ Astha Garg et al.
+ 
+ “An Evaluation of Anomaly Detection and Diagnosis in
+Multivariate Time Series”
+ 
+ In IEEE Trans. on Neural Networks and Learning Systems 
+ 
+ IEEE, 2021
+ 
+ 
+ Gensler & Sick (2014) 
+ Andr\’e Gensler and Bernhard Sick
+ 
+ “Novel Criteria to Measure Performance of Time Series
+Segmentation Techniques”
+ 
+ In LWA , 2014, pp. 193–204
+ 
+ Citeseer
+ 
+ 
+ Gharghabi et al. (2017) 
+ Shaghayegh Gharghabi et al.
+ 
+ “Matrix profile VIII: domain agnostic online semantic
+segmentation at superhuman performance levels”
+ 
+ In IEEE ICDM , 2017
+ 
+ 
+ Goh et al. (2016) 
+ Jonathan Goh, Sridhar Adepu, Khurum Junejo and Aditya Mathur
+ 
+ “A dataset to support research in the design of secure water
+treatment systems”
+ 
+ In CRITIS , 2016, pp. 88–99
+ 
+ Springer
+ 
+ 
+ Huet et al. (2022) 
+ Alexis Huet, Jose Navarro and Dario Rossi
+ 
+ “Affiliation precision/recall library”, https://doi.org/10.6084/m9.figshare.19131425 , 2022
+ 
+ 
+ Hundman et al. (2018) 
+ Kyle Hundman et al.
+ 
+ “Detecting spacecraft anomalies using LSTMs and
+nonparametric dynamic thresholding”
+ 
+ In ACM SIGKDD , 2018, pp. 387–395
+ 
+ 
+ Hwang et al. (2019) 
+ Won-Seok Hwang, Jeong-Han Yun, Jonguk Kim and Hyoung Kim
+ 
+ “Time-series aware precision and recall for anomaly detection:
+considering variety of detection result and addressing ambiguous labeling”
+ 
+ In ACM CIKM , 2019, pp. 2241–2244
+ 
+ 
+ James et al. (2020) 
+ Nick James, Max Menzies, Lamiae Azizi and Jennifer Chan
+ 
+ “Novel semi-metrics for multivariate change point analysis and
+anomaly detection”
+ 
+ In Physica D: Nonlinear Phenomena 412 
+ 
+ Elsevier, 2020
+ 
+ 
+ Kim et al. (2019) 
+ Jonguk Kim, Jeong-Han Yun and Hyoung Kim
+ 
+ “Anomaly detection for industrial control systems using
+sequence-to-sequence neural networks”
+ 
+ In CyberICPS , 2019
+ 
+ 
+ Kim et al. (2021) 
+ Siwon Kim et al.
+ 
+ “Towards a Rigorous Evaluation of Time-series Anomaly
+Detection”
+ 
+ In arXiv preprint arXiv:2109.05257 , 2021
+ 
+ 
+ Laptev et al. (2015) 
+ Nikolay Laptev, Saeed Amizadeh and Youssef Billawala
+ 
+ “S5 - A Labeled Anomaly Detection Dataset, v1.0 (16M)”, https://webscope.sandbox.yahoo.com/catalog.php?datatype=s&did=70 , 2015
+ 
+ 
+ Lavin & Ahmad (2015) 
+ Alexander Lavin and Subutai Ahmad
+ 
+ “Evaluating real-time anomaly detection algorithms – the
+Numenta anomaly benchmark”
+ 
+ In IEEE ICMLA , 2015
+ 
+ 
+ Lee et al. (2018) 
+ Tae Lee et al.
+ 
+ “Greenhouse: A Zero-Positive Machine Learning System for
+Time-Series Anomaly Detection”
+ 
+ In SysML , 2018
+ 
+ 
+ LinkedIn (2018) 
+ LinkedIn
+ 
+ “Luminol”, https://github.com/linkedin/luminol , 2018
+ 
+ 
+ Liu et al. (2008) 
+ Fei Liu, Kai Ting and Zhi-Hua Zhou
+ 
+ “Isolation forest”
+ 
+ In IEEE ICDM , 2008, pp. 413–422
+ 
+ 
+ Malhotra et al. (2015) 
+ Pankaj Malhotra, Lovekesh Vig, Gautam Shroff and Puneet Agarwal
+ 
+ “Long short term memory networks for anomaly detection in time
+series”
+ 
+ In ESANN 89 , 2015, pp. 89–94
+ 
+ 
+ Ren et al. (2019) 
+ Hansheng Ren et al.
+ 
+ “Time-series anomaly detection service at Microsoft”
+ 
+ In ACM SIGKDD , 2019, pp. 3009–3017
+ 
+ 
+ Scharw\"achter & M\"uller (2020) 
+ Erik Scharw\"achter and Emmanuel M\"uller
+ 
+ “Statistical Evaluation of Anomaly Detectors for Sequences”
+ 
+ In ACM SIGKDD Workshop on Mining and Learning from Time
+Series (KDD MiLeTS) , 2020
+ 
+ 
+ Sch\"olkopf et al. (2001) 
+ Bernhard Sch\"olkopf et al.
+ 
+ “Estimating the support of a high-dimensional distribution”
+ 
+ In Neural computation 13.7 
+ 
+ MIT Press One Rogers Street, Cambridge, MA 02142-1209, 2001, pp. 1443–1471
+ 
+ 
+ Shin et al. (2020) 
+ Hyeok-Ki Shin, Woomyo Lee, Jeong-Han Yun and HyoungChun Kim
+ 
+ “HAI 1.0: HIL-based Augmented ICS Security Dataset”
+ 
+ In USENIX Workshop on Cyber Security Experimentation and
+Test , 2020
+ 
+ 
+ Singh & Olinsky (2017) 
+ Nidhi Singh and Craig Olinsky
+ 
+ “Demystifying Numenta anomaly benchmark”
+ 
+ In IEEE IJCNN , 2017
+ 
+ 
+ Su et al. (2019) 
+ Ya Su et al.
+ 
+ “Robust anomaly detection for multivariate time series through
+stochastic recurrent neural network”
+ 
+ In ACM SIGKDD , 2019, pp. 2828–2837
+ 
+ 
+ Tatbul et al. (2018) 
+ Nesime Tatbul et al.
+ 
+ “Precision and Recall for Time Series”
+ 
+ In NeurIPS , 2018
+ 
+ 
+ Truong et al. (2020) 
+ Charles Truong, Laurent Oudre and Nicolas Vayatis
+ 
+ “Selective review of offline change point detection methods”
+ 
+ In Signal Processing 167 
+ 
+ Elsevier, 2020, pp. 107299
+ 
+ 
+ Wei et al. (2005) 
+ Li Wei et al.
+ 
+ “Assumption-Free Anomaly Detection in Time Series”
+ 
+ In SSDBM 5 , 2005, pp. 237–242
+ 
+ 
+ Wu & Keogh (2021) 
+ Renjie Wu and Eamonn Keogh
+ 
+ “Current time series anomaly detection benchmarks are flawed
+and are creating the illusion of progress”
+ 
+ In IEEE TKDE , 2021
+ 
+ 
+ Xu et al. (2018) 
+ Haowen Xu et al.
+ 
+ “Unsupervised anomaly detection via variational auto-encoder
+for seasonal KPIs in web applications”
+ 
+ In WWW , 2018, pp. 187–196
+ 
+ 
+ 
+ 
+ 
+ Appendix A Closed-form of the affiliation metrics 
+
+ 
+ For the ground truth event gt j = : [ a , b ) \text{gt}_{j}=:[a,b) located within the affiliation zone I j = : [ A , B ) I_{j}=:[A,B) , we let respectively m m and M M the shortest and largest distance from the event to the borders of the zone: 
+ 
+
+ 
+ 
+ m := min ⁡ ( a − A , B − b )  and  M := max ⁡ ( a − A , B − b ) . m:=\min\left(a-A,B-b\right)\quad\text{ and }\quad M:=\max\left(a-A,B-b\right). 
+ 
+ 
+ 
+ 
+ A.1. Survival functions 
+
+ 
+ The survival function for the precision defined by Eq.  3 is given by F ¯ precision j ​ ( 0 ) = 1 \bar{F}_{\text{precision}_{j}}(0)=1 and, for d ∈ ( 0 , M ] d\in(0,M] : 
+ 
+
+ 
+ (10) 
+ 
+ F ¯ precision j ​ ( d ) = 1 − | gt j | + min ⁡ ( d , m ) + d | I j | . \displaystyle\bar{F}_{\text{precision}_{j}}(d)=1-\frac{|\text{gt}_{j}|+\min(d,m)+d}{|I_{j}|}. 
+ 
+ 
+ 
+ 
+ The explanation is as follows: taking uniformly at random an element within the affiliation zone, the probability to obtain a distance of zero is | gt j | / | I j | |\text{gt}_{j}|/|I_{j}| , while outside the decrease of the survival function is in 2 ​ d 2d on ( 0 , m ] (0,m] and in d d on ( m , M ] (m,M] , because two elements exist for each distance before m m , and only one after.
+For a ground truth sample y ∈ gt j y\in\text{gt}_{j} , we let: 
+ 
+
+ 
+ 
+ m y := min ⁡ ( y − A , B − y )  and  M y := max ⁡ ( y − A , B − y ) . m_{y}:=\min\left(y-A,B-y\right)\quad\text{ and }\quad M_{y}:=\max\left(y-A,B-y\right). 
+ 
+ 
+ The survival function for the recall is given, for d ∈ [ 0 , M y ] d\in[0,M_{y}] , by: 
+ 
+
+ 
+ (11) 
+ 
+ F ¯ y , recall j ​ ( d ) = 1 − min ⁡ ( d , m y ) + d | I j | . \displaystyle\bar{F}_{y,\text{recall}_{j}}(d)=1-\frac{\min(d,m_{y})+d}{|I_{j}|}. 
+ 
+ 
+ 
+ 
+ 
+ A.2. Closed-form of the integrals 
+
+ 
+ The closed-form of the integrals is straightforward (integral of piecewise linear functions) but include many cases due to the presence of the min \min and max \max functions. The expressions are derived in the following paragraphs. All the cases have been considered in the Python implementation  Huet et al., 2022 . 
+ 
+ 
+ A.2.1. Integral over the samples for the precision 
+
+ 
+ For the precision, each predicted interval located within the affiliation zone is cut into three pieces (possibly empty), corresponding to the portion before, within, and after the ground truth event.
+We consider the case of a single predicted interval pred located after the ground truth event (thus not intersecting it).
+The distance from the interval to the ground truth event goes from d min = pred start − b d_{\text{min}}=\text{pred}_{\text{start}}-b to d max = pred stop − b d_{\text{max}}=\text{pred}_{\text{stop}}-b . We also consider either the case (a) d max ≤ m d_{\text{max}}\leq m or (b) m ≤ d min m\leq d_{\text{min}} . For the remaining case m ∈ ( d min , d max ) m\in(d_{\text{min}},d_{\text{max}}) , the predicted interval is cut again into two smaller pieces, one verifying (a) and the other (b). The integral over the samples is given by: 
+ 
+
+ 
+ (12) 
+ 
+ 𝒜 := ∫ x ∈ pred F ¯ precision j ​ ( dist ​ ( x , gt j ) ) ​ 𝑑 x = ∫ d min d max F ¯ precision j ​ ( z ) ​ 𝑑 z . \displaystyle\mathcal{A}:=\int_{x\in\text{pred}}\bar{F}_{\text{precision}_{j}}(\text{dist}(x,\text{gt}_{j}))dx=\int_{d_{\text{min}}}^{d_{\text{max}}}\bar{F}_{\text{precision}_{j}}(z)dz. 
+ 
+ 
+ 
+ 
+ We replace the survival function using ( 10 ). The linear part gives ∫ d min d max z ​ 𝑑 z = ( d max − d min ) ​ ( d max + d min ) / 2 = | pred | ​ d center \int_{d_{\text{min}}}^{d_{\text{max}}}zdz=(d_{\text{max}}-d_{\text{min}})(d_{\text{max}}+d_{\text{min}})/2=|\text{pred}|d_{\text{center}} , with d center d_{\text{center}} the distance reached for the point at the middle of the predicted interval.
+For the two cases (a) and (b), we deduce the same expression: 
+ 
+
+ 
+ (13) 
+ 
+ 𝒜 | pred | = 1 − | gt j | + min ⁡ ( d center , m ) + d center | I j | . \displaystyle\frac{\mathcal{A}}{|\text{pred}|}=1-\frac{|\text{gt}_{j}|+\min(d_{\text{center}},m)+d_{\text{center}}}{|I_{j}|}. 
+ 
+ 
+ 
+ 
+ 
+ A.2.2. Integral over the samples for the recall 
+
+ 
+ For the recall, we cut the ground truth interval into a finite partition such that each piece gt j , k \text{gt}_{j,k} is either fully included in the predictions (and the integral is immediate) or has a unique closest prediction t pivot , k ∈ I j t_{\text{pivot},k}\in I_{j} located at the border or outside the piece. Furthermore, all elements of a piece should be closer either to the closest prediction or to the border.
+We consider the case of a closest prediction located after the ground truth event, so that the distance from an element y ∈ gt j , k y\in\text{gt}_{j,k} to the predictions is: t pivot , k − y t_{\text{pivot},k}-y . 
+ 
+ 
+ The integral over the samples is given by: 
+ 
+
+ 
+ (14) 
+ 
+ ℬ := \displaystyle\mathcal{B}:= 
+ ∫ y ∈ gt j , k F ¯ y , recall j ​ ( dist ​ ( y , pred ∩ I j ) ) ​ 𝑑 y \displaystyle\int_{y\in\text{gt}_{j,k}}\bar{F}_{y,\text{recall}_{j}}(\text{dist}(y,\text{pred}\cap I_{j}))dy 
+ 
+ 
+ (15) 
+ 
+ = \displaystyle= 
+ ∫ y ∈ gt j , k F ¯ y , recall j ​ ( t pivot , k − y ) ​ 𝑑 y . \displaystyle\int_{y\in\text{gt}_{j,k}}\bar{F}_{y,\text{recall}_{j}}(t_{\text{pivot},k}-y)dy. 
+ 
+ 
+ 
+ 
+ We replace the survival function using Eq.  11 . We define y center y_{\text{center}} the middle point of gt j , k \text{gt}_{j,k} , d pivot = | t pivot , k − y center | d_{\text{pivot}}=|t_{\text{pivot},k}-y_{\text{center}}| its distance to the pivot prediction, and m center = min ⁡ ( y center − A , B − y center ) m_{\text{center}}=\min(y_{\text{center}}-A,B-y_{\text{center}}) its closest distance to the border.
+Using those notations, we obtain on the one side the linear part: 
+ 
+
+ 
+ (16) 
+ 
+ ∫ y ∈ gt j , k ( t pivot , k − y ) ​ 𝑑 y = | gt j , k | ​ d pivot \displaystyle\int_{y\in\text{gt}_{j,k}}(t_{\text{pivot},k}-y)dy=|\text{gt}_{j,k}|d_{\text{pivot}} 
+ 
+ 
+ and on the other side: 
+ 
+
+ 
+ (17) 
+ 
+ ∫ y ∈ gt j , k min ⁡ ( t pivot , k − y , m y ) ​ 𝑑 y = | gt j , k | min ⁡ ( d pivot , m center ) . \displaystyle\int_{y\in\text{gt}_{j,k}}\min(t_{\text{pivot},k}-y,m_{y})dy=|\text{gt}_{j,k}|\min(d_{\text{pivot}},m_{\text{center}}). 
+ 
+ 
+ Combining those elements, we arrive at the following expression: 
+ 
+ 
+ 
+
+ 
+ (18) 
+ 
+ ℬ | gt j , k | = 1 − min ⁡ ( d pivot , m center ) + d pivot | I j | . \displaystyle\frac{\mathcal{B}}{|\text{gt}_{j,k}|}=1-\frac{\min(d_{\text{pivot}},m_{\text{center}})+d_{\text{pivot}}}{|I_{j}|}. 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ Appendix B Particularization to point anomalies 
+
+ 
+ The case of point anomalies corresponds to express each anomaly at date t t as the limit of an event [ t , t + ε ) [t,t+\varepsilon) when ε → 0 \varepsilon\to 0 . It is therefore immediate to restate Eq.  4 as follows (with pred corresponding here to the point predictions within the affiliation zone I j I_{j} ): 
+ 
+ 
+ 
+
+ 
+ (19) 
+ 
+ P precision j = 1 # ​ pred ​ ∑ x ∈ pred F ¯ precision j ​ ( dist ​ ( x , gt j ) ) \displaystyle P_{\text{precision}_{j}}=\frac{1}{\#\text{pred}}\sum_{x\in\text{pred}}\bar{F}_{\text{precision}_{j}}(\text{dist}(x,\text{gt}_{j})) 
+ 
+ 
+ 
+ 
+ and Eq.  5 , since gt j \text{gt}_{j} is now a single point, as: 
+ 
+
+ 
+ (20) 
+ 
+ P recall j = F ¯ gt j , recall j ​ ( dist ​ ( gt j , pred ) ) . \displaystyle P_{\text{recall}_{j}}=\bar{F}_{\text{gt}_{j},\text{recall}_{j}}(\text{dist}(\text{gt}_{j},\text{pred})). 
+ 
+ 
+ 
+ 
+ The forms of the survival functions do not change (in Eq.  10 , the term | gt j | |\text{gt}_{j}| is replaced by 0 0 ). 
+ 
+ 
+ 
+ Appendix C Proof of the properties 
+
+ 
+ The generic method for proving the properties is to find a cut of the intervals satisfying the conditions expressed in Appendix  A , and to apply ( 13 ) and ( 18 ). 
+ 
+ 
+ C.1. Predicting the whole interval as anomalous 
+
+ 
+ The recall is 1 1 because the ground truth interval is included in the predictions. For the precision, we suppose that m = a − A m=a-A (the other case is symmetric).
+The predicted interval [ A , B ) [A,B) is cut into [ A , a ) ∪ [ a , b ) ∪ [ b , b + m ) ∪ [ b + m , B ) [A,a)\cup[a,b)\cup[b,b+m)\cup[b+m,B) . The Eq.  13 is applied on each part, giving four areas: 
+ 
+
+ 
+ 
+ 
+ 𝒜 [ A , a ) = ( a − A ) ​ ( B − b ) B − A , 𝒜 [ a , b ) = b − a , 𝒜 [ b , b + m ) = 𝒜 [ A , a ) , \displaystyle\mathcal{A}_{[A,a)}=\frac{(a-A)(B-b)}{B-A}~~,~~\mathcal{A}_{[a,b)}=b-a~~,~~\mathcal{A}_{[b,b+m)}=\mathcal{A}_{[A,a)}, 
+ 
+ 
+ 
+ 
+ 𝒜 [ b + m , B ) = 1 2 ( ( B − b ) − ( a − A ) ) 2 B − A . \displaystyle\mathcal{A}_{[b+m,B)}=\frac{1}{2}\frac{((B-b)-(a-A))^{2}}{B-A}. 
+ 
+ 
+ It leads to the following expression (corresponding to the Eq.  7 ): 
+ 
+
+ 
+ (21) 
+ 
+ P precision = 𝒜 [ A , a ) + 𝒜 [ A , a ) + 𝒜 [ A , a ) + 𝒜 [ A , a ) B − A = 1 2 + 1 2 ​ ( b − a B − A ) 2 . \displaystyle P_{\text{precision}}=\frac{\mathcal{A}_{[A,a)}+\mathcal{A}_{[A,a)}+\mathcal{A}_{[A,a)}+\mathcal{A}_{[A,a)}}{B-A}=\frac{1}{2}+\frac{1}{2}\left(\frac{b-a}{B-A}\right)^{2}. 
+ 
+ 
+ 
+ 
+ 
+ C.2. Expected precision and recall given a single random prediction 
+
+ 
+ The expected recall is expressed as the average of ( 5 ) over t ∈ I j t\in I_{j} : 
+ 
+
+ 
+ 
+ 𝔼 ⁡ [ P recall ] \displaystyle\mathbb{E}\left[P_{\text{recall}}\right] 
+ = 1 | gt j | ​ 1 | I j | ​ ∫ t ∈ I j ∫ y ∈ gt j F ¯ y , recall j ​ ( dist ​ ( y , t ) ) ​ 𝑑 y ​ 𝑑 t \displaystyle=\frac{1}{|\text{gt}_{j}|}\frac{1}{|I_{j}|}\int_{t\in I_{j}}\int_{y\in\text{gt}_{j}}\bar{F}_{y,\text{recall}_{j}}(\text{dist}(y,t))dydt 
+ 
+ 
+ 
+ 
+ = 1 | gt j | ​ 1 | I j | ​ ∫ y ∫ t 1 − min ⁡ ( | t − y | , m y ) + | t − y | | I j | ​ 𝑑 t ​ 𝑑 y \displaystyle=\frac{1}{|\text{gt}_{j}|}\frac{1}{|I_{j}|}\int_{y}\int_{t}1-\frac{\min(|t-y|,m_{y})+|t-y|}{|I_{j}|}dtdy 
+ 
+ 
+ where on the second line, we use the Fubini’s theorem, which facilitates the computation of the inner integral for each fixed y y : 
+ 
+ 
+ 
+
+ 
+ 
+ R ⁡ ( y ) := \displaystyle R(y):= 
+ ∫ t 1 − min ⁡ ( | t − y | , m y ) + | t − y | | I j | ​ 𝑑 t \displaystyle\int_{t}1-\frac{\min(|t-y|,m_{y})+|t-y|}{|I_{j}|}dt 
+ 
+ 
+ 
+ = \displaystyle= 
+ | I j | − 1 | I j | ​ [ ∫ min ⁡ ( | t − y | , m y ) + | t − y | ​ 𝑑 t ] \displaystyle|I_{j}|-\frac{1}{|I_{j}|}\left[\int\min(|t-y|,m_{y})+|t-y|dt\right] 
+ 
+ 
+ 
+ = \displaystyle= 
+ | I j | − 1 | I j | ​ [ 2 ​ ∫ 0 m y 2 ​ z ​ 𝑑 z + ∫ m y M y ( m y + z ) ​ 𝑑 z ] . \displaystyle|I_{j}|-\frac{1}{|I_{j}|}\left[2\int_{0}^{m_{y}}2zdz+\int_{m_{y}}^{M_{y}}(m_{y}+z)dz\right]. 
+ 
+ 
+ 
+ 
+ For the last line, we observe that for t ∈ [ y − m y , y + m y ] t\in[y-m_{y},y+m_{y}] , the distance | t − y | |t-y| goes from 0 0 to m y m_{y} (and this happens two times, on the left and on the right), while for t ∈ [ m y , M y ] t\in[m_{y},M_{y}] , the distance goes from m y m_{y} to M y M_{y} .
+After computing the integral, we end up with a quantity which does not depend on y y : 
+ 
+
+ 
+ (22) 
+ 
+ R ⁡ ( y ) = | I j | − 1 2 ​ | I j | ​ ( m y + M y ) 2 = | I j | 2 , \displaystyle R(y)=|I_{j}|-\frac{1}{2|I_{j}|}(m_{y}+M_{y})^{2}=\frac{|I_{j}|}{2}, 
+ 
+ 
+ and finally:
+ 𝔼 ⁡ [ P recall ] = 1 / 2 . \mathbb{E}\left[P_{\text{recall}}\right]=1/2. 
+For the expected precision, the computations are identical to those leading to Eq.  21 . 
+ 
+ 
+ 
+ C.3. Single prediction at a defined position 
+
+ 
+ To ease the understanding, we consider the case | I j | = [ A , B ) = [ 0 , 1 ) |I_{j}|=[A,B)=[0,1) . Since gt j = [ a , b ) \text{gt}_{j}=[a,b) is centered in the affiliation zone and of proportion p p , we have: [ a , b ) = [ 1 / 2 − p / 2 , 1 / 2 + p / 2 ) [a,b)=[1/2-p/2,1/2+p/2) . We detail the case (d) of a prediction located at the position 1 / 2 1/2 and corresponding to Eq.  9 . 
+ 
+ 
+ If p ≤ 1 / 2 p\leq 1/2 , the cut [ 1 / 2 − p / 2 , 1 / 2 ) ∪ [ 1 / 2 , 1 / 2 + p / 2 ) [1/2-p/2,1/2)\cup[1/2,1/2+p/2) verifies the necessary conditions.
+By applying Eq.  18 on each part, we obtain:
+ ℬ [ 1 / 2 − p / 2 , 1 / 2 ) = ℬ [ 1 / 2 , 1 / 2 + p / 2 ) = ( p / 2 ) ( 1 − p / 2 ) \mathcal{B}_{[1/2-p/2,1/2)}=\mathcal{B}_{[1/2,1/2+p/2)}=(p/2)(1-p/2) 
+so that P recall = 1 − p / 2 . P_{\text{recall}}=1-p/2. 
+ 
+ 
+ If p > 1 / 2 p>1/2 , the ground truth region is partitioned into four areas: [ 1 / 2 − p / 2 , 1 / 4 ) ∪ [ 1 / 4 , 1 / 2 ) ∪ [ 1 / 2 , 3 / 4 ) ∪ [ 3 / 4 , 1 / 2 + p / 2 ) , [1/2-p/2,1/4)\cup[1/4,1/2)\cup[1/2,3/4)\cup[3/4,1/2+p/2), from which we compute: 
+ 
+
+ 
+ 
+ ℬ [ 1 / 4 , 1 / 2 ) = ℬ [ 1 / 2 , 3 / 4 ) = \displaystyle\mathcal{B}_{[1/4,1/2)}=\mathcal{B}_{[1/2,3/4)}= 
+ ( 1 / 4 ) ​ ( 3 / 4 ) , \displaystyle(1/4)(3/4), 
+ 
+ 
+ 
+ ℬ [ 1 / 2 − p / 2 , 1 / 4 ) = ℬ [ 3 / 4 , 1 / 2 + p / 2 ) = \displaystyle\mathcal{B}_{[1/2-p/2,1/4)}=\mathcal{B}_{[3/4,1/2+p/2)}= 
+ ( p / 2 − 1 / 4 ) ​ ( 1 / 2 ) , \displaystyle(p/2-1/4)(1/2), 
+ 
+ 
+ so that P recall = 1 / 2 + 1 / ( 8 ​ p ) P_{\text{recall}}=1/2+1/(8p) .
+By combining those two cases, we end up with Eq.  9 .
+Globally, the same method is applied for the positions (a), (b), (c), and we get the curves represented in Fig.  4 : 
+ 
+
+ 
+ (23) 
+ 
+ (a) 
+ P precision = 0 , \displaystyle\quad P_{\text{precision}}=0,~ 
+ 
+ P recall = \displaystyle P_{\text{recall}}= 
+ 
+ p 4 , \displaystyle\frac{p}{4}, 
+ 
+ 
+ (24) 
+ 
+ (b) 
+ P precision = 1 2 − p 2 , \displaystyle\quad P_{\text{precision}}=\frac{1}{2}-\frac{p}{2},~ 
+ 
+ P recall = \displaystyle P_{\text{recall}}= 
+ 
+ 1 2 − p 2 + 25 64 ​ p ​ ( p − 1 5 ) + 2 , \displaystyle\frac{1}{2}-\frac{p}{2}+\frac{25}{64p}\left(p-\frac{1}{5}\right)_{+}^{2}, 
+ 
+ 
+ (25) 
+ 
+ (c) 
+ P precision = 1 , \displaystyle\quad P_{\text{precision}}=1,~ 
+ 
+ P recall = \displaystyle P_{\text{recall}}= 
+ 
+ 1 − p + 16 9 ​ p ​ ( p − 1 3 ) + 2 , \displaystyle 1-p+\frac{16}{9p}\left(p-\frac{1}{3}\right)_{+}^{2}, 
+ 
+ 
+ (26) 
+ 
+ (d) 
+ P precision = 1 , \displaystyle\quad P_{\text{precision}}=1,~ 
+ 
+ P recall = \displaystyle P_{\text{recall}}= 
+ 
+ 1 − p 2 + 1 2 ​ p ​ ( p − 1 2 ) + 2 . \displaystyle 1-\frac{p}{2}+\frac{1}{2p}\left(p-\frac{1}{2}\right)_{+}^{2}. 
+ 
+ 
+ 
+ 
+ 
+ 
+ Appendix D Reproducibility 
+
+ 
+ The affiliation metrics have been implemented using the standard Python 3 library and is available at  Huet et al., 2022 .
+The implementation leverages the closed-form highlighted in Appendix  A and follows the process of Sec.  3.4 : the binary inputs are converted into events before being separated into affiliation zones. On each segment, the metrics are computed and the output consists of the precision/recall scores as well as the individual distances and probabilities. 
+ 
+ 
+ Reliability of the code has been checked through unit tests.
+Additionally, the numerical results related to the affiliation metrics obtained in Sec.  4 are directly reproducible by typing the following: python -m unittest discover .
+On a Windows 10 machine using an Intel(R) Core(TM) i7-8650U processor running at 1.90 GHz with 16 GB of RAM, the whole tests took 8 seconds, including the computation of the affiliation metrics for the SWaT  Goh et al., 2016 dataset containing 449919 samples and 35 ground truth events, against up to 472 predicted events. 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ Experimental support, please
+ view the build logs 
+ for errors. Generated by
+ 
+ 
+ L
+ A 
+ T
+ E 
+ 
+ xml 
+ 
+ .
+ 
+ 
+ Instructions for reporting errors 
+ We are continuing to improve HTML versions of papers, and your feedback helps enhance accessibility and mobile
+ support. To report errors in the HTML that will help us improve conversion and rendering, choose any of the
+ methods listed below: 
+ 
+ Click the "Report Issue" ( 
+ 
+ ) button, located in the page header. 
+ 
+ Tip: You can select the relevant text first, to include it in your report. 
+ Our team has already identified the following issues . We appreciate your time reviewing and reporting rendering errors we
+ may not have found yet. Your efforts will help us improve the HTML versions for all readers, because disability
+ should not be a barrier to accessing research. Thank you for your continued support in championing open access for
+ all. 
+ Have a free development cycle? Help support accessibility at arXiv! Our collaborators at LaTeXML maintain a list of packages that need conversion , and welcome developer contributions . 
+ 
+ 
+ 
+ 
+ 
+ We gratefully acknowledge support from
+ our major funders ,
+ member institutions , ,
+ and all contributors.
+ 
+ 
+ About 
+ · 
+ Help 
+ · 
+ Contact 
+ · 
+ Subscribe 
+ · 
+ Copyright 
+ · 
+ Privacy 
+ · 
+ Accessibility 
+ · 
+ Operational Status (opens in new tab) 
+ 
+ 
+
+ 
+ Major funding support from 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
