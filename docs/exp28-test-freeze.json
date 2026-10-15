@@ -1,0 +1,43 @@
+{
+  "experiment_id": "GNSS-VLM-EXP28",
+  "primary_method": "ce_flash_image",
+  "development_stations": 360,
+  "development_summary_sha256": "949ebc3e4d2d7b6b4b71bf7f78f5ae8cedc00ae746f20412b8cdd9844b9323ff",
+  "development_decision": {
+    "split": "validation",
+    "stations": 360,
+    "main_method": "ce_flash_image",
+    "aff_delta_vs_cfv": -0.08510626356348872,
+    "daily_delta_vs_cfv": -0.025258786960914548,
+    "aff_delta_vs_same_prompt_cfonly": -0.0017136515440626665,
+    "daily_delta_vs_same_prompt_cfonly": -0.02345668329920292,
+    "has_successful_range_metric_gain_case_vs_cfonly": true,
+    "passes_declared_metric_conditions": false,
+    "scope": "Adoption only considered on independent test; all tradeoffs and textual controls still required"
+  },
+  "method_selection_after_development": false,
+  "frozen_files": {
+    "C:\\Users\\JC\\.codex\\worktrees\\gnss-vlm-research\\GNSSAnomalyAgent-sim\\scripts\\experiment_exp28.py": "7701402c73f0762d52be08f8e5db006729c72e0644e41f6a7708d9328e79aaa0",
+    "docs\\experiment-exp28.md": "857f59fa0f199db5898f1fb0fe34ac6bf3e1a03cded0a0f067e8447014906aa6",
+    "scripts\\exp28_data_baseline.py": "2bc820247844c22576b9c85c2f7725157b5d9682b2d14a7092cc6b14ae3f3640",
+    "scripts\\report_exp28.py": "a9c38c2cd7687b715a37d229e08d3e92e46253d554e096ff4a167c634d061e02",
+    "scripts\\experiment_exp26.py": "2a94c5b66c854658bf345f57d54efbce1e9850ce7e237d6f12941b46d9a3e41e",
+    "scripts\\experiment_exp27.py": "d60cbfcc33bee20af64e22bbd9532e62375f694a5d27eb671c93ab3611f9d461",
+    "scripts\\exp14_fingerprint.py": "45ef3c47fd83b379d1a7eb6a93ec7e7c599d7d1c7a6f484ab6b2424eac950e3f",
+    "scripts\\exp15_vector.py": "4e8b0e25fb5cd6e53f2e2b5ed9dad64ea8c3022a9baa75fb8a4a2dbdd0d27916",
+    "scripts\\experiment_exp25.py": "4ef394eb2479ad644e244114d9cf59a5afcc1a14ebb2df9242850dd33e586920",
+    "scripts/supplement_exp28.py": "677ac6b7a431838fae433a9416d87d10048e66e5773524962a638f05593cfe62",
+    "docs/experiment-exp28-s1.md": "5dc378606165c438b87edad4079a6a68476a64d68c834322c498bd5c98ce4ab8"
+  },
+  "test_stations": 360,
+  "cohort_seeds": [
+    2026101528,
+    2026101529,
+    2026101530
+  ],
+  "test_labels_scored": false,
+  "test_numeric_predictions": "Prepared with the same frozen training model; no label scoring or visual inference",
+  "supplement": "EXP28-S1 added after development, before test; fixed matched controls, no main method change",
+  "test_visual": "D:/CodeWorkSpace/AgentWorkspace/GNSSAnomalyAgent-sim/artifacts/exp28-test-visual-v1",
+  "scope": "Complete independent test even though main development metric conditions failed; no threshold/prompt/model selection on test"
+}
