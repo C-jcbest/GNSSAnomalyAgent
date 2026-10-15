@@ -1,0 +1,10 @@
+[
+  {
+    "cell": 6,
+    "source": "import pandas as pd\nfrom sklearn.metrics import precision_score, recall_score\nfrom affiliation.generics import convert_vector_to_events\nfrom affiliation.metrics import pr_from_events\nfrom utils import compute_metrics\n\ndata = {}\n\nfor name, prediction in results.items():\n    metrics = compute_metrics(gt, prediction)\n    data[name] = metrics\n\ndf = pd.DataFrame(data).T\ndf\n"
+  },
+  {
+    "cell": 11,
+    "source": "import numpy as np\nimport pandas as pd\nfrom tqdm import trange\nfrom utils import compute_metrics, interval_to_vector\n\n# Initialize dictionary to store results\nmetric_names = ['precision', 'recall', 'f1', 'affi precision', 'affi recall', 'affi f1']\n\nresults_dict = {\n    key: [[] for _ in metric_names] for key in results.keys()\n}\n\n# Initialize DataFrame to store results\ndf_list = []\n\nfor i in trange(0, 400):\n    series = eval_dataset[idx][1].numpy()\n    anomaly_locations = eval_dataset[idx][0].numpy()\n    gt = interval_to_vector(anomaly_locations[0])\n\n    for name, prediction in results.items():\n        metrics = compute_metrics(gt, prediction[i])\n        for idx, metric_name in enumerate(metric_names):\n            results_dict[name][idx].append(metrics[metric_name])\n\n# Convert dictionary to DataFrame\ndf = pd.DataFrame({k: np.mean(v, axis=1) for k, v in results_dict.items()}, \n                  index=['precision', 'recall', 'f1', 'affi precision', 'affi recall', 'affi f1'])\n\ndf.T"
+  }
+]

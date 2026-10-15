@@ -1,5 +1,16 @@
 # EXP20—22：区间评价与视觉定位实读笔记
 
+2026-10-15补充：本轮重读VisualTimeAnomaly全文1063行起，确认其对point-wise和range-wise
+均使用Huet等Affiliation P/R/F1。结合AnomLLM的主要指标说明，后续将Affiliation设为
+范围任务主评价，IoU只作补充，不是方案采纳硬门槛。不能由这两篇推断全领域禁止IoU。
+EXP23又通过GitHub API成功取得先前未能直连的AnomLLM `notebook/affiliation.ipynb`
+及`src/utils.py`，固定tree `bf7827dfd63e5cd134f5b2412efc54175e5aee72`。
+实读notebook cells 6/11及`compute_metrics`：作者逐序列算Aff-F1后均值，先保留三位小数；
+空真值且空预测给1，只有一方空给0。本项目仍按既有明确适配：仅正样本站均值、
+负站误报单列、不提前四舍五入。两者汇总不完全相同，不直接横比论文表格绝对分数。
+原笔记关于notebook未取得的叙述仅指EXP20时点；新证据与blob/sha见
+`papers/exp23-affiliation-candidate-recovery/`。
+
 2026-10-15，延续ARS academic-research-suite实验工作流。区分已确认文献事实、GNSS适配和本轮实验结果；模型生成的解释不当成事实证据。
 
 | 文献/代码 | 本轮实际读取 | 可采用的思想与边界 |

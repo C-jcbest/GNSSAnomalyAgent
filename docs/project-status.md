@@ -1,5 +1,28 @@
 # 新分支研究状态
 
+## 当前决策：保留SDR-Flash-Aff，EXP23—24补充缺测边界恢复（2026-10-15）
+
+分支`codex/exp23-affiliation-candidate-recovery`，父版本6076f59，备份标签
+`backup/pre-exp23-affiliation-retained-20261015-6076f59`。按用户要求，后续Affiliation P/R/F1
+为范围主评价、IoU仅补充；此前“不采纳新Flash”的判断由本条更新，负结果和去图事实仍保留。
+**SDR-Flash-Aff**＝EXP22 `flash_image` / 本轮`base_flash`，当前研究候选正式保留。
+原48站Aff-F1 .9357>数值.7500；新1516验证48站 .8663>数值.6250，日F1 .8982>.7513，无新增FP日。
+
+EXP23 **SDR-CR**恢复被阶跃筛选舍弃的PELT起点，4旧站请求+5新Flash基线+8新恢复＝17请求，
+17成功、无重试。旧站恢复47日暂态，Aff .9357→.9982，有图>去图，但同候选数值也同分。
+新1516 VL恢复Aff .8663→.9084，但新增115个FP日、日F1下降，去图.9144更高；全部保留供取舍。
+EXP24 **SDR-GR**响应后仅接受缺测后首个观测边界，0新请求、事后开发修正：
+旧站Aff .9982、日F1 .9777、FP仍26；新1516移除新增误报，维持Aff .8663、FP0。
+新1516无符合条件的缺测恢复候选，不能称独立验证了GR收益。GR保留为特殊场景补充候选。
+长期形变不变。生产源码和25页EXP06 Word未替换。1516 test未评分。
+
+文献确认VisualTimeAnomaly区间任务、AnomLLM主评价均用Affiliation；取得先前未能访问的
+AnomLLM作者notebook/compute_metrics，跨站空集适配区别已披露。
+[结果、方法键与下一步](exp23-24-assessment.md)、[EXP23调用前登记](experiment-exp23.md)、
+[EXP24事后修正](experiment-exp24.md)、[完整证据](../results/exp23-24-assessment/evidence.json)。
+
+以下保留历史完成时的判断，当前采用决策以本条为准。
+
 ## EXP20—22完成：区间多指标已补齐，同轮去图消融未发现独立图像贡献（2026-10-15）
 
 当前分支`codex/exp20-range-visual-evaluation`，父版本f42d1c2，

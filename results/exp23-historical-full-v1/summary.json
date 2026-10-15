@@ -1,0 +1,1473 @@
+{
+  "experiment_id": "GNSS-VLM-EXP23",
+  "stations": 48,
+  "phase": "full",
+  "historical": true,
+  "methods": {
+    "segment_numeric": {
+      "transient": {
+        "affiliation": {
+          "positive_stations": 16,
+          "precision": 0.75,
+          "recall": 0.75,
+          "station_macro_f1": 0.75,
+          "harmonic_of_macro_pr": 0.75,
+          "defined_author_precision_mean": 1.0,
+          "empty_prediction_stations": 4
+        },
+        "affiliation_gap_spans_sensitivity": {
+          "positive_stations": 16,
+          "precision": 0.75,
+          "recall": 0.75,
+          "station_macro_f1": 0.75,
+          "harmonic_of_macro_pr": 0.75,
+          "defined_author_precision_mean": 1.0,
+          "empty_prediction_stations": 4
+        },
+        "daily_micro": {
+          "tp": 446,
+          "fp": 0,
+          "fn": 123,
+          "precision": 1.0,
+          "recall": 0.7838312829525483,
+          "f1": 0.8788177339901477
+        },
+        "events_micro": {
+          "iou_0.3": {
+            "tp": 12,
+            "fp": 0,
+            "fn": 4,
+            "precision": 1.0,
+            "recall": 0.75,
+            "f1": 0.8571428571428571,
+            "matched_start_mae_days": 0.0,
+            "matched_end_mae_days": 0.0
+          },
+          "iou_0.5": {
+            "tp": 12,
+            "fp": 0,
+            "fn": 4,
+            "precision": 1.0,
+            "recall": 0.75,
+            "f1": 0.8571428571428571,
+            "matched_start_mae_days": 0.0,
+            "matched_end_mae_days": 0.0
+          }
+        },
+        "truth_event_mean_best_iou": 0.75,
+        "truth_event_mean_coverage": 0.75,
+        "truth_events": 16,
+        "predicted_events": 12,
+        "predicted_observed_fragments": 15,
+        "false_positive_days": 0,
+        "negative_stations": 32,
+        "negative_station_fp_days": 0,
+        "negative_station_fp_runs": 0,
+        "negative_station_fp_runs_per_station_year": 0.0
+      },
+      "deformation": {
+        "affiliation": {
+          "positive_stations": 16,
+          "precision": 0.9363522825685072,
+          "recall": 0.8852875433700522,
+          "station_macro_f1": 0.9041212089319393,
+          "harmonic_of_macro_pr": 0.9101041821337226,
+          "defined_author_precision_mean": 0.9987757680730744,
+          "empty_prediction_stations": 1
+        },
+        "affiliation_gap_spans_sensitivity": {
+          "positive_stations": 16,
+          "precision": 0.9351427994239099,
+          "recall": 0.9337453531830424,
+          "station_macro_f1": 0.9344185757363936,
+          "harmonic_of_macro_pr": 0.9344435538388243,
+          "defined_author_precision_mean": 0.9974856527188372,
+          "empty_prediction_stations": 1
+        },
+        "daily_micro": {
+          "tp": 1448,
+          "fp": 56,
+          "fn": 265,
+          "precision": 0.9627659574468085,
+          "recall": 0.8453006421482778,
+          "f1": 0.9002175940317065
+        },
+        "events_micro": {
+          "iou_0.3": {
+            "tp": 15,
+            "fp": 3,
+            "fn": 1,
+            "precision": 0.8333333333333334,
+            "recall": 0.9375,
+            "f1": 0.8823529411764706,
+            "matched_start_mae_days": 4.4,
+            "matched_end_mae_days": 6.733333333333333
+          },
+          "iou_0.5": {
+            "tp": 15,
+            "fp": 3,
+            "fn": 1,
+            "precision": 0.8333333333333334,
+            "recall": 0.9375,
+            "f1": 0.8823529411764706,
+            "matched_start_mae_days": 4.4,
+            "matched_end_mae_days": 6.733333333333333
+          }
+        },
+        "truth_event_mean_best_iou": 0.8183697229067379,
+        "truth_event_mean_coverage": 0.8234101158192614,
+        "truth_events": 16,
+        "predicted_events": 18,
+        "predicted_observed_fragments": 43,
+        "false_positive_days": 56,
+        "negative_stations": 32,
+        "negative_station_fp_days": 43,
+        "negative_station_fp_runs": 5,
+        "negative_station_fp_runs_per_station_year": 0.1608747357293869
+      },
+      "range_union": {
+        "affiliation": {
+          "positive_stations": 24,
+          "precision": 0.9966858174296381,
+          "recall": 0.9286228043332588,
+          "station_macro_f1": 0.9477159681473064,
+          "harmonic_of_macro_pr": 0.9614512378521707,
+          "defined_author_precision_mean": 0.9966858174296381,
+          "empty_prediction_stations": 0
+        },
+        "affiliation_gap_spans_sensitivity": {
+          "positive_stations": 24,
+          "precision": 0.9959276350989835,
+          "recall": 0.9888350063202997,
+          "station_macro_f1": 0.9922151844482116,
+          "harmonic_of_macro_pr": 0.9923686478131596,
+          "defined_author_precision_mean": 0.9959276350989835,
+          "empty_prediction_stations": 0
+        },
+        "daily_micro": {
+          "tp": 1805,
+          "fp": 44,
+          "fn": 301,
+          "precision": 0.9762033531638724,
+          "recall": 0.8570750237416904,
+          "f1": 0.9127686472819216
+        },
+        "events_micro": {
+          "iou_0.3": {
+            "tp": 22,
+            "fp": 5,
+            "fn": 2,
+            "precision": 0.8148148148148148,
+            "recall": 0.9166666666666666,
+            "f1": 0.8627450980392157,
+            "matched_start_mae_days": 3.0,
+            "matched_end_mae_days": 7.5
+          },
+          "iou_0.5": {
+            "tp": 21,
+            "fp": 6,
+            "fn": 3,
+            "precision": 0.7777777777777778,
+            "recall": 0.875,
+            "f1": 0.8235294117647058,
+            "matched_start_mae_days": 2.8095238095238093,
+            "matched_end_mae_days": 5.0476190476190474
+          }
+        },
+        "truth_event_mean_best_iou": 0.8326059920462846,
+        "truth_event_mean_coverage": 0.8532922810399532,
+        "truth_events": 24,
+        "predicted_events": 27,
+        "predicted_observed_fragments": 55,
+        "false_positive_days": 44,
+        "negative_stations": 24,
+        "negative_station_fp_days": 29,
+        "negative_station_fp_runs": 3,
+        "negative_station_fp_runs_per_station_year": 0.12876028202115158
+      },
+      "range_types_affiliation_macro_f1": 0.8270606044659696
+    },
+    "base_flash": {
+      "transient": {
+        "affiliation": {
+          "positive_stations": 16,
+          "precision": 0.933904109589041,
+          "recall": 0.9375,
+          "station_macro_f1": 0.9356537027376881,
+          "harmonic_of_macro_pr": 0.9356986000548998,
+          "defined_author_precision_mean": 0.9961643835616438,
+          "empty_prediction_stations": 1
+        },
+        "affiliation_gap_spans_sensitivity": {
+          "positive_stations": 16,
+          "precision": 0.933904109589041,
+          "recall": 0.9375,
+          "station_macro_f1": 0.9356537027376881,
+          "harmonic_of_macro_pr": 0.9356986000548998,
+          "defined_author_precision_mean": 0.9961643835616438,
+          "empty_prediction_stations": 1
+        },
+        "daily_micro": {
+          "tp": 522,
+          "fp": 26,
+          "fn": 47,
+          "precision": 0.9525547445255474,
+          "recall": 0.9173989455184535,
+          "f1": 0.9346463742166518
+        },
+        "events_micro": {
+          "iou_0.3": {
+            "tp": 15,
+            "fp": 1,
+            "fn": 1,
+            "precision": 0.9375,
+            "recall": 0.9375,
+            "f1": 0.9375,
+            "matched_start_mae_days": 1.4,
+            "matched_end_mae_days": 0.0
+          },
+          "iou_0.5": {
+            "tp": 14,
+            "fp": 2,
+            "fn": 2,
+            "precision": 0.875,
+            "recall": 0.875,
+            "f1": 0.875,
+            "matched_start_mae_days": 0.07142857142857142,
+            "matched_end_mae_days": 0.0
+          }
+        },
+        "truth_event_mean_best_iou": 0.8996305418719212,
+        "truth_event_mean_coverage": 0.9375,
+        "truth_events": 16,
+        "predicted_events": 16,
+        "predicted_observed_fragments": 22,
+        "false_positive_days": 26,
+        "negative_stations": 32,
+        "negative_station_fp_days": 5,
+        "negative_station_fp_runs": 2,
+        "negative_station_fp_runs_per_station_year": 0.0643782497576452
+      },
+      "deformation": {
+        "affiliation": {
+          "positive_stations": 16,
+          "precision": 0.9363522825685072,
+          "recall": 0.8852875433700522,
+          "station_macro_f1": 0.9041212089319393,
+          "harmonic_of_macro_pr": 0.9101041821337226,
+          "defined_author_precision_mean": 0.9987757680730744,
+          "empty_prediction_stations": 1
+        },
+        "affiliation_gap_spans_sensitivity": {
+          "positive_stations": 16,
+          "precision": 0.9351427994239099,
+          "recall": 0.9337453531830424,
+          "station_macro_f1": 0.9344185757363936,
+          "harmonic_of_macro_pr": 0.9344435538388243,
+          "defined_author_precision_mean": 0.9974856527188372,
+          "empty_prediction_stations": 1
+        },
+        "daily_micro": {
+          "tp": 1448,
+          "fp": 56,
+          "fn": 265,
+          "precision": 0.9627659574468085,
+          "recall": 0.8453006421482778,
+          "f1": 0.9002175940317065
+        },
+        "events_micro": {
+          "iou_0.3": {
+            "tp": 15,
+            "fp": 3,
+            "fn": 1,
+            "precision": 0.8333333333333334,
+            "recall": 0.9375,
+            "f1": 0.8823529411764706,
+            "matched_start_mae_days": 4.4,
+            "matched_end_mae_days": 6.733333333333333
+          },
+          "iou_0.5": {
+            "tp": 15,
+            "fp": 3,
+            "fn": 1,
+            "precision": 0.8333333333333334,
+            "recall": 0.9375,
+            "f1": 0.8823529411764706,
+            "matched_start_mae_days": 4.4,
+            "matched_end_mae_days": 6.733333333333333
+          }
+        },
+        "truth_event_mean_best_iou": 0.8183697229067379,
+        "truth_event_mean_coverage": 0.8234101158192614,
+        "truth_events": 16,
+        "predicted_events": 18,
+        "predicted_observed_fragments": 43,
+        "false_positive_days": 56,
+        "negative_stations": 32,
+        "negative_station_fp_days": 43,
+        "negative_station_fp_runs": 5,
+        "negative_station_fp_runs_per_station_year": 0.1608747357293869
+      },
+      "range_union": {
+        "affiliation": {
+          "positive_stations": 24,
+          "precision": 0.9966858174296381,
+          "recall": 0.9291883314187568,
+          "station_macro_f1": 0.9479987219710034,
+          "harmonic_of_macro_pr": 0.961754258137756,
+          "defined_author_precision_mean": 0.9966858174296381,
+          "empty_prediction_stations": 0
+        },
+        "affiliation_gap_spans_sensitivity": {
+          "positive_stations": 24,
+          "precision": 0.9959776581865624,
+          "recall": 0.9892148920768978,
+          "station_macro_f1": 0.9924301741955887,
+          "harmonic_of_macro_pr": 0.9925847560965997,
+          "defined_author_precision_mean": 0.9959776581865624,
+          "empty_prediction_stations": 0
+        },
+        "daily_micro": {
+          "tp": 1831,
+          "fp": 44,
+          "fn": 275,
+          "precision": 0.9765333333333334,
+          "recall": 0.869420702754036,
+          "f1": 0.9198693795528762
+        },
+        "events_micro": {
+          "iou_0.3": {
+            "tp": 22,
+            "fp": 5,
+            "fn": 2,
+            "precision": 0.8148148148148148,
+            "recall": 0.9166666666666666,
+            "f1": 0.8627450980392157,
+            "matched_start_mae_days": 3.0,
+            "matched_end_mae_days": 6.318181818181818
+          },
+          "iou_0.5": {
+            "tp": 21,
+            "fp": 6,
+            "fn": 3,
+            "precision": 0.7777777777777778,
+            "recall": 0.875,
+            "f1": 0.8235294117647058,
+            "matched_start_mae_days": 2.8095238095238093,
+            "matched_end_mae_days": 3.8095238095238093
+          }
+        },
+        "truth_event_mean_best_iou": 0.843304014424635,
+        "truth_event_mean_coverage": 0.8640906399315323,
+        "truth_events": 24,
+        "predicted_events": 27,
+        "predicted_observed_fragments": 55,
+        "false_positive_days": 44,
+        "negative_stations": 24,
+        "negative_station_fp_days": 29,
+        "negative_station_fp_runs": 3,
+        "negative_station_fp_runs_per_station_year": 0.12876028202115158
+      },
+      "range_types_affiliation_macro_f1": 0.9198874558348137
+    },
+    "recovery_numeric": {
+      "transient": {
+        "affiliation": {
+          "positive_stations": 16,
+          "precision": 0.996404109589041,
+          "recall": 1.0,
+          "station_macro_f1": 0.9981537027376881,
+          "harmonic_of_macro_pr": 0.9981988163650398,
+          "defined_author_precision_mean": 0.996404109589041,
+          "empty_prediction_stations": 0
+        },
+        "affiliation_gap_spans_sensitivity": {
+          "positive_stations": 16,
+          "precision": 0.996404109589041,
+          "recall": 1.0,
+          "station_macro_f1": 0.9981537027376881,
+          "harmonic_of_macro_pr": 0.9981988163650398,
+          "defined_author_precision_mean": 0.996404109589041,
+          "empty_prediction_stations": 0
+        },
+        "daily_micro": {
+          "tp": 569,
+          "fp": 26,
+          "fn": 0,
+          "precision": 0.9563025210084034,
+          "recall": 1.0,
+          "f1": 0.9776632302405498
+        },
+        "events_micro": {
+          "iou_0.3": {
+            "tp": 16,
+            "fp": 1,
+            "fn": 0,
+            "precision": 0.9411764705882353,
+            "recall": 1.0,
+            "f1": 0.9696969696969697,
+            "matched_start_mae_days": 1.3125,
+            "matched_end_mae_days": 0.0
+          },
+          "iou_0.5": {
+            "tp": 15,
+            "fp": 2,
+            "fn": 1,
+            "precision": 0.8823529411764706,
+            "recall": 0.9375,
+            "f1": 0.9090909090909091,
+            "matched_start_mae_days": 0.06666666666666667,
+            "matched_end_mae_days": 0.0
+          }
+        },
+        "truth_event_mean_best_iou": 0.9621305418719212,
+        "truth_event_mean_coverage": 1.0,
+        "truth_events": 16,
+        "predicted_events": 17,
+        "predicted_observed_fragments": 23,
+        "false_positive_days": 26,
+        "negative_stations": 32,
+        "negative_station_fp_days": 5,
+        "negative_station_fp_runs": 2,
+        "negative_station_fp_runs_per_station_year": 0.0643782497576452
+      },
+      "deformation": {
+        "affiliation": {
+          "positive_stations": 16,
+          "precision": 0.9363522825685072,
+          "recall": 0.8852875433700522,
+          "station_macro_f1": 0.9041212089319393,
+          "harmonic_of_macro_pr": 0.9101041821337226,
+          "defined_author_precision_mean": 0.9987757680730744,
+          "empty_prediction_stations": 1
+        },
+        "affiliation_gap_spans_sensitivity": {
+          "positive_stations": 16,
+          "precision": 0.9351427994239099,
+          "recall": 0.9337453531830424,
+          "station_macro_f1": 0.9344185757363936,
+          "harmonic_of_macro_pr": 0.9344435538388243,
+          "defined_author_precision_mean": 0.9974856527188372,
+          "empty_prediction_stations": 1
+        },
+        "daily_micro": {
+          "tp": 1448,
+          "fp": 56,
+          "fn": 265,
+          "precision": 0.9627659574468085,
+          "recall": 0.8453006421482778,
+          "f1": 0.9002175940317065
+        },
+        "events_micro": {
+          "iou_0.3": {
+            "tp": 15,
+            "fp": 3,
+            "fn": 1,
+            "precision": 0.8333333333333334,
+            "recall": 0.9375,
+            "f1": 0.8823529411764706,
+            "matched_start_mae_days": 4.4,
+            "matched_end_mae_days": 6.733333333333333
+          },
+          "iou_0.5": {
+            "tp": 15,
+            "fp": 3,
+            "fn": 1,
+            "precision": 0.8333333333333334,
+            "recall": 0.9375,
+            "f1": 0.8823529411764706,
+            "matched_start_mae_days": 4.4,
+            "matched_end_mae_days": 6.733333333333333
+          }
+        },
+        "truth_event_mean_best_iou": 0.8183697229067379,
+        "truth_event_mean_coverage": 0.8234101158192614,
+        "truth_events": 16,
+        "predicted_events": 18,
+        "predicted_observed_fragments": 43,
+        "false_positive_days": 56,
+        "negative_stations": 32,
+        "negative_station_fp_days": 43,
+        "negative_station_fp_runs": 5,
+        "negative_station_fp_runs_per_station_year": 0.1608747357293869
+      },
+      "range_union": {
+        "affiliation": {
+          "positive_stations": 24,
+          "precision": 0.998665841799169,
+          "recall": 0.9328825896525079,
+          "station_macro_f1": 0.9508393488248744,
+          "harmonic_of_macro_pr": 0.9646540169794526,
+          "defined_author_precision_mean": 0.998665841799169,
+          "empty_prediction_stations": 0
+        },
+        "affiliation_gap_spans_sensitivity": {
+          "positive_stations": 24,
+          "precision": 0.9980552837573385,
+          "recall": 0.992909150310649,
+          "station_macro_f1": 0.9953166013407291,
+          "harmonic_of_macro_pr": 0.9954755663151266,
+          "defined_author_precision_mean": 0.9980552837573385,
+          "empty_prediction_stations": 0
+        },
+        "daily_micro": {
+          "tp": 1870,
+          "fp": 44,
+          "fn": 236,
+          "precision": 0.9770114942528736,
+          "recall": 0.8879392212725546,
+          "f1": 0.9303482587064676
+        },
+        "events_micro": {
+          "iou_0.3": {
+            "tp": 23,
+            "fp": 4,
+            "fn": 1,
+            "precision": 0.8518518518518519,
+            "recall": 0.9583333333333334,
+            "f1": 0.9019607843137255,
+            "matched_start_mae_days": 3.1739130434782608,
+            "matched_end_mae_days": 6.043478260869565
+          },
+          "iou_0.5": {
+            "tp": 22,
+            "fp": 5,
+            "fn": 2,
+            "precision": 0.8148148148148148,
+            "recall": 0.9166666666666666,
+            "f1": 0.8627450980392157,
+            "matched_start_mae_days": 3.0,
+            "matched_end_mae_days": 3.6363636363636362
+          }
+        },
+        "truth_event_mean_best_iou": 0.8739643917831255,
+        "truth_event_mean_coverage": 0.8986651080166389,
+        "truth_events": 24,
+        "predicted_events": 27,
+        "predicted_observed_fragments": 55,
+        "false_positive_days": 44,
+        "negative_stations": 24,
+        "negative_station_fp_days": 29,
+        "negative_station_fp_runs": 3,
+        "negative_station_fp_runs_per_station_year": 0.12876028202115158
+      },
+      "range_types_affiliation_macro_f1": 0.9511374558348137
+    },
+    "candidate_all": {
+      "transient": {
+        "affiliation": {
+          "positive_stations": 16,
+          "precision": 0.996404109589041,
+          "recall": 1.0,
+          "station_macro_f1": 0.9981537027376881,
+          "harmonic_of_macro_pr": 0.9981988163650398,
+          "defined_author_precision_mean": 0.996404109589041,
+          "empty_prediction_stations": 0
+        },
+        "affiliation_gap_spans_sensitivity": {
+          "positive_stations": 16,
+          "precision": 0.996404109589041,
+          "recall": 1.0,
+          "station_macro_f1": 0.9981537027376881,
+          "harmonic_of_macro_pr": 0.9981988163650398,
+          "defined_author_precision_mean": 0.996404109589041,
+          "empty_prediction_stations": 0
+        },
+        "daily_micro": {
+          "tp": 569,
+          "fp": 26,
+          "fn": 0,
+          "precision": 0.9563025210084034,
+          "recall": 1.0,
+          "f1": 0.9776632302405498
+        },
+        "events_micro": {
+          "iou_0.3": {
+            "tp": 16,
+            "fp": 1,
+            "fn": 0,
+            "precision": 0.9411764705882353,
+            "recall": 1.0,
+            "f1": 0.9696969696969697,
+            "matched_start_mae_days": 1.3125,
+            "matched_end_mae_days": 0.0
+          },
+          "iou_0.5": {
+            "tp": 15,
+            "fp": 2,
+            "fn": 1,
+            "precision": 0.8823529411764706,
+            "recall": 0.9375,
+            "f1": 0.9090909090909091,
+            "matched_start_mae_days": 0.06666666666666667,
+            "matched_end_mae_days": 0.0
+          }
+        },
+        "truth_event_mean_best_iou": 0.9621305418719212,
+        "truth_event_mean_coverage": 1.0,
+        "truth_events": 16,
+        "predicted_events": 17,
+        "predicted_observed_fragments": 23,
+        "false_positive_days": 26,
+        "negative_stations": 32,
+        "negative_station_fp_days": 5,
+        "negative_station_fp_runs": 2,
+        "negative_station_fp_runs_per_station_year": 0.0643782497576452
+      },
+      "deformation": {
+        "affiliation": {
+          "positive_stations": 16,
+          "precision": 0.9363522825685072,
+          "recall": 0.8852875433700522,
+          "station_macro_f1": 0.9041212089319393,
+          "harmonic_of_macro_pr": 0.9101041821337226,
+          "defined_author_precision_mean": 0.9987757680730744,
+          "empty_prediction_stations": 1
+        },
+        "affiliation_gap_spans_sensitivity": {
+          "positive_stations": 16,
+          "precision": 0.9351427994239099,
+          "recall": 0.9337453531830424,
+          "station_macro_f1": 0.9344185757363936,
+          "harmonic_of_macro_pr": 0.9344435538388243,
+          "defined_author_precision_mean": 0.9974856527188372,
+          "empty_prediction_stations": 1
+        },
+        "daily_micro": {
+          "tp": 1448,
+          "fp": 56,
+          "fn": 265,
+          "precision": 0.9627659574468085,
+          "recall": 0.8453006421482778,
+          "f1": 0.9002175940317065
+        },
+        "events_micro": {
+          "iou_0.3": {
+            "tp": 15,
+            "fp": 3,
+            "fn": 1,
+            "precision": 0.8333333333333334,
+            "recall": 0.9375,
+            "f1": 0.8823529411764706,
+            "matched_start_mae_days": 4.4,
+            "matched_end_mae_days": 6.733333333333333
+          },
+          "iou_0.5": {
+            "tp": 15,
+            "fp": 3,
+            "fn": 1,
+            "precision": 0.8333333333333334,
+            "recall": 0.9375,
+            "f1": 0.8823529411764706,
+            "matched_start_mae_days": 4.4,
+            "matched_end_mae_days": 6.733333333333333
+          }
+        },
+        "truth_event_mean_best_iou": 0.8183697229067379,
+        "truth_event_mean_coverage": 0.8234101158192614,
+        "truth_events": 16,
+        "predicted_events": 18,
+        "predicted_observed_fragments": 43,
+        "false_positive_days": 56,
+        "negative_stations": 32,
+        "negative_station_fp_days": 43,
+        "negative_station_fp_runs": 5,
+        "negative_station_fp_runs_per_station_year": 0.1608747357293869
+      },
+      "range_union": {
+        "affiliation": {
+          "positive_stations": 24,
+          "precision": 0.998665841799169,
+          "recall": 0.9328825896525079,
+          "station_macro_f1": 0.9508393488248744,
+          "harmonic_of_macro_pr": 0.9646540169794526,
+          "defined_author_precision_mean": 0.998665841799169,
+          "empty_prediction_stations": 0
+        },
+        "affiliation_gap_spans_sensitivity": {
+          "positive_stations": 24,
+          "precision": 0.9980552837573385,
+          "recall": 0.992909150310649,
+          "station_macro_f1": 0.9953166013407291,
+          "harmonic_of_macro_pr": 0.9954755663151266,
+          "defined_author_precision_mean": 0.9980552837573385,
+          "empty_prediction_stations": 0
+        },
+        "daily_micro": {
+          "tp": 1870,
+          "fp": 44,
+          "fn": 236,
+          "precision": 0.9770114942528736,
+          "recall": 0.8879392212725546,
+          "f1": 0.9303482587064676
+        },
+        "events_micro": {
+          "iou_0.3": {
+            "tp": 23,
+            "fp": 4,
+            "fn": 1,
+            "precision": 0.8518518518518519,
+            "recall": 0.9583333333333334,
+            "f1": 0.9019607843137255,
+            "matched_start_mae_days": 3.1739130434782608,
+            "matched_end_mae_days": 6.043478260869565
+          },
+          "iou_0.5": {
+            "tp": 22,
+            "fp": 5,
+            "fn": 2,
+            "precision": 0.8148148148148148,
+            "recall": 0.9166666666666666,
+            "f1": 0.8627450980392157,
+            "matched_start_mae_days": 3.0,
+            "matched_end_mae_days": 3.6363636363636362
+          }
+        },
+        "truth_event_mean_best_iou": 0.8739643917831255,
+        "truth_event_mean_coverage": 0.8986651080166389,
+        "truth_events": 24,
+        "predicted_events": 27,
+        "predicted_observed_fragments": 55,
+        "false_positive_days": 44,
+        "negative_stations": 24,
+        "negative_station_fp_days": 29,
+        "negative_station_fp_runs": 3,
+        "negative_station_fp_runs_per_station_year": 0.12876028202115158
+      },
+      "range_types_affiliation_macro_f1": 0.9511374558348137
+    },
+    "flash_image": {
+      "transient": {
+        "affiliation": {
+          "positive_stations": 16,
+          "precision": 0.996404109589041,
+          "recall": 1.0,
+          "station_macro_f1": 0.9981537027376881,
+          "harmonic_of_macro_pr": 0.9981988163650398,
+          "defined_author_precision_mean": 0.996404109589041,
+          "empty_prediction_stations": 0
+        },
+        "affiliation_gap_spans_sensitivity": {
+          "positive_stations": 16,
+          "precision": 0.996404109589041,
+          "recall": 1.0,
+          "station_macro_f1": 0.9981537027376881,
+          "harmonic_of_macro_pr": 0.9981988163650398,
+          "defined_author_precision_mean": 0.996404109589041,
+          "empty_prediction_stations": 0
+        },
+        "daily_micro": {
+          "tp": 569,
+          "fp": 26,
+          "fn": 0,
+          "precision": 0.9563025210084034,
+          "recall": 1.0,
+          "f1": 0.9776632302405498
+        },
+        "events_micro": {
+          "iou_0.3": {
+            "tp": 16,
+            "fp": 1,
+            "fn": 0,
+            "precision": 0.9411764705882353,
+            "recall": 1.0,
+            "f1": 0.9696969696969697,
+            "matched_start_mae_days": 1.3125,
+            "matched_end_mae_days": 0.0
+          },
+          "iou_0.5": {
+            "tp": 15,
+            "fp": 2,
+            "fn": 1,
+            "precision": 0.8823529411764706,
+            "recall": 0.9375,
+            "f1": 0.9090909090909091,
+            "matched_start_mae_days": 0.06666666666666667,
+            "matched_end_mae_days": 0.0
+          }
+        },
+        "truth_event_mean_best_iou": 0.9621305418719212,
+        "truth_event_mean_coverage": 1.0,
+        "truth_events": 16,
+        "predicted_events": 17,
+        "predicted_observed_fragments": 23,
+        "false_positive_days": 26,
+        "negative_stations": 32,
+        "negative_station_fp_days": 5,
+        "negative_station_fp_runs": 2,
+        "negative_station_fp_runs_per_station_year": 0.0643782497576452
+      },
+      "deformation": {
+        "affiliation": {
+          "positive_stations": 16,
+          "precision": 0.9363522825685072,
+          "recall": 0.8852875433700522,
+          "station_macro_f1": 0.9041212089319393,
+          "harmonic_of_macro_pr": 0.9101041821337226,
+          "defined_author_precision_mean": 0.9987757680730744,
+          "empty_prediction_stations": 1
+        },
+        "affiliation_gap_spans_sensitivity": {
+          "positive_stations": 16,
+          "precision": 0.9351427994239099,
+          "recall": 0.9337453531830424,
+          "station_macro_f1": 0.9344185757363936,
+          "harmonic_of_macro_pr": 0.9344435538388243,
+          "defined_author_precision_mean": 0.9974856527188372,
+          "empty_prediction_stations": 1
+        },
+        "daily_micro": {
+          "tp": 1448,
+          "fp": 56,
+          "fn": 265,
+          "precision": 0.9627659574468085,
+          "recall": 0.8453006421482778,
+          "f1": 0.9002175940317065
+        },
+        "events_micro": {
+          "iou_0.3": {
+            "tp": 15,
+            "fp": 3,
+            "fn": 1,
+            "precision": 0.8333333333333334,
+            "recall": 0.9375,
+            "f1": 0.8823529411764706,
+            "matched_start_mae_days": 4.4,
+            "matched_end_mae_days": 6.733333333333333
+          },
+          "iou_0.5": {
+            "tp": 15,
+            "fp": 3,
+            "fn": 1,
+            "precision": 0.8333333333333334,
+            "recall": 0.9375,
+            "f1": 0.8823529411764706,
+            "matched_start_mae_days": 4.4,
+            "matched_end_mae_days": 6.733333333333333
+          }
+        },
+        "truth_event_mean_best_iou": 0.8183697229067379,
+        "truth_event_mean_coverage": 0.8234101158192614,
+        "truth_events": 16,
+        "predicted_events": 18,
+        "predicted_observed_fragments": 43,
+        "false_positive_days": 56,
+        "negative_stations": 32,
+        "negative_station_fp_days": 43,
+        "negative_station_fp_runs": 5,
+        "negative_station_fp_runs_per_station_year": 0.1608747357293869
+      },
+      "range_union": {
+        "affiliation": {
+          "positive_stations": 24,
+          "precision": 0.998665841799169,
+          "recall": 0.9328825896525079,
+          "station_macro_f1": 0.9508393488248744,
+          "harmonic_of_macro_pr": 0.9646540169794526,
+          "defined_author_precision_mean": 0.998665841799169,
+          "empty_prediction_stations": 0
+        },
+        "affiliation_gap_spans_sensitivity": {
+          "positive_stations": 24,
+          "precision": 0.9980552837573385,
+          "recall": 0.992909150310649,
+          "station_macro_f1": 0.9953166013407291,
+          "harmonic_of_macro_pr": 0.9954755663151266,
+          "defined_author_precision_mean": 0.9980552837573385,
+          "empty_prediction_stations": 0
+        },
+        "daily_micro": {
+          "tp": 1870,
+          "fp": 44,
+          "fn": 236,
+          "precision": 0.9770114942528736,
+          "recall": 0.8879392212725546,
+          "f1": 0.9303482587064676
+        },
+        "events_micro": {
+          "iou_0.3": {
+            "tp": 23,
+            "fp": 4,
+            "fn": 1,
+            "precision": 0.8518518518518519,
+            "recall": 0.9583333333333334,
+            "f1": 0.9019607843137255,
+            "matched_start_mae_days": 3.1739130434782608,
+            "matched_end_mae_days": 6.043478260869565
+          },
+          "iou_0.5": {
+            "tp": 22,
+            "fp": 5,
+            "fn": 2,
+            "precision": 0.8148148148148148,
+            "recall": 0.9166666666666666,
+            "f1": 0.8627450980392157,
+            "matched_start_mae_days": 3.0,
+            "matched_end_mae_days": 3.6363636363636362
+          }
+        },
+        "truth_event_mean_best_iou": 0.8739643917831255,
+        "truth_event_mean_coverage": 0.8986651080166389,
+        "truth_events": 24,
+        "predicted_events": 27,
+        "predicted_observed_fragments": 55,
+        "false_positive_days": 44,
+        "negative_stations": 24,
+        "negative_station_fp_days": 29,
+        "negative_station_fp_runs": 3,
+        "negative_station_fp_runs_per_station_year": 0.12876028202115158
+      },
+      "range_types_affiliation_macro_f1": 0.9511374558348137
+    },
+    "flash_noimage": {
+      "transient": {
+        "affiliation": {
+          "positive_stations": 16,
+          "precision": 0.933904109589041,
+          "recall": 0.9375,
+          "station_macro_f1": 0.9356537027376881,
+          "harmonic_of_macro_pr": 0.9356986000548998,
+          "defined_author_precision_mean": 0.9961643835616438,
+          "empty_prediction_stations": 1
+        },
+        "affiliation_gap_spans_sensitivity": {
+          "positive_stations": 16,
+          "precision": 0.933904109589041,
+          "recall": 0.9375,
+          "station_macro_f1": 0.9356537027376881,
+          "harmonic_of_macro_pr": 0.9356986000548998,
+          "defined_author_precision_mean": 0.9961643835616438,
+          "empty_prediction_stations": 1
+        },
+        "daily_micro": {
+          "tp": 522,
+          "fp": 26,
+          "fn": 47,
+          "precision": 0.9525547445255474,
+          "recall": 0.9173989455184535,
+          "f1": 0.9346463742166518
+        },
+        "events_micro": {
+          "iou_0.3": {
+            "tp": 15,
+            "fp": 1,
+            "fn": 1,
+            "precision": 0.9375,
+            "recall": 0.9375,
+            "f1": 0.9375,
+            "matched_start_mae_days": 1.4,
+            "matched_end_mae_days": 0.0
+          },
+          "iou_0.5": {
+            "tp": 14,
+            "fp": 2,
+            "fn": 2,
+            "precision": 0.875,
+            "recall": 0.875,
+            "f1": 0.875,
+            "matched_start_mae_days": 0.07142857142857142,
+            "matched_end_mae_days": 0.0
+          }
+        },
+        "truth_event_mean_best_iou": 0.8996305418719212,
+        "truth_event_mean_coverage": 0.9375,
+        "truth_events": 16,
+        "predicted_events": 16,
+        "predicted_observed_fragments": 22,
+        "false_positive_days": 26,
+        "negative_stations": 32,
+        "negative_station_fp_days": 5,
+        "negative_station_fp_runs": 2,
+        "negative_station_fp_runs_per_station_year": 0.0643782497576452
+      },
+      "deformation": {
+        "affiliation": {
+          "positive_stations": 16,
+          "precision": 0.9363522825685072,
+          "recall": 0.8852875433700522,
+          "station_macro_f1": 0.9041212089319393,
+          "harmonic_of_macro_pr": 0.9101041821337226,
+          "defined_author_precision_mean": 0.9987757680730744,
+          "empty_prediction_stations": 1
+        },
+        "affiliation_gap_spans_sensitivity": {
+          "positive_stations": 16,
+          "precision": 0.9351427994239099,
+          "recall": 0.9337453531830424,
+          "station_macro_f1": 0.9344185757363936,
+          "harmonic_of_macro_pr": 0.9344435538388243,
+          "defined_author_precision_mean": 0.9974856527188372,
+          "empty_prediction_stations": 1
+        },
+        "daily_micro": {
+          "tp": 1448,
+          "fp": 56,
+          "fn": 265,
+          "precision": 0.9627659574468085,
+          "recall": 0.8453006421482778,
+          "f1": 0.9002175940317065
+        },
+        "events_micro": {
+          "iou_0.3": {
+            "tp": 15,
+            "fp": 3,
+            "fn": 1,
+            "precision": 0.8333333333333334,
+            "recall": 0.9375,
+            "f1": 0.8823529411764706,
+            "matched_start_mae_days": 4.4,
+            "matched_end_mae_days": 6.733333333333333
+          },
+          "iou_0.5": {
+            "tp": 15,
+            "fp": 3,
+            "fn": 1,
+            "precision": 0.8333333333333334,
+            "recall": 0.9375,
+            "f1": 0.8823529411764706,
+            "matched_start_mae_days": 4.4,
+            "matched_end_mae_days": 6.733333333333333
+          }
+        },
+        "truth_event_mean_best_iou": 0.8183697229067379,
+        "truth_event_mean_coverage": 0.8234101158192614,
+        "truth_events": 16,
+        "predicted_events": 18,
+        "predicted_observed_fragments": 43,
+        "false_positive_days": 56,
+        "negative_stations": 32,
+        "negative_station_fp_days": 43,
+        "negative_station_fp_runs": 5,
+        "negative_station_fp_runs_per_station_year": 0.1608747357293869
+      },
+      "range_union": {
+        "affiliation": {
+          "positive_stations": 24,
+          "precision": 0.9966858174296381,
+          "recall": 0.9291883314187568,
+          "station_macro_f1": 0.9479987219710034,
+          "harmonic_of_macro_pr": 0.961754258137756,
+          "defined_author_precision_mean": 0.9966858174296381,
+          "empty_prediction_stations": 0
+        },
+        "affiliation_gap_spans_sensitivity": {
+          "positive_stations": 24,
+          "precision": 0.9959776581865624,
+          "recall": 0.9892148920768978,
+          "station_macro_f1": 0.9924301741955887,
+          "harmonic_of_macro_pr": 0.9925847560965997,
+          "defined_author_precision_mean": 0.9959776581865624,
+          "empty_prediction_stations": 0
+        },
+        "daily_micro": {
+          "tp": 1831,
+          "fp": 44,
+          "fn": 275,
+          "precision": 0.9765333333333334,
+          "recall": 0.869420702754036,
+          "f1": 0.9198693795528762
+        },
+        "events_micro": {
+          "iou_0.3": {
+            "tp": 22,
+            "fp": 5,
+            "fn": 2,
+            "precision": 0.8148148148148148,
+            "recall": 0.9166666666666666,
+            "f1": 0.8627450980392157,
+            "matched_start_mae_days": 3.0,
+            "matched_end_mae_days": 6.318181818181818
+          },
+          "iou_0.5": {
+            "tp": 21,
+            "fp": 6,
+            "fn": 3,
+            "precision": 0.7777777777777778,
+            "recall": 0.875,
+            "f1": 0.8235294117647058,
+            "matched_start_mae_days": 2.8095238095238093,
+            "matched_end_mae_days": 3.8095238095238093
+          }
+        },
+        "truth_event_mean_best_iou": 0.843304014424635,
+        "truth_event_mean_coverage": 0.8640906399315323,
+        "truth_events": 24,
+        "predicted_events": 27,
+        "predicted_observed_fragments": 55,
+        "false_positive_days": 44,
+        "negative_stations": 24,
+        "negative_station_fp_days": 29,
+        "negative_station_fp_runs": 3,
+        "negative_station_fp_runs_per_station_year": 0.12876028202115158
+      },
+      "range_types_affiliation_macro_f1": 0.9198874558348137
+    },
+    "vl_image": {
+      "transient": {
+        "affiliation": {
+          "positive_stations": 16,
+          "precision": 0.996404109589041,
+          "recall": 1.0,
+          "station_macro_f1": 0.9981537027376881,
+          "harmonic_of_macro_pr": 0.9981988163650398,
+          "defined_author_precision_mean": 0.996404109589041,
+          "empty_prediction_stations": 0
+        },
+        "affiliation_gap_spans_sensitivity": {
+          "positive_stations": 16,
+          "precision": 0.996404109589041,
+          "recall": 1.0,
+          "station_macro_f1": 0.9981537027376881,
+          "harmonic_of_macro_pr": 0.9981988163650398,
+          "defined_author_precision_mean": 0.996404109589041,
+          "empty_prediction_stations": 0
+        },
+        "daily_micro": {
+          "tp": 569,
+          "fp": 26,
+          "fn": 0,
+          "precision": 0.9563025210084034,
+          "recall": 1.0,
+          "f1": 0.9776632302405498
+        },
+        "events_micro": {
+          "iou_0.3": {
+            "tp": 16,
+            "fp": 1,
+            "fn": 0,
+            "precision": 0.9411764705882353,
+            "recall": 1.0,
+            "f1": 0.9696969696969697,
+            "matched_start_mae_days": 1.3125,
+            "matched_end_mae_days": 0.0
+          },
+          "iou_0.5": {
+            "tp": 15,
+            "fp": 2,
+            "fn": 1,
+            "precision": 0.8823529411764706,
+            "recall": 0.9375,
+            "f1": 0.9090909090909091,
+            "matched_start_mae_days": 0.06666666666666667,
+            "matched_end_mae_days": 0.0
+          }
+        },
+        "truth_event_mean_best_iou": 0.9621305418719212,
+        "truth_event_mean_coverage": 1.0,
+        "truth_events": 16,
+        "predicted_events": 17,
+        "predicted_observed_fragments": 23,
+        "false_positive_days": 26,
+        "negative_stations": 32,
+        "negative_station_fp_days": 5,
+        "negative_station_fp_runs": 2,
+        "negative_station_fp_runs_per_station_year": 0.0643782497576452
+      },
+      "deformation": {
+        "affiliation": {
+          "positive_stations": 16,
+          "precision": 0.9363522825685072,
+          "recall": 0.8852875433700522,
+          "station_macro_f1": 0.9041212089319393,
+          "harmonic_of_macro_pr": 0.9101041821337226,
+          "defined_author_precision_mean": 0.9987757680730744,
+          "empty_prediction_stations": 1
+        },
+        "affiliation_gap_spans_sensitivity": {
+          "positive_stations": 16,
+          "precision": 0.9351427994239099,
+          "recall": 0.9337453531830424,
+          "station_macro_f1": 0.9344185757363936,
+          "harmonic_of_macro_pr": 0.9344435538388243,
+          "defined_author_precision_mean": 0.9974856527188372,
+          "empty_prediction_stations": 1
+        },
+        "daily_micro": {
+          "tp": 1448,
+          "fp": 56,
+          "fn": 265,
+          "precision": 0.9627659574468085,
+          "recall": 0.8453006421482778,
+          "f1": 0.9002175940317065
+        },
+        "events_micro": {
+          "iou_0.3": {
+            "tp": 15,
+            "fp": 3,
+            "fn": 1,
+            "precision": 0.8333333333333334,
+            "recall": 0.9375,
+            "f1": 0.8823529411764706,
+            "matched_start_mae_days": 4.4,
+            "matched_end_mae_days": 6.733333333333333
+          },
+          "iou_0.5": {
+            "tp": 15,
+            "fp": 3,
+            "fn": 1,
+            "precision": 0.8333333333333334,
+            "recall": 0.9375,
+            "f1": 0.8823529411764706,
+            "matched_start_mae_days": 4.4,
+            "matched_end_mae_days": 6.733333333333333
+          }
+        },
+        "truth_event_mean_best_iou": 0.8183697229067379,
+        "truth_event_mean_coverage": 0.8234101158192614,
+        "truth_events": 16,
+        "predicted_events": 18,
+        "predicted_observed_fragments": 43,
+        "false_positive_days": 56,
+        "negative_stations": 32,
+        "negative_station_fp_days": 43,
+        "negative_station_fp_runs": 5,
+        "negative_station_fp_runs_per_station_year": 0.1608747357293869
+      },
+      "range_union": {
+        "affiliation": {
+          "positive_stations": 24,
+          "precision": 0.998665841799169,
+          "recall": 0.9328825896525079,
+          "station_macro_f1": 0.9508393488248744,
+          "harmonic_of_macro_pr": 0.9646540169794526,
+          "defined_author_precision_mean": 0.998665841799169,
+          "empty_prediction_stations": 0
+        },
+        "affiliation_gap_spans_sensitivity": {
+          "positive_stations": 24,
+          "precision": 0.9980552837573385,
+          "recall": 0.992909150310649,
+          "station_macro_f1": 0.9953166013407291,
+          "harmonic_of_macro_pr": 0.9954755663151266,
+          "defined_author_precision_mean": 0.9980552837573385,
+          "empty_prediction_stations": 0
+        },
+        "daily_micro": {
+          "tp": 1870,
+          "fp": 44,
+          "fn": 236,
+          "precision": 0.9770114942528736,
+          "recall": 0.8879392212725546,
+          "f1": 0.9303482587064676
+        },
+        "events_micro": {
+          "iou_0.3": {
+            "tp": 23,
+            "fp": 4,
+            "fn": 1,
+            "precision": 0.8518518518518519,
+            "recall": 0.9583333333333334,
+            "f1": 0.9019607843137255,
+            "matched_start_mae_days": 3.1739130434782608,
+            "matched_end_mae_days": 6.043478260869565
+          },
+          "iou_0.5": {
+            "tp": 22,
+            "fp": 5,
+            "fn": 2,
+            "precision": 0.8148148148148148,
+            "recall": 0.9166666666666666,
+            "f1": 0.8627450980392157,
+            "matched_start_mae_days": 3.0,
+            "matched_end_mae_days": 3.6363636363636362
+          }
+        },
+        "truth_event_mean_best_iou": 0.8739643917831255,
+        "truth_event_mean_coverage": 0.8986651080166389,
+        "truth_events": 24,
+        "predicted_events": 27,
+        "predicted_observed_fragments": 55,
+        "false_positive_days": 44,
+        "negative_stations": 24,
+        "negative_station_fp_days": 29,
+        "negative_station_fp_runs": 3,
+        "negative_station_fp_runs_per_station_year": 0.12876028202115158
+      },
+      "range_types_affiliation_macro_f1": 0.9511374558348137
+    },
+    "vl_noimage": {
+      "transient": {
+        "affiliation": {
+          "positive_stations": 16,
+          "precision": 0.933904109589041,
+          "recall": 0.9375,
+          "station_macro_f1": 0.9356537027376881,
+          "harmonic_of_macro_pr": 0.9356986000548998,
+          "defined_author_precision_mean": 0.9961643835616438,
+          "empty_prediction_stations": 1
+        },
+        "affiliation_gap_spans_sensitivity": {
+          "positive_stations": 16,
+          "precision": 0.933904109589041,
+          "recall": 0.9375,
+          "station_macro_f1": 0.9356537027376881,
+          "harmonic_of_macro_pr": 0.9356986000548998,
+          "defined_author_precision_mean": 0.9961643835616438,
+          "empty_prediction_stations": 1
+        },
+        "daily_micro": {
+          "tp": 522,
+          "fp": 26,
+          "fn": 47,
+          "precision": 0.9525547445255474,
+          "recall": 0.9173989455184535,
+          "f1": 0.9346463742166518
+        },
+        "events_micro": {
+          "iou_0.3": {
+            "tp": 15,
+            "fp": 1,
+            "fn": 1,
+            "precision": 0.9375,
+            "recall": 0.9375,
+            "f1": 0.9375,
+            "matched_start_mae_days": 1.4,
+            "matched_end_mae_days": 0.0
+          },
+          "iou_0.5": {
+            "tp": 14,
+            "fp": 2,
+            "fn": 2,
+            "precision": 0.875,
+            "recall": 0.875,
+            "f1": 0.875,
+            "matched_start_mae_days": 0.07142857142857142,
+            "matched_end_mae_days": 0.0
+          }
+        },
+        "truth_event_mean_best_iou": 0.8996305418719212,
+        "truth_event_mean_coverage": 0.9375,
+        "truth_events": 16,
+        "predicted_events": 16,
+        "predicted_observed_fragments": 22,
+        "false_positive_days": 26,
+        "negative_stations": 32,
+        "negative_station_fp_days": 5,
+        "negative_station_fp_runs": 2,
+        "negative_station_fp_runs_per_station_year": 0.0643782497576452
+      },
+      "deformation": {
+        "affiliation": {
+          "positive_stations": 16,
+          "precision": 0.9363522825685072,
+          "recall": 0.8852875433700522,
+          "station_macro_f1": 0.9041212089319393,
+          "harmonic_of_macro_pr": 0.9101041821337226,
+          "defined_author_precision_mean": 0.9987757680730744,
+          "empty_prediction_stations": 1
+        },
+        "affiliation_gap_spans_sensitivity": {
+          "positive_stations": 16,
+          "precision": 0.9351427994239099,
+          "recall": 0.9337453531830424,
+          "station_macro_f1": 0.9344185757363936,
+          "harmonic_of_macro_pr": 0.9344435538388243,
+          "defined_author_precision_mean": 0.9974856527188372,
+          "empty_prediction_stations": 1
+        },
+        "daily_micro": {
+          "tp": 1448,
+          "fp": 56,
+          "fn": 265,
+          "precision": 0.9627659574468085,
+          "recall": 0.8453006421482778,
+          "f1": 0.9002175940317065
+        },
+        "events_micro": {
+          "iou_0.3": {
+            "tp": 15,
+            "fp": 3,
+            "fn": 1,
+            "precision": 0.8333333333333334,
+            "recall": 0.9375,
+            "f1": 0.8823529411764706,
+            "matched_start_mae_days": 4.4,
+            "matched_end_mae_days": 6.733333333333333
+          },
+          "iou_0.5": {
+            "tp": 15,
+            "fp": 3,
+            "fn": 1,
+            "precision": 0.8333333333333334,
+            "recall": 0.9375,
+            "f1": 0.8823529411764706,
+            "matched_start_mae_days": 4.4,
+            "matched_end_mae_days": 6.733333333333333
+          }
+        },
+        "truth_event_mean_best_iou": 0.8183697229067379,
+        "truth_event_mean_coverage": 0.8234101158192614,
+        "truth_events": 16,
+        "predicted_events": 18,
+        "predicted_observed_fragments": 43,
+        "false_positive_days": 56,
+        "negative_stations": 32,
+        "negative_station_fp_days": 43,
+        "negative_station_fp_runs": 5,
+        "negative_station_fp_runs_per_station_year": 0.1608747357293869
+      },
+      "range_union": {
+        "affiliation": {
+          "positive_stations": 24,
+          "precision": 0.9966858174296381,
+          "recall": 0.9291883314187568,
+          "station_macro_f1": 0.9479987219710034,
+          "harmonic_of_macro_pr": 0.961754258137756,
+          "defined_author_precision_mean": 0.9966858174296381,
+          "empty_prediction_stations": 0
+        },
+        "affiliation_gap_spans_sensitivity": {
+          "positive_stations": 24,
+          "precision": 0.9959776581865624,
+          "recall": 0.9892148920768978,
+          "station_macro_f1": 0.9924301741955887,
+          "harmonic_of_macro_pr": 0.9925847560965997,
+          "defined_author_precision_mean": 0.9959776581865624,
+          "empty_prediction_stations": 0
+        },
+        "daily_micro": {
+          "tp": 1831,
+          "fp": 44,
+          "fn": 275,
+          "precision": 0.9765333333333334,
+          "recall": 0.869420702754036,
+          "f1": 0.9198693795528762
+        },
+        "events_micro": {
+          "iou_0.3": {
+            "tp": 22,
+            "fp": 5,
+            "fn": 2,
+            "precision": 0.8148148148148148,
+            "recall": 0.9166666666666666,
+            "f1": 0.8627450980392157,
+            "matched_start_mae_days": 3.0,
+            "matched_end_mae_days": 6.318181818181818
+          },
+          "iou_0.5": {
+            "tp": 21,
+            "fp": 6,
+            "fn": 3,
+            "precision": 0.7777777777777778,
+            "recall": 0.875,
+            "f1": 0.8235294117647058,
+            "matched_start_mae_days": 2.8095238095238093,
+            "matched_end_mae_days": 3.8095238095238093
+          }
+        },
+        "truth_event_mean_best_iou": 0.843304014424635,
+        "truth_event_mean_coverage": 0.8640906399315323,
+        "truth_events": 24,
+        "predicted_events": 27,
+        "predicted_observed_fragments": 55,
+        "false_positive_days": 44,
+        "negative_stations": 24,
+        "negative_station_fp_days": 29,
+        "negative_station_fp_runs": 3,
+        "negative_station_fp_runs_per_station_year": 0.12876028202115158
+      },
+      "range_types_affiliation_macro_f1": 0.9198874558348137
+    }
+  },
+  "expand": true
+}
