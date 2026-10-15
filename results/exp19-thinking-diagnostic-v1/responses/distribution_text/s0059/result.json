@@ -1,0 +1,28 @@
+{
+  "status": "success",
+  "requested_model": "qwen3-vl-plus",
+  "request_count": 1,
+  "retry_count": 0,
+  "http_status": 200,
+  "served_model": "qwen3-vl-plus",
+  "usage": {
+    "prompt_tokens": 9611,
+    "completion_tokens": 2232,
+    "total_tokens": 11843,
+    "completion_tokens_details": {
+      "reasoning_tokens": 2049,
+      "text_tokens": 183
+    },
+    "prompt_tokens_details": {
+      "text_tokens": 9611,
+      "cached_tokens": 0
+    }
+  },
+  "elapsed_seconds": 45.92067110000062,
+  "pair_decision": {
+    "pair_ids": [
+      "P1"
+    ],
+    "evidence": "P1 shows a coherent joint change: onset (J1) has a clear negative jump in N/U (e.g., N from ~0 to -8 to -12) and return (J2) shows a matching positive jump in N/U after sign reversal (blue plot shows negative jump, meaning actual return is positive). P2 and P3 are invalid: P2 spans too long (630-699) with no coherent return at J3, and P3 overlaps with P1's endpoints (J2 used in both). Training R_positive example matches this pattern of opposite-direction jumps with similar magnitude in reliable components (N/U), while R_negative shows mismatched jumps. P1's N/U changes are strong and consistent; E component is noisy but not dominant."
+  }
+}

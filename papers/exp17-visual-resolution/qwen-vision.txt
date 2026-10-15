@@ -1,0 +1,3278 @@
+
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+
+ 
+ 
+ 
+ 
+ 
+ 
+ How to use the Qwen3.6 model for visual understanding - Alibaba Cloud Model Studio - Alibaba Cloud Documentation Center
+
+ 
+ 
+ 
+ 
+ -->
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+
+ 
+
+ 
+ 
+
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+Document Center
+ 
+ 
+   
+ 
+ 
+ 
+ 
+ All Products 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+Search
+ 
+ 
+ 
+ 
+ 
+ Document Center 
+ Alibaba Cloud Model Studio 
+ User Guide (Models) 
+ Model Playground 
+ Visual understanding 
+ Image and video understanding 
+ 
+ 
+ 
+ 
+ 
+ 
+all-products-head 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ This Product 
+ 
+ 
+ 
+ This Product 
+ All Products 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ Alibaba Cloud Model Studio:Image and video understanding 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+Document Center
+ 
+ 
+ 
+ Alibaba Cloud Model Studio:Image and video understanding 
+ 
+Last Updated:Oct 11, 2026
+ 
+ 
+ 
+ 
+ Visual understanding models can answer questions based on the images or videos that you provide. They support single or multiple image inputs and are suitable for various tasks, such as image captioning, visual question answering, and object localization. Try it online: Go to the Alibaba Cloud Model Studio console . In the upper-right corner of the page, select the destination region. Then, go to the Vision Models page to try out the models. 
+ Getting started 
+ Prerequisites 
+ 
+ Obtain an API key and configure it as an environment variable. 
+ To make calls using an SDK, install the SDK . The DashScope Python SDK must be version 1.24.6 or later, and the DashScope Java SDK must be version 2.21.10 or later. 
+ 
+ The following examples show how to call a model to describe image content. For more information about local files and image limits, see Pass local files and Image limits . 
+ OpenAI compatible Python from openai import OpenAI
+import os
+
+client = OpenAI(
+ # API keys vary by region. To obtain an API key, see https://www.alibabacloud.com/help/model-studio/get-api-key
+ api_key=os.getenv("DASHSCOPE_API_KEY"),
+ # The following URL is for the Singapore region. When you make a call, replace {WorkspaceId} with your actual workspace ID. URLs vary by region.
+ base_url="https://{WorkspaceId}.ap-southeast-1.maas.aliyuncs.com/compatible-mode/v1"
+)
+
+completion = client.chat.completions.create(
+ model="qwen3.8-max", # This example uses qwen3.7-plus. You can replace it with another model as needed. For a list of models, see https://www.alibabacloud.com/help/model-studio/getting-started/models
+ messages=[
+ {
+ "role": "user",
+ "content": [
+ {
+ "type": "image_url",
+ "image_url": {
+ "url": "https://help-static-aliyun-doc.aliyuncs.com/file-manage-files/zh-CN/20241022/emyrja/dog_and_girl.jpeg"
+ },
+ },
+ {"type": "text", "text": "What scene is depicted in the image?"},
+ ],
+ },
+ ],
+)
+print(completion.choices[0].message.content)
+ Response This is a photo taken on a beach. In the photo, a person and a dog are sitting on the sand with the sea and sky in the background. The person and the dog seem to be interacting, with the dog's front paw on the person's hand. Sunlight shines from the right side of the frame, adding a warm atmosphere to the scene.
+ Node.js import OpenAI from "openai";
+
+const openai = new OpenAI({
+ // API keys vary by region. To obtain an API key, see https://www.alibabacloud.com/help/model-studio/get-api-key
+ // If the environment variable is not configured, replace the following line with your Model Studio API key: apiKey: "sk-xxx"
+ apiKey: process.env.DASHSCOPE_API_KEY,
+ // The following URL is for the Singapore region. When you make a call, replace {WorkspaceId} with your actual workspace ID. URLs vary by region.
+ baseURL: "https://{WorkspaceId}.ap-southeast-1.maas.aliyuncs.com/compatible-mode/v1"
+});
+
+async function main() {
+ const response = await openai.chat.completions.create({
+ model: "qwen3.8-max", // This example uses qwen3.7-plus. You can replace it with another model as needed. For a list of models, see https://www.alibabacloud.com/help/model-studio/getting-started/models
+ messages: [
+ {
+ role: "user",
+ content: [{
+ type: "image_url",
+ image_url: {
+ "url": "https://help-static-aliyun-doc.aliyuncs.com/file-manage-files/zh-CN/20241022/emyrja/dog_and_girl.jpeg"
+ }
+ },
+ {
+ type: "text",
+ text: "What scene is depicted in the image?"
+ }
+ ]
+ }
+ ]
+ });
+ console.log(response.choices[0].message.content);
+}
+main()
+ Response This is a photo taken on a beach. In the photo, a person and a dog are sitting on the sand with the sea and sky in the background. The person and the dog seem to be interacting, with the dog's front paw on the person's hand. Sunlight shines from the right side of the frame, adding a warm atmosphere to the scene.
+ Java import com.openai.client.OpenAIClient;
+import com.openai.client.okhttp.OpenAIOkHttpClient;
+import com.openai.core.http.StreamResponse;
+import com.openai.models.chat.completions.*;
+
+import java.util.List;
+
+public class Main {
+ public static void main(String[] args) {
+ // Create a client using the API key from the environment variable
+ OpenAIClient client = OpenAIOkHttpClient.builder()
+ // API keys vary by region. To obtain an API key, see https://www.alibabacloud.com/help/model-studio/get-api-key
+ // If you have not set an environment variable, replace the following line with your Bailian API key: .apiKey("sk-xxx")
+ .apiKey(System.getenv("DASHSCOPE_API_KEY"))
+ // The following URL is for the Singapore region. When you make a call, replace {WorkspaceId} with your actual workspace ID. URLs vary by region.
+ .baseUrl("https://{WorkspaceId}.ap-southeast-1.maas.aliyuncs.com/compatible-mode/v1")
+ .build();
+
+ // Build the multimodal message content: image + text
+ ChatCompletionContentPart imagePart = ChatCompletionContentPart.ofImageUrl(
+ ChatCompletionContentPartImage.builder()
+ .imageUrl(ChatCompletionContentPartImage.ImageUrl.builder()
+ .url("https://help-static-aliyun-doc.aliyuncs.com/file-manage-files/zh-CN/20241022/emyrja/dog_and_girl.jpeg")
+ .build())
+ .build());
+ ChatCompletionContentPart textPart = ChatCompletionContentPart.ofText(
+ ChatCompletionContentPartText.builder()
+ .text("What scene is depicted in the image?")
+ .build());
+
+ // Create a chat request
+ ChatCompletionCreateParams chatParams = ChatCompletionCreateParams.builder()
+ // This example uses qwen3.8-max. You can replace it with another model as needed. For a list of models, see https://www.alibabacloud.com/help/model-studio/getting-started/models
+ .model("qwen3.8-max")
+ .addUserMessageOfArrayOfContentParts(List.of(imagePart, textPart))
+ .build();
+
+ StringBuilder fullResponse = new StringBuilder();
+
+ // All code examples use streaming output to clearly show the model output process. For a non-streaming example, see https://www.alibabacloud.com/help/model-studio/text-generation
+ try (StreamResponse<ChatCompletionChunk> streamResponse = client.chat().completions().createStreaming(chatParams)) {
+ streamResponse.stream().forEach(chunk -> {
+ System.out.println(chunk);
+ String content = chunk.choices().get(0).delta().content().orElse("");
+ if (!content.isEmpty()) {
+ fullResponse.append(content);
+ }
+ });
+ System.out.println(fullResponse);
+ } catch (Exception e) {
+ System.err.println("Error message: " + e.getMessage());
+ System.err.println("See: https://www.alibabacloud.com/help/model-studio/developer-reference/error-code");
+ }
+ }
+}
+ Response This is a photo taken on a beach. In the photo, a person and a dog are sitting on the sand with the sea and sky in the background. The person and the dog seem to be interacting, with the dog's front paw on the person's hand. Sunlight shines from the right side of the frame, adding a warm atmosphere to the scene.
+ curl # ======= Important notes =======
+# The following URL is for the Singapore region. When you make a call, replace {WorkspaceId} with your actual workspace ID. URLs vary by region.
+# API keys vary by region. To obtain an API key, see https://www.alibabacloud.com/help/model-studio/get-api-key
+# === Delete this comment before execution ===
+
+curl --location 'https://{WorkspaceId}.ap-southeast-1.maas.aliyuncs.com/compatible-mode/v1/chat/completions' \
+--header "Authorization: Bearer $DASHSCOPE_API_KEY" \
+--header 'Content-Type: application/json' \
+--data '{
+ "model": "qwen3.8-max",
+ "messages": [
+ {"role": "user",
+ "content": [
+ {"type": "image_url", "image_url": {"url": "https://help-static-aliyun-doc.aliyuncs.com/file-manage-files/zh-CN/20241022/emyrja/dog_and_girl.jpeg"}},
+ {"type": "text", "text": "What scene is depicted in the image?"}
+ ]
+ }]
+}'
+ Response {
+ "choices": [
+ {
+ "message": {
+ "content": "This is a photo taken on a beach. In the photo, a person and a dog are sitting on the sand with the sea and sky in the background. The person and the dog seem to be interacting, with the dog's front paw on the person's hand. Sunlight shines from the right side of the frame, adding a warm atmosphere to the scene.",
+ "role": "assistant"
+ },
+ "finish_reason": "stop",
+ "index": 0,
+ "logprobs": null
+ }
+ ],
+ "object": "chat.completion",
+ "usage": {
+ "prompt_tokens": 1270,
+ "completion_tokens": 54,
+ "total_tokens": 1324
+ },
+ "created": 1725948561,
+ "system_fingerprint": null,
+ "model": "qwen3.8-max",
+ "id": "chatcmpl-0fd66f46-b09e-9164-a84f-3ebbbedbac15"
+}
+ DashScope Python import os
+import dashscope
+
+# The following URL is for the Singapore region. When you make a call, replace {WorkspaceId} with your actual workspace ID. URLs vary by region.
+dashscope.base_http_api_url = 'https://{WorkspaceId}.ap-southeast-1.maas.aliyuncs.com/api/v1'
+
+messages = [
+{
+ "role": "user",
+ "content": [
+ {"image": "https://help-static-aliyun-doc.aliyuncs.com/file-manage-files/zh-CN/20241022/emyrja/dog_and_girl.jpeg"},
+ {"text": "What scene is depicted in the image?"}]
+}]
+
+response = dashscope.MultiModalConversation.call(
+ # API keys vary by region. To obtain an API key, see https://www.alibabacloud.com/help/model-studio/get-api-key
+ # If the environment variable is not configured, replace the following line with your Model Studio API key: api_key="sk-xxx"
+ api_key=os.getenv('DASHSCOPE_API_KEY'),
+ model='qwen3.7-plus', # This example uses qwen3.7-plus. You can replace it with another model as needed. For a list of models, see https://www.alibabacloud.com/help/model-studio/getting-started/models
+ messages=messages
+)
+
+print(response.output.choices[0].message.content[0]["text"])
+ Response This is a photo taken on a beach. The photo shows a woman and a dog. The woman is sitting on the sand, smiling and interacting with the dog. The dog is wearing a collar and seems to be shaking hands with the woman. The background is the sea and the sky, and the sunlight shining on them creates a warm atmosphere.
+ Java import java.util.Arrays;
+import java.util.Collections;
+
+import com.alibaba.dashscope.aigc.multimodalconversation.MultiModalConversation;
+import com.alibaba.dashscope.aigc.multimodalconversation.MultiModalConversationParam;
+import com.alibaba.dashscope.aigc.multimodalconversation.MultiModalConversationResult;
+import com.alibaba.dashscope.common.MultiModalMessage;
+import com.alibaba.dashscope.common.Role;
+import com.alibaba.dashscope.exception.ApiException;
+import com.alibaba.dashscope.exception.NoApiKeyException;
+import com.alibaba.dashscope.exception.UploadFileException;
+import com.alibaba.dashscope.utils.Constants;
+
+public class Main {
+
+ // The following URL is for the Singapore region. When you make a call, replace {WorkspaceId} with your actual workspace ID. URLs vary by region.
+ static {
+ Constants.baseHttpApiUrl="https://{WorkspaceId}.ap-southeast-1.maas.aliyuncs.com/api/v1";
+ }
+
+ public static void simpleMultiModalConversationCall()
+ throws ApiException, NoApiKeyException, UploadFileException {
+ MultiModalConversation conv = new MultiModalConversation();
+ MultiModalMessage userMessage = MultiModalMessage.builder().role(Role.USER.getValue())
+ .content(Arrays.asList(
+ Collections.singletonMap("image", "https://help-static-aliyun-doc.aliyuncs.com/file-manage-files/zh-CN/20241022/emyrja/dog_and_girl.jpeg"),
+ Collections.singletonMap("text", "What scene is depicted in the image?"))).build();
+ MultiModalConversationParam param = MultiModalConversationParam.builder()
+ // API keys vary by region. To obtain an API key, see https://www.alibabacloud.com/help/model-studio/get-api-key
+ // If the environment variable is not configured, replace the following line with your Model Studio API key: .apiKey("sk-xxx")
+ .apiKey(System.getenv("DASHSCOPE_API_KEY"))
+ .model("qwen3.8-max") // This example uses qwen3.7-plus. You can replace it with another model as needed. For a list of models, see https://www.alibabacloud.com/help/model-studio/getting-started/models
+ .messages(Arrays.asList(userMessage))
+ .build();
+ MultiModalConversationResult result = conv.call(param);
+ System.out.println(result.getOutput().getChoices().get(0).getMessage().getContent().get(0).get("text"));
+ }
+ public static void main(String[] args) {
+ try {
+ simpleMultiModalConversationCall();
+ } catch (ApiException | NoApiKeyException | UploadFileException e) {
+ System.out.println(e.getMessage());
+ }
+ System.exit(0);
+ }
+}
+ Response This is a photo taken on a beach. The photo shows a person in a plaid shirt and a dog wearing a collar. The person and the dog are sitting face to face, seemingly interacting. The background is the sea and the sky, and the sunlight shining on them creates a warm atmosphere.
+ curl # ======= Important notes =======
+# The following URL is for the Singapore region. When you make a call, replace {WorkspaceId} with your actual workspace ID. URLs vary by region.
+# API keys vary by region. To obtain an API key, see https://www.alibabacloud.com/help/model-studio/get-api-key
+# === Delete this comment before execution ===
+
+curl -X POST https://{WorkspaceId}.ap-southeast-1.maas.aliyuncs.com/api/v1/services/aigc/multimodal-generation/generation \
+-H "Authorization: Bearer $DASHSCOPE_API_KEY" \
+-H 'Content-Type: application/json' \
+-d '{
+ "model": "qwen3.8-max",
+ "input":{
+ "messages":[
+ {
+ "role": "user",
+ "content": [
+ {"image": "https://help-static-aliyun-doc.aliyuncs.com/file-manage-files/zh-CN/20241022/emyrja/dog_and_girl.jpeg"},
+ {"text": "What scene is depicted in the image?"}
+ ]
+ }
+ ]
+ }
+}'
+ Response {
+ "output": {
+ "choices": [
+ {
+ "finish_reason": "stop",
+ "message": {
+ "role": "assistant",
+ "content": [
+ {
+ "text": "This is a photo taken on a beach. The photo shows a person in a plaid shirt and a dog wearing a collar. They are sitting on the sand with the sea and sky in the background. Sunlight shines from the right side of the frame, adding a warm atmosphere to the scene."
+ }
+ ]
+ }
+ }
+ ]
+ },
+ "usage": {
+ "output_tokens": 55,
+ "input_tokens": 1271,
+ "image_tokens": 1247
+ },
+ "request_id": "ccf845a3-dc33-9cda-b581-20fe7dc23f70"
+}
+ dashscope CLI Call via the dashscope command line. export DASHSCOPE_API_KEY="your-api-key"
+# Replace {WorkspaceId} with your workspace ID, ap-southeast-1 with your region (e.g., us-east-1, eu-central-1)
+export DASHSCOPE_HTTP_BASE_URL="https://{WorkspaceId}.ap-southeast-1.maas.aliyuncs.com/api/v1"
+dashscope multimodal-conversation create -m qwen3-vl-plus -t "Hello"
+ Important The SDK Expert interactive assistant can accomplish the same development and troubleshooting via natural language, see DashScope SDK Expert . For the complete region table, see Base URL overview . 
+ Model performance 
+ Image Q&A 
+ Describe the content of an image or classify and label it, such as identifying people, places, animals, and plants. 
+ What item in this image should I use if the sun is too bright? If the sun is too bright, you should use the pink sunglasses in the image. Sunglasses can effectively block strong light, reduce UV damage to your eyes, and help protect your vision and improve visual comfort in bright sunlight. 
+ Creative writing 
+ Generate vivid text descriptions based on image or video content, suitable for creative scenarios such as story writing, copywriting, and short video scripts. 
+ Please write an interesting social media post based on the content of the image. Sure. This image is filled with a rich Mid-Autumn Festival atmosphere, cleverly combining classical and modern elements. Based on the main elements in the image, I have prepared several social media posts in different styles for you to choose from. Poetic and beautiful style Tonight, the moon is bright for all to see, but who knows where the autumn thoughts will fall? Chang'e flies to the moon, and the Jade Rabbit pounds medicine. The romance of the ancients is lit up tonight. May this bright moon light your way home and carry my deepest thoughts. Happy Mid-Autumn Festival! Warm Wishes Style The moon is full, and people are reunited. The Mid-Autumn night is the gentlest. Watch the fireworks bloom, admire the full moon in the sky, take a bite of a mooncake, and want for good health. May all that you and I want for come true. Happy Mid-Autumn Festival to everyone, and may your families be happy! 
+ Text recognition and information extraction 
+ Recognize text and formulas in images, or extract information from receipts, certificates, and forms. Supports formatted text output. 
+ Extract the following from the image: ['Invoice Code', 'Invoice Number', 'Destination', 'Fuel Surcharge', 'Fare', 'Date', 'Departure Time', 'Train Number', 'Seat Number']. Please output in JSON format. { "Invoice Code": "221021325353", "Invoice Number": "10283819", "Destination": "Development Zone", "Fuel Surcharge": "2.0", "Fare": "8.00<Full>", "Date": "2013-06-29", "Departure Time": "Rolling", "Train Number": "040", "Seat Number": "371" } 
+ Multi-disciplinary problem solving 
+ Solve math, physics, chemistry, and other problems in images. Suitable for K-12, university, and adult education. 
+ Solve the math problem in the graph step by step. 
+ Visual programming 
+ Generate code from images or videos. You can use this feature to generate HTML, CSS, and JS code from design drafts, website screenshots, and more. 
+ Create a webpage using HTML and CSS based on my sketch. The main color should be black. Webpage preview 
+ Object localization 
+ Supports 2D and 3D localization. You can use this feature to determine object orientation, perspective changes, and occlusion relationships. 3D localization is a new capability added to the Qwen3-VL model. 
+ 
+ The object localization performance of the Qwen2.5-VL model is robust within the resolution range of 480 × 480 to 2560 × 2560. Outside this range, the detection accuracy may decrease, with occasional detection frame drift. 
+ 
+ 
+ For information about how to draw the localization results on the original image, see FAQ . 
+ 
+ 2D localization 
+ Return Box (bounding box) coordinates: Detect all food items in the image and output their bbox coordinates in JSON format. 
+ Return Point (centroid) coordinates: Locate all food items in the image as points and output their point coordinates in XML format. 
+ Visualization of 2D localization results 3D localization Detect the car in the image and predict its 3D position. Output JSON: [{"bbox_3d": [x_center, y_center, z_center, x_size, y_size, z_size, roll, pitch, yaw], "label": "category"}] . Visualization of 3D localization results 
+ Document parsing 
+ Parse image-based documents (such as scanned copies or image PDFs) into QwenVL HTML or QwenVL Markdown format. This format not only accurately recognizes text but also obtains the position information of elements such as images and tables. The Qwen3-VL model adds the ability to parse into Markdown format. 
+ 
+ The recommended prompts are as follows: qwenvl html (to parse into HTML format) or qwenvl markdown (to parse into Markdown format). 
+ 
+ qwenvl markdown. Visualization of results 
+ Video understanding 
+ Analyze video content, such as locating specific events and obtaining timestamps, or generating summaries of key time periods. 
+ Please describe the series of actions of the person in the video. Output the start time (start_time), end time (end_time), and event (event) in JSON format. Use HH:mm:ss for the timestamp. { "events": [ { "start_time": "00:00:00", "end_time": "00:00:05", "event": "The person walks towards the table holding a cardboard box and places it on the table." }, { "start_time": "00:00:05", "end_time": "00:00:15", "event": "The person picks up a scanner and scans the label on the cardboard box." }, { "start_time": "00:00:15", "end_time": "00:00:21", "event": "The person puts the scanner back in its place and then picks up a pen to record information in a notebook."}] } 
+ Core features 
+ Enable or disable thinking mode 
+ 
+ 
+ The qwen3.8 , qwen3.7 , qwen3.6 , qwen3.5 , and qwen3-vl-plus series models are hybrid thinking models. They can either think before responding or respond directly. Use the enable_thinking parameter to control whether to enable thinking mode: 
+ 
+ true : Enables thinking mode. The default value for the qwen3.8 , qwen3.7 , qwen3.6 , and qwen3.5 series models is true . 
+ false : Disables thinking mode. The default value for the qwen3-vl-plus series models is false . 
+ 
+ 
+ 
+ Models with the thinking suffix are thinking-only models. They always think before responding, and this feature cannot be disabled. 
+ 
+ 
+ Important 
+ Model configuration: In general conversation scenarios that do not involve Agent tool calls, do not set a System Message to maintain optimal performance. You can pass instructions such as model role settings and output format requirements through the User Message . 
+ Prioritize streaming output: When thinking mode is enabled, both streaming and non-streaming output are supported. To avoid timeouts caused by excessively long responses, prioritize using streaming output. 
+ Limit thinking length: Deep thinking models sometimes output lengthy reasoning processes. You can use the thinking_budget parameter to limit the length of the thinking process. If the number of tokens generated during the model's thinking process exceeds the thinking_budget , the inference content is truncated, and the model immediately starts generating the final response. The default value of thinking_budget is the model's maximum chain-of-thought length. For more information, see the model list. 
+ 
+ OpenAI compatible The enable_thinking parameter is not a standard OpenAI parameter. If you use the OpenAI Python SDK, pass it through extra_body . python import os
+from openai import OpenAI
+
+client = OpenAI(
+ # API keys vary by region. To obtain an API key, see https://www.alibabacloud.com/help/model-studio/get-api-key
+ api_key=os.getenv("DASHSCOPE_API_KEY"),
+ # The following URL is for the Singapore region. When you make a call, replace {WorkspaceId} with your actual workspace ID. URLs vary by region.
+ base_url="https://{WorkspaceId}.ap-southeast-1.maas.aliyuncs.com/compatible-mode/v1"
+)
+
+reasoning_content = "" # Define the complete thinking process
+answer_content = "" # Define the complete response
+is_answering = False # Determine whether to end the thinking process and start responding
+enable_thinking = True
+# Create a chat completion request
+completion = client.chat.completions.create(
+ model="qwen3.8-max",
+ messages=[
+ {
+ "role": "user",
+ "content": [
+ {
+ "type": "image_url",
+ "image_url": {
+ "url": "https://img.alicdn.com/imgextra/i1/O1CN01gDEY8M1W114Hi3XcN_!!6000000002727-0-tps-1024-406.jpg"
+ },
+ },
+ {"type": "text", "text": "How do I solve this problem?"},
+ ],
+ },
+ ],
+ stream=True,
+ # The enable_thinking parameter enables the thinking process, and the thinking_budget parameter sets the maximum number of tokens for the inference process.
+ # Use the enable_thinking parameter to switch the thinking mode.
+ extra_body={
+ 'enable_thinking': enable_thinking,
+ "thinking_budget": 81920},
+
+ # Uncomment the following lines to return token usage in the last chunk.
+ # stream_options={
+ # "include_usage": True
+ # }
+)
+
+if enable_thinking:
+ print("\n" + "=" * 20 + "Thinking process" + "=" * 20 + "\n")
+
+for chunk in completion:
+ # If chunk.choices is empty, print the usage.
+ if not chunk.choices:
+ print("\nUsage:")
+ print(chunk.usage)
+ else:
+ delta = chunk.choices[0].delta
+ # Print the thinking process.
+ if hasattr(delta, 'reasoning_content') and delta.reasoning_content is not None:
+ print(delta.reasoning_content, end='', flush=True)
+ reasoning_content += delta.reasoning_content
+ else:
+ # Start responding.
+ if delta.content != "" and is_answering is False:
+ print("\n" + "=" * 20 + "Complete response" + "=" * 20 + "\n")
+ is_answering = True
+ # Print the response process.
+ print(delta.content, end='', flush=True)
+ answer_content += delta.content
+
+# print("=" * 20 + "Complete thinking process" + "=" * 20 + "\n")
+# print(reasoning_content)
+# print("=" * 20 + "Complete response" + "=" * 20 + "\n")
+# print(answer_content)
+ javascript import OpenAI from "openai";
+
+// Initialize the OpenAI client
+const openai = new OpenAI({
+ // API keys vary by region. To obtain an API key, see https://www.alibabacloud.com/help/model-studio/get-api-key
+ // If the environment variable is not configured, replace the following line with your Model Studio API key: apiKey: "sk-xxx"
+ apiKey: process.env.DASHSCOPE_API_KEY,
+ // The following URL is for the Singapore region. When you make a call, replace {WorkspaceId} with your actual workspace ID. URLs vary by region.
+ baseURL: "https://{WorkspaceId}.ap-southeast-1.maas.aliyuncs.com/compatible-mode/v1"
+});
+
+let reasoningContent = '';
+let answerContent = '';
+let isAnswering = false;
+let enableThinking = true;
+
+let messages = [
+ {
+ role: "user",
+ content: [
+ { type: "image_url", image_url: { "url": "https://img.alicdn.com/imgextra/i1/O1CN01gDEY8M1W114Hi3XcN_!!6000000002727-0-tps-1024-406.jpg" } },
+ { type: "text", text: "Solve this problem" },
+ ]
+}]
+
+async function main() {
+ try {
+ const stream = await openai.chat.completions.create({
+ model: 'qwen3.7-plus',
+ messages: messages,
+ stream: true,
+ // Note: In the Node.js SDK, non-standard parameters like enableThinking are passed as top-level properties and do not need to be placed in extra_body.
+ enable_thinking: enableThinking,
+ thinking_budget: 81920
+
+ });
+
+ if (enableThinking){console.log('\n' + '='.repeat(20) + 'Thinking process' + '='.repeat(20) + '\n');}
+
+ for await (const chunk of stream) {
+ if (!chunk.choices?.length) {
+ console.log('\nUsage:');
+ console.log(chunk.usage);
+ continue;
+ }
+
+ const delta = chunk.choices[0].delta;
+
+ // Process the thinking process.
+ if (delta.reasoning_content) {
+ process.stdout.write(delta.reasoning_content);
+ reasoningContent += delta.reasoning_content;
+ }
+ // Process the formal response.
+ else if (delta.content) {
+ if (!isAnswering) {
+ console.log('\n' + '='.repeat(20) + 'Complete response' + '='.repeat(20) + '\n');
+ isAnswering = true;
+ }
+ process.stdout.write(delta.content);
+ answerContent += delta.content;
+ }
+ }
+ } catch (error) {
+ console.error('Error:', error);
+ }
+}
+
+main();
+ bash # ======= Important notes =======
+# The following URL is for the Singapore region. When you make a call, replace {WorkspaceId} with your actual workspace ID. URLs vary by region.
+# API keys vary by region. To obtain an API key, see https://www.alibabacloud.com/help/model-studio/get-api-key
+# === Delete this comment before execution ===
+
+curl --location 'https://{WorkspaceId}.ap-southeast-1.maas.aliyuncs.com/compatible-mode/v1/chat/completions' \
+--header "Authorization: Bearer $DASHSCOPE_API_KEY" \
+--header 'Content-Type: application/json' \
+--data '{
+ "model": "qwen3.8-max",
+ "messages": [
+ {
+ "role": "user",
+ "content": [
+ {
+ "type": "image_url",
+ "image_url": {
+ "url": "https://img.alicdn.com/imgextra/i1/O1CN01gDEY8M1W114Hi3XcN_!!6000000002727-0-tps-1024-406.jpg"
+ }
+ },
+ {
+ "type": "text",
+ "text": "Please solve this problem"
+ }
+ ]
+ }
+ ],
+ "stream":true,
+ "stream_options":{"include_usage":true},
+ "enable_thinking": true,
+ "thinking_budget": 81920
+}'
+ DashScope python import os
+import dashscope
+from dashscope import MultiModalConversation
+
+# The following URL is for the Singapore region. When you make a call, replace {WorkspaceId} with your actual workspace ID. URLs vary by region.
+dashscope.base_http_api_url = "https://{WorkspaceId}.ap-southeast-1.maas.aliyuncs.com/api/v1"
+
+enable_thinking=True
+
+messages = [
+ {
+ "role": "user",
+ "content": [
+ {"image": "https://img.alicdn.com/imgextra/i1/O1CN01gDEY8M1W114Hi3XcN_!!6000000002727-0-tps-1024-406.jpg"},
+ {"text": "Solve this problem?"}
+ ]
+ }
+]
+
+response = MultiModalConversation.call(
+ # If the environment variable is not configured, replace the following line with your Model Studio API key: api_key="sk-xxx",
+ # API keys vary by region. To obtain an API key, see https://www.alibabacloud.com/help/model-studio/get-api-key
+ api_key=os.getenv('DASHSCOPE_API_KEY'),
+ model="qwen3.8-max",
+ messages=messages,
+ stream=True,
+ # The enable_thinking parameter enables the thinking process.
+ # Use the enable_thinking parameter to switch the thinking mode.
+ enable_thinking=enable_thinking,
+ # The thinking_budget parameter sets the maximum number of tokens for the inference process.
+ thinking_budget=81920,
+
+)
+
+# Define the complete thinking process
+reasoning_content = ""
+# Define the complete response
+answer_content = ""
+# Determine whether to end the thinking process and start responding
+is_answering = False
+
+if enable_thinking:
+ print("=" * 20 + "Thinking process" + "=" * 20)
+
+for chunk in response:
+ # If both the thinking process and the response are empty, ignore them.
+ message = chunk.output.choices[0].message
+ reasoning_content_chunk = message.get("reasoning_content", None)
+ if (chunk.output.choices[0].message.content == [] and
+ reasoning_content_chunk == ""):
+ pass
+ else:
+ # If it is currently in the thinking process
+ if reasoning_content_chunk is not None and chunk.output.choices[0].message.content == []:
+ print(chunk.output.choices[0].message.reasoning_content, end="")
+ reasoning_content += chunk.output.choices[0].message.reasoning_content
+ # If it is currently responding
+ elif chunk.output.choices[0].message.content != []:
+ if not is_answering:
+ print("\n" + "=" * 20 + "Complete response" + "=" * 20)
+ is_answering = True
+ print(chunk.output.choices[0].message.content[0]["text"], end="")
+ answer_content += chunk.output.choices[0].message.content[0]["text"]
+
+# Print the complete thinking process and response.
+# print("=" * 20 + "Complete thinking process" + "=" * 20 + "\n")
+# print(f"{reasoning_content}")
+# print("=" * 20 + "Complete response" + "=" * 20 + "\n")
+# print(f"{answer_content}")
+ java // The DashScope SDK version must be 2.21.10 or later.
+import java.util.*;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import com.alibaba.dashscope.common.Role;
+import com.alibaba.dashscope.exception.ApiException;
+import com.alibaba.dashscope.exception.NoApiKeyException;
+import io.reactivex.Flowable;
+
+import com.alibaba.dashscope.aigc.multimodalconversation.MultiModalConversation;
+import com.alibaba.dashscope.aigc.multimodalconversation.MultiModalConversationParam;
+import com.alibaba.dashscope.aigc.multimodalconversation.MultiModalConversationResult;
+import com.alibaba.dashscope.common.MultiModalMessage;
+import com.alibaba.dashscope.exception.UploadFileException;
+import com.alibaba.dashscope.exception.InputRequiredException;
+import java.lang.System;
+import com.alibaba.dashscope.utils.Constants;
+
+public class Main {
+ // The following URL is for the Singapore region. When you make a call, replace {WorkspaceId} with your actual workspace ID. URLs vary by region.
+ static {Constants.baseHttpApiUrl="https://{WorkspaceId}.ap-southeast-1.maas.aliyuncs.com/api/v1";}
+
+ private static final Logger logger = LoggerFactory.getLogger(Main.class);
+ private static StringBuilder reasoningContent = new StringBuilder();
+ private static StringBuilder finalContent = new StringBuilder();
+ private static boolean isFirstPrint = true;
+
+ private static void handleGenerationResult(MultiModalConversationResult message) {
+ String re = message.getOutput().getChoices().get(0).getMessage().getReasoningContent();
+ String reasoning = Objects.isNull(re)?"":re; // Default value
+
+ List<Map<String, Object>> content = message.getOutput().getChoices().get(0).getMessage().getContent();
+ if (!reasoning.isEmpty()) {
+ reasoningContent.append(reasoning);
+ if (isFirstPrint) {
+ System.out.println("====================Thinking process====================");
+ isFirstPrint = false;
+ }
+ System.out.print(reasoning);
+ }
+
+ if (Objects.nonNull(content) && !content.isEmpty()) {
+ Object text = content.get(0).get("text");
+ finalContent.append(content.get(0).get("text"));
+ if (!isFirstPrint) {
+ System.out.println("\n====================Complete response====================");
+ isFirstPrint = true;
+ }
+ System.out.print(text);
+ }
+ }
+ public static MultiModalConversationParam buildMultiModalConversationParam(MultiModalMessage Msg) {
+ return MultiModalConversationParam.builder()
+ // If the environment variable is not configured, replace the following line with your Model Studio API key: .apiKey("sk-xxx")
+ // API keys vary by region. To obtain an API key, see https://www.alibabacloud.com/help/model-studio/get-api-key
+ .apiKey(System.getenv("DASHSCOPE_API_KEY"))
+ .model("qwen3.8-max")
+ .messages(Arrays.asList(Msg))
+ .enableThinking(true)
+ .thinkingBudget(81920)
+ .incrementalOutput(true)
+ .build();
+ }
+
+ public static void streamCallWithMessage(MultiModalConversation conv, MultiModalMessage Msg)
+ throws NoApiKeyException, ApiException, InputRequiredException, UploadFileException {
+ MultiModalConversationParam param = buildMultiModalConversationParam(Msg);
+ Flowable<MultiModalConversationResult> result = conv.streamCall(param);
+ result.blockingForEach(message -> {
+ handleGenerationResult(message);
+ });
+ }
+ public static void main(String[] args) {
+ try {
+ MultiModalConversation conv = new MultiModalConversation();
+ MultiModalMessage userMsg = MultiModalMessage.builder()
+ .role(Role.USER.getValue())
+ .content(Arrays.asList(Collections.singletonMap("image", "https://img.alicdn.com/imgextra/i1/O1CN01gDEY8M1W114Hi3XcN_!!6000000002727-0-tps-1024-406.jpg"),
+ Collections.singletonMap("text", "Please solve this problem")))
+ .build();
+ streamCallWithMessage(conv, userMsg);
+// Print the final result.
+// if (reasoningContent.length() > 0) {
+// System.out.println("\n====================Complete response====================");
+// System.out.println(finalContent.toString());
+// }
+ } catch (ApiException | NoApiKeyException | UploadFileException | InputRequiredException e) {
+ logger.error("An exception occurred: {}", e.getMessage());
+ }
+ System.exit(0);
+ }
+}
+ bash # ======= Important notes =======
+# API keys vary by region. To obtain an API key, see https://www.alibabacloud.com/help/model-studio/get-api-key
+# The following URL is for the Singapore region. When you make a call, replace {WorkspaceId} with your actual workspace ID. URLs vary by region.
+# === Delete this comment before execution ===
+
+curl -X POST https://{WorkspaceId}.ap-southeast-1.maas.aliyuncs.com/api/v1/services/aigc/multimodal-generation/generation \
+-H "Authorization: Bearer $DASHSCOPE_API_KEY" \
+-H 'Content-Type: application/json' \
+-H 'X-DashScope-SSE: enable' \
+-d '{
+ "model": "qwen3.8-max",
+ "input":{
+ "messages":[
+ {
+ "role": "user",
+ "content": [
+ {"image": "https://img.alicdn.com/imgextra/i1/O1CN01gDEY8M1W114Hi3XcN_!!6000000002727-0-tps-1024-406.jpg"},
+ {"text": "Please solve this problem"}
+ ]
+ }
+ ]
+ },
+ "parameters":{
+ "enable_thinking": true,
+ "incremental_output": true,
+ "thinking_budget": 81920
+ }
+}'
+ 
+ Multiple image inputs 
+ Visual understanding models support passing multiple images in a single request, which can be used for tasks such as product comparison and multi-page document processing . To do this, simply include multiple image objects in the content array of the user message . 
+ Important The number of images is limited by the model's total token limit for images and text. The total token count for all images and text must not exceed the model's maximum input. 
+ OpenAI compatible Python import os
+from openai import OpenAI
+
+client = OpenAI(
+ # API keys vary by region. To obtain an API key, see https://www.alibabacloud.com/help/model-studio/get-api-key
+ api_key=os.getenv("DASHSCOPE_API_KEY"),
+ # The following URL is for the Singapore region. When you make a call, replace {WorkspaceId} with your actual workspace ID. URLs vary by region.
+ base_url="https://{WorkspaceId}.ap-southeast-1.maas.aliyuncs.com/compatible-mode/v1",
+)
+
+completion = client.chat.completions.create(
+ model="qwen3.8-max", # This example uses qwen3.7-plus. You can replace it with another model as needed. For a list of models, see https://www.alibabacloud.com/help/model-studio/getting-started/models
+ messages=[
+ {"role": "user","content": [
+ {"type": "image_url","image_url": {"url": "https://help-static-aliyun-doc.aliyuncs.com/file-manage-files/zh-CN/20241022/emyrja/dog_and_girl.jpeg"},},
+ {"type": "image_url","image_url": {"url": "https://dashscope.oss-cn-beijing.aliyuncs.com/images/tiger.png"},},
+ {"type": "text", "text": "What content do these images depict?"},
+ ],
+ }
+ ],
+)
+
+print(completion.choices[0].message.content)
+ Response Image 1 shows a scene of a woman and a Labrador retriever interacting on a beach. The woman is wearing a plaid shirt and sitting on the sand, shaking hands with the dog. The background is the ocean waves and the sky, and the whole picture is full of warmth and joy.
+
+Image 2 shows a scene of a tiger walking in a forest. The tiger's coat is orange with black stripes. It is stepping forward, surrounded by dense trees and vegetation, and the ground is covered with fallen leaves. The whole picture gives a feeling of wild nature.
+ Node.js import OpenAI from "openai";
+
+const openai = new OpenAI(
+ {
+ // API keys vary by region. To obtain an API key, see https://www.alibabacloud.com/help/model-studio/get-api-key
+ // If the environment variable is not configured, replace the following line with your Model Studio API key: apiKey: "sk-xxx"
+ apiKey: process.env.DASHSCOPE_API_KEY,
+ // The following URL is for the Singapore region. When you make a call, replace {WorkspaceId} with your actual workspace ID. URLs vary by region.
+ baseURL: "https://{WorkspaceId}.ap-southeast-1.maas.aliyuncs.com/compatible-mode/v1"
+ }
+);
+
+async function main() {
+ const response = await openai.chat.completions.create({
+ model: "qwen3.8-max", // This example uses qwen3.7-plus. You can replace it with another model as needed. For a list of models, see https://www.alibabacloud.com/help/model-studio/getting-started/models
+ messages: [
+ {role: "user",content: [
+ {type: "image_url",image_url: {"url": "https://help-static-aliyun-doc.aliyuncs.com/file-manage-files/zh-CN/20241022/emyrja/dog_and_girl.jpeg"}},
+ {type: "image_url",image_url: {"url": "https://dashscope.oss-cn-beijing.aliyuncs.com/images/tiger.png"}},
+ {type: "text", text: "What content do these images depict?" },
+ ]}]
+ });
+ console.log(response.choices[0].message.content);
+}
+
+main()
+ Response In the first image, a person and a dog are interacting on a beach. The person is wearing a plaid shirt, and the dog is wearing a collar. They seem to be shaking hands or giving a high-five.
+
+In the second image, a tiger is walking in a forest. The tiger's coat is orange with black stripes, and the background is green trees and vegetation.
+ curl # ======= Important notes =======
+# API keys vary by region. To obtain an API key, see https://www.alibabacloud.com/help/model-studio/get-api-key
+# The following URL is for the Singapore region. When you make a call, replace {WorkspaceId} with your actual workspace ID. URLs vary by region.
+# === Delete this comment before execution ===
+
+curl -X POST https://{WorkspaceId}.ap-southeast-1.maas.aliyuncs.com/compatible-mode/v1/chat/completions \
+-H "Authorization: Bearer $DASHSCOPE_API_KEY" \
+-H 'Content-Type: application/json' \
+-d '{
+ "model": "qwen3.8-max",
+ "messages": [
+ {
+ "role": "user",
+ "content": [
+ {
+ "type": "image_url",
+ "image_url": {
+ "url": "https://help-static-aliyun-doc.aliyuncs.com/file-manage-files/zh-CN/20241022/emyrja/dog_and_girl.jpeg"
+ }
+ },
+ {
+ "type": "image_url",
+ "image_url": {
+ "url": "https://dashscope.oss-cn-beijing.aliyuncs.com/images/tiger.png"
+ }
+ },
+ {
+ "type": "text",
+ "text": "What content do these images depict?"
+ }
+ ]
+ }
+ ]
+}'
+ Response {
+ "choices": [
+ {
+ "message": {
+ "content": "Image 1 shows a scene of a woman and a Labrador retriever interacting on a beach. The woman is wearing a plaid shirt and sitting on the sand, shaking hands with the dog. The background is a sea view and a sunset sky, making the whole scene look very warm and harmonious.\n\nImage 2 shows a scene of a tiger walking in a forest. The tiger's coat is orange with black stripes. It is stepping forward, surrounded by dense trees and vegetation, and the ground is covered with fallen leaves. The whole picture is full of natural wildness and vitality.",
+ "role": "assistant"
+ },
+ "finish_reason": "stop",
+ "index": 0,
+ "logprobs": null
+ }
+ ],
+ "object": "chat.completion",
+ "usage": {
+ "prompt_tokens": 2497,
+ "completion_tokens": 109,
+ "total_tokens": 2606
+ },
+ "created": 1725948561,
+ "system_fingerprint": null,
+ "model": "qwen3.8-max",
+ "id": "chatcmpl-0fd66f46-b09e-9164-a84f-3ebbbedbac15"
+}
+ DashScope Python import os
+import dashscope
+
+# The following URL is for the Singapore region. When you make a call, replace {WorkspaceId} with your actual workspace ID. URLs vary by region.
+dashscope.base_http_api_url = 'https://{WorkspaceId}.ap-southeast-1.maas.aliyuncs.com/api/v1'
+
+messages = [
+ {
+ "role": "user",
+ "content": [
+ {"image": "https://help-static-aliyun-doc.aliyuncs.com/file-manage-files/zh-CN/20241022/emyrja/dog_and_girl.jpeg"},
+ {"image": "https://dashscope.oss-cn-beijing.aliyuncs.com/images/tiger.png"},
+ {"text": "What content do these images depict?"}
+ ]
+ }
+]
+
+response = dashscope.MultiModalConversation.call(
+ # API keys vary by region. To obtain an API key, see https://www.alibabacloud.com/help/model-studio/get-api-key
+ # If the environment variable is not configured, replace the following line with your Model Studio API key: api_key="sk-xxx"
+ api_key=os.getenv('DASHSCOPE_API_KEY'),
+ model='qwen3.7-plus', # This example uses qwen3.7-plus. You can replace it with another model as needed. For a list of models, see https://www.alibabacloud.com/help/model-studio/getting-started/models
+ messages=messages
+)
+
+print(response.output.choices[0].message.content[0]["text"])
+ Response These images show some animals and natural scenes. In the first image, a person and a dog are interacting on a beach. The second image is of a tiger walking in a forest.
+ Java import java.util.Arrays;
+import java.util.Collections;
+import com.alibaba.dashscope.aigc.multimodalconversation.MultiModalConversation;
+import com.alibaba.dashscope.aigc.multimodalconversation.MultiModalConversationParam;
+import com.alibaba.dashscope.aigc.multimodalconversation.MultiModalConversationResult;
+import com.alibaba.dashscope.common.MultiModalMessage;
+import com.alibaba.dashscope.common.Role;
+import com.alibaba.dashscope.exception.ApiException;
+import com.alibaba.dashscope.exception.NoApiKeyException;
+import com.alibaba.dashscope.exception.UploadFileException;
+import com.alibaba.dashscope.utils.Constants;
+
+public class Main {
+ static {
+ // The following URL is for the Singapore region. When you make a call, replace {WorkspaceId} with your actual workspace ID. URLs vary by region.
+ Constants.baseHttpApiUrl="https://{WorkspaceId}.ap-southeast-1.maas.aliyuncs.com/api/v1";
+ }
+ public static void simpleMultiModalConversationCall()
+ throws ApiException, NoApiKeyException, UploadFileException {
+ MultiModalConversation conv = new MultiModalConversation();
+ MultiModalMessage userMessage = MultiModalMessage.builder().role(Role.USER.getValue())
+ .content(Arrays.asList(
+ Collections.singletonMap("image", "https://help-static-aliyun-doc.aliyuncs.com/file-manage-files/zh-CN/20241022/emyrja/dog_and_girl.jpeg"),
+ Collections.singletonMap("image", "https://dashscope.oss-cn-beijing.aliyuncs.com/images/tiger.png"),
+ Collections.singletonMap("text", "What content do these images depict?"))).build();
+ MultiModalConversationParam param = MultiModalConversationParam.builder()
+ // API keys vary by region. To obtain an API key, see https://www.alibabacloud.com/help/model-studio/get-api-key
+ .apiKey(System.getenv("DASHSCOPE_API_KEY"))
+ .model("qwen3.8-max") // This example uses qwen3.7-plus. You can replace it with another model as needed. For a list of models, see https://www.alibabacloud.com/help/model-studio/getting-started/models
+ .messages(Arrays.asList(userMessage))
+ .build();
+ MultiModalConversationResult result = conv.call(param);
+ System.out.println(result.getOutput().getChoices().get(0).getMessage().getContent().get(0).get("text")); }
+ public static void main(String[] args) {
+ try {
+ simpleMultiModalConversationCall();
+ } catch (ApiException | NoApiKeyException | UploadFileException e) {
+ System.out.println(e.getMessage());
+ }
+ System.exit(0);
+ }
+}
+ Response These images show some animals and natural scenes.
+
+1. First image: A woman and a dog are interacting on a beach. The woman is wearing a plaid shirt and sitting on the sand, and the dog is wearing a collar and extending its paw to shake hands with the woman.
+2. Second image: A tiger is walking in a forest. The tiger's coat is orange with black stripes, and the background is trees and leaves.
+ curl # ======= Important notes =======
+# The following URL is for the Singapore region. When you make a call, replace {WorkspaceId} with your actual workspace ID. URLs vary by region.
+# API keys vary by region. To obtain an API key, see https://www.alibabacloud.com/help/model-studio/get-api-key
+# === Delete this comment before execution ===
+
+curl --location 'https://{WorkspaceId}.ap-southeast-1.maas.aliyuncs.com/api/v1/services/aigc/multimodal-generation/generation' \
+--header "Authorization: Bearer $DASHSCOPE_API_KEY" \
+--header 'Content-Type: application/json' \
+--data '{
+ "model": "qwen3.8-max",
+ "input":{
+ "messages":[
+ {
+ "role": "user",
+ "content": [
+ {"image": "https://help-static-aliyun-doc.aliyuncs.com/file-manage-files/zh-CN/20241022/emyrja/dog_and_girl.jpeg"},
+ {"image": "https://dashscope.oss-cn-beijing.aliyuncs.com/images/tiger.png"},
+ {"text": "What content do these images show?"}
+ ]
+ }
+ ]
+ }
+}'
+ Response {
+ "output": {
+ "choices": [
+ {
+ "finish_reason": "stop",
+ "message": {
+ "role": "assistant",
+ "content": [
+ {
+ "text": "These images show some animals and natural scenes. In the first image, a person and a dog are interacting on a beach. The second image is of a tiger walking in a forest."
+ }
+ ]
+ }
+ }
+ ]
+ },
+ "usage": {
+ "output_tokens": 81,
+ "input_tokens": 1277,
+ "image_tokens": 2497
+ },
+ "request_id": "ccf845a3-dc33-9cda-b581-20fe7dc23f70"
+}
+ 
+ Video understanding 
+ Visual understanding models can understand video content provided as an image list (video frames) or a video file. The following examples show how to understand online videos or image lists specified by a URL. For more information about video limits or the number of images that can be passed in an image list, see Video limits . 
+ 
+ For better performance when understanding video files, use the latest or recent snapshot versions of the models. 
+ 
+ Video files Visual understanding models analyze video content by extracting a sequence of frames from the video. You can control the frame extraction strategy with the following two parameters: 
+ 
+ fps : Controls the frame extraction frequency. One frame is extracted every 1/fps seconds. The value range is [0.1, 10], and the default value is 2.0. 
+ 
+ For scenes with fast motion, set a higher fps value to capture more detail. 
+ For static scenes or long videos, set a lower fps value to improve performance. 
+ 
+ 
+ 
+ max_frames : The maximum number of frames to extract from a video. The system calculates the total frames based on the video's fps. If the total number of frames exceeds this limit, the system automatically samples frames evenly to meet the limit. This parameter is available only when using the DashScope SDK. 
+ 
+ OpenAI compatible 
+ When you send a video file directly to the visual understanding model using the OpenAI SDK or HTTP, set the "type" parameter in the user message to "video_url" . 
+ Python import os
+from openai import OpenAI
+
+client = OpenAI(
+ # API keys vary by region. To get an API key, see https://www.alibabacloud.com/help/model-studio/get-api-key
+ # If you have not configured the environment variable, replace the following line with your Model Studio API key: api_key="sk-xxx",
+ api_key=os.getenv("DASHSCOPE_API_KEY"),
+ # The following URL is for the Singapore region. When you make a call, replace {WorkspaceId} with your workspace ID. URLs vary by region.
+ base_url="https://{WorkspaceId}.ap-southeast-1.maas.aliyuncs.com/compatible-mode/v1",
+)
+completion = client.chat.completions.create(
+ model="qwen3.8-max",
+ messages=[
+ {
+ "role": "user",
+ "content": [
+ # When you pass a video file directly, set the value of type to video_url.
+ {
+ "type": "video_url",
+ "video_url": {
+ "url": "https://help-static-aliyun-doc.aliyuncs.com/file-manage-files/zh-CN/20241115/cqqkru/1.mp4"
+ },
+ "fps": 2
+ },
+ {
+ "type": "text",
+ "text": "What is the content of this video?"
+ }
+ ]
+ }
+ ]
+)
+
+print(completion.choices[0].message.content)
+ Node.js import OpenAI from "openai";
+
+const openai = new OpenAI(
+ {
+ // API keys vary by region. To get an API key, see https://www.alibabacloud.com/help/model-studio/get-api-key
+ // If you have not configured the environment variable, replace the following line with your Model Studio API key: apiKey: "sk-xxx"
+ apiKey: process.env.DASHSCOPE_API_KEY,
+ // The following URL is for the Singapore region. When you make a call, replace {WorkspaceId} with your workspace ID. URLs vary by region.
+ baseURL: "https://{WorkspaceId}.ap-southeast-1.maas.aliyuncs.com/compatible-mode/v1"
+ }
+);
+
+async function main() {
+ const response = await openai.chat.completions.create({
+ model: "qwen3.8-max",
+ messages: [
+ {
+ role: "user",
+ content: [
+ // When you pass a video file directly, set the value of type to video_url.
+ {
+ type: "video_url",
+ video_url: {
+ "url": "https://help-static-aliyun-doc.aliyuncs.com/file-manage-files/zh-CN/20241115/cqqkru/1.mp4"
+ },
+ "fps": 2
+ },
+ {
+ type: "text",
+ text: "What is the content of this video?"
+ }
+ ]
+ }
+ ]
+ });
+
+ console.log(response.choices[0].message.content);
+}
+
+main();
+ curl # ======= Important =======
+# API keys vary by region. To get an API key, see https://www.alibabacloud.com/help/model-studio/get-api-key
+# The following URL is for the Singapore region. When you make a call, replace {WorkspaceId} with your workspace ID. URLs vary by region.
+# === Delete this comment before execution. ===
+
+curl -X POST https://{WorkspaceId}.ap-southeast-1.maas.aliyuncs.com/compatible-mode/v1/chat/completions \
+ -H "Authorization: Bearer $DASHSCOPE_API_KEY" \
+ -H 'Content-Type: application/json' \
+ -d '{
+ "model": "qwen3.8-max",
+ "messages": [
+ {
+ "role": "user",
+ "content": [
+ {
+ "type": "video_url",
+ "video_url": {
+ "url": "https://help-static-aliyun-doc.aliyuncs.com/file-manage-files/zh-CN/20241115/cqqkru/1.mp4"
+ },
+ "fps":2
+ },
+ {
+ "type": "text",
+ "text": "What is the content of this video?"
+ }
+ ]
+ }
+ ]
+ }'
+ DashScope Python import dashscope
+import os
+
+# The following URL is for the Singapore region. When you make a call, replace {WorkspaceId} with your workspace ID. URLs vary by region.
+dashscope.base_http_api_url = 'https://{WorkspaceId}.ap-southeast-1.maas.aliyuncs.com/api/v1'
+messages = [
+ {"role": "user",
+ "content": [
+ # The fps parameter controls the video frame extraction frequency. It indicates that one frame is extracted every 1/fps seconds. For complete usage, see: https://www.alibabacloud.com/help/model-studio/use-qwen-by-calling-api?#2ed5ee7377fum
+ {"video": "https://help-static-aliyun-doc.aliyuncs.com/file-manage-files/zh-CN/20241115/cqqkru/1.mp4","fps":2},
+ {"text": "What is the content of this video?"}
+ ]
+ }
+]
+
+response = dashscope.MultiModalConversation.call(
+ # API keys vary by region. To get an API key, see https://www.alibabacloud.com/help/model-studio/get-api-key
+ # If you have not configured the environment variable, replace the following line with your Model Studio API key: api_key ="sk-xxx"
+ api_key=os.getenv('DASHSCOPE_API_KEY'),
+ model='qwen3.7-plus',
+ messages=messages
+)
+
+print(response.output.choices[0].message.content[0]["text"])
+ Java import java.util.Arrays;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.Map;
+
+import com.alibaba.dashscope.aigc.multimodalconversation.MultiModalConversation;
+import com.alibaba.dashscope.aigc.multimodalconversation.MultiModalConversationParam;
+import com.alibaba.dashscope.aigc.multimodalconversation.MultiModalConversationResult;
+import com.alibaba.dashscope.common.MultiModalMessage;
+import com.alibaba.dashscope.common.Role;
+import com.alibaba.dashscope.exception.ApiException;
+import com.alibaba.dashscope.exception.NoApiKeyException;
+import com.alibaba.dashscope.exception.UploadFileException;
+import com.alibaba.dashscope.utils.Constants;
+
+public class Main {
+ static {
+ // The following URL is for the Singapore region. When you make a call, replace {WorkspaceId} with your workspace ID. URLs vary by region.
+ Constants.baseHttpApiUrl="https://{WorkspaceId}.ap-southeast-1.maas.aliyuncs.com/api/v1";
+ }
+ public static void simpleMultiModalConversationCall()
+ throws ApiException, NoApiKeyException, UploadFileException {
+ MultiModalConversation conv = new MultiModalConversation();
+ // The fps parameter controls the video frame extraction frequency. It indicates that one frame is extracted every 1/fps seconds. For complete usage, see: https://www.alibabacloud.com/help/model-studio/use-qwen-by-calling-api?#2ed5ee7377fum
+ Map<String, Object> params = new HashMap<>();
+ params.put("video", "https://help-static-aliyun-doc.aliyuncs.com/file-manage-files/zh-CN/20241115/cqqkru/1.mp4");
+ params.put("fps", 2);
+ MultiModalMessage userMessage = MultiModalMessage.builder().role(Role.USER.getValue())
+ .content(Arrays.asList(
+ params,
+ Collections.singletonMap("text", "What is the content of this video?"))).build();
+ MultiModalConversationParam param = MultiModalConversationParam.builder()
+ // If you use a model in the China (Beijing) region, you must use an API key for that region. To get an API key, see: https://www.alibabacloud.com/help/model-studio/get-api-key
+ // If you have not configured the environment variable, replace the following line with your Model Studio API key: .apiKey("sk-xxx")
+ .apiKey(System.getenv("DASHSCOPE_API_KEY"))
+ .model("qwen3.8-max")
+ .messages(Arrays.asList(userMessage))
+ .build();
+ MultiModalConversationResult result = conv.call(param);
+ System.out.println(result.getOutput().getChoices().get(0).getMessage().getContent().get(0).get("text"));
+ }
+ public static void main(String[] args) {
+ try {
+ simpleMultiModalConversationCall();
+ } catch (ApiException | NoApiKeyException | UploadFileException e) {
+ System.out.println(e.getMessage());
+ }
+ System.exit(0);
+ }
+}
+ curl # ======= Important =======
+# The following URL is for the Singapore region. When you make a call, replace {WorkspaceId} with your workspace ID. URLs vary by region.
+# API keys vary by region. To get an API key, see https://www.alibabacloud.com/help/model-studio/get-api-key
+# === Delete this comment before execution. ===
+
+curl -X POST https://{WorkspaceId}.ap-southeast-1.maas.aliyuncs.com/api/v1/services/aigc/multimodal-generation/generation \
+-H "Authorization: Bearer $DASHSCOPE_API_KEY" \
+-H 'Content-Type: application/json' \
+-d '{
+ "model": "qwen3.8-max",
+ "input":{
+ "messages":[
+ {"role": "user","content": [{"video": "https://help-static-aliyun-doc.aliyuncs.com/file-manage-files/zh-CN/20241115/cqqkru/1.mp4","fps":2},
+ {"text": "What is the content of this video?"}]}]}
+}'
+ Image list When you provide a video as a list of pre-extracted frames, use the fps parameter to specify the time interval between frames. This helps the model better understand the sequence, duration, and dynamic changes of events. The fps parameter indicates that frames were extracted from the original video every 1/fps seconds. This parameter is supported by the Qwen3.6, Qwen3-VL , and Qwen2.5-VL models. OpenAI compatible 
+ When you use the OpenAI SDK or HTTP to input a video as a list of images to the visual understanding model, set the "type" parameter in the user message to "video" . 
+ Python import os
+from openai import OpenAI
+
+client = OpenAI(
+ # API keys vary by region. To obtain an API key, see https://www.alibabacloud.com/help/model-studio/get-api-key
+ # If you have not configured the environment variable, replace the following line with your Model Studio API key: api_key="sk-xxx",
+ api_key=os.getenv("DASHSCOPE_API_KEY"),
+ # The following URL is for the Singapore region. When you call the API, replace {WorkspaceId} with your actual workspace ID. URLs vary by region.
+ base_url="https://{WorkspaceId}.ap-southeast-1.maas.aliyuncs.com/compatible-mode/v1",
+)
+
+completion = client.chat.completions.create(
+ model="qwen3.8-max", # This example uses qwen3.7-plus. You can replace it with another model name as needed. For a list of models, see https://www.alibabacloud.com/help/model-studio/models
+ messages=[{"role": "user","content": [
+ # When you input a list of images, the "type" parameter in the user message is "video"
+ {"type": "video","video": [
+ "https://help-static-aliyun-doc.aliyuncs.com/file-manage-files/zh-CN/20241108/xzsgiz/football1.jpg",
+ "https://help-static-aliyun-doc.aliyuncs.com/file-manage-files/zh-CN/20241108/tdescd/football2.jpg",
+ "https://help-static-aliyun-doc.aliyuncs.com/file-manage-files/zh-CN/20241108/zefdja/football3.jpg",
+ "https://help-static-aliyun-doc.aliyuncs.com/file-manage-files/zh-CN/20241108/aedbqh/football4.jpg"],
+ "fps":2},
+ {"type": "text","text": "Describe the specific process in this video"},
+ ]}]
+)
+
+print(completion.choices[0].message.content)
+ Node.js // Make sure you have specified "type": "module" in your package.json file.
+import OpenAI from "openai";
+
+const openai = new OpenAI({
+ // API keys vary by region. To obtain an API key, see https://www.alibabacloud.com/help/model-studio/get-api-key
+ // If you have not configured the environment variable, replace the following line with your Model Studio API key: apiKey: "sk-xxx",
+ apiKey: process.env.DASHSCOPE_API_KEY,
+ // The following URL is for the Singapore region. When you call the API, replace {WorkspaceId} with your actual workspace ID. URLs vary by region.
+ baseURL: "https://{WorkspaceId}.ap-southeast-1.maas.aliyuncs.com/compatible-mode/v1"
+});
+
+async function main() {
+ const response = await openai.chat.completions.create({
+ model: "qwen3.8-max", // This example uses qwen3.7-plus. You can replace it with another model name as needed. For a list of models, see https://www.alibabacloud.com/help/model-studio/models
+ messages: [{
+ role: "user",
+ content: [
+ {
+ // When you input a list of images, the "type" parameter in the user message is "video"
+ type: "video",
+ video: [
+ "https://help-static-aliyun-doc.aliyuncs.com/file-manage-files/zh-CN/20241108/xzsgiz/football1.jpg",
+ "https://help-static-aliyun-doc.aliyuncs.com/file-manage-files/zh-CN/20241108/tdescd/football2.jpg",
+ "https://help-static-aliyun-doc.aliyuncs.com/file-manage-files/zh-CN/20241108/zefdja/football3.jpg",
+ "https://help-static-aliyun-doc.aliyuncs.com/file-manage-files/zh-CN/20241108/aedbqh/football4.jpg"],
+ "fps": 2
+ },
+ {
+ type: "text",
+ text: "Describe the specific process in this video"
+ }
+ ]
+ }]
+ });
+ console.log(response.choices[0].message.content);
+}
+
+main();
+ curl # ======= Important =======
+# API keys vary by region. To obtain an API key, see https://www.alibabacloud.com/help/model-studio/get-api-key
+# The following URL is for the Singapore region. When you call the API, replace {WorkspaceId} with your actual workspace ID. URLs vary by region.
+# === Delete this comment before execution ===
+
+curl -X POST https://{WorkspaceId}.ap-southeast-1.maas.aliyuncs.com/compatible-mode/v1/chat/completions \
+-H "Authorization: Bearer $DASHSCOPE_API_KEY" \
+-H 'Content-Type: application/json' \
+-d '{
+ "model": "qwen3.8-max",
+ "messages": [{"role": "user","content": [{"type": "video","video": [
+ "https://help-static-aliyun-doc.aliyuncs.com/file-manage-files/zh-CN/20241108/xzsgiz/football1.jpg",
+ "https://help-static-aliyun-doc.aliyuncs.com/file-manage-files/zh-CN/20241108/tdescd/football2.jpg",
+ "https://help-static-aliyun-doc.aliyuncs.com/file-manage-files/zh-CN/20241108/zefdja/football3.jpg",
+ "https://help-static-aliyun-doc.aliyuncs.com/file-manage-files/zh-CN/20241108/aedbqh/football4.jpg"],
+ "fps":2},
+ {"type": "text","text": "Describe the specific process in this video"}]}]
+}'
+ DashScope Python import os
+import dashscope
+
+# The following URL is for the Singapore region. When you call the API, replace {WorkspaceId} with your actual workspace ID. URLs vary by region.
+dashscope.base_http_api_url = 'https://{WorkspaceId}.ap-southeast-1.maas.aliyuncs.com/api/v1'
+messages = [{"role": "user",
+ "content": [
+ # When you input a list of images, the fps parameter applies to the Qwen3.6, Qwen3-VL, and Qwen2.5-VL series models.
+ {"video":["https://help-static-aliyun-doc.aliyuncs.com/file-manage-files/zh-CN/20241108/xzsgiz/football1.jpg",
+ "https://help-static-aliyun-doc.aliyuncs.com/file-manage-files/zh-CN/20241108/tdescd/football2.jpg",
+ "https://help-static-aliyun-doc.aliyuncs.com/file-manage-files/zh-CN/20241108/zefdja/football3.jpg",
+ "https://help-static-aliyun-doc.aliyuncs.com/file-manage-files/zh-CN/20241108/aedbqh/football4.jpg"],
+ "fps":2},
+ {"text": "Describe the specific process in this video"}]}]
+response = dashscope.MultiModalConversation.call(
+ # API keys vary by region. To obtain an API key, see https://www.alibabacloud.com/help/model-studio/get-api-key
+ # If you have not configured the environment variable, replace the following line with your Model Studio API key: api_key="sk-xxx",
+ api_key=os.getenv("DASHSCOPE_API_KEY"),
+ model='qwen3.7-plus', # This example uses qwen3.7-plus. You can replace it with another model name as needed. For a list of models, see https://www.alibabacloud.com/help/model-studio/getting-started/models
+ messages=messages
+)
+print(response.output.choices[0].message.content[0]["text"])
+ Java // The DashScope SDK version must be 2.21.10 or later.
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.Map;
+
+import com.alibaba.dashscope.aigc.multimodalconversation.MultiModalConversation;
+import com.alibaba.dashscope.aigc.multimodalconversation.MultiModalConversationParam;
+import com.alibaba.dashscope.aigc.multimodalconversation.MultiModalConversationResult;
+import com.alibaba.dashscope.common.MultiModalMessage;
+import com.alibaba.dashscope.common.Role;
+import com.alibaba.dashscope.exception.ApiException;
+import com.alibaba.dashscope.exception.NoApiKeyException;
+import com.alibaba.dashscope.exception.UploadFileException;
+import com.alibaba.dashscope.utils.Constants;
+
+public class Main {
+ static {
+ // The following URL is for the Singapore region. When you call the API, replace {WorkspaceId} with your actual workspace ID. URLs vary by region.
+ Constants.baseHttpApiUrl="https://{WorkspaceId}.ap-southeast-1.maas.aliyuncs.com/api/v1";
+ }
+ private static final String MODEL_NAME = "qwen3.8-max"; // This example uses qwen3.7-plus. You can replace it with another model name as needed. For a list of models, see https://www.alibabacloud.com/help/model-studio/getting-started/models
+ public static void videoImageListSample() throws ApiException, NoApiKeyException, UploadFileException {
+ MultiModalConversation conv = new MultiModalConversation();
+ // When you input a list of images, the fps parameter applies to the Qwen3.6, Qwen3-VL, and Qwen2.5-VL series models.
+ Map<String, Object> params = new HashMap<>();
+ params.put("video", Arrays.asList("https://help-static-aliyun-doc.aliyuncs.com/file-manage-files/zh-CN/20241108/xzsgiz/football1.jpg",
+ "https://help-static-aliyun-doc.aliyuncs.com/file-manage-files/zh-CN/20241108/tdescd/football2.jpg",
+ "https://help-static-aliyun-doc.aliyuncs.com/file-manage-files/zh-CN/20241108/zefdja/football3.jpg",
+ "https://help-static-aliyun-doc.aliyuncs.com/file-manage-files/zh-CN/20241108/aedbqh/football4.jpg"));
+ params.put("fps", 2);
+ MultiModalMessage userMessage = MultiModalMessage.builder()
+ .role(Role.USER.getValue())
+ .content(Arrays.asList(
+ params,
+ Collections.singletonMap("text", "Describe the specific process in this video")))
+ .build();
+ MultiModalConversationParam param = MultiModalConversationParam.builder()
+ // API keys vary by region. To obtain an API key, see https://www.alibabacloud.com/help/model-studio/get-api-key
+ // If you have not configured the environment variable, replace the following line with your Model Studio API key: .apiKey("sk-xxx")
+ .apiKey(System.getenv("DASHSCOPE_API_KEY"))
+ .model(MODEL_NAME)
+ .messages(Arrays.asList(userMessage)).build();
+ MultiModalConversationResult result = conv.call(param);
+ System.out.print(result.getOutput().getChoices().get(0).getMessage().getContent().get(0).get("text"));
+ }
+ public static void main(String[] args) {
+ try {
+ videoImageListSample();
+ } catch (ApiException | NoApiKeyException | UploadFileException e) {
+ System.out.println(e.getMessage());
+ }
+ System.exit(0);
+ }
+}
+ curl # ======= Important =======
+# The following URL is for the Singapore region. When you call the API, replace {WorkspaceId} with your actual workspace ID. URLs vary by region.
+# API keys vary by region. To obtain an API key, see https://www.alibabacloud.com/help/model-studio/get-api-key
+# === Delete this comment before execution ===
+
+curl -X POST https://{WorkspaceId}.ap-southeast-1.maas.aliyuncs.com/api/v1/services/aigc/multimodal-generation/generation \
+-H "Authorization: Bearer $DASHSCOPE_API_KEY" \
+-H 'Content-Type: application/json' \
+-d '{
+ "model": "qwen3.8-max",
+ "input": {
+ "messages": [
+ {
+ "role": "user",
+ "content": [
+ {
+ "video": [
+ "https://help-static-aliyun-doc.aliyuncs.com/file-manage-files/zh-CN/20241108/xzsgiz/football1.jpg",
+ "https://help-static-aliyun-doc.aliyuncs.com/file-manage-files/zh-CN/20241108/tdescd/football2.jpg",
+ "https://help-static-aliyun-doc.aliyuncs.com/file-manage-files/zh-CN/20241108/zefdja/football3.jpg",
+ "https://help-static-aliyun-doc.aliyuncs.com/file-manage-files/zh-CN/20241108/aedbqh/football4.jpg"
+ ],
+ "fps":2
+
+ },
+ {
+ "text": "Describe the specific process in this video"
+ }
+ ]
+ }
+ ]
+ }
+}'
+ 
+ Pass a local file (Base64 encoding or file path) 
+ Visual understanding models support two methods for uploading local files: Base64 encoding and direct file path upload. You can choose an upload method based on the file size and SDK type. For recommendations, see How to choose a file upload method . Both methods must meet the file requirements described in Image limitations . 
+ Upload using Base64 encoding Convert the file to a Base64-encoded string and then pass it to the model. This method is applicable to OpenAI and DashScope SDKs, and HTTP requests. Steps to pass a Base64-encoded string (image example) 
+ 
+ Encode the file: Convert the local image to a Base64 encoding. 
+ Sample code to convert an image to Base64 encoding # Encoding function: Converts a local file to a Base64-encoded string
+import base64
+def encode_image(image_path):
+ with open(image_path, "rb") as image_file:
+ return base64.b64encode(image_file.read()).decode("utf-8")
+
+# Replace xxx/eagle.png with the absolute path of your local image
+base64_image = encode_image("xxx/eagle.png")
+ 
+ 
+ 
+ Build a Data URL in the following format: data:[MIME_type];base64,{base64_image} . 
+ 
+ Replace MIME_type with the actual media type. Ensure that it matches the MIME Type value in the Supported image formats table, such as image/jpeg or image/png . 
+ base64_image is the Base64 string generated in the previous step. 
+ 
+ 
+ 
+ Call the model: Pass the Data URL using the image or image_url parameter. 
+ 
+ Upload using a file path Directly pass the local file path to the model. This method is supported only by the DashScope Python and Java SDKs. It is not supported for DashScope HTTP requests or the OpenAI compatible mode. Refer to the following table to specify the file path based on your programming language and operating system. Specify a file path (image example) System SDK File path to pass Example Linux or macOS system Python SDK file://{absolute path of the file} file:///home/images/test.png Java SDK Windows system Python SDK file://{absolute path of the file} file://D:/images/test.png Java SDK file:///{absolute path of the file} file:///D:/images/test.png 
+ Image Pass using a file path Python import os
+import dashscope
+
+# The following URL is for the Singapore region. When you call the API, replace {WorkspaceId} with your actual workspace ID. The URL varies by region.
+dashscope.base_http_api_url = 'https://{WorkspaceId}.ap-southeast-1.maas.aliyuncs.com/api/v1'
+
+# Replace xxx/eagle.png with the absolute path of your local image
+local_path = "xxx/eagle.png"
+image_path = f"file://{local_path}"
+messages = [
+ {'role':'user',
+ 'content': [{'image': image_path},
+ {'text': 'What scene is depicted in the image?'}]}]
+response = dashscope.MultiModalConversation.call(
+ # API keys vary by region. To obtain an API key, see https://www.alibabacloud.com/help/model-studio/get-api-key
+ # If you have not configured the environment variable, replace the following line with your Model Studio API key: api_key="sk-xxx"
+ api_key=os.getenv('DASHSCOPE_API_KEY'),
+ model='qwen3.7-plus', # This example uses qwen3.7-plus. You can change the model name as needed. For a list of models, see https://www.alibabacloud.com/help/model-studio/getting-started/models
+ messages=messages)
+print(response.output.choices[0].message.content[0]["text"])
+ Java import java.util.Arrays;
+import java.util.Collections;
+import java.util.HashMap;
+import com.alibaba.dashscope.aigc.multimodalconversation.MultiModalConversation;
+import com.alibaba.dashscope.aigc.multimodalconversation.MultiModalConversationParam;
+import com.alibaba.dashscope.aigc.multimodalconversation.MultiModalConversationResult;
+import com.alibaba.dashscope.common.MultiModalMessage;
+import com.alibaba.dashscope.common.Role;
+import com.alibaba.dashscope.exception.ApiException;
+import com.alibaba.dashscope.exception.NoApiKeyException;
+import com.alibaba.dashscope.exception.UploadFileException;
+import com.alibaba.dashscope.utils.Constants;
+
+public class Main {
+
+ static {
+ // The following URL is for the Singapore region. When you call the API, replace {WorkspaceId} with your actual workspace ID. The URL varies by region.
+ Constants.baseHttpApiUrl="https://{WorkspaceId}.ap-southeast-1.maas.aliyuncs.com/api/v1";
+ }
+
+ public static void callWithLocalFile(String localPath)
+ throws ApiException, NoApiKeyException, UploadFileException {
+ String filePath = "file://"+localPath;
+ MultiModalConversation conv = new MultiModalConversation();
+ MultiModalMessage userMessage = MultiModalMessage.builder().role(Role.USER.getValue())
+ .content(Arrays.asList(new HashMap<String, Object>(){{put("image", filePath);}},
+ new HashMap<String, Object>(){{put("text", "What scene is depicted in the image?");}})).build();
+ MultiModalConversationParam param = MultiModalConversationParam.builder()
+ // API keys vary by region. To obtain an API key, see https://www.alibabacloud.com/help/model-studio/get-api-key
+ // If you have not configured the environment variable, replace the following line with your Model Studio API key: .apiKey("sk-xxx")
+ .apiKey(System.getenv("DASHSCOPE_API_KEY"))
+ .model("qwen3.8-max") // This example uses qwen3.7-plus. You can change the model name as needed. For a list of models, see https://www.alibabacloud.com/help/model-studio/getting-started/models
+ .messages(Arrays.asList(userMessage))
+ .build();
+ MultiModalConversationResult result = conv.call(param);
+ System.out.println(result.getOutput().getChoices().get(0).getMessage().getContent().get(0).get("text"));}
+
+ public static void main(String[] args) {
+ try {
+ // Replace xxx/eagle.png with the absolute path of your local image
+ callWithLocalFile("xxx/eagle.png");
+ } catch (ApiException | NoApiKeyException | UploadFileException e) {
+ System.out.println(e.getMessage());
+ }
+ System.exit(0);
+ }
+}
+ Base64-encoded input OpenAI compatible Python from openai import OpenAI
+import os
+import base64
+
+# Encoding function: Converts a local file to a Base64-encoded string
+def encode_image(image_path):
+ with open(image_path, "rb") as image_file:
+ return base64.b64encode(image_file.read()).decode("utf-8")
+
+# Replace xxxx/eagle.png with the absolute path of your local image
+base64_image = encode_image("xxx/eagle.png")
+client = OpenAI(
+ # API keys vary by region. To obtain an API key, see https://www.alibabacloud.com/help/model-studio/get-api-key
+ # If you have not configured the environment variable, replace the following line with your Model Studio API key: api_key="sk-xxx"
+ api_key=os.getenv('DASHSCOPE_API_KEY'),
+ # The following URL is for the Singapore region. When you call the API, replace {WorkspaceId} with your actual workspace ID. The URL varies by region.
+ base_url="https://{WorkspaceId}.ap-southeast-1.maas.aliyuncs.com/compatible-mode/v1",
+)
+completion = client.chat.completions.create(
+ model="qwen3.8-max", # This example uses qwen3.7-plus. You can change the model name as needed. For a list of models, see https://www.alibabacloud.com/help/model-studio/getting-started/models
+ messages=[
+ {
+ "role": "user",
+ "content": [
+ {
+ "type": "image_url",
+ # When passing Base64 image data, note that the image format (image/{format}) must match the Content Type in the list of supported images. "f" is a method for string formatting.
+ # PNG image: f"data:image/png;base64,{base64_image}"
+ # JPEG image: f"data:image/jpeg;base64,{base64_image}"
+ # WEBP image: f"data:image/webp;base64,{base64_image}"
+ "image_url": {"url": f"data:image/png;base64,{base64_image}"},
+ },
+ {"type": "text", "text": "What scene is depicted in the image?"},
+ ],
+ }
+ ],
+)
+print(completion.choices[0].message.content)
+ Node.js import OpenAI from "openai";
+import { readFileSync } from 'fs';
+
+const openai = new OpenAI(
+ {
+ // API keys vary by region. To obtain an API key, see https://www.alibabacloud.com/help/model-studio/get-api-key
+ // If you have not configured the environment variable, replace the following line with your Model Studio API key: apiKey: "sk-xxx"
+ apiKey: process.env.DASHSCOPE_API_KEY,
+ // The following URL is for the Singapore region. When you call the API, replace {WorkspaceId} with your actual workspace ID. The URL varies by region.
+ baseURL: "https://{WorkspaceId}.ap-southeast-1.maas.aliyuncs.com/compatible-mode/v1"
+ }
+);
+
+const encodeImage = (imagePath) => {
+ const imageFile = readFileSync(imagePath);
+ return imageFile.toString('base64');
+ };
+// Replace xxx/eagle.png with the absolute path of your local image
+const base64Image = encodeImage("xxx/eagle.png")
+async function main() {
+ const completion = await openai.chat.completions.create({
+ model: "qwen3.8-max", // This example uses qwen3.7-plus. You can change the model name as needed. For a list of models, see https://www.alibabacloud.com/help/model-studio/getting-started/models
+ messages: [
+ {"role": "user",
+ "content": [{"type": "image_url",
+ // Note: When passing Base64 data, the image format (image/{format}) must match the Content Type in the list of supported images.
+ // PNG image: data:image/png;base64,${base64Image}
+ // JPEG image: data:image/jpeg;base64,${base64Image}
+ // WEBP image: data:image/webp;base64,${base64Image}
+ "image_url": {"url": `data:image/png;base64,${base64Image}`},},
+ {"type": "text", "text": "What scene is depicted in the image?"}]}]
+ });
+ console.log(completion.choices[0].message.content);
+}
+
+main();
+ curl 
+ For information about how to convert a file to a Base64-encoded string, see the sample code . 
+ For demonstration purposes, the Base64-encoded string "data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wBDAA..." in the code is truncated. In actual use, make sure to pass the complete encoded string. 
+ # ======= Important =======
+# API keys vary by region. To obtain an API key, see https://www.alibabacloud.com/help/model-studio/get-api-key
+# The following URL is for the Singapore region. When you call the API, replace {WorkspaceId} with your actual workspace ID. The URL varies by region.
+# === Delete this comment before execution ===
+
+curl --location 'https://{WorkspaceId}.ap-southeast-1.maas.aliyuncs.com/compatible-mode/v1/chat/completions' \
+--header "Authorization: Bearer $DASHSCOPE_API_KEY" \
+--header 'Content-Type: application/json' \
+--data '{
+ "model": "qwen3.8-max",
+ "messages": [
+ {
+ "role": "user",
+ "content": [
+ {"type": "image_url", "image_url": {"url": "data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wBDAA"}},
+ {"type": "text", "text": "What scene is depicted in the image?"}
+ ]
+ }]
+}'
+ DashScope Python import base64
+import os
+import dashscope
+
+# The following URL is for the Singapore region. When you call the API, replace {WorkspaceId} with your actual workspace ID. The URL varies by region.
+dashscope.base_http_api_url = 'https://{WorkspaceId}.ap-southeast-1.maas.aliyuncs.com/api/v1'
+
+# Encoding function: Converts a local file to a Base64-encoded string
+def encode_image(image_path):
+ with open(image_path, "rb") as image_file:
+ return base64.b64encode(image_file.read()).decode("utf-8")
+
+# Replace xxxx/eagle.png with the absolute path of your local image
+base64_image = encode_image("xxxx/eagle.png")
+
+messages = [
+ {
+ "role": "user",
+ "content": [
+ # Note: When passing Base64 data, the image format (image/{format}) must match the Content Type in the list of supported images. "f" is a method for string formatting.
+ # PNG image: f"data:image/png;base64,{base64_image}"
+ # JPEG image: f"data:image/jpeg;base64,{base64_image}"
+ # WEBP image: f"data:image/webp;base64,{base64_image}"
+ {"image": f"data:image/png;base64,{base64_image}"},
+ {"text": "What scene is depicted in the image?"},
+ ],
+ },
+]
+
+response = dashscope.MultiModalConversation.call(
+ # API keys vary by region. To obtain an API key, see https://www.alibabacloud.com/help/model-studio/get-api-key
+ # If you have not configured the environment variable, replace the following line with your Model Studio API key: api_key="sk-xxx"
+ api_key=os.getenv("DASHSCOPE_API_KEY"),
+ model="qwen3.8-max", # This example uses qwen3.7-plus. You can change the model name as needed. For a list of models, see https://www.alibabacloud.com/help/model-studio/getting-started/models
+ messages=messages,
+)
+print(response.output.choices[0].message.content[0]["text"])
+ Java import java.io.IOException;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.Base64;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+
+import com.alibaba.dashscope.aigc.multimodalconversation.*;
+import com.alibaba.dashscope.common.MultiModalMessage;
+import com.alibaba.dashscope.common.Role;
+import com.alibaba.dashscope.exception.ApiException;
+import com.alibaba.dashscope.exception.NoApiKeyException;
+import com.alibaba.dashscope.exception.UploadFileException;
+import com.alibaba.dashscope.utils.Constants;
+
+public class Main {
+
+ static {
+ // The following URL is for the Singapore region. When you call the API, replace {WorkspaceId} with your actual workspace ID. The URL varies by region.
+ Constants.baseHttpApiUrl="https://{WorkspaceId}.ap-southeast-1.maas.aliyuncs.com/api/v1";
+ }
+
+ private static String encodeImageToBase64(String imagePath) throws IOException {
+ Path path = Paths.get(imagePath);
+ byte[] imageBytes = Files.readAllBytes(path);
+ return Base64.getEncoder().encodeToString(imageBytes);
+ }
+
+ public static void callWithLocalFile(String localPath) throws ApiException, NoApiKeyException, UploadFileException, IOException {
+
+ String base64Image = encodeImageToBase64(localPath); // Base64 encoding
+
+ MultiModalConversation conv = new MultiModalConversation();
+ MultiModalMessage userMessage = MultiModalMessage.builder().role(Role.USER.getValue())
+ .content(Arrays.asList(
+ new HashMap<String, Object>() {{ put("image", "data:image/png;base64," + base64Image); }},
+ new HashMap<String, Object>() {{ put("text", "What scene is depicted in the image?"); }}
+ )).build();
+
+ MultiModalConversationParam param = MultiModalConversationParam.builder()
+ // API keys vary by region. To obtain an API key, see https://www.alibabacloud.com/help/model-studio/get-api-key
+ .apiKey(System.getenv("DASHSCOPE_API_KEY"))
+ .model("qwen3.8-max")
+ .messages(Arrays.asList(userMessage))
+ .build();
+
+ MultiModalConversationResult result = conv.call(param);
+ System.out.println(result.getOutput().getChoices().get(0).getMessage().getContent().get(0).get("text"));
+ }
+
+ public static void main(String[] args) {
+ try {
+ // Replace xxx/eagle.png with the absolute path of your local image
+ callWithLocalFile("xxx/eagle.png");
+ } catch (ApiException | NoApiKeyException | UploadFileException | IOException e) {
+ System.out.println(e.getMessage());
+ }
+ System.exit(0);
+ }
+}
+ curl 
+ For information about how to convert a file to a Base64-encoded string, see the sample code . 
+ For demonstration purposes, the Base64-encoded string "data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wBDAA..." in the code is truncated. In actual use, make sure to pass the complete encoded string. 
+ # ======= Important =======
+# The following URL is for the Singapore region. When you call the API, replace {WorkspaceId} with your actual workspace ID. The URL varies by region.
+# API keys vary by region. To obtain an API key, see https://www.alibabacloud.com/help/model-studio/get-api-key
+# === Delete this comment before execution ===
+
+curl -X POST https://{WorkspaceId}.ap-southeast-1.maas.aliyuncs.com/api/v1/services/aigc/multimodal-generation/generation \
+-H "Authorization: Bearer $DASHSCOPE_API_KEY" \
+-H 'Content-Type: application/json' \
+-d '{
+ "model": "qwen3.8-max",
+ "input":{
+ "messages":[
+ {
+ "role": "user",
+ "content": [
+ {"image": "data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wBDAA..."},
+ {"text": "What scene is depicted in the image?"}
+ ]
+ }
+ ]
+ }
+}'
+ Video file This section uses a locally saved test.mp4 file as an example. Pass using a file path Python import os
+import dashscope
+
+# The following URL is for the Singapore region. When you call the API, replace {WorkspaceId} with your actual workspace ID. The URL varies by region.
+dashscope.base_http_api_url = 'https://{WorkspaceId}.ap-southeast-1.maas.aliyuncs.com/api/v1'
+
+# Replace xxxx/test.mp4 with the absolute path of your local video
+local_path = "xxx/test.mp4"
+video_path = f"file://{local_path}"
+messages = [
+ {'role':'user',
+ # The fps parameter controls the number of frames extracted from the video. It indicates that one frame is extracted every 1/fps seconds.
+ 'content': [{'video': video_path,"fps":2},
+ {'text': 'What scene does this video depict?'}]}]
+response = MultiModalConversation.call(
+ # API keys vary by region. To obtain an API key, see https://www.alibabacloud.com/help/model-studio/get-api-key
+ # If you have not configured the environment variable, replace the following line with your Model Studio API key: api_key="sk-xxx"
+ api_key=os.getenv('DASHSCOPE_API_KEY'),
+ model='qwen3.7-plus',
+ messages=messages)
+print(response.output.choices[0].message.content[0]["text"])
+ Java import java.util.Arrays;
+import java.util.Collections;
+import java.util.HashMap;
+import com.alibaba.dashscope.aigc.multimodalconversation.MultiModalConversation;
+import com.alibaba.dashscope.aigc.multimodalconversation.MultiModalConversationParam;
+import com.alibaba.dashscope.aigc.multimodalconversation.MultiModalConversationResult;
+import com.alibaba.dashscope.common.MultiModalMessage;
+import com.alibaba.dashscope.common.Role;
+import com.alibaba.dashscope.exception.ApiException;
+import com.alibaba.dashscope.exception.NoApiKeyException;
+import com.alibaba.dashscope.exception.UploadFileException;
+import com.alibaba.dashscope.utils.Constants;
+
+public class Main {
+
+ static {
+ // The following URL is for the Singapore region. When you call the API, replace {WorkspaceId} with your actual workspace ID. The URL varies by region.
+ Constants.baseHttpApiUrl="https://{WorkspaceId}.ap-southeast-1.maas.aliyuncs.com/api/v1";
+ }
+
+ public static void callWithLocalFile(String localPath)
+ throws ApiException, NoApiKeyException, UploadFileException {
+ String filePath = "file://"+localPath;
+ MultiModalConversation conv = new MultiModalConversation();
+ MultiModalMessage userMessage = MultiModalMessage.builder().role(Role.USER.getValue())
+ .content(Arrays.asList(new HashMap<String, Object>()
+ {{
+ put("video", filePath);// The fps parameter controls the number of frames extracted from the video. It indicates that one frame is extracted every 1/fps seconds.
+ put("fps", 2);
+ }},
+ new HashMap<String, Object>(){{put("text", "What scene does this video depict?");}})).build();
+ MultiModalConversationParam param = MultiModalConversationParam.builder()
+ // API keys vary by region. To obtain an API key, see https://www.alibabacloud.com/help/model-studio/get-api-key
+ // If you have not configured the environment variable, replace the following line with your Model Studio API key: .apiKey("sk-xxx")
+ .apiKey(System.getenv("DASHSCOPE_API_KEY"))
+ .model("qwen3.8-max")
+ .messages(Arrays.asList(userMessage))
+ .build();
+ MultiModalConversationResult result = conv.call(param);
+ System.out.println(result.getOutput().getChoices().get(0).getMessage().getContent().get(0).get("text"));}
+
+ public static void main(String[] args) {
+ try {
+ // Replace xxxx/test.mp4 with the absolute path of your local video
+ callWithLocalFile("xxx/test.mp4");
+ } catch (ApiException | NoApiKeyException | UploadFileException e) {
+ System.out.println(e.getMessage());
+ }
+ System.exit(0);
+ }
+}
+ Base64-encoded input OpenAI compatible Python from openai import OpenAI
+import os
+import base64
+
+# Encoding function: Converts a local file to a Base64-encoded string
+def encode_video(video_path):
+ with open(video_path, "rb") as video_file:
+ return base64.b64encode(video_file.read()).decode("utf-8")
+
+# Replace xxxx/test.mp4 with the absolute path of your local video
+base64_video = encode_video("xxx/test.mp4")
+client = OpenAI(
+ # API keys vary by region. To obtain an API key, see https://www.alibabacloud.com/help/model-studio/get-api-key
+ # If you have not configured the environment variable, replace the following line with your Model Studio API key: api_key="sk-xxx"
+ api_key=os.getenv('DASHSCOPE_API_KEY'),
+ # The following URL is for the Singapore region. When you call the API, replace {WorkspaceId} with your actual workspace ID. The URL varies by region.
+ base_url="https://{WorkspaceId}.ap-southeast-1.maas.aliyuncs.com/compatible-mode/v1",
+)
+completion = client.chat.completions.create(
+ model="qwen3.8-max",
+ messages=[
+ {
+ "role": "user",
+ "content": [
+ {
+ # When passing a video file directly, set the value of type to video_url
+ "type": "video_url",
+ "video_url": {"url": f"data:video/mp4;base64,{base64_video}"},
+ "fps":2
+ },
+ {"type": "text", "text": "What scene does this video depict?"},
+ ],
+ }
+ ],
+)
+print(completion.choices[0].message.content)
+ Node.js import OpenAI from "openai";
+import { readFileSync } from 'fs';
+
+const openai = new OpenAI(
+ {
+ // API keys vary by region. To obtain an API key, see https://www.alibabacloud.com/help/model-studio/get-api-key
+ // If you have not configured the environment variable, replace the following line with your Model Studio API key: apiKey: "sk-xxx"
+ apiKey: process.env.DASHSCOPE_API_KEY,
+ // The following URL is for the Singapore region. When you call the API, replace {WorkspaceId} with your actual workspace ID. The URL varies by region.
+ baseURL: "https://{WorkspaceId}.ap-southeast-1.maas.aliyuncs.com/compatible-mode/v1"
+ }
+);
+
+const encodeVideo = (videoPath) => {
+ const videoFile = readFileSync(videoPath);
+ return videoFile.toString('base64');
+ };
+// Replace xxxx/test.mp4 with the absolute path of your local video
+const base64Video = encodeVideo("xxx/test.mp4")
+async function main() {
+ const completion = await openai.chat.completions.create({
+ model: "qwen3.8-max",
+ messages: [
+ {"role": "user",
+ "content": [{
+ // When passing a video file directly, set the value of type to video_url
+ "type": "video_url",
+ "video_url": {"url": `data:video/mp4;base64,${base64Video}`},
+ "fps":2},
+ {"type": "text", "text": "What scene does this video depict?"}]}]
+ });
+ console.log(completion.choices[0].message.content);
+}
+
+main();
+ curl 
+ For information about how to convert a file to a Base64-encoded string, see the sample code . 
+ For demonstration purposes, the Base64-encoded string "data:video/mp4;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wBDAA..." in the code is truncated. In actual use, make sure to pass the complete encoded string. 
+ # ======= Important =======
+# API keys vary by region. To obtain an API key, see https://www.alibabacloud.com/help/model-studio/get-api-key
+# The following URL is for the Singapore region. When you call the API, replace {WorkspaceId} with your actual workspace ID. The URL varies by region.
+# === Delete this comment before execution ===
+
+curl --location 'https://{WorkspaceId}.ap-southeast-1.maas.aliyuncs.com/compatible-mode/v1/chat/completions' \
+--header "Authorization: Bearer $DASHSCOPE_API_KEY" \
+--header 'Content-Type: application/json' \
+--data '{
+ "model": "qwen3.8-max",
+ "messages": [
+ {
+ "role": "user",
+ "content": [
+ {"type": "video_url", "video_url": {"url": "data:video/mp4;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wBDAA..."},"fps":2},
+ {"type": "text", "text": "What scene is depicted in the image?"}
+ ]
+ }]
+}'
+ DashScope Python import base64
+import os
+import dashscope
+
+# The following URL is for the Singapore region. When you call the API, replace {WorkspaceId} with your actual workspace ID. The URL varies by region.
+dashscope.base_http_api_url = 'https://{WorkspaceId}.ap-southeast-1.maas.aliyuncs.com/api/v1'
+
+# Encoding function: Converts a local file to a Base64-encoded string
+def encode_video(video_path):
+ with open(video_path, "rb") as video_file:
+ return base64.b64encode(video_file.read()).decode("utf-8")
+
+# Replace xxxx/test.mp4 with the absolute path of your local video
+base64_video = encode_video("xxxx/test.mp4")
+
+messages = [{'role':'user',
+ # The fps parameter controls the number of frames extracted from the video. It indicates that one frame is extracted every 1/fps seconds.
+ 'content': [{'video': f"data:video/mp4;base64,{base64_video}","fps":2},
+ {'text': 'What scene does this video depict?'}]}]
+response = dashscope.MultiModalConversation.call(
+ # API keys vary by region. To obtain an API key, see https://www.alibabacloud.com/help/model-studio/get-api-key
+ # If you have not configured the environment variable, replace the following line with your Model Studio API key: api_key="sk-xxx"
+ api_key=os.getenv('DASHSCOPE_API_KEY'),
+ model='qwen3.7-plus',
+ messages=messages)
+
+print(response.output.choices[0].message.content[0]["text"])
+ Java import java.io.IOException;
+import java.util.*;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+
+import com.alibaba.dashscope.aigc.multimodalconversation.*;
+import com.alibaba.dashscope.common.MultiModalMessage;
+import com.alibaba.dashscope.common.Role;
+import com.alibaba.dashscope.exception.ApiException;
+import com.alibaba.dashscope.exception.NoApiKeyException;
+import com.alibaba.dashscope.exception.UploadFileException;
+import com.alibaba.dashscope.utils.Constants;
+
+public class Main {
+
+ static {
+ // The following URL is for the Singapore region. When you call the API, replace {WorkspaceId} with your actual workspace ID. The URL varies by region.
+ Constants.baseHttpApiUrl="https://{WorkspaceId}.ap-southeast-1.maas.aliyuncs.com/api/v1";
+ }
+
+ private static String encodeVideoToBase64(String videoPath) throws IOException {
+ Path path = Paths.get(videoPath);
+ byte[] videoBytes = Files.readAllBytes(path);
+ return Base64.getEncoder().encodeToString(videoBytes);
+ }
+
+ public static void callWithLocalFile(String localPath)
+ throws ApiException, NoApiKeyException, UploadFileException, IOException {
+
+ String base64Video = encodeVideoToBase64(localPath); // Base64 encoding
+
+ MultiModalConversation conv = new MultiModalConversation();
+ MultiModalMessage userMessage = MultiModalMessage.builder().role(Role.USER.getValue())
+ .content(Arrays.asList(new HashMap<String, Object>()
+ {{
+ put("video", "data:video/mp4;base64," + base64Video);// The fps parameter controls the number of frames extracted from the video. It indicates that one frame is extracted every 1/fps seconds.
+ put("fps", 2);
+ }},
+ new HashMap<String, Object>(){{put("text", "What scene does this video depict?");}})).build();
+
+ MultiModalConversationParam param = MultiModalConversationParam.builder()
+ // API keys vary by region. To obtain an API key, see https://www.alibabacloud.com/help/model-studio/get-api-key
+ // If you have not configured the environment variable, replace the following line with your Model Studio API key: .apiKey("sk-xxx")
+ .apiKey(System.getenv("DASHSCOPE_API_KEY"))
+ .model("qwen3.8-max")
+ .messages(Arrays.asList(userMessage))
+ .build();
+
+ MultiModalConversationResult result = conv.call(param);
+ System.out.println(result.getOutput().getChoices().get(0).getMessage().getContent().get(0).get("text"));
+ }
+
+ public static void main(String[] args) {
+ try {
+ // Replace xxx/test.mp4 with the absolute path of your local video
+ callWithLocalFile("xxx/test.mp4");
+ } catch (ApiException | NoApiKeyException | UploadFileException | IOException e) {
+ System.out.println(e.getMessage());
+ }
+ System.exit(0);
+ }
+}
+ curl 
+ For information about how to convert a file to a Base64-encoded string, see the sample code . 
+ For demonstration purposes, the Base64-encoded string "f"data:video/mp4;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wBDAA..." in the code is truncated. In actual use, make sure to pass the complete encoded string. 
+ # ======= Important =======
+# The following URL is for the Singapore region. When you call the API, replace {WorkspaceId} with your actual workspace ID. The URL varies by region.
+# API keys vary by region. To obtain an API key, see https://www.alibabacloud.com/help/model-studio/get-api-key
+# === Delete this comment before execution ===
+
+curl -X POST https://{WorkspaceId}.ap-southeast-1.maas.aliyuncs.com/api/v1/services/aigc/multimodal-generation/generation \
+-H "Authorization: Bearer $DASHSCOPE_API_KEY" \
+-H 'Content-Type: application/json' \
+-d '{
+ "model": "qwen3.8-max",
+ "input":{
+ "messages":[
+ {
+ "role": "user",
+ "content": [
+ {"video": "data:video/mp4;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wBDAA..."},
+ {"text": "What scene does this video depict? "}
+ ]
+ }
+ ]
+ }
+}'
+ Image list This section uses the locally saved files football1.jpg , football2.jpg , football3.jpg , and football4.jpg as examples. Passing file paths Python import os
+import dashscope
+
+# The following URL is for the Singapore region. When you call the API, replace {WorkspaceId} with your actual workspace ID. The URL varies by region.
+dashscope.base_http_api_url = 'https://{WorkspaceId}.ap-southeast-1.maas.aliyuncs.com/api/v1'
+
+local_path1 = "football1.jpg"
+local_path2 = "football2.jpg"
+local_path3 = "football3.jpg"
+local_path4 = "football4.jpg"
+
+image_path1 = f"file://{local_path1}"
+image_path2 = f"file://{local_path2}"
+image_path3 = f"file://{local_path3}"
+image_path4 = f"file://{local_path4}"
+
+messages = [{'role':'user',
+ # When you pass an image list, the fps parameter applies to the Qwen3.6, Qwen3-VL, and Qwen2.5-VL series models.
+ 'content': [{'video': [image_path1,image_path2,image_path3,image_path4],"fps":2},
+ {'text': 'What scene does this video depict?'}]}]
+response = MultiModalConversation.call(
+ # API keys vary by region. To obtain an API key, see https://www.alibabacloud.com/help/model-studio/get-api-key
+ # If you have not configured the environment variable, replace the following line with your Model Studio API key: api_key="sk-xxx"
+ api_key=os.getenv('DASHSCOPE_API_KEY'),
+ model='qwen3.7-plus', # This example uses qwen3.7-plus. You can change the model name as needed. For a list of models, see https://www.alibabacloud.com/help/model-studio/getting-started/models
+ messages=messages)
+
+print(response.output.choices[0].message.content[0]["text"])
+ Java // The DashScope SDK version must be 2.21.10 or later.
+import java.util.Arrays;
+import java.util.Map;
+import java.util.Collections;
+import java.util.HashMap;
+import com.alibaba.dashscope.aigc.multimodalconversation.MultiModalConversation;
+import com.alibaba.dashscope.aigc.multimodalconversation.MultiModalConversationParam;
+import com.alibaba.dashscope.aigc.multimodalconversation.MultiModalConversationResult;
+import com.alibaba.dashscope.common.MultiModalMessage;
+import com.alibaba.dashscope.common.Role;
+import com.alibaba.dashscope.exception.ApiException;
+import com.alibaba.dashscope.exception.NoApiKeyException;
+import com.alibaba.dashscope.exception.UploadFileException;
+import com.alibaba.dashscope.utils.Constants;
+
+public class Main {
+
+ static {
+ // The following URL is for the Singapore region. When you call the API, replace {WorkspaceId} with your actual workspace ID. The URL varies by region.
+ Constants.baseHttpApiUrl="https://{WorkspaceId}.ap-southeast-1.maas.aliyuncs.com/api/v1";
+ }
+
+ private static final String MODEL_NAME = "qwen3.8-max"; // This example uses qwen3.7-plus. You can change the model name as needed. For a list of models, see https://www.alibabacloud.com/help/model-studio/getting-started/models
+ public static void videoImageListSample(String localPath1, String localPath2, String localPath3, String localPath4)
+ throws ApiException, NoApiKeyException, UploadFileException {
+ MultiModalConversation conv = new MultiModalConversation();
+ String filePath1 = "file://" + localPath1;
+ String filePath2 = "file://" + localPath2;
+ String filePath3 = "file://" + localPath3;
+ String filePath4 = "file://" + localPath4;
+ Map<String, Object> params = new HashMap<>();
+ params.put("video", Arrays.asList(filePath1,filePath2,filePath3,filePath4));
+ // When you pass an image list, the fps parameter applies to the Qwen3.6, Qwen3-VL, and Qwen2.5-VL series models.
+ params.put("fps", 2);
+ MultiModalMessage userMessage = MultiModalMessage.builder()
+ .role(Role.USER.getValue())
+ .content(Arrays.asList(params,
+ Collections.singletonMap("text", "Describe the specific process in this video")))
+ .build();
+ MultiModalConversationParam param = MultiModalConversationParam.builder()
+ // API keys vary by region. To obtain an API key, see https://www.alibabacloud.com/help/model-studio/get-api-key
+ // If you have not configured the environment variable, replace the following line with your Model Studio API key: .apiKey("sk-xxx")
+ .apiKey(System.getenv("DASHSCOPE_API_KEY"))
+ .model(MODEL_NAME)
+ .messages(Arrays.asList(userMessage)).build();
+ MultiModalConversationResult result = conv.call(param);
+ System.out.print(result.getOutput().getChoices().get(0).getMessage().getContent().get(0).get("text"));
+ }
+ public static void main(String[] args) {
+ try {
+ videoImageListSample(
+ "xxx/football1.jpg",
+ "xxx/football2.jpg",
+ "xxx/football3.jpg",
+ "xxx/football4.jpg");
+ } catch (ApiException | NoApiKeyException | UploadFileException e) {
+ System.out.println(e.getMessage());
+ }
+ System.exit(0);
+ }
+}
+ Pass using Base64 encoding OpenAI compatible Python import os
+from openai import OpenAI
+import base64
+
+# Encoding function: Converts a local file to a Base64-encoded string
+def encode_image(image_path):
+ with open(image_path, "rb") as image_file:
+ return base64.b64encode(image_file.read()).decode("utf-8")
+
+base64_image1 = encode_image("football1.jpg")
+base64_image2 = encode_image("football2.jpg")
+base64_image3 = encode_image("football3.jpg")
+base64_image4 = encode_image("football4.jpg")
+client = OpenAI(
+ # API keys vary by region. To obtain an API key, see https://www.alibabacloud.com/help/model-studio/get-api-key
+ # If you have not configured the environment variable, replace the following line with your Model Studio API key: api_key="sk-xxx",
+ api_key=os.getenv("DASHSCOPE_API_KEY"),
+ # The following URL is for the Singapore region. When you call the API, replace {WorkspaceId} with your actual workspace ID. The URL varies by region.
+ base_url="https://{WorkspaceId}.ap-southeast-1.maas.aliyuncs.com/compatible-mode/v1",
+)
+completion = client.chat.completions.create(
+ model="qwen3.8-max", # This example uses qwen3.7-plus. You can change the model name as needed. For a list of models, see https://www.alibabacloud.com/help/model-studio/getting-started/models
+ messages=[
+ {"role": "user","content": [
+ {"type": "video","video": [
+ f"data:image/jpeg;base64,{base64_image1}",
+ f"data:image/jpeg;base64,{base64_image2}",
+ f"data:image/jpeg;base64,{base64_image3}",
+ f"data:image/jpeg;base64,{base64_image4}",]},
+ {"type": "text","text": "Describe the specific process in this video"},
+ ]}]
+)
+print(completion.choices[0].message.content)
+ Node.js import OpenAI from "openai";
+import { readFileSync } from 'fs';
+
+const openai = new OpenAI(
+ {
+ // API keys vary by region. To obtain an API key, see https://www.alibabacloud.com/help/model-studio/get-api-key
+ // If you have not configured the environment variable, replace the following line with your Model Studio API key: apiKey: "sk-xxx"
+ apiKey: process.env.DASHSCOPE_API_KEY,
+ // The following URL is for the Singapore region. When you call the API, replace {WorkspaceId} with your actual workspace ID. The URL varies by region.
+ baseURL: "https://{WorkspaceId}.ap-southeast-1.maas.aliyuncs.com/compatible-mode/v1"
+ }
+);
+
+const encodeImage = (imagePath) => {
+ const imageFile = readFileSync(imagePath);
+ return imageFile.toString('base64');
+ };
+
+const base64Image1 = encodeImage("football1.jpg")
+const base64Image2 = encodeImage("football2.jpg")
+const base64Image3 = encodeImage("football3.jpg")
+const base64Image4 = encodeImage("football4.jpg")
+async function main() {
+ const completion = await openai.chat.completions.create({
+ model: "qwen3.8-max", // This example uses qwen3.7-plus. You can change the model name as needed. For a list of models, see https://www.alibabacloud.com/help/model-studio/getting-started/models
+ messages: [
+ {"role": "user",
+ "content": [{"type": "video",
+ "video": [
+ `data:image/jpeg;base64,${base64Image1}`,
+ `data:image/jpeg;base64,${base64Image2}`,
+ `data:image/jpeg;base64,${base64Image3}`,
+ `data:image/jpeg;base64,${base64Image4}`]},
+ {"type": "text", "text": "What scene does this video depict?"}]}]
+ });
+ console.log(completion.choices[0].message.content);
+}
+
+main();
+ curl 
+ For information about how to convert a file to a Base64-encoded string, see the sample code . 
+ For demonstration purposes, the Base64-encoded string "data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wBDAA..." in the code is truncated. In actual use, make sure to pass the complete encoded string. 
+ # ======= Important =======
+# The following URL is for the Singapore region. When you call the API, replace {WorkspaceId} with your actual workspace ID. The URL varies by region.
+# API keys vary by region. To obtain an API key, see https://www.alibabacloud.com/help/model-studio/get-api-key
+# === Delete this comment before execution ===
+
+curl -X POST https://{WorkspaceId}.ap-southeast-1.maas.aliyuncs.com/compatible-mode/v1/chat/completions \
+-H "Authorization: Bearer $DASHSCOPE_API_KEY" \
+-H 'Content-Type: application/json' \
+-d '{
+ "model": "qwen3.8-max",
+ "messages": [{"role": "user",
+ "content": [{"type": "video",
+ "video": [
+ "data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wBDAA...",
+ "data:image/jpeg;base64,nEpp6jpnP57MoWSyOWwrkXMJhHRCWYeFYb...",
+ "data:image/jpeg;base64,JHWQnJPc40GwQ7zERAtRMK6iIhnWw4080s...",
+ "data:image/jpeg;base64,adB6QOU5HP7dAYBBOg/Fb7KIptlbyEOu58..."
+ ]},
+ {"type": "text",
+ "text": "Describe the specific process in this video"}]}]
+}'
+ DashScope Python import base64
+import os
+import dashscope
+
+# The following URL is for the Singapore region. When you call the API, replace {WorkspaceId} with your actual workspace ID. The URL varies by region.
+dashscope.base_http_api_url = 'https://{WorkspaceId}.ap-southeast-1.maas.aliyuncs.com/api/v1'
+
+# Encoding function: Converts a local file to a Base64-encoded string
+def encode_image(image_path):
+ with open(image_path, "rb") as image_file:
+ return base64.b64encode(image_file.read()).decode("utf-8")
+
+base64_image1 = encode_image("football1.jpg")
+base64_image2 = encode_image("football2.jpg")
+base64_image3 = encode_image("football3.jpg")
+base64_image4 = encode_image("football4.jpg")
+
+messages = [{'role':'user',
+ 'content': [
+ {'video':
+ [f"data:image/jpeg;base64,{base64_image1}",
+ f"data:image/jpeg;base64,{base64_image2}",
+ f"data:image/jpeg;base64,{base64_image3}",
+ f"data:image/jpeg;base64,{base64_image4}"
+ ]
+ },
+ {'text': 'Please describe the specific process of this video?'}]}]
+response = dashscope.MultiModalConversation.call(
+ # API keys vary by region. To obtain an API key, see https://www.alibabacloud.com/help/model-studio/get-api-key
+ api_key=os.getenv("DASHSCOPE_API_KEY"),
+ model='qwen3.7-plus', # This example uses qwen3.7-plus. You can change the model name as needed. For a list of models, see https://www.alibabacloud.com/help/model-studio/getting-started/models
+ messages=messages)
+
+print(response.output.choices[0].message.content[0]["text"])
+ Java import java.io.IOException;
+import java.util.*;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+
+import com.alibaba.dashscope.aigc.multimodalconversation.*;
+import com.alibaba.dashscope.common.MultiModalMessage;
+import com.alibaba.dashscope.common.Role;
+import com.alibaba.dashscope.exception.ApiException;
+import com.alibaba.dashscope.exception.NoApiKeyException;
+import com.alibaba.dashscope.exception.UploadFileException;
+import com.alibaba.dashscope.utils.Constants;
+
+public class Main {
+
+ static {
+ // The following URL is for the Singapore region. When you call the API, replace {WorkspaceId} with your actual workspace ID. The URL varies by region.
+ Constants.baseHttpApiUrl="https://{WorkspaceId}.ap-southeast-1.maas.aliyuncs.com/api/v1";
+ }
+
+ private static String encodeImageToBase64(String imagePath) throws IOException {
+ Path path = Paths.get(imagePath);
+ byte[] imageBytes = Files.readAllBytes(path);
+ return Base64.getEncoder().encodeToString(imageBytes);
+ }
+
+ public static void videoImageListSample(String localPath1,String localPath2,String localPath3,String localPath4)
+ throws ApiException, NoApiKeyException, UploadFileException, IOException {
+
+ String base64Image1 = encodeImageToBase64(localPath1); // Base64 encoding
+ String base64Image2 = encodeImageToBase64(localPath2);
+ String base64Image3 = encodeImageToBase64(localPath3);
+ String base64Image4 = encodeImageToBase64(localPath4);
+
+ MultiModalConversation conv = new MultiModalConversation();
+ Map<String, Object> params = new HashMap<>();
+ params.put("video", Arrays.asList(
+ "data:image/jpeg;base64," + base64Image1,
+ "data:image/jpeg;base64," + base64Image2,
+ "data:image/jpeg;base64," + base64Image3,
+ "data:image/jpeg;base64," + base64Image4));
+ // When you pass an image list, the fps parameter applies to the Qwen3.6, Qwen3-VL, and Qwen2.5-VL series models.
+ params.put("fps", 2);
+ MultiModalMessage userMessage = MultiModalMessage.builder()
+ .role(Role.USER.getValue())
+ .content(Arrays.asList(params,
+ Collections.singletonMap("text", "Describe the specific process in this video")))
+ .build();
+
+ MultiModalConversationParam param = MultiModalConversationParam.builder()
+ // API keys vary by region. To obtain an API key, see https://www.alibabacloud.com/help/model-studio/get-api-key
+ .apiKey(System.getenv("DASHSCOPE_API_KEY"))
+ .model("qwen3.8-max")
+ .messages(Arrays.asList(userMessage))
+ .build();
+
+ MultiModalConversationResult result = conv.call(param);
+ System.out.println(result.getOutput().getChoices().get(0).getMessage().getContent().get(0).get("text"));
+ }
+
+ public static void main(String[] args) {
+ try {
+ // Replace xxx/football1.png and other files with the absolute paths of your local images
+ videoImageListSample(
+ "xxx/football1.jpg",
+ "xxx/football2.jpg",
+ "xxx/football3.jpg",
+ "xxx/football4.jpg"
+ );
+ } catch (ApiException | NoApiKeyException | UploadFileException | IOException e) {
+ System.out.println(e.getMessage());
+ }
+ System.exit(0);
+ }
+}
+ curl 
+ For information about how to convert a file to a Base64-encoded string, see the sample code . 
+ For demonstration purposes, the Base64-encoded string "data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wBDAA..." in the code is truncated. In actual use, make sure to pass the complete encoded string. 
+ # ======= Important =======
+# The following URL is for the Singapore region. When you call the API, replace {WorkspaceId} with your actual workspace ID. The URL varies by region.
+# API keys vary by region. To obtain an API key, see https://www.alibabacloud.com/help/model-studio/get-api-key
+# === Delete this comment before execution ===
+
+curl -X POST https://{WorkspaceId}.ap-southeast-1.maas.aliyuncs.com/api/v1/services/aigc/multimodal-generation/generation \
+-H "Authorization: Bearer $DASHSCOPE_API_KEY" \
+-H 'Content-Type: application/json' \
+-d '{
+ "model": "qwen3.8-max",
+ "input": {
+ "messages": [
+ {
+ "role": "user",
+ "content": [
+ {
+ "video": [
+ "data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wBDAA...",
+ "data:image/jpeg;base64,nEpp6jpnP57MoWSyOWwrkXMJhHRCWYeFYb...",
+ "data:image/jpeg;base64,JHWQnJPc40GwQ7zERAtRMK6iIhnWw4080s...",
+ "data:image/jpeg;base64,adB6QOU5HP7dAYBBOg/Fb7KIptlbyEOu58..."
+ ],
+ "fps":2
+ },
+ {
+ "text": "Describe the specific process in this video"
+ }
+ ]
+ }
+ ]
+ }
+}'
+ 
+ Process high-resolution images 
+ The visual understanding model API has a limit on the number of visual tokens for a single encoded image. With default configurations, high-resolution images are compressed, which may cause loss of detail and affect understanding accuracy. Enable vl_high_resolution_images or adjust max_pixels to increase the number of visual tokens. This retains more image details and improves understanding. 
+ View the pixels per visual token, token limit, and pixel limit for each model 
+ If the pixel count of the input image exceeds the model's pixel limit, the image is downscaled to fit within the limit. 
+ Model Pixels per token vl_high_resolution_images max_pixels Token limit Pixel limit Qwen3.8 , Qwen3.7 , Qwen3.6 , Qwen3.5 and Qwen3-VL series models 32×32 true max_pixels is invalid 16,384 tokens 16,777,216 (that is, 16,384 × 32 × 32 ) false (default) Customizable. The default value is 2,621,440 and the maximum value is 16,777,216 . Determined by max_pixels , which is max_pixels / 32 / 32 max_pixels Open source Qwen2.5-VL series and QVQ series models 28 × 28 true max_pixels is invalid 16,384 tokens 12,845,056 (that is, 16,384 × 28 × 28 ) false (default) Customizable. The default value is 1,003,520 and the maximum value is 12,845,056 . Determined by max_pixels , which is max_pixels / 28 / 28 max_pixels 
+ 
+ 
+ When vl_high_resolution_images=true , the API uses a fixed resolution policy and ignores the max_pixels setting. This is suitable for recognizing fine text, small objects, or rich details in images. 
+ 
+ 
+ When vl_high_resolution_images=false , the final pixel limit depends on the value of the max_pixels parameter. 
+ 
+ For cost-sensitive scenarios where you want to reduce visual token consumption: Use the default value of max_pixels or set it to a smaller value. 
+ If you want to focus on certain details and can accept a lower processing speed, increase the value of max_pixels as needed. 
+ 
+ 
+ 
+ OpenAI compatible vl_high_resolution_images is not a standard OpenAI parameter. The method for passing it varies across different language SDKs: 
+ Python SDK: Must be passed through the extra_body dictionary. 
+ Node.js SDK: Can be passed directly as a top-level parameter. 
+ Python import os
+import time
+from openai import OpenAI
+
+client = OpenAI(
+ # API keys vary by region. To obtain an API key, see https://www.alibabacloud.com/help/model-studio/get-api-key
+ api_key=os.getenv("DASHSCOPE_API_KEY"),
+ # The following URL is for the Singapore region. When you call the API, replace {WorkspaceId} with your actual workspace ID. The URL varies by region.
+ base_url="https://{WorkspaceId}.ap-southeast-1.maas.aliyuncs.com/compatible-mode/v1",
+)
+
+completion = client.chat.completions.create(
+ model="qwen3.8-max",
+ messages=[
+ {"role": "user","content": [
+ {"type": "image_url","image_url": {"url": "https://help-static-aliyun-doc.aliyuncs.com/file-manage-files/zh-CN/20250212/earbrt/vcg_VCG211286867973_RF.jpg"},
+ # max_pixels represents the maximum pixel threshold for the input image. It is invalid when vl_high_resolution_images=True. When vl_high_resolution_images=False, it is customizable, and the maximum value varies by model.
+ # "max_pixels": 16384 * 32 * 32
+ },
+ {"type": "text", "text": "What festival atmosphere does this image convey"},
+ ],
+ }
+ ],
+ extra_body={"vl_high_resolution_images":True}
+
+)
+print(f"Model output: {completion.choices[0].message.content}")
+print(f"Total input tokens: {completion.usage.prompt_tokens}")
+ Node.js import OpenAI from "openai";
+
+const openai = new OpenAI(
+ {
+ // API keys vary by region. To obtain an API key, see https://www.alibabacloud.com/help/model-studio/get-api-key
+ // If you have not configured the environment variable, replace the following line with your Model Studio API key: apiKey: "sk-xxx"
+ apiKey: process.env.DASHSCOPE_API_KEY,
+ // The following URL is for the Singapore region. When you call the API, replace {WorkspaceId} with your actual workspace ID. The URL varies by region.
+ baseURL: "https://{WorkspaceId}.ap-southeast-1.maas.aliyuncs.com/compatible-mode/v1"
+ }
+);
+
+const response = await openai.chat.completions.create({
+ model: "qwen3.8-max",
+ messages: [
+ {role: "user",content: [
+ {type: "image_url",
+ image_url: {"url": "https://help-static-aliyun-doc.aliyuncs.com/file-manage-files/zh-CN/20250212/earbrt/vcg_VCG211286867973_RF.jpg"},
+ // max_pixels represents the maximum pixel threshold for the input image. It has no effect when vl_high_resolution_images=True. When vl_high_resolution_images=False, it is customizable, and the maximum value varies by model.
+ // "max_pixels": 2560 * 32 * 32
+ },
+ {type: "text", text: "What festival atmosphere does this image convey?" },
+ ]}],
+ vl_high_resolution_images:true
+ })
+
+console.log("Model output:",response.choices[0].message.content);
+console.log("Total input tokens",response.usage.prompt_tokens);
+ curl # ======= Important =======
+# API keys vary by region. To obtain an API key, see https://www.alibabacloud.com/help/model-studio/get-api-key
+# The following URL is for the Singapore region. When you call the API, replace {WorkspaceId} with your actual workspace ID. The URL varies by region.
+# === Delete this comment before execution ===
+
+curl -X POST https://{WorkspaceId}.ap-southeast-1.maas.aliyuncs.com/compatible-mode/v1/chat/completions \
+-H "Authorization: Bearer $DASHSCOPE_API_KEY" \
+-H 'Content-Type: application/json' \
+-d '{
+ "model": "qwen3.8-max",
+ "messages": [
+ {
+ "role": "user",
+ "content": [
+ {
+ "type": "image_url",
+ "image_url": {
+ "url": "https://help-static-aliyun-doc.aliyuncs.com/file-manage-files/zh-CN/20250212/earbrt/vcg_VCG211286867973_RF.jpg"
+ }
+ },
+ {
+ "type": "text",
+ "text": "What festival atmosphere does this image convey?"
+ }
+ ]
+ }
+ ],
+ "vl_high_resolution_images":true
+}'
+ DashScope Python import os
+import time
+
+import dashscope
+
+# The following URL is for the Singapore region. When you call the API, replace {WorkspaceId} with your actual workspace ID. The URL varies by region.
+dashscope.base_http_api_url = 'https://{WorkspaceId}.ap-southeast-1.maas.aliyuncs.com/api/v1'
+
+messages = [
+ {
+ "role": "user",
+ "content": [
+ {"image": "https://help-static-aliyun-doc.aliyuncs.com/file-manage-files/zh-CN/20250212/earbrt/vcg_VCG211286867973_RF.jpg",
+ # max_pixels represents the maximum pixel threshold for the input image. It is invalid when vl_high_resolution_images=True. When vl_high_resolution_images=False, it is customizable, and the maximum value varies by model.
+ # "max_pixels": 16384 * 32 * 32
+ },
+ {"text": "What festival atmosphere does this image convey?"}
+ ]
+ }
+]
+
+response = dashscope.MultiModalConversation.call(
+ # If you have not configured the environment variable, replace the following line with your Model Studio API key: api_key="sk-xxx"
+ # API keys vary by region. To obtain an API key, see https://www.alibabacloud.com/help/model-studio/get-api-key
+ api_key=os.getenv('DASHSCOPE_API_KEY'),
+ model='qwen3.7-plus',
+ messages=messages,
+ vl_high_resolution_images=True
+ )
+
+print("Model output",response.output.choices[0].message.content[0]["text"])
+print("Total input tokens:",response.usage.input_tokens)
+ Java import java.util.Arrays;
+import java.util.Collections;
+import java.util.Map;
+import java.util.HashMap;
+import com.alibaba.dashscope.aigc.multimodalconversation.MultiModalConversation;
+import com.alibaba.dashscope.aigc.multimodalconversation.MultiModalConversationParam;
+import com.alibaba.dashscope.aigc.multimodalconversation.MultiModalConversationResult;
+import com.alibaba.dashscope.common.MultiModalMessage;
+import com.alibaba.dashscope.common.Role;
+import com.alibaba.dashscope.exception.ApiException;
+import com.alibaba.dashscope.exception.NoApiKeyException;
+import com.alibaba.dashscope.exception.UploadFileException;
+import com.alibaba.dashscope.utils.Constants;
+
+public class Main {
+
+ static {
+ // The following URL is for the Singapore region. When you call the API, replace {WorkspaceId} with your actual workspace ID. The URL varies by region.
+ Constants.baseHttpApiUrl="https://{WorkspaceId}.ap-southeast-1.maas.aliyuncs.com/api/v1";
+ }
+
+ public static void simpleMultiModalConversationCall()
+ throws ApiException, NoApiKeyException, UploadFileException {
+ MultiModalConversation conv = new MultiModalConversation();
+ Map<String, Object> map = new HashMap<>();
+ map.put("image", "https://help-static-aliyun-doc.aliyuncs.com/file-manage-files/zh-CN/20250212/earbrt/vcg_VCG211286867973_RF.jpg");
+ // max_pixels represents the maximum pixel threshold for the input image. It is invalid when vl_high_resolution_images=True. When vl_high_resolution_images=False, it is customizable, and the maximum value varies by model.
+ // map.put("max_pixels", 2621440);
+ MultiModalMessage userMessage = MultiModalMessage.builder().role(Role.USER.getValue())
+ .content(Arrays.asList(
+ map,
+ Collections.singletonMap("text", "What festival atmosphere does this image convey?"))).build();
+ MultiModalConversationParam param = MultiModalConversationParam.builder()
+ // If you have not configured the environment variable, replace the following line with your Model Studio API key: .apiKey("sk-xxx")
+ .apiKey(System.getenv("DASHSCOPE_API_KEY"))
+ .model("qwen3.8-max")
+ .message(userMessage)
+ .vlHighResolutionImages(true)
+ .build();
+ MultiModalConversationResult result = conv.call(param);
+ System.out.println(result.getOutput().getChoices().get(0).getMessage().getContent().get(0).get("text"));
+ System.out.println(result.getUsage().getInputTokens());
+ }
+
+ public static void main(String[] args) {
+ try {
+ simpleMultiModalConversationCall();
+ } catch (ApiException | NoApiKeyException | UploadFileException e) {
+ System.out.println(e.getMessage());
+ }
+ System.exit(0);
+ }
+}
+ curl # ======= Important =======
+# API keys vary by region. To obtain an API key, see https://www.alibabacloud.com/help/model-studio/get-api-key
+# The following URL is for the Singapore region. When you call the API, replace {WorkspaceId} with your actual workspace ID. The URL varies by region.
+# === Delete this comment before execution ===
+
+curl -X POST https://{WorkspaceId}.ap-southeast-1.maas.aliyuncs.com/api/v1/services/aigc/multimodal-generation/generation \
+-H "Authorization: Bearer $DASHSCOPE_API_KEY" \
+-H 'Content-Type: application/json' \
+-d '{
+ "model": "qwen3.8-max",
+ "input":{
+ "messages":[
+ {
+ "role": "user",
+ "content": [
+ {"image": "https://help-static-aliyun-doc.aliyuncs.com/file-manage-files/zh-CN/20250212/earbrt/vcg_VCG211286867973_RF.jpg"},
+ {"text": "What festival atmosphere does this image convey?"}
+ ]
+ }
+ ]
+ },
+ "parameters": {
+ "vl_high_resolution_images": true
+ }
+}'
+ 
+ More usages 
+ 
+ Multi-turn conversation 
+ Streaming output 
+ 
+ Limits 
+ Input file limits 
+ Image limits 
+ 
+ Image resolution: 
+ 
+ 
+ Minimum size: The width and height of the image must both be greater than 10 pixels. 
+ 
+ 
+ Aspect ratio: The ratio of the long side to the short side for both original and scaled images must not exceed 200:1 . 
+ 
+ For information about the image scaling logic, see the smart_resize function in Calculate image tokens 
+ 
+ 
+ 
+ Maximum pixels: 
+ 
+ Keep the image resolution within 8K (7680x4320) . Images with a higher resolution may cause API call timeouts because of large file sizes and long network transmission times. 
+ Automatic scaling: The model can adjust the image size using max_pixels and min_pixels . Providing high-resolution images does not improve detection accuracy. Instead, it increases the risk of failed calls. Scale images to a reasonable size on the client before uploading. 
+ 
+ 
+ 
+ 
+ 
+ Supported image formats 
+ 
+ 
+ For resolutions below 4K (3840x2160) , the following image formats are supported: 
+ Image format Common extensions MIME type BMP .bmp image/bmp JPEG .jpe, .jpeg, .jpg image/jpeg PNG .png image/png TIFF .tif, .tiff image/tiff WEBP .webp image/webp HEIC .heic image/heic 
+ 
+ 
+ For resolutions between 4K (3840x2160) and 8K (7680x4320) , only the JPEG, JPG, and PNG formats are supported. 
+ 
+ 
+ 
+ 
+ Image size: 
+ The total request body for all interfaces must not exceed 64 MB ; when passing multiple images, they share this overall request body quota. DashScope domains limit the request body to 16 MiB; use the {WorkspaceId}.{region}.maas.aliyuncs.com workspace domain instead. 
+ 
+ When passed as a public URL: A single image cannot exceed 20 MB for Qwen3.8, Qwen3.7, Qwen3.6, and Qwen3.5 and Qwen3-VL series models. For other models, a single image cannot exceed 10 MB . 
+ When passed as a local path: A single image cannot exceed 10 MB . 
+ When passed as Base64 encoding: For Qwen3.8, Qwen3.7, Qwen3.6, Qwen3.5 and Qwen3-VL series models, the original image file before encoding cannot exceed 20 MB . For other models, it cannot exceed 10 MB . The resulting Data URI string cannot exceed 20 MB on the OpenAI-compatible API and DashScope, or 32 MB on the Anthropic-compatible API. 
+ 
+ These limits depend on the model you use. They cannot be raised by purchasing a higher-tier plan or upgrading the model version. 
+ 
+ To compress a file, see How to compress an image or video to the required size . 
+ 
+ 
+ 
+ Image quantity limit: The maximum number of images supported for multi-image input varies by the input method: 
+ 
+ 
+ When passed as public URLs or local paths: 
+ 
+ Qwen3.8-Max, Qwen3.8-Flash, Qwen3.7-Plus series: Up to 2,048 images 
+ Qwen3.7-Flash, Qwen3.6-Plus, Qwen3.6-Flash, Qwen3.5-Plus, Qwen3.5-Flash, Qwen3-VL, Qwen-VL, QVQ series: Up to 256 images 
+ For Qwen-Omni series, see Omni-modal . 
+ 
+ 
+ 
+ When passed as Base64-encoded strings: Up to 250 images 
+ 
+ 
+ 
+ 
+ The total number of tokens for all images is also limited by the model's maximum input token limit. The total token count for all images and text must not exceed the model's maximum input. 
+ Video limits 
+ 
+ When passed as an image list, the number of images in the list is limited as follows: 
+ 
+ qwen3.8 , qwen3.7 series , qwen3.6 series and qwen3.5 series: A minimum of 4 images and a maximum of 8,000 images 
+ qwen3-vl-plus series: A minimum of 4 images and a maximum of 2,000 images 
+ Other open source Qwen3-VL , Qwen2.5-VL (including commercial and open source versions), and QVQ series models: A minimum of 4 images and a maximum of 512 images 
+ Other models: A minimum of 4 images and a maximum of 80 images 
+ 
+ 
+ 
+ When passed as a video file: 
+ 
+ 
+ Video size: 
+ 
+ 
+ When passed as a public URL: 
+ 
+ qwen3.8 series , qwen3.7 series , qwen3.6 series, qwen3.5 series, and Qwen3-VL series: Cannot exceed 2 GB. 
+ Open source Qwen2.5-VL series and QVQ series models: Cannot exceed 1 GB. 
+ Other models: Cannot exceed 150 MB. 
+ 
+ 
+ 
+ When passed as a Base64-encoded string: The encoded string must be less than 10 MB. 
+ 
+ 
+ When passed as a local file path: The video file cannot exceed 100 MB. 
+ 
+ 
+ 
+ To compress a file, see How to compress an image or video to the required size . 
+ 
+ 
+ 
+ Video duration: 
+ 
+ qwen3.8 series , qwen3.7 series , qwen3.6 series and qwen3.5 series: 2 seconds to 2 hours. 
+ qwen3-vl-plus series: 2 seconds to 1 hour. 
+ Other open source Qwen3-VL series: 2 seconds to 20 minutes. 
+ Open source Qwen2.5-VL series and QVQ series models: 2 seconds to 10 minutes. 
+ Other models: 2 seconds to 40 seconds. 
+ 
+ 
+ 
+ Video format: MP4, AVI, MKV, MOV, FLV, WMV, and more. 
+ 
+ 
+ Video dimensions: There are no specific limits. The model can automatically adjust the video dimensions using max_pixels and min_pixels . Larger video files do not result in better understanding. 
+ 
+ 
+ Video quantity limit: Up to 64 videos can be passed. 
+ 
+ 
+ Audio understanding: The model does not support understanding the audio track of video files. 
+ 
+ 
+ 
+ 
+ File input methods 
+ 
+ 
+ Public URL : Provide a publicly accessible file address that supports the HTTP or HTTPS protocol. For optimal stability and performance, upload the file to OSS to obtain a public URL. Model Studio cannot access OSS internal endpoints, whose addresses contain -internal , such as https://<bucket>.oss-cn-hangzhou-internal.aliyuncs.com/image.jpg . If you pass an internal address, the file download fails and InvalidParameter is returned with the message Failed to download multimodal content . Use an OSS public endpoint instead, such as https://<bucket>.oss-cn-hangzhou.aliyuncs.com/image.jpg , or a presigned OSS URL. 
+ Important To ensure the model can successfully download the file, the response header of the public URL must include Content-Length (file size) and Content-Type (media type, such as image/jpeg). If either field is missing or incorrect, the file download will fail. 
+ 
+ 
+ Base64 encoding: Convert the file to a Base64-encoded string and then pass it. 
+ 
+ 
+ Local file path (DashScope SDK only): Pass the path of a local file. 
+ 
+ 
+ 
+ For recommendations on how to choose a file input method, see How do I choose a file upload method? 
+ 
+ Using in a production environment 
+ 
+ 
+ Image and video pre-processing: Visual understanding models have size limits for input files. To compress files, see Image or video compression methods . 
+ 
+ 
+ Processing text files: Visual understanding models only support image and video files. They do not support processing TXT, Word (.doc/.docx), PDF, or other text-based files. Use one of the following workarounds: 
+ 
+ Convert the text file to an image format. Use an image processing library, such as pdf2image for Python, to convert the file page by page into multiple high-quality images. Then, pass the images to the model using the multi-image input method. 
+ Use Qwen-Long , which supports uploading documents and conducting conversations by passing information through file-id . 
+ 
+ 
+ 
+ Fault tolerance and stability 
+ 
+ Timeout handling: In non-streaming calls, a timeout error occurs if the model does not finish generating output within 300 seconds. When a timeout occurs, the generated content is returned in the response body. A response header that contains x-dashscope-partialresponse: true indicates that the response timed out. Use the partial mode feature, which is supported by some models. Add the generated content to the messages array and send the request again. This allows the Large Language Model (LLM) to continue generating content. For more information, see Continue generation from incomplete output . 
+ Client-side timeout configuration: The preceding timeout is a server-side timeout that occurs when the model does not finish generating output within 300 seconds. It is different from the default client-side timeout of the SDK. When you process large images, such as a 4000 x 4000 pixel image, a request may take longer than the default client-side timeout of the SDK and be interrupted with an APITimeoutError , even though the server-side 300-second limit is not reached. To avoid this, use with_options in the OpenAI Python SDK to extend the client-side timeout: 
+ 
+ 
+ 
+ client = client.with_options(timeout=1800.0)
+response = client.chat.completions.create(
+ model="qwen3-vl-plus",
+ messages=[...]
+)
+ 
+ 
+ Streaming output: Set stream=True so that the model returns content incrementally instead of waiting for a single complete response. This prevents client-side timeouts caused by long-running non-streaming calls when you process large images: 
+ 
+ stream = client.chat.completions.create(
+ model="qwen3-vl-plus",
+ messages=[...],
+ stream=True
+)
+for chunk in stream:
+ print(chunk.choices[0].delta.content)
+ 
+ 
+ Retry mechanism: Design a reasonable API call retry logic, such as exponential backoff, to handle network fluctuations or temporary service unavailability. 
+ 
+ Billing and rate limiting 
+ 
+ 
+ Billing: Total cost is calculated based on the total number of input and output tokens. Input and output prices are available in the Model Studio console. 
+ 
+ 
+ Token composition: Input tokens consist of text tokens and tokens converted from images or videos. Output tokens are the text generated by the model. In thinking mode, the model's thought process is also counted as output tokens. If the thought process is not output in thinking mode, billing follows the pricing for non-thinking mode. 
+ 
+ 
+ Calculate tokens for images and videos: Use the following code to calculate the token consumption for images or videos. The estimated result is for reference only. Actual usage is based on the API response. 
+ Calculate tokens for images and videos Images Formula: Image Tokens = h_bar * w_bar / token_pixels + 2 
+ 
+ h_bar, w_bar : The height and width of the scaled image. Before processing an image, the model performs pre-processing to scale it down to a specific pixel limit. This limit depends on the values of the max_pixels and vl_high_resolution_images parameters. For more information, see Process high-resolution images . 
+ 
+ 
+ token_pixels : The pixel value corresponding to each visual token . This varies by model: 
+ 
+ qwen3.8-series , qwen3.7-series , qwen3.6-series , qwen3.5-series , Qwen3-VL : Each token corresponds to 32x32 pixels. 
+ QVQ and other Qwen2.5-VL models : Each token corresponds to 28x28 pixels. 
+ 
+ 
+ The following code demonstrates the approximate image scaling logic used by the model. Use it to estimate the tokens for an image. For actual billing, refer to the API response. import math
+from PIL import Image # pip install Pillow
+
+def smart_resize(image_path, max_pixels, vl_high_resolution_images):
+ """Calculates the scaled dimensions of an image based on model parameters to estimate image tokens."""
+ image = Image.open(image_path)
+ height, width = image.height, image.width
+
+ # The scaling factor is 32 for models such as Qwen3.6, Qwen3.5, and Qwen3-VL. For other models, it is 28.
+ factor = 32
+ h_bar = round(height / factor) * factor
+ w_bar = round(width / factor) * factor
+
+ # Token lower limit: 4 tokens
+ min_pixels = 4 * factor * factor
+
+ # If vl_high_resolution_images=True, the token upper limit is fixed at 16384, and max_pixels is ignored.
+ if vl_high_resolution_images:
+ max_pixels = 16384 * factor * factor
+
+ # Constrains the total number of pixels to the range [min_pixels, max_pixels].
+ if h_bar * w_bar > max_pixels:
+ beta = math.sqrt((height * width) / max_pixels)
+ h_bar = math.floor(height / beta / factor) * factor
+ w_bar = math.floor(width / beta / factor) * factor
+ elif h_bar * w_bar < min_pixels:
+ beta = math.sqrt(min_pixels / (height * width))
+ h_bar = math.ceil(height * beta / factor) * factor
+ w_bar = math.ceil(width * beta / factor) * factor
+
+ return h_bar, w_bar
+
+if __name__ == "__main__":
+ # Note: The values of max_pixels and vl_high_resolution_images must match the parameters passed when calling the model.
+ h_bar, w_bar = smart_resize("xxx/test.jpg", max_pixels=2560 * 32 * 32, vl_high_resolution_images=False)
+ print(f"Scaled image dimensions: Height {h_bar}, Width {w_bar}")
+
+ # Each image includes one <vision_bos> and one <vision_eos> token.
+ token = int(h_bar * w_bar / (32 * 32)) + 2
+ print(f"Number of image tokens: {token}")
+ Videos 
+ 
+ Video files: 
+ When processing a video file, the model first extracts frames and then calculates the total number of tokens for all video frames. Because this calculation is complex, you can use the following code to estimate the total token consumption for a video by providing its path: 
+ 
+ # Before use, install: pip install opencv-python
+import math
+import os
+import logging
+import cv2
+
+logger = logging.getLogger(__name__)
+
+FRAME_FACTOR = 2
+
+# For models such as Qwen3.6, Qwen3.5, and Qwen3-VL, the image scaling factor is 32.
+IMAGE_FACTOR = 32
+
+# For other models, the image scaling factor is 28.
+# IMAGE_FACTOR = 28
+
+# Maximum aspect ratio for video frames
+MAX_RATIO = 200
+# Pixel lower limit for video frames
+VIDEO_MIN_PIXELS = 4 * 32 * 32
+# Pixel upper limit for video frames. For the Qwen3-VL-Plus model, VIDEO_MAX_PIXELS is 640 * 32 * 32. For other models, it is 768 * 32 * 32.
+VIDEO_MAX_PIXELS = 640 * 32 * 32
+
+# If the user does not pass the FPS parameter, the default value is used for fps.
+FPS = 2.0
+# Minimum number of extracted frames
+FPS_MIN_FRAMES = 4
+# Maximum number of extracted frames (set based on the selected model)
+FPS_MAX_FRAMES = 2000
+
+# Maximum pixel value for video input. For the Qwen3-VL-Plus model, set VIDEO_TOTAL_PIXELS to 131072 * 32 * 32. For other models, set it to 65536 * 32 * 32.
+VIDEO_TOTAL_PIXELS = int(float(os.environ.get('VIDEO_TOTAL_PIXELS', 131072 * 32 * 32)))
+
+def round_by_factor(number: int, factor: int) -> int:
+ """Returns the integer closest to 'number' that is divisible by 'factor'."""
+ return round(number / factor) * factor
+
+def ceil_by_factor(number: int, factor: int) -> int:
+ """Returns the smallest integer that is greater than or equal to 'number' and divisible by 'factor'."""
+ return math.ceil(number / factor) * factor
+
+def floor_by_factor(number: int, factor: int) -> int:
+ """Returns the largest integer that is less than or equal to 'number' and divisible by 'factor'."""
+ return math.floor(number / factor) * factor
+
+def extract_vision_info(conversations):
+ vision_infos = []
+ if isinstance(conversations[0], dict):
+ conversations = [conversations]
+ for conversation in conversations:
+ for message in conversation:
+ if isinstance(message["content"], list):
+ for ele in message["content"]:
+ if (
+ "image" in ele
+ or "image_url" in ele
+ or "video" in ele
+ or ele.get("type","") in ("image", "image_url", "video")
+ ):
+ vision_infos.append(ele)
+ return vision_infos
+
+def smart_nframes(ele,total_frames,video_fps):
+ """Calculates the number of extracted video frames.
+
+ Args:
+ ele (dict): A dictionary containing the video configuration.
+ - fps: Controls the number of input frames extracted for the model.
+ total_frames (int): The original total number of frames in the video.
+ video_fps (int | float): The original frame rate of the video.
+
+ Raises:
+ An error is reported if nframes is not within the interval [FRAME_FACTOR, total_frames].
+
+ Returns:
+ The number of video frames for model input.
+ """
+ assert not ("fps" in ele and "nframes" in ele), "Only accept either `fps` or `nframes`"
+ fps = ele.get("fps", FPS)
+ min_frames = ceil_by_factor(ele.get("min_frames", FPS_MIN_FRAMES), FRAME_FACTOR)
+ max_frames = floor_by_factor(ele.get("max_frames", min(FPS_MAX_FRAMES, total_frames)), FRAME_FACTOR)
+ duration = total_frames / video_fps if video_fps != 0 else 0
+ if duration-int(duration)>(1/fps):
+ total_frames = math.ceil(duration * video_fps)
+ else:
+ total_frames = math.ceil(int(duration)*video_fps)
+ nframes = total_frames / video_fps * fps
+ if nframes > total_frames:
+ logger.warning(f"smart_nframes: nframes[{nframes}] > total_frames[{total_frames}]")
+ nframes = int(min(min(max(nframes, min_frames), max_frames), total_frames))
+ if not (FRAME_FACTOR <= nframes and nframes <= total_frames):
+ raise ValueError(f"nframes should in interval [{FRAME_FACTOR}, {total_frames}], but got {nframes}.")
+
+ return nframes
+
+def get_video(video_path):
+ # Get video information
+ cap = cv2.VideoCapture(video_path)
+
+ frame_width = int(cap.get(cv2.CAP_PROP_FRAME_WIDTH))
+ # Get video height
+ frame_height = int(cap.get(cv2.CAP_PROP_FRAME_HEIGHT))
+ total_frames = int(cap.get(cv2.CAP_PROP_FRAME_COUNT))
+
+ video_fps = cap.get(cv2.CAP_PROP_FPS)
+ return frame_height, frame_width, total_frames, video_fps
+
+def smart_resize(ele, path, factor=IMAGE_FACTOR):
+ # Get the original width and height of the video
+ height, width, total_frames, video_fps = get_video(path)
+ # Token lower limit for video frames
+ min_pixels = VIDEO_MIN_PIXELS
+ total_pixels = VIDEO_TOTAL_PIXELS
+ # Number of extracted video frames
+ nframes = smart_nframes(ele, total_frames, video_fps)
+ max_pixels = max(min(VIDEO_MAX_PIXELS, total_pixels / nframes * FRAME_FACTOR),int(min_pixels * 1.05))
+
+ # The aspect ratio of the video should not exceed 200:1 or 1:200.
+ if max(height, width) / min(height, width) > MAX_RATIO:
+ raise ValueError(
+ f"absolute aspect ratio must be smaller than {MAX_RATIO}, got {max(height, width) / min(height, width)}"
+ )
+
+ h_bar = max(factor, round_by_factor(height, factor))
+ w_bar = max(factor, round_by_factor(width, factor))
+ if h_bar * w_bar > max_pixels:
+ beta = math.sqrt((height * width) / max_pixels)
+ h_bar = floor_by_factor(height / beta, factor)
+ w_bar = floor_by_factor(width / beta, factor)
+ elif h_bar * w_bar < min_pixels:
+ beta = math.sqrt(min_pixels / (height * width))
+ h_bar = ceil_by_factor(height * beta, factor)
+ w_bar = ceil_by_factor(width * beta, factor)
+ return h_bar, w_bar
+
+def token_calculate(video_path, fps):
+ # Pass the video path and the fps frame extraction parameter.
+ messages = [{"content": [{"video": video_path, "fps": fps}]}]
+ vision_infos = extract_vision_info(messages)[0]
+
+ resized_height, resized_width = smart_resize(vision_infos, video_path)
+
+ height, width, total_frames, video_fps = get_video(video_path)
+ num_frames = smart_nframes(vision_infos, total_frames, video_fps)
+ print(f"Original video dimensions: {height}*{width}, Model input dimensions: {resized_height}*{resized_width}, Total video frames: {total_frames}, Total frames extracted when fps is {fps}: {num_frames}", end=", ")
+ video_token = int(math.ceil(num_frames / 2) * resized_height / 32 * resized_width / 32)
+ video_token += 2 # The system automatically adds <|vision_bos|> and <|vision_eos|> visual markers (1 token each).
+ return video_token
+
+video_token = token_calculate("xxx/test.mp4", 1)
+print("Video tokens:", video_token)
+ 
+ 
+ Image list: 
+ When a video is passed as a list of images, it means that frame extraction has already been performed. Use the following code to calculate the token consumption by providing the path and number of images: 
+ 
+ # Before use, install: pip install Pillow
+import math
+import os
+import logging
+from typing import Tuple
+from PIL import Image
+
+logger = logging.getLogger(__name__)
+
+# ==================== Constant Definitions ====================
+FRAME_FACTOR = 2
+# For models such as Qwen3-VL, the scaling factor is 32.
+IMAGE_FACTOR = 32
+
+# For other models, the scaling factor is 28.
+# IMAGE_FACTOR = 28
+
+# Constants for token calculation
+TOKEN_DIVISOR = 32 # Divisor for token calculation
+VISION_SPECIAL_TOKENS = 2 # <|vision_bos|> and <|vision_eos|> markers
+
+# Maximum aspect ratio for video frames
+MAX_RATIO = 200
+# Pixel lower limit for video frames
+VIDEO_MIN_PIXELS = 4 * 32 * 32
+# Pixel upper limit for video frames. For the Qwen3-VL-Plus model, VIDEO_MAX_PIXELS is 640 * 32 * 32. For other models, it is 768 * 32 * 32.
+VIDEO_MAX_PIXELS = 640 * 32 * 32
+
+# Maximum pixel value for video input. For the Qwen3-VL-Plus model, set VIDEO_TOTAL_PIXELS to 131072 * 32 * 32. For other models, set it to 65536 * 32 * 32.
+VIDEO_TOTAL_PIXELS = int(float(os.environ.get('VIDEO_TOTAL_PIXELS', 131072 * 32 * 32)))
+
+def round_by_factor(number: int, factor: int) -> int:
+ """Returns the integer closest to 'number' that is divisible by 'factor'."""
+ return round(number / factor) * factor
+
+def ceil_by_factor(number: int, factor: int) -> int:
+ """Returns the smallest integer that is greater than or equal to 'number' and divisible by 'factor'."""
+ return math.ceil(number / factor) * factor
+
+def floor_by_factor(number: int, factor: int) -> int:
+ """Returns the largest integer that is less than or equal to 'number' and divisible by 'factor'."""
+ return math.floor(number / factor) * factor
+
+def get_image_size(image_path: str) -> Tuple[int, int]:
+ if not os.path.exists(image_path):
+ raise FileNotFoundError(f"Image file not found: {image_path}")
+
+ try:
+ image = Image.open(image_path)
+ height = image.height
+ width = image.width
+ image.close() # Close the file promptly
+ return height, width
+ except Exception as e:
+ raise ValueError(f"Cannot read image file {image_path}: {str(e)}")
+
+def smart_resize(height: int, width: int, nframes: int, factor: int = IMAGE_FACTOR) -> Tuple[int, int]:
+ """
+ Calculates the scaled dimensions of an image
+
+ Args:
+ height: Original image height
+ width: Original image width
+ nframes: Number of video frames
+ factor: Scaling factor, defaults to IMAGE_FACTOR
+
+ Returns:
+ (resized_height, resized_width) The scaled height and width
+
+ Raises:
+ ValueError: Aspect ratio exceeds the limit
+ """
+ # Token lower limit for video frames
+ min_pixels = VIDEO_MIN_PIXELS
+ total_pixels = VIDEO_TOTAL_PIXELS
+ # Number of extracted video frames
+ max_pixels = max(min(VIDEO_MAX_PIXELS, total_pixels / nframes * FRAME_FACTOR), int(min_pixels * 1.05))
+
+ # The aspect ratio of the video should not exceed 200:1 or 1:200.
+ aspect_ratio = max(height, width) / min(height, width)
+ if aspect_ratio > MAX_RATIO:
+ raise ValueError(
+ f"Image aspect ratio must be less than {MAX_RATIO}:1, but is currently {aspect_ratio:.2f}:1"
+ )
+
+ h_bar = max(factor, round_by_factor(height, factor))
+ w_bar = max(factor, round_by_factor(width, factor))
+ if h_bar * w_bar > max_pixels:
+ beta = math.sqrt((height * width) / max_pixels)
+ h_bar = floor_by_factor(height / beta, factor)
+ w_bar = floor_by_factor(width / beta, factor)
+ elif h_bar * w_bar < min_pixels:
+ beta = math.sqrt(min_pixels / (height * width))
+ h_bar = ceil_by_factor(height * beta, factor)
+ w_bar = ceil_by_factor(width * beta, factor)
+ return h_bar, w_bar
+
+def calculate_video_tokens(image_path: str, nframes: int = 1, factor: int = IMAGE_FACTOR, verbose: bool = True) -> int:
+ """
+
+ Args:
+ image_path: Path to the video frame file
+ nframes: Number of video frames,
+ factor: Scaling factor, defaults to IMAGE_FACTOR
+ verbose: Whether to print detailed information
+
+ Returns:
+ The number of tokens consumed
+
+ Raises:
+ FileNotFoundError: The file does not exist
+ ValueError: The file format is invalid or the aspect ratio exceeds the limit
+ """
+ # Get the original image dimensions (read only once)
+ height, width = get_image_size(image_path)
+
+ # Calculate the scaled dimensions
+ resized_height, resized_width = smart_resize(height, width, nframes, factor)
+
+ # Calculate the number of tokens
+ # Formula: ceil(nframes/2) * (height/TOKEN_DIVISOR) * (width/TOKEN_DIVISOR) + VISION_SPECIAL_TOKENS
+ video_token = int(
+ math.ceil(nframes / 2) *
+ (resized_height / TOKEN_DIVISOR) *
+ (resized_width / TOKEN_DIVISOR)
+ )
+ # Add visual marker tokens (<|vision_bos|> and <|vision_eos|>)
+ video_token += VISION_SPECIAL_TOKENS
+
+ if verbose:
+ print(f"Original video frame dimensions: {height}x{width}, Model input dimensions: {resized_height}x{resized_width}, ", end="")
+
+ return video_token
+
+if __name__ == "__main__":
+ try:
+ video_token = calculate_video_tokens("xxx/test.jpg", nframes=30)
+ print(f"Video tokens: {video_token}\n")
+ except Exception as e:
+ print(f"Error: {str(e)}\n")
+ 
+ 
+ 
+ 
+ 
+ View bills: View bills or top up your account on the Expenses and Costs page in the Alibaba Cloud Management Console. 
+ 
+ 
+ Rate limiting: For more information about the rate limiting conditions for visual understanding models, see Rate limiting . 
+ 
+ 
+ Free quota(Singapore region only) : A free quota of 1 million tokens is provided for visual understanding models. The 90-day validity period starts from the date you enable Model Studio or your model request is approved. 
+ 
+ 
+ API reference 
+ For more information about the input and output parameters of the visual understanding model, see text generation . 
+ FAQ 
+ How do I choose a file upload method? Choose the most suitable upload method based on the SDK type, file size, and network stability. File type File specifications DashScope SDK (Python, Java) OpenAI compatible / DashScope HTTP Image Greater than 7 MB and less than 10 MB Pass the local path Only public network URLs are supported. Use Alibaba Cloud Object Storage Service Less than 7 MB Pass the local path Base64 encoding Video Greater than 100 MB Only public network URLs are supported. Use Alibaba Cloud Object Storage Service Only public network URLs are supported. Use Alibaba Cloud Object Storage Service Greater than 7 MB and less than 100 MB Pass the local path Only public network URLs are supported. Use Alibaba Cloud Object Storage Service Less than 7 MB Pass the local path Base64 encoding 
+ Base64 encoding increases data size. The original file size must be less than 7 MB. 
+ 
+ Use Base64 or a local path to avoid server-side download timeouts and improve stability. 
+ 
+ How do I compress an image or video to the required size? Visual understanding models have size limits for input files. Use the following methods to compress your files. Image compression methods 
+ Online tools: Use online tools such as CompressJPEG to compress images. 
+ Local software: Use software such as Photoshop to adjust the quality when exporting. 
+ Code implementation: 
+ # pip install pillow
+
+from PIL import Image
+def compress_image(input_path, output_path, quality=85):
+ with Image.open(input_path) as img:
+ img.save(output_path, "JPEG", optimize=True, quality=quality)
+
+# Pass the local image
+compress_image("/xxx/before-large.jpeg","/xxx/after-min.jpeg")
+
+# Batch compress the images in a directory
+import glob
+import os
+
+def batch_compress(input_dir, output_dir, quality=85):
+ files = (
+ glob.glob(os.path.join(input_dir, "*.jpg"))
+ + glob.glob(os.path.join(input_dir, "*.jpeg"))
+ + glob.glob(os.path.join(input_dir, "*.png"))
+ )
+ for i, f in enumerate(files, 1):
+ try:
+ compress_image(f, os.path.join(output_dir, os.path.basename(f)), quality)
+ print(f"[{i}/{len(files)}] {os.path.basename(f)} done")
+ except Exception as e:
+ print(f"[{i}/{len(files)}] {os.path.basename(f)} error: {e}")
+
+batch_compress("/xxx/input_dir", "/xxx/output_dir")
+ Video compression methods 
+ Online tools: Use online tools such as FreeConvert to compress videos. 
+ Local software: Use software such as HandBrake . 
+ Code implementation: Use the FFmpeg tool. For more information, see the official FFmpeg website . 
+ # Basic transform command
+# -i, function: input file path, example: input.mp4
+# -vcodec, function: video encoder, common values include libx264 (generally recommended) and libx265 (higher compression ratio)
+# -crf, function: controls video quality, value range: [18-28]. The smaller the value, the higher the quality and the larger the file size.
+# --preset, function: controls the balance between encoding speed and compression efficiency. Common values include slow, fast, and faster.
+# -y, function: overwrite an existing file (no value needed)
+# output.mp4, function: output file path
+
+ffmpeg -i input.mp4 -vcodec libx264 -crf 28 -preset slow output.mp4
+ 
+ After the model outputs object location results, how do I draw detection frames on the original image? After the visual understanding model returns the object location results, you can use the following code to draw the detection frames and their label information on the original image. 
+ Qwen2.5-VL: The returned coordinates are absolute values in pixels, relative to the top-left corner of the scaled image. To draw detection frames, see the code in qwen2_5_vl_2d.py . 
+ Qwen3-VL, Qwen3.5, Qwen3.6, and Qwen3.7 series (such as qwen3.5-plus, qwen3.6-plus, and qwen3.7-plus): The returned coordinates are relative and normalized to the range [0, 999] . To draw detection frames, see the code in qwen3_vl_2d.py (2D positioning) or qwen3_vl_3d.zip (3D positioning). 
+ 
+ Error codes 
+ If a model call fails, an error message is returned. For information about how to resolve the error, see Error codes . 
+ 
+ 
+
+ 
+ 
+ 
+ 
+ 
+Thank you! We've received your feedback.
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+
+
+
+
+
+ 
+ 

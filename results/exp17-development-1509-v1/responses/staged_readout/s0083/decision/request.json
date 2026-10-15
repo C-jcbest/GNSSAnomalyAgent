@@ -1,0 +1,54 @@
+{
+  "model": "qwen3-vl-plus",
+  "temperature": 0,
+  "enable_thinking": false,
+  "response_format": {
+    "type": "json_schema",
+    "json_schema": {
+      "name": "PairDecision",
+      "strict": true,
+      "schema": {
+        "additionalProperties": false,
+        "properties": {
+          "pair_ids": {
+            "items": {
+              "type": "string"
+            },
+            "title": "Pair Ids",
+            "type": "array"
+          },
+          "evidence": {
+            "minLength": 1,
+            "title": "Evidence",
+            "type": "string"
+          }
+        },
+        "required": [
+          "pair_ids",
+          "evidence"
+        ],
+        "title": "PairDecision",
+        "type": "object"
+      }
+    }
+  },
+  "messages": [
+    {
+      "role": "user",
+      "content": [
+        {
+          "type": "text",
+          "text": "Select GNSS temporary-offset onset/return pairs from the supplied pair IDs.\nReply exactly {\"pair_ids\":[],\"evidence\":\"one short sentence\"}. Choose P IDs, never J IDs.\nFor each candidate we compare the local ONSET displacement-change vector with the RETURN\nvector AFTER MULTIPLYING IT BY MINUS ONE. This sign reversal is already done: do not invert\nit again. A good returning offset gives SIMILAR paired bar lengths and directions in N/E/U,\nas the onset and original return are opposite. The two displayed bars should OVERLAP in\nshape, not oppose. Compare all three components jointly, allowing station noise and smooth\nmovement. If one displayed vector is tiny and the other large, this is not a convincing\nmatched return, even when the signs agree. All panels share the same vertical scale.\nLocal observed medians were computed separately around each edge; permanent interior steps\nand ongoing deformation can coexist. Candidate pairs compete and cannot share endpoints.\nDo not force a pair count. If no candidate is clearly matched, or observational evidence is\nabsent, return an empty pair_ids list. Apply no universal displacement or speed cutoff.\nDo not detect activity or estimate dates; those numerical decisions remain independent.\n\nInspect every supplied candidate, not only the first panel. For each N/E/U component,\ncompare the orange ONSET bar with the blue MINUS RETURN bar using the zero line and ticks.\nCheck both sign AND relative size; a sign contradiction on a clearly visible component\nis counterevidence even when another component matches. Assess the joint three-component\nfingerprint. Do not prefer earlier IDs or the nearest dates. Do not force any pair count.\n"
+        },
+        {
+          "type": "text",
+          "text": "{\"jumps\": [{\"id\": \"J1\", \"index\": 700}, {\"id\": \"J2\", \"index\": 710}], \"pairs\": [{\"id\": \"P1\", \"first_id\": \"J1\", \"second_id\": \"J2\", \"start\": 700, \"end\": 709}]}"
+        },
+        {
+          "type": "text",
+          "text": "{\"visual_readout\": {\"rows\": [{\"pair_id\": \"P1\", \"onset\": [0.01, 6.01, -5.36], \"minus_return\": [-0.4, -2.68, -4.61], \"observation\": \"P1 shows large negative return in E and U, small negative in N.\"}]}}"
+        }
+      ]
+    }
+  ]
+}
