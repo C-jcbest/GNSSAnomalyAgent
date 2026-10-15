@@ -1,0 +1,341 @@
+{
+  "baseline_run": "C:\\Users\\JC\\.codex\\worktrees\\gnss-vlm-research\\GNSSAnomalyAgent-sim\\runs\\exp10-development-baseline-v1",
+  "dataset": "C:\\Users\\JC\\.codex\\worktrees\\gnss-vlm-research\\GNSSAnomalyAgent-sim\\data\\exp10-development",
+  "dataset_seed": 2026101501,
+  "split": "validation",
+  "station_ids": [
+    "s0024",
+    "s0025",
+    "s0026",
+    "s0027",
+    "s0028",
+    "s0029",
+    "s0030",
+    "s0031",
+    "s0032",
+    "s0033",
+    "s0034",
+    "s0035",
+    "s0036",
+    "s0037",
+    "s0038",
+    "s0039",
+    "s0040",
+    "s0041",
+    "s0042",
+    "s0043",
+    "s0044",
+    "s0045",
+    "s0046",
+    "s0047"
+  ],
+  "model": "qwen3.8-flash",
+  "source_hashes": {
+    "__init__.py": "9c1ecee1dd8350d88a13e3e542d0541a2448cd34e44ed9127c453b604970296f",
+    "baselines.py": "a8ca8c9b3f80ad376183ee7c1ee77501c543168f0cd4d5564fc78ae08df26861",
+    "cli.py": "5483b1976d756d5e006a2c4a931898c4d5916b8b8f6b7db55313dfd8e16cb4bf",
+    "data.py": "a0ac7ba8a3ed984e60965ca08ba93dc4ce696f2390f054fc7eb1c73afc47f45c",
+    "experiment.py": "fd0b0f10d9b080fa74a62ebe16c024e9064bfd3acec83cf3415fb9150c748ff2",
+    "features.py": "8b6fed5af931113b10e1cf6a3759017e8bdbbf42891e5c6e92b5e245f7d80d8f",
+    "files.py": "fda1f5894c90c61a8d259c5aa67fc40a052b764634b6d60cf3c740be56b6637b",
+    "fusion.py": "83f1428a3ecb6bd75c606ec219ce6e38bff5ce126a6f9a9f985c04db7527969d",
+    "guided.py": "a1c6c1ed183f614ef30879f0a13f00b9cafee6eb5f5f4b264c190787a5a65a92",
+    "localization.py": "287aa2a38d7e354486b7f42c11ead417d3a8264fc3dc2b35511247d6e9f18eab",
+    "metrics.py": "ee774e99262112dd043de5d19bb88bab69b46dc7422f2edb6988881a25fdc9f8",
+    "plots.py": "a3f3ee1852ea81e94aa321c27a9beef4ed96ef056cf4a6321d15e3e139a05708",
+    "provider.py": "ca0e9a594d59e9caf15d649815051ff652f39924ccc62ed0a6328db66eaf77f7",
+    "schema.py": "ff1477391c9ac4f3e5b9883e140451b204f5f5beca95f3795a90e13e65a3196f",
+    "segmentation.py": "3f139e94e4ba68a33665d8f77fbb85515ff741d73a7ad5709f38bac780166805",
+    "segmented_review.py": "90b8576d9372911ca71f5cd054342e69b0dcb61e5c59abacb4c8ba6019775f4c",
+    "temporal.py": "f594ebf0683ff4f717242f0325cc98430d7fec171787b5b478762a18bfcdd11c",
+    "upstream.py": "0d471248da8b6a2e01e8516b771c0c7b299c318194dd5ddcefccb984554a7e08",
+    "vision.py": "12388c54aef7e0326d3d5dab49cbd0419a3e230910f04faa20ade7d67673c9e9"
+  },
+  "experiment_files": {
+    "C:\\Users\\JC\\.codex\\worktrees\\gnss-vlm-research\\GNSSAnomalyAgent-sim\\scripts\\experiment_exp10.py": "c5471bff806600dcab6e7ad78f27478647d435f0234aaa8c2b9a8b167d39e340",
+    "C:\\Users\\JC\\.codex\\worktrees\\gnss-vlm-research\\GNSSAnomalyAgent-sim\\scripts\\exp10_visual_graph.py": "3ffd9814c60300d11f6bc3cea9f30579f5f1f6962d6be994ed7b3ffa250775db"
+  },
+  "protocol_path": "docs/experiment-exp10.md",
+  "protocol_sha256": "f974aa0c0e1b378371e4970af9f5ce87435451796ab1ccfc1e091f93d48cbc30",
+  "identity": {
+    "experiment_id": "GNSS-VLM-EXP10",
+    "name": "GNSS竞争跳变联合视觉判别与训练形态参考实验",
+    "protocol_path": "docs/experiment-exp10.md",
+    "primary_method": "reference_graph",
+    "development_seed": 2026101501,
+    "model": "qwen3.8-flash",
+    "candidates": [
+      "reference_graph"
+    ],
+    "ablations": [
+      "zero_graph",
+      "text_graph"
+    ],
+    "minimum_vs_original": 0.02,
+    "minimum_visual_vs_numeric": 0.03,
+    "maximum_type_degradation": 0.05,
+    "reference_selection": "first sorted training example of step, transient, deformation, and mixed with an interior permanent step; first mixed otherwise",
+    "reference_context_days": 45,
+    "query_context_days": 45,
+    "max_pair_separation_days": 120,
+    "stable_commit": "4495ff0"
+  },
+  "references": [
+    {
+      "station_id": "s0002",
+      "split": "train",
+      "observation": "observations\\s0002.json",
+      "scenario": "step",
+      "events": [
+        {
+          "kind": "step",
+          "start": 601,
+          "end": 601,
+          "status": "confirmed",
+          "evidence": "simulation mechanism",
+          "phases": []
+        }
+      ]
+    },
+    {
+      "station_id": "s0003",
+      "split": "train",
+      "observation": "observations\\s0003.json",
+      "scenario": "transient",
+      "events": [
+        {
+          "kind": "transient",
+          "start": 541,
+          "end": 560,
+          "status": "confirmed",
+          "evidence": "simulation mechanism",
+          "phases": []
+        }
+      ]
+    },
+    {
+      "station_id": "s0004",
+      "split": "train",
+      "observation": "observations\\s0004.json",
+      "scenario": "deformation",
+      "events": [
+        {
+          "kind": "deformation",
+          "start": 524,
+          "end": 702,
+          "status": "confirmed",
+          "evidence": "simulation mechanism",
+          "phases": [
+            {
+              "kind": "acceleration",
+              "start": 524,
+              "end": 582
+            },
+            {
+              "kind": "steady",
+              "start": 583,
+              "end": 642
+            },
+            {
+              "kind": "deceleration",
+              "start": 643,
+              "end": 702
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "station_id": "s0005",
+      "split": "train",
+      "observation": "observations\\s0005.json",
+      "scenario": "mixed",
+      "events": [
+        {
+          "kind": "deformation",
+          "start": 453,
+          "end": 607,
+          "status": "confirmed",
+          "evidence": "simulation mechanism",
+          "phases": [
+            {
+              "kind": "acceleration",
+              "start": 453,
+              "end": 503
+            },
+            {
+              "kind": "steady",
+              "start": 504,
+              "end": 555
+            },
+            {
+              "kind": "deceleration",
+              "start": 556,
+              "end": 607
+            }
+          ]
+        },
+        {
+          "kind": "spike",
+          "start": 476,
+          "end": 476,
+          "status": "confirmed",
+          "evidence": "simulation mechanism",
+          "phases": []
+        },
+        {
+          "kind": "step",
+          "start": 471,
+          "end": 471,
+          "status": "confirmed",
+          "evidence": "simulation mechanism",
+          "phases": []
+        },
+        {
+          "kind": "transient",
+          "start": 459,
+          "end": 483,
+          "status": "confirmed",
+          "evidence": "simulation mechanism",
+          "phases": []
+        }
+      ]
+    }
+  ],
+  "reference_image_sha256": "7140c4e79fd4a5f0b523801a6c1c4b2e8942fd88a60a100c071ee49be3027c89",
+  "pending": [
+    {
+      "station": "s0029",
+      "mode": "original",
+      "request_sha256": "cd3971f8c124d1850c1b57c2af497acefeb6fa9409229c064acab4d530eaa273"
+    },
+    {
+      "station": "s0029",
+      "mode": "reference_graph",
+      "request_sha256": "5a5d7e1293846e2bdb9d738f5297f899a0315932c8e30664489db00cdc23d90f"
+    },
+    {
+      "station": "s0029",
+      "mode": "zero_graph",
+      "request_sha256": "9e7223e61f808da125c361908d93dc45bba367ae7a95be308ea8db96adbe6447"
+    },
+    {
+      "station": "s0029",
+      "mode": "text_graph",
+      "request_sha256": "4c6c5c9100d561120ed04633f8b7e595bab05aa9044bb6961f2c0f7c4e181866"
+    },
+    {
+      "station": "s0033",
+      "mode": "reference_graph",
+      "request_sha256": "cc538b7b3ef3008625a6d6c4e32d410778ca73e4c14dbb881f2cc6707f82944d"
+    },
+    {
+      "station": "s0033",
+      "mode": "zero_graph",
+      "request_sha256": "017274ce382935c2e85e87e13f697704b9e6f1959830f5a170dfeb2fca9c4392"
+    },
+    {
+      "station": "s0033",
+      "mode": "text_graph",
+      "request_sha256": "37d7bfb2b4ad2ba57866dd179444a7a9cf8493c20eea72a4a8f9723eabddeca2"
+    },
+    {
+      "station": "s0035",
+      "mode": "original",
+      "request_sha256": "c32d796bfcd3b4aef92a4c64095d22ef69e8fee1099520d8a4ffc9f4ed59cc35"
+    },
+    {
+      "station": "s0035",
+      "mode": "reference_graph",
+      "request_sha256": "fd3cdcc26889e31003cb520634a4e163ef68335575df9bbacd9a656e1d7d2d92"
+    },
+    {
+      "station": "s0035",
+      "mode": "zero_graph",
+      "request_sha256": "f5af0c23ec74740e10f97981d3a92c2c234663bc0a85de845f2240256641b42c"
+    },
+    {
+      "station": "s0035",
+      "mode": "text_graph",
+      "request_sha256": "ebe4bfc8d9862c2cbad8b000869c6e380c031d2b71fc6beb7e1d23b213fcdbd0"
+    },
+    {
+      "station": "s0039",
+      "mode": "reference_graph",
+      "request_sha256": "17886d004b847bbe51c4e612d4d50724b3aaa4f67ae52d38f0b66e75e2d6aab6"
+    },
+    {
+      "station": "s0039",
+      "mode": "zero_graph",
+      "request_sha256": "b264c4727133606c5583a0c39f073c9a4466686d3fb05816ed4844e8fc119066"
+    },
+    {
+      "station": "s0039",
+      "mode": "text_graph",
+      "request_sha256": "08634739e57e78d00b2ca199db11a4226b8e8ea053a6e8f38829f55846624f3d"
+    },
+    {
+      "station": "s0041",
+      "mode": "original",
+      "request_sha256": "732645d48d0f5844bd2ff3250e16ce3c50160c1ae0353345449e8f62970a13c6"
+    },
+    {
+      "station": "s0041",
+      "mode": "reference_graph",
+      "request_sha256": "290ad01d30b9493cc05a24d9199247e454c4c20a6e09b49c39c08b471466ee18"
+    },
+    {
+      "station": "s0041",
+      "mode": "zero_graph",
+      "request_sha256": "1536ca7a24693df3c66edf6ee317aa978457577febe7ddc6aebae03479e0bf92"
+    },
+    {
+      "station": "s0041",
+      "mode": "text_graph",
+      "request_sha256": "9bc95d46693f18c35a616c6c90e0d068daee829b374bf71a67bd643add230a16"
+    },
+    {
+      "station": "s0045",
+      "mode": "reference_graph",
+      "request_sha256": "56ab44e1feb6232ccee405d3238e43d24227bab7a5ddb4bb0e9ba321c909b584"
+    },
+    {
+      "station": "s0045",
+      "mode": "zero_graph",
+      "request_sha256": "f9ae44937c1b09dd628d91f37f1daa3d5c04134974c1c31fc603dcd14c0a5ff7"
+    },
+    {
+      "station": "s0045",
+      "mode": "text_graph",
+      "request_sha256": "15858d175993a2a7472765c80238e5fcd09689161f28f1bf5b09d6437b3d35f1"
+    },
+    {
+      "station": "s0047",
+      "mode": "original",
+      "request_sha256": "a369d3271fb4074cdbfdac2578ae81d5cafec5cf7f1eb4e29f99d5c89ced41a3"
+    },
+    {
+      "station": "s0047",
+      "mode": "reference_graph",
+      "request_sha256": "81243b12479f73b0e4ea6c7f896d550d3556529c06158249982da8e0b25d7c36"
+    },
+    {
+      "station": "s0047",
+      "mode": "zero_graph",
+      "request_sha256": "6f34f65af5540be01956cc0ac4c28d120bbc92d5376e4dcdc42b603f5ed4eae2"
+    },
+    {
+      "station": "s0047",
+      "mode": "text_graph",
+      "request_sha256": "34beecec961cad2cbd0765a5c8ab33fbe346f395149814f210f754f6fd337992"
+    }
+  ],
+  "pilot_ids": [
+    "s0029",
+    "s0033",
+    "s0035",
+    "s0039",
+    "s0041",
+    "s0045"
+  ]
+}

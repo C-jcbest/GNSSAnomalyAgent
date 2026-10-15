@@ -1,0 +1,18 @@
+{
+  "experiment_id": "GNSS-VLM-EXP10",
+  "name": "GNSS竞争跳变联合视觉判别与训练形态参考实验",
+  "protocol_path": "docs/experiment-exp10.md",
+  "primary_method": "reference_graph",
+  "development_seed": 2026101501,
+  "model": "qwen3.8-flash",
+  "candidates": ["reference_graph"],
+  "ablations": ["zero_graph", "text_graph"],
+  "minimum_vs_original": 0.02,
+  "minimum_visual_vs_numeric": 0.03,
+  "maximum_type_degradation": 0.05,
+  "reference_selection": "first sorted training example of step, transient, deformation, and mixed with an interior permanent step; first mixed otherwise",
+  "reference_context_days": 45,
+  "query_context_days": 45,
+  "max_pair_separation_days": 120,
+  "stable_commit": "4495ff0"
+}

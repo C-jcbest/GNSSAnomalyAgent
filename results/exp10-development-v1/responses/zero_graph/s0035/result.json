@@ -1,0 +1,30 @@
+{
+  "status": "success",
+  "requested_model": "qwen3.8-flash",
+  "request_count": 1,
+  "retry_count": 0,
+  "http_status": 200,
+  "served_model": "qwen3.8-flash",
+  "usage": {
+    "prompt_tokens": 2948,
+    "total_tokens": 3178,
+    "completion_tokens": 230,
+    "prompt_tokens_details": {
+      "cached_tokens": 512,
+      "image_tokens": 2144,
+      "text_tokens": 804
+    },
+    "completion_tokens_details": {}
+  },
+  "elapsed_seconds": 4.0466219000009005,
+  "graph_decision": {
+    "decision": "replace_levels",
+    "pair_ids": [
+      "P3"
+    ],
+    "step_ids": [
+      "J1"
+    ],
+    "evidence": "Analysis of the three axes reveals two distinct types of anomalies. 1) A permanent step change occurs at J1 (index ~587). This is clearly visible in the E-axis as a sharp drop from ~0 to -12 MAD, and in the U-axis as a jump from ~-1 to +1.5 MAD. The N-axis shows a corresponding upward shift. Since the level does not return to the previous baseline, this is classified as a standalone step (J1). 2) A transient spike occurs around indices 640-645. In the E-axis, there is a large negative excursion starting at J2 (~640) that returns to the new baseline at J3 (~645). The U-axis also shows a downward trend during this period. The candidate pair P3 (J2-J3) correctly identifies this short-duration anomaly where the signal shifts and then returns. Therefore, J2 and J3 are paired."
+  }
+}
