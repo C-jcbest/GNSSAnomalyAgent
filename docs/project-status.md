@@ -1,5 +1,20 @@
 # 新分支研究状态
 
+## EXP27局部趋势分离与边缘放大：小批无新增收益（2026-10-15）
+
+分支codex/exp27-trend-aware-cfv，父版本6736b41；EXP26 ZIP SHA重验通过，
+备份标签backup/exp26-cfv-before-exp27-20261015。协议docs/experiment-exp27.md。
+新seed1518生成96训练/48validation/48test，数值baseline完成48validation，
+新方法只推理并评分前24validation，2个自由配对触发站，22次请求全部成功、0重试。
+ECV边缘放大、TCV趋势分离和原CFV-Flash输出逐站相同：Aff .9963、日F1 .9907、四类 .8741、FP6。
+ECV文字Aff .9564，但TCV文字与图相同；近邻Aff .9994、日F1 .9984、四类 .8486、FP1。
+s0059图正确恢复内含独立阶跃暂态；s0071图误将尖峰+阶跃片段归暂态，不能只依据四类F1宣称定位更好。
+决定取消集成，停止后24站视觉扩量与test，保留EXP26。1518前24validation已用于开发，不能再称未见。
+生产src、EXP26冻结脚本、Word未改；71测试通过。
+下一未测假设是持续偏移与尖峰+独立阶跃的竞争解释，不继续优先扫描DPI。
+[完整结论](exp27-assessment.md)、[19方法和消融](../results/exp27-development-pilot-v1/results.md)、
+[备份凭据](exp27-backup.json)。以下为历史状态。
+
 ## EXP26反事实位移图验证完成（2026-10-15）
 
 分支`codex/exp26-counterfactual-visual-review`，父版本5b88846；优化前备份标签
