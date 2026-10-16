@@ -44,3 +44,21 @@ def test_export_does_not_change_frozen_input_or_export_old_cross_type_average(tm
     assert len(result['rows']) == 12
     assert 'types_daily_macro_f1' not in (output / 'per-type.json').read_text(encoding='utf-8')
     assert '四类F1' not in (output / 'results.md').read_text(encoding='utf-8')
+
+
+def test_primary_scores_follow_point_daily_and_range_affiliation_policy():
+    summary = sample_summary()
+    summary['methods']['full']['range'] = {
+        kind: {'affiliation': {'precision': .9, 'recall': .7, 'station_macro_f1': .75},
+            'negative_station_fp_days': 12}
+        for kind in ('transient', 'deformation')}
+    typed = {row['kind']: row for row in per_type_rows(summary) if row['method'] == 'full'}
+    assert typed['spike']['primary_f1'] == .2
+    assert typed['step']['primary_f1'] == .4
+    for kind in ('transient', 'deformation'):
+        assert typed[kind]['primary_metric'] == 'affiliation_f1'
+        assert typed[kind]['primary_f1'] == .75
+        assert typed[kind]['primary_precision'] == .9
+        assert typed[kind]['primary_recall'] == .7
+        assert typed[kind]['negative_station_fp_days'] == 12
+    assert typed['transient']['f1'] == .6

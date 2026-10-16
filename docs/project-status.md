@@ -1,5 +1,17 @@
 # 新分支研究状态
 
+## 2026-10-16 用户修正及EXP35：点类日F1、范围Aff，固定粒度分工
+
+- 类型：Correction / Decision / Status；影响评价、融合职责与新实验准入。按[evaluation-policy.md](evaluation-policy.md)执行，范围日F1作辅助，不再单因其下降否定范围Aff研究收益。
+- 使用project-status-recorder同步规则。AGENTS与只读导出已更新，3批既有结果生成v2；旧冻结记录/准入不改。
+- 新分支`codex/exp35-granularity-fusion`，稳定标签`backup/per-type-before-granularity-fusion-20261016`指向b63b4088。
+- EXP35为已看数据后的开发诊断：固定数值spike/step与原视觉融合transient/deformation，同样处理两种文字控制。两批72/36站，每批16方法，0API、0训练；原预测SHA不变。
+- 72站四主指标.7895/.8148/.9137/.9946均为本组最优或并列；暂态Aff比近邻高.1221，但多375FP。step相对旧融合多5TP/1FP，日F1恢复.8148。
+- 36站四主指标.7778/.7368/.9995/.9316；暂态未超过近邻1，step比原图像融合.7778低，恢复1个假阶跃。不能只报72站结果。
+- 形变无新增视觉预测，各类SOTA未确认；候选保留，不替换生产。剩余72开发/360test本轮未用，下轮需先固定确认协议再预测。
+- 验证：4项针对性测试通过，覆盖主指标选取、范围辅助计数、输入保留、点/范围同日共存；本轮4个Python文件Ruff通过。
+- 链接：[EXP35评估](exp35-assessment.md)、[诊断登记](experiment-exp35.md)、[72站](../results/exp35-exp34-development-v1/per-type/results.md)、[36站](../results/exp35-s1-development-v1/per-type/results.md)。
+
 ## 2026-10-16 用户修正：四类异常分开统计，不再用平均F1总评
 
 - 类型：Correction / Constraint / Doc Sync；范围：评价、报告及后续新实验准入。

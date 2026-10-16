@@ -1,11 +1,19 @@
 # GNSS 视觉大模型异常识别研究
 
+2026-10-16 **EXP35完成：按异常粒度分工（GNV-GNSS），点类使用日F1，范围类使用各自Affiliation**。
+离线复算已有72/36开发站，每批16方法。72站单点/阶跃日F1为.7895/.8148，暂态/形变Aff为.9137/.9946，
+均为本组最优或并列；暂态较近邻提高12.21个百分点。36站暂态.9995低于近邻1.0000，未复现完整系统优势。
+图像范围有真实增益及误报代价，形变仍由数值输出；尚无各类领域SOTA证据。
+[完整评估](docs/exp35-assessment.md)、[72站全部逐类结果](results/exp35-exp34-development-v1/per-type/results.md)、
+[36站全部逐类结果](results/exp35-s1-development-v1/per-type/results.md)、[评价口径](docs/evaluation-policy.md)。
+本轮0模型请求，剩余72开发/360测试未使用；以下旧记录保留其原判定。
+
 2026-10-16 **评价口径修正：四类异常分别统计，停止使用四类平均F1作为总指标或新实验准入依据**。
-单点、阶跃、暂态、持续形变各自报告P/R/F1与TP/FP/FN；暂态、形变另报各自Affiliation及负站误报。
+单点、阶跃以各自日P/R/F1为主；暂态、持续形变以各自Affiliation为主，日计数和负站误报辅助。
 以下旧实验条目保留原冻结记录，当前展示以逐类报告为准：
-[最新36站逐类结果](results/exp34-s1-per-type-v1/results.md)、
-[72站逐类结果](results/exp34-per-type-v1/results.md)、
-[历史360测试站逐类结果](results/exp29-s3-test-per-type-v1/results.md)、[完整口径](docs/evaluation-policy.md)。
+[最新36站逐类结果](results/exp34-s1-per-type-v2/results.md)、
+[72站逐类结果](results/exp34-per-type-v2/results.md)、
+[历史360测试站逐类结果](results/exp29-s3-test-per-type-v2/results.md)、[完整口径](docs/evaluation-policy.md)。
 本次只读导出，不重跑模型，不改变旧准入判定；仅暂态输出的其他三类标不适用。
 
 2026-10-16 **EXP34 / S1完成：去叙述联合视觉的范围识别收益得到部分重复，系统暂不升级**。

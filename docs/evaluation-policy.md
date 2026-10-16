@@ -1,21 +1,25 @@
 # 分类型评价口径
 
-2026-10-16，用户明确要求四类异常分开统计，停止使用四类F1平均值作为总指标。
+2026-10-16，用户明确要求四类异常分开统计，并进一步指定：点异常以日F1为主，范围异常以Affiliation为主。
+数值与视觉按擅长的异常粒度分工，目标是逐类达到先进水平；尚未满足对比条件时不提前称SOTA。
 
 ## 当前要求
 
 分别汇总所有站点有效观测日上的TP、FP、FN，得到**每个类型自己的Precision、Recall和F1**：
 
-| 类型 | 主要报告 | 补充范围评价 |
+| 类型 | 主要评价 | 辅助评价 |
 |---|---|---|
-| 单点异常spike | 独立P/R/F1、TP/FP/FN，严格发生日 | 不强行添加范围分数 |
-| 永久阶跃step | 独立P/R/F1、TP/FP/FN，严格发生日 | 阶跃后整个平台不扩为异常区间 |
-| 暂态transient | 独立日P/R/F1、TP/FP/FN | 独立Affiliation P/R/F1及无暂态站误报 |
-| 持续形变deformation | 独立日P/R/F1、TP/FP/FN | 独立Affiliation P/R/F1及无形变站误报 |
+| 单点异常spike | 日级Precision、Recall、F1，严格发生日 | TP/FP/FN |
+| 永久阶跃step | 日级Precision、Recall、F1，严格发生日 | TP/FP/FN；阶跃后平台不扩为异常区间 |
+| 暂态transient | 该类Affiliation Precision、Recall、F1 | 日P/R/F1、TP/FP/FN、无暂态站误报 |
+| 持续形变deformation | 该类Affiliation Precision、Recall、F1 | 日P/R/F1、TP/FP/FN、无形变站误报 |
 
-各类型分别计算F1 = 2TP / (2TP + FP + FN)，不再对四类F1或事件F1取平均作为报告指标。
+日F1各类型分别计算2TP / (2TP + FP + FN)；范围Aff-F1由该类Aff-P/R及既定站间聚合得出，不能用日计数代算。
+不再对四类F1或事件F1取平均作为报告指标。
 多类型可在同一天共存，缺测日不计入有效观测。
 Affiliation仍沿用已披露的同类真阳性站聚合，不跨异常类型平均；负站误报必须单列。
+当前Aff-F1先逐站由P/R计算，再在该类阳性站平均；表内Aff-P、Aff-R各自也先算站平均，
+因此所展示Aff-F1不一定等于所展示聚合P/R的调和平均。不得混称这两种聚合。
 范围并集只可作为明确标注“不区分范围类型”的补充，不能替代暂态和形变各自结果。
 通用异常检测器没有类型输出时，类型P/R/F1标不适用，通用异常结果另列。
 只输出暂态的模型独立读出，其他三类标不适用，不展示为零分或合并后排名。
@@ -24,8 +28,17 @@ Affiliation仍沿用已披露的同类真阳性站聚合，不跨异常类型平
 
 说明某类有收益时，直接给出该类图文/数值差值、真实恢复、误报及正反例。
 形变沿用数值时明确说明，不能将该类分数归为视觉作用。
-后续新方法如需限制其他类型退化，在新预测前逐类登记允许变化与依据；
+范围日F1和误报是辅助解释，不因范围日F1单项下降直接否定Aff改善；同时不能把仅Aff增加写成真实覆盖增加。
+后续范围研究准入以预先登记的该类Aff增益和跨站/种子方向为主，实际TP及误报并列披露；
+完整系统如需限制其他类型退化，在新预测前按每类主指标登记允许变化与依据；
 不得继续采用“四类平均F1下降不超过某值”的门槛，也不能用一类上升抵消另一类下降。
+
+数值侧优先处理单点/阶跃，视觉侧参与暂态和持续形变范围；融合规则须明确每类结果的所有者，
+不能默默用范围候选删除独立点异常。仍由数值输出的形变不能称新增视觉能力。
+SOTA要求同数据、同划分、同类主指标，与已执行的近期作者方法/明确适配公平比较；
+在自有基线表中最好只能称“本组对照最优”，不能将未运行论文排在本方法之后。
+VisualTimeAnomaly关于视觉范围任务优势的观察提供分工动机，不保证本项目GNSS结果：
+https://arxiv.org/abs/2502.17812 。Affiliation原指标依据：https://arxiv.org/abs/2206.13167 。
 
 ## 历史记录与当前实现
 
@@ -36,12 +49,13 @@ Affiliation仍沿用已披露的同类真阳性站聚合，不跨异常类型平
 已有summary本身已保存各类型daily_micro，无需重跑模型或重新拟合。
 `scripts/report_per_type.py`只读取这些分类型统计，独立生成新CSV、JSON和报告；
 不调用旧跨类型聚合，不输出类型平均，不修改冻结的推理或评分文件。
+当前v2导出主表固定为单点日F1、阶跃日F1、暂态Aff-F1、形变Aff-F1，其他指标放入对应类型辅助表。
 导出登记原summary的SHA、方法输出范围和本次规则版本，新增模型请求为0。
 
 示例：
 
 ```powershell
-uv run --no-sync python scripts/report_per_type.py --summary results/exp34-s1-validation-pilot-v1/summary.json --out results/exp34-s1-per-type-v1
+uv run --no-sync python scripts/report_per_type.py --summary results/exp34-s1-validation-pilot-v1/summary.json --out results/exp34-s1-per-type-v2
 ```
 
 这是对既有结果的展示修正，不是新独立实验；原数据集、预测、失败和缺测规则不变。
