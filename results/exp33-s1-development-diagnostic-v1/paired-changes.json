@@ -1,0 +1,190 @@
+{
+  "changes": [
+    {
+      "station": "v0036",
+      "cohort_seed": 2026101601,
+      "scenario": "normal",
+      "tp_delta": 0,
+      "fp_delta": 0,
+      "aff_delta": null
+    },
+    {
+      "station": "v0037",
+      "cohort_seed": 2026101601,
+      "scenario": "spike",
+      "tp_delta": 0,
+      "fp_delta": 0,
+      "aff_delta": null
+    },
+    {
+      "station": "v0038",
+      "cohort_seed": 2026101601,
+      "scenario": "step",
+      "tp_delta": 0,
+      "fp_delta": 0,
+      "aff_delta": null
+    },
+    {
+      "station": "v0039",
+      "cohort_seed": 2026101601,
+      "scenario": "transient",
+      "tp_delta": 23,
+      "fp_delta": 0,
+      "aff_delta": 1.0
+    },
+    {
+      "station": "v0040",
+      "cohort_seed": 2026101601,
+      "scenario": "deformation",
+      "tp_delta": 0,
+      "fp_delta": 0,
+      "aff_delta": null
+    },
+    {
+      "station": "v0041",
+      "cohort_seed": 2026101601,
+      "scenario": "mixed",
+      "tp_delta": 0,
+      "fp_delta": 65,
+      "aff_delta": 0.8574676260819565
+    },
+    {
+      "station": "v0156",
+      "cohort_seed": 2026101602,
+      "scenario": "normal",
+      "tp_delta": 0,
+      "fp_delta": 0,
+      "aff_delta": null
+    },
+    {
+      "station": "v0157",
+      "cohort_seed": 2026101602,
+      "scenario": "spike",
+      "tp_delta": 0,
+      "fp_delta": 0,
+      "aff_delta": null
+    },
+    {
+      "station": "v0158",
+      "cohort_seed": 2026101602,
+      "scenario": "step",
+      "tp_delta": 0,
+      "fp_delta": 0,
+      "aff_delta": null
+    },
+    {
+      "station": "v0159",
+      "cohort_seed": 2026101602,
+      "scenario": "transient",
+      "tp_delta": 24,
+      "fp_delta": 0,
+      "aff_delta": 1.0
+    },
+    {
+      "station": "v0160",
+      "cohort_seed": 2026101602,
+      "scenario": "deformation",
+      "tp_delta": 0,
+      "fp_delta": 0,
+      "aff_delta": null
+    },
+    {
+      "station": "v0161",
+      "cohort_seed": 2026101602,
+      "scenario": "mixed",
+      "tp_delta": 0,
+      "fp_delta": 0,
+      "aff_delta": 0.0
+    },
+    {
+      "station": "v0276",
+      "cohort_seed": 2026101603,
+      "scenario": "normal",
+      "tp_delta": 0,
+      "fp_delta": 0,
+      "aff_delta": null
+    },
+    {
+      "station": "v0277",
+      "cohort_seed": 2026101603,
+      "scenario": "spike",
+      "tp_delta": 0,
+      "fp_delta": 0,
+      "aff_delta": null
+    },
+    {
+      "station": "v0278",
+      "cohort_seed": 2026101603,
+      "scenario": "step",
+      "tp_delta": 0,
+      "fp_delta": 7,
+      "aff_delta": null
+    },
+    {
+      "station": "v0279",
+      "cohort_seed": 2026101603,
+      "scenario": "transient",
+      "tp_delta": 61,
+      "fp_delta": 0,
+      "aff_delta": 0.9999779049470823
+    },
+    {
+      "station": "v0280",
+      "cohort_seed": 2026101603,
+      "scenario": "deformation",
+      "tp_delta": 0,
+      "fp_delta": 0,
+      "aff_delta": null
+    },
+    {
+      "station": "v0281",
+      "cohort_seed": 2026101603,
+      "scenario": "mixed",
+      "tp_delta": -36,
+      "fp_delta": -85,
+      "aff_delta": -0.47367503246831305
+    }
+  ],
+  "tp_delta": 72,
+  "fp_delta": -13,
+  "tp_improved_stations": 3,
+  "tp_harmed_stations": 1,
+  "bootstrap": {
+    "repeats": 2000,
+    "seed": 2026101525,
+    "endpoints": {
+      "transient_affiliation_f1": {
+        "difference": 0.5639617497601209,
+        "percentile_ci_95": [
+          0.013156960002614057,
+          0.9999869086811463
+        ],
+        "undefined_resamples": 2
+      },
+      "deformation_affiliation_f1": {
+        "difference": 0.0,
+        "percentile_ci_95": [
+          0.0,
+          0.0
+        ],
+        "undefined_resamples": 1
+      },
+      "range_union_affiliation_f1": {
+        "difference": 0.36149682003777045,
+        "percentile_ci_95": [
+          -0.0020085850538955168,
+          0.7493656505496745
+        ],
+        "undefined_resamples": 0
+      },
+      "four_type_daily_f1": {
+        "difference": 0.07990314769975787,
+        "percentile_ci_95": [
+          -0.05539150355069728,
+          0.22877240746760777
+        ]
+      }
+    },
+    "scope": "Descriptive station bootstrap; common fitted models; no significance acceptance gate"
+  }
+}
