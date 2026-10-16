@@ -5,6 +5,7 @@
 
 ## 当前研究约束
 
+- 当前实际研究工作树为`D:/CodeWorkSpace/CodexWorktrees/gnss-vlm-research/GNSSAnomalyAgent-sim`，后续代码、Git及实验命令在此执行。用户已将应用工作树根目录设为`D:/CodeWorkSpace/CodexWorktrees`，不得再在C盘新建工作树。原`D:/CodeWorkSpace/AgentWorkspace/GNSSAnomalyAgent-sim`保留共享实验数据和历史检出，不能与当前研究代码混用。迁移记录见docs/worktree-migration-20261016.md。
 - 当前入口是`src/gnss_research`与`gnss-research` CLI，使用单轮视觉审阅和数值对照；旧分支探索代码不迁作本分支证据。
 - 不设跨站点统一毫米/速率告警阈值。保留原库或原作者决策参数，任何参数、提示、输入或后处理适配必须披露并与默认结果分列。
 - 实验先小批后扩量，模型沿用本地配置；用户已授权不限制请求总数。禁止隐式重试或覆盖已登记运行，新增复测独立登记，全部失败保留。

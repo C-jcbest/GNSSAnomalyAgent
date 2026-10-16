@@ -1,5 +1,12 @@
 # 新分支研究状态
 
+## 2026-10-16 当前研究工作树已迁移D盘
+
+- 用户将应用工作树根目录设为`D:/CodeWorkSpace/CodexWorktrees`并授权迁移。当前代码/Git目录为`D:/CodeWorkSpace/CodexWorktrees/gnss-vlm-research/GNSSAnomalyAgent-sim`，分支仍为codex/exp35-granularity-fusion。
+- 22,721跟踪文件与旧目录逐字节一致；1,638必要忽略文件先外部备份，再复制及SHA核验。D盘环境重建、模型加载、本地配置、4测试及EXP35 8项SHA核验通过，0模型请求。
+- 旧C盘副本已通过应用归档并移除，当前会话只挂接D盘活动工作树，保留旧C盘可恢复归档。共享实验数据和历史检出仍在原D盘路径；上轮早期材料缺失的边界不变。
+- AGENTS已记录未来工作树禁用C盘；[完整迁移与路径说明](worktree-migration-20261016.md)。
+
 ## 2026-10-16 项目清理：聊天与分支完成，文件删除受阻
 
 - 归档20条本项目旧聊天，保留当前会话；23本地/20远端旧分支已删除，本地保留main/当前EXP35，远端额外保留GitHub默认simulation-lab。

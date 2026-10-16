@@ -1,5 +1,9 @@
 # GNSS 视觉大模型异常识别研究
 
+当前实际研究工作树：`D:/CodeWorkSpace/CodexWorktrees/gnss-vlm-research/GNSSAnomalyAgent-sim`。
+2026-10-16已从C盘迁移，代码、模型、配置校验及测试通过，旧C盘副本已归档移除。
+后续工作树仅使用D盘；[迁移与历史路径说明](docs/worktree-migration-20261016.md)。
+
 2026-10-16项目清理：本项目只保留当前活动会话，旧分支已归档清理；
 共享工作树回收后的恢复情况、历史材料完整性边界及被拒绝的文件删除见[清理记录](docs/cleanup-20261016.md)。
 
