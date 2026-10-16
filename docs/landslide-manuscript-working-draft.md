@@ -1,5 +1,15 @@
 # 长期GNSS持续位移活动与运动阶段识别：证据约束与视觉判别失效分析
 
+当前以[完整稿v14](gnss-deformation-manuscript-draft-2026-10-13-v14.md)及QSG完整结果为准。固定局部图形监督F1 .7114低于去监督.7443，净−68；虽平均图形R² .0479，未转为活动收益，STOP。14权重266校准600输出精确重放，65行内37显示LaTeX通过。96×730、48／24／24不变，保留内容未加载。不要重启训练、改停止版本或将较好控制更名创新；下一机制应先证明独特且可纠错的活动信息，不能重复已停止残差、空间读出、竞争拟合或权限排列。目标active，无本轮live进程，核心创新和独立效果尚未成立。
+
+当前续接以[完整初稿v13](gnss-deformation-manuscript-draft-2026-10-13-v13.md)和[signed-event-session-v1](../artifacts/gnss-deformation-diversity-2026-10-12/signed-event-session-v1/passport.md)为准。SERA F1 .738574/.728938低于RCRA、净损82/84，同预算center／whole输出相同，STOP；48方法1152输出重放完成。固定视觉目标事实MAE .899760高于零.715288、平均R²−.038338，也STOP。0新API／数据，59行内35显示LaTeX通过；保留24内容未加载。先获取独特局部证据价值，不重做已停止块图／分段／竞争／权限排列。goal active，无live进程，尚无独立稳定Agent/VLM贡献。
+
+当前续接以[完整初稿v12](gnss-deformation-manuscript-draft-2026-10-13-v12.md)及[daily-authority-session-v1](../artifacts/gnss-deformation-diversity-2026-10-12/daily-authority-session-v1/passport.md)为准。RCRA小试两遍通过，完整48/24主F1 .753963/.741811、强数值.844167，第一遍未胜49邻域、严格事件受损，STOP_RCRA_FULL_DEVELOPMENT。114新请求、36方法864输出重放已完成，保留24未加载；先检验新增／撤回不同证据授权与已有机制差异，不改停止版救分。53行内32显示LaTeX通过，goal active，没有live进程。
+
+> **当前整体形变主稿**为[运动分布证据与多形态机制验证v7](gnss-deformation-manuscript-draft-2026-10-13-v7.md)，含48／24数值信息收益、16／8辅助视觉的强对照与关键消融、实际负结果及LaTeX公式。旧有限复核稿与本失效诊断底稿保留作历史，不能当作新的稳定创新结论。
+
+> 当前已有[有限运动冲突复核完整论文初稿](landslide-adaptive-review-manuscript-draft.md)与[实际统一比较／消融／新确认结果](landslide-adaptive-review-results.md)。本文件保留为此前失效诊断底稿，不作为当前未执行状态入口。
+
 > 中文初稿工作底稿，2026-10-08。不是已完成投稿稿。正式共同独立参考、真实案例和最终效果表仍待补齐；不将开发标签成绩与review-v3后的无参考诊断混写。
 
 ## Material Passport

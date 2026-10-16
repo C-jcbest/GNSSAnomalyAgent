@@ -1,0 +1,20 @@
+{
+  "schema_version": "landslide-adaptive-review-v1",
+  "date": "2026-10-09",
+  "scope": "Twelve held-out new-seed analytic motion probes: controlled latent mechanism recovery, not expert observable-motion or field generalization. Method frozen after pilot-v3; all observations/errors in this probe family are newly generated. Same recalibrated numeric baselines and stage head for every visual activity arm.",
+  "source_bundle": "artifacts/landslide-adaptive-review-2026-10-09/motion-probe-v2",
+  "case_ids": ["case_0037", "case_0038", "case_0039", "case_0040", "case_0041", "case_0042", "case_0043", "case_0044", "case_0045", "case_0046", "case_0047", "case_0048"],
+  "model": "qwen3.8-flash",
+  "repetitions": 2,
+  "window_days": 180,
+  "stride_days": 90,
+  "policy": {"maximum_reviews": 2, "minimum_conflict_days": 14, "minimum_rate": 0.03, "minimum_signal_to_noise": 2.0},
+  "maximum_requests": 168,
+  "hard_timeout_seconds": 3600,
+  "retries": 0,
+  "stage_policy": "Newly trained XGBoost stage head on the common train split; no old fitted model. Same head and support on all visual activity arms; native numeric heads also scored.",
+  "freeze": "Keep policy, feedback, rendering, aggregation, model settings unchanged from pilot-v3. Record predictions before test scoring; never tune or resample the twelve test records.",
+  "primary": "Activity P/R/F1, FP/FN, weak scenario recall, event matching and boundary errors",
+  "secondary": "End-to-end A/S/D and false A, coverage, output failures, requests/tokens/time",
+  "interpretation": "Do not promote independent synthetic mechanism recovery to independent field or expert observable-label validation. Existing previously sealed background test remains untouched. No positive effect is presumed."
+}

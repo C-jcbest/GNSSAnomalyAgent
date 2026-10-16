@@ -1,0 +1,21 @@
+{
+  "schema_version": "landslide-adaptive-review-v1",
+  "date": "2026-10-09",
+  "scope": "New twelve controlled records for pre-frozen conflict-scoped revision. Unchanged four workflows and same train24/validation12 models; candidate scope and matched-centre ablation applied after all main and TAMA GNSS inference is frozen. Not field accuracy or expert observable validation.",
+  "source_bundle": "artifacts/landslide-adaptive-review-2026-10-09/revision-scope-confirmation-data-v1",
+  "case_ids": ["case_0073", "case_0074", "case_0075", "case_0076", "case_0077", "case_0078", "case_0079", "case_0080", "case_0081", "case_0082", "case_0083", "case_0084"],
+  "model": "qwen3.8-flash",
+  "repetitions": 2,
+  "window_days": 180,
+  "stride_days": 90,
+  "policy": {"maximum_reviews": 2, "minimum_conflict_days": 14, "minimum_rate": 0.03, "minimum_signal_to_noise": 2.0},
+  "maximum_requests": 168,
+  "hard_timeout_seconds": 3600,
+  "retries": 0,
+  "stage_policy": "Same frozen train24 stage head for visual arms, scope ablations and TAMA GNSS adaptation",
+  "primary_candidate": "adaptive_no_feedback + conflict_scope with fixed 49-day raw observation half-footprint",
+  "freeze": "Candidate source and decision conditions frozen before generation; no test tuning, repeated-call selection or source changes. Current whole-target default retained pending confirmation.",
+  "primary": "Activity P/R/F1, event IoU0.3/0.5, conditional boundaries, TP protection, FP removal and weak recall",
+  "secondary": "Unknown coverage, ASD inside activity and end-to-end, inference and deterministic scope costs",
+  "interpretation": "Scopes choose revision authority, not labels. Both repetitions and matched observed-day central control retained. TAMA adaptation is not original published benchmark reproduction."
+}

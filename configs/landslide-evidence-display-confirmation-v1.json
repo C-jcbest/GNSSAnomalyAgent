@@ -1,0 +1,103 @@
+{
+  "schema": "landslide-evidence-display-confirmation-v1",
+  "status": "registered_not_generated",
+  "primary": "evidence_display",
+  "generation": {
+    "seed": 2026100937,
+    "indices_zero_based": [
+      84,
+      85,
+      86,
+      87,
+      88,
+      89,
+      90,
+      91,
+      92,
+      93,
+      94,
+      95
+    ],
+    "case_ids": [
+      "case_0085",
+      "case_0086",
+      "case_0087",
+      "case_0088",
+      "case_0089",
+      "case_0090",
+      "case_0091",
+      "case_0092",
+      "case_0093",
+      "case_0094",
+      "case_0095",
+      "case_0096"
+    ],
+    "days": 730,
+    "families": [
+      "quiet",
+      "instrument_step",
+      "weak_constant",
+      "asd",
+      "reactivation",
+      "weak_after_strong"
+    ],
+    "reference": "Controlled latent activity/ASD; not field or expert observable validation"
+  },
+  "fixed_policy": {
+    "maximum_reviews": 2,
+    "minimum_conflict_days": 14,
+    "minimum_rate": 0.03,
+    "minimum_signal_to_noise": 2.0,
+    "window_days": 180,
+    "stride_days": 90,
+    "base_evidence_days": 42,
+    "additional_evidence_days": 84,
+    "base_scope_radius": 49,
+    "new_scope_radius": 91,
+    "raw_block_days": 14,
+    "minimum_block_observed_days": 8
+  },
+  "primary_rule": "On frozen84 selected targets, choose narrow block display when base42 target conflict count<14, otherwise narrow raw; no local answers or labels used for choices",
+  "visual_controls": [
+    "direct_visual",
+    "fixed_narrow_raw_budget2",
+    "fixed_narrow_blocks_budget2",
+    "adaptive42_narrow_raw",
+    "adaptive42_narrow_blocks",
+    "adaptive84_narrow_raw",
+    "adaptive84_narrow_blocks",
+    "adaptive84_evidence_display"
+  ],
+  "requests": "Share identical initial/local requests across controls. Per-method budget<=3/record. Eight workflows need at most six distinct local windows with two display types plus one initial per record: at most312 unique requests for12 records x two repetitions. No retry or best-repeat choice.",
+  "numeric_controls": [
+    "robust_rule",
+    "pelt_rule",
+    "xgboost",
+    "robust_xgboost_stage",
+    "raw_multiscale_rule",
+    "xgboost_raw_persistence",
+    "raw_rule_84",
+    "xgboost_42_matched_support",
+    "xgboost_84"
+  ],
+  "training": "Keep same original train24/validation12 frozen fitted models and parameter selections; all information/support-matched84 models included. No new record used for fitting/calibration.",
+  "scoring": "Same activity P/R/F1 and weak_signal, IoU.3/.5 one-to-one events, matched-only boundaries, coverage, end-to-end and true-activity ASD, actual unique and hypothetical method costs",
+  "stop": "Do not promote unless both repetitions improve daily F1 and weak recall versus adaptive84_narrow_raw, have F1 no lower than adaptive42_narrow_raw, and do not increase total FP on generated quiet/step negatives versus adaptive84_narrow_raw. Disclose TP loss and all baseline tradeoffs. If either fails, reject or retain inconclusive without test retuning.",
+  "model": {
+    "name": "qwen3.8-flash",
+    "temperature": 0.1,
+    "top_p": 0.3,
+    "max_tokens": 2048,
+    "enable_thinking": false,
+    "repetitions": 2,
+    "retries": 0
+  },
+  "independence": "Gate was selected after viewed0073-0084 outcomes. Generate0085-0096 only after runner/data/model/source hashes are frozen. Existing labels cannot confirm it.",
+  "source_bindings": {
+    "src/gnss_sim/landslide_evidence_observation.py": "6c35fc1f4c70f6a6eaf1f4e1997e874ded7cb476da6a2e24998e0499639b0708",
+    "src/gnss_sim/landslide_observation_view.py": "69203e772caa8b82a1e97afa774476ac012c5c01dbf9e3b4a9329626bf6fb623",
+    "scripts/probe_landslide_evidence_display.py": "03a239663f1928351f47d2559ddcb6716ae753295c75e658877dae93349acec3",
+    "scripts/prepare_landslide_motion_probe.py": "8d779741d1729b6db89f15cc7b832bbd4860bdfe27e8dfc7667b57bd23bd2a3c",
+    "scripts/probe_landslide_longer_motion_evidence.py": "97ccb3f9246825f101caf90c27cdb0cc87a4160a00dcce5e245057b45001c226"
+  }
+}

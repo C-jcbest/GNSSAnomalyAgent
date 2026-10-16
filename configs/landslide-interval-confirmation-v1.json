@@ -1,0 +1,21 @@
+{
+  "schema_version": "landslide-adaptive-review-v1",
+  "date": "2026-10-09",
+  "scope": "New twelve-record controlled confirmation for interval-support candidate chosen on cached development. Run unchanged four visual workflows, freeze all predictions including separate TAMA GNSS adaptation, then score and apply previously frozen deterministic checks. No field accuracy claims.",
+  "source_bundle": "artifacts/landslide-adaptive-review-2026-10-09/interval-confirmation-data-v1",
+  "case_ids": ["case_0061", "case_0062", "case_0063", "case_0064", "case_0065", "case_0066", "case_0067", "case_0068", "case_0069", "case_0070", "case_0071", "case_0072"],
+  "model": "qwen3.8-flash",
+  "repetitions": 2,
+  "window_days": 180,
+  "stride_days": 90,
+  "policy": {"maximum_reviews": 2, "minimum_conflict_days": 14, "minimum_rate": 0.03, "minimum_signal_to_noise": 2.0},
+  "maximum_requests": 168,
+  "hard_timeout_seconds": 3600,
+  "retries": 0,
+  "stage_policy": "Same frozen common train24 stage head for every visual arm and TAMA adapter; numerical models from same train24/validation12 distribution",
+  "primary_candidate": "adaptive_no_feedback + require_support interval check, defined in frozen data protocol before generation",
+  "freeze": "Keep v1 workflows unchanged. No new-data method selection, threshold changes, repeat selection or test-label tuning. Candidate check and same checks on all controls are deterministic analyses after all inference is frozen.",
+  "primary": "Activity P/R/F1, TP loss and FP removal, weak recall, events, conditional boundary errors",
+  "secondary": "End-to-end ASD, coverage, failures, actual model costs including normal-reference calls",
+  "interpretation": "Twelve controlled latent-process records do not substitute for independent expert observable references. TAMA adaptation scores do not reproduce its published generic benchmark."
+}

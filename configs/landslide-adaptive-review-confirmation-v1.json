@@ -1,0 +1,20 @@
+{
+  "schema_version": "landslide-adaptive-review-v1",
+  "date": "2026-10-09",
+  "scope": "Twelve new confirmation mechanism probes created after choosing the simpler Agent from pilot-v3 and mechanism-v1. Primary candidate is adaptive_no_feedback: numerical raw conflict selects windows, local VLM sees images only. Numeric prompt arm remains an ablation, not a selectable default. Controlled synthetic mechanism recovery; no expert observable reference or field claim.",
+  "source_bundle": "artifacts/landslide-adaptive-review-2026-10-09/confirmation-data-v1",
+  "case_ids": ["case_0049", "case_0050", "case_0051", "case_0052", "case_0053", "case_0054", "case_0055", "case_0056", "case_0057", "case_0058", "case_0059", "case_0060"],
+  "primary_method": "adaptive_no_feedback",
+  "model": "qwen3.8-flash",
+  "repetitions": 2,
+  "window_days": 180,
+  "stride_days": 90,
+  "policy": {"maximum_reviews": 2, "minimum_conflict_days": 14, "minimum_rate": 0.03, "minimum_signal_to_noise": 2.0},
+  "maximum_requests": 168,
+  "hard_timeout_seconds": 3600,
+  "retries": 0,
+  "stage_policy": "Same train24/validation12 calibrated models and stage head as motion-probe-v2; all visual activity arms use the same XGBoost head.",
+  "primary_metrics": "Activity P/R/F1, event IoU0.3/0.5, weak recovery, boundary error, coverage, failures, call/token costs",
+  "secondary_metrics": "A/S/D end-to-end macroF1, false acceleration, native VLM stage supplement",
+  "freeze": "No candidate switch, parameter selection or repeat selection using these confirmation scores. Fixed pure-image observation and numeric-text ablation both retained regardless of outcome. Existing sealed background test remains untouched."
+}

@@ -1,0 +1,20 @@
+{
+  "schema_version": "landslide-adaptive-review-v1",
+  "date": "2026-10-09",
+  "scope": "Frozen robustness test of existing21/42 conflict selection and49-day revision authority on24 known injections in four held-out P227 residual blocks. Recalibrated common train24/validation12 numerical models. This is injected mechanism recovery, not field total activity or expert reference accuracy. No fit competitor tool, threshold tuning, repeat selection or default switch.",
+  "source_bundle": "artifacts/landslide-adaptive-review-2026-10-09/background-benchmark-data-v1",
+  "case_ids": ["case_2025", "case_2026", "case_2027", "case_2028", "case_2029", "case_2030", "case_2031", "case_2032", "case_2033", "case_2034", "case_2035", "case_2036", "case_2049", "case_2050", "case_2051", "case_2052", "case_2053", "case_2054", "case_2055", "case_2056", "case_2057", "case_2058", "case_2059", "case_2060"],
+  "primary_method": "adaptive_no_feedback__conflict_scope",
+  "model": "qwen3.8-flash",
+  "repetitions": 2,
+  "window_days": 180,
+  "stride_days": 90,
+  "policy": {"maximum_reviews": 2, "minimum_conflict_days": 14, "minimum_rate": 0.03, "minimum_signal_to_noise": 2.0},
+  "maximum_requests": 336,
+  "hard_timeout_seconds": 7200,
+  "retries": 0,
+  "stage_policy": "Common NEW background-train24 learned stage head, trained before held-out injection generation; retain baseline native stages and do not claim pure VLM ASD",
+  "primary_metrics": "Full730-day activity P/R/F1, event IoU.3/.5, weak recall, boundary MAE conditional on matches, coverage/failures, requests/tokens; group by held-out background and family",
+  "secondary_metrics": "Fixed ASD macro and class denominators inside true activity; no native VLM stage calls",
+  "freeze": "Old bounded runner and prompts unchanged. Compare whole-target/conflict49/matched-center authority from exactly the same frozen local answers for fixed/image/numeric arms. For replication scope must removeFP withoutTP or weak loss in both repeats; otherwise report not replicated. Group comparisons by four shared real-background blocks; no24-site independence claim."
+}
