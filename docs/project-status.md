@@ -1,5 +1,15 @@
 # 新分支研究状态
 
+## EXP32进行中：联合上下文视觉识别确认（2026-10-16）
+
+分支`codex/exp32-visual-context-confirmation`，父23135a9f；EXP31完整ZIP SHA重验一致，
+稳定标签`backup/exp31-before-visual-confirmation-20261016`。另行确认EXP31模型独立读出的探索假设，
+不改变EXP31融合主方法失败结论。未预测252开发中先用72站，旧108开发全部排除。
+逐字复用EXP31提示、模型、图像和后处理；19方法/读出，机制确认和完整系统升级分判。
+72站数值完成、144粗筛成功，432终轮请求运行中；无新评分，全部360test保持未预测。
+93测试及本轮脚本Ruff通过。重新取回原参考论文并读取模态对比及TSAD-Agents相关部分。
+[预登记](experiment-exp32.md)、[文献复核](exp32-reading-notes.md)、[数据与拟合](exp32-data-and-fit.json)。
+
 ## EXP31完成：全局—局部联合视觉复核，主方法不扩量（2026-10-16）
 
 分支`codex/exp31-joint-context-visual`，父f89f27ae，稳定标签
