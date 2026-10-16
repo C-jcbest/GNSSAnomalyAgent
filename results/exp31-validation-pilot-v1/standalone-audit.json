@@ -1,0 +1,2027 @@
+{
+  "experiment_id": "GNSS-VLM-EXP31",
+  "main_admission_unchanged": true,
+  "scope": "Exploratory comparison of preregistered model-only readouts after a failed main pilot; not a new success endpoint or independent confirmation.",
+  "terminology": "Pure means no numerical final predictions fused in; the model still receives numerical jump evidence except in no_numeric.",
+  "strong_baseline_daily_counts": {
+    "tp": 423,
+    "fp": 0,
+    "fn": 0,
+    "precision": 1.0,
+    "recall": 1.0,
+    "f1": 1.0
+  },
+  "comparisons": {
+    "jcv_text_final_pure": {
+      "tp_delta": 32,
+      "fp_delta": -4,
+      "tp_improved_stations": 3,
+      "tp_harmed_stations": 3,
+      "fp_increased_stations": 3,
+      "bootstrap": {
+        "repeats": 2000,
+        "seed": 2026101525,
+        "endpoints": {
+          "transient_affiliation_f1": {
+            "difference": 0.05675335900470898,
+            "percentile_ci_95": [
+              -0.2760948644741833,
+              0.3708991637468972
+            ],
+            "undefined_resamples": 0
+          },
+          "deformation_affiliation_f1": {
+            "difference": 0.0,
+            "percentile_ci_95": [
+              0.0,
+              0.0
+            ],
+            "undefined_resamples": 0
+          },
+          "range_union_affiliation_f1": {
+            "difference": 0.03858211592327479,
+            "percentile_ci_95": [
+              -0.11792689719455152,
+              0.20347346950887718
+            ],
+            "undefined_resamples": 0
+          },
+          "four_type_daily_f1": {
+            "difference": 0.02333041875413555,
+            "percentile_ci_95": [
+              -0.0524695283337102,
+              0.09566735230493045
+            ]
+          }
+        },
+        "scope": "Descriptive station bootstrap; common fitted models; no significance acceptance gate"
+      },
+      "changes": [
+        {
+          "station": "v0024",
+          "cohort_seed": 2026101601,
+          "scenario": "normal",
+          "tp_delta": 0,
+          "fp_delta": 0,
+          "aff_delta": null
+        },
+        {
+          "station": "v0025",
+          "cohort_seed": 2026101601,
+          "scenario": "spike",
+          "tp_delta": 0,
+          "fp_delta": 0,
+          "aff_delta": null
+        },
+        {
+          "station": "v0026",
+          "cohort_seed": 2026101601,
+          "scenario": "step",
+          "tp_delta": 0,
+          "fp_delta": 0,
+          "aff_delta": null
+        },
+        {
+          "station": "v0027",
+          "cohort_seed": 2026101601,
+          "scenario": "transient",
+          "tp_delta": 0,
+          "fp_delta": 0,
+          "aff_delta": 0.0
+        },
+        {
+          "station": "v0028",
+          "cohort_seed": 2026101601,
+          "scenario": "deformation",
+          "tp_delta": 0,
+          "fp_delta": 0,
+          "aff_delta": null
+        },
+        {
+          "station": "v0029",
+          "cohort_seed": 2026101601,
+          "scenario": "mixed",
+          "tp_delta": 0,
+          "fp_delta": 0,
+          "aff_delta": 0.0
+        },
+        {
+          "station": "v0030",
+          "cohort_seed": 2026101601,
+          "scenario": "normal",
+          "tp_delta": 0,
+          "fp_delta": 0,
+          "aff_delta": null
+        },
+        {
+          "station": "v0031",
+          "cohort_seed": 2026101601,
+          "scenario": "spike",
+          "tp_delta": 0,
+          "fp_delta": 0,
+          "aff_delta": null
+        },
+        {
+          "station": "v0032",
+          "cohort_seed": 2026101601,
+          "scenario": "step",
+          "tp_delta": 0,
+          "fp_delta": 0,
+          "aff_delta": null
+        },
+        {
+          "station": "v0033",
+          "cohort_seed": 2026101601,
+          "scenario": "transient",
+          "tp_delta": -1,
+          "fp_delta": -4,
+          "aff_delta": 0.0013388225977866708
+        },
+        {
+          "station": "v0034",
+          "cohort_seed": 2026101601,
+          "scenario": "deformation",
+          "tp_delta": 0,
+          "fp_delta": 0,
+          "aff_delta": null
+        },
+        {
+          "station": "v0035",
+          "cohort_seed": 2026101601,
+          "scenario": "mixed",
+          "tp_delta": -25,
+          "fp_delta": 0,
+          "aff_delta": -1.0
+        },
+        {
+          "station": "v0144",
+          "cohort_seed": 2026101602,
+          "scenario": "normal",
+          "tp_delta": 0,
+          "fp_delta": 0,
+          "aff_delta": null
+        },
+        {
+          "station": "v0145",
+          "cohort_seed": 2026101602,
+          "scenario": "spike",
+          "tp_delta": 0,
+          "fp_delta": 0,
+          "aff_delta": null
+        },
+        {
+          "station": "v0146",
+          "cohort_seed": 2026101602,
+          "scenario": "step",
+          "tp_delta": 0,
+          "fp_delta": 0,
+          "aff_delta": null
+        },
+        {
+          "station": "v0147",
+          "cohort_seed": 2026101602,
+          "scenario": "transient",
+          "tp_delta": 0,
+          "fp_delta": 0,
+          "aff_delta": 0.0
+        },
+        {
+          "station": "v0148",
+          "cohort_seed": 2026101602,
+          "scenario": "deformation",
+          "tp_delta": 0,
+          "fp_delta": 18,
+          "aff_delta": null
+        },
+        {
+          "station": "v0149",
+          "cohort_seed": 2026101602,
+          "scenario": "mixed",
+          "tp_delta": 23,
+          "fp_delta": 2,
+          "aff_delta": 0.9968143877784605
+        },
+        {
+          "station": "v0150",
+          "cohort_seed": 2026101602,
+          "scenario": "normal",
+          "tp_delta": 0,
+          "fp_delta": 0,
+          "aff_delta": null
+        },
+        {
+          "station": "v0151",
+          "cohort_seed": 2026101602,
+          "scenario": "spike",
+          "tp_delta": 0,
+          "fp_delta": 0,
+          "aff_delta": null
+        },
+        {
+          "station": "v0152",
+          "cohort_seed": 2026101602,
+          "scenario": "step",
+          "tp_delta": 0,
+          "fp_delta": 0,
+          "aff_delta": null
+        },
+        {
+          "station": "v0153",
+          "cohort_seed": 2026101602,
+          "scenario": "transient",
+          "tp_delta": -14,
+          "fp_delta": -6,
+          "aff_delta": -0.6587443477973387
+        },
+        {
+          "station": "v0154",
+          "cohort_seed": 2026101602,
+          "scenario": "deformation",
+          "tp_delta": 0,
+          "fp_delta": 0,
+          "aff_delta": null
+        },
+        {
+          "station": "v0155",
+          "cohort_seed": 2026101602,
+          "scenario": "mixed",
+          "tp_delta": 0,
+          "fp_delta": 0,
+          "aff_delta": 0.0
+        },
+        {
+          "station": "v0264",
+          "cohort_seed": 2026101603,
+          "scenario": "normal",
+          "tp_delta": 0,
+          "fp_delta": 0,
+          "aff_delta": null
+        },
+        {
+          "station": "v0265",
+          "cohort_seed": 2026101603,
+          "scenario": "spike",
+          "tp_delta": 0,
+          "fp_delta": 0,
+          "aff_delta": null
+        },
+        {
+          "station": "v0266",
+          "cohort_seed": 2026101603,
+          "scenario": "step",
+          "tp_delta": 0,
+          "fp_delta": 0,
+          "aff_delta": null
+        },
+        {
+          "station": "v0267",
+          "cohort_seed": 2026101603,
+          "scenario": "transient",
+          "tp_delta": 35,
+          "fp_delta": 2,
+          "aff_delta": 0.9972527472527473
+        },
+        {
+          "station": "v0268",
+          "cohort_seed": 2026101603,
+          "scenario": "deformation",
+          "tp_delta": 0,
+          "fp_delta": 0,
+          "aff_delta": null
+        },
+        {
+          "station": "v0269",
+          "cohort_seed": 2026101603,
+          "scenario": "mixed",
+          "tp_delta": 0,
+          "fp_delta": 0,
+          "aff_delta": 0.0
+        },
+        {
+          "station": "v0270",
+          "cohort_seed": 2026101603,
+          "scenario": "normal",
+          "tp_delta": 0,
+          "fp_delta": -16,
+          "aff_delta": null
+        },
+        {
+          "station": "v0271",
+          "cohort_seed": 2026101603,
+          "scenario": "spike",
+          "tp_delta": 0,
+          "fp_delta": 0,
+          "aff_delta": null
+        },
+        {
+          "station": "v0272",
+          "cohort_seed": 2026101603,
+          "scenario": "step",
+          "tp_delta": 0,
+          "fp_delta": 0,
+          "aff_delta": null
+        },
+        {
+          "station": "v0273",
+          "cohort_seed": 2026101603,
+          "scenario": "transient",
+          "tp_delta": 0,
+          "fp_delta": 0,
+          "aff_delta": 0.0
+        },
+        {
+          "station": "v0274",
+          "cohort_seed": 2026101603,
+          "scenario": "deformation",
+          "tp_delta": 0,
+          "fp_delta": 0,
+          "aff_delta": null
+        },
+        {
+          "station": "v0275",
+          "cohort_seed": 2026101603,
+          "scenario": "mixed",
+          "tp_delta": 14,
+          "fp_delta": 0,
+          "aff_delta": 0.344378698224852
+        }
+      ]
+    },
+    "jcv_text_pipeline_pure": {
+      "tp_delta": 117,
+      "fp_delta": 45,
+      "tp_improved_stations": 5,
+      "tp_harmed_stations": 0,
+      "fp_increased_stations": 4,
+      "bootstrap": {
+        "repeats": 2000,
+        "seed": 2026101525,
+        "endpoints": {
+          "transient_affiliation_f1": {
+            "difference": 0.3139024785827542,
+            "percentile_ci_95": [
+              0.003611610732904867,
+              0.6352990877559659
+            ],
+            "undefined_resamples": 0
+          },
+          "deformation_affiliation_f1": {
+            "difference": 0.0,
+            "percentile_ci_95": [
+              0.0,
+              0.0
+            ],
+            "undefined_resamples": 0
+          },
+          "range_union_affiliation_f1": {
+            "difference": 0.21086495515937778,
+            "percentile_ci_95": [
+              0.041544907330404,
+              0.390728404052783
+            ],
+            "undefined_resamples": 0
+          },
+          "four_type_daily_f1": {
+            "difference": 0.09815436241610738,
+            "percentile_ci_95": [
+              0.029007639185153585,
+              0.16532413151364764
+            ]
+          }
+        },
+        "scope": "Descriptive station bootstrap; common fitted models; no significance acceptance gate"
+      },
+      "changes": [
+        {
+          "station": "v0024",
+          "cohort_seed": 2026101601,
+          "scenario": "normal",
+          "tp_delta": 0,
+          "fp_delta": 0,
+          "aff_delta": null
+        },
+        {
+          "station": "v0025",
+          "cohort_seed": 2026101601,
+          "scenario": "spike",
+          "tp_delta": 0,
+          "fp_delta": -3,
+          "aff_delta": null
+        },
+        {
+          "station": "v0026",
+          "cohort_seed": 2026101601,
+          "scenario": "step",
+          "tp_delta": 0,
+          "fp_delta": 0,
+          "aff_delta": null
+        },
+        {
+          "station": "v0027",
+          "cohort_seed": 2026101601,
+          "scenario": "transient",
+          "tp_delta": 0,
+          "fp_delta": 0,
+          "aff_delta": 0.0
+        },
+        {
+          "station": "v0028",
+          "cohort_seed": 2026101601,
+          "scenario": "deformation",
+          "tp_delta": 0,
+          "fp_delta": 0,
+          "aff_delta": null
+        },
+        {
+          "station": "v0029",
+          "cohort_seed": 2026101601,
+          "scenario": "mixed",
+          "tp_delta": 0,
+          "fp_delta": 0,
+          "aff_delta": 0.0
+        },
+        {
+          "station": "v0030",
+          "cohort_seed": 2026101601,
+          "scenario": "normal",
+          "tp_delta": 0,
+          "fp_delta": 0,
+          "aff_delta": null
+        },
+        {
+          "station": "v0031",
+          "cohort_seed": 2026101601,
+          "scenario": "spike",
+          "tp_delta": 0,
+          "fp_delta": 34,
+          "aff_delta": null
+        },
+        {
+          "station": "v0032",
+          "cohort_seed": 2026101601,
+          "scenario": "step",
+          "tp_delta": 0,
+          "fp_delta": -6,
+          "aff_delta": null
+        },
+        {
+          "station": "v0033",
+          "cohort_seed": 2026101601,
+          "scenario": "transient",
+          "tp_delta": 6,
+          "fp_delta": 0,
+          "aff_delta": 0.4988449368112491
+        },
+        {
+          "station": "v0034",
+          "cohort_seed": 2026101601,
+          "scenario": "deformation",
+          "tp_delta": 0,
+          "fp_delta": 0,
+          "aff_delta": null
+        },
+        {
+          "station": "v0035",
+          "cohort_seed": 2026101601,
+          "scenario": "mixed",
+          "tp_delta": 0,
+          "fp_delta": 0,
+          "aff_delta": 0.0
+        },
+        {
+          "station": "v0144",
+          "cohort_seed": 2026101602,
+          "scenario": "normal",
+          "tp_delta": 0,
+          "fp_delta": 0,
+          "aff_delta": null
+        },
+        {
+          "station": "v0145",
+          "cohort_seed": 2026101602,
+          "scenario": "spike",
+          "tp_delta": 0,
+          "fp_delta": 0,
+          "aff_delta": null
+        },
+        {
+          "station": "v0146",
+          "cohort_seed": 2026101602,
+          "scenario": "step",
+          "tp_delta": 0,
+          "fp_delta": 0,
+          "aff_delta": null
+        },
+        {
+          "station": "v0147",
+          "cohort_seed": 2026101602,
+          "scenario": "transient",
+          "tp_delta": 0,
+          "fp_delta": 0,
+          "aff_delta": 0.0
+        },
+        {
+          "station": "v0148",
+          "cohort_seed": 2026101602,
+          "scenario": "deformation",
+          "tp_delta": 0,
+          "fp_delta": 18,
+          "aff_delta": null
+        },
+        {
+          "station": "v0149",
+          "cohort_seed": 2026101602,
+          "scenario": "mixed",
+          "tp_delta": 23,
+          "fp_delta": 2,
+          "aff_delta": 0.9968143877784605
+        },
+        {
+          "station": "v0150",
+          "cohort_seed": 2026101602,
+          "scenario": "normal",
+          "tp_delta": 0,
+          "fp_delta": 0,
+          "aff_delta": null
+        },
+        {
+          "station": "v0151",
+          "cohort_seed": 2026101602,
+          "scenario": "spike",
+          "tp_delta": 0,
+          "fp_delta": 0,
+          "aff_delta": null
+        },
+        {
+          "station": "v0152",
+          "cohort_seed": 2026101602,
+          "scenario": "step",
+          "tp_delta": 0,
+          "fp_delta": 0,
+          "aff_delta": null
+        },
+        {
+          "station": "v0153",
+          "cohort_seed": 2026101602,
+          "scenario": "transient",
+          "tp_delta": 0,
+          "fp_delta": 0,
+          "aff_delta": 0.0
+        },
+        {
+          "station": "v0154",
+          "cohort_seed": 2026101602,
+          "scenario": "deformation",
+          "tp_delta": 0,
+          "fp_delta": 0,
+          "aff_delta": null
+        },
+        {
+          "station": "v0155",
+          "cohort_seed": 2026101602,
+          "scenario": "mixed",
+          "tp_delta": 0,
+          "fp_delta": -2,
+          "aff_delta": -0.7260823288494062
+        },
+        {
+          "station": "v0264",
+          "cohort_seed": 2026101603,
+          "scenario": "normal",
+          "tp_delta": 0,
+          "fp_delta": 0,
+          "aff_delta": null
+        },
+        {
+          "station": "v0265",
+          "cohort_seed": 2026101603,
+          "scenario": "spike",
+          "tp_delta": 0,
+          "fp_delta": 0,
+          "aff_delta": null
+        },
+        {
+          "station": "v0266",
+          "cohort_seed": 2026101603,
+          "scenario": "step",
+          "tp_delta": 0,
+          "fp_delta": 0,
+          "aff_delta": null
+        },
+        {
+          "station": "v0267",
+          "cohort_seed": 2026101603,
+          "scenario": "transient",
+          "tp_delta": 35,
+          "fp_delta": 2,
+          "aff_delta": 0.9972527472527473
+        },
+        {
+          "station": "v0268",
+          "cohort_seed": 2026101603,
+          "scenario": "deformation",
+          "tp_delta": 0,
+          "fp_delta": 0,
+          "aff_delta": null
+        },
+        {
+          "station": "v0269",
+          "cohort_seed": 2026101603,
+          "scenario": "mixed",
+          "tp_delta": 0,
+          "fp_delta": 0,
+          "aff_delta": 0.0
+        },
+        {
+          "station": "v0270",
+          "cohort_seed": 2026101603,
+          "scenario": "normal",
+          "tp_delta": 0,
+          "fp_delta": 0,
+          "aff_delta": null
+        },
+        {
+          "station": "v0271",
+          "cohort_seed": 2026101603,
+          "scenario": "spike",
+          "tp_delta": 0,
+          "fp_delta": 0,
+          "aff_delta": null
+        },
+        {
+          "station": "v0272",
+          "cohort_seed": 2026101603,
+          "scenario": "step",
+          "tp_delta": 0,
+          "fp_delta": 0,
+          "aff_delta": null
+        },
+        {
+          "station": "v0273",
+          "cohort_seed": 2026101603,
+          "scenario": "transient",
+          "tp_delta": 34,
+          "fp_delta": 0,
+          "aff_delta": 1.0
+        },
+        {
+          "station": "v0274",
+          "cohort_seed": 2026101603,
+          "scenario": "deformation",
+          "tp_delta": 0,
+          "fp_delta": 0,
+          "aff_delta": null
+        },
+        {
+          "station": "v0275",
+          "cohort_seed": 2026101603,
+          "scenario": "mixed",
+          "tp_delta": 19,
+          "fp_delta": 0,
+          "aff_delta": 1.0
+        }
+      ]
+    },
+    "jcv_global_only_pure": {
+      "tp_delta": 34,
+      "fp_delta": 16,
+      "tp_improved_stations": 1,
+      "tp_harmed_stations": 1,
+      "fp_increased_stations": 2,
+      "bootstrap": {
+        "repeats": 2000,
+        "seed": 2026101525,
+        "endpoints": {
+          "transient_affiliation_f1": {
+            "difference": 0.08326069216209873,
+            "percentile_ci_95": [
+              -4.631819111361457e-05,
+              0.28554463288339044
+            ],
+            "undefined_resamples": 0
+          },
+          "deformation_affiliation_f1": {
+            "difference": 0.0,
+            "percentile_ci_95": [
+              0.0,
+              0.0
+            ],
+            "undefined_resamples": 0
+          },
+          "range_union_affiliation_f1": {
+            "difference": 0.07794742444759417,
+            "percentile_ci_95": [
+              -0.00012367072207839872,
+              0.2137183320547275
+            ],
+            "undefined_resamples": 0
+          },
+          "four_type_daily_f1": {
+            "difference": 0.02214703640878138,
+            "percentile_ci_95": [
+              -0.009111141153196467,
+              0.07932443173138044
+            ]
+          }
+        },
+        "scope": "Descriptive station bootstrap; common fitted models; no significance acceptance gate"
+      },
+      "changes": [
+        {
+          "station": "v0024",
+          "cohort_seed": 2026101601,
+          "scenario": "normal",
+          "tp_delta": 0,
+          "fp_delta": 0,
+          "aff_delta": null
+        },
+        {
+          "station": "v0025",
+          "cohort_seed": 2026101601,
+          "scenario": "spike",
+          "tp_delta": 0,
+          "fp_delta": 0,
+          "aff_delta": null
+        },
+        {
+          "station": "v0026",
+          "cohort_seed": 2026101601,
+          "scenario": "step",
+          "tp_delta": 0,
+          "fp_delta": 0,
+          "aff_delta": null
+        },
+        {
+          "station": "v0027",
+          "cohort_seed": 2026101601,
+          "scenario": "transient",
+          "tp_delta": 0,
+          "fp_delta": 0,
+          "aff_delta": 0.0
+        },
+        {
+          "station": "v0028",
+          "cohort_seed": 2026101601,
+          "scenario": "deformation",
+          "tp_delta": 0,
+          "fp_delta": 0,
+          "aff_delta": null
+        },
+        {
+          "station": "v0029",
+          "cohort_seed": 2026101601,
+          "scenario": "mixed",
+          "tp_delta": 0,
+          "fp_delta": 0,
+          "aff_delta": 0.0
+        },
+        {
+          "station": "v0030",
+          "cohort_seed": 2026101601,
+          "scenario": "normal",
+          "tp_delta": 0,
+          "fp_delta": 0,
+          "aff_delta": null
+        },
+        {
+          "station": "v0031",
+          "cohort_seed": 2026101601,
+          "scenario": "spike",
+          "tp_delta": 0,
+          "fp_delta": 0,
+          "aff_delta": null
+        },
+        {
+          "station": "v0032",
+          "cohort_seed": 2026101601,
+          "scenario": "step",
+          "tp_delta": 0,
+          "fp_delta": 0,
+          "aff_delta": null
+        },
+        {
+          "station": "v0033",
+          "cohort_seed": 2026101601,
+          "scenario": "transient",
+          "tp_delta": 0,
+          "fp_delta": -4,
+          "aff_delta": 0.002153467839119183
+        },
+        {
+          "station": "v0034",
+          "cohort_seed": 2026101601,
+          "scenario": "deformation",
+          "tp_delta": 0,
+          "fp_delta": 0,
+          "aff_delta": null
+        },
+        {
+          "station": "v0035",
+          "cohort_seed": 2026101601,
+          "scenario": "mixed",
+          "tp_delta": 0,
+          "fp_delta": 0,
+          "aff_delta": 0.0
+        },
+        {
+          "station": "v0144",
+          "cohort_seed": 2026101602,
+          "scenario": "normal",
+          "tp_delta": 0,
+          "fp_delta": 0,
+          "aff_delta": null
+        },
+        {
+          "station": "v0145",
+          "cohort_seed": 2026101602,
+          "scenario": "spike",
+          "tp_delta": 0,
+          "fp_delta": 0,
+          "aff_delta": null
+        },
+        {
+          "station": "v0146",
+          "cohort_seed": 2026101602,
+          "scenario": "step",
+          "tp_delta": 0,
+          "fp_delta": 0,
+          "aff_delta": null
+        },
+        {
+          "station": "v0147",
+          "cohort_seed": 2026101602,
+          "scenario": "transient",
+          "tp_delta": 0,
+          "fp_delta": 0,
+          "aff_delta": 0.0
+        },
+        {
+          "station": "v0148",
+          "cohort_seed": 2026101602,
+          "scenario": "deformation",
+          "tp_delta": 0,
+          "fp_delta": 18,
+          "aff_delta": null
+        },
+        {
+          "station": "v0149",
+          "cohort_seed": 2026101602,
+          "scenario": "mixed",
+          "tp_delta": -1,
+          "fp_delta": 0,
+          "aff_delta": -0.0002779091466816874
+        },
+        {
+          "station": "v0150",
+          "cohort_seed": 2026101602,
+          "scenario": "normal",
+          "tp_delta": 0,
+          "fp_delta": 0,
+          "aff_delta": null
+        },
+        {
+          "station": "v0151",
+          "cohort_seed": 2026101602,
+          "scenario": "spike",
+          "tp_delta": 0,
+          "fp_delta": 0,
+          "aff_delta": null
+        },
+        {
+          "station": "v0152",
+          "cohort_seed": 2026101602,
+          "scenario": "step",
+          "tp_delta": 0,
+          "fp_delta": 0,
+          "aff_delta": null
+        },
+        {
+          "station": "v0153",
+          "cohort_seed": 2026101602,
+          "scenario": "transient",
+          "tp_delta": 0,
+          "fp_delta": 0,
+          "aff_delta": 0.0
+        },
+        {
+          "station": "v0154",
+          "cohort_seed": 2026101602,
+          "scenario": "deformation",
+          "tp_delta": 0,
+          "fp_delta": 0,
+          "aff_delta": null
+        },
+        {
+          "station": "v0155",
+          "cohort_seed": 2026101602,
+          "scenario": "mixed",
+          "tp_delta": 0,
+          "fp_delta": 0,
+          "aff_delta": 0.0
+        },
+        {
+          "station": "v0264",
+          "cohort_seed": 2026101603,
+          "scenario": "normal",
+          "tp_delta": 0,
+          "fp_delta": 0,
+          "aff_delta": null
+        },
+        {
+          "station": "v0265",
+          "cohort_seed": 2026101603,
+          "scenario": "spike",
+          "tp_delta": 0,
+          "fp_delta": 0,
+          "aff_delta": null
+        },
+        {
+          "station": "v0266",
+          "cohort_seed": 2026101603,
+          "scenario": "step",
+          "tp_delta": 0,
+          "fp_delta": 0,
+          "aff_delta": null
+        },
+        {
+          "station": "v0267",
+          "cohort_seed": 2026101603,
+          "scenario": "transient",
+          "tp_delta": 35,
+          "fp_delta": 2,
+          "aff_delta": 0.9972527472527473
+        },
+        {
+          "station": "v0268",
+          "cohort_seed": 2026101603,
+          "scenario": "deformation",
+          "tp_delta": 0,
+          "fp_delta": 0,
+          "aff_delta": null
+        },
+        {
+          "station": "v0269",
+          "cohort_seed": 2026101603,
+          "scenario": "mixed",
+          "tp_delta": 0,
+          "fp_delta": 0,
+          "aff_delta": 0.0
+        },
+        {
+          "station": "v0270",
+          "cohort_seed": 2026101603,
+          "scenario": "normal",
+          "tp_delta": 0,
+          "fp_delta": 0,
+          "aff_delta": null
+        },
+        {
+          "station": "v0271",
+          "cohort_seed": 2026101603,
+          "scenario": "spike",
+          "tp_delta": 0,
+          "fp_delta": 0,
+          "aff_delta": null
+        },
+        {
+          "station": "v0272",
+          "cohort_seed": 2026101603,
+          "scenario": "step",
+          "tp_delta": 0,
+          "fp_delta": 0,
+          "aff_delta": null
+        },
+        {
+          "station": "v0273",
+          "cohort_seed": 2026101603,
+          "scenario": "transient",
+          "tp_delta": 0,
+          "fp_delta": 0,
+          "aff_delta": 0.0
+        },
+        {
+          "station": "v0274",
+          "cohort_seed": 2026101603,
+          "scenario": "deformation",
+          "tp_delta": 0,
+          "fp_delta": 0,
+          "aff_delta": null
+        },
+        {
+          "station": "v0275",
+          "cohort_seed": 2026101603,
+          "scenario": "mixed",
+          "tp_delta": 0,
+          "fp_delta": 0,
+          "aff_delta": 0.0
+        }
+      ]
+    },
+    "jcv_local_only_pure": {
+      "tp_delta": 72,
+      "fp_delta": 7,
+      "tp_improved_stations": 3,
+      "tp_harmed_stations": 0,
+      "fp_increased_stations": 3,
+      "bootstrap": {
+        "repeats": 2000,
+        "seed": 2026101525,
+        "endpoints": {
+          "transient_affiliation_f1": {
+            "difference": 0.19487048610467164,
+            "percentile_ci_95": [
+              0.0,
+              0.42733141175485073
+            ],
+            "undefined_resamples": 0
+          },
+          "deformation_affiliation_f1": {
+            "difference": 0.0,
+            "percentile_ci_95": [
+              0.0,
+              0.0
+            ],
+            "undefined_resamples": 0
+          },
+          "range_union_affiliation_f1": {
+            "difference": 0.11059885339510424,
+            "percentile_ci_95": [
+              0.018222086227966592,
+              0.24241121602711085
+            ],
+            "undefined_resamples": 0
+          },
+          "four_type_daily_f1": {
+            "difference": 0.054634052938351094,
+            "percentile_ci_95": [
+              0.0,
+              0.11853478616995693
+            ]
+          }
+        },
+        "scope": "Descriptive station bootstrap; common fitted models; no significance acceptance gate"
+      },
+      "changes": [
+        {
+          "station": "v0024",
+          "cohort_seed": 2026101601,
+          "scenario": "normal",
+          "tp_delta": 0,
+          "fp_delta": 0,
+          "aff_delta": null
+        },
+        {
+          "station": "v0025",
+          "cohort_seed": 2026101601,
+          "scenario": "spike",
+          "tp_delta": 0,
+          "fp_delta": 0,
+          "aff_delta": null
+        },
+        {
+          "station": "v0026",
+          "cohort_seed": 2026101601,
+          "scenario": "step",
+          "tp_delta": 0,
+          "fp_delta": 0,
+          "aff_delta": null
+        },
+        {
+          "station": "v0027",
+          "cohort_seed": 2026101601,
+          "scenario": "transient",
+          "tp_delta": 0,
+          "fp_delta": 0,
+          "aff_delta": 0.0
+        },
+        {
+          "station": "v0028",
+          "cohort_seed": 2026101601,
+          "scenario": "deformation",
+          "tp_delta": 0,
+          "fp_delta": 0,
+          "aff_delta": null
+        },
+        {
+          "station": "v0029",
+          "cohort_seed": 2026101601,
+          "scenario": "mixed",
+          "tp_delta": 0,
+          "fp_delta": 0,
+          "aff_delta": 0.0
+        },
+        {
+          "station": "v0030",
+          "cohort_seed": 2026101601,
+          "scenario": "normal",
+          "tp_delta": 0,
+          "fp_delta": 0,
+          "aff_delta": null
+        },
+        {
+          "station": "v0031",
+          "cohort_seed": 2026101601,
+          "scenario": "spike",
+          "tp_delta": 0,
+          "fp_delta": 0,
+          "aff_delta": null
+        },
+        {
+          "station": "v0032",
+          "cohort_seed": 2026101601,
+          "scenario": "step",
+          "tp_delta": 0,
+          "fp_delta": 0,
+          "aff_delta": null
+        },
+        {
+          "station": "v0033",
+          "cohort_seed": 2026101601,
+          "scenario": "transient",
+          "tp_delta": 0,
+          "fp_delta": 0,
+          "aff_delta": 0.0
+        },
+        {
+          "station": "v0034",
+          "cohort_seed": 2026101601,
+          "scenario": "deformation",
+          "tp_delta": 0,
+          "fp_delta": 0,
+          "aff_delta": null
+        },
+        {
+          "station": "v0035",
+          "cohort_seed": 2026101601,
+          "scenario": "mixed",
+          "tp_delta": 0,
+          "fp_delta": 0,
+          "aff_delta": 0.0
+        },
+        {
+          "station": "v0144",
+          "cohort_seed": 2026101602,
+          "scenario": "normal",
+          "tp_delta": 0,
+          "fp_delta": 0,
+          "aff_delta": null
+        },
+        {
+          "station": "v0145",
+          "cohort_seed": 2026101602,
+          "scenario": "spike",
+          "tp_delta": 0,
+          "fp_delta": 0,
+          "aff_delta": null
+        },
+        {
+          "station": "v0146",
+          "cohort_seed": 2026101602,
+          "scenario": "step",
+          "tp_delta": 0,
+          "fp_delta": 0,
+          "aff_delta": null
+        },
+        {
+          "station": "v0147",
+          "cohort_seed": 2026101602,
+          "scenario": "transient",
+          "tp_delta": 0,
+          "fp_delta": 0,
+          "aff_delta": 0.0
+        },
+        {
+          "station": "v0148",
+          "cohort_seed": 2026101602,
+          "scenario": "deformation",
+          "tp_delta": 0,
+          "fp_delta": 18,
+          "aff_delta": null
+        },
+        {
+          "station": "v0149",
+          "cohort_seed": 2026101602,
+          "scenario": "mixed",
+          "tp_delta": 23,
+          "fp_delta": 2,
+          "aff_delta": 0.9968143877784605
+        },
+        {
+          "station": "v0150",
+          "cohort_seed": 2026101602,
+          "scenario": "normal",
+          "tp_delta": 0,
+          "fp_delta": 0,
+          "aff_delta": null
+        },
+        {
+          "station": "v0151",
+          "cohort_seed": 2026101602,
+          "scenario": "spike",
+          "tp_delta": 0,
+          "fp_delta": 0,
+          "aff_delta": null
+        },
+        {
+          "station": "v0152",
+          "cohort_seed": 2026101602,
+          "scenario": "step",
+          "tp_delta": 0,
+          "fp_delta": 0,
+          "aff_delta": null
+        },
+        {
+          "station": "v0153",
+          "cohort_seed": 2026101602,
+          "scenario": "transient",
+          "tp_delta": 0,
+          "fp_delta": 0,
+          "aff_delta": 0.0
+        },
+        {
+          "station": "v0154",
+          "cohort_seed": 2026101602,
+          "scenario": "deformation",
+          "tp_delta": 0,
+          "fp_delta": 0,
+          "aff_delta": null
+        },
+        {
+          "station": "v0155",
+          "cohort_seed": 2026101602,
+          "scenario": "mixed",
+          "tp_delta": 0,
+          "fp_delta": 0,
+          "aff_delta": 0.0
+        },
+        {
+          "station": "v0264",
+          "cohort_seed": 2026101603,
+          "scenario": "normal",
+          "tp_delta": 0,
+          "fp_delta": 0,
+          "aff_delta": null
+        },
+        {
+          "station": "v0265",
+          "cohort_seed": 2026101603,
+          "scenario": "spike",
+          "tp_delta": 0,
+          "fp_delta": 0,
+          "aff_delta": null
+        },
+        {
+          "station": "v0266",
+          "cohort_seed": 2026101603,
+          "scenario": "step",
+          "tp_delta": 0,
+          "fp_delta": 0,
+          "aff_delta": null
+        },
+        {
+          "station": "v0267",
+          "cohort_seed": 2026101603,
+          "scenario": "transient",
+          "tp_delta": 35,
+          "fp_delta": 2,
+          "aff_delta": 0.9972527472527473
+        },
+        {
+          "station": "v0268",
+          "cohort_seed": 2026101603,
+          "scenario": "deformation",
+          "tp_delta": 0,
+          "fp_delta": 0,
+          "aff_delta": null
+        },
+        {
+          "station": "v0269",
+          "cohort_seed": 2026101603,
+          "scenario": "mixed",
+          "tp_delta": 0,
+          "fp_delta": 0,
+          "aff_delta": 0.0
+        },
+        {
+          "station": "v0270",
+          "cohort_seed": 2026101603,
+          "scenario": "normal",
+          "tp_delta": 0,
+          "fp_delta": -15,
+          "aff_delta": null
+        },
+        {
+          "station": "v0271",
+          "cohort_seed": 2026101603,
+          "scenario": "spike",
+          "tp_delta": 0,
+          "fp_delta": 0,
+          "aff_delta": null
+        },
+        {
+          "station": "v0272",
+          "cohort_seed": 2026101603,
+          "scenario": "step",
+          "tp_delta": 0,
+          "fp_delta": 0,
+          "aff_delta": null
+        },
+        {
+          "station": "v0273",
+          "cohort_seed": 2026101603,
+          "scenario": "transient",
+          "tp_delta": 0,
+          "fp_delta": 0,
+          "aff_delta": 0.0
+        },
+        {
+          "station": "v0274",
+          "cohort_seed": 2026101603,
+          "scenario": "deformation",
+          "tp_delta": 0,
+          "fp_delta": 0,
+          "aff_delta": null
+        },
+        {
+          "station": "v0275",
+          "cohort_seed": 2026101603,
+          "scenario": "mixed",
+          "tp_delta": 14,
+          "fp_delta": 0,
+          "aff_delta": 0.344378698224852
+        }
+      ]
+    },
+    "jcv_image_no_numeric_pure": {
+      "tp_delta": 94,
+      "fp_delta": -13,
+      "tp_improved_stations": 4,
+      "tp_harmed_stations": 0,
+      "fp_increased_stations": 1,
+      "bootstrap": {
+        "repeats": 2000,
+        "seed": 2026101525,
+        "endpoints": {
+          "transient_affiliation_f1": {
+            "difference": 0.2913414736719997,
+            "percentile_ci_95": [
+              0.055353709488656484,
+              0.5585047037879601
+            ],
+            "undefined_resamples": 0
+          },
+          "deformation_affiliation_f1": {
+            "difference": 0.0,
+            "percentile_ci_95": [
+              0.0,
+              0.0
+            ],
+            "undefined_resamples": 0
+          },
+          "range_union_affiliation_f1": {
+            "difference": 0.19161926017173245,
+            "percentile_ci_95": [
+              0.029343819812426418,
+              0.3686469449588628
+            ],
+            "undefined_resamples": 0
+          },
+          "four_type_daily_f1": {
+            "difference": 0.07582426532872874,
+            "percentile_ci_95": [
+              0.00682930638482489,
+              0.14247498781804624
+            ]
+          }
+        },
+        "scope": "Descriptive station bootstrap; common fitted models; no significance acceptance gate"
+      },
+      "changes": [
+        {
+          "station": "v0024",
+          "cohort_seed": 2026101601,
+          "scenario": "normal",
+          "tp_delta": 0,
+          "fp_delta": 0,
+          "aff_delta": null
+        },
+        {
+          "station": "v0025",
+          "cohort_seed": 2026101601,
+          "scenario": "spike",
+          "tp_delta": 0,
+          "fp_delta": 0,
+          "aff_delta": null
+        },
+        {
+          "station": "v0026",
+          "cohort_seed": 2026101601,
+          "scenario": "step",
+          "tp_delta": 0,
+          "fp_delta": 0,
+          "aff_delta": null
+        },
+        {
+          "station": "v0027",
+          "cohort_seed": 2026101601,
+          "scenario": "transient",
+          "tp_delta": 0,
+          "fp_delta": 0,
+          "aff_delta": 0.0
+        },
+        {
+          "station": "v0028",
+          "cohort_seed": 2026101601,
+          "scenario": "deformation",
+          "tp_delta": 0,
+          "fp_delta": 0,
+          "aff_delta": null
+        },
+        {
+          "station": "v0029",
+          "cohort_seed": 2026101601,
+          "scenario": "mixed",
+          "tp_delta": 0,
+          "fp_delta": 0,
+          "aff_delta": 0.0
+        },
+        {
+          "station": "v0030",
+          "cohort_seed": 2026101601,
+          "scenario": "normal",
+          "tp_delta": 0,
+          "fp_delta": 0,
+          "aff_delta": null
+        },
+        {
+          "station": "v0031",
+          "cohort_seed": 2026101601,
+          "scenario": "spike",
+          "tp_delta": 0,
+          "fp_delta": 0,
+          "aff_delta": null
+        },
+        {
+          "station": "v0032",
+          "cohort_seed": 2026101601,
+          "scenario": "step",
+          "tp_delta": 0,
+          "fp_delta": 0,
+          "aff_delta": null
+        },
+        {
+          "station": "v0033",
+          "cohort_seed": 2026101601,
+          "scenario": "transient",
+          "tp_delta": 6,
+          "fp_delta": 0,
+          "aff_delta": 0.4988449368112491
+        },
+        {
+          "station": "v0034",
+          "cohort_seed": 2026101601,
+          "scenario": "deformation",
+          "tp_delta": 0,
+          "fp_delta": 0,
+          "aff_delta": null
+        },
+        {
+          "station": "v0035",
+          "cohort_seed": 2026101601,
+          "scenario": "mixed",
+          "tp_delta": 0,
+          "fp_delta": 0,
+          "aff_delta": 0.0
+        },
+        {
+          "station": "v0144",
+          "cohort_seed": 2026101602,
+          "scenario": "normal",
+          "tp_delta": 0,
+          "fp_delta": 0,
+          "aff_delta": null
+        },
+        {
+          "station": "v0145",
+          "cohort_seed": 2026101602,
+          "scenario": "spike",
+          "tp_delta": 0,
+          "fp_delta": 0,
+          "aff_delta": null
+        },
+        {
+          "station": "v0146",
+          "cohort_seed": 2026101602,
+          "scenario": "step",
+          "tp_delta": 0,
+          "fp_delta": 0,
+          "aff_delta": null
+        },
+        {
+          "station": "v0147",
+          "cohort_seed": 2026101602,
+          "scenario": "transient",
+          "tp_delta": 0,
+          "fp_delta": 0,
+          "aff_delta": 0.0
+        },
+        {
+          "station": "v0148",
+          "cohort_seed": 2026101602,
+          "scenario": "deformation",
+          "tp_delta": 0,
+          "fp_delta": 0,
+          "aff_delta": null
+        },
+        {
+          "station": "v0149",
+          "cohort_seed": 2026101602,
+          "scenario": "mixed",
+          "tp_delta": 0,
+          "fp_delta": 0,
+          "aff_delta": 0.0
+        },
+        {
+          "station": "v0150",
+          "cohort_seed": 2026101602,
+          "scenario": "normal",
+          "tp_delta": 0,
+          "fp_delta": 0,
+          "aff_delta": null
+        },
+        {
+          "station": "v0151",
+          "cohort_seed": 2026101602,
+          "scenario": "spike",
+          "tp_delta": 0,
+          "fp_delta": 0,
+          "aff_delta": null
+        },
+        {
+          "station": "v0152",
+          "cohort_seed": 2026101602,
+          "scenario": "step",
+          "tp_delta": 0,
+          "fp_delta": 0,
+          "aff_delta": null
+        },
+        {
+          "station": "v0153",
+          "cohort_seed": 2026101602,
+          "scenario": "transient",
+          "tp_delta": 0,
+          "fp_delta": 0,
+          "aff_delta": 0.0
+        },
+        {
+          "station": "v0154",
+          "cohort_seed": 2026101602,
+          "scenario": "deformation",
+          "tp_delta": 0,
+          "fp_delta": 0,
+          "aff_delta": null
+        },
+        {
+          "station": "v0155",
+          "cohort_seed": 2026101602,
+          "scenario": "mixed",
+          "tp_delta": 0,
+          "fp_delta": 0,
+          "aff_delta": 0.0
+        },
+        {
+          "station": "v0264",
+          "cohort_seed": 2026101603,
+          "scenario": "normal",
+          "tp_delta": 0,
+          "fp_delta": 0,
+          "aff_delta": null
+        },
+        {
+          "station": "v0265",
+          "cohort_seed": 2026101603,
+          "scenario": "spike",
+          "tp_delta": 0,
+          "fp_delta": 0,
+          "aff_delta": null
+        },
+        {
+          "station": "v0266",
+          "cohort_seed": 2026101603,
+          "scenario": "step",
+          "tp_delta": 0,
+          "fp_delta": 0,
+          "aff_delta": null
+        },
+        {
+          "station": "v0267",
+          "cohort_seed": 2026101603,
+          "scenario": "transient",
+          "tp_delta": 35,
+          "fp_delta": 2,
+          "aff_delta": 0.9972527472527473
+        },
+        {
+          "station": "v0268",
+          "cohort_seed": 2026101603,
+          "scenario": "deformation",
+          "tp_delta": 0,
+          "fp_delta": 0,
+          "aff_delta": null
+        },
+        {
+          "station": "v0269",
+          "cohort_seed": 2026101603,
+          "scenario": "mixed",
+          "tp_delta": 0,
+          "fp_delta": 0,
+          "aff_delta": 0.0
+        },
+        {
+          "station": "v0270",
+          "cohort_seed": 2026101603,
+          "scenario": "normal",
+          "tp_delta": 0,
+          "fp_delta": -15,
+          "aff_delta": null
+        },
+        {
+          "station": "v0271",
+          "cohort_seed": 2026101603,
+          "scenario": "spike",
+          "tp_delta": 0,
+          "fp_delta": 0,
+          "aff_delta": null
+        },
+        {
+          "station": "v0272",
+          "cohort_seed": 2026101603,
+          "scenario": "step",
+          "tp_delta": 0,
+          "fp_delta": 0,
+          "aff_delta": null
+        },
+        {
+          "station": "v0273",
+          "cohort_seed": 2026101603,
+          "scenario": "transient",
+          "tp_delta": 34,
+          "fp_delta": 0,
+          "aff_delta": 1.0
+        },
+        {
+          "station": "v0274",
+          "cohort_seed": 2026101603,
+          "scenario": "deformation",
+          "tp_delta": 0,
+          "fp_delta": 0,
+          "aff_delta": null
+        },
+        {
+          "station": "v0275",
+          "cohort_seed": 2026101603,
+          "scenario": "mixed",
+          "tp_delta": 19,
+          "fp_delta": 0,
+          "aff_delta": 1.0
+        }
+      ]
+    },
+    "air_image_pure": {
+      "tp_delta": 92,
+      "fp_delta": 4,
+      "tp_improved_stations": 4,
+      "tp_harmed_stations": 1,
+      "fp_increased_stations": 2,
+      "bootstrap": {
+        "repeats": 2000,
+        "seed": 2026101525,
+        "endpoints": {
+          "transient_affiliation_f1": {
+            "difference": 0.2913049437158091,
+            "percentile_ci_95": [
+              0.05520893550438547,
+              0.5584544213776743
+            ],
+            "undefined_resamples": 0
+          },
+          "deformation_affiliation_f1": {
+            "difference": 0.0,
+            "percentile_ci_95": [
+              0.0,
+              0.0
+            ],
+            "undefined_resamples": 0
+          },
+          "range_union_affiliation_f1": {
+            "difference": 0.15785744624499834,
+            "percentile_ci_95": [
+              -0.030889252827765723,
+              0.35030187866456436
+            ],
+            "undefined_resamples": 0
+          },
+          "four_type_daily_f1": {
+            "difference": 0.07315436241610737,
+            "percentile_ci_95": [
+              0.0026754339728723014,
+              0.14110330001790888
+            ]
+          }
+        },
+        "scope": "Descriptive station bootstrap; common fitted models; no significance acceptance gate"
+      },
+      "changes": [
+        {
+          "station": "v0024",
+          "cohort_seed": 2026101601,
+          "scenario": "normal",
+          "tp_delta": 0,
+          "fp_delta": 0,
+          "aff_delta": null
+        },
+        {
+          "station": "v0025",
+          "cohort_seed": 2026101601,
+          "scenario": "spike",
+          "tp_delta": 0,
+          "fp_delta": 0,
+          "aff_delta": null
+        },
+        {
+          "station": "v0026",
+          "cohort_seed": 2026101601,
+          "scenario": "step",
+          "tp_delta": 0,
+          "fp_delta": 0,
+          "aff_delta": null
+        },
+        {
+          "station": "v0027",
+          "cohort_seed": 2026101601,
+          "scenario": "transient",
+          "tp_delta": 0,
+          "fp_delta": 0,
+          "aff_delta": 0.0
+        },
+        {
+          "station": "v0028",
+          "cohort_seed": 2026101601,
+          "scenario": "deformation",
+          "tp_delta": 0,
+          "fp_delta": 0,
+          "aff_delta": null
+        },
+        {
+          "station": "v0029",
+          "cohort_seed": 2026101601,
+          "scenario": "mixed",
+          "tp_delta": 0,
+          "fp_delta": 0,
+          "aff_delta": 0.0
+        },
+        {
+          "station": "v0030",
+          "cohort_seed": 2026101601,
+          "scenario": "normal",
+          "tp_delta": 0,
+          "fp_delta": 0,
+          "aff_delta": null
+        },
+        {
+          "station": "v0031",
+          "cohort_seed": 2026101601,
+          "scenario": "spike",
+          "tp_delta": 0,
+          "fp_delta": 0,
+          "aff_delta": null
+        },
+        {
+          "station": "v0032",
+          "cohort_seed": 2026101601,
+          "scenario": "step",
+          "tp_delta": 0,
+          "fp_delta": 0,
+          "aff_delta": null
+        },
+        {
+          "station": "v0033",
+          "cohort_seed": 2026101601,
+          "scenario": "transient",
+          "tp_delta": 6,
+          "fp_delta": 0,
+          "aff_delta": 0.4988449368112491
+        },
+        {
+          "station": "v0034",
+          "cohort_seed": 2026101601,
+          "scenario": "deformation",
+          "tp_delta": 0,
+          "fp_delta": 0,
+          "aff_delta": null
+        },
+        {
+          "station": "v0035",
+          "cohort_seed": 2026101601,
+          "scenario": "mixed",
+          "tp_delta": 0,
+          "fp_delta": 0,
+          "aff_delta": 0.0
+        },
+        {
+          "station": "v0144",
+          "cohort_seed": 2026101602,
+          "scenario": "normal",
+          "tp_delta": 0,
+          "fp_delta": 0,
+          "aff_delta": null
+        },
+        {
+          "station": "v0145",
+          "cohort_seed": 2026101602,
+          "scenario": "spike",
+          "tp_delta": 0,
+          "fp_delta": 0,
+          "aff_delta": null
+        },
+        {
+          "station": "v0146",
+          "cohort_seed": 2026101602,
+          "scenario": "step",
+          "tp_delta": 0,
+          "fp_delta": 0,
+          "aff_delta": null
+        },
+        {
+          "station": "v0147",
+          "cohort_seed": 2026101602,
+          "scenario": "transient",
+          "tp_delta": 0,
+          "fp_delta": 0,
+          "aff_delta": 0.0
+        },
+        {
+          "station": "v0148",
+          "cohort_seed": 2026101602,
+          "scenario": "deformation",
+          "tp_delta": 0,
+          "fp_delta": 3,
+          "aff_delta": null
+        },
+        {
+          "station": "v0149",
+          "cohort_seed": 2026101602,
+          "scenario": "mixed",
+          "tp_delta": -2,
+          "fp_delta": 0,
+          "aff_delta": -0.0004383594742867203
+        },
+        {
+          "station": "v0150",
+          "cohort_seed": 2026101602,
+          "scenario": "normal",
+          "tp_delta": 0,
+          "fp_delta": 0,
+          "aff_delta": null
+        },
+        {
+          "station": "v0151",
+          "cohort_seed": 2026101602,
+          "scenario": "spike",
+          "tp_delta": 0,
+          "fp_delta": 0,
+          "aff_delta": null
+        },
+        {
+          "station": "v0152",
+          "cohort_seed": 2026101602,
+          "scenario": "step",
+          "tp_delta": 0,
+          "fp_delta": 0,
+          "aff_delta": null
+        },
+        {
+          "station": "v0153",
+          "cohort_seed": 2026101602,
+          "scenario": "transient",
+          "tp_delta": 0,
+          "fp_delta": 0,
+          "aff_delta": 0.0
+        },
+        {
+          "station": "v0154",
+          "cohort_seed": 2026101602,
+          "scenario": "deformation",
+          "tp_delta": 0,
+          "fp_delta": 0,
+          "aff_delta": null
+        },
+        {
+          "station": "v0155",
+          "cohort_seed": 2026101602,
+          "scenario": "mixed",
+          "tp_delta": 0,
+          "fp_delta": 0,
+          "aff_delta": 0.0
+        },
+        {
+          "station": "v0264",
+          "cohort_seed": 2026101603,
+          "scenario": "normal",
+          "tp_delta": 0,
+          "fp_delta": 0,
+          "aff_delta": null
+        },
+        {
+          "station": "v0265",
+          "cohort_seed": 2026101603,
+          "scenario": "spike",
+          "tp_delta": 0,
+          "fp_delta": 0,
+          "aff_delta": null
+        },
+        {
+          "station": "v0266",
+          "cohort_seed": 2026101603,
+          "scenario": "step",
+          "tp_delta": 0,
+          "fp_delta": 0,
+          "aff_delta": null
+        },
+        {
+          "station": "v0267",
+          "cohort_seed": 2026101603,
+          "scenario": "transient",
+          "tp_delta": 35,
+          "fp_delta": 2,
+          "aff_delta": 0.9972527472527473
+        },
+        {
+          "station": "v0268",
+          "cohort_seed": 2026101603,
+          "scenario": "deformation",
+          "tp_delta": 0,
+          "fp_delta": 0,
+          "aff_delta": null
+        },
+        {
+          "station": "v0269",
+          "cohort_seed": 2026101603,
+          "scenario": "mixed",
+          "tp_delta": 0,
+          "fp_delta": 0,
+          "aff_delta": 0.0
+        },
+        {
+          "station": "v0270",
+          "cohort_seed": 2026101603,
+          "scenario": "normal",
+          "tp_delta": 0,
+          "fp_delta": 0,
+          "aff_delta": null
+        },
+        {
+          "station": "v0271",
+          "cohort_seed": 2026101603,
+          "scenario": "spike",
+          "tp_delta": 0,
+          "fp_delta": 0,
+          "aff_delta": null
+        },
+        {
+          "station": "v0272",
+          "cohort_seed": 2026101603,
+          "scenario": "step",
+          "tp_delta": 0,
+          "fp_delta": 0,
+          "aff_delta": null
+        },
+        {
+          "station": "v0273",
+          "cohort_seed": 2026101603,
+          "scenario": "transient",
+          "tp_delta": 34,
+          "fp_delta": 0,
+          "aff_delta": 1.0
+        },
+        {
+          "station": "v0274",
+          "cohort_seed": 2026101603,
+          "scenario": "deformation",
+          "tp_delta": 0,
+          "fp_delta": -1,
+          "aff_delta": null
+        },
+        {
+          "station": "v0275",
+          "cohort_seed": 2026101603,
+          "scenario": "mixed",
+          "tp_delta": 19,
+          "fp_delta": 0,
+          "aff_delta": 1.0
+        }
+      ]
+    }
+  },
+  "new_model_requests": 0
+}

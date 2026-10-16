@@ -1,0 +1,231 @@
+{
+  "v0031": {
+    "selection": [
+      "added_fp"
+    ],
+    "change": {
+      "station": "v0031",
+      "scenario": "spike",
+      "cohort_seed": 2026101601,
+      "tp_delta": 0,
+      "fp_delta": 34,
+      "aff_delta": null,
+      "main_events": {
+        "events": [
+          {
+            "start": 596,
+            "end": 596,
+            "kind": "spike",
+            "status": "confirmed",
+            "evidence": "default classifier decision on GNSS observation features",
+            "phases": []
+          },
+          {
+            "start": 410,
+            "end": 444,
+            "kind": "transient",
+            "status": "confirmed",
+            "evidence": "N-component shows abrupt onset near index 410, sustained positive shift (~+2 MAD) through index 444, with opposing return beginning at 445 (downward slope over ~3–4 samples); E and U show correlated smaller fluctuations during the same interval, consistent with superposed temporary offset. Pre-410 and post-445 N levels are comparable within noise, supporting a closed temporary event.",
+            "phases": []
+          }
+        ]
+      },
+      "control_events": {
+        "events": [
+          {
+            "start": 596,
+            "end": 596,
+            "kind": "spike",
+            "status": "confirmed",
+            "evidence": "default classifier decision on GNSS observation features",
+            "phases": []
+          }
+        ]
+      }
+    },
+    "truth": [
+      {
+        "kind": "spike",
+        "start": 596,
+        "end": 596,
+        "status": "confirmed",
+        "evidence": "simulation mechanism",
+        "phases": []
+      }
+    ],
+    "predictions": {
+      "truth": {
+        "events": [
+          {
+            "kind": "spike",
+            "start": 596,
+            "end": 596,
+            "status": "confirmed",
+            "evidence": "simulation mechanism",
+            "phases": []
+          }
+        ]
+      },
+      "jcv_image": {
+        "events": [
+          {
+            "start": 596,
+            "end": 596,
+            "kind": "spike",
+            "status": "confirmed",
+            "evidence": "default classifier decision on GNSS observation features",
+            "phases": []
+          },
+          {
+            "start": 410,
+            "end": 444,
+            "kind": "transient",
+            "status": "confirmed",
+            "evidence": "N-component shows abrupt onset near index 410, sustained positive shift (~+2 MAD) through index 444, with opposing return beginning at 445 (downward slope over ~3–4 samples); E and U show correlated smaller fluctuations during the same interval, consistent with superposed temporary offset. Pre-410 and post-445 N levels are comparable within noise, supporting a closed temporary event.",
+            "phases": []
+          }
+        ]
+      },
+      "jcv_image_pure": {
+        "events": [
+          {
+            "start": 410,
+            "end": 444,
+            "kind": "transient",
+            "status": "confirmed",
+            "evidence": "N-component shows abrupt onset near index 410, sustained positive shift (~+2 MAD) through index 444, with opposing return beginning at 445 (downward slope over ~3–4 samples); E and U show correlated smaller fluctuations during the same interval, consistent with superposed temporary offset. Pre-410 and post-445 N levels are comparable within noise, supporting a closed temporary event.",
+            "phases": []
+          }
+        ]
+      },
+      "jcv_global_only": {
+        "events": [
+          {
+            "start": 596,
+            "end": 596,
+            "kind": "spike",
+            "status": "confirmed",
+            "evidence": "default classifier decision on GNSS observation features",
+            "phases": []
+          },
+          {
+            "start": 410,
+            "end": 444,
+            "kind": "transient",
+            "status": "confirmed",
+            "evidence": "N-component shows abrupt onset near index 410, sustained positive offset (~+2 MAD) through index 444, with opposing return beginning at index 445 (downward slope over ~3–4 samples); E and U show correlated smaller fluctuations during the same interval, consistent with a superposed temporary offset. The return is visible and opposes the onset direction on N, satisfying the three-part criterion.",
+            "phases": []
+          }
+        ]
+      },
+      "jcv_local_only": {
+        "events": [
+          {
+            "start": 596,
+            "end": 596,
+            "kind": "spike",
+            "status": "confirmed",
+            "evidence": "default classifier decision on GNSS observation features",
+            "phases": []
+          },
+          {
+            "start": 410,
+            "end": 444,
+            "kind": "transient",
+            "status": "confirmed",
+            "evidence": "N-component shows abrupt onset near index 410, sustained positive offset (~+2 MAD) through index 444, with correlated E/U fluctuations; opposing return begins at index 445 (downward slope in N), confirming temporary offset interior ends at 444.",
+            "phases": []
+          }
+        ]
+      },
+      "jcv_text_final": {
+        "events": [
+          {
+            "start": 596,
+            "end": 596,
+            "kind": "spike",
+            "status": "confirmed",
+            "evidence": "default classifier decision on GNSS observation features",
+            "phases": []
+          },
+          {
+            "start": 410,
+            "end": 444,
+            "kind": "transient",
+            "status": "confirmed",
+            "evidence": "N-component shows a sustained positive offset (~+2 MAD) from index 410 to 444, with sharp onset near 410 and multi-sample descent ending near 445; E and U show correlated smaller-scale fluctuations during same interval. The interior is shifted, and the return (descent) begins at ~445 — so last shifted sample before opposing return is 444. Confirmed as temporary offset on N/E/U superposition.",
+            "phases": []
+          }
+        ]
+      },
+      "jcv_text_pipeline": {
+        "events": [
+          {
+            "start": 596,
+            "end": 596,
+            "kind": "spike",
+            "status": "confirmed",
+            "evidence": "default classifier decision on GNSS observation features",
+            "phases": []
+          }
+        ]
+      },
+      "air_image": {
+        "events": [
+          {
+            "start": 596,
+            "end": 596,
+            "kind": "spike",
+            "status": "confirmed",
+            "evidence": "default classifier decision on GNSS observation features",
+            "phases": []
+          },
+          {
+            "start": 410,
+            "end": 444,
+            "kind": "transient",
+            "status": "confirmed",
+            "evidence": "N-component shows a sustained positive offset (~+2 MAD) beginning sharply near index 410, persisting through index 444; E and U exhibit correlated fluctuations but no clear opposing return. The descent from the offset begins at ~445 (first sample after 444), so 444 is the last sample *before* the opposing return starts.",
+            "phases": []
+          }
+        ]
+      },
+      "air_global": {
+        "events": [
+          {
+            "start": 596,
+            "end": 596,
+            "kind": "spike",
+            "status": "confirmed",
+            "evidence": "default classifier decision on GNSS observation features",
+            "phases": []
+          }
+        ]
+      },
+      "vrc_image": {
+        "events": [
+          {
+            "start": 596,
+            "end": 596,
+            "kind": "spike",
+            "status": "confirmed",
+            "evidence": "default classifier decision on GNSS observation features",
+            "phases": []
+          }
+        ]
+      },
+      "vector_nearest": {
+        "events": [
+          {
+            "start": 596,
+            "end": 596,
+            "kind": "spike",
+            "status": "confirmed",
+            "evidence": "default classifier decision on GNSS observation features",
+            "phases": []
+          }
+        ]
+      }
+    }
+  }
+}

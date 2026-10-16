@@ -1,0 +1,1340 @@
+{
+  "vector_nearest": {
+    "changes": [
+      {
+        "station": "v0031",
+        "scenario": "spike",
+        "cohort_seed": 2026101601,
+        "tp_delta": 0,
+        "fp_delta": 34,
+        "aff_delta": null,
+        "main_events": {
+          "events": [
+            {
+              "start": 596,
+              "end": 596,
+              "kind": "spike",
+              "status": "confirmed",
+              "evidence": "default classifier decision on GNSS observation features",
+              "phases": []
+            },
+            {
+              "start": 410,
+              "end": 444,
+              "kind": "transient",
+              "status": "confirmed",
+              "evidence": "N-component shows abrupt onset near index 410, sustained positive shift (~+2 MAD) through index 444, with opposing return beginning at 445 (downward slope over ~3–4 samples); E and U show correlated smaller fluctuations during the same interval, consistent with superposed temporary offset. Pre-410 and post-445 N levels are comparable within noise, supporting a closed temporary event.",
+              "phases": []
+            }
+          ]
+        },
+        "control_events": {
+          "events": [
+            {
+              "start": 596,
+              "end": 596,
+              "kind": "spike",
+              "status": "confirmed",
+              "evidence": "default classifier decision on GNSS observation features",
+              "phases": []
+            }
+          ]
+        }
+      },
+      {
+        "station": "v0148",
+        "scenario": "deformation",
+        "cohort_seed": 2026101602,
+        "tp_delta": 0,
+        "fp_delta": 18,
+        "aff_delta": null,
+        "main_events": {
+          "events": [
+            {
+              "start": 519,
+              "end": 597,
+              "kind": "deformation",
+              "status": "confirmed",
+              "evidence": "Bounded raw-displacement trajectory improves information criterion over background plus jumps",
+              "phases": []
+            },
+            {
+              "start": 490,
+              "end": 508,
+              "kind": "transient",
+              "status": "confirmed",
+              "evidence": "E-component shows abrupt onset near index 490 with sustained ~2 MAD downward shift; N and U show correlated fluctuations during same interval. Return begins around 505 but is incomplete by index 508 (last shifted sample before partial recovery), satisfying onset–interior–opposing-return structure on E, with cross-axis coherence. Confirmed as temporary offset.",
+              "phases": []
+            }
+          ]
+        },
+        "control_events": {
+          "events": [
+            {
+              "start": 519,
+              "end": 597,
+              "kind": "deformation",
+              "status": "confirmed",
+              "evidence": "Bounded raw-displacement trajectory improves information criterion over background plus jumps",
+              "phases": []
+            }
+          ]
+        }
+      }
+    ],
+    "tp_improved_stations": 0,
+    "fp_increased_stations": 2,
+    "aff_only_improved_stations": 0,
+    "bootstrap": {
+      "repeats": 2000,
+      "seed": 2026101525,
+      "endpoints": {
+        "transient_affiliation_f1": {
+          "difference": 0.0,
+          "percentile_ci_95": [
+            0.0,
+            0.0
+          ],
+          "undefined_resamples": 0
+        },
+        "deformation_affiliation_f1": {
+          "difference": 0.0,
+          "percentile_ci_95": [
+            0.0,
+            0.0
+          ],
+          "undefined_resamples": 0
+        },
+        "range_union_affiliation_f1": {
+          "difference": -0.0009817178964639393,
+          "percentile_ci_95": [
+            -0.0033658899307335063,
+            0.0
+          ],
+          "undefined_resamples": 0
+        },
+        "four_type_daily_f1": {
+          "difference": -0.014476614699331813,
+          "percentile_ci_95": [
+            -0.04426719812893801,
+            0.0
+          ]
+        }
+      },
+      "scope": "Descriptive station bootstrap; common fitted models; no significance acceptance gate"
+    }
+  },
+  "vrc_image": {
+    "changes": [
+      {
+        "station": "v0026",
+        "scenario": "step",
+        "cohort_seed": 2026101601,
+        "tp_delta": 0,
+        "fp_delta": -6,
+        "aff_delta": null,
+        "main_events": {
+          "events": [
+            {
+              "start": 626,
+              "end": 626,
+              "kind": "step",
+              "status": "confirmed",
+              "evidence": "Unpaired segmented displacement level jump",
+              "phases": []
+            }
+          ]
+        },
+        "control_events": {
+          "events": [
+            {
+              "start": 626,
+              "end": 626,
+              "kind": "step",
+              "status": "confirmed",
+              "evidence": "Unpaired segmented displacement level jump",
+              "phases": []
+            },
+            {
+              "start": 624,
+              "end": 629,
+              "kind": "transient",
+              "status": "confirmed",
+              "evidence": "short observations",
+              "phases": []
+            }
+          ]
+        }
+      },
+      {
+        "station": "v0031",
+        "scenario": "spike",
+        "cohort_seed": 2026101601,
+        "tp_delta": 0,
+        "fp_delta": 34,
+        "aff_delta": null,
+        "main_events": {
+          "events": [
+            {
+              "start": 596,
+              "end": 596,
+              "kind": "spike",
+              "status": "confirmed",
+              "evidence": "default classifier decision on GNSS observation features",
+              "phases": []
+            },
+            {
+              "start": 410,
+              "end": 444,
+              "kind": "transient",
+              "status": "confirmed",
+              "evidence": "N-component shows abrupt onset near index 410, sustained positive shift (~+2 MAD) through index 444, with opposing return beginning at 445 (downward slope over ~3–4 samples); E and U show correlated smaller fluctuations during the same interval, consistent with superposed temporary offset. Pre-410 and post-445 N levels are comparable within noise, supporting a closed temporary event.",
+              "phases": []
+            }
+          ]
+        },
+        "control_events": {
+          "events": [
+            {
+              "start": 596,
+              "end": 596,
+              "kind": "spike",
+              "status": "confirmed",
+              "evidence": "default classifier decision on GNSS observation features",
+              "phases": []
+            }
+          ]
+        }
+      },
+      {
+        "station": "v0146",
+        "scenario": "step",
+        "cohort_seed": 2026101602,
+        "tp_delta": 0,
+        "fp_delta": -4,
+        "aff_delta": null,
+        "main_events": {
+          "events": [
+            {
+              "start": 610,
+              "end": 610,
+              "kind": "step",
+              "status": "confirmed",
+              "evidence": "Unpaired segmented displacement level jump",
+              "phases": []
+            }
+          ]
+        },
+        "control_events": {
+          "events": [
+            {
+              "start": 610,
+              "end": 610,
+              "kind": "step",
+              "status": "confirmed",
+              "evidence": "Unpaired segmented displacement level jump",
+              "phases": []
+            },
+            {
+              "start": 612,
+              "end": 615,
+              "kind": "transient",
+              "status": "confirmed",
+              "evidence": "short observations",
+              "phases": []
+            }
+          ]
+        }
+      },
+      {
+        "station": "v0148",
+        "scenario": "deformation",
+        "cohort_seed": 2026101602,
+        "tp_delta": 0,
+        "fp_delta": 18,
+        "aff_delta": null,
+        "main_events": {
+          "events": [
+            {
+              "start": 519,
+              "end": 597,
+              "kind": "deformation",
+              "status": "confirmed",
+              "evidence": "Bounded raw-displacement trajectory improves information criterion over background plus jumps",
+              "phases": []
+            },
+            {
+              "start": 490,
+              "end": 508,
+              "kind": "transient",
+              "status": "confirmed",
+              "evidence": "E-component shows abrupt onset near index 490 with sustained ~2 MAD downward shift; N and U show correlated fluctuations during same interval. Return begins around 505 but is incomplete by index 508 (last shifted sample before partial recovery), satisfying onset–interior–opposing-return structure on E, with cross-axis coherence. Confirmed as temporary offset.",
+              "phases": []
+            }
+          ]
+        },
+        "control_events": {
+          "events": [
+            {
+              "start": 519,
+              "end": 597,
+              "kind": "deformation",
+              "status": "confirmed",
+              "evidence": "Bounded raw-displacement trajectory improves information criterion over background plus jumps",
+              "phases": []
+            }
+          ]
+        }
+      }
+    ],
+    "tp_improved_stations": 0,
+    "fp_increased_stations": 2,
+    "aff_only_improved_stations": 0,
+    "bootstrap": {
+      "repeats": 2000,
+      "seed": 2026101525,
+      "endpoints": {
+        "transient_affiliation_f1": {
+          "difference": 0.0,
+          "percentile_ci_95": [
+            0.0,
+            0.0
+          ],
+          "undefined_resamples": 0
+        },
+        "deformation_affiliation_f1": {
+          "difference": 0.0,
+          "percentile_ci_95": [
+            0.0,
+            0.0
+          ],
+          "undefined_resamples": 0
+        },
+        "range_union_affiliation_f1": {
+          "difference": -0.0009817178964639393,
+          "percentile_ci_95": [
+            -0.0033658899307335063,
+            0.0
+          ],
+          "undefined_resamples": 0
+        },
+        "four_type_daily_f1": {
+          "difference": -0.011556053951668366,
+          "percentile_ci_95": [
+            -0.04012598086865865,
+            0.00522227386436649
+          ]
+        }
+      },
+      "scope": "Descriptive station bootstrap; common fitted models; no significance acceptance gate"
+    }
+  },
+  "air_image": {
+    "changes": [
+      {
+        "station": "v0148",
+        "scenario": "deformation",
+        "cohort_seed": 2026101602,
+        "tp_delta": 0,
+        "fp_delta": 3,
+        "aff_delta": null,
+        "main_events": {
+          "events": [
+            {
+              "start": 519,
+              "end": 597,
+              "kind": "deformation",
+              "status": "confirmed",
+              "evidence": "Bounded raw-displacement trajectory improves information criterion over background plus jumps",
+              "phases": []
+            },
+            {
+              "start": 490,
+              "end": 508,
+              "kind": "transient",
+              "status": "confirmed",
+              "evidence": "E-component shows abrupt onset near index 490 with sustained ~2 MAD downward shift; N and U show correlated fluctuations during same interval. Return begins around 505 but is incomplete by index 508 (last shifted sample before partial recovery), satisfying onset–interior–opposing-return structure on E, with cross-axis coherence. Confirmed as temporary offset.",
+              "phases": []
+            }
+          ]
+        },
+        "control_events": {
+          "events": [
+            {
+              "start": 519,
+              "end": 597,
+              "kind": "deformation",
+              "status": "confirmed",
+              "evidence": "Bounded raw-displacement trajectory improves information criterion over background plus jumps",
+              "phases": []
+            },
+            {
+              "start": 490,
+              "end": 504,
+              "kind": "transient",
+              "status": "confirmed",
+              "evidence": "E-component shows a sustained downward shift from ~index 490, with interior values consistently below pre-event baseline; N and U show correlated fluctuations but no clear sustained offset. Return not observed before index 505, and at 505 the E-value begins rising but remains below baseline through 504.",
+              "phases": []
+            }
+          ]
+        }
+      },
+      {
+        "station": "v0274",
+        "scenario": "deformation",
+        "cohort_seed": 2026101603,
+        "tp_delta": 0,
+        "fp_delta": -1,
+        "aff_delta": null,
+        "main_events": {
+          "events": [
+            {
+              "start": 620,
+              "end": 675,
+              "kind": "deformation",
+              "status": "confirmed",
+              "evidence": "Bounded raw-displacement trajectory improves information criterion over background plus jumps",
+              "phases": []
+            }
+          ]
+        },
+        "control_events": {
+          "events": [
+            {
+              "start": 620,
+              "end": 675,
+              "kind": "deformation",
+              "status": "confirmed",
+              "evidence": "Bounded raw-displacement trajectory improves information criterion over background plus jumps",
+              "phases": []
+            },
+            {
+              "start": 655,
+              "end": 655,
+              "kind": "transient",
+              "status": "confirmed",
+              "evidence": "U component exhibits an isolated ~3-MAD spike at index 655, with no sustained offset before or after; adjacent E/N show no correlated step or recovery. Not a temporary offset—classified as transient anomaly, excluded per instructions.",
+              "phases": []
+            }
+          ]
+        }
+      }
+    ],
+    "tp_improved_stations": 0,
+    "fp_increased_stations": 1,
+    "aff_only_improved_stations": 0,
+    "bootstrap": {
+      "repeats": 2000,
+      "seed": 2026101525,
+      "endpoints": {
+        "transient_affiliation_f1": {
+          "difference": 0.0,
+          "percentile_ci_95": [
+            0.0,
+            0.0
+          ],
+          "undefined_resamples": 0
+        },
+        "deformation_affiliation_f1": {
+          "difference": 0.0,
+          "percentile_ci_95": [
+            0.0,
+            0.0
+          ],
+          "undefined_resamples": 0
+        },
+        "range_union_affiliation_f1": {
+          "difference": -5.5922239656287014e-05,
+          "percentile_ci_95": [
+            -0.00019173339310726977,
+            0.0
+          ],
+          "undefined_resamples": 0
+        },
+        "four_type_daily_f1": {
+          "difference": -0.0005257218421890197,
+          "percentile_ci_95": [
+            -0.0026374499664704788,
+            0.0008532912342294222
+          ]
+        }
+      },
+      "scope": "Descriptive station bootstrap; common fitted models; no significance acceptance gate"
+    }
+  },
+  "air_global": {
+    "changes": [
+      {
+        "station": "v0031",
+        "scenario": "spike",
+        "cohort_seed": 2026101601,
+        "tp_delta": 0,
+        "fp_delta": 34,
+        "aff_delta": null,
+        "main_events": {
+          "events": [
+            {
+              "start": 596,
+              "end": 596,
+              "kind": "spike",
+              "status": "confirmed",
+              "evidence": "default classifier decision on GNSS observation features",
+              "phases": []
+            },
+            {
+              "start": 410,
+              "end": 444,
+              "kind": "transient",
+              "status": "confirmed",
+              "evidence": "N-component shows abrupt onset near index 410, sustained positive shift (~+2 MAD) through index 444, with opposing return beginning at 445 (downward slope over ~3–4 samples); E and U show correlated smaller fluctuations during the same interval, consistent with superposed temporary offset. Pre-410 and post-445 N levels are comparable within noise, supporting a closed temporary event.",
+              "phases": []
+            }
+          ]
+        },
+        "control_events": {
+          "events": [
+            {
+              "start": 596,
+              "end": 596,
+              "kind": "spike",
+              "status": "confirmed",
+              "evidence": "default classifier decision on GNSS observation features",
+              "phases": []
+            }
+          ]
+        }
+      },
+      {
+        "station": "v0148",
+        "scenario": "deformation",
+        "cohort_seed": 2026101602,
+        "tp_delta": 0,
+        "fp_delta": 18,
+        "aff_delta": null,
+        "main_events": {
+          "events": [
+            {
+              "start": 519,
+              "end": 597,
+              "kind": "deformation",
+              "status": "confirmed",
+              "evidence": "Bounded raw-displacement trajectory improves information criterion over background plus jumps",
+              "phases": []
+            },
+            {
+              "start": 490,
+              "end": 508,
+              "kind": "transient",
+              "status": "confirmed",
+              "evidence": "E-component shows abrupt onset near index 490 with sustained ~2 MAD downward shift; N and U show correlated fluctuations during same interval. Return begins around 505 but is incomplete by index 508 (last shifted sample before partial recovery), satisfying onset–interior–opposing-return structure on E, with cross-axis coherence. Confirmed as temporary offset.",
+              "phases": []
+            }
+          ]
+        },
+        "control_events": {
+          "events": [
+            {
+              "start": 519,
+              "end": 597,
+              "kind": "deformation",
+              "status": "confirmed",
+              "evidence": "Bounded raw-displacement trajectory improves information criterion over background plus jumps",
+              "phases": []
+            }
+          ]
+        }
+      },
+      {
+        "station": "v0153",
+        "scenario": "transient",
+        "cohort_seed": 2026101602,
+        "tp_delta": 0,
+        "fp_delta": -10,
+        "aff_delta": 0.047021943573667735,
+        "main_events": {
+          "events": [
+            {
+              "start": 476,
+              "end": 498,
+              "kind": "transient",
+              "status": "confirmed",
+              "evidence": "Paired shift-and-return regression wins information criterion",
+              "phases": []
+            }
+          ]
+        },
+        "control_events": {
+          "events": [
+            {
+              "start": 476,
+              "end": 498,
+              "kind": "transient",
+              "status": "confirmed",
+              "evidence": "Paired shift-and-return regression wins information criterion",
+              "phases": []
+            },
+            {
+              "start": 605,
+              "end": 614,
+              "kind": "transient",
+              "status": "confirmed",
+              "evidence": "N shows a sharp upward step starting at ~605 (≈+10 MAD), sustained through 611, then a rapid downward step (~−10 MAD) from 612 to 614; U rises concurrently with N but does not reverse; E rises more gradually and remains elevated. The N component exhibits a clear temporary offset interval (up then down), while E/U show only partial or no return—thus only the N-axis offset is confirmed as temporary.",
+              "phases": []
+            }
+          ]
+        }
+      },
+      {
+        "station": "v0274",
+        "scenario": "deformation",
+        "cohort_seed": 2026101603,
+        "tp_delta": 0,
+        "fp_delta": -1,
+        "aff_delta": null,
+        "main_events": {
+          "events": [
+            {
+              "start": 620,
+              "end": 675,
+              "kind": "deformation",
+              "status": "confirmed",
+              "evidence": "Bounded raw-displacement trajectory improves information criterion over background plus jumps",
+              "phases": []
+            }
+          ]
+        },
+        "control_events": {
+          "events": [
+            {
+              "start": 620,
+              "end": 675,
+              "kind": "deformation",
+              "status": "confirmed",
+              "evidence": "Bounded raw-displacement trajectory improves information criterion over background plus jumps",
+              "phases": []
+            },
+            {
+              "start": 655,
+              "end": 655,
+              "kind": "transient",
+              "status": "confirmed",
+              "evidence": "U component exhibits an isolated ~3-MAD spike at index 655, sharply rising and falling within one sample; no correlated E/N response, and no sustained offset before or after. Not a temporary offset interval (lacks onset-sustained-return structure).",
+              "phases": []
+            }
+          ]
+        }
+      }
+    ],
+    "tp_improved_stations": 0,
+    "fp_increased_stations": 2,
+    "aff_only_improved_stations": 1,
+    "bootstrap": {
+      "repeats": 2000,
+      "seed": 2026101525,
+      "endpoints": {
+        "transient_affiliation_f1": {
+          "difference": 0.003918495297805645,
+          "percentile_ci_95": [
+            0.0,
+            0.01282416642918211
+          ],
+          "undefined_resamples": 0
+        },
+        "deformation_affiliation_f1": {
+          "difference": 0.0,
+          "percentile_ci_95": [
+            0.0,
+            0.0
+          ],
+          "undefined_resamples": 0
+        },
+        "range_union_affiliation_f1": {
+          "difference": 0.001630612302073157,
+          "percentile_ci_95": [
+            -0.0027203919604645477,
+            0.007748489803724907
+          ],
+          "undefined_resamples": 0
+        },
+        "four_type_daily_f1": {
+          "difference": -0.011267746554641134,
+          "percentile_ci_95": [
+            -0.0413482931767004,
+            0.0060982399913086
+          ]
+        }
+      },
+      "scope": "Descriptive station bootstrap; common fitted models; no significance acceptance gate"
+    }
+  },
+  "jcv_global_only": {
+    "changes": [
+      {
+        "station": "v0148",
+        "scenario": "deformation",
+        "cohort_seed": 2026101602,
+        "tp_delta": 0,
+        "fp_delta": 18,
+        "aff_delta": null,
+        "main_events": {
+          "events": [
+            {
+              "start": 519,
+              "end": 597,
+              "kind": "deformation",
+              "status": "confirmed",
+              "evidence": "Bounded raw-displacement trajectory improves information criterion over background plus jumps",
+              "phases": []
+            },
+            {
+              "start": 490,
+              "end": 508,
+              "kind": "transient",
+              "status": "confirmed",
+              "evidence": "E-component shows abrupt onset near index 490 with sustained ~2 MAD downward shift; N and U show correlated fluctuations during same interval. Return begins around 505 but is incomplete by index 508 (last shifted sample before partial recovery), satisfying onset–interior–opposing-return structure on E, with cross-axis coherence. Confirmed as temporary offset.",
+              "phases": []
+            }
+          ]
+        },
+        "control_events": {
+          "events": [
+            {
+              "start": 519,
+              "end": 597,
+              "kind": "deformation",
+              "status": "confirmed",
+              "evidence": "Bounded raw-displacement trajectory improves information criterion over background plus jumps",
+              "phases": []
+            }
+          ]
+        }
+      }
+    ],
+    "tp_improved_stations": 0,
+    "fp_increased_stations": 1,
+    "aff_only_improved_stations": 0,
+    "bootstrap": {
+      "repeats": 2000,
+      "seed": 2026101525,
+      "endpoints": {
+        "transient_affiliation_f1": {
+          "difference": 0.0,
+          "percentile_ci_95": [
+            0.0,
+            0.0
+          ],
+          "undefined_resamples": 0
+        },
+        "deformation_affiliation_f1": {
+          "difference": 0.0,
+          "percentile_ci_95": [
+            0.0,
+            0.0
+          ],
+          "undefined_resamples": 0
+        },
+        "range_union_affiliation_f1": {
+          "difference": -0.0009817178964639393,
+          "percentile_ci_95": [
+            -0.0033658899307335063,
+            0.0
+          ],
+          "undefined_resamples": 0
+        },
+        "four_type_daily_f1": {
+          "difference": -0.0048175237902409185,
+          "percentile_ci_95": [
+            -0.01961682397841207,
+            0.0
+          ]
+        }
+      },
+      "scope": "Descriptive station bootstrap; common fitted models; no significance acceptance gate"
+    }
+  },
+  "jcv_local_only": {
+    "changes": [
+      {
+        "station": "v0148",
+        "scenario": "deformation",
+        "cohort_seed": 2026101602,
+        "tp_delta": 0,
+        "fp_delta": 18,
+        "aff_delta": null,
+        "main_events": {
+          "events": [
+            {
+              "start": 519,
+              "end": 597,
+              "kind": "deformation",
+              "status": "confirmed",
+              "evidence": "Bounded raw-displacement trajectory improves information criterion over background plus jumps",
+              "phases": []
+            },
+            {
+              "start": 490,
+              "end": 508,
+              "kind": "transient",
+              "status": "confirmed",
+              "evidence": "E-component shows abrupt onset near index 490 with sustained ~2 MAD downward shift; N and U show correlated fluctuations during same interval. Return begins around 505 but is incomplete by index 508 (last shifted sample before partial recovery), satisfying onset–interior–opposing-return structure on E, with cross-axis coherence. Confirmed as temporary offset.",
+              "phases": []
+            }
+          ]
+        },
+        "control_events": {
+          "events": [
+            {
+              "start": 519,
+              "end": 597,
+              "kind": "deformation",
+              "status": "confirmed",
+              "evidence": "Bounded raw-displacement trajectory improves information criterion over background plus jumps",
+              "phases": []
+            }
+          ]
+        }
+      },
+      {
+        "station": "v0270",
+        "scenario": "normal",
+        "cohort_seed": 2026101603,
+        "tp_delta": 0,
+        "fp_delta": -15,
+        "aff_delta": null,
+        "main_events": {
+          "events": []
+        },
+        "control_events": {
+          "events": [
+            {
+              "start": 610,
+              "end": 624,
+              "kind": "transient",
+              "status": "confirmed",
+              "evidence": "U shows abrupt ~3-MAD negative jump at indices 610–612, with coherent but weaker negative excursions in N and E; interior remains shifted until index 624, after which U begins recovering (e.g., +1.5 MAD by 626), indicating opposing return starts at 625. The onset is the first shifted sample at 610; end is last shifted sample before return, i.e., 624.",
+              "phases": []
+            }
+          ]
+        }
+      }
+    ],
+    "tp_improved_stations": 0,
+    "fp_increased_stations": 1,
+    "aff_only_improved_stations": 0,
+    "bootstrap": {
+      "repeats": 2000,
+      "seed": 2026101525,
+      "endpoints": {
+        "transient_affiliation_f1": {
+          "difference": 0.0,
+          "percentile_ci_95": [
+            0.0,
+            0.0
+          ],
+          "undefined_resamples": 0
+        },
+        "deformation_affiliation_f1": {
+          "difference": 0.0,
+          "percentile_ci_95": [
+            0.0,
+            0.0
+          ],
+          "undefined_resamples": 0
+        },
+        "range_union_affiliation_f1": {
+          "difference": -0.0009817178964639393,
+          "percentile_ci_95": [
+            -0.0033658899307335063,
+            0.0
+          ],
+          "undefined_resamples": 0
+        },
+        "four_type_daily_f1": {
+          "difference": -0.0007894638613430427,
+          "percentile_ci_95": [
+            -0.01574234800498005,
+            0.012514796493381185
+          ]
+        }
+      },
+      "scope": "Descriptive station bootstrap; common fitted models; no significance acceptance gate"
+    }
+  },
+  "jcv_text_final": {
+    "changes": [
+      {
+        "station": "v0148",
+        "scenario": "deformation",
+        "cohort_seed": 2026101602,
+        "tp_delta": 0,
+        "fp_delta": 18,
+        "aff_delta": null,
+        "main_events": {
+          "events": [
+            {
+              "start": 519,
+              "end": 597,
+              "kind": "deformation",
+              "status": "confirmed",
+              "evidence": "Bounded raw-displacement trajectory improves information criterion over background plus jumps",
+              "phases": []
+            },
+            {
+              "start": 490,
+              "end": 508,
+              "kind": "transient",
+              "status": "confirmed",
+              "evidence": "E-component shows abrupt onset near index 490 with sustained ~2 MAD downward shift; N and U show correlated fluctuations during same interval. Return begins around 505 but is incomplete by index 508 (last shifted sample before partial recovery), satisfying onset–interior–opposing-return structure on E, with cross-axis coherence. Confirmed as temporary offset.",
+              "phases": []
+            }
+          ]
+        },
+        "control_events": {
+          "events": [
+            {
+              "start": 519,
+              "end": 597,
+              "kind": "deformation",
+              "status": "confirmed",
+              "evidence": "Bounded raw-displacement trajectory improves information criterion over background plus jumps",
+              "phases": []
+            }
+          ]
+        }
+      },
+      {
+        "station": "v0270",
+        "scenario": "normal",
+        "cohort_seed": 2026101603,
+        "tp_delta": 0,
+        "fp_delta": -16,
+        "aff_delta": null,
+        "main_events": {
+          "events": []
+        },
+        "control_events": {
+          "events": [
+            {
+              "start": 610,
+              "end": 625,
+              "kind": "transient",
+              "status": "confirmed",
+              "evidence": "U shows abrupt ~3-MAD negative jump at indices 610–612, sustained lower level until ~625; N and E show weaker but coherent negative excursions in same interval, consistent with a transient vertical displacement with horizontal coupling. Return not observed within window, but onset and sustained shift are clear on U with supporting N/E behavior.",
+              "phases": []
+            }
+          ]
+        }
+      }
+    ],
+    "tp_improved_stations": 0,
+    "fp_increased_stations": 1,
+    "aff_only_improved_stations": 0,
+    "bootstrap": {
+      "repeats": 2000,
+      "seed": 2026101525,
+      "endpoints": {
+        "transient_affiliation_f1": {
+          "difference": 0.0,
+          "percentile_ci_95": [
+            0.0,
+            0.0
+          ],
+          "undefined_resamples": 0
+        },
+        "deformation_affiliation_f1": {
+          "difference": 0.0,
+          "percentile_ci_95": [
+            0.0,
+            0.0
+          ],
+          "undefined_resamples": 0
+        },
+        "range_union_affiliation_f1": {
+          "difference": -0.0009817178964639393,
+          "percentile_ci_95": [
+            -0.0033658899307335063,
+            0.0
+          ],
+          "undefined_resamples": 0
+        },
+        "four_type_daily_f1": {
+          "difference": -0.0005257218421890197,
+          "percentile_ci_95": [
+            -0.01574234800498005,
+            0.013304666219045597
+          ]
+        }
+      },
+      "scope": "Descriptive station bootstrap; common fitted models; no significance acceptance gate"
+    }
+  },
+  "jcv_text_pipeline": {
+    "changes": [
+      {
+        "station": "v0025",
+        "scenario": "spike",
+        "cohort_seed": 2026101601,
+        "tp_delta": 0,
+        "fp_delta": -3,
+        "aff_delta": null,
+        "main_events": {
+          "events": [
+            {
+              "start": 478,
+              "end": 478,
+              "kind": "spike",
+              "status": "confirmed",
+              "evidence": "default classifier decision on GNSS observation features",
+              "phases": []
+            }
+          ]
+        },
+        "control_events": {
+          "events": [
+            {
+              "start": 478,
+              "end": 478,
+              "kind": "spike",
+              "status": "confirmed",
+              "evidence": "default classifier decision on GNSS observation features",
+              "phases": []
+            },
+            {
+              "start": 492,
+              "end": 494,
+              "kind": "transient",
+              "status": "confirmed",
+              "evidence": "Sharp multi-sample drop in N and E components around index 492–494, with U showing a concurrent rise; appears as a transient offset or opposing motion, possibly followed by partial recovery. The change is abrupt and spans several samples, not resolvable as a single spike.",
+              "phases": []
+            }
+          ]
+        }
+      },
+      {
+        "station": "v0031",
+        "scenario": "spike",
+        "cohort_seed": 2026101601,
+        "tp_delta": 0,
+        "fp_delta": 34,
+        "aff_delta": null,
+        "main_events": {
+          "events": [
+            {
+              "start": 596,
+              "end": 596,
+              "kind": "spike",
+              "status": "confirmed",
+              "evidence": "default classifier decision on GNSS observation features",
+              "phases": []
+            },
+            {
+              "start": 410,
+              "end": 444,
+              "kind": "transient",
+              "status": "confirmed",
+              "evidence": "N-component shows abrupt onset near index 410, sustained positive shift (~+2 MAD) through index 444, with opposing return beginning at 445 (downward slope over ~3–4 samples); E and U show correlated smaller fluctuations during the same interval, consistent with superposed temporary offset. Pre-410 and post-445 N levels are comparable within noise, supporting a closed temporary event.",
+              "phases": []
+            }
+          ]
+        },
+        "control_events": {
+          "events": [
+            {
+              "start": 596,
+              "end": 596,
+              "kind": "spike",
+              "status": "confirmed",
+              "evidence": "default classifier decision on GNSS observation features",
+              "phases": []
+            }
+          ]
+        }
+      },
+      {
+        "station": "v0032",
+        "scenario": "step",
+        "cohort_seed": 2026101601,
+        "tp_delta": 0,
+        "fp_delta": -6,
+        "aff_delta": null,
+        "main_events": {
+          "events": [
+            {
+              "start": 420,
+              "end": 434,
+              "kind": "deformation",
+              "status": "confirmed",
+              "evidence": "Bounded raw-displacement trajectory improves information criterion over background plus jumps",
+              "phases": []
+            }
+          ]
+        },
+        "control_events": {
+          "events": [
+            {
+              "start": 420,
+              "end": 434,
+              "kind": "deformation",
+              "status": "confirmed",
+              "evidence": "Bounded raw-displacement trajectory improves information criterion over background plus jumps",
+              "phases": []
+            },
+            {
+              "start": 489,
+              "end": 491,
+              "kind": "transient",
+              "status": "confirmed",
+              "evidence": "Abrupt multi-sample rise in N (~2.4→5.0), E (~5.7→6.9), and U (~2.8→4.7) starting at index 489, sustained through 491; partial return begins at 492 (N/E/U drop), but full opposing return not confirmed within allowed context [454,527]. Onset is abrupt, interior is sustained, and opposing motion starts immediately after — consistent with temporary offset morphology.",
+              "phases": []
+            },
+            {
+              "start": 609,
+              "end": 611,
+              "kind": "transient",
+              "status": "confirmed",
+              "evidence": "Sharp transient dip in N (~3.3→0.6), E (~4.0→3.3), and U (~2.8→0.6) from index 609–611; recovery toward prior levels observed by index 612. The dip is abrupt, interior is sustained over 3 samples, and opposing return begins at 612 — matches temporary offset criteria within allowed context [574,647].",
+              "phases": []
+            }
+          ]
+        }
+      },
+      {
+        "station": "v0148",
+        "scenario": "deformation",
+        "cohort_seed": 2026101602,
+        "tp_delta": 0,
+        "fp_delta": 18,
+        "aff_delta": null,
+        "main_events": {
+          "events": [
+            {
+              "start": 519,
+              "end": 597,
+              "kind": "deformation",
+              "status": "confirmed",
+              "evidence": "Bounded raw-displacement trajectory improves information criterion over background plus jumps",
+              "phases": []
+            },
+            {
+              "start": 490,
+              "end": 508,
+              "kind": "transient",
+              "status": "confirmed",
+              "evidence": "E-component shows abrupt onset near index 490 with sustained ~2 MAD downward shift; N and U show correlated fluctuations during same interval. Return begins around 505 but is incomplete by index 508 (last shifted sample before partial recovery), satisfying onset–interior–opposing-return structure on E, with cross-axis coherence. Confirmed as temporary offset.",
+              "phases": []
+            }
+          ]
+        },
+        "control_events": {
+          "events": [
+            {
+              "start": 519,
+              "end": 597,
+              "kind": "deformation",
+              "status": "confirmed",
+              "evidence": "Bounded raw-displacement trajectory improves information criterion over background plus jumps",
+              "phases": []
+            }
+          ]
+        }
+      },
+      {
+        "station": "v0155",
+        "scenario": "mixed",
+        "cohort_seed": 2026101602,
+        "tp_delta": 0,
+        "fp_delta": -2,
+        "aff_delta": 0.0045583555517330065,
+        "main_events": {
+          "events": [
+            {
+              "start": 634,
+              "end": 634,
+              "kind": "spike",
+              "status": "confirmed",
+              "evidence": "default classifier decision on GNSS observation features",
+              "phases": []
+            },
+            {
+              "start": 651,
+              "end": 712,
+              "kind": "transient",
+              "status": "confirmed",
+              "evidence": "Paired shift-and-return regression wins information criterion",
+              "phases": []
+            },
+            {
+              "start": 606,
+              "end": 606,
+              "kind": "step",
+              "status": "confirmed",
+              "evidence": "Unpaired segmented displacement level jump",
+              "phases": []
+            },
+            {
+              "start": 554,
+              "end": 715,
+              "kind": "deformation",
+              "status": "confirmed",
+              "evidence": "Bounded raw-displacement trajectory improves information criterion over background plus jumps",
+              "phases": []
+            }
+          ]
+        },
+        "control_events": {
+          "events": [
+            {
+              "start": 634,
+              "end": 634,
+              "kind": "spike",
+              "status": "confirmed",
+              "evidence": "default classifier decision on GNSS observation features",
+              "phases": []
+            },
+            {
+              "start": 651,
+              "end": 712,
+              "kind": "transient",
+              "status": "confirmed",
+              "evidence": "Paired shift-and-return regression wins information criterion",
+              "phases": []
+            },
+            {
+              "start": 606,
+              "end": 606,
+              "kind": "step",
+              "status": "confirmed",
+              "evidence": "Unpaired segmented displacement level jump",
+              "phases": []
+            },
+            {
+              "start": 554,
+              "end": 715,
+              "kind": "deformation",
+              "status": "confirmed",
+              "evidence": "Bounded raw-displacement trajectory improves information criterion over background plus jumps",
+              "phases": []
+            },
+            {
+              "start": 623,
+              "end": 624,
+              "kind": "transient",
+              "status": "confirmed",
+              "evidence": "Sharp multi-sample drop in N (from ~-5 to -21) at index 623–624, with large concurrent E and U excursions; appears as a sudden offset rather than smooth motion. Surrounding samples show high-amplitude variability but no similar abrupt jump before or after within this window.",
+              "phases": []
+            }
+          ]
+        }
+      }
+    ],
+    "tp_improved_stations": 0,
+    "fp_increased_stations": 2,
+    "aff_only_improved_stations": 1,
+    "bootstrap": {
+      "repeats": 2000,
+      "seed": 2026101525,
+      "endpoints": {
+        "transient_affiliation_f1": {
+          "difference": 0.0003798629626444172,
+          "percentile_ci_95": [
+            0.0,
+            0.0013023873004951447
+          ],
+          "undefined_resamples": 0
+        },
+        "deformation_affiliation_f1": {
+          "difference": 0.0,
+          "percentile_ci_95": [
+            0.0,
+            0.0
+          ],
+          "undefined_resamples": 0
+        },
+        "range_union_affiliation_f1": {
+          "difference": -0.0009817178964639393,
+          "percentile_ci_95": [
+            -0.0033658899307335063,
+            0.0
+          ],
+          "undefined_resamples": 0
+        },
+        "four_type_daily_f1": {
+          "difference": -0.011267746554641134,
+          "percentile_ci_95": [
+            -0.04021727404280279,
+            0.005030224830316689
+          ]
+        }
+      },
+      "scope": "Descriptive station bootstrap; common fitted models; no significance acceptance gate"
+    }
+  },
+  "jcv_image_no_numeric": {
+    "changes": [
+      {
+        "station": "v0270",
+        "scenario": "normal",
+        "cohort_seed": 2026101603,
+        "tp_delta": 0,
+        "fp_delta": -15,
+        "aff_delta": null,
+        "main_events": {
+          "events": []
+        },
+        "control_events": {
+          "events": [
+            {
+              "start": 610,
+              "end": 624,
+              "kind": "transient",
+              "status": "confirmed",
+              "evidence": "U shows abrupt ~3-MAD negative jump at 610–612, sustained lower level through 624; N and E show coherent weaker negative excursions during same interval; return to pre-event level not observed within window but interior is clearly shifted and distinct from surrounding noise. Onset at 610 (first shifted sample), end at 624 (last shifted sample before any recovery begins).",
+              "phases": []
+            }
+          ]
+        }
+      }
+    ],
+    "tp_improved_stations": 0,
+    "fp_increased_stations": 0,
+    "aff_only_improved_stations": 0,
+    "bootstrap": {
+      "repeats": 2000,
+      "seed": 2026101525,
+      "endpoints": {
+        "transient_affiliation_f1": {
+          "difference": 0.0,
+          "percentile_ci_95": [
+            0.0,
+            0.0
+          ],
+          "undefined_resamples": 0
+        },
+        "deformation_affiliation_f1": {
+          "difference": 0.0,
+          "percentile_ci_95": [
+            0.0,
+            0.0
+          ],
+          "undefined_resamples": 0
+        },
+        "range_union_affiliation_f1": {
+          "difference": 0.0,
+          "percentile_ci_95": [
+            0.0,
+            0.0
+          ],
+          "undefined_resamples": 0
+        },
+        "four_type_daily_f1": {
+          "difference": 0.0038694970202738377,
+          "percentile_ci_95": [
+            0.0,
+            0.015108345734746998
+          ]
+        }
+      },
+      "scope": "Descriptive station bootstrap; common fitted models; no significance acceptance gate"
+    }
+  }
+}
