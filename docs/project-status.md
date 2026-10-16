@@ -1,5 +1,14 @@
 # 新分支研究状态
 
+## EXP34进行中：视觉选区—去叙述证据判定（2026-10-16）
+
+分支`codex/exp34-visual-evidence-confirmation`，父a71c6057，EXP33完整ZIP已CRC/SHA留证，
+稳定标签`backup/exp33-before-visual-evidence-confirmation-20261016`。
+使用未预测180开发站，先72站；主读出为视觉粗筛→去叙述文字终判，
+全文字去叙述及视觉粗筛→去叙述图像终判作对照。13方法/读出，全部先前180开发站排除。
+72站数值完成，正在准备144粗筛请求；尚无本轮模型结果，360test未预测。
+[预登记](experiment-exp34.md)。
+
 ## EXP33 / S1完成：去叙述恢复识别，视觉粗筛出现开发线索（2026-10-16）
 
 分支`codex/exp33-deanchored-visual-review`，父edca645e，EXP32完整备份已保存。
