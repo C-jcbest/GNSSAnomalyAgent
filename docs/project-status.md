@@ -1,5 +1,15 @@
 # 新分支研究状态
 
+## 2026-10-16 用户修正：四类异常分开统计，不再用平均F1总评
+
+- 类型：Correction / Constraint / Doc Sync；范围：评价、报告及后续新实验准入。
+- 原问题：四类平均F1把单点、阶跃、暂态和形变合并，可能掩盖单类退化。
+- 修正规则：逐类报告P/R/F1、TP/FP/FN；暂态和形变分别报告Affiliation及无该类异常站误报；后续新报告与准入不使用跨类型平均。
+- 实施：新增只读逐类导出，已生成EXP34 72开发站、S1 36开发站与EXP29-S3 360测试站报告；0模型请求。仅暂态输出的其他类标不适用，通用检测器不虚构类型指标。
+- 历史边界：原生产聚合函数、冻结源码/summary/协议/准入不改，保留复现所需SHA；旧总指标只作历史记录，不作为当前推荐口径，不能据新展示把旧失败改写为成功。
+- 验证：2项新增导出测试通过，覆盖逐类分数保留、不适用类型、输入SHA不变和不输出旧类型平均；Ruff通过。
+- 链接：[口径](evaluation-policy.md)、[最新36站](../results/exp34-s1-per-type-v1/results.md)、[72站](../results/exp34-per-type-v1/results.md)、[360测试站](../results/exp29-s3-test-per-type-v1/results.md)。
+
 ## EXP34 / S1完成：范围识别有视觉增益，形变误报仍限制系统（2026-10-16）
 
 分支`codex/exp34-visual-evidence-confirmation`，父a71c6057，EXP33完整ZIP已CRC/SHA留证，
