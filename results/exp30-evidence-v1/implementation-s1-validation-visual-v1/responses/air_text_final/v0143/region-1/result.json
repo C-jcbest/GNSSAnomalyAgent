@@ -1,0 +1,38 @@
+{
+  "status": "success",
+  "requested_model": "qwen3-vl-plus",
+  "request_count": 1,
+  "retry_count": 0,
+  "http_status": 200,
+  "served_model": "qwen3-vl-plus",
+  "usage": {
+    "prompt_tokens": 4127,
+    "completion_tokens": 412,
+    "total_tokens": 4539,
+    "completion_tokens_details": {
+      "text_tokens": 412
+    },
+    "prompt_tokens_details": {
+      "text_tokens": 4127,
+      "cached_tokens": 0
+    }
+  },
+  "elapsed_seconds": 11.060521200008225,
+  "decision": {
+    "summary": "A large, abrupt U drop at indices 600–602 (≈−15 MAD) is the clearest discontinuity, sustained through index 629, with partial rebound starting at 630. N shows a smaller delayed step up (~+3 MAD) around 605–610, but no clear return. E displays non-monotonic behavior without a definitive opposing edge. The U offset lacks full recovery within allowed context [560,670], and cross-axis responses are inconsistent with a clean temporary offset; thus all candidate intervals are marked uncertain. No confirmed temporary offset interval meets the requirement of clear onset, sustained interior, and opposing return on the same axis.",
+    "intervals": [
+      {
+        "start": 600,
+        "end": 629,
+        "status": "uncertain",
+        "observation": "U drops sharply (~−15 MAD) at indices 600–602, remains depressed through ~629; N shows delayed step up (~+3 MAD) around 605–610; E exhibits non-monotonic behavior without clear opposing return. Return in U is observed at index 630 (U rises from −22.7 to −18.1), but full recovery to pre-drop level not achieved within allowed context. Status uncertain due to incomplete return and superposed motion."
+      },
+      {
+        "start": 600,
+        "end": 634,
+        "status": "uncertain",
+        "observation": "E shows a complex, non-monotonic response during 600–634 with no clear opposing edge; U rebound begins at 630 but E does not show a matching reversal. No confirmed temporary offset in E alone—coincident with U depression but shape inconsistent with isolated temporary offset. Status uncertain."
+      }
+    ]
+  }
+}

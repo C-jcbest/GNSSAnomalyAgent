@@ -1,0 +1,36 @@
+{
+  "status": "success",
+  "requested_model": "qwen3-vl-plus",
+  "request_count": 1,
+  "retry_count": 0,
+  "http_status": 200,
+  "served_model": "qwen3-vl-plus",
+  "usage": {
+    "prompt_tokens": 13605,
+    "completion_tokens": 280,
+    "total_tokens": 13885,
+    "completion_tokens_details": {
+      "text_tokens": 280
+    },
+    "prompt_tokens_details": {
+      "text_tokens": 13605,
+      "cached_tokens": 256
+    }
+  },
+  "elapsed_seconds": 9.402417699981015,
+  "decision": {
+    "summary": "Two regions stand out: (1) a sharp E-drop with partial recovery near index 486–488, possibly indicating a transient offset or opposing motion; (2) an abrupt E-N coupled shift near index 610–612 with no clear reversal, suggesting a potential permanent jump or sustained offset. Both involve multi-sample changes that exceed typical noise and warrant closer inspection.",
+    "regions": [
+      {
+        "start": 485,
+        "end": 492,
+        "observation": "Sharp multi-sample drop in E (from ~-9.5 to ~-10.9) at index 486–487, followed by a partial recovery and then a sustained low-E platform from ~488 onward; N shows concurrent rise, suggesting possible opposing motion or superposed offset."
+      },
+      {
+        "start": 605,
+        "end": 632,
+        "observation": "Abrupt E-axis shift downward around index 610–612 (E drops ~1.5 units), with N rising sharply; the change is not fully reversed within the window, and later samples show a new baseline with elevated N and lower E—possible permanent jump or prolonged offset with ambiguous return."
+      }
+    ]
+  }
+}

@@ -1,0 +1,33 @@
+{
+  "status": "success",
+  "requested_model": "qwen3-vl-plus",
+  "request_count": 1,
+  "retry_count": 0,
+  "http_status": 200,
+  "served_model": "qwen3-vl-plus",
+  "usage": {
+    "prompt_tokens": 2464,
+    "completion_tokens": 191,
+    "total_tokens": 2655,
+    "completion_tokens_details": {
+      "text_tokens": 191
+    },
+    "prompt_tokens_details": {
+      "image_tokens": 1738,
+      "text_tokens": 726,
+      "cached_tokens": 128
+    }
+  },
+  "elapsed_seconds": 5.486407099990174,
+  "decision": {
+    "summary": "Only one candidate temporary offset lies within allowed_context [690,729]: a multi-axis coherent linear trend beginning abruptly at index 725 and continuing to the end (729) with no opposing return observed. The sustained interior is monotonic on N/E/U, but absence of return prevents confirmation. No other temporary offsets are supported by the original observations in this window.",
+    "intervals": [
+      {
+        "start": 725,
+        "end": 729,
+        "status": "uncertain",
+        "observation": "Abrupt onset at 725 of coherent linear trends: N increases, E decreases, U increases; no return observed within allowed context (729 is last index). Sustained interior shows monotonic trend on all axes without reversal or plateau. Return phase unobserved → uncertain."
+      }
+    ]
+  }
+}

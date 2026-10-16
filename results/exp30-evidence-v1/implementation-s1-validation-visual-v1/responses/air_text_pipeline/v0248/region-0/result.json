@@ -1,0 +1,32 @@
+{
+  "status": "success",
+  "requested_model": "qwen3-vl-plus",
+  "request_count": 1,
+  "retry_count": 0,
+  "http_status": 200,
+  "served_model": "qwen3-vl-plus",
+  "usage": {
+    "prompt_tokens": 2956,
+    "completion_tokens": 364,
+    "total_tokens": 3320,
+    "completion_tokens_details": {
+      "text_tokens": 364
+    },
+    "prompt_tokens_details": {
+      "text_tokens": 2956,
+      "cached_tokens": 128
+    }
+  },
+  "elapsed_seconds": 9.058671999984654,
+  "decision": {
+    "summary": "A multi-sample abrupt shift begins around index 588–592 in all axes: N decreases ~2.3 MAD, E increases ~3.1 MAD, U increases ~2.7 MAD (relative to pre-shift trend). Post-shift behavior (idx 592–605) shows reduced scatter and quasi-stable levels, consistent with a temporary offset. However, the return phase is not observed within allowed_context [555,629]; the series ends at idx 629 still in the shifted state. Thus, status is uncertain due to missing recovery evidence.",
+    "intervals": [
+      {
+        "start": 588,
+        "end": 605,
+        "status": "uncertain",
+        "observation": "N drops sharply from ~-8.4 (idx 555) to ~-10.7 (idx 592), then stabilizes near -10.0 to -10.7 through idx 605; E rises from ~10.4 to ~13.5 by idx 592 and remains elevated (~12–14) until idx 605; U shows a less coherent but generally upward shift from ~-16.5 to ~-13.8 by idx 592, then fluctuates between -12.8 and -15.4 through idx 605. The onset spans indices 588–592 (multi-sample), interior is sustained with reduced variability, but no clear opposing return observed within allowed_context (ends at 629). Return not confirmed before context end."
+      }
+    ]
+  }
+}

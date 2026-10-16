@@ -1,0 +1,32 @@
+{
+  "status": "success",
+  "requested_model": "qwen3-vl-plus",
+  "request_count": 1,
+  "retry_count": 0,
+  "http_status": 200,
+  "served_model": "qwen3-vl-plus",
+  "usage": {
+    "prompt_tokens": 2908,
+    "completion_tokens": 204,
+    "total_tokens": 3112,
+    "completion_tokens_details": {
+      "text_tokens": 204
+    },
+    "prompt_tokens_details": {
+      "text_tokens": 2908,
+      "cached_tokens": 0
+    }
+  },
+  "elapsed_seconds": 6.100657399976626,
+  "decision": {
+    "summary": "A coherent multi-sample downward ramp in E and U (with weaker decline in N) begins at index 605 and continues through index 614. Index 615 is missing, so no return is observed; thus the interval cannot be confirmed as temporary. No other intervals within allowed_context [570,650] meet criteria for temporary offset.",
+    "intervals": [
+      {
+        "start": 605,
+        "end": 614,
+        "status": "uncertain",
+        "observation": "E and U components show a coherent multi-sample downward ramp from index 605 to 614; N also declines but less steeply. The ramp does not clearly reverse or return by index 614, and the next observed sample (index 615) is missing (null), preventing confirmation of recovery. Return is unobserved/ambiguous."
+      }
+    ]
+  }
+}

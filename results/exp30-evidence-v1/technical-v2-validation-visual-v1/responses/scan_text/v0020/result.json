@@ -1,0 +1,36 @@
+{
+  "status": "success",
+  "requested_model": "qwen3-vl-plus",
+  "request_count": 1,
+  "retry_count": 0,
+  "http_status": 200,
+  "served_model": "qwen3-vl-plus",
+  "usage": {
+    "prompt_tokens": 14448,
+    "completion_tokens": 276,
+    "total_tokens": 14724,
+    "completion_tokens_details": {
+      "text_tokens": 276
+    },
+    "prompt_tokens_details": {
+      "text_tokens": 14448,
+      "cached_tokens": 0
+    }
+  },
+  "elapsed_seconds": 8.29656800001976,
+  "decision": {
+    "summary": "Two regions warrant closer inspection: (1) a sharp, multi-axis jump near the end of the first window (indices 539–544), likely a step change or data artifact; (2) a prolonged period of elevated, correlated variability in E/U from ~680 to 729, suggestive of sustained motion or systematic error.",
+    "regions": [
+      {
+        "start": 539,
+        "end": 544,
+        "observation": "Abrupt large-magnitude jump in all three axes (N/E/U) around index 539–540, with values shifting from ~[-2, 3, -0.5] to ~[24, 18, 23], suggesting a permanent offset or data discontinuity; no clear return observed within window."
+      },
+      {
+        "start": 680,
+        "end": 729,
+        "observation": "Sustained high-amplitude oscillatory behavior in E and U components from ~index 680 onward, with E fluctuating between ~20–26 and U between ~22–26, possibly indicating platform-like motion or persistent deformation; N shows less coherence but similar timing."
+      }
+    ]
+  }
+}

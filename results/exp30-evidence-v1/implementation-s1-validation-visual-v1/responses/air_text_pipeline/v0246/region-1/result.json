@@ -1,0 +1,32 @@
+{
+  "status": "success",
+  "requested_model": "qwen3-vl-plus",
+  "request_count": 1,
+  "retry_count": 0,
+  "http_status": 200,
+  "served_model": "qwen3-vl-plus",
+  "usage": {
+    "prompt_tokens": 3179,
+    "completion_tokens": 307,
+    "total_tokens": 3486,
+    "completion_tokens_details": {
+      "text_tokens": 307
+    },
+    "prompt_tokens_details": {
+      "text_tokens": 3179,
+      "cached_tokens": 128
+    }
+  },
+  "elapsed_seconds": 7.957266999990679,
+  "decision": {
+    "summary": "A multi-sample E-N coupled shift begins at index 610: E drops ~1.16 MAD (from -3.76 to -4.93), N jumps upward (~0.01 to -0.69), persisting through index 624. No full reversal observed before end of allowed context (660); later samples (e.g., index 625: E=-3.764) show partial recovery but not restoration to pre-610 baseline. Thus, temporary offset status remains uncertain. No other clear temporary intervals within [570,660].",
+    "intervals": [
+      {
+        "start": 610,
+        "end": 624,
+        "status": "uncertain",
+        "observation": "E-axis drops sharply from ~-3.77 (index 609) to ~-4.93 (index 610–611), with N rising concurrently (~0.01 to ~-0.69); the offset persists through index 624 without full reversal—only partial drift back in E (e.g., -4.925 at 611 → -3.764 at 625), but no return to pre-event level; U shows no coherent pattern. Return is incomplete and ambiguous within allowed context."
+      }
+    ]
+  }
+}

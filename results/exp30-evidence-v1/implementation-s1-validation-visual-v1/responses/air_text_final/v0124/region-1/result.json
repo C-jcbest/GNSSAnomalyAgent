@@ -1,0 +1,38 @@
+{
+  "status": "success",
+  "requested_model": "qwen3-vl-plus",
+  "request_count": 1,
+  "retry_count": 0,
+  "http_status": 200,
+  "served_model": "qwen3-vl-plus",
+  "usage": {
+    "prompt_tokens": 3753,
+    "completion_tokens": 258,
+    "total_tokens": 4011,
+    "completion_tokens_details": {
+      "text_tokens": 258
+    },
+    "prompt_tokens_details": {
+      "text_tokens": 3753,
+      "cached_tokens": 128
+    }
+  },
+  "elapsed_seconds": 7.287445800000569,
+  "decision": {
+    "summary": "A confirmed temporary multi-axis negative offset begins at index 665, persists through 685 with coherent behavior across N/E/U. A subsequent partial recovery (686–700) is observed in U and E but not fully resolved in N, leaving the return status uncertain. No full reversal to pre-offset levels is evident within allowed context [625,729].",
+    "intervals": [
+      {
+        "start": 665,
+        "end": 685,
+        "status": "confirmed",
+        "observation": "Multi-axis negative offset initiated ~665–670 (U drops ~3 MAD, E ~2 MAD, N ~1 MAD), sustained through ~685 with platform-like behavior; onset and interior coherent across axes."
+      },
+      {
+        "start": 686,
+        "end": 700,
+        "status": "uncertain",
+        "observation": "Partial opposing recovery in U and E near 695–700, but N shows no clear return and overall level remains offset relative to pre-665 baseline; return ambiguous/unresolved."
+      }
+    ]
+  }
+}

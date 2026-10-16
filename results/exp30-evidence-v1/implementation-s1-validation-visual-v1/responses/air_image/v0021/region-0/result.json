@@ -1,0 +1,33 @@
+{
+  "status": "success",
+  "requested_model": "qwen3-vl-plus",
+  "request_count": 1,
+  "retry_count": 0,
+  "http_status": 200,
+  "served_model": "qwen3-vl-plus",
+  "usage": {
+    "prompt_tokens": 2648,
+    "completion_tokens": 289,
+    "total_tokens": 2937,
+    "completion_tokens_details": {
+      "text_tokens": 289
+    },
+    "prompt_tokens_details": {
+      "image_tokens": 1738,
+      "text_tokens": 910,
+      "cached_tokens": 128
+    }
+  },
+  "elapsed_seconds": 8.484932899998967,
+  "decision": {
+    "summary": "A single candidate temporary offset is identified in the allowed context [565,650], centered on the screened region 600–615. E and U exhibit abrupt, coherent drops beginning near index 600, but no definitive opposing return is observed within the context: E remains depressed through 614, and the candidate jump at 614 does not restore pre-event levels nor align with a clean reversal on all axes. N’s dip is smaller and less diagnostic. Due to ambiguous return, status is uncertain. No other temporary intervals are supported within allowed_context.",
+    "intervals": [
+      {
+        "start": 600,
+        "end": 614,
+        "status": "uncertain",
+        "observation": "E and U show a sharp multi-sample drop starting near index 600, with E falling ~4 MAD and U ~3 MAD; N shows a smaller concurrent dip. E does not recover to pre-event level by 614, and the return is incomplete/ambiguous—no clear opposing shift observed before index 615. The candidate jump at 614 (E +3.73) is insufficient to restore baseline and occurs amid ongoing variability; interior (601–613) lacks sustained plateau or coherent recovery trend."
+      }
+    ]
+  }
+}

@@ -1,0 +1,33 @@
+{
+  "status": "success",
+  "requested_model": "qwen3-vl-plus",
+  "request_count": 1,
+  "retry_count": 0,
+  "http_status": 200,
+  "served_model": "qwen3-vl-plus",
+  "usage": {
+    "prompt_tokens": 2469,
+    "completion_tokens": 210,
+    "total_tokens": 2679,
+    "completion_tokens_details": {
+      "text_tokens": 210
+    },
+    "prompt_tokens_details": {
+      "image_tokens": 1738,
+      "text_tokens": 731,
+      "cached_tokens": 128
+    }
+  },
+  "elapsed_seconds": 6.4151182000059634,
+  "decision": {
+    "summary": "A single candidate temporary offset in N (with correlated E/U) begins abruptly at index 485 and remains elevated through the end of the allowed context (530); no return is observed, so status is uncertain. The screened region (485–495) is embedded within this longer unreturned excursion. No other temporary offsets confirmed within [450,530].",
+    "intervals": [
+      {
+        "start": 485,
+        "end": 529,
+        "status": "uncertain",
+        "observation": "N-component shows a sustained positive offset beginning at index 485, persisting through 529 without clear return; E and U show correlated but smaller excursions. Onset is abrupt (~485), interior is elevated (N ~+2 to +4 MAD), but no opposing return observed within allowed context [450,530]."
+      }
+    ]
+  }
+}

@@ -1,0 +1,36 @@
+{
+  "status": "success",
+  "requested_model": "qwen3-vl-plus",
+  "request_count": 1,
+  "retry_count": 0,
+  "http_status": 200,
+  "served_model": "qwen3-vl-plus",
+  "usage": {
+    "prompt_tokens": 14057,
+    "completion_tokens": 304,
+    "total_tokens": 14361,
+    "completion_tokens_details": {
+      "text_tokens": 304
+    },
+    "prompt_tokens_details": {
+      "text_tokens": 14057,
+      "cached_tokens": 0
+    }
+  },
+  "elapsed_seconds": 10.33745990000898,
+  "decision": {
+    "summary": "Two regions warrant closer inspection: (1) an abrupt multi-sample shift near the end of the first window (indices 536–544), and (2) a prolonged interval of high-amplitude, irregular motion with missing data and possible superposed offsets from index 605 onward.",
+    "regions": [
+      {
+        "start": 536,
+        "end": 544,
+        "observation": "Sharp multi-sample jump in N and E components around index 539–542 (e.g. N from ~10 to ~13, E from ~10 to ~12), followed by sustained elevated levels; U shows a concurrent drop then partial recovery. The transition is abrupt and spans several samples, suggesting a possible permanent offset or rapid motion event."
+      },
+      {
+        "start": 605,
+        "end": 729,
+        "observation": "Persistent high-amplitude variability in all axes from ~605 onward, with notable spikes (e.g. N=21.3 at index 638) and missing samples at 639 and 728–729. A broad platform-like behavior in N/E/U between ~640–670 appears superposed on slower drifts; ambiguous whether some features represent opposing returns or unresolved multi-stage changes due to coarse sampling."
+      }
+    ]
+  }
+}

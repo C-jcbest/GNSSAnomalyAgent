@@ -1,0 +1,39 @@
+{
+  "status": "success",
+  "requested_model": "qwen3-vl-plus",
+  "request_count": 1,
+  "retry_count": 0,
+  "http_status": 200,
+  "served_model": "qwen3-vl-plus",
+  "usage": {
+    "prompt_tokens": 2596,
+    "completion_tokens": 407,
+    "total_tokens": 3003,
+    "completion_tokens_details": {
+      "text_tokens": 407
+    },
+    "prompt_tokens_details": {
+      "image_tokens": 1738,
+      "text_tokens": 858,
+      "cached_tokens": 128
+    }
+  },
+  "elapsed_seconds": 10.15982850000728,
+  "decision": {
+    "summary": "Two candidate temporary offsets identified within allowed context [365,579]: (1) a prolonged N/E/U divergent trend (400–529) featuring a partial reversal at 525–529 without confirmed return; (2) a short U spike with correlated N/E dips (525–530) lacking a clear opposing recovery. Neither interval satisfies full onset–interior–return criteria on all affected axes; status remains uncertain due to incomplete or ambiguous returns.",
+    "intervals": [
+      {
+        "start": 400,
+        "end": 529,
+        "status": "uncertain",
+        "observation": "N: sustained upward trend from ~400, interrupted by sharp multi-sample drop at 525–529; E: steady decline with coincident dip at 525–529; U: step-like rise at ~468, then sharp spike and drop at 525–529. Return to pre-drop N/E levels not observed before index 530; U does not recover to pre-spike level. Onset (gradual) and interior (sustained) are clear, but return is incomplete/ambiguous within allowed context."
+      },
+      {
+        "start": 525,
+        "end": 530,
+        "status": "uncertain",
+        "observation": "U component shows a sharp transient spike peaking at ~526, followed by rapid drop ending at 530; N and E show correlated multi-sample dips (525–530) but no matching permanent offset. The U spike is isolated in shape and duration (~5 samples), with no clear opposing return before 531. Interior is transient, not sustained; onset and return both abrupt but unpaired across axes."
+      }
+    ]
+  }
+}

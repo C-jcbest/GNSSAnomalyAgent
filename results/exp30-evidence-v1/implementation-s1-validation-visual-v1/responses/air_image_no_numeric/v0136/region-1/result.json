@@ -1,0 +1,39 @@
+{
+  "status": "success",
+  "requested_model": "qwen3-vl-plus",
+  "request_count": 1,
+  "retry_count": 0,
+  "http_status": 200,
+  "served_model": "qwen3-vl-plus",
+  "usage": {
+    "prompt_tokens": 2527,
+    "completion_tokens": 317,
+    "total_tokens": 2844,
+    "completion_tokens_details": {
+      "text_tokens": 317
+    },
+    "prompt_tokens_details": {
+      "image_tokens": 1738,
+      "text_tokens": 789,
+      "cached_tokens": 128
+    }
+  },
+  "elapsed_seconds": 8.52183569999761,
+  "decision": {
+    "summary": "No confirmed temporary offset intervals: both candidate segments (490–549 and 550–600) lack an observed opposing return within allowed context [455,699]. The E-rise/N-decline is coherent but monotonic or slowly evolving; the 'platform' is not a stable offset but a reduced-slope phase without reversal. U shows no coupled step. All proposed intervals remain uncertain due to missing return evidence.",
+    "intervals": [
+      {
+        "start": 490,
+        "end": 549,
+        "status": "uncertain",
+        "observation": "E rises monotonically from ~490 to 549; N declines steadily over same span. No opposing return observed before 550; interior shows coherent opposite-signed drift without plateau stabilization in raw data (plateau claim appears smoothed/interpreted). U noisy, no coupling."
+      },
+      {
+        "start": 550,
+        "end": 600,
+        "status": "uncertain",
+        "observation": "Apparent platform 550–600: E flattens after rise, N continues slow decline but with reduced slope; however, neither axis shows a clear reversal or return toward pre-490 levels. Sustained offset persists beyond 600; no opposing return observed within allowed context (≤699). U remains uncorrelated and noisy."
+      }
+    ]
+  }
+}

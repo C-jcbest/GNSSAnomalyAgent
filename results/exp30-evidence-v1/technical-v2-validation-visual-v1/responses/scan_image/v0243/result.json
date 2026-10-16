@@ -1,0 +1,37 @@
+{
+  "status": "success",
+  "requested_model": "qwen3-vl-plus",
+  "request_count": 1,
+  "retry_count": 0,
+  "http_status": 200,
+  "served_model": "qwen3-vl-plus",
+  "usage": {
+    "prompt_tokens": 5462,
+    "completion_tokens": 286,
+    "total_tokens": 5748,
+    "completion_tokens_details": {
+      "text_tokens": 286
+    },
+    "prompt_tokens_details": {
+      "image_tokens": 4936,
+      "text_tokens": 526,
+      "cached_tokens": 256
+    }
+  },
+  "elapsed_seconds": 9.242875800002366,
+  "decision": {
+    "summary": "Two prominent multi-axis coherent steps are evident: one strong downward shift near index 575 and one upward jump near index 622. Both are abrupt, span multiple samples, affect all components consistently, and lack immediate opposing returns in the displayed windows. Other segments show ordinary noise or smooth trends.",
+    "regions": [
+      {
+        "start": 570,
+        "end": 580,
+        "observation": "Sharp, multi-sample downward step in all three axes (N/E/U) centered near index 575–578, with N dropping ~10 MAD, E ~6 MAD, U ~8 MAD; post-step behavior shows persistent offset without clear return within the window. Surrounding noise is typical; the step is abrupt and coherent across axes."
+      },
+      {
+        "start": 618,
+        "end": 630,
+        "observation": "Large, coherent upward jump in all axes near index 622–625: N rises ~7 MAD, E ~4 MAD, U ~6 MAD; preceded by gradual decline and followed by a stable platform until ~628, then minor fluctuations. The jump is multi-sample but tightly clustered; no opposing return observed in this window, though later indices show possible stabilization rather than reversal."
+      }
+    ]
+  }
+}

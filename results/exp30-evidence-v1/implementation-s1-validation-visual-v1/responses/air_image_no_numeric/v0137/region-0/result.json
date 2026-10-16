@@ -1,0 +1,39 @@
+{
+  "status": "success",
+  "requested_model": "qwen3-vl-plus",
+  "request_count": 1,
+  "retry_count": 0,
+  "http_status": 200,
+  "served_model": "qwen3-vl-plus",
+  "usage": {
+    "prompt_tokens": 2512,
+    "completion_tokens": 402,
+    "total_tokens": 2914,
+    "completion_tokens_details": {
+      "text_tokens": 402
+    },
+    "prompt_tokens_details": {
+      "image_tokens": 1738,
+      "text_tokens": 774,
+      "cached_tokens": 128
+    }
+  },
+  "elapsed_seconds": 12.472648100025253,
+  "decision": {
+    "summary": "A multi-axis displacement initiates near index 630: E jumps up and sustains a plateau until ~640; U jumps up then descends gradually, accelerating after ~640. No complete opposing return is observed for either axis within allowed context [590,670]. The E offset ends near 640, but the U descent continues beyond without rejoining pre-event baseline. N shows only a smooth decline, no step. Thus, two overlapping uncertain temporary-offset intervals are identified based on onset, interior behavior, and incomplete return.",
+    "intervals": [
+      {
+        "start": 630,
+        "end": 640,
+        "status": "uncertain",
+        "observation": "E: abrupt upward jump at ~630–632 (+~10 MAD), sustained elevated platform until ~640; U: concurrent upward jump (+~8 MAD) followed by slower descent starting ~635, not fully returned by 640; N: gradual decline during same interval, no sharp edge. Return in E is absent before 640; U shows partial descent but no clear opposing return to pre-jump level within allowed context."
+      },
+      {
+        "start": 640,
+        "end": 642,
+        "status": "uncertain",
+        "observation": "U: sharp downward drop beginning ~640, continuing through 642 (~−10 MAD total from peak at 630), overlapping with end of E platform. No matching upward return observed; E remains elevated until ~640 then begins declining after 640. Interior sustained offset in E (630–640) and U (630–642) lacks full closure; return phase incomplete/unobserved within allowed context."
+      }
+    ]
+  }
+}

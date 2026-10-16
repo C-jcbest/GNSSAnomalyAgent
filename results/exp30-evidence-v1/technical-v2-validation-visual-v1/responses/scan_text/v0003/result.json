@@ -1,0 +1,36 @@
+{
+  "status": "success",
+  "requested_model": "qwen3-vl-plus",
+  "request_count": 1,
+  "retry_count": 0,
+  "http_status": 200,
+  "served_model": "qwen3-vl-plus",
+  "usage": {
+    "prompt_tokens": 13508,
+    "completion_tokens": 306,
+    "total_tokens": 13814,
+    "completion_tokens_details": {
+      "text_tokens": 306
+    },
+    "prompt_tokens_details": {
+      "text_tokens": 13508,
+      "cached_tokens": 0
+    }
+  },
+  "elapsed_seconds": 9.315702899999451,
+  "decision": {
+    "summary": "Two regions stand out: (1) a coherent multi-axis drop around indices 485–544 with a plateau-like U behavior, and (2) a sharp multi-component shift starting near 605–610 with incomplete recovery. Both show ambiguous superposed changes and lack definitive opposing returns within the observed windows.",
+    "regions": [
+      {
+        "start": 485,
+        "end": 544,
+        "observation": "Cross-axis shape shows a multi-sample abrupt drop in N and E around index 490–495, followed by sustained low-amplitude oscillation; U component exhibits a broad shallow platform from ~495 to 520 before resuming variability. The drop appears coherent across axes but lacks a clear opposing return within the window."
+      },
+      {
+        "start": 605,
+        "end": 664,
+        "observation": "Strong, rapid shift in all three components beginning near index 610: N drops sharply (~+2.8 to -5.2), E shifts from positive to strongly negative (~+2.3 to -1.6), and U falls from ~6.1 to ~-0.5 over ~5 samples. A possible partial recovery begins around index 630 (U rises, N/E remain low), but no full return is evident in this window."
+      }
+    ]
+  }
+}

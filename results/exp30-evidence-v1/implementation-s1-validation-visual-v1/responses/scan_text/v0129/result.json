@@ -1,0 +1,36 @@
+{
+  "status": "success",
+  "requested_model": "qwen3-vl-plus",
+  "request_count": 1,
+  "retry_count": 0,
+  "http_status": 200,
+  "served_model": "qwen3-vl-plus",
+  "usage": {
+    "prompt_tokens": 13207,
+    "completion_tokens": 296,
+    "total_tokens": 13503,
+    "completion_tokens_details": {
+      "text_tokens": 296
+    },
+    "prompt_tokens_details": {
+      "text_tokens": 13207,
+      "cached_tokens": 256
+    }
+  },
+  "elapsed_seconds": 8.851640399981989,
+  "decision": {
+    "summary": "Two regions stand out: (1) a sharp, multi-sample displacement around indices 492–498 with correlated N/E increase and U drop, suggesting a transient offset or rapid motion; (2) a prolonged elevated plateau in N/E from ~612–630 with opposing U behavior, possibly indicating a sustained shift or ambiguous superposition of opposing trends. Other segments show noisy or smooth motion without clear morphological anomalies.",
+    "regions": [
+      {
+        "start": 492,
+        "end": 498,
+        "observation": "Sharp multi-sample rise in N and E components around index 495–498, with U dropping sharply; appears as a possible offset or rapid motion event, followed by sustained elevated levels. Cross-axis shape shows correlated N/E increase and U decrease without immediate reversal."
+      },
+      {
+        "start": 612,
+        "end": 630,
+        "observation": "Extended plateau-like behavior in E (high ~2.5–3.5) and N (~1–2.5) from ~615 to 630, preceded by a steep rise at ~612–614 and followed by a gradual decline; U shows opposing trend (negative then rising). Ambiguous whether this is a platform or superposed slow return."
+      }
+    ]
+  }
+}

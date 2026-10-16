@@ -1,0 +1,37 @@
+{
+  "status": "success",
+  "requested_model": "qwen3-vl-plus",
+  "request_count": 1,
+  "retry_count": 0,
+  "http_status": 200,
+  "served_model": "qwen3-vl-plus",
+  "usage": {
+    "prompt_tokens": 5462,
+    "completion_tokens": 280,
+    "total_tokens": 5742,
+    "completion_tokens_details": {
+      "text_tokens": 280
+    },
+    "prompt_tokens_details": {
+      "image_tokens": 4936,
+      "text_tokens": 526,
+      "cached_tokens": 256
+    }
+  },
+  "elapsed_seconds": 8.624840300006326,
+  "decision": {
+    "summary": "Two regions warrant closer inspection: (1) a coherent multi-axis drop near index 465 with persistent offset, and (2) a late-stage inflection in all axes starting ~725, possibly indicating a reversal or new trend. Other segments show typical noise or smooth motion without ambiguous superposed changes.",
+    "regions": [
+      {
+        "start": 460,
+        "end": 470,
+        "observation": "Sharp multi-sample drop in all three axes (N, E, U) around index 465–468, followed by a sustained offset: N drops ~4 mm, E drops ~2 mm, U drops ~3 mm. The change is abrupt and coherent across axes; no clear return within the window, though minor fluctuations persist."
+      },
+      {
+        "start": 720,
+        "end": 729,
+        "observation": "Linear trend reversal in U-axis from ~index 725 onward: U shifts from steady decline to upward slope over last 5 samples; N and E show concurrent small but coherent inflection—N flattens then rises slightly, E transitions from flat to gentle rise. Suggests possible onset of recovery or new motion regime; boundaries uncertain due to coarse sampling near end."
+      }
+    ]
+  }
+}

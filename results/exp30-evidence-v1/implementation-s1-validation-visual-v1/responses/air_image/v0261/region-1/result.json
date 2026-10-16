@@ -1,0 +1,45 @@
+{
+  "status": "success",
+  "requested_model": "qwen3-vl-plus",
+  "request_count": 1,
+  "retry_count": 0,
+  "http_status": 200,
+  "served_model": "qwen3-vl-plus",
+  "usage": {
+    "prompt_tokens": 2601,
+    "completion_tokens": 439,
+    "total_tokens": 3040,
+    "completion_tokens_details": {
+      "text_tokens": 439
+    },
+    "prompt_tokens_details": {
+      "image_tokens": 1738,
+      "text_tokens": 863,
+      "cached_tokens": 128
+    }
+  },
+  "elapsed_seconds": 10.891510800021933,
+  "decision": {
+    "summary": "Two temporally adjacent temporary offsets are confirmed: (1) a downward step starting at index 606 (N/E/U all shift down), and (2) a coherent multi-sample upward reversal from 608–612 restoring components partway toward prior levels; a subsequent plateau (613–624) remains offset relative to pre-560 baseline, with return unobserved—hence uncertain.",
+    "intervals": [
+      {
+        "start": 606,
+        "end": 607,
+        "status": "confirmed",
+        "observation": "Sustained offset in N/E/U beginning ~560, with sharp onset near 605–606: N drops from ~-4 to ~-6, E drops from ~18 to ~16, U drops from ~22 to ~20; interior (606–607) stable at new level before reversal begins."
+      },
+      {
+        "start": 608,
+        "end": 612,
+        "status": "confirmed",
+        "observation": "Multi-axis reversal: N rises from ~-6 to ~-2 (Δ≈+4), E rises from ~16 to ~18 (Δ≈+2), U falls from ~20 to ~5 (Δ≈-15) over indices 608–612; coherent across axes, interior (609–611) shows sustained shifted level, return toward pre-offset baseline evident by 612."
+      },
+      {
+        "start": 613,
+        "end": 624,
+        "status": "uncertain",
+        "observation": "Post-reversal plateau: N ~-2, E ~18, U ~5 persist through 613–624; no further return to original pre-560 levels observed within allowed context; status uncertain due to unobserved return to initial baseline."
+      }
+    ]
+  }
+}

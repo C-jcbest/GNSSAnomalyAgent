@@ -1,0 +1,33 @@
+{
+  "status": "success",
+  "requested_model": "qwen3-vl-plus",
+  "request_count": 1,
+  "retry_count": 0,
+  "http_status": 200,
+  "served_model": "qwen3-vl-plus",
+  "usage": {
+    "prompt_tokens": 2657,
+    "completion_tokens": 208,
+    "total_tokens": 2865,
+    "completion_tokens_details": {
+      "text_tokens": 208
+    },
+    "prompt_tokens_details": {
+      "image_tokens": 1906,
+      "text_tokens": 751,
+      "cached_tokens": 128
+    }
+  },
+  "elapsed_seconds": 6.446624100004556,
+  "decision": {
+    "summary": "Within allowed_context [570,650], only the U-component exhibits a sharp multi-sample drop beginning at index 605, accompanied by transient N and E excursions. The offset persists through index 614 (last fully observed point before return ambiguity); no opposing return is evident by index 650. Hence, the interval is classified as uncertain due to incomplete recovery and unobserved return.",
+    "intervals": [
+      {
+        "start": 605,
+        "end": 614,
+        "status": "uncertain",
+        "observation": "U-component shows a multi-sample drop starting at index 605, with sustained negative deviation through 614; N and E show correlated transient shifts. Return is not observed within allowed_context (ends at 650), and U remains offset at 615 (last available point in screened region) without clear reversal trend."
+      }
+    ]
+  }
+}

@@ -1,0 +1,36 @@
+{
+  "status": "success",
+  "requested_model": "qwen3-vl-plus",
+  "request_count": 1,
+  "retry_count": 0,
+  "http_status": 200,
+  "served_model": "qwen3-vl-plus",
+  "usage": {
+    "prompt_tokens": 13280,
+    "completion_tokens": 269,
+    "total_tokens": 13549,
+    "completion_tokens_details": {
+      "text_tokens": 269
+    },
+    "prompt_tokens_details": {
+      "text_tokens": 13280,
+      "cached_tokens": 0
+    }
+  },
+  "elapsed_seconds": 12.470537499990314,
+  "decision": {
+    "summary": "Two regions merit closer inspection: (1) a rapid multi-sample displacement in E/U near index 520 without immediate reversal, suggesting possible offset or jump onset; (2) a prolonged high-U episode from ~610–640 with a sharp peak at 622 and ambiguous recovery, possibly indicating a temporary platform or superposed motion.",
+    "regions": [
+      {
+        "start": 518,
+        "end": 544,
+        "observation": "Sharp multi-sample drop in E and U components around index 520–525, with E falling ~17 units and U ~11 units over 3–4 samples; N shows smaller but coherent shift. No clear return within window; possible platform or offset onset."
+      },
+      {
+        "start": 608,
+        "end": 664,
+        "observation": "Extended period (indices ~610–640) of elevated U (up to ~6.2) and variable E/N, including a sharp U spike at index 622 (~6.24), followed by gradual decline; ambiguous whether this is a transient platform or superposed slow motion with partial recovery."
+      }
+    ]
+  }
+}

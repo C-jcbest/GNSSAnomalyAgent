@@ -1,0 +1,39 @@
+{
+  "status": "success",
+  "requested_model": "qwen3-vl-plus",
+  "request_count": 1,
+  "retry_count": 0,
+  "http_status": 200,
+  "served_model": "qwen3-vl-plus",
+  "usage": {
+    "prompt_tokens": 2742,
+    "completion_tokens": 390,
+    "total_tokens": 3132,
+    "completion_tokens_details": {
+      "text_tokens": 390
+    },
+    "prompt_tokens_details": {
+      "image_tokens": 1738,
+      "text_tokens": 1004,
+      "cached_tokens": 128
+    }
+  },
+  "elapsed_seconds": 10.905105700017884,
+  "decision": {
+    "summary": "Two candidate temporary offsets in the allowed context [555,639]: (1) a major 3D discontinuity centered ~594–596 with sustained N/E/U deviation and incomplete recovery by index 603; (2) a secondary U drop with concurrent N/E rise at ~625–626, lacking clear return. Neither shows a confirmed opposing return on all affected axes within the allowed window; both are classified as uncertain.",
+    "intervals": [
+      {
+        "start": 594,
+        "end": 603,
+        "status": "uncertain",
+        "observation": "N: sharp upward step ~594–596, sustained elevated level through 603; E: upward step ~595–597, then gradual decline but not back to pre-event level by 603; U: large negative step ~594–596, followed by slow partial recovery (still ~−12 MAD at 603). Return not observed on any axis before end of allowed context. Cross-axis coherence supports a single 3D offset event, but absence of full return makes status uncertain."
+      },
+      {
+        "start": 625,
+        "end": 628,
+        "status": "uncertain",
+        "observation": "U: second sharp drop ~625–626 (coincident with optional jump at 625), N and E rise concurrently (~625–627); however, N/E do not show a clear opposing return before 628, and U remains depressed. No sustained platform or clean reversal observed; motion appears ongoing or unresolved. Status uncertain due to ambiguous recovery and overlapping with prior offset tail."
+      }
+    ]
+  }
+}

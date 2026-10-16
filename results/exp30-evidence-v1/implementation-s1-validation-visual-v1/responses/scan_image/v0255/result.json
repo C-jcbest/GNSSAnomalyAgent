@@ -1,0 +1,37 @@
+{
+  "status": "success",
+  "requested_model": "qwen3-vl-plus",
+  "request_count": 1,
+  "retry_count": 0,
+  "http_status": 200,
+  "served_model": "qwen3-vl-plus",
+  "usage": {
+    "prompt_tokens": 4218,
+    "completion_tokens": 304,
+    "total_tokens": 4522,
+    "completion_tokens_details": {
+      "text_tokens": 304
+    },
+    "prompt_tokens_details": {
+      "image_tokens": 3702,
+      "text_tokens": 516,
+      "cached_tokens": 0
+    }
+  },
+  "elapsed_seconds": 9.12558390002232,
+  "decision": {
+    "summary": "Two regions merit closer inspection: (1) a large, coherent multi-axis offset near index 482 with partial recovery in E/U but persistent N shift; (2) a smaller, less coherent transient near index 608–612 with divergent cross-axis behavior and ambiguous return. Other segments show ordinary noise or smooth motion.",
+    "regions": [
+      {
+        "start": 480,
+        "end": 535,
+        "observation": "Sharp ~12-unit N upward jump at ~482, followed by sustained elevated level until ~530; E shows concurrent ~15-unit downward step at ~482 and partial recovery starting ~510; U drops ~10 units at ~482 then recovers gradually. Cross-axis coherence suggests a single multi-component offset with ambiguous return timing in E/U."
+      },
+      {
+        "start": 605,
+        "end": 729,
+        "observation": "At ~608–612, U shows a sharp ~10-unit drop while N and E exhibit smaller but correlated transient shifts (N down ~2, E up ~2); later (~660–670), U rebounds sharply while N/E show opposing small offsets—suggesting possible superposed temporary deformation or measurement artifact. No clear platform or full return observed in this window."
+      }
+    ]
+  }
+}

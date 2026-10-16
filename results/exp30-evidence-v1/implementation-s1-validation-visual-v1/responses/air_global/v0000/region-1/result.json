@@ -1,0 +1,33 @@
+{
+  "status": "success",
+  "requested_model": "qwen3-vl-plus",
+  "request_count": 1,
+  "retry_count": 0,
+  "http_status": 200,
+  "served_model": "qwen3-vl-plus",
+  "usage": {
+    "prompt_tokens": 2662,
+    "completion_tokens": 208,
+    "total_tokens": 2870,
+    "completion_tokens_details": {
+      "text_tokens": 208
+    },
+    "prompt_tokens_details": {
+      "image_tokens": 1906,
+      "text_tokens": 756,
+      "cached_tokens": 128
+    }
+  },
+  "elapsed_seconds": 6.950696500018239,
+  "decision": {
+    "summary": "Within allowed context [605, 710], the E-component exhibits a sustained upward trend from index 640 to ~670, accompanied by a smaller U-rise and flat N. The trend plateaus near 670, but no definitive opposing return is observed before index 710; recovery boundary is ambiguous. Thus, the interval is classified as uncertain. No other temporary offsets are confirmed in this context.",
+    "intervals": [
+      {
+        "start": 640,
+        "end": 670,
+        "status": "uncertain",
+        "observation": "E-component shows sustained upward trend from index 640 to 670 (~3 MAD), with smaller concurrent rise in U; N remains flat. Return not observed within allowed context (ends at 710), and reversal onset is ambiguous beyond 670 — no clear opposing return before end of context."
+      }
+    ]
+  }
+}

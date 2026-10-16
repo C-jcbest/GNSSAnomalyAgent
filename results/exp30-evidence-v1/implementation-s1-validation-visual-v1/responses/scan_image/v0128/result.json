@@ -1,0 +1,37 @@
+{
+  "status": "success",
+  "requested_model": "qwen3-vl-plus",
+  "request_count": 1,
+  "retry_count": 0,
+  "http_status": 200,
+  "served_model": "qwen3-vl-plus",
+  "usage": {
+    "prompt_tokens": 4218,
+    "completion_tokens": 279,
+    "total_tokens": 4497,
+    "completion_tokens_details": {
+      "text_tokens": 279
+    },
+    "prompt_tokens_details": {
+      "image_tokens": 3702,
+      "text_tokens": 516,
+      "cached_tokens": 0
+    }
+  },
+  "elapsed_seconds": 8.100459900015267,
+  "decision": {
+    "summary": "Two regions merit closer inspection: (1) a sharp multi-sample U drop near index 432 without clear recovery, possibly a jump or temporary offset; (2) a sustained U plateau ~670–690 with ambiguous boundaries and weak cross-axis correlation, suggesting superposed slow motion and stabilization.",
+    "regions": [
+      {
+        "start": 425,
+        "end": 435,
+        "observation": "Sharp multi-sample downward step in U (≈−6 to −8 MAD) at ~432, preceded by modest N/E rise; U does not return to prior level within window, while N/E show transient co-variation but no clear opposing offset. Ambiguity whether this is a permanent jump or temporary offset with incomplete recovery."
+      },
+      {
+        "start": 665,
+        "end": 695,
+        "observation": "Broad apparent platform in U from ~670–690 (centered near −4 MAD), flanked by rising trend before and falling after; E shows subtle dip coincident with U plateau, N remains noisy but without matching structure. Possible superposed slow shift and short-term stabilization; boundary uncertainty around 685–695 where U begins descending again."
+      }
+    ]
+  }
+}

@@ -1,0 +1,38 @@
+{
+  "status": "success",
+  "requested_model": "qwen3-vl-plus",
+  "request_count": 1,
+  "retry_count": 0,
+  "http_status": 200,
+  "served_model": "qwen3-vl-plus",
+  "usage": {
+    "prompt_tokens": 5264,
+    "completion_tokens": 341,
+    "total_tokens": 5605,
+    "completion_tokens_details": {
+      "text_tokens": 341
+    },
+    "prompt_tokens_details": {
+      "text_tokens": 5264,
+      "cached_tokens": 128
+    }
+  },
+  "elapsed_seconds": 8.956400800001575,
+  "decision": {
+    "summary": "Two candidate temporary offsets identified in the screened region: (1) a multi-sample N dip (~620–625) without clear cross-axis support or return; (2) a sharp E increase (~680–690) concurrent with N plateauing, but lacking a confirmed opposing return within allowed context. Neither satisfies full criteria for confirmed temporary offset due to ambiguous returns and possible superposition with ongoing motion. No confirmed temporary intervals.",
+    "intervals": [
+      {
+        "start": 620,
+        "end": 625,
+        "status": "uncertain",
+        "observation": "N drops ~-12.5 to -10.5 over indices 620–625 (samples 50–55), while E remains near 20–21 and U shows no coherent counterpart; no clear return observed within allowed context, and interior is not sustained plateau but a transient dip."
+      },
+      {
+        "start": 680,
+        "end": 690,
+        "status": "uncertain",
+        "observation": "E rises sharply from ~20.8 to ~22.5 across indices 680–690 (samples 110–120), coinciding with N plateauing near -10.5 to -10.0; however, the rise in E lacks a clear opposing return before index 729, and N does not show a matching step—suggests superposed motion rather than a closed temporary offset."
+      }
+    ]
+  }
+}

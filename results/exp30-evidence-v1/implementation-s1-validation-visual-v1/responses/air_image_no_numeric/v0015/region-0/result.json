@@ -1,0 +1,33 @@
+{
+  "status": "success",
+  "requested_model": "qwen3-vl-plus",
+  "request_count": 1,
+  "retry_count": 0,
+  "http_status": 200,
+  "served_model": "qwen3-vl-plus",
+  "usage": {
+    "prompt_tokens": 2489,
+    "completion_tokens": 215,
+    "total_tokens": 2704,
+    "completion_tokens_details": {
+      "text_tokens": 215
+    },
+    "prompt_tokens_details": {
+      "image_tokens": 1738,
+      "text_tokens": 751,
+      "cached_tokens": 128
+    }
+  },
+  "elapsed_seconds": 7.391342700022506,
+  "decision": {
+    "summary": "A multi-sample downward offset in E and U begins around index 435, stabilizes by ~440, and persists through index 449 without recovery within the allowed context [400, 485]. The absence of an opposing return before index 485 prevents confirmation of a temporary interval; status is uncertain. N shows only minor correlated noise, insufficient to confirm a 3D transient.",
+    "intervals": [
+      {
+        "start": 435,
+        "end": 449,
+        "status": "uncertain",
+        "observation": "E and U show a sustained downward offset beginning near index 435, reaching a stable low plateau by ~440 and persisting through 449; N remains noisy with no coherent opposing motion. Return to pre-offset level is not observed within allowed context (ends at 485), and the offset does not reverse before index 485."
+      }
+    ]
+  }
+}

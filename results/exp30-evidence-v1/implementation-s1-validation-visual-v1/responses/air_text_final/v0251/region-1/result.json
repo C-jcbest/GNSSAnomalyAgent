@@ -1,0 +1,38 @@
+{
+  "status": "success",
+  "requested_model": "qwen3-vl-plus",
+  "request_count": 1,
+  "retry_count": 0,
+  "http_status": 200,
+  "served_model": "qwen3-vl-plus",
+  "usage": {
+    "prompt_tokens": 7917,
+    "completion_tokens": 378,
+    "total_tokens": 8295,
+    "completion_tokens_details": {
+      "text_tokens": 378
+    },
+    "prompt_tokens_details": {
+      "text_tokens": 7917,
+      "cached_tokens": 128
+    }
+  },
+  "elapsed_seconds": 9.976076499995543,
+  "decision": {
+    "summary": "A confirmed temporary offset occurs from index 525 to 538, marked by coherent multi-axis excursions (N drop, E dip, U spike) followed by multi-sample recovery. A second candidate interval (539–552) shows correlated N/U step-down with flat E, but lacks a clear opposing return on N/U, rendering its status uncertain. No other temporary offsets are supported within allowed context [450,699].",
+    "intervals": [
+      {
+        "start": 525,
+        "end": 538,
+        "status": "confirmed",
+        "observation": "N drops sharply (~+1.7 to -0.3), E dips (~+2.4 to +1.2), U spikes dramatically (~+9.6 to +11.9) over indices 525–530, then all three components show coherent multi-sample recovery toward pre-event levels through index 538; onset and return are multi-point and axis-coherent, satisfying temporary offset criteria."
+      },
+      {
+        "start": 539,
+        "end": 552,
+        "status": "uncertain",
+        "observation": "N and U show a correlated step-down (~N: +11.1 to +9.2; U: +6.2 to +2.2) between indices 539–545, while E remains relatively flat (−10.4 to −10.5); however, the return is ambiguous—U recovers partially by index 552 but not fully to pre-539 level, and N shows no clear reversal; insufficient evidence for full return on affected axes."
+      }
+    ]
+  }
+}

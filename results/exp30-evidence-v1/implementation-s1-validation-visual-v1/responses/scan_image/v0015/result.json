@@ -1,0 +1,37 @@
+{
+  "status": "success",
+  "requested_model": "qwen3-vl-plus",
+  "request_count": 1,
+  "retry_count": 0,
+  "http_status": 200,
+  "served_model": "qwen3-vl-plus",
+  "usage": {
+    "prompt_tokens": 4218,
+    "completion_tokens": 290,
+    "total_tokens": 4508,
+    "completion_tokens_details": {
+      "text_tokens": 290
+    },
+    "prompt_tokens_details": {
+      "image_tokens": 3702,
+      "text_tokens": 516,
+      "cached_tokens": 0
+    }
+  },
+  "elapsed_seconds": 8.764923799986718,
+  "decision": {
+    "summary": "Two regions stand out: (1) a pronounced, sustained downward offset in E/U near index 440 without clear reversal in the window; (2) a broad elevated platform in U near index 700 with ambiguous return behavior and weak cross-axis correlation. Other segments show typical noise or smooth motion.",
+    "regions": [
+      {
+        "start": 435,
+        "end": 450,
+        "observation": "Sharp, multi-sample downward step in E and U (≈−12 MAD and −10 MAD respectively) centered near index 440–445, with no clear opposing return in the immediate window; N shows only minor correlated fluctuation. The step appears abrupt and sustained over ~10 samples before resuming noisy baseline."
+      },
+      {
+        "start": 690,
+        "end": 715,
+        "observation": "Broad, ambiguous platform-like feature in U from ~695 to 710 (≈+2 to +4 MAD), preceded by a sharp upward spike at ~692 and followed by a gradual decline; E shows a weaker co-occurring dip (~−1 MAD) around 698–705, but no clean opposing return is evident. Morphology suggests possible superposed transient and offset."
+      }
+    ]
+  }
+}

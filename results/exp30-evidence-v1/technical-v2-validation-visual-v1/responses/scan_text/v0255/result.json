@@ -1,0 +1,36 @@
+{
+  "status": "success",
+  "requested_model": "qwen3-vl-plus",
+  "request_count": 1,
+  "retry_count": 0,
+  "http_status": 200,
+  "served_model": "qwen3-vl-plus",
+  "usage": {
+    "prompt_tokens": 13700,
+    "completion_tokens": 327,
+    "total_tokens": 14027,
+    "completion_tokens_details": {
+      "text_tokens": 327
+    },
+    "prompt_tokens_details": {
+      "text_tokens": 13700,
+      "cached_tokens": 256
+    }
+  },
+  "elapsed_seconds": 9.672298200021032,
+  "decision": {
+    "summary": "Two regions stand out: (1) an early interval (365–484) with complex, non-smooth cross-axis behavior including multi-sample shifts and ambiguous partial returns; (2) a sharp, coherent multi-axis jump at index 485, followed by sustained high-amplitude motion. No other intervals show similarly compelling morphology.",
+    "regions": [
+      {
+        "start": 365,
+        "end": 484,
+        "observation": "Cross-axis shape shows a prolonged, irregular drift with intermittent spikes in N/E/U; no clear platform but several multi-sample shifts (e.g. around index 390–395 and 420–425) suggest possible superposed temporary offsets or opposing returns. The motion is noisy but not monotonic—some apparent reversals in E and U without full recovery."
+      },
+      {
+        "start": 485,
+        "end": 604,
+        "observation": "Abrupt large-magnitude jump occurs between indices 484 and 485: N jumps from ~-2.9 to ~11.6, E from ~-4.3 to ~-17.2, U from ~2.2 to ~-13.0 — a coherent, near-instantaneous offset across all axes. Following this, the series remains at elevated amplitude with persistent oscillation, suggesting a permanent shift with residual motion. The jump is unambiguous and warrants close inspection."
+      }
+    ]
+  }
+}

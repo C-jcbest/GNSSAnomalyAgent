@@ -1,0 +1,36 @@
+{
+  "status": "success",
+  "requested_model": "qwen3-vl-plus",
+  "request_count": 1,
+  "retry_count": 0,
+  "http_status": 200,
+  "served_model": "qwen3-vl-plus",
+  "usage": {
+    "prompt_tokens": 13788,
+    "completion_tokens": 359,
+    "total_tokens": 14147,
+    "completion_tokens_details": {
+      "text_tokens": 359
+    },
+    "prompt_tokens_details": {
+      "text_tokens": 13788,
+      "cached_tokens": 0
+    }
+  },
+  "elapsed_seconds": 11.459734200005187,
+  "decision": {
+    "summary": "Two regions merit closer inspection: (1) an early multi-sample drop in N with concurrent E spike near index 395, partially obscured by missing data; (2) a prolonged negative drift in N/E/U starting ~index 500, featuring a possible abrupt offset near index 550 that may represent a superposed temporary event or permanent shift.",
+    "regions": [
+      {
+        "start": 365,
+        "end": 544,
+        "observation": "N-component shows a multi-sample drop around index 390–395 (from ~-1.0 to -3.0), followed by a sustained low level; E-component has a sharp rise near index 395 (from ~0.5 to ~2.6) then fluctuates, while U remains noisy but without clear platform. A possible opposing return is ambiguous due to missing samples at index 397 and 418."
+      },
+      {
+        "start": 485,
+        "end": 664,
+        "observation": "From index ~500 onward, N and E show coordinated large-magnitude negative drift (N from ~-4.5 to ~-13, E from ~2.6 to ~1.2), with U dropping steadily (~-1.4 to ~-10). Around index 540–550, a brief apparent plateau in N/E is interrupted by a sharp downward jump in N at index 550 (to ~-7.3), possibly indicating a superposed offset or shift. The trend resumes after index 555."
+      }
+    ]
+  }
+}

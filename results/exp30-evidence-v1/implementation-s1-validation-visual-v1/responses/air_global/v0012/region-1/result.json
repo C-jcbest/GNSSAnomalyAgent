@@ -1,0 +1,33 @@
+{
+  "status": "success",
+  "requested_model": "qwen3-vl-plus",
+  "request_count": 1,
+  "retry_count": 0,
+  "http_status": 200,
+  "served_model": "qwen3-vl-plus",
+  "usage": {
+    "prompt_tokens": 2680,
+    "completion_tokens": 217,
+    "total_tokens": 2897,
+    "completion_tokens_details": {
+      "text_tokens": 217
+    },
+    "prompt_tokens_details": {
+      "image_tokens": 1906,
+      "text_tokens": 774,
+      "cached_tokens": 128
+    }
+  },
+  "elapsed_seconds": 6.160126499977196,
+  "decision": {
+    "summary": "Within allowed context [595, 705], N and E display a multi-sample stabilization (plateau-like) from index 635 to 665, consistent with a temporary offset. U shows a coincident shallow dip centered at 650 but lacks a clear opposing return before index 705; thus the interval is classified as uncertain. No confirmed temporary offset due to incomplete return evidence on U and absence of definitive opposing motion on N/E.",
+    "intervals": [
+      {
+        "start": 635,
+        "end": 665,
+        "status": "uncertain",
+        "observation": "N and E show a sustained plateau near zero from ~635 to 665 (≈30 samples), following prior variability; U exhibits a shallow dip (~−1 MAD) centered at 650 with no clear opposing return within allowed context (ends at 705). Return not observed or ambiguous."
+      }
+    ]
+  }
+}

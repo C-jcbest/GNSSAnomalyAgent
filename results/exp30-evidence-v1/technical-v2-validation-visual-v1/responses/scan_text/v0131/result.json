@@ -1,0 +1,36 @@
+{
+  "status": "success",
+  "requested_model": "qwen3-vl-plus",
+  "request_count": 1,
+  "retry_count": 0,
+  "http_status": 200,
+  "served_model": "qwen3-vl-plus",
+  "usage": {
+    "prompt_tokens": 14089,
+    "completion_tokens": 300,
+    "total_tokens": 14389,
+    "completion_tokens_details": {
+      "text_tokens": 300
+    },
+    "prompt_tokens_details": {
+      "text_tokens": 14089,
+      "cached_tokens": 0
+    }
+  },
+  "elapsed_seconds": 8.711804300022777,
+  "decision": {
+    "summary": "Two regions stand out: (1) a sharp, multi-sample displacement onset near index 489–492 involving large jumps in all components, likely a permanent offset; (2) a sustained quasi-stable segment from index 605 onward showing reduced variability and possible platform behavior after prior large motion. No clear opposing returns observed in these windows.",
+    "regions": [
+      {
+        "start": 489,
+        "end": 492,
+        "observation": "Sharp multi-sample jump in N and E components around index 489–492 (from ~2.1/0.1 to ~6.7/−9.9), with U also shifting upward; appears as a permanent offset rather than transient, though the exact onset is multi-sample and possibly overlapping with prior noise."
+      },
+      {
+        "start": 605,
+        "end": 615,
+        "observation": "Extended plateau-like behavior in N/E/U from ~index 605–615: N stays near 16.8–17.2, E near −14.3 to −12.9, U fluctuates but remains within ~−1.2 to +1.6; this region follows a large jump and shows apparent stabilization, possibly indicating a new regime or platform after earlier rapid motion."
+      }
+    ]
+  }
+}

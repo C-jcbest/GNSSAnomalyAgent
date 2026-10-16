@@ -1,0 +1,37 @@
+{
+  "status": "success",
+  "requested_model": "qwen3-vl-plus",
+  "request_count": 1,
+  "retry_count": 0,
+  "http_status": 200,
+  "served_model": "qwen3-vl-plus",
+  "usage": {
+    "prompt_tokens": 5462,
+    "completion_tokens": 297,
+    "total_tokens": 5759,
+    "completion_tokens_details": {
+      "text_tokens": 297
+    },
+    "prompt_tokens_details": {
+      "image_tokens": 4936,
+      "text_tokens": 526,
+      "cached_tokens": 256
+    }
+  },
+  "elapsed_seconds": 8.328349899995374,
+  "decision": {
+    "summary": "Two regions stand out: (1) a prolonged, accelerating E-axis decline starting ~550 and continuing through 664 without reversal; (2) a sharp E-axis drop and plateau from ~665 to 729, superposed on rising N and a transient U spike, with unclear recovery. Other intervals show typical noise or smooth trends without compelling opposing returns or ambiguous superpositions.",
+    "regions": [
+      {
+        "start": 550,
+        "end": 664,
+        "observation": "E-component shows a sustained, accelerating downward trend from ~index 550 onward, with no clear opposing return; the slope steepens around 600–630 and continues through 664. N and U remain noisy but lack comparable monotonic structure in this interval."
+      },
+      {
+        "start": 665,
+        "end": 729,
+        "observation": "From ~665 to 729, E-component exhibits a sharp, multi-sample drop (~−10 to −28 MAD) followed by a plateau near −25 to −28, while N rises steadily and U shows a transient spike then recovery—suggesting a possible compound offset or platform with ambiguous return timing; the abruptness at ~665–670 warrants closer inspection."
+      }
+    ]
+  }
+}

@@ -1,0 +1,36 @@
+{
+  "status": "success",
+  "requested_model": "qwen3-vl-plus",
+  "request_count": 1,
+  "retry_count": 0,
+  "http_status": 200,
+  "served_model": "qwen3-vl-plus",
+  "usage": {
+    "prompt_tokens": 13813,
+    "completion_tokens": 321,
+    "total_tokens": 14134,
+    "completion_tokens_details": {
+      "text_tokens": 321
+    },
+    "prompt_tokens_details": {
+      "text_tokens": 13813,
+      "cached_tokens": 0
+    }
+  },
+  "elapsed_seconds": 10.553198700014036,
+  "decision": {
+    "summary": "Two regions warrant closer inspection: (1) a sharp multi-sample jump near the end of the first window (indices 538–544) with large, asymmetric displacement across N/E/U and no immediate return; (2) a sustained drift beginning around index 685 in the third window, with coherent motion in N and E over ~40 samples without reversal.",
+    "regions": [
+      {
+        "start": 538,
+        "end": 544,
+        "observation": "Cross-axis shape shows a multi-sample abrupt upward jump in N and E (e.g. index ~538–540: N from ~1 to ~12, E from ~1 to ~-6), followed by sustained high-amplitude oscillation in all components; U also jumps sharply (~-1 to ~12). The change is not symmetric across axes and lacks an obvious return within the window."
+      },
+      {
+        "start": 685,
+        "end": 729,
+        "observation": "After a period of relatively stable motion (indices ~620–680), a gradual but persistent drift appears in N and E starting around index 685, with N rising from ~28 to ~30 and E increasing from ~6 to ~8 over ~30 samples; U shows a concurrent slow decline. No clear reversal or platform is evident, but the trend is distinct against prior noise level."
+      }
+    ]
+  }
+}

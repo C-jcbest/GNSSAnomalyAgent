@@ -1,0 +1,38 @@
+{
+  "status": "success",
+  "requested_model": "qwen3-vl-plus",
+  "request_count": 1,
+  "retry_count": 0,
+  "http_status": 200,
+  "served_model": "qwen3-vl-plus",
+  "usage": {
+    "prompt_tokens": 5004,
+    "completion_tokens": 431,
+    "total_tokens": 5435,
+    "completion_tokens_details": {
+      "text_tokens": 431
+    },
+    "prompt_tokens_details": {
+      "text_tokens": 5004,
+      "cached_tokens": 128
+    }
+  },
+  "elapsed_seconds": 11.675362399982987,
+  "decision": {
+    "summary": "A multi-sample E-axis drop coinciding with a large U spike occurs at indices 605–610. E remains persistently low afterward, but no unambiguous return to pre-event levels or stable baseline is observed within the allowed context [570,729]. The event lacks a confirmed recovery phase; thus all candidate intervals are marked uncertain. No other temporary offsets meet criteria in this window.",
+    "intervals": [
+      {
+        "start": 605,
+        "end": 610,
+        "status": "uncertain",
+        "observation": "E drops sharply from ~-5.8 to ~-8.0 over indices 605–607 (e.g., -5.8157→-6.0078→-4.4922→-5.9114→-4.9659→-3.9714→-5.1411→-5.8164), with concurrent U jump from ~1.86 to ~9.29 at index 610; E remains low (~-6 to -8) through 610, but no clear return observed within allowed context."
+      },
+      {
+        "start": 611,
+        "end": 620,
+        "status": "uncertain",
+        "observation": "E stays depressed (~-6.9 to -7.4) from index 611 onward, with U fluctuating (e.g., 1.04→0.67→0.81→1.69→1.42→2.25→0.64→3.33→-0.99→-0.72→2.22→0.73); no sustained reversal of the initial E drop is evident by 620, and interior motion is irregular—not a clean platform."
+      }
+    ]
+  }
+}

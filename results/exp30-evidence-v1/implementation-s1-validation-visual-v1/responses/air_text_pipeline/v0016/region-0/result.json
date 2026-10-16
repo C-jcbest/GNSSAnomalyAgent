@@ -1,0 +1,32 @@
+{
+  "status": "success",
+  "requested_model": "qwen3-vl-plus",
+  "request_count": 1,
+  "retry_count": 0,
+  "http_status": 200,
+  "served_model": "qwen3-vl-plus",
+  "usage": {
+    "prompt_tokens": 4258,
+    "completion_tokens": 365,
+    "total_tokens": 4623,
+    "completion_tokens_details": {
+      "text_tokens": 365
+    },
+    "prompt_tokens_details": {
+      "text_tokens": 4258,
+      "cached_tokens": 128
+    }
+  },
+  "elapsed_seconds": 11.40129110001726,
+  "decision": {
+    "summary": "Within allowed context [450,579], the screened region (485–544) does not contain a clean temporary offset: N and E show an abrupt multi-sample shift starting near index 451–453, but neither axis exhibits a clear opposing return before index 579. N shows large post-shift variability without reversion; E sustains a drop and continues drifting downward. U remains stable but uninformative. The absence of a confirmed return on either affected axis prevents confirmation of a temporary offset. No other candidate intervals meet the definition of a complete temporary offset (onset → sustained interior → opposing return) inside the allowed context.",
+    "intervals": [
+      {
+        "start": 451,
+        "end": 502,
+        "status": "uncertain",
+        "observation": "N rises sharply from ~1.7 to ~3.9 (index 451→453), E drops from ~-0.1 to ~-1.4 over same span; U shows no coherent shift. After index 453, N fluctuates (e.g., 0.07 at 454, 0.81 at 455) but does not return to pre-451 baseline; E continues dropping to ~-3.4 by index 464 and remains low. No clear opposing return on either N or E within allowed context [450,579]. The onset is abrupt (~2–3 samples), interior is unstable, and recovery is absent—suggesting a complex event, possibly superposed offset + drift, not a clean temporary offset."
+      }
+    ]
+  }
+}

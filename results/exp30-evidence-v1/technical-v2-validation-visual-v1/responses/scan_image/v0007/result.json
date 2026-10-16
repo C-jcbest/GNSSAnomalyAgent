@@ -1,0 +1,37 @@
+{
+  "status": "success",
+  "requested_model": "qwen3-vl-plus",
+  "request_count": 1,
+  "retry_count": 0,
+  "http_status": 200,
+  "served_model": "qwen3-vl-plus",
+  "usage": {
+    "prompt_tokens": 5462,
+    "completion_tokens": 294,
+    "total_tokens": 5756,
+    "completion_tokens_details": {
+      "text_tokens": 294
+    },
+    "prompt_tokens_details": {
+      "image_tokens": 4936,
+      "text_tokens": 526,
+      "cached_tokens": 0
+    }
+  },
+  "elapsed_seconds": 9.037217400007648,
+  "decision": {
+    "summary": "Two regions warrant closer inspection: (1) a multi-axis transient offset near index 470 with incomplete recovery in N, and (2) a coherent, abrupt multi-axis step beginning at index 725 that persists to the end of the record. Other segments show typical noise or smooth motion without clear morphological anomalies.",
+    "regions": [
+      {
+        "start": 465,
+        "end": 475,
+        "observation": "Sharp multi-sample negative jump in N and E (≈−2 to −4 MAD) around index 470–475, followed by a partial recovery in E but not N; U shows a smaller concurrent dip. The shape suggests a possible transient offset or local disturbance with ambiguous return in N."
+      },
+      {
+        "start": 725,
+        "end": 729,
+        "observation": "From ~725 onward, all three axes show abrupt, coherent linear trends: N drops sharply (~−3.0 to −4.0), E rises (~−1.4 to −0.4), U falls (~1.75 to 0.25). The clean triangular pattern across axes suggests a sustained platform shift or instrumental step; the start of this change is abrupt at 725, with no clear opposing return within the window."
+      }
+    ]
+  }
+}

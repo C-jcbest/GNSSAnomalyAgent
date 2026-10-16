@@ -1,0 +1,39 @@
+{
+  "status": "success",
+  "requested_model": "qwen3-vl-plus",
+  "request_count": 1,
+  "retry_count": 0,
+  "http_status": 200,
+  "served_model": "qwen3-vl-plus",
+  "usage": {
+    "prompt_tokens": 2508,
+    "completion_tokens": 321,
+    "total_tokens": 2829,
+    "completion_tokens_details": {
+      "text_tokens": 321
+    },
+    "prompt_tokens_details": {
+      "image_tokens": 1738,
+      "text_tokens": 770,
+      "cached_tokens": 128
+    }
+  },
+  "elapsed_seconds": 9.59020320000127,
+  "decision": {
+    "summary": "A multi-sample negative offset begins at index 665 across N/E/U, with coherent magnitude scaling (U > E > N) and a sustained plateau until ~684; no clear return is observed. A partial opposing shift occurs in U and E around 695–699, but N lacks recovery and the offset does not fully reverse within allowed context (625–729). Both candidate intervals are classified as uncertain due to ambiguous or incomplete return.",
+    "intervals": [
+      {
+        "start": 665,
+        "end": 684,
+        "status": "uncertain",
+        "observation": "Multi-axis negative offset onset at ~665–667 (U: ~−3 MAD, E: ~−2 MAD, N: ~−1 MAD), sustained through 684 with platform-like behavior (small scatter, no monotonic drift). Return not observed before 685; subsequent noisy decline prevents confirmation of full reversal."
+      },
+      {
+        "start": 695,
+        "end": 699,
+        "status": "uncertain",
+        "observation": "Partial opposing shift in U and E near 695–699 (U rises ~1.5 MAD, E rises ~1 MAD), but N shows no recovery and overall level remains below pre-offset baseline; interior trend continues downward after 699. Incomplete return; status uncertain."
+      }
+    ]
+  }
+}

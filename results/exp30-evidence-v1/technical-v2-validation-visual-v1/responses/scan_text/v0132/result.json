@@ -1,0 +1,36 @@
+{
+  "status": "success",
+  "requested_model": "qwen3-vl-plus",
+  "request_count": 1,
+  "retry_count": 0,
+  "http_status": 200,
+  "served_model": "qwen3-vl-plus",
+  "usage": {
+    "prompt_tokens": 13360,
+    "completion_tokens": 294,
+    "total_tokens": 13654,
+    "completion_tokens_details": {
+      "text_tokens": 294
+    },
+    "prompt_tokens_details": {
+      "text_tokens": 13360,
+      "cached_tokens": 0
+    }
+  },
+  "elapsed_seconds": 9.094036499998765,
+  "decision": {
+    "summary": "Two regions stand out: (1) 485–544 shows a complex multi-sample rise/drop with platform-like persistence and ambiguous cross-axis coupling; (2) 605–664 exhibits strong opposing N/E shifts and a broad U peak, suggesting a transient event with incomplete or ambiguous reversal. Other windows show noisy but monotonic or irregular motion without clear morphological anomalies.",
+    "regions": [
+      {
+        "start": 485,
+        "end": 544,
+        "observation": "Cross-axis shape shows a multi-sample rise in N and E (e.g. indices ~490–505), followed by a sharp drop in N (~510) while E remains elevated, then a sustained platform-like segment with high N/E variability and U fluctuating—suggesting possible superposed motion or offset with ambiguous return."
+      },
+      {
+        "start": 605,
+        "end": 664,
+        "observation": "Strong opposing behavior: N rises sharply (~610–620) while E drops steeply; U shows a broad peak around 620–630. The pattern resembles a temporary offset with partial recovery, but the return is ambiguous—E does not fully revert, and N sustains higher values beyond 640."
+      }
+    ]
+  }
+}

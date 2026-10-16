@@ -1,0 +1,36 @@
+{
+  "status": "success",
+  "requested_model": "qwen3-vl-plus",
+  "request_count": 1,
+  "retry_count": 0,
+  "http_status": 200,
+  "served_model": "qwen3-vl-plus",
+  "usage": {
+    "prompt_tokens": 13466,
+    "completion_tokens": 346,
+    "total_tokens": 13812,
+    "completion_tokens_details": {
+      "text_tokens": 346
+    },
+    "prompt_tokens_details": {
+      "text_tokens": 13466,
+      "cached_tokens": 0
+    }
+  },
+  "elapsed_seconds": 10.357137500017416,
+  "decision": {
+    "summary": "Two regions stand out: (1) a complex multi-axis offset starting near index 490 within the 485–544 window, featuring non-symmetric shifts and possible superposed motion; (2) a sharp, near-simultaneous large jump across all axes near index 610–615 in the 605–664 window, with clear pre- and post-event plateaus. Both warrant closer inspection for morphology.",
+    "regions": [
+      {
+        "start": 485,
+        "end": 544,
+        "observation": "Cross-axis shape shows a multi-sample abrupt shift in N/E/U around index 490–495, with large opposing excursions: N drops sharply while E and U rise, then all three components show a sustained offset lasting ~50 samples before gradual relaxation. The change is not symmetric across axes and includes possible superposed smaller fluctuations."
+      },
+      {
+        "start": 605,
+        "end": 664,
+        "observation": "A prominent multi-sample jump occurs near index 610–615: N shifts from ~-7 to ~0, E drops from ~17 to ~1.4, and U falls from ~24.8 to ~3.8 over 3–4 samples. This appears as a near-simultaneous large offset across all axes, possibly a permanent jump or temporary platform; surrounding samples (605–620) show clear pre- and post-jump levels with no immediate return."
+      }
+    ]
+  }
+}

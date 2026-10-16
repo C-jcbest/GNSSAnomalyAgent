@@ -1,0 +1,37 @@
+{
+  "status": "success",
+  "requested_model": "qwen3-vl-plus",
+  "request_count": 1,
+  "retry_count": 0,
+  "http_status": 200,
+  "served_model": "qwen3-vl-plus",
+  "usage": {
+    "prompt_tokens": 5462,
+    "completion_tokens": 285,
+    "total_tokens": 5747,
+    "completion_tokens_details": {
+      "text_tokens": 285
+    },
+    "prompt_tokens_details": {
+      "image_tokens": 4936,
+      "text_tokens": 526,
+      "cached_tokens": 256
+    }
+  },
+  "elapsed_seconds": 8.907288200018229,
+  "decision": {
+    "summary": "Two regions warrant closer inspection: (1) a large, abrupt U-axis spike near index 580 with correlated N/E responses and no immediate reversal; (2) a coordinated linear trend beginning at index 725 across all axes, suggestive of a potential step or platform onset. Other intervals show typical noise or smooth motion without ambiguous superposed changes.",
+    "regions": [
+      {
+        "start": 578,
+        "end": 584,
+        "observation": "Sharp, multi-sample negative spike in U (downward ~17 MAD) at index 580–584, accompanied by smaller but coherent N and E spikes; no clear opposing return within the window, though U begins recovering after 584. The event is isolated and abrupt, distinct from surrounding noise."
+      },
+      {
+        "start": 725,
+        "end": 729,
+        "observation": "Sustained linear trend in all three axes from ~725 onward: N drops ~0.6 MAD, E rises ~0.5 MAD, U rises ~2.0 MAD over 5 samples; appears as a possible platform or step onset with ambiguous boundary—no prior offset visible, but the slope is unusually smooth and coordinated across axes compared to earlier variability."
+      }
+    ]
+  }
+}

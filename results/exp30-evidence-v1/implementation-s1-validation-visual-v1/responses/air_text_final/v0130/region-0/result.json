@@ -1,0 +1,32 @@
+{
+  "status": "success",
+  "requested_model": "qwen3-vl-plus",
+  "request_count": 1,
+  "retry_count": 0,
+  "http_status": 200,
+  "served_model": "qwen3-vl-plus",
+  "usage": {
+    "prompt_tokens": 3097,
+    "completion_tokens": 279,
+    "total_tokens": 3376,
+    "completion_tokens_details": {
+      "text_tokens": 279
+    },
+    "prompt_tokens_details": {
+      "text_tokens": 3097,
+      "cached_tokens": 128
+    }
+  },
+  "elapsed_seconds": 7.579390099999728,
+  "decision": {
+    "summary": "A multi-axis coherent offset is observed starting near index 490: N and U show sustained downward trends through index 504, while E shows a transient spike at ~498 without lasting deviation; however, no return to pre-offset levels is observed within the allowed context [450,540], so status is uncertain. No other temporary offsets confirmed in this window.",
+    "intervals": [
+      {
+        "start": 490,
+        "end": 504,
+        "status": "uncertain",
+        "observation": "N shows sustained downward shift from ~490 to 504 (e.g., N drops from ~-2.7 at idx 489 to ~-6.3 at idx 504); U coherently declines over same span (e.g., U from ~-1.8 at idx 489 to ~-5.4 at idx 504); E exhibits transient positive spike near idx 498 (~3.5) but returns toward baseline by idx 504 (~1.8), inconsistent with permanent step. Return not observed within allowed context (ends at 540, but values continue declining beyond 504 without reversal)."
+      }
+    ]
+  }
+}

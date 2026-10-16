@@ -1,0 +1,37 @@
+{
+  "status": "success",
+  "requested_model": "qwen3-vl-plus",
+  "request_count": 1,
+  "retry_count": 0,
+  "http_status": 200,
+  "served_model": "qwen3-vl-plus",
+  "usage": {
+    "prompt_tokens": 5462,
+    "completion_tokens": 259,
+    "total_tokens": 5721,
+    "completion_tokens_details": {
+      "text_tokens": 259
+    },
+    "prompt_tokens_details": {
+      "image_tokens": 4936,
+      "text_tokens": 526,
+      "cached_tokens": 256
+    }
+  },
+  "elapsed_seconds": 7.740714900020976,
+  "decision": {
+    "summary": "Two regions warrant closer inspection: (1) an abrupt multi-sample E-component drop near index 440 without clear reversal, accompanied by smaller correlated transients in N/U; (2) a coherent linear trend across all axes beginning at index 725, suggesting a sustained offset or motion onset. Other intervals show typical noise or smooth variability without ambiguous superposed changes.",
+    "regions": [
+      {
+        "start": 435,
+        "end": 445,
+        "observation": "Sharp ~8 MAD downward step in E-component (centered) around index 440–445, with no clear opposing return in E; N and U show concurrent but smaller transient offsets. The step is multi-sample and abrupt, distinct from surrounding noise."
+      },
+      {
+        "start": 725,
+        "end": 729,
+        "observation": "Sustained linear trend in all three components from ~725 onward: N rises steadily (~2 MAD), E drops steadily (~1.5 MAD), U drops steadily (~0.75 MAD); appears as a coherent platform-like shift rather than noise, with consistent slope across axes."
+      }
+    ]
+  }
+}

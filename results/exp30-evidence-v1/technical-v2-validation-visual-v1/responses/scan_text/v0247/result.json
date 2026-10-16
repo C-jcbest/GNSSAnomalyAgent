@@ -1,0 +1,36 @@
+{
+  "status": "success",
+  "requested_model": "qwen3-vl-plus",
+  "request_count": 1,
+  "retry_count": 0,
+  "http_status": 200,
+  "served_model": "qwen3-vl-plus",
+  "usage": {
+    "prompt_tokens": 13511,
+    "completion_tokens": 267,
+    "total_tokens": 13778,
+    "completion_tokens_details": {
+      "text_tokens": 267
+    },
+    "prompt_tokens_details": {
+      "text_tokens": 13511,
+      "cached_tokens": 256
+    }
+  },
+  "elapsed_seconds": 7.58947080001235,
+  "decision": {
+    "summary": "Two regions stand out: (1) an abrupt downward U-jump near index 487 with sustained offset, and (2) a sharp U-dip near index 607 with ambiguous cross-axis behavior and missing data complicating interpretation. Other segments show noisy drift or smooth trends without clear morphological anomalies.",
+    "regions": [
+      {
+        "start": 485,
+        "end": 492,
+        "observation": "Sharp multi-sample drop in U (downward jump ~1.5 units) at index 487–488, followed by a sustained lower platform; N and E show correlated but noisier shifts. The change is abrupt and not fully reversed within the window."
+      },
+      {
+        "start": 605,
+        "end": 612,
+        "observation": "Large negative spike in U (~-2.0 units) at index 607–608, preceded by a steep descent from index 605; N and E show opposing or ambiguous motion—E rises while N drops—suggesting possible superposed offset and trend. A missing sample at 606 obscures exact transition shape but supports ambiguity."
+      }
+    ]
+  }
+}

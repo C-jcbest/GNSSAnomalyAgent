@@ -1,0 +1,32 @@
+{
+  "status": "success",
+  "requested_model": "qwen3-vl-plus",
+  "request_count": 1,
+  "retry_count": 0,
+  "http_status": 200,
+  "served_model": "qwen3-vl-plus",
+  "usage": {
+    "prompt_tokens": 3063,
+    "completion_tokens": 326,
+    "total_tokens": 3389,
+    "completion_tokens_details": {
+      "text_tokens": 326
+    },
+    "prompt_tokens_details": {
+      "text_tokens": 3063,
+      "cached_tokens": 128
+    }
+  },
+  "elapsed_seconds": 8.159662500023842,
+  "decision": {
+    "summary": "Within allowed context [580,660], the screened region (615–625) shows a sustained U drop (~-5.1 → -7.22), gradual N rise, and erratic E fluctuations. The U axis does not recover within the window; no opposing return is observed before index 660, and the motion appears unresolved. Hence, only one uncertain temporary offset interval is identified, spanning 615–629 (last shifted sample before possible reversal at 630, where E jumps +1.62 but U remains low at -7.22 and does not rebound). No confirmed temporary offset due to missing return evidence.",
+    "intervals": [
+      {
+        "start": 615,
+        "end": 629,
+        "status": "uncertain",
+        "observation": "U drops sharply from ~-5.1 at index 615 to -7.22 at 629, while N rises gradually (71.9→72.5) and E shows large fluctuations (+2.94 at 617, -1.89 at 629, +1.62 at 630). No clear return observed within allowed context [580,660]; the U trend continues downward through 629 and does not reverse before 660. Cross-axis behavior is sustained but lacks a clean opposing return; status uncertain."
+      }
+    ]
+  }
+}

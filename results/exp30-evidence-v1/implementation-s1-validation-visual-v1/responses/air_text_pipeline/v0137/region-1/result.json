@@ -1,0 +1,32 @@
+{
+  "status": "success",
+  "requested_model": "qwen3-vl-plus",
+  "request_count": 1,
+  "retry_count": 0,
+  "http_status": 200,
+  "served_model": "qwen3-vl-plus",
+  "usage": {
+    "prompt_tokens": 2858,
+    "completion_tokens": 292,
+    "total_tokens": 3150,
+    "completion_tokens_details": {
+      "text_tokens": 292
+    },
+    "prompt_tokens_details": {
+      "text_tokens": 2858,
+      "cached_tokens": 128
+    }
+  },
+  "elapsed_seconds": 8.181586099992273,
+  "decision": {
+    "summary": "A multi-axis abrupt offset begins near index 692: N decreases ~12 MAD, E reverses sign (~14 MAD shift), U drops ~1 MAD. The change spans ~5 samples and persists through the last valid observation at index 728; the final 4 samples (729–732) are null, so no return is observed. No evidence of reversal or recovery within allowed context [657,729]; thus status is uncertain. The optional jump at index 689 is inconsistent with the observed onset (which occurs later, at 692–696) and is rejected.",
+    "intervals": [
+      {
+        "start": 692,
+        "end": 728,
+        "status": "uncertain",
+        "observation": "N drops sharply from ~-10 to ~-22 over indices 692–696 (5 samples), E shifts from ~10 to ~-4 over same span, U falls from ~-14 to ~-15; deviation persists through index 728. Return to pre-event levels is not observed within allowed context (ends at 729 with nulls). Onset is abrupt and multi-axis; interior is sustained; return is missing/ambiguous → uncertain."
+      }
+    ]
+  }
+}

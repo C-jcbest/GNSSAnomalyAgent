@@ -1,0 +1,37 @@
+{
+  "status": "success",
+  "requested_model": "qwen3-vl-plus",
+  "request_count": 1,
+  "retry_count": 0,
+  "http_status": 200,
+  "served_model": "qwen3-vl-plus",
+  "usage": {
+    "prompt_tokens": 4218,
+    "completion_tokens": 259,
+    "total_tokens": 4477,
+    "completion_tokens_details": {
+      "text_tokens": 259
+    },
+    "prompt_tokens_details": {
+      "image_tokens": 3702,
+      "text_tokens": 516,
+      "cached_tokens": 0
+    }
+  },
+  "elapsed_seconds": 9.8057148999942,
+  "decision": {
+    "summary": "Two regions warrant closer inspection: (1) a sustained N-positive offset starting ~485 with correlated E/U motion, and (2) a sharp U-drop near 605–610 with incomplete recovery. Both show multi-sample abrupt changes and ambiguous returns; other intervals appear consistent with noise or smooth motion.",
+    "regions": [
+      {
+        "start": 485,
+        "end": 495,
+        "observation": "N-component shows a sustained positive offset (~+2 to +4 MAD) beginning around index 485, with E and U showing correlated but smaller excursions; the onset is abrupt over ~5 samples and persists through 495 without clear return, suggesting a possible step or slow ramp."
+      },
+      {
+        "start": 605,
+        "end": 615,
+        "observation": "U-component exhibits a sharp multi-sample drop (~−3 MAD) near index 605–610, coinciding with a transient negative N excursion and E shift; the U drop recovers partially by 615 but not fully, and the pattern resembles a temporary offset with ambiguous return timing."
+      }
+    ]
+  }
+}

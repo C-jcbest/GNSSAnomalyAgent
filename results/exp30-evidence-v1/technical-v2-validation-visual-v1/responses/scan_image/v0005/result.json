@@ -1,0 +1,37 @@
+{
+  "status": "success",
+  "requested_model": "qwen3-vl-plus",
+  "request_count": 1,
+  "retry_count": 0,
+  "http_status": 200,
+  "served_model": "qwen3-vl-plus",
+  "usage": {
+    "prompt_tokens": 5462,
+    "completion_tokens": 301,
+    "total_tokens": 5763,
+    "completion_tokens_details": {
+      "text_tokens": 301
+    },
+    "prompt_tokens_details": {
+      "image_tokens": 4936,
+      "text_tokens": 526,
+      "cached_tokens": 0
+    }
+  },
+  "elapsed_seconds": 8.822619199985638,
+  "decision": {
+    "summary": "Two prominent multi-axis step events: first near 520–530 (N/E up, U down), second near 545 (stronger N/E up, U down) with ambiguous partial return near 575. Later windows (605+) show only smooth secular trends and noise—no further candidate anomalies.",
+    "regions": [
+      {
+        "start": 520,
+        "end": 544,
+        "observation": "N/E/U show correlated multi-sample step-up around index 520–530, with N rising ~6 units, E ~25, U dropping ~15; no clear return within window, though U shows a possible partial rebound after 535. The step is abrupt (2–3 samples) and sustained, distinct from surrounding noise."
+      },
+      {
+        "start": 540,
+        "end": 664,
+        "observation": "At index ~545, U drops sharply (~15 units over 2–3 samples), followed by E stepping up ~25 units at same index; N also steps up ~20 units. A second, smaller opposing step occurs near index 575 in U (partial recovery) and E (small dip), suggesting possible superposed or incomplete reversal. Both axes sustain offset through 664."
+      }
+    ]
+  }
+}

@@ -1,0 +1,33 @@
+{
+  "status": "success",
+  "requested_model": "qwen3-vl-plus",
+  "request_count": 1,
+  "retry_count": 0,
+  "http_status": 200,
+  "served_model": "qwen3-vl-plus",
+  "usage": {
+    "prompt_tokens": 2640,
+    "completion_tokens": 295,
+    "total_tokens": 2935,
+    "completion_tokens_details": {
+      "text_tokens": 295
+    },
+    "prompt_tokens_details": {
+      "image_tokens": 1738,
+      "text_tokens": 902,
+      "cached_tokens": 128
+    }
+  },
+  "elapsed_seconds": 9.44530580000719,
+  "decision": {
+    "summary": "A clear multi-sample downward step in E and U begins around index 435 and persists through 449. While a large opposing jump is reported at index 450, the subsequent observations (450–485) do not confirm full recovery to the pre-offset baseline on either axis; residual offsets remain. Thus, the interval is classified as uncertain due to unconfirmed return within allowed context. N shows no coherent offset, only minor correlated fluctuations.",
+    "intervals": [
+      {
+        "start": 435,
+        "end": 449,
+        "status": "uncertain",
+        "observation": "Sustained downward offset in E (≈−12 MAD) and U (≈−10 MAD) beginning near index 435, persisting through index 449; N shows only minor correlated noise. A candidate opposing jump at index 450 (E +14.7, U +11.1 MAD) suggests a return, but the return is not fully observed within the allowed context (ends at 485), and the post-450 segment does not yet rejoin the pre-offset baseline level—U remains ~−4 to −6 MAD, E ~−3 to −5 MAD through 485. Hence, return is incomplete/ambiguous."
+      }
+    ]
+  }
+}

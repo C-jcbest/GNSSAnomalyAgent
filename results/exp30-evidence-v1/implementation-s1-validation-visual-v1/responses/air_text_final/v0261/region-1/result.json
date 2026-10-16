@@ -1,0 +1,38 @@
+{
+  "status": "success",
+  "requested_model": "qwen3-vl-plus",
+  "request_count": 1,
+  "retry_count": 0,
+  "http_status": 200,
+  "served_model": "qwen3-vl-plus",
+  "usage": {
+    "prompt_tokens": 3381,
+    "completion_tokens": 379,
+    "total_tokens": 3760,
+    "completion_tokens_details": {
+      "text_tokens": 379
+    },
+    "prompt_tokens_details": {
+      "text_tokens": 3381,
+      "cached_tokens": 128
+    }
+  },
+  "elapsed_seconds": 9.156147099973168,
+  "decision": {
+    "summary": "Two temporally adjacent multi-axis events are observed: (1) a sustained offset starting at index 570 with stable interior through 607, and (2) a rapid 5-sample reversal from 608–612 that partially restores components but does not fully return to pre-offset levels. The reversal is coherent across N/E/U and spans multiple samples, yet the post-reversal state remains offset relative to the pre-570 baseline, and no definitive return to original trend is observed within allowed context [570,660]. Both intervals lack confirmed opposing returns; status is uncertain.",
+    "intervals": [
+      {
+        "start": 570,
+        "end": 607,
+        "status": "uncertain",
+        "observation": "Sustained multi-axis offset beginning ~570, with coherent N/E/U motion (N: ~-5→~0, E: ~18→~2, U: ~21→~4) and stable platform through index 607; onset sharp, interior stable, no return observed within allowed context."
+      },
+      {
+        "start": 608,
+        "end": 612,
+        "status": "uncertain",
+        "observation": "Multi-sample reversal event (indices 608–612): N rises from ~0→~2, E drops from ~2→~1.5, U drops from ~4→~2; coherent across axes, but return to pre-offset levels is incomplete and post-event drift continues (e.g., U remains ~2 at 613 vs ~21 at 570); no clear opposing return observed before 660."
+      }
+    ]
+  }
+}

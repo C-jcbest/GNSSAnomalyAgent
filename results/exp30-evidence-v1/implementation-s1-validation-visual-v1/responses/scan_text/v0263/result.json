@@ -1,0 +1,36 @@
+{
+  "status": "success",
+  "requested_model": "qwen3-vl-plus",
+  "request_count": 1,
+  "retry_count": 0,
+  "http_status": 200,
+  "served_model": "qwen3-vl-plus",
+  "usage": {
+    "prompt_tokens": 13338,
+    "completion_tokens": 331,
+    "total_tokens": 13669,
+    "completion_tokens_details": {
+      "text_tokens": 331
+    },
+    "prompt_tokens_details": {
+      "text_tokens": 13338,
+      "cached_tokens": 0
+    }
+  },
+  "elapsed_seconds": 10.216249499993864,
+  "decision": {
+    "summary": "Two regions stand out: (1) a sharp multi-sample step-like displacement in N/E/U near the end of the first window (indices ~535–544), and (2) a very large abrupt offset at index 485–486 with strong cross-axis coupling (N↑, E↓↓, U slight ↑), followed by prolonged recovery. Both show morphology inconsistent with smooth motion or noise.",
+    "regions": [
+      {
+        "start": 535,
+        "end": 544,
+        "observation": "N/E/U show a multi-sample abrupt upward jump in N and E around index 539–542, with U also rising sharply; the change is not fully resolved in the window but appears as a steep step rather than smooth motion. Preceding samples (e.g., 535–538) are relatively stable, suggesting a possible offset or jump event."
+      },
+      {
+        "start": 485,
+        "end": 664,
+        "observation": "A pronounced, sustained drop in E (from ~-0.5 to ~-9.9) occurs between indices 485–486, coinciding with a large positive N jump (~7.2) and small U shift; this is followed by a complex recovery phase with oscillatory behavior in E and N through ~510, then gradual drift. The abruptness and magnitude suggest a possible permanent offset or transient platform with ambiguous return."
+      }
+    ]
+  }
+}

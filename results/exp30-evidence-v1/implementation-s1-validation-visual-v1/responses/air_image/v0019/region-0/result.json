@@ -1,0 +1,33 @@
+{
+  "status": "success",
+  "requested_model": "qwen3-vl-plus",
+  "request_count": 1,
+  "retry_count": 0,
+  "http_status": 200,
+  "served_model": "qwen3-vl-plus",
+  "usage": {
+    "prompt_tokens": 2519,
+    "completion_tokens": 210,
+    "total_tokens": 2729,
+    "completion_tokens_details": {
+      "text_tokens": 210
+    },
+    "prompt_tokens_details": {
+      "image_tokens": 1738,
+      "text_tokens": 781,
+      "cached_tokens": 128
+    }
+  },
+  "elapsed_seconds": 7.496555399993667,
+  "decision": {
+    "summary": "A correlated N/U offset initiates abruptly around index 495, persists for ~13 samples, and shows only partial recovery by index 508; no opposing return observed within allowed context [455,545]. E exhibits a weak compensating rise but no clear reversal. The event lacks a confirmed return, so status is uncertain.",
+    "intervals": [
+      {
+        "start": 495,
+        "end": 508,
+        "status": "uncertain",
+        "observation": "N and U show correlated multi-sample drop (N: ~-2 to -4 MAD, U: ~-2 to -3 MAD) starting near index 495, sustained through ~505–508; E shows slight rise. Recovery begins after 508 but does not reach pre-drop level by end of allowed context (545); return is unobserved/ambiguous."
+      }
+    ]
+  }
+}

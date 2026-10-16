@@ -1,0 +1,37 @@
+{
+  "status": "success",
+  "requested_model": "qwen3-vl-plus",
+  "request_count": 1,
+  "retry_count": 0,
+  "http_status": 200,
+  "served_model": "qwen3-vl-plus",
+  "usage": {
+    "prompt_tokens": 4218,
+    "completion_tokens": 256,
+    "total_tokens": 4474,
+    "completion_tokens_details": {
+      "text_tokens": 256
+    },
+    "prompt_tokens_details": {
+      "image_tokens": 3702,
+      "text_tokens": 516,
+      "cached_tokens": 0
+    }
+  },
+  "elapsed_seconds": 8.744130700011738,
+  "decision": {
+    "summary": "Two regions stand out: (1) a coherent horizontal ramp in N/E from ~470–505 without clear vertical counterpart, and (2) a sharp E-component drop at ~618–622 with associated U-spike and ambiguous N response. Other intervals show typical noise or smooth trends.",
+    "regions": [
+      {
+        "start": 470,
+        "end": 505,
+        "observation": "N-component shows a sustained upward ramp from ~index 470 to 505, while E-component simultaneously declines steadily over the same interval; U-component exhibits increased high-frequency noise but no coherent trend—suggesting possible correlated horizontal motion with ambiguous vertical response."
+      },
+      {
+        "start": 615,
+        "end": 625,
+        "observation": "E-component displays a sharp multi-sample drop (~indices 618–622) followed by a partial recovery and plateau; N-component shows a concurrent subtle inflection (less than 1 MAD), and U-component has a coincident spike and dip—indicating a possible transient offset or local disturbance with uncertain return timing."
+      }
+    ]
+  }
+}

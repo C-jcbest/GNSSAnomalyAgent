@@ -1,0 +1,37 @@
+{
+  "status": "success",
+  "requested_model": "qwen3-vl-plus",
+  "request_count": 1,
+  "retry_count": 0,
+  "http_status": 200,
+  "served_model": "qwen3-vl-plus",
+  "usage": {
+    "prompt_tokens": 5462,
+    "completion_tokens": 292,
+    "total_tokens": 5754,
+    "completion_tokens_details": {
+      "text_tokens": 292
+    },
+    "prompt_tokens_details": {
+      "image_tokens": 4936,
+      "text_tokens": 526,
+      "cached_tokens": 0
+    }
+  },
+  "elapsed_seconds": 8.86079740000423,
+  "decision": {
+    "summary": "Two regions stand out: (1) a pronounced, correlated multi-axis step near index 598–602 with persistent offset in N/E/U, and (2) an abrupt, multi-axis trend reversal at the final segment (725–729) where all components change direction sharply. Other intervals show typical noise or smooth variability without clear transient morphology.",
+    "regions": [
+      {
+        "start": 595,
+        "end": 604,
+        "observation": "Sharp, multi-sample upward jump in N (≈+10 MAD) near index 598–602, accompanied by a simultaneous downward step in E (≈−4 MAD) and a smaller upward step in U (≈+2 MAD); the N and E changes appear persistent over subsequent samples with no clear opposing return within the window."
+      },
+      {
+        "start": 725,
+        "end": 729,
+        "observation": "Broad, multi-segment linear trend reversal in all axes between ~725–729: N declines steadily, E rises sharply after a dip, and U rises steeply—suggesting possible platform shift or superposed motion; the abruptness at the very end (index 725–729) warrants closer inspection despite limited surrounding samples."
+      }
+    ]
+  }
+}

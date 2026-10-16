@@ -1,0 +1,37 @@
+{
+  "status": "success",
+  "requested_model": "qwen3-vl-plus",
+  "request_count": 1,
+  "retry_count": 0,
+  "http_status": 200,
+  "served_model": "qwen3-vl-plus",
+  "usage": {
+    "prompt_tokens": 5462,
+    "completion_tokens": 259,
+    "total_tokens": 5721,
+    "completion_tokens_details": {
+      "text_tokens": 259
+    },
+    "prompt_tokens_details": {
+      "image_tokens": 4936,
+      "text_tokens": 526,
+      "cached_tokens": 256
+    }
+  },
+  "elapsed_seconds": 8.308886199985864,
+  "decision": {
+    "summary": "Two regions warrant closer inspection: (1) a sharp transient spike around index 468 affecting all axes with asymmetric recovery, and (2) a coherent multi-axis linear trend beginning at index 725, possibly indicating a sustained offset or deformation onset. Other segments show typical noise or smooth variability without ambiguous superposed changes.",
+    "regions": [
+      {
+        "start": 465,
+        "end": 470,
+        "observation": "Sharp multi-sample negative spike in N and E (≈−6 MAD) near index 468, followed by a rapid return over ~5 samples; U shows a concurrent positive spike (~+5 MAD) with slower recovery. The shape suggests a transient offset or local disturbance rather than smooth motion."
+      },
+      {
+        "start": 725,
+        "end": 729,
+        "observation": "From ~725 onward, all three axes show coherent linear trends: N rises steadily, E drops steadily, and U declines sharply—suggesting a possible platform-like shift or sustained deformation onset. The change is abrupt at 725 and persists to the end; no clear return observed within window."
+      }
+    ]
+  }
+}

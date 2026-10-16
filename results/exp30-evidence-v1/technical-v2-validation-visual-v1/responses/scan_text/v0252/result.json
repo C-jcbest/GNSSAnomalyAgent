@@ -1,0 +1,36 @@
+{
+  "status": "success",
+  "requested_model": "qwen3-vl-plus",
+  "request_count": 1,
+  "retry_count": 0,
+  "http_status": 200,
+  "served_model": "qwen3-vl-plus",
+  "usage": {
+    "prompt_tokens": 13355,
+    "completion_tokens": 303,
+    "total_tokens": 13658,
+    "completion_tokens_details": {
+      "text_tokens": 303
+    },
+    "prompt_tokens_details": {
+      "text_tokens": 13355,
+      "cached_tokens": 0
+    }
+  },
+  "elapsed_seconds": 9.565219600015553,
+  "decision": {
+    "summary": "Two regions stand out: (1) an abrupt multi-sample shift around index 485–495 with strong N/E increase and complex U behavior, and (2) a post-gap segment starting at index 605 where the signal stabilizes at elevated N with irregular E/U, possibly indicating a platform or unresolved offset. Other segments show noisy but smooth motion without clear morphological anomalies.",
+    "regions": [
+      {
+        "start": 485,
+        "end": 495,
+        "observation": "Sharp multi-sample rise in N and E components (e.g., index 485→486: N from 2.91→4.66, E from -0.37→0.39), followed by sustained elevated levels with oscillatory behavior; U shows a drop then partial recovery—suggests abrupt offset possibly with opposing return or superposed motion."
+      },
+      {
+        "start": 605,
+        "end": 615,
+        "observation": "Extended plateau-like behavior in N/E/U from ~605 onward, preceded by missing samples; first valid sample at 609 (N=4.87) appears elevated relative to prior trend, and subsequent values show persistent high N with variable E/U—possible platform or delayed response after gap; ambiguity about exact onset due to missing data."
+      }
+    ]
+  }
+}

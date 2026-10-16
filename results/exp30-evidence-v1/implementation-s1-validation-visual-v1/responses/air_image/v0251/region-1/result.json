@@ -1,0 +1,39 @@
+{
+  "status": "success",
+  "requested_model": "qwen3-vl-plus",
+  "request_count": 1,
+  "retry_count": 0,
+  "http_status": 200,
+  "served_model": "qwen3-vl-plus",
+  "usage": {
+    "prompt_tokens": 2793,
+    "completion_tokens": 348,
+    "total_tokens": 3141,
+    "completion_tokens_details": {
+      "text_tokens": 348
+    },
+    "prompt_tokens_details": {
+      "image_tokens": 1738,
+      "text_tokens": 1055,
+      "cached_tokens": 128
+    }
+  },
+  "elapsed_seconds": 8.682865300012054,
+  "decision": {
+    "summary": "A high-amplitude multi-axis transient occurs at indices 525–530 (N drop, E dip, U spike), with incomplete recovery by 534. A secondary correlated N/U step-down appears ~545–555, possibly part of the same event’s return or a distinct offset; neither interval shows a confirmed opposing return within allowed context [450,699]. Numerical jump candidates at 466, 539, 553 do not align cleanly with observed multi-sample morphology and are not used to define intervals.",
+    "intervals": [
+      {
+        "start": 525,
+        "end": 534,
+        "status": "uncertain",
+        "observation": "N drops sharply over ~525–530 (multi-sample), E dips then rebounds, U spikes ~18 MAD then collapses; all three axes show coherent transient with clear onset and sustained interior before return begins. Return is incomplete by index 534 (U still elevated, N/E not fully recovered)."
+      },
+      {
+        "start": 545,
+        "end": 555,
+        "status": "uncertain",
+        "observation": "N and U show correlated step-down starting ~545, while E remains flat; this resembles a secondary offset or partial return of the earlier transient. No clear opposing return observed by 555; U does not recover to pre-525 level, and N shows only partial rebound. Coherence across N/U but not E weakens confidence."
+      }
+    ]
+  }
+}

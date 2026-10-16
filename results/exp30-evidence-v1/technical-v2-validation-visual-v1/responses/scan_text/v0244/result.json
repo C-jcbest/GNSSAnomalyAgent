@@ -1,0 +1,36 @@
+{
+  "status": "success",
+  "requested_model": "qwen3-vl-plus",
+  "request_count": 1,
+  "retry_count": 0,
+  "http_status": 200,
+  "served_model": "qwen3-vl-plus",
+  "usage": {
+    "prompt_tokens": 13576,
+    "completion_tokens": 305,
+    "total_tokens": 13881,
+    "completion_tokens_details": {
+      "text_tokens": 305
+    },
+    "prompt_tokens_details": {
+      "text_tokens": 13576,
+      "cached_tokens": 256
+    }
+  },
+  "elapsed_seconds": 8.224137699988205,
+  "decision": {
+    "summary": "Two regions stand out: (1) an abrupt multi-axis shift near indices 485–544 with no clear reversal, and (2) a prolonged monotonic E-component descent from index 605 onward, accompanied by steady N increase—both warrant closer inspection for physical interpretation.",
+    "regions": [
+      {
+        "start": 485,
+        "end": 544,
+        "observation": "N/E/U show a multi-sample shift around index ~490–500: N jumps from ~0 to ~1.4, E rises sharply from ~2.4 to ~5.2, U drops from ~-0.4 to ~1.3; the change is abrupt over 2–3 samples and not clearly reversed in the window, suggesting a possible permanent offset or rapid transient."
+      },
+      {
+        "start": 605,
+        "end": 729,
+        "observation": "From index ~610 onward, E component exhibits a sustained, accelerating downward trend (from ~1.6 to ~-27.6 by index 729), with N also rising steadily (from ~0.7 to ~7.5) and U fluctuating but generally negative; the E decline appears monotonic over >100 samples with no platform or return, indicating likely long-term motion rather than temporary offset."
+      }
+    ]
+  }
+}

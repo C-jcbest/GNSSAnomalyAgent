@@ -1,0 +1,37 @@
+{
+  "status": "success",
+  "requested_model": "qwen3-vl-plus",
+  "request_count": 1,
+  "retry_count": 0,
+  "http_status": 200,
+  "served_model": "qwen3-vl-plus",
+  "usage": {
+    "prompt_tokens": 5462,
+    "completion_tokens": 273,
+    "total_tokens": 5735,
+    "completion_tokens_details": {
+      "text_tokens": 273
+    },
+    "prompt_tokens_details": {
+      "image_tokens": 4936,
+      "text_tokens": 526,
+      "cached_tokens": 256
+    }
+  },
+  "elapsed_seconds": 9.071492899995064,
+  "decision": {
+    "summary": "Two regions stand out: (1) an abrupt ~2 MAD upward step in E around index 545 with no return observed, and (2) a coherent multi-axis linear trend starting at index 725, likely indicating physical motion. Other intervals show typical noise or small transient fluctuations without persistent structure.",
+    "regions": [
+      {
+        "start": 545,
+        "end": 560,
+        "observation": "E-component shows a sustained ~2 MAD upward shift beginning near index 545, with no clear return within the window; N and U show only minor correlated fluctuations. The shift appears abrupt over 2–3 samples and persists through index 560, suggesting a possible permanent offset or slow ramp."
+      },
+      {
+        "start": 725,
+        "end": 729,
+        "observation": "From index ~725 onward, all three components (N, E, U) exhibit coherent, monotonic trends: N rises sharply, E declines steadily, and U rises steeply—suggesting a common kinematic event (e.g., station tilt or motion). The onset is abrupt at 725, and the trend continues to the end of record without reversal."
+      }
+    ]
+  }
+}

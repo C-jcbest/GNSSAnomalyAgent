@@ -1,0 +1,38 @@
+{
+  "status": "success",
+  "requested_model": "qwen3-vl-plus",
+  "request_count": 1,
+  "retry_count": 0,
+  "http_status": 200,
+  "served_model": "qwen3-vl-plus",
+  "usage": {
+    "prompt_tokens": 6448,
+    "completion_tokens": 414,
+    "total_tokens": 6862,
+    "completion_tokens_details": {
+      "text_tokens": 414
+    },
+    "prompt_tokens_details": {
+      "text_tokens": 6448,
+      "cached_tokens": 128
+    }
+  },
+  "elapsed_seconds": 10.933506000001216,
+  "decision": {
+    "summary": "Two candidate temporary offsets identified: (1) early multi-sample rise in N/E/U (365–375) with sustained elevation but no confirmed return; (2) sharp jump at 490–491 with complex post-jump motion and no observed reversal within window. Both lack unambiguous opposing returns; status marked uncertain. No confirmed temporary intervals.",
+    "intervals": [
+      {
+        "start": 365,
+        "end": 375,
+        "status": "uncertain",
+        "observation": "N rises from ~-0.89 to ~2.44 (index 365→372), E shifts from ~-0.53 to ~0.46 (365→372), U peaks near index 370 (~1.9) then declines; onset is multi-sample, sustained elevated N/E through index 375, but no opposing return observed within allowed context (ends at 579); return ambiguous due to coarse sampling and continued variability."
+      },
+      {
+        "start": 490,
+        "end": 492,
+        "status": "uncertain",
+        "observation": "At index 490–491, N jumps from ~2.9 to ~5.08, E drops sharply from ~-0.36 to ~-2.44, U rises from ~1.49 to ~3.53; post-jump, N remains elevated (>2.9) through index 492, E stays negative, U fluctuates but does not return toward pre-jump levels by index 492; no clear opposing return observed before index 492, and subsequent behavior includes further jumps (e.g., index 500: N=7.07), preventing isolation of a closed temporary offset."
+      }
+    ]
+  }
+}

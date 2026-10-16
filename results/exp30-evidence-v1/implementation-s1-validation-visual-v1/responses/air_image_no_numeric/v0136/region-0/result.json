@@ -1,0 +1,33 @@
+{
+  "status": "success",
+  "requested_model": "qwen3-vl-plus",
+  "request_count": 1,
+  "retry_count": 0,
+  "http_status": 200,
+  "served_model": "qwen3-vl-plus",
+  "usage": {
+    "prompt_tokens": 2517,
+    "completion_tokens": 210,
+    "total_tokens": 2727,
+    "completion_tokens_details": {
+      "text_tokens": 210
+    },
+    "prompt_tokens_details": {
+      "image_tokens": 1738,
+      "text_tokens": 779,
+      "cached_tokens": 128
+    }
+  },
+  "elapsed_seconds": 6.830254200001946,
+  "decision": {
+    "summary": "Within allowed context [445,579], only one candidate temporary offset interval (480–544) is supported by coherent N-down/E-up motion without observed opposing return. The onset is well-defined (~480), interior shows sustained trend (N monotonic down, E ramp up post-500), but no return occurs before index 579. U-component shows spikes but no coherent shift or coupling. No confirmed temporary offsets; all candidates remain uncertain due to missing return.",
+    "intervals": [
+      {
+        "start": 480,
+        "end": 544,
+        "status": "uncertain",
+        "observation": "N-component shows sustained downward trend from index 480; E-component begins gentle upward ramp after ~500; no opposing return observed within allowed context. U-component noisy, not coupled. Onset clear, interior sustained, but return absent → uncertain."
+      }
+    ]
+  }
+}

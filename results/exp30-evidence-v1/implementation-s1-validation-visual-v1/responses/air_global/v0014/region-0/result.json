@@ -1,0 +1,33 @@
+{
+  "status": "success",
+  "requested_model": "qwen3-vl-plus",
+  "request_count": 1,
+  "retry_count": 0,
+  "http_status": 200,
+  "served_model": "qwen3-vl-plus",
+  "usage": {
+    "prompt_tokens": 2712,
+    "completion_tokens": 218,
+    "total_tokens": 2930,
+    "completion_tokens_details": {
+      "text_tokens": 218
+    },
+    "prompt_tokens_details": {
+      "image_tokens": 1906,
+      "text_tokens": 806,
+      "cached_tokens": 128
+    }
+  },
+  "elapsed_seconds": 6.374881900002947,
+  "decision": {
+    "summary": "A single candidate temporary offset is identified in the U-component from index 606 to 614: a sharp, multi-sample downward displacement (~8 MAD) with no observed opposing return within the allowed context [570,650]. E and N components lack a matching step, showing only transient correlations. Due to absence of confirmed return, status is uncertain. The broad E-platform (495–535) lies outside allowed_context and is not evaluated here.",
+    "intervals": [
+      {
+        "start": 606,
+        "end": 614,
+        "status": "uncertain",
+        "observation": "U-component shows a sharp multi-sample downward shift beginning at index 606 (~-8 MAD), sustained through 614; E and N show only modest correlated transients without matching step. No opposing return observed within allowed context (up to 650); recovery remains unobserved beyond 614."
+      }
+    ]
+  }
+}

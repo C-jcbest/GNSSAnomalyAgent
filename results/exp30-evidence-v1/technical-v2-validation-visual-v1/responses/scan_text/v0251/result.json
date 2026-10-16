@@ -1,0 +1,36 @@
+{
+  "status": "success",
+  "requested_model": "qwen3-vl-plus",
+  "request_count": 1,
+  "retry_count": 0,
+  "http_status": 200,
+  "served_model": "qwen3-vl-plus",
+  "usage": {
+    "prompt_tokens": 14087,
+    "completion_tokens": 293,
+    "total_tokens": 14380,
+    "completion_tokens_details": {
+      "text_tokens": 293
+    },
+    "prompt_tokens_details": {
+      "text_tokens": 14087,
+      "cached_tokens": 256
+    }
+  },
+  "elapsed_seconds": 8.750618399993982,
+  "decision": {
+    "summary": "Two regions stand out: (1) a sharp, multi-axis transient near index 485–495 with strong coupling across N/E/U and no immediate return; (2) a prolonged U plateau (~605–625) amid steady N/E drift, hinting at possible offset or platform behavior. Other segments show noisy but smooth motion or missing data.",
+    "regions": [
+      {
+        "start": 485,
+        "end": 495,
+        "observation": "Sharp multi-sample rise in U (from ~10.3 to ~11.1) coinciding with a large E jump (~-0.5 to +0.3), followed by abrupt drop in U and E over next few samples; N also jumps sharply. Cross-axis shape shows coupled N/E/U excursion without clear return within window."
+      },
+      {
+        "start": 605,
+        "end": 625,
+        "observation": "Extended plateau-like behavior in U (~9–10) from index ~605–625, while N and E show sustained drift: N rises steadily (~21→24), E drops (~-9→-11). The U platform appears decoupled from the monotonic N/E trend, suggesting possible superposed offset or sensor artifact."
+      }
+    ]
+  }
+}

@@ -1,0 +1,39 @@
+{
+  "status": "success",
+  "requested_model": "qwen3-vl-plus",
+  "request_count": 1,
+  "retry_count": 0,
+  "http_status": 200,
+  "served_model": "qwen3-vl-plus",
+  "usage": {
+    "prompt_tokens": 2828,
+    "completion_tokens": 319,
+    "total_tokens": 3147,
+    "completion_tokens_details": {
+      "text_tokens": 319
+    },
+    "prompt_tokens_details": {
+      "image_tokens": 1906,
+      "text_tokens": 922,
+      "cached_tokens": 0
+    }
+  },
+  "elapsed_seconds": 8.26995060002082,
+  "decision": {
+    "summary": "Two candidate temporary offsets in allowed context [560,670]: (1) a multi-axis perturbation near index 575 with partial recovery but no full return; (2) a large asynchronous step starting at ~596 affecting all axes, with stable post-step levels but no observed reversal before index 670. Neither interval shows a confirmed return; both classified as uncertain.",
+    "intervals": [
+      {
+        "start": 575,
+        "end": 578,
+        "status": "uncertain",
+        "observation": "N shows a small positive shift (~+1.5 MAD) at ~575, E drops sharply (~−3 MAD), U rises (~+1.7 MAD); all three axes recover partially by ~578 but do not return to pre-event levels within allowed context. Return is incomplete and ambiguous; status uncertain."
+      },
+      {
+        "start": 596,
+        "end": 634,
+        "status": "uncertain",
+        "observation": "N drops sharply (~−12 MAD) at ~596, E rises (~+12 MAD) with delay (~600–605), U drops (~−9 MAD) and stabilizes near new level by ~605. All axes remain offset through 634 with no observed return; sustained interior clear, but return unobserved in allowed context. Status uncertain."
+      }
+    ]
+  }
+}

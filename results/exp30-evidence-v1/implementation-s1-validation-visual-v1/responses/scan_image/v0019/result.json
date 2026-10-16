@@ -1,0 +1,37 @@
+{
+  "status": "success",
+  "requested_model": "qwen3-vl-plus",
+  "request_count": 1,
+  "retry_count": 0,
+  "http_status": 200,
+  "served_model": "qwen3-vl-plus",
+  "usage": {
+    "prompt_tokens": 4218,
+    "completion_tokens": 298,
+    "total_tokens": 4516,
+    "completion_tokens_details": {
+      "text_tokens": 298
+    },
+    "prompt_tokens_details": {
+      "image_tokens": 3702,
+      "text_tokens": 516,
+      "cached_tokens": 0
+    }
+  },
+  "elapsed_seconds": 9.959246300015366,
+  "decision": {
+    "summary": "Two regions stand out: (1) a correlated N/U drop with partial recovery near indices 490–510, and (2) a sharp U spike with supporting N/E dips near 600–615. Both show abrupt multi-sample changes without definitive opposing returns; other intervals display ordinary noise or smooth trends.",
+    "regions": [
+      {
+        "start": 490,
+        "end": 510,
+        "observation": "N/E/U show correlated multi-sample drop in N (~-2 to -4 MAD) and U (~-2 to -3 MAD) around index 495–505, with E rising slightly; the drop appears abrupt (2–3 samples) and is followed by a partial recovery but not full return to prior level—suggests possible transient offset or platform-like behavior with ambiguous recovery."
+      },
+      {
+        "start": 600,
+        "end": 615,
+        "observation": "U component exhibits a sharp, multi-sample negative spike (~-7 MAD) centered at index 605–608, coinciding with a smaller but coherent dip in N and E; the U spike recovers within ~5 samples, but the surrounding noise envelope widens, and no clear opposing return is visible—warrants closer inspection for superposed motion or artifact."
+      }
+    ]
+  }
+}

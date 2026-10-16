@@ -1,0 +1,32 @@
+{
+  "status": "success",
+  "requested_model": "qwen3-vl-plus",
+  "request_count": 1,
+  "retry_count": 0,
+  "http_status": 200,
+  "served_model": "qwen3-vl-plus",
+  "usage": {
+    "prompt_tokens": 2913,
+    "completion_tokens": 259,
+    "total_tokens": 3172,
+    "completion_tokens_details": {
+      "text_tokens": 259
+    },
+    "prompt_tokens_details": {
+      "text_tokens": 2913,
+      "cached_tokens": 128
+    }
+  },
+  "elapsed_seconds": 8.639550699997926,
+  "decision": {
+    "summary": "A coherent, multi-sample displacement occurs from index 485 to 490: N drops from ~4.0 to ~-3.6, E from ~7.5 to ~1.6, and U rises sharply from ~-21 to ~-0.9. The change spans ≥5 samples and shows cross-axis consistency, but no return or opposing motion is observed within the allowed context [450,525]; thus, the interval is classified as uncertain temporary offset. No other temporary offsets are supported by the data in this window.",
+    "intervals": [
+      {
+        "start": 485,
+        "end": 490,
+        "status": "uncertain",
+        "observation": "Coherent multi-sample drop in N (~4.0→-3.6), E (~7.5→1.6), and U (~-21→-0.9) across indices 485–490, with sustained offset through index 490; return not observed within allowed context (ends at 525), and no opposing shift seen afterward—status uncertain due to unobserved recovery."
+      }
+    ]
+  }
+}

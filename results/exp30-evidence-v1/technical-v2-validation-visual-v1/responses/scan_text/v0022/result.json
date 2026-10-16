@@ -1,0 +1,36 @@
+{
+  "status": "success",
+  "requested_model": "qwen3-vl-plus",
+  "request_count": 1,
+  "retry_count": 0,
+  "http_status": 200,
+  "served_model": "qwen3-vl-plus",
+  "usage": {
+    "prompt_tokens": 13461,
+    "completion_tokens": 294,
+    "total_tokens": 13755,
+    "completion_tokens_details": {
+      "text_tokens": 294
+    },
+    "prompt_tokens_details": {
+      "text_tokens": 13461,
+      "cached_tokens": 0
+    }
+  },
+  "elapsed_seconds": 8.447215499996673,
+  "decision": {
+    "summary": "Two regions stand out: (1) a complex offset event in the 485–544 window with abrupt onset and ambiguous partial return, and (2) a prolonged accelerating trend with a sharp multi-sample jump near 690–695 in the 605–729 window, where cross-axis behavior suggests superposed motion components.",
+    "regions": [
+      {
+        "start": 485,
+        "end": 544,
+        "observation": "Cross-axis shape shows a multi-sample drop in N and E around index 490–495, followed by a sustained offset in E (positive) and U (negative), with possible opposing return starting near index 520 but not fully resolved; the change is abrupt and spans several samples."
+      },
+      {
+        "start": 605,
+        "end": 729,
+        "observation": "Strong monotonic trend in N and E from ~index 610 onward, with accelerating rate after ~660; U shows a broad platform from ~630 to 680 before descending. A sharp multi-sample jump in N/E occurs near index 690–695, possibly indicating a permanent shift or superposed temporary offset; surrounding context suggests ambiguity about whether a return occurs later."
+      }
+    ]
+  }
+}

@@ -1,0 +1,38 @@
+{
+  "status": "success",
+  "requested_model": "qwen3-vl-plus",
+  "request_count": 1,
+  "retry_count": 0,
+  "http_status": 200,
+  "served_model": "qwen3-vl-plus",
+  "usage": {
+    "prompt_tokens": 4378,
+    "completion_tokens": 339,
+    "total_tokens": 4717,
+    "completion_tokens_details": {
+      "text_tokens": 339
+    },
+    "prompt_tokens_details": {
+      "text_tokens": 4378,
+      "cached_tokens": 128
+    }
+  },
+  "elapsed_seconds": 9.843330799980322,
+  "decision": {
+    "summary": "Confirmed temporary offset in N/E from index 489 to 524: multi-sample onset, sustained low plateau, no return within context. A subsequent abrupt upward jump at 525–530 lacks a clear return by 579, so classified as uncertain. U remains stable throughout, supporting cross-axis coherence of the offset. No evidence of permanent step coexisting inside the confirmed interval; the jump at 525 may be part of an incomplete return or separate event.",
+    "intervals": [
+      {
+        "start": 489,
+        "end": 524,
+        "status": "confirmed",
+        "observation": "N and E show a multi-sample drop starting ~490, reaching a sustained low plateau (N ~ -2 to -4, E ~ -2 to -3) through index 524; U remains stable. The onset is gradual over ~5 samples (489–494), interior is flat for ~30 samples, and no return observed before 525."
+      },
+      {
+        "start": 525,
+        "end": 579,
+        "status": "uncertain",
+        "observation": "A sharp upward jump in N and E occurs at 525–530 (multi-sample, >3σ on both axes), but no clear opposing return is observed within allowed_context (up to 579); values remain elevated or noisy afterward. U shows no matching step. Return ambiguous/unobserved → uncertain."
+      }
+    ]
+  }
+}

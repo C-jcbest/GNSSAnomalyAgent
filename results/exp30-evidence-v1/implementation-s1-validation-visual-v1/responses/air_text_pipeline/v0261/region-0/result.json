@@ -1,0 +1,32 @@
+{
+  "status": "success",
+  "requested_model": "qwen3-vl-plus",
+  "request_count": 1,
+  "retry_count": 0,
+  "http_status": 200,
+  "served_model": "qwen3-vl-plus",
+  "usage": {
+    "prompt_tokens": 4373,
+    "completion_tokens": 326,
+    "total_tokens": 4699,
+    "completion_tokens_details": {
+      "text_tokens": 326
+    },
+    "prompt_tokens_details": {
+      "text_tokens": 4373,
+      "cached_tokens": 128
+    }
+  },
+  "elapsed_seconds": 8.236772500007646,
+  "decision": {
+    "summary": "A multi-axis abrupt shift begins near index 490: N decreases sharply while E and U increase, forming a sustained offset lasting ~54 samples (490–543). The offset is non-symmetric across axes and shows no clear opposing return within the allowed context (up to 579); thus the interval is classified as uncertain. A candidate jump at index 557 lies outside the screened region and is not supported by adjacent observations (index 556 is null, 557 is extreme but isolated without preceding/preparatory trend or return), so it is not interpreted as a temporary offset.",
+    "intervals": [
+      {
+        "start": 490,
+        "end": 543,
+        "status": "uncertain",
+        "observation": "N drops sharply (e.g., from ~1.9 at idx 489 to ~-0.1 at idx 492), E rises (e.g., ~2.7→~3.5), U rises (e.g., ~1.2→~2.0) over indices 490–493; sustained offset persists through idx 543 with N remaining ~-0.1 to -0.5, E ~2.6–3.5, U ~1.2–2.8, without clear opposing return within allowed context [450,579]. Return not observed before end of context; status uncertain."
+      }
+    ]
+  }
+}

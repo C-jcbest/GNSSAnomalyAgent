@@ -1,0 +1,38 @@
+{
+  "status": "success",
+  "requested_model": "qwen3-vl-plus",
+  "request_count": 1,
+  "retry_count": 0,
+  "http_status": 200,
+  "served_model": "qwen3-vl-plus",
+  "usage": {
+    "prompt_tokens": 5476,
+    "completion_tokens": 264,
+    "total_tokens": 5740,
+    "completion_tokens_details": {
+      "text_tokens": 264
+    },
+    "prompt_tokens_details": {
+      "text_tokens": 5476,
+      "cached_tokens": 128
+    }
+  },
+  "elapsed_seconds": 7.0219448000134435,
+  "decision": {
+    "summary": "A confirmed temporary offset occurs in N/E/U from index 370 to 385, marked by a correlated multi-sample drop. A subsequent interval (400–410) shows divergent E/U rebounds against a still-depressed N, but the return to pre-offset levels is unobserved and inconsistent across axes, yielding uncertain status. No other temporary offsets are supported within allowed context [365,545].",
+    "intervals": [
+      {
+        "start": 370,
+        "end": 385,
+        "status": "confirmed",
+        "observation": "N/E/U show correlated multi-sample drop (370–385); all axes shift downward together, sustained over ≥15 samples, with no immediate reversal — onset and interior consistent with temporary offset."
+      },
+      {
+        "start": 400,
+        "end": 410,
+        "status": "uncertain",
+        "observation": "E and U exhibit opposing rebounds ~400–410 while N remains depressed; return not observed on N, and E/U behavior suggests superposed motion or incomplete recovery — ambiguous return, status uncertain."
+      }
+    ]
+  }
+}

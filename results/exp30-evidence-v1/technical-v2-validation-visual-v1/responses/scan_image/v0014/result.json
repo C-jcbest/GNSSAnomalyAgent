@@ -1,0 +1,37 @@
+{
+  "status": "success",
+  "requested_model": "qwen3-vl-plus",
+  "request_count": 1,
+  "retry_count": 0,
+  "http_status": 200,
+  "served_model": "qwen3-vl-plus",
+  "usage": {
+    "prompt_tokens": 5462,
+    "completion_tokens": 291,
+    "total_tokens": 5753,
+    "completion_tokens_details": {
+      "text_tokens": 291
+    },
+    "prompt_tokens_details": {
+      "image_tokens": 4936,
+      "text_tokens": 526,
+      "cached_tokens": 256
+    }
+  },
+  "elapsed_seconds": 9.81900710001355,
+  "decision": {
+    "summary": "Two regions warrant closer inspection: (1) a sharp, sustained U-component drop near index 610–615 without an obvious return, and (2) a coherent multi-axis linear trend beginning at index 725, suggesting a possible slow offset or ramp. Other intervals show typical noise or smooth motion without ambiguous superposed changes.",
+    "regions": [
+      {
+        "start": 605,
+        "end": 615,
+        "observation": "U-component shows a sharp, multi-sample drop (~−8 MAD to −11 MAD) near index 610–615, with no clear opposing return in the immediate aftermath; N and E components show modest correlated fluctuations but no comparable abrupt shift. The drop appears sustained over several samples and stands out against background noise."
+      },
+      {
+        "start": 725,
+        "end": 729,
+        "observation": "From ~725 onward, all three components (N, E, U) exhibit smooth, coherent linear trends: N rises ~2.5 MAD, E drops ~0.5 MAD, U rises ~1.5 MAD over ~5 samples. This suggests a possible platform-like offset or slow ramp not seen earlier; the coherence across axes and absence of noise spikes make it distinct from typical daily variability."
+      }
+    ]
+  }
+}

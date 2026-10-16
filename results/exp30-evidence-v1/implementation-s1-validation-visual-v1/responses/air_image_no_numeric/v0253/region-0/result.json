@@ -1,0 +1,33 @@
+{
+  "status": "success",
+  "requested_model": "qwen3-vl-plus",
+  "request_count": 1,
+  "retry_count": 0,
+  "http_status": 200,
+  "served_model": "qwen3-vl-plus",
+  "usage": {
+    "prompt_tokens": 2486,
+    "completion_tokens": 270,
+    "total_tokens": 2756,
+    "completion_tokens_details": {
+      "text_tokens": 270
+    },
+    "prompt_tokens_details": {
+      "image_tokens": 1738,
+      "text_tokens": 748,
+      "cached_tokens": 128
+    }
+  },
+  "elapsed_seconds": 6.839343700004974,
+  "decision": {
+    "summary": "A single candidate temporary offset is identified in the U axis (indices 580–585), marked by a sharp, deep negative spike with weak correlated N/E responses. The event lacks a clear opposing return within the allowed context [540,620]; U recovers partially after 585 but does not revert to pre-event baseline before 620. Hence status is uncertain. The second region mentioned in scanning_summary (610–635) lies outside allowed_context (ends at 620), so it is excluded.",
+    "intervals": [
+      {
+        "start": 580,
+        "end": 585,
+        "status": "uncertain",
+        "observation": "Sharp multi-sample negative spike in U (~-17 MAD) centered at ~580–585, with correlated smaller negative excursions in N and E; onset is abrupt, interior shows sustained depression in U (down to ~-17.5 MAD), but no opposing return observed within allowed context (U begins recovering after 585 but remains below pre-event level through 620). Cross-axis responses are transient and not fully coherent with U’s depth or duration."
+      }
+    ]
+  }
+}

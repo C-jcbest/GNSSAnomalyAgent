@@ -1,0 +1,33 @@
+{
+  "status": "success",
+  "requested_model": "qwen3-vl-plus",
+  "request_count": 1,
+  "retry_count": 0,
+  "http_status": 200,
+  "served_model": "qwen3-vl-plus",
+  "usage": {
+    "prompt_tokens": 2452,
+    "completion_tokens": 265,
+    "total_tokens": 2717,
+    "completion_tokens_details": {
+      "text_tokens": 265
+    },
+    "prompt_tokens_details": {
+      "image_tokens": 1738,
+      "text_tokens": 714,
+      "cached_tokens": 128
+    }
+  },
+  "elapsed_seconds": 6.9474563999974634,
+  "decision": {
+    "summary": "A multi-sample transient centered at index 480 affects all axes: N and U exhibit large negative excursions with incomplete recovery within the allowed context (443–519); E shows a smaller concurrent dip. The onset is clear (479), but the return is ambiguous—U recovers partially by 482 but remains offset, and N does not recover by 483. No opposing return observed before index 519. Thus, the interval is classified as uncertain.",
+    "intervals": [
+      {
+        "start": 479,
+        "end": 482,
+        "status": "uncertain",
+        "observation": "N shows a sharp negative excursion from index 479 to 482 (drop ~6 MAD), with no return by 483; U shows a deeper transient (drop ~13 MAD) at 480–481, followed by partial recovery at 482 but still offset below pre-event level; E shows a smaller concurrent dip (~2 MAD) at 480–481. Return to baseline is unobserved within allowed context and not confirmed on N or U."
+      }
+    ]
+  }
+}

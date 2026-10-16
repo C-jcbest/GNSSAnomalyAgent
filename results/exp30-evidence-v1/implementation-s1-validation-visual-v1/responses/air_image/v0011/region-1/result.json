@@ -1,0 +1,39 @@
+{
+  "status": "success",
+  "requested_model": "qwen3-vl-plus",
+  "request_count": 1,
+  "retry_count": 0,
+  "http_status": 200,
+  "served_model": "qwen3-vl-plus",
+  "usage": {
+    "prompt_tokens": 2660,
+    "completion_tokens": 425,
+    "total_tokens": 3085,
+    "completion_tokens_details": {
+      "text_tokens": 425
+    },
+    "prompt_tokens_details": {
+      "image_tokens": 1738,
+      "text_tokens": 922,
+      "cached_tokens": 128
+    }
+  },
+  "elapsed_seconds": 11.25207750001573,
+  "decision": {
+    "summary": "Two candidate temporary-offset intervals identified in allowed context [560,670]. First (562–578): multi-axis transient with incomplete recovery—N/E/U show correlated but non-simultaneous excursions; return ambiguous. Second (596–604): sharp multi-axis step onset with sustained deviation and no observed return; likely permanent, but interval classified uncertain due to missing opposing return within context. No confirmed temporary offsets.",
+    "intervals": [
+      {
+        "start": 562,
+        "end": 578,
+        "status": "uncertain",
+        "observation": "N shows a sharp negative excursion (~−10 MAD) at index 562, followed by partial recovery; E drops ~−3 MAD around 565–570 and stabilizes near lower level until ~578; U spikes positive (~+10 MAD) at 562 then falls sharply to ~−5 MAD by 565 and remains low through 578. Return toward pre-event levels is incomplete and ambiguous beyond 578; no clear opposing return observed within allowed context. Status: uncertain."
+      },
+      {
+        "start": 596,
+        "end": 604,
+        "status": "uncertain",
+        "observation": "N drops sharply (~−12 MAD) at index 596, sustained through 604; E rises briefly (~+12 MAD) at 596 then declines rapidly, crossing zero by 600 and reaching ~−5 MAD by 604; U drops ~−9 MAD at 596 and continues descending to ~−12 MAD by 604. All axes show coherent onset at 596 but no return observed before 605; the event appears to initiate a permanent offset rather than a temporary one. Status: uncertain (no return observed)."
+      }
+    ]
+  }
+}

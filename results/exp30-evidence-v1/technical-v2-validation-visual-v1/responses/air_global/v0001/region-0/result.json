@@ -1,0 +1,33 @@
+{
+  "status": "success",
+  "requested_model": "qwen3-vl-plus",
+  "request_count": 1,
+  "retry_count": 0,
+  "http_status": 200,
+  "served_model": "qwen3-vl-plus",
+  "usage": {
+    "prompt_tokens": 2629,
+    "completion_tokens": 245,
+    "total_tokens": 2874,
+    "completion_tokens_details": {
+      "text_tokens": 245
+    },
+    "prompt_tokens_details": {
+      "image_tokens": 1906,
+      "text_tokens": 723,
+      "cached_tokens": 0
+    }
+  },
+  "elapsed_seconds": 6.761550700000953,
+  "decision": {
+    "summary": "A transient multi-axis disturbance occurs at indices 478–483: N and U drop sharply near 480, with U partially recovering by 483 but N remaining offset; E dips concurrently. No full return observed before index 519, so the interval is classified as uncertain. The screened region (478–484) captures the onset and peak but not a confirmed return; thus, the temporary offset cannot be confirmed.",
+    "intervals": [
+      {
+        "start": 478,
+        "end": 483,
+        "status": "uncertain",
+        "observation": "N and U show a sharp multi-sample negative excursion centered at index 480; N remains offset (no return) through end of allowed context, while U shows partial recovery by index 483 but not full return to pre-event level. E exhibits a smaller concurrent dip without clear return. Onset is abrupt (index 478), interior is sustained over ~5 samples, but return is incomplete/ambiguous on N and uncertain on U/E within allowed context."
+      }
+    ]
+  }
+}

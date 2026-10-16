@@ -1,0 +1,38 @@
+{
+  "status": "success",
+  "requested_model": "qwen3-vl-plus",
+  "request_count": 1,
+  "retry_count": 0,
+  "http_status": 200,
+  "served_model": "qwen3-vl-plus",
+  "usage": {
+    "prompt_tokens": 6376,
+    "completion_tokens": 392,
+    "total_tokens": 6768,
+    "completion_tokens_details": {
+      "text_tokens": 392
+    },
+    "prompt_tokens_details": {
+      "text_tokens": 6376,
+      "cached_tokens": 128
+    }
+  },
+  "elapsed_seconds": 10.06185880000703,
+  "decision": {
+    "summary": "Two candidate temporary offsets identified in early window (365–544): (1) abrupt multi-sample shift at idx 368–369 affecting N/E/U, sustained through idx 394 without confirmed return; (2) platform-like segment at idx 450–460 with cross-axis coherence but ambiguous recovery. No interval meets full confirmation criteria due to missing or ambiguous return phases within allowed context [365,579].",
+    "intervals": [
+      {
+        "start": 368,
+        "end": 394,
+        "status": "uncertain",
+        "observation": "N jumps from -0.28165 (idx 367) to 0.99009 (idx 368); E shifts from -0.60075 to -0.74308; U drops from -0.27426 to -0.77167. Sustained offset persists through idx 394 with N/E remaining elevated relative to pre-event baseline, but no clear opposing return observed within allowed context."
+      },
+      {
+        "start": 450,
+        "end": 460,
+        "status": "uncertain",
+        "observation": "From idx 450–460, N and E show a relatively flat platform (e.g., N ~0.1–1.5, E ~0.5–2.0), while U trends downward (e.g., U ~-1.0 to -2.1). However, the platform is embedded in high-amplitude variability and lacks a clean onset/return pairing on all axes; no unambiguous opposing return before idx 544."
+      }
+    ]
+  }
+}

@@ -1,0 +1,36 @@
+{
+  "status": "success",
+  "requested_model": "qwen3-vl-plus",
+  "request_count": 1,
+  "retry_count": 0,
+  "http_status": 200,
+  "served_model": "qwen3-vl-plus",
+  "usage": {
+    "prompt_tokens": 13632,
+    "completion_tokens": 399,
+    "total_tokens": 14031,
+    "completion_tokens_details": {
+      "text_tokens": 399
+    },
+    "prompt_tokens_details": {
+      "text_tokens": 13632,
+      "cached_tokens": 256
+    }
+  },
+  "elapsed_seconds": 11.44801340001868,
+  "decision": {
+    "summary": "Two regions warrant closer inspection: (1) a multi-axis abrupt shift in the mid-window (~485–544) with missing samples obscuring full return behavior; (2) a sequence of superposed accelerating trends and step-like changes in the later window (605–729), where uncertainty in exact onset/offset of secondary steps prevents clean separation.",
+    "regions": [
+      {
+        "start": 485,
+        "end": 544,
+        "observation": "Cross-axis shape shows a multi-sample abrupt shift in E and U around index ~490–495 (within window [365,544]), with E jumping from ~0.5 to ~2.1 and U dropping sharply (~-1.8 to -3.3), followed by sustained elevated E and depressed U; N shows less coherent change but some correlation. A possible opposing return is ambiguous due to missing samples at 497 and 527, and the transition appears non-smooth across axes."
+      },
+      {
+        "start": 605,
+        "end": 729,
+        "observation": "From index ~605 onward, all components show accelerating monotonic trends (N, E increasing; U decreasing), but with notable superposed changes: a sharp E increase (~15→18) and U drop (~-13→-18) between indices 620–625, then another step-like E surge (~22→26) and U deepening (~-15→-18) near 640–645. The pattern suggests overlapping permanent motion and temporary offsets; boundaries of the second event are uncertain due to coarse sampling and missing data at 632, 648, 652."
+      }
+    ]
+  }
+}

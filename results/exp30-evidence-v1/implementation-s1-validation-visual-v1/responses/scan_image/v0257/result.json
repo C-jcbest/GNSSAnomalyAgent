@@ -1,0 +1,37 @@
+{
+  "status": "success",
+  "requested_model": "qwen3-vl-plus",
+  "request_count": 1,
+  "retry_count": 0,
+  "http_status": 200,
+  "served_model": "qwen3-vl-plus",
+  "usage": {
+    "prompt_tokens": 4218,
+    "completion_tokens": 315,
+    "total_tokens": 4533,
+    "completion_tokens_details": {
+      "text_tokens": 315
+    },
+    "prompt_tokens_details": {
+      "image_tokens": 3702,
+      "text_tokens": 516,
+      "cached_tokens": 0
+    }
+  },
+  "elapsed_seconds": 9.173556299996562,
+  "decision": {
+    "summary": "Two regions stand out: (1) a prolonged E- and U-downward trend from ~500–664 without reversal, and (2) a sharp, multi-axis displacement at ~685–690 with U-jump, E-dip, and delayed N-response, followed by a new plateau—suggesting a possible permanent offset or complex transient.",
+    "regions": [
+      {
+        "start": 500,
+        "end": 664,
+        "observation": "E-component shows a sustained, monotonic descent from ~−2.5 to ~−13 MAD between indices ~500 and 660, with no clear opposing return; U-component also declines steadily over same interval but with superposed short-term fluctuations. N-component remains relatively stable, suggesting a possible unidirectional offset or trend rather than a temporary event."
+      },
+      {
+        "start": 680,
+        "end": 729,
+        "observation": "Sharp ~10 MAD upward jump in U-component at index ~685, followed by a plateau near +5 MAD through 729; E-component shows a concurrent sharp drop (~−5 MAD) around same index, then partial recovery. N-component exhibits a smaller, delayed dip (~−4 MAD) peaking near 690. The multi-axis coherence suggests a transient but substantial displacement event, possibly with incomplete return in E/U."
+      }
+    ]
+  }
+}

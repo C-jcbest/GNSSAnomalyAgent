@@ -1,0 +1,44 @@
+{
+  "status": "success",
+  "requested_model": "qwen3-vl-plus",
+  "request_count": 1,
+  "retry_count": 0,
+  "http_status": 200,
+  "served_model": "qwen3-vl-plus",
+  "usage": {
+    "prompt_tokens": 5457,
+    "completion_tokens": 441,
+    "total_tokens": 5898,
+    "completion_tokens_details": {
+      "text_tokens": 441
+    },
+    "prompt_tokens_details": {
+      "text_tokens": 5457,
+      "cached_tokens": 128
+    }
+  },
+  "elapsed_seconds": 11.744021799997427,
+  "decision": {
+    "summary": "Within allowed context [570,729], no fully confirmed temporary offset intervals are identified. Several candidate U-axis fluctuations (e.g., dip/recovery around 570–580, and late decline 699–729) show partial opposing behavior but lack clear onset-return pairing on all axes, or have ambiguous interior trends. N and E exhibit persistent drifts without matching reversals, preventing confirmation of a coherent temporary offset. All candidate intervals remain uncertain.",
+    "intervals": [
+      {
+        "start": 570,
+        "end": 624,
+        "status": "uncertain",
+        "observation": "U-axis shows a local dip from ~24.5 to ~21.7 (indices 570–574), then recovers to ~23.2 by index 580, while N and E continue irregular drifts; no clear opposing return in U after index 580, and the pattern does not form a closed temporary offset interval within allowed context."
+      },
+      {
+        "start": 630,
+        "end": 699,
+        "status": "uncertain",
+        "observation": "U rises from ~22.5 (index 630) to ~25.7 (index 699), while N and E also rise steadily; no opposing return observed before index 700, and the trend continues beyond—no confirmed temporary offset."
+      },
+      {
+        "start": 699,
+        "end": 729,
+        "status": "uncertain",
+        "observation": "U peaks near 25.7 at index 699, then declines to ~22.1 by index 729; N and E remain rising or flat during this decline, suggesting possible partial recovery in U only. However, the onset of the decline is gradual and lacks a sharp opposing edge; return is incomplete/unconfirmed relative to earlier levels. Status: uncertain."
+      }
+    ]
+  }
+}

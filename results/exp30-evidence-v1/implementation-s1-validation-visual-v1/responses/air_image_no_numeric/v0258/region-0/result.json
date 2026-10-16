@@ -1,0 +1,33 @@
+{
+  "status": "success",
+  "requested_model": "qwen3-vl-plus",
+  "request_count": 1,
+  "retry_count": 0,
+  "http_status": 200,
+  "served_model": "qwen3-vl-plus",
+  "usage": {
+    "prompt_tokens": 2477,
+    "completion_tokens": 259,
+    "total_tokens": 2736,
+    "completion_tokens_details": {
+      "text_tokens": 259
+    },
+    "prompt_tokens_details": {
+      "image_tokens": 1738,
+      "text_tokens": 739,
+      "cached_tokens": 128
+    }
+  },
+  "elapsed_seconds": 7.210658500000136,
+  "decision": {
+    "summary": "A transient multi-axis disturbance centered near index 430–434: N drops sharply (~2 MAD), with correlated dips in E and U. The onset is clear (sharp edge at ~428), interior is sustained for ~5–6 samples, but the return is incomplete and ambiguous by index 442 (last observable point before context ends at 470); no opposing step or full recovery observed. Thus, status is uncertain—consistent with a temporary offset but not confirmed due to missing return.",
+    "intervals": [
+      {
+        "start": 428,
+        "end": 442,
+        "status": "uncertain",
+        "observation": "N shows a sharp multi-sample drop starting ~428, reaching minimum near 432–434; E and U exhibit correlated transient dips (E: ~429–436, U: ~429–435). Recovery begins after 434 but remains incomplete through 442 (N still ~1.5 MAD below pre-event level); no clear opposing return observed within allowed context (ends at 470)."
+      }
+    ]
+  }
+}

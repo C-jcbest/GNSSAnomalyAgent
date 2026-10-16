@@ -1,0 +1,32 @@
+{
+  "status": "success",
+  "requested_model": "qwen3-vl-plus",
+  "request_count": 1,
+  "retry_count": 0,
+  "http_status": 200,
+  "served_model": "qwen3-vl-plus",
+  "usage": {
+    "prompt_tokens": 2778,
+    "completion_tokens": 265,
+    "total_tokens": 3043,
+    "completion_tokens_details": {
+      "text_tokens": 265
+    },
+    "prompt_tokens_details": {
+      "text_tokens": 2778,
+      "cached_tokens": 128
+    }
+  },
+  "elapsed_seconds": 7.598969600017881,
+  "decision": {
+    "summary": "A multi-sample displacement occurs in N and E (and to lesser extent U) between indices 487–491: N drops ~1.7 units, E drops ~1.6 units, U drops ~0.7 units. The change is abrupt across ≥4 samples and persists through the last observed point (index 491); no return is captured within allowed context [452,527], so status is uncertain. No other temporary offsets are evident in the allowed context.",
+    "intervals": [
+      {
+        "start": 487,
+        "end": 491,
+        "status": "uncertain",
+        "observation": "Multi-sample drop in N (from ~-2.25 to ~-3.96) and E (from ~1.39 to ~-0.24) over indices 487–491; U dips from ~-3.22 to ~-3.93. Return not observed by index 492 (last valid sample at 491), and values remain offset relative to pre-event trend. Incomplete recovery suggests transient offset, but return phase unobserved."
+      }
+    ]
+  }
+}

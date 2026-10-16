@@ -1,0 +1,37 @@
+{
+  "status": "success",
+  "requested_model": "qwen3-vl-plus",
+  "request_count": 1,
+  "retry_count": 0,
+  "http_status": 200,
+  "served_model": "qwen3-vl-plus",
+  "usage": {
+    "prompt_tokens": 4218,
+    "completion_tokens": 280,
+    "total_tokens": 4498,
+    "completion_tokens_details": {
+      "text_tokens": 280
+    },
+    "prompt_tokens_details": {
+      "image_tokens": 3702,
+      "text_tokens": 516,
+      "cached_tokens": 0
+    }
+  },
+  "elapsed_seconds": 9.00489209999796,
+  "decision": {
+    "summary": "Two regions merit closer inspection: (1) a correlated transient drop in all components near indices 525–540, most pronounced in U; (2) a prolonged U decline with a distinct step near 610–615, overlapping the second window’s start. No clear opposing returns are evident; cross-axis shapes suggest possible superposed permanent and temporary effects.",
+    "regions": [
+      {
+        "start": 525,
+        "end": 540,
+        "observation": "N/E/U show correlated multi-sample drop (~3–4 MAD) around index 530–538, with U showing a sharper descent and partial recovery by 540; E and N exhibit similar timing but less amplitude—suggests possible transient offset or local disturbance rather than isolated spike."
+      },
+      {
+        "start": 605,
+        "end": 660,
+        "observation": "U component shows sustained downward trend from ~530 to ~650 (≈6 MAD total), punctuated by a sharp multi-sample step down near 610–615; E and N show weaker co-variation but no clear platform—ambiguous whether this is cumulative motion or superposed temporary offset with incomplete return."
+      }
+    ]
+  }
+}

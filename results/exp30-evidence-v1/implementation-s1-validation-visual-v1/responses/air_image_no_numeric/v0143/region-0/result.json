@@ -1,0 +1,33 @@
+{
+  "status": "success",
+  "requested_model": "qwen3-vl-plus",
+  "request_count": 1,
+  "retry_count": 0,
+  "http_status": 200,
+  "served_model": "qwen3-vl-plus",
+  "usage": {
+    "prompt_tokens": 2523,
+    "completion_tokens": 279,
+    "total_tokens": 2802,
+    "completion_tokens_details": {
+      "text_tokens": 279
+    },
+    "prompt_tokens_details": {
+      "image_tokens": 1738,
+      "text_tokens": 785,
+      "cached_tokens": 128
+    }
+  },
+  "elapsed_seconds": 8.243591400008881,
+  "decision": {
+    "summary": "A coherent 3D discontinuity begins ~594–596: N and E jump up, U drops sharply. N remains elevated through 603 with no return; E declines partially but does not rejoin pre-event trend; U recovers slowly but remains offset. No full return observed in allowed context [555,639], so all candidate temporary offsets are uncertain. No evidence of smooth motion or isolated spikes—edges are multi-sample and correlated across axes.",
+    "intervals": [
+      {
+        "start": 594,
+        "end": 603,
+        "status": "uncertain",
+        "observation": "N: sharp multi-sample rise ~594–597 (+~12 MAD), sustained elevated level through 603; E: rise ~595–598 (+~5 MAD) followed by gradual decline but not back to pre-event level by 603; U: sharp drop ~594–596 (−~15 MAD) with slow partial recovery, still far below pre-event by 603. Return not observed on any axis within allowed context; E and U show incomplete recovery, N shows no return. Thus, temporary offset status is uncertain."
+      }
+    ]
+  }
+}

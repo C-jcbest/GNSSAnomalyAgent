@@ -1,0 +1,37 @@
+{
+  "status": "success",
+  "requested_model": "qwen3-vl-plus",
+  "request_count": 1,
+  "retry_count": 0,
+  "http_status": 200,
+  "served_model": "qwen3-vl-plus",
+  "usage": {
+    "prompt_tokens": 4218,
+    "completion_tokens": 269,
+    "total_tokens": 4487,
+    "completion_tokens_details": {
+      "text_tokens": 269
+    },
+    "prompt_tokens_details": {
+      "image_tokens": 3702,
+      "text_tokens": 516,
+      "cached_tokens": 0
+    }
+  },
+  "elapsed_seconds": 8.684724699996877,
+  "decision": {
+    "summary": "Two regions stand out: one near index 425–430 with a sharp, multi-axis transient offset (strongest in E), and another near index 630–635 with a pronounced E-axis drop and partial recovery. Both show abrupt multi-sample changes without clear opposing returns, warranting closer inspection. Other variations appear consistent with noise or smooth secular motion.",
+    "regions": [
+      {
+        "start": 422,
+        "end": 430,
+        "observation": "Sharp multi-sample negative excursion in N and E (≈−2 to −6 MAD), followed by a rapid return over ~5 samples; U shows a concurrent but smaller dip. The shape suggests a transient offset or local disturbance rather than smooth motion, with ambiguous recovery timing in E."
+      },
+      {
+        "start": 628,
+        "end": 635,
+        "observation": "Abrupt ~3-MAD drop in E around index 630, coinciding with a smaller negative spike in N and a modest U dip; E remains depressed for ~5 samples before partial recovery. The event is isolated and not mirrored in other axes with equal magnitude, indicating possible localized effect or measurement artifact."
+      }
+    ]
+  }
+}

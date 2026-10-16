@@ -1,0 +1,32 @@
+{
+  "status": "success",
+  "requested_model": "qwen3-vl-plus",
+  "request_count": 1,
+  "retry_count": 0,
+  "http_status": 200,
+  "served_model": "qwen3-vl-plus",
+  "usage": {
+    "prompt_tokens": 5127,
+    "completion_tokens": 260,
+    "total_tokens": 5387,
+    "completion_tokens_details": {
+      "text_tokens": 260
+    },
+    "prompt_tokens_details": {
+      "text_tokens": 5127,
+      "cached_tokens": 128
+    }
+  },
+  "elapsed_seconds": 7.331281500024488,
+  "decision": {
+    "summary": "A rapid, multi-sample shift occurs at indices ~610–615 across all axes (N, E, U), with values dropping sharply and remaining negative/offset through index 624. No clear return to pre-shift levels is observed within the allowed context [570,729]; later samples show continued variability without recovery. The onset is abrupt, interior is sustained and variable, but the absence of a confirmed opposing return prevents confirmation of a temporary offset. One candidate jump at index 618 aligns with the transition but does not resolve the return ambiguity.",
+    "intervals": [
+      {
+        "start": 610,
+        "end": 624,
+        "status": "uncertain",
+        "observation": "Abrupt multi-axis drop in N/E/U beginning ~610–615 (e.g., N: ~1.6→−5.2, E: ~2.3→−1.6, U: ~6.1→−0.5), sustained through index 624 with no return; interior shows high variability but remains offset from pre-event levels. Return not observed within allowed context."
+      }
+    ]
+  }
+}

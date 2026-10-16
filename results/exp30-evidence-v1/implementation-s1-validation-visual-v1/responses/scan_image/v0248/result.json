@@ -1,0 +1,37 @@
+{
+  "status": "success",
+  "requested_model": "qwen3-vl-plus",
+  "request_count": 1,
+  "retry_count": 0,
+  "http_status": 200,
+  "served_model": "qwen3-vl-plus",
+  "usage": {
+    "prompt_tokens": 4218,
+    "completion_tokens": 309,
+    "total_tokens": 4527,
+    "completion_tokens_details": {
+      "text_tokens": 309
+    },
+    "prompt_tokens_details": {
+      "image_tokens": 3702,
+      "text_tokens": 516,
+      "cached_tokens": 0
+    }
+  },
+  "elapsed_seconds": 9.315695700002834,
+  "decision": {
+    "summary": "Two regions stand out: (1) a clear vertical drop at ~478 with correlated eastward uplift and northward dip, showing partial E recovery; (2) a broader multi-axis transient near 618–622 with opposing U/E trends and ambiguous return behavior. Other segments show typical noise or smooth secular motion without compelling morphology.",
+    "regions": [
+      {
+        "start": 475,
+        "end": 480,
+        "observation": "Sharp ~10 MAD downward step in U (vertical) at ~index 478, accompanied by a smaller (~2 MAD) upward step in E (east) and a subtle ~1 MAD downward shift in N (north); the U drop persists with minor fluctuations, while E shows a possible opposing partial return starting around 482–485 but not fully resolving within the window."
+      },
+      {
+        "start": 615,
+        "end": 625,
+        "observation": "Broad multi-axis transient: U drops sharply (~3 MAD) near index 618, while E rises steadily (~2 MAD) from ~615 to 622, and N shows a shallow dip (~1 MAD) peaking near 620; the E rise appears to plateau or reverse slightly after 622, suggesting an ambiguous superposed change—possibly a temporary offset with incomplete recovery."
+      }
+    ]
+  }
+}

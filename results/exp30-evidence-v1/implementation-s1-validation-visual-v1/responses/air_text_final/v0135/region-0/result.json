@@ -1,0 +1,32 @@
+{
+  "status": "success",
+  "requested_model": "qwen3-vl-plus",
+  "request_count": 1,
+  "retry_count": 0,
+  "http_status": 200,
+  "served_model": "qwen3-vl-plus",
+  "usage": {
+    "prompt_tokens": 3015,
+    "completion_tokens": 240,
+    "total_tokens": 3255,
+    "completion_tokens_details": {
+      "text_tokens": 240
+    },
+    "prompt_tokens_details": {
+      "text_tokens": 3015,
+      "cached_tokens": 128
+    }
+  },
+  "elapsed_seconds": 7.513111200009007,
+  "decision": {
+    "summary": "A coherent multi-axis offset begins at index 488: U drops ~19 MAD, N and E each shift ~-7 MAD; the offset remains sustained through index 492 (last sample in allowed context before a gap). No return is observed within [450,527]; next valid sample at 495 shows a different baseline, preventing confirmation of temporary nature. Candidate jump at 489 aligns with onset but does not resolve return. Status is uncertain due to missing post-492 observations.",
+    "intervals": [
+      {
+        "start": 488,
+        "end": 492,
+        "status": "uncertain",
+        "observation": "U drops sharply (~19 MAD) from index 488 to 489, accompanied by N and E shifts (~-7 MAD each); offset persists through 492 with no return observed within allowed context. Return is unobserved beyond 492 (next non-null sample at 495 shows different baseline), so status is uncertain."
+      }
+    ]
+  }
+}

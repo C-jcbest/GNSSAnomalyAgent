@@ -1,0 +1,33 @@
+{
+  "status": "success",
+  "requested_model": "qwen3-vl-plus",
+  "request_count": 1,
+  "retry_count": 0,
+  "http_status": 200,
+  "served_model": "qwen3-vl-plus",
+  "usage": {
+    "prompt_tokens": 2666,
+    "completion_tokens": 220,
+    "total_tokens": 2886,
+    "completion_tokens_details": {
+      "text_tokens": 220
+    },
+    "prompt_tokens_details": {
+      "image_tokens": 1906,
+      "text_tokens": 760,
+      "cached_tokens": 128
+    }
+  },
+  "elapsed_seconds": 6.120649199991021,
+  "decision": {
+    "summary": "In the allowed context [593, 670], a multi-sample depression in E begins at index 629, persists through 634, and lacks a definitive opposing return before the context ends. N and U show only transient co-occurring features without sustained offsets. The absence of a clear return and incomplete recovery preclude confirmation of a temporary offset; status is uncertain.",
+    "intervals": [
+      {
+        "start": 629,
+        "end": 634,
+        "status": "uncertain",
+        "observation": "E shows a sharp drop starting at index 629, reaching minimum near 630–631, and remains depressed through 634; N exhibits a smaller negative spike at ~630 but recovers quickly; U shows a modest dip coincident with E’s low but no sustained offset. No clear opposing return observed by index 670; recovery appears partial and incomplete within allowed context."
+      }
+    ]
+  }
+}

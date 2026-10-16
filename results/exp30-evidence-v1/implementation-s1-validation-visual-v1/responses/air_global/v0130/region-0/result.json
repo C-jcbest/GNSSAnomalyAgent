@@ -1,0 +1,33 @@
+{
+  "status": "success",
+  "requested_model": "qwen3-vl-plus",
+  "request_count": 1,
+  "retry_count": 0,
+  "http_status": 200,
+  "served_model": "qwen3-vl-plus",
+  "usage": {
+    "prompt_tokens": 2658,
+    "completion_tokens": 217,
+    "total_tokens": 2875,
+    "completion_tokens_details": {
+      "text_tokens": 217
+    },
+    "prompt_tokens_details": {
+      "image_tokens": 1906,
+      "text_tokens": 752,
+      "cached_tokens": 128
+    }
+  },
+  "elapsed_seconds": 6.5766064999916125,
+  "decision": {
+    "summary": "Within allowed context [450, 540], a multi-axis perturbation begins near index 490: N and U exhibit coherent downward trends (~2.5 MAD and ~3 MAD respectively), while E shows a brief positive spike (~498) followed by partial return. The offset does not clearly reverse before the context ends at 540, and the E-axis recovery is incomplete; thus the interval is classified as uncertain. No other temporary offsets are confirmed within this context.",
+    "intervals": [
+      {
+        "start": 490,
+        "end": 504,
+        "status": "uncertain",
+        "observation": "N shows sustained downward shift from ~490; U declines coherently; E has transient positive spike at ~498 but returns toward baseline by ~502. Return not fully observed before index 505 (end of allowed context), and interior shows mixed recovery behavior—status uncertain."
+      }
+    ]
+  }
+}

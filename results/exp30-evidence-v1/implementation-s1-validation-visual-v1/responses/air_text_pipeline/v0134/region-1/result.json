@@ -1,0 +1,38 @@
+{
+  "status": "success",
+  "requested_model": "qwen3-vl-plus",
+  "request_count": 1,
+  "retry_count": 0,
+  "http_status": 200,
+  "served_model": "qwen3-vl-plus",
+  "usage": {
+    "prompt_tokens": 2871,
+    "completion_tokens": 289,
+    "total_tokens": 3160,
+    "completion_tokens_details": {
+      "text_tokens": 289
+    },
+    "prompt_tokens_details": {
+      "text_tokens": 2871,
+      "cached_tokens": 128
+    }
+  },
+  "elapsed_seconds": 8.207377500017174,
+  "decision": {
+    "summary": "Within allowed context [570,653], E shows a prolonged low plateau starting around index 590 and an abrupt upward shift near 605–606. Neither the onset nor the return of a temporary offset is fully confirmed: the interior is sustained but not strictly flat, and no opposing return is observed before index 653. N and U show no coherent opposing motion that would confirm a temporary offset. Hence both candidate intervals are uncertain.",
+    "intervals": [
+      {
+        "start": 590,
+        "end": 610,
+        "status": "uncertain",
+        "observation": "E-axis sustained low plateau (~-5 to -8) from index ~590 to 610, with N and U showing variable but non-opposing trends; no clear return observed within allowed context"
+      },
+      {
+        "start": 605,
+        "end": 617,
+        "status": "uncertain",
+        "observation": "E-axis abrupt upward shift at ~605–606 (from ~-8.25 to ~-7.42), followed by continued E values near -7 to -6 through 617; no opposing return observed before end of allowed context (653)"
+      }
+    ]
+  }
+}

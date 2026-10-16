@@ -1,0 +1,36 @@
+{
+  "status": "success",
+  "requested_model": "qwen3-vl-plus",
+  "request_count": 1,
+  "retry_count": 0,
+  "http_status": 200,
+  "served_model": "qwen3-vl-plus",
+  "usage": {
+    "prompt_tokens": 13102,
+    "completion_tokens": 300,
+    "total_tokens": 13402,
+    "completion_tokens_details": {
+      "text_tokens": 300
+    },
+    "prompt_tokens_details": {
+      "text_tokens": 13102,
+      "cached_tokens": 0
+    }
+  },
+  "elapsed_seconds": 9.558699599991087,
+  "decision": {
+    "summary": "Two regions show abrupt multi-sample offsets: one near index 485–487 (E/U drop), another near 605–607 (E/U/N step down). Both lack clear opposing returns in the available windows and may represent temporary or permanent shifts worth closer inspection.",
+    "regions": [
+      {
+        "start": 485,
+        "end": 495,
+        "observation": "Abrupt multi-sample drop in E (from ~-4.99 to -5.29) and U (from ~-2.56 to -1.74) around index 485–487, followed by a sustained offset; N shows a smaller but coherent shift. The change spans 3–4 samples and is not clearly reversed within the window."
+      },
+      {
+        "start": 605,
+        "end": 620,
+        "observation": "Sharp multi-sample descent in E (e.g., from ~-6.65 to -5.19) and U (from ~-4.09 to -3.19) between indices 605–607, with N also shifting negatively; this appears as a step-like offset without immediate return, possibly superposed on slower drift. A later gap at 608 obscures immediate aftermath."
+      }
+    ]
+  }
+}

@@ -1,0 +1,37 @@
+{
+  "status": "success",
+  "requested_model": "qwen3-vl-plus",
+  "request_count": 1,
+  "retry_count": 0,
+  "http_status": 200,
+  "served_model": "qwen3-vl-plus",
+  "usage": {
+    "prompt_tokens": 5462,
+    "completion_tokens": 339,
+    "total_tokens": 5801,
+    "completion_tokens_details": {
+      "text_tokens": 339
+    },
+    "prompt_tokens_details": {
+      "image_tokens": 4936,
+      "text_tokens": 526,
+      "cached_tokens": 256
+    }
+  },
+  "elapsed_seconds": 10.068936199997552,
+  "decision": {
+    "summary": "Two prominent cross-axis morphological features stand out: (1) a broad multi-sample drop and offset platform in E/U (with partial N response) around indices 555–610, and (2) a sharp, large-magnitude triaxial step at ~608–610 with asymmetric recovery—E and U show early return while N stays depressed. Both regions exhibit coherent multi-axis behavior inconsistent with ordinary noise or smooth motion.",
+    "regions": [
+      {
+        "start": 555,
+        "end": 610,
+        "observation": "Sharp, multi-sample drop in all three axes (N, E, U) centered near index 560–570, followed by a sustained offset platform in E and U lasting until ~610; N shows partial recovery but remains depressed. The drop is abrupt and coherent across axes, suggesting a possible step or transient event with lingering offset."
+      },
+      {
+        "start": 605,
+        "end": 625,
+        "observation": "Large, near-instantaneous downward jump in N (~−6 to −8 MAD) at index ~608–610, coinciding with a sharp upward jump in E (~+15 to +18 MAD) and U (~+20 to +25 MAD), forming a clear triaxial step. A subsequent return begins around 612–614 in E and U, but N remains low through 625, indicating asymmetric recovery or residual offset."
+      }
+    ]
+  }
+}

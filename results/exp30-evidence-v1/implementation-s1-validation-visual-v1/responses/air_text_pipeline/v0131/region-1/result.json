@@ -1,0 +1,32 @@
+{
+  "status": "success",
+  "requested_model": "qwen3-vl-plus",
+  "request_count": 1,
+  "retry_count": 0,
+  "http_status": 200,
+  "served_model": "qwen3-vl-plus",
+  "usage": {
+    "prompt_tokens": 2535,
+    "completion_tokens": 257,
+    "total_tokens": 2792,
+    "completion_tokens_details": {
+      "text_tokens": 257
+    },
+    "prompt_tokens_details": {
+      "text_tokens": 2535,
+      "cached_tokens": 128
+    }
+  },
+  "elapsed_seconds": 6.713802999991458,
+  "decision": {
+    "summary": "Within allowed context [670,729], a multi-sample drop in N and E begins at index 705 and persists through 710, with sustained lower values through 729 but no observed return to pre-drop levels. The drop is coherent across N and E, but the absence of a clear opposing edge or recovery renders the interval uncertain. No other temporary offsets are confirmed.",
+    "intervals": [
+      {
+        "start": 705,
+        "end": 710,
+        "status": "uncertain",
+        "observation": "N drops from ~14.5–16.4 to ~12.9–13.1 and E drops from ~-15.0 to ~-15.7 over indices 705–710; interior (706–709) shows sustained lower N (~12.9–13.6) and more negative E (~-15.5 to -16.1), but no clear opposing return before index 729 — the signal remains in the lower platform with continued oscillation, not a reversal."
+      }
+    ]
+  }
+}

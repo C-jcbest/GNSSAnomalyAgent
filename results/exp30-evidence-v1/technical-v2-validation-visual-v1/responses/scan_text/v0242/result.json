@@ -1,0 +1,36 @@
+{
+  "status": "success",
+  "requested_model": "qwen3-vl-plus",
+  "request_count": 1,
+  "retry_count": 0,
+  "http_status": 200,
+  "served_model": "qwen3-vl-plus",
+  "usage": {
+    "prompt_tokens": 13482,
+    "completion_tokens": 304,
+    "total_tokens": 13786,
+    "completion_tokens_details": {
+      "text_tokens": 304
+    },
+    "prompt_tokens_details": {
+      "text_tokens": 13482,
+      "cached_tokens": 256
+    }
+  },
+  "elapsed_seconds": 8.966496900015045,
+  "decision": {
+    "summary": "Two regions merit closer inspection: (1) a sharp, multi-sample displacement starting at index 725 with opposing N/E trends and a steep U drop; (2) a brief apparent platform near indices 605–610 following a jump and preceding a U anomaly, possibly indicating a temporary offset or ambiguous return.",
+    "regions": [
+      {
+        "start": 725,
+        "end": 729,
+        "observation": "Strong multi-axis shift beginning around index 725: N drops sharply from ~8.7 to ~6.9, E rises from ~8.9 to ~9.8 then falls back, U shows a steep drop followed by partial recovery; the abrupt change spans only a few samples and is not clearly reversed within the window."
+      },
+      {
+        "start": 605,
+        "end": 610,
+        "observation": "Apparent platform-like behavior in N/E/U between indices 605–610: N stabilizes near 8.6–8.7, E hovers near 8.3–8.4, U remains near -1.0 to -1.6; this follows a prior large jump (index ~604) and precedes a sharp U drop at index 611, suggesting possible transient offset or measurement artifact rather than smooth motion."
+      }
+    ]
+  }
+}

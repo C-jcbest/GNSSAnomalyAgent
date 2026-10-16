@@ -1,0 +1,32 @@
+{
+  "status": "success",
+  "requested_model": "qwen3-vl-plus",
+  "request_count": 1,
+  "retry_count": 0,
+  "http_status": 200,
+  "served_model": "qwen3-vl-plus",
+  "usage": {
+    "prompt_tokens": 3008,
+    "completion_tokens": 253,
+    "total_tokens": 3261,
+    "completion_tokens_details": {
+      "text_tokens": 253
+    },
+    "prompt_tokens_details": {
+      "text_tokens": 3008,
+      "cached_tokens": 128
+    }
+  },
+  "elapsed_seconds": 7.032413000008091,
+  "decision": {
+    "summary": "A multi-sample transient is observed starting at index 420: N shows a sharp drop and remains depressed through 434; E drops then partially recovers by 435; U spikes sharply then recovers. The return in N is incomplete within the allowed context [385,470], and no opposing reversal is observed before index 470. Hence, the interval is classified as uncertain.",
+    "intervals": [
+      {
+        "start": 420,
+        "end": 434,
+        "status": "uncertain",
+        "observation": "N drops sharply at index 420 (from -1.10 to -3.53), E drops from -1.07 to 0.11, U spikes from -1.09 to 1.69; N remains low through 434, E partially recovers by 435 (to -1.01), U returns toward baseline by 435. Sustained multi-sample offset in N and U with asymmetric E behavior; return not fully completed in N within allowed context."
+      }
+    ]
+  }
+}

@@ -1,0 +1,37 @@
+{
+  "status": "success",
+  "requested_model": "qwen3-vl-plus",
+  "request_count": 1,
+  "retry_count": 0,
+  "http_status": 200,
+  "served_model": "qwen3-vl-plus",
+  "usage": {
+    "prompt_tokens": 5462,
+    "completion_tokens": 281,
+    "total_tokens": 5743,
+    "completion_tokens_details": {
+      "text_tokens": 281
+    },
+    "prompt_tokens_details": {
+      "image_tokens": 4936,
+      "text_tokens": 526,
+      "cached_tokens": 256
+    }
+  },
+  "elapsed_seconds": 8.63577009999426,
+  "decision": {
+    "summary": "Two regions stand out: (1) a sharp multi-axis step at ~632–634 with sustained offset, and (2) an abrupt onset of strong linear trends across all components starting at index 725. Other segments show noisy fluctuations or gradual drift without clear transient morphology warranting closer inspection.",
+    "regions": [
+      {
+        "start": 630,
+        "end": 635,
+        "observation": "Sharp, multi-sample upward jump in E and U (≈+10 MAD and +8 MAD) at ~632–634, followed by a sustained platform until ~635; N shows a concurrent smaller step. The change is abrupt and not mirrored by an immediate opposing return, though later drift may partially offset it."
+      },
+      {
+        "start": 725,
+        "end": 729,
+        "observation": "Large, coherent linear trend across all axes from ~725 onward: N rises steadily (~+1.5 MAD), E drops sharply (~−3.5 MAD), U drops steeply (~−13 MAD). The onset is abrupt at index 725 with no prior warning; the shape suggests a permanent offset or ramp, possibly superposed on earlier slower motion."
+      }
+    ]
+  }
+}

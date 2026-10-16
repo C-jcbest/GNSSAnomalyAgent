@@ -1,0 +1,38 @@
+{
+  "status": "success",
+  "requested_model": "qwen3-vl-plus",
+  "request_count": 1,
+  "retry_count": 0,
+  "http_status": 200,
+  "served_model": "qwen3-vl-plus",
+  "usage": {
+    "prompt_tokens": 5995,
+    "completion_tokens": 336,
+    "total_tokens": 6331,
+    "completion_tokens_details": {
+      "text_tokens": 336
+    },
+    "prompt_tokens_details": {
+      "text_tokens": 5995,
+      "cached_tokens": 128
+    }
+  },
+  "elapsed_seconds": 8.531361600005766,
+  "decision": {
+    "summary": "Two multi-axis offset candidates identified within screened region: (1) E/U drop at 460–480 with sustained N trend; (2) E/U rise at 510–525, also superposed on N trend. In both cases, onset and interior are coherent across axes, but returns are unobserved or ambiguous within allowed context [385,579], preventing confirmation. No isolated spikes or permanent steps dominate; motion remains largely trend-dominated with transient cross-axis perturbations.",
+    "intervals": [
+      {
+        "start": 460,
+        "end": 480,
+        "status": "uncertain",
+        "observation": "E drops ~1.5 MAD and U drops ~2 MAD between indices 460–480, while N continues its sustained upward trend; the multi-axis offset is coherent and distinct from the background trend, but the return is not clearly observed within allowed context (ends at 480, next samples show continued N rise without reversal), so status is uncertain"
+      },
+      {
+        "start": 510,
+        "end": 525,
+        "status": "uncertain",
+        "observation": "E rises ~1 MAD and U rises ~1.5 MAD between indices 510–525, superposed on ongoing N trend; interior shows coherent offset shape, but no clear opposing return before index 579 (allowed end), and subsequent N continues rising—return ambiguous, status uncertain"
+      }
+    ]
+  }
+}

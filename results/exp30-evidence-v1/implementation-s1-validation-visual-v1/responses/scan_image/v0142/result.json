@@ -1,0 +1,37 @@
+{
+  "status": "success",
+  "requested_model": "qwen3-vl-plus",
+  "request_count": 1,
+  "retry_count": 0,
+  "http_status": 200,
+  "served_model": "qwen3-vl-plus",
+  "usage": {
+    "prompt_tokens": 4218,
+    "completion_tokens": 324,
+    "total_tokens": 4542,
+    "completion_tokens_details": {
+      "text_tokens": 324
+    },
+    "prompt_tokens_details": {
+      "image_tokens": 3702,
+      "text_tokens": 516,
+      "cached_tokens": 0
+    }
+  },
+  "elapsed_seconds": 9.72031020000577,
+  "decision": {
+    "summary": "Two regions stand out: (1) early window (365–544) with multi-sample drops and partial recoveries in all axes, possibly indicating superposed temporary offsets or jumps; (2) mid-to-late window (485–664) where a sustained trend emerges in N upward and E/U downward, but with a distinct sharp U-dip (~590–610) lacking clear counterparts, warranting closer inspection of cross-axis consistency.",
+    "regions": [
+      {
+        "start": 365,
+        "end": 544,
+        "observation": "N-component shows a multi-sample drop (~365–375) followed by a slow rebound and plateau until ~410, then a second abrupt drop (~410–415) with partial recovery; E and U show correlated transient offsets around the same intervals, suggesting possible superposed temporary motion or jump with ambiguous return."
+      },
+      {
+        "start": 485,
+        "end": 664,
+        "observation": "From ~560 onward, N exhibits a sustained monotonic rise (steepening after ~600), while E and U show concurrent gradual declines—cross-axis shape suggests coherent long-term trend onset; however, between ~590–610, U shows a sharp multi-sample dip not mirrored in N/E, hinting at a possible localized offset or opposing transient superposed on the trend."
+      }
+    ]
+  }
+}

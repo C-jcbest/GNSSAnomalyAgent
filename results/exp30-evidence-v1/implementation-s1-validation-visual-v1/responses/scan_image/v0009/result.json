@@ -1,0 +1,37 @@
+{
+  "status": "success",
+  "requested_model": "qwen3-vl-plus",
+  "request_count": 1,
+  "retry_count": 0,
+  "http_status": 200,
+  "served_model": "qwen3-vl-plus",
+  "usage": {
+    "prompt_tokens": 4218,
+    "completion_tokens": 301,
+    "total_tokens": 4519,
+    "completion_tokens_details": {
+      "text_tokens": 301
+    },
+    "prompt_tokens_details": {
+      "image_tokens": 3702,
+      "text_tokens": 516,
+      "cached_tokens": 0
+    }
+  },
+  "elapsed_seconds": 9.251769700000295,
+  "decision": {
+    "summary": "Two regions stand out: (1) a correlated multi-sample drop near 515–520 with asymmetric recovery across axes, and (2) a broad platform-like feature near 680–690 with unclear return and possible superposition of transient and persistent motion. Other intervals show typical noise or smooth trends without compelling morphological anomalies.",
+    "regions": [
+      {
+        "start": 510,
+        "end": 525,
+        "observation": "N/E/U components show a correlated multi-sample drop (~3–5 samples) around index 515–520, with N and E decreasing together and U showing a sharper transient dip; the recovery is asymmetric—U rebounds quickly while N/E lag, suggesting possible superposed offset and elastic rebound or multi-phase motion."
+      },
+      {
+        "start": 670,
+        "end": 695,
+        "observation": "Around index 680–690, all three axes exhibit a broad, shallow platform-like feature: N rises then flattens, E dips then stabilizes near zero, and U shows a sustained low plateau (~1–2 MAD units below prior mean); the shape lacks a clean return edge, and the onset coincides with a prior sharp spike at ~675 in U, hinting at ambiguous superposition of transient and persistent change."
+      }
+    ]
+  }
+}

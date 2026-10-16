@@ -1,0 +1,37 @@
+{
+  "status": "success",
+  "requested_model": "qwen3-vl-plus",
+  "request_count": 1,
+  "retry_count": 0,
+  "http_status": 200,
+  "served_model": "qwen3-vl-plus",
+  "usage": {
+    "prompt_tokens": 5462,
+    "completion_tokens": 279,
+    "total_tokens": 5741,
+    "completion_tokens_details": {
+      "text_tokens": 279
+    },
+    "prompt_tokens_details": {
+      "image_tokens": 4936,
+      "text_tokens": 526,
+      "cached_tokens": 0
+    }
+  },
+  "elapsed_seconds": 8.846006899984786,
+  "decision": {
+    "summary": "Two regions stand out: (1) a large 3D step near index 440 with strong N/E upshift and U downshift, and (2) a sharp E/N/U co-drop near index 535 with a temporary platform. Both show multi-sample abrupt changes and ambiguous returns; no other windows display similarly coherent cross-axis morphology.",
+    "regions": [
+      {
+        "start": 435,
+        "end": 544,
+        "observation": "Sharp multi-sample upward jump in N and E (~+10 MAD) near index 440, followed by sustained offset; U shows a concurrent sharp drop (~-12 MAD) then partial recovery. The cross-axis shape suggests a coherent 3D displacement event with possible incomplete return in U."
+      },
+      {
+        "start": 530,
+        "end": 664,
+        "observation": "Abrupt ~-15 MAD drop in E near index 535, coincident with a smaller (~-5 MAD) drop in N and a sharp ~-10 MAD drop in U; all three components show a plateau-like offset for ~20 samples before gradual recovery. Ambiguous whether the E drop is fully reversed or superposed on ongoing motion."
+      }
+    ]
+  }
+}

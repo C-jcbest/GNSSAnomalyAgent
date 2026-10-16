@@ -1,0 +1,38 @@
+{
+  "status": "success",
+  "requested_model": "qwen3-vl-plus",
+  "request_count": 1,
+  "retry_count": 0,
+  "http_status": 200,
+  "served_model": "qwen3-vl-plus",
+  "usage": {
+    "prompt_tokens": 5074,
+    "completion_tokens": 311,
+    "total_tokens": 5385,
+    "completion_tokens_details": {
+      "text_tokens": 311
+    },
+    "prompt_tokens_details": {
+      "text_tokens": 5074,
+      "cached_tokens": 0
+    }
+  },
+  "elapsed_seconds": 9.978228899999522,
+  "decision": {
+    "summary": "A confirmed temporary offset in E/N begins at index 605, with sustained high E and declining N through index 649. A later ambiguous partial E recovery (670–680) lacks coordinated N return and is thus uncertain. No full reversal observed within allowed context [570,729].",
+    "intervals": [
+      {
+        "start": 605,
+        "end": 649,
+        "status": "confirmed",
+        "observation": "E rises to ~4.5–5.5 (indices 605–630), then declines steadily through index 649; N drops concurrently from ~-2.8 to ~-4.5 over same span. The decline is multi-sample, monotonic, and not reversed by index 649. No opposing return observed within allowed context before index 649."
+      },
+      {
+        "start": 670,
+        "end": 680,
+        "status": "uncertain",
+        "observation": "E shows a modest partial recovery (~1.0–2.5) from index 670 to 680, but N remains low (~-4.5 to -5.3) with no clear opposing motion; the E rise may be superposed change or incomplete return. Return behavior ambiguous; no full reversal observed in either axis."
+      }
+    ]
+  }
+}

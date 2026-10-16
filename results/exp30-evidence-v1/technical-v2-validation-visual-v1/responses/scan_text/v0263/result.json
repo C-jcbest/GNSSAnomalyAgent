@@ -1,0 +1,36 @@
+{
+  "status": "success",
+  "requested_model": "qwen3-vl-plus",
+  "request_count": 1,
+  "retry_count": 0,
+  "http_status": 200,
+  "served_model": "qwen3-vl-plus",
+  "usage": {
+    "prompt_tokens": 13501,
+    "completion_tokens": 348,
+    "total_tokens": 13849,
+    "completion_tokens_details": {
+      "text_tokens": 348
+    },
+    "prompt_tokens_details": {
+      "text_tokens": 13501,
+      "cached_tokens": 256
+    }
+  },
+  "elapsed_seconds": 10.14252339999075,
+  "decision": {
+    "summary": "Two regions stand out: (1) a sharp multi-sample displacement near index 485–486 with large cross-axis changes and unclear recovery, and (2) a prolonged high-amplitude oscillatory platform from index 605 onward, punctuated by an abrupt step near the end (725–726). Both show complex morphology with possible superposed offsets and ambiguous returns.",
+    "regions": [
+      {
+        "start": 485,
+        "end": 490,
+        "observation": "Sharp multi-sample jump in N/E/U at index 485–486 (e.g., N from ~2.7 to 7.2, E from ~-1.5 to -9.9, U from ~-0.3 to -0.3), followed by a rapid but noisy descent over next ~5 samples; ambiguous whether this is a single offset or superposed transient and return."
+      },
+      {
+        "start": 605,
+        "end": 729,
+        "observation": "Sustained platform-like behavior in N/E/U from ~index 605 onward with high-amplitude oscillations (N ~8–12, E ~-2 to -7, U ~5–10); includes abrupt step-up around index 725–726 (N jumps from ~10 to 11.5, E from ~-4.5 to -5.8, U from ~8.8 to 8.8) possibly indicating a new regime or measurement shift."
+      }
+    ]
+  }
+}

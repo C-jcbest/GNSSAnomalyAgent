@@ -1,0 +1,36 @@
+{
+  "status": "success",
+  "requested_model": "qwen3-vl-plus",
+  "request_count": 1,
+  "retry_count": 0,
+  "http_status": 200,
+  "served_model": "qwen3-vl-plus",
+  "usage": {
+    "prompt_tokens": 13462,
+    "completion_tokens": 352,
+    "total_tokens": 13814,
+    "completion_tokens_details": {
+      "text_tokens": 352
+    },
+    "prompt_tokens_details": {
+      "text_tokens": 13462,
+      "cached_tokens": 0
+    }
+  },
+  "elapsed_seconds": 10.250687799998559,
+  "decision": {
+    "summary": "Two regions merit closer inspection: (1) an abrupt multi-sample cross-axis shift near index 490–495 with unresolved return, and (2) a sustained elevated platform in E/U from ~510 onward, culminating in a sharp N drop and E surge near 580–590 with ambiguous recovery. No clear single-edge temporary events; morphology suggests overlapping permanent-like shifts and possible offsets.",
+    "regions": [
+      {
+        "start": 485,
+        "end": 544,
+        "observation": "Cross-axis shape shows a multi-sample shift in N and E around index 490–495 (within window [365,544]), where N drops sharply from ~1.2 to ~-1.8 while E rises from ~0.2 to ~2.1; the change is abrupt but not fully resolved—possible opposing return or platform not yet evident. Surrounding samples show noisy baseline before and after."
+      },
+      {
+        "start": 545,
+        "end": 664,
+        "observation": "Strong apparent platform in E (~2.0–3.5) and U (~1.5–2.5) from ~510 to ~570, with N fluctuating between -1.5 and -2.8; at ~580–590, N drops further to ~-3.0 while E surges to ~6.3, suggesting a possible superposed offset or jump. The transition into this phase is multi-sample and ambiguous whether it resolves back."
+      }
+    ]
+  }
+}

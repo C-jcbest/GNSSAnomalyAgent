@@ -1,0 +1,39 @@
+{
+  "status": "success",
+  "requested_model": "qwen3-vl-plus",
+  "request_count": 1,
+  "retry_count": 0,
+  "http_status": 200,
+  "served_model": "qwen3-vl-plus",
+  "usage": {
+    "prompt_tokens": 2509,
+    "completion_tokens": 385,
+    "total_tokens": 2894,
+    "completion_tokens_details": {
+      "text_tokens": 385
+    },
+    "prompt_tokens_details": {
+      "image_tokens": 1738,
+      "text_tokens": 771,
+      "cached_tokens": 128
+    }
+  },
+  "elapsed_seconds": 9.78530389998923,
+  "decision": {
+    "summary": "Two candidate temporary offsets identified in allowed context [560,670]. First (560–570): multi-axis transient with partial but incomplete recovery—return ambiguous, status uncertain. Second (599–634): sharp, axis-asynchronous step onset with sustained offset and no observed return; though coherent across axes, absence of opposing return prevents confirmation as temporary—status uncertain. No interval meets full criteria for confirmed temporary offset (onset, sustained interior, and clear opposing return).",
+    "intervals": [
+      {
+        "start": 560,
+        "end": 570,
+        "status": "uncertain",
+        "observation": "N drops ~−10 MAD at index 560, E drops ~−5 MAD by 562, U spikes +10 MAD then falls to ~−3 MAD by 564; all axes show partial recovery: N rebounds by 565, E by 567, U by 568, but none fully return to pre-560 levels by 570. Return is incomplete and ambiguous within allowed context."
+      },
+      {
+        "start": 599,
+        "end": 634,
+        "status": "uncertain",
+        "observation": "N steps down ~−10 MAD at 599–600, holds near new level through 634; E steps down ~−5 MAD over 604–607, stabilizes; U drops sharply ~−6 MAD at 599–601, then remains near new level with minor fluctuations. No opposing return observed in any axis up to 634; sustained offset persists without reversal."
+      }
+    ]
+  }
+}

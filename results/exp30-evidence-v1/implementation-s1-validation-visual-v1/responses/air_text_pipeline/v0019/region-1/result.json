@@ -1,0 +1,32 @@
+{
+  "status": "success",
+  "requested_model": "qwen3-vl-plus",
+  "request_count": 1,
+  "retry_count": 0,
+  "http_status": 200,
+  "served_model": "qwen3-vl-plus",
+  "usage": {
+    "prompt_tokens": 3030,
+    "completion_tokens": 257,
+    "total_tokens": 3287,
+    "completion_tokens_details": {
+      "text_tokens": 257
+    },
+    "prompt_tokens_details": {
+      "text_tokens": 3030,
+      "cached_tokens": 128
+    }
+  },
+  "elapsed_seconds": 8.030465700023342,
+  "decision": {
+    "summary": "Within allowed context [575, 660], only the screened ramp-like feature (610–625) is examined. E rises steadily over ~15 samples, accompanied by correlated N/U increases. No reversal or return to pre-ramp levels is observed before index 660; subsequent data show continued high-amplitude variability without a clear opposing offset. The absence of a confirmed return prevents confirmation of a temporary offset. No other candidate intervals meet criteria for temporary offset (e.g., abrupt multi-sample drop near 492–494 lies outside allowed_context).",
+    "intervals": [
+      {
+        "start": 610,
+        "end": 625,
+        "status": "uncertain",
+        "observation": "E component shows a sustained upward ramp from index 610 to 625, with correlated increases in N and U; however, the return phase is not observed within allowed_context (ends at 660), and post-625 values remain elevated and highly variable—no clear opposing return. Interior is monotonic but gradual; onset is smooth, not abrupt. Status: uncertain."
+      }
+    ]
+  }
+}

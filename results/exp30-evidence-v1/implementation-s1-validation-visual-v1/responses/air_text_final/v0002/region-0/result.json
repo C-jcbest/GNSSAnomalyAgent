@@ -1,0 +1,32 @@
+{
+  "status": "success",
+  "requested_model": "qwen3-vl-plus",
+  "request_count": 1,
+  "retry_count": 0,
+  "http_status": 200,
+  "served_model": "qwen3-vl-plus",
+  "usage": {
+    "prompt_tokens": 3002,
+    "completion_tokens": 226,
+    "total_tokens": 3228,
+    "completion_tokens_details": {
+      "text_tokens": 226
+    },
+    "prompt_tokens_details": {
+      "text_tokens": 3002,
+      "cached_tokens": 128
+    }
+  },
+  "elapsed_seconds": 6.178573499986669,
+  "decision": {
+    "summary": "A clear multi-axis step-like offset begins at index 597 (N↑, E↓, U↑), consistent with the screened region and numerical jump candidate. The offset remains sustained through index 603 (last observed before missing data at 604), with no opposing return observed in the allowed context. E shows gradual recovery but not a definitive reversal; thus status is uncertain. No other temporary offsets are confirmed within [560,639].",
+    "intervals": [
+      {
+        "start": 597,
+        "end": 603,
+        "status": "uncertain",
+        "observation": "Multi-axis step onset at index 597–598: N jumps +~10 MAD, E drops −~5 MAD, U rises +~4 MAD; sustained offset persists through index 603 with no opposing return observed within allowed context [560,639]; E shows slow recovery but not reversal by index 603."
+      }
+    ]
+  }
+}

@@ -1,0 +1,33 @@
+{
+  "status": "success",
+  "requested_model": "qwen3-vl-plus",
+  "request_count": 1,
+  "retry_count": 0,
+  "http_status": 200,
+  "served_model": "qwen3-vl-plus",
+  "usage": {
+    "prompt_tokens": 2732,
+    "completion_tokens": 193,
+    "total_tokens": 2925,
+    "completion_tokens_details": {
+      "text_tokens": 193
+    },
+    "prompt_tokens_details": {
+      "image_tokens": 1906,
+      "text_tokens": 826,
+      "cached_tokens": 128
+    }
+  },
+  "elapsed_seconds": 5.754611799988197,
+  "decision": {
+    "summary": "Within allowed context [390,470], a single candidate temporary offset is observed in U starting at index 432: a rapid multi-sample drop without recovery. N/E show transient co-variation but no clear opposing return. Since the return phase is not observed before index 470, the interval is classified as uncertain. No confirmed temporary offsets.",
+    "intervals": [
+      {
+        "start": 432,
+        "end": 469,
+        "status": "uncertain",
+        "observation": "U shows a sharp multi-sample downward shift centered near index 432 (≈−6 to −8 MAD), with no return to pre-event level within allowed context [390,470]; N and E exhibit modest co-variation but lack an opposing offset. Return is unobserved; status uncertain."
+      }
+    ]
+  }
+}

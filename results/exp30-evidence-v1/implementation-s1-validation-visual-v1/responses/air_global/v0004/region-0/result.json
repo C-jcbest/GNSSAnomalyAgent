@@ -1,0 +1,33 @@
+{
+  "status": "success",
+  "requested_model": "qwen3-vl-plus",
+  "request_count": 1,
+  "retry_count": 0,
+  "http_status": 200,
+  "served_model": "qwen3-vl-plus",
+  "usage": {
+    "prompt_tokens": 2654,
+    "completion_tokens": 303,
+    "total_tokens": 2957,
+    "completion_tokens_details": {
+      "text_tokens": 303
+    },
+    "prompt_tokens_details": {
+      "image_tokens": 1906,
+      "text_tokens": 748,
+      "cached_tokens": 128
+    }
+  },
+  "elapsed_seconds": 8.44715309998719,
+  "decision": {
+    "summary": "Within allowed context [385,500], only the E/U transient around indices 430–440 meets criteria for a candidate temporary offset: correlated opposite-signed excursions on E (positive) and U (negative) with onset near 430, peak near 433–435, and partial return starting ~438–439. However, the return is incomplete before index 440 and no opposing reversal is observed in either axis within the allowed window; thus status is uncertain. The N-component’s sustained monotonic rise from ~420 onward is smooth and lacks a discrete offset edge or return, so it is not classified as a temporary offset.",
+    "intervals": [
+      {
+        "start": 430,
+        "end": 440,
+        "status": "uncertain",
+        "observation": "E-component shows a positive transient spike peaking near index 432–435, with U-component showing a concurrent negative dip (valley ~433–437); N-component is already in a sustained monotonic rise but shows no distinct step or reversal. Return toward baseline begins after ~438 in E and ~439 in U, but neither fully recovers to pre-430 levels by index 440; the return is incomplete within allowed context."
+      }
+    ]
+  }
+}

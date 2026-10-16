@@ -1,0 +1,39 @@
+{
+  "status": "success",
+  "requested_model": "qwen3-vl-plus",
+  "request_count": 1,
+  "retry_count": 0,
+  "http_status": 200,
+  "served_model": "qwen3-vl-plus",
+  "usage": {
+    "prompt_tokens": 2542,
+    "completion_tokens": 324,
+    "total_tokens": 2866,
+    "completion_tokens_details": {
+      "text_tokens": 324
+    },
+    "prompt_tokens_details": {
+      "image_tokens": 1738,
+      "text_tokens": 804,
+      "cached_tokens": 128
+    }
+  },
+  "elapsed_seconds": 9.720693100010976,
+  "decision": {
+    "summary": "U shows a large, abrupt drop at 600–602 with sustained depression through 629 and an incomplete rebound after; N exhibits a delayed step up (~605–610) without clear reversal; E displays non-monotonic behavior with possible transient offset but no confirmed opposing return within allowed context [560,670]. All candidate intervals lack unambiguous opposing returns on the affected axes, so status is uncertain.",
+    "intervals": [
+      {
+        "start": 600,
+        "end": 629,
+        "status": "uncertain",
+        "observation": "U: sharp drop ~−15 MAD at 600–602, sustained depression until ~629; N: delayed step up ~+3 MAD at 605–610; E: non-monotonic, no clear opposing return observed by 629. Return not confirmed; U rebound begins after 629 but is incomplete within allowed context."
+      },
+      {
+        "start": 602,
+        "end": 634,
+        "status": "uncertain",
+        "observation": "E: transient offset starting ~602 with complex shape (rise then fall), partially recovering by ~634; no clear opposing edge before 634, and interior shows superposed fluctuations. Return ambiguous due to noise and missing samples near 620–622."
+      }
+    ]
+  }
+}

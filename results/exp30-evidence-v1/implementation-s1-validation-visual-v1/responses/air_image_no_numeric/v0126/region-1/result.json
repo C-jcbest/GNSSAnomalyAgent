@@ -1,0 +1,39 @@
+{
+  "status": "success",
+  "requested_model": "qwen3-vl-plus",
+  "request_count": 1,
+  "retry_count": 0,
+  "http_status": 200,
+  "served_model": "qwen3-vl-plus",
+  "usage": {
+    "prompt_tokens": 2495,
+    "completion_tokens": 292,
+    "total_tokens": 2787,
+    "completion_tokens_details": {
+      "text_tokens": 292
+    },
+    "prompt_tokens_details": {
+      "image_tokens": 1738,
+      "text_tokens": 757,
+      "cached_tokens": 128
+    }
+  },
+  "elapsed_seconds": 7.961898000008659,
+  "decision": {
+    "summary": "The screened region (610–675) contains a prolonged E descent (610–659) followed by an abrupt E reversal (660–664). The descent lacks a clear opposing return within the allowed context [575,710]; the reversal is incomplete and co-occurs with continuing N decline and elevated U, preventing confirmation of a closed temporary offset. Both intervals are classified uncertain due to ambiguous recovery and cross-axis complexity.",
+    "intervals": [
+      {
+        "start": 610,
+        "end": 659,
+        "status": "uncertain",
+        "observation": "E shows sustained descent from ~610 to 659 (≈4 MAD), with N gradually declining and U rising; interior is coherent and monotonic in E, but cross-axis trends diverge—no return observed within allowed context."
+      },
+      {
+        "start": 660,
+        "end": 664,
+        "status": "uncertain",
+        "observation": "E reverses sharply upward starting at 660, peaking by 664; N continues downward through this interval, U remains elevated—return in E is partial and not yet stabilized; no full recovery to pre-descent level observed before 665."
+      }
+    ]
+  }
+}

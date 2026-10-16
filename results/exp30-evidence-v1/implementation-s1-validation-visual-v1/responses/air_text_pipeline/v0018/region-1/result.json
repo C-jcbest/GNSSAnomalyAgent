@@ -1,0 +1,32 @@
+{
+  "status": "success",
+  "requested_model": "qwen3-vl-plus",
+  "request_count": 1,
+  "retry_count": 0,
+  "http_status": 200,
+  "served_model": "qwen3-vl-plus",
+  "usage": {
+    "prompt_tokens": 4426,
+    "completion_tokens": 235,
+    "total_tokens": 4661,
+    "completion_tokens_details": {
+      "text_tokens": 235
+    },
+    "prompt_tokens_details": {
+      "text_tokens": 4426,
+      "cached_tokens": 128
+    }
+  },
+  "elapsed_seconds": 7.01831429998856,
+  "decision": {
+    "summary": "Within allowed context [590,729], only one candidate temporary offset interval is identified: a sustained upward trend in N and E starting at index 625 with no confirmed return. The absence of a clear opposing reversal—despite a transient dip near 670—and continued motion through 720–729 render the status uncertain. No other temporary offsets are supported by the original daily samples.",
+    "intervals": [
+      {
+        "start": 625,
+        "end": 729,
+        "status": "uncertain",
+        "observation": "N and E show a sustained upward trend from ~625 onward (N: ~2→>5, E: ~-1.8→~0.3), but no clear opposing return is observed; U remains elevated (~2–5). A brief dip in N at ~670 does not reverse the trend, and later samples (e.g., 700–720) continue upward motion. Return is unobserved/ambiguous."
+      }
+    ]
+  }
+}

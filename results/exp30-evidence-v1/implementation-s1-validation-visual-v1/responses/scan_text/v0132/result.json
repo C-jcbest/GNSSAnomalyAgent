@@ -1,0 +1,36 @@
+{
+  "status": "success",
+  "requested_model": "qwen3-vl-plus",
+  "request_count": 1,
+  "retry_count": 0,
+  "http_status": 200,
+  "served_model": "qwen3-vl-plus",
+  "usage": {
+    "prompt_tokens": 13222,
+    "completion_tokens": 341,
+    "total_tokens": 13563,
+    "completion_tokens_details": {
+      "text_tokens": 341
+    },
+    "prompt_tokens_details": {
+      "text_tokens": 13222,
+      "cached_tokens": 0
+    }
+  },
+  "elapsed_seconds": 9.64376559999073,
+  "decision": {
+    "summary": "Two regions stand out: (1) an early multi-sample rise in N/E with ambiguous return, and (2) a sharp jump at index ~490 with complex post-jump behavior including possible partial recovery. Both involve overlapping motion types (shifts, platforms, opposing returns) and warrant closer inspection.",
+    "regions": [
+      {
+        "start": 365,
+        "end": 544,
+        "observation": "N/E/U show a multi-sample rise in N (from ~0.3 to ~3.8) and E (from ~-1.0 to ~0.4) between indices 365–375, followed by sustained elevated N (~2–4) with intermittent E swings; U shows a broad peak around index 370 then declines. A possible opposing return or platform is ambiguous due to coarse sampling—no clear reversal within window."
+      },
+      {
+        "start": 485,
+        "end": 664,
+        "observation": "Strong multi-sample jump in N from ~2.5 to ~5.1 at index 490 (within [485,664]), accompanied by large E drop (~0.0 to -2.4) and U spike (~1.8 to 3.5); subsequent samples show high-amplitude oscillations in all axes without clear return to pre-jump level. A second abrupt change occurs near index 500 (N drops to ~2.9, E rebounds), suggesting possible superposed offset or partial recovery."
+      }
+    ]
+  }
+}

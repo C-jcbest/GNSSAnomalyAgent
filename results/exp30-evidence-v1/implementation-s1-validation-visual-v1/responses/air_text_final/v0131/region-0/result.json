@@ -1,0 +1,32 @@
+{
+  "status": "success",
+  "requested_model": "qwen3-vl-plus",
+  "request_count": 1,
+  "retry_count": 0,
+  "http_status": 200,
+  "served_model": "qwen3-vl-plus",
+  "usage": {
+    "prompt_tokens": 3064,
+    "completion_tokens": 233,
+    "total_tokens": 3297,
+    "completion_tokens_details": {
+      "text_tokens": 233
+    },
+    "prompt_tokens_details": {
+      "text_tokens": 3064,
+      "cached_tokens": 128
+    }
+  },
+  "elapsed_seconds": 6.285284399986267,
+  "decision": {
+    "summary": "A sharp transient drop in E and U components occurs around indices 490–495, with N trending upward throughout—indicating asymmetric, non-rigid behavior. E shows early partial recovery starting at 495, but full return is not observed within the allowed context [450,530]. The onset is clear, interior is sustained over ~5 samples, but the return is ambiguous; thus status is uncertain. No other temporary offsets are supported by the original daily samples within the allowed context.",
+    "intervals": [
+      {
+        "start": 490,
+        "end": 495,
+        "status": "uncertain",
+        "observation": "E drops sharply (~10 MAD) from index ~490 to 495; U also drops concurrently, while N continues upward trend. Partial E recovery begins at 495 but does not complete within allowed context (ends at 530). Return is unobserved/ambiguous; no opposing shift in N or full E/U recovery confirmed."
+      }
+    ]
+  }
+}

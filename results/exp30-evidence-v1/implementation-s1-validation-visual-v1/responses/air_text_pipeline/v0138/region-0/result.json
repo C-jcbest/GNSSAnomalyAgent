@@ -1,0 +1,32 @@
+{
+  "status": "success",
+  "requested_model": "qwen3-vl-plus",
+  "request_count": 1,
+  "retry_count": 0,
+  "http_status": 200,
+  "served_model": "qwen3-vl-plus",
+  "usage": {
+    "prompt_tokens": 4273,
+    "completion_tokens": 328,
+    "total_tokens": 4601,
+    "completion_tokens_details": {
+      "text_tokens": 328
+    },
+    "prompt_tokens_details": {
+      "text_tokens": 4273,
+      "cached_tokens": 128
+    }
+  },
+  "elapsed_seconds": 8.456805599998916,
+  "decision": {
+    "summary": "A multi-sample cross-axis shift begins at index 451: N drops sharply (e.g., 0.12→-1.27→-3.44) and E surges (0.29→2.10→1.58), followed by sustained elevated E (~1.3–2.9) and variable N over ~78 samples. The offset does not resolve with a clear opposing return within the allowed context [450,579]; the return is unobserved/ambiguous, so status is uncertain. U shows no coherent offset pattern—varies irregularly without sustained deviation.",
+    "intervals": [
+      {
+        "start": 451,
+        "end": 528,
+        "status": "uncertain",
+        "observation": "N drops sharply from ~0.12 (index 450) to ~-1.3 to -3.4 over indices 451–454, then fluctuates between ~-0.1 and -2.6 through index 528; E rises from ~0.29 to ~1.5–2.9 by index 454 and remains elevated (~1.3–2.9) through index 528. No clear opposing return in N or E within allowed context [450,579]; sustained offset persists beyond screened region end (544), with no reversal observed before 579."
+      }
+    ]
+  }
+}

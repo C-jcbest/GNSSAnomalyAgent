@@ -1,0 +1,33 @@
+{
+  "status": "success",
+  "requested_model": "qwen3-vl-plus",
+  "request_count": 1,
+  "retry_count": 0,
+  "http_status": 200,
+  "served_model": "qwen3-vl-plus",
+  "usage": {
+    "prompt_tokens": 2686,
+    "completion_tokens": 209,
+    "total_tokens": 2895,
+    "completion_tokens_details": {
+      "text_tokens": 209
+    },
+    "prompt_tokens_details": {
+      "image_tokens": 1906,
+      "text_tokens": 780,
+      "cached_tokens": 0
+    }
+  },
+  "elapsed_seconds": 6.581350699998438,
+  "decision": {
+    "summary": "Within allowed context [690, 729], only the final segment (725–729) shows a coherent multi-axis directional shift: N monotonic decline, E sharp rise after local minimum, U steep rise. No return to prior trend is observed before index 729, and the interval ends at the edge of available data. Hence, the event is classified as uncertain—consistent with a temporary offset but lacking confirmation of reversal or recovery.",
+    "intervals": [
+      {
+        "start": 725,
+        "end": 729,
+        "status": "uncertain",
+        "observation": "Multi-axis trend reversal: N declines steadily, E rises sharply after a dip, U rises steeply from index 725 onward; no opposing return observed within allowed context (690–729), and interior shows sustained directional change without recovery. Return is unobserved/ambiguous."
+      }
+    ]
+  }
+}

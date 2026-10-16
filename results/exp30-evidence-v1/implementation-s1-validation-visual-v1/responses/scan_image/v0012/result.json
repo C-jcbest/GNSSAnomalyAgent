@@ -1,0 +1,37 @@
+{
+  "status": "success",
+  "requested_model": "qwen3-vl-plus",
+  "request_count": 1,
+  "retry_count": 0,
+  "http_status": 200,
+  "served_model": "qwen3-vl-plus",
+  "usage": {
+    "prompt_tokens": 4218,
+    "completion_tokens": 280,
+    "total_tokens": 4498,
+    "completion_tokens_details": {
+      "text_tokens": 280
+    },
+    "prompt_tokens_details": {
+      "image_tokens": 3702,
+      "text_tokens": 516,
+      "cached_tokens": 0
+    }
+  },
+  "elapsed_seconds": 8.845490000006976,
+  "decision": {
+    "summary": "Two regions stand out: (1) a multi-sample downward shift in N/E around index 420 with incomplete recovery and a coincident U spike; (2) a sustained plateau-like behavior in N/E from ~635–665 with a subtle U dip, hinting at possible superposed or delayed responses. Other segments show typical noise or smooth motion without clear morphological anomalies.",
+    "regions": [
+      {
+        "start": 415,
+        "end": 425,
+        "observation": "Multi-sample downward shift in N and E (≈1–1.5 MAD) around index 418–422, followed by a partial but not full return; U shows a concurrent sharp negative spike at ~420 with slower recovery, suggesting possible superposed temporary offset and physical motion."
+      },
+      {
+        "start": 630,
+        "end": 670,
+        "observation": "Broad apparent platform in N and E from ~635 to 665 (≈20 samples), where both components stabilize near zero after prior variability; U shows a shallow dip (~−1 MAD) centered at 650 with ambiguous return—possible opposing or delayed response, not clearly resolved at this scale."
+      }
+    ]
+  }
+}

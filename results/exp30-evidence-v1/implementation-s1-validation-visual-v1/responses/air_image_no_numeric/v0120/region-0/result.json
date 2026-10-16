@@ -1,0 +1,45 @@
+{
+  "status": "success",
+  "requested_model": "qwen3-vl-plus",
+  "request_count": 1,
+  "retry_count": 0,
+  "http_status": 200,
+  "served_model": "qwen3-vl-plus",
+  "usage": {
+    "prompt_tokens": 2501,
+    "completion_tokens": 384,
+    "total_tokens": 2885,
+    "completion_tokens_details": {
+      "text_tokens": 384
+    },
+    "prompt_tokens_details": {
+      "image_tokens": 1738,
+      "text_tokens": 763,
+      "cached_tokens": 128
+    }
+  },
+  "elapsed_seconds": 10.665136199997505,
+  "decision": {
+    "summary": "One confirmed temporary offset in N (490–530) with sustained negative deviation; two uncertain intervals in E/U (510–525 and 520–550) due to ambiguous or incomplete returns. No permanent steps are evident; transients overlap and lack clean paired edges.",
+    "intervals": [
+      {
+        "start": 490,
+        "end": 530,
+        "status": "confirmed",
+        "observation": "N-component shows a sustained negative offset from index 490 to 530, with interior values consistently below pre-event baseline; E and U show transient multi-sample dips (510–525) that do not fully reverse the N offset, and no clear opposing return observed in N before index 530."
+      },
+      {
+        "start": 510,
+        "end": 525,
+        "status": "uncertain",
+        "observation": "E and U exhibit correlated multi-sample dips centered ~510–525; however, the dip in E is not monotonic and lacks a clean onset/return pair, and U shows only partial recovery by 525 with no clear reversal of the dip. Return is ambiguous or unobserved within allowed context."
+      },
+      {
+        "start": 520,
+        "end": 550,
+        "status": "uncertain",
+        "observation": "U shows a sharp negative dip near index 520, followed by partial recovery but no full return to pre-dip level by index 550; a second dip begins near 545, overlapping the first recovery. No clear opposing return observed before 550 within allowed context."
+      }
+    ]
+  }
+}

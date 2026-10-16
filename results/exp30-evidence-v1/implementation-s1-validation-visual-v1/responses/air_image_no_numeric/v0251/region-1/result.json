@@ -1,0 +1,39 @@
+{
+  "status": "success",
+  "requested_model": "qwen3-vl-plus",
+  "request_count": 1,
+  "retry_count": 0,
+  "http_status": 200,
+  "served_model": "qwen3-vl-plus",
+  "usage": {
+    "prompt_tokens": 2575,
+    "completion_tokens": 351,
+    "total_tokens": 2926,
+    "completion_tokens_details": {
+      "text_tokens": 351
+    },
+    "prompt_tokens_details": {
+      "image_tokens": 1738,
+      "text_tokens": 837,
+      "cached_tokens": 128
+    }
+  },
+  "elapsed_seconds": 9.350429699989036,
+  "decision": {
+    "summary": "A confirmed multi-axis temporary offset occurs 525–534, with coherent sharp excursions in N, E, and U followed by full recovery. A second candidate offset 545–555 shows correlated N/U step-down without E response and no observed return, hence uncertain. No other temporary intervals meet criteria within allowed context.",
+    "intervals": [
+      {
+        "start": 525,
+        "end": 534,
+        "status": "confirmed",
+        "observation": "N drops sharply over ~5 samples (525–530), then recovers by 534; E dips concurrently (526–530) and rebounds by 534; U spikes sharply at 527 (~18 MAD), then collapses by 534. All three axes show coherent multi-sample transient with clear onset, sustained interior (2–4 samples), and return to pre-event trend by end of interval. Confirmed temporary offset."
+      },
+      {
+        "start": 545,
+        "end": 555,
+        "status": "uncertain",
+        "observation": "N and U show correlated step-down starting ~545, persisting through 555; E remains flat with no matching step. Return not observed: N/U remain offset relative to pre-545 trend beyond 555, and no opposing excursion is evident in allowed context. Uncertain whether this is a secondary temporary offset or part of ongoing trend/step. No clear return within [450,699]."
+      }
+    ]
+  }
+}

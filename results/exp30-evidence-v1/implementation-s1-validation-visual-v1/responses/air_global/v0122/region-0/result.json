@@ -1,0 +1,33 @@
+{
+  "status": "success",
+  "requested_model": "qwen3-vl-plus",
+  "request_count": 1,
+  "retry_count": 0,
+  "http_status": 200,
+  "served_model": "qwen3-vl-plus",
+  "usage": {
+    "prompt_tokens": 2753,
+    "completion_tokens": 250,
+    "total_tokens": 3003,
+    "completion_tokens_details": {
+      "text_tokens": 250
+    },
+    "prompt_tokens_details": {
+      "image_tokens": 1906,
+      "text_tokens": 847,
+      "cached_tokens": 128
+    }
+  },
+  "elapsed_seconds": 7.753725500020664,
+  "decision": {
+    "summary": "Within allowed context [405, 485], only one candidate temporary offset is supported: a multi-sample E-axis depression starting at index 440, with coherent N involvement and no confirmed return by index 448. The partial recovery after 447 is insufficient to confirm closure; status is uncertain. No other temporary offsets are evident in this window.",
+    "intervals": [
+      {
+        "start": 440,
+        "end": 447,
+        "status": "uncertain",
+        "observation": "E-axis shows a sustained downward offset beginning sharply at index 440 (≈−3.9 MAD), deepening to ≈−10 MAD by 442–445, and persisting through 447; N shows a concurrent smaller negative offset (~−7 MAD at 440) that recovers earlier (~444); U remains near zero with no coherent transient. Return is not observed before index 448, where E begins rising but does not yet rejoin pre-event level. Thus onset and interior are clear, return ambiguous."
+      }
+    ]
+  }
+}

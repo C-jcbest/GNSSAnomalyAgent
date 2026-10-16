@@ -1,0 +1,33 @@
+{
+  "status": "success",
+  "requested_model": "qwen3-vl-plus",
+  "request_count": 1,
+  "retry_count": 0,
+  "http_status": 200,
+  "served_model": "qwen3-vl-plus",
+  "usage": {
+    "prompt_tokens": 2480,
+    "completion_tokens": 195,
+    "total_tokens": 2675,
+    "completion_tokens_details": {
+      "text_tokens": 195
+    },
+    "prompt_tokens_details": {
+      "image_tokens": 1738,
+      "text_tokens": 742,
+      "cached_tokens": 128
+    }
+  },
+  "elapsed_seconds": 6.044839700014563,
+  "decision": {
+    "summary": "A sharp multi-sample U-drop initiates at index 605, accompanied by transient N and E deviations. The U component shows partial recovery but does not return to pre-event baseline by index 614; the return phase is unobserved within allowed context [570,650], hence status is uncertain. No confirmed temporary offset interval due to ambiguous return.",
+    "intervals": [
+      {
+        "start": 605,
+        "end": 614,
+        "status": "uncertain",
+        "observation": "U-component drops sharply (~−3 MAD) starting at index 605, with correlated transient negative N excursion and small E shift; recovery begins by 610 but remains incomplete through 614 (U still ~−1.5 MAD below pre-event level); no clear opposing return observed within allowed context."
+      }
+    ]
+  }
+}

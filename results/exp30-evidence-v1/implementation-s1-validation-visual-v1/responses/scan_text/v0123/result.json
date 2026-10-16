@@ -1,0 +1,36 @@
+{
+  "status": "success",
+  "requested_model": "qwen3-vl-plus",
+  "request_count": 1,
+  "retry_count": 0,
+  "http_status": 200,
+  "served_model": "qwen3-vl-plus",
+  "usage": {
+    "prompt_tokens": 13220,
+    "completion_tokens": 351,
+    "total_tokens": 13571,
+    "completion_tokens_details": {
+      "text_tokens": 351
+    },
+    "prompt_tokens_details": {
+      "text_tokens": 13220,
+      "cached_tokens": 0
+    }
+  },
+  "elapsed_seconds": 11.119795599981444,
+  "decision": {
+    "summary": "Two regions stand out: (1) a sharp, multi-axis step-up near index 520–525 with sustained high values, and (2) a prolonged interval ~590–640 featuring ambiguous superposed changes—especially a steep U drop without clear counter-motion in N/E. Both involve abrupt multi-sample transitions that warrant closer inspection; other intervals show noise or smooth drift.",
+    "regions": [
+      {
+        "start": 520,
+        "end": 544,
+        "observation": "Sharp multi-sample rise in N/E/U around index 520–525 (e.g., N jumps from ~-1.6 to +3.6, E from ~1.5 to 3.8, U from ~-0.6 to 5.4), forming a steep platform-like step; followed by sustained elevated values with minor fluctuations through end of window. The onset is abrupt across all axes and not clearly mirrored by an opposing return within the window."
+      },
+      {
+        "start": 590,
+        "end": 664,
+        "observation": "Extended period (~index 590–640) showing complex cross-axis behavior: U drops sharply while N and E show opposing trends—N becomes more negative then recovers, E rises steadily—suggesting possible superposed motion or offset. A notable multi-sample shift occurs near index 620–625 where U plunges (~-2.7 to -4.3) while N and E continue divergent paths; no clear return observed within window bounds."
+      }
+    ]
+  }
+}

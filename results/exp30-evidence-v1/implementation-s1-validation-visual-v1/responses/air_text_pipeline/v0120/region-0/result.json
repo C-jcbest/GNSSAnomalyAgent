@@ -1,0 +1,32 @@
+{
+  "status": "success",
+  "requested_model": "qwen3-vl-plus",
+  "request_count": 1,
+  "retry_count": 0,
+  "http_status": 200,
+  "served_model": "qwen3-vl-plus",
+  "usage": {
+    "prompt_tokens": 4225,
+    "completion_tokens": 282,
+    "total_tokens": 4507,
+    "completion_tokens_details": {
+      "text_tokens": 282
+    },
+    "prompt_tokens_details": {
+      "text_tokens": 4225,
+      "cached_tokens": 128
+    }
+  },
+  "elapsed_seconds": 7.618861399998423,
+  "decision": {
+    "summary": "A multi-sample cross-axis shift occurs in N and E between indices 485–494: N increases ~1.9 MAD, E decreases ~0.8 MAD over ~10 samples. The abruptness and coherence suggest a transient offset, but missing data (496–498) and lack of unambiguous opposing return within allowed context [450,579] preclude confirmation. U shows no consistent response. No other temporary offsets identified in the allowed window.",
+    "intervals": [
+      {
+        "start": 485,
+        "end": 494,
+        "status": "uncertain",
+        "observation": "N rises from ~0.45 (idx 485) to ~2.32 (idx 494); E drops from ~0.11 (idx 485) to ~0.63 (idx 494), then to ~0.34 (idx 495). U remains variable but not monotonic. Missing samples at 496–498 prevent confirmation of return; subsequent values (idx 499 onward) show N/E continuing in new regime without clear opposing reversal. No sustained platform or clean return observed within allowed context."
+      }
+    ]
+  }
+}

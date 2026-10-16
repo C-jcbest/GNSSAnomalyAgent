@@ -1,0 +1,37 @@
+{
+  "status": "success",
+  "requested_model": "qwen3-vl-plus",
+  "request_count": 1,
+  "retry_count": 0,
+  "http_status": 200,
+  "served_model": "qwen3-vl-plus",
+  "usage": {
+    "prompt_tokens": 5462,
+    "completion_tokens": 289,
+    "total_tokens": 5751,
+    "completion_tokens_details": {
+      "text_tokens": 289
+    },
+    "prompt_tokens_details": {
+      "image_tokens": 4936,
+      "text_tokens": 526,
+      "cached_tokens": 256
+    }
+  },
+  "elapsed_seconds": 11.095767200022237,
+  "decision": {
+    "summary": "Two regions stand out: (1) a step-like E-component rise with supporting N/U shifts around indices 595–610, possibly indicating a partial or unresolved offset; (2) a sharp, correlated multi-axis jump near the end of the series (720–729), likely a transient or permanent displacement without clear return in the available data. Other intervals show typical noise or smooth trends.",
+    "regions": [
+      {
+        "start": 595,
+        "end": 610,
+        "observation": "E-component shows a sustained step-like rise beginning near index 595–600, with a clear platform from ~602 to 610; N and U show concurrent but smaller multi-sample shifts (~598–605) that do not fully resolve as symmetric returns, suggesting possible superposed transient and permanent components."
+      },
+      {
+        "start": 720,
+        "end": 729,
+        "observation": "From ~720 onward, all three axes (N/E/U) exhibit abrupt, correlated multi-sample offsets: N drops sharply, E rises steeply, and U rises sharply—consistent with a sudden motion event; the change is not reversed within the window, though surrounding noise makes precise boundary assignment ambiguous."
+      }
+    ]
+  }
+}

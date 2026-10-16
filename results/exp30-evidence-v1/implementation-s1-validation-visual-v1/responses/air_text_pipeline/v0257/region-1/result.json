@@ -1,0 +1,32 @@
+{
+  "status": "success",
+  "requested_model": "qwen3-vl-plus",
+  "request_count": 1,
+  "retry_count": 0,
+  "http_status": 200,
+  "served_model": "qwen3-vl-plus",
+  "usage": {
+    "prompt_tokens": 2945,
+    "completion_tokens": 276,
+    "total_tokens": 3221,
+    "completion_tokens_details": {
+      "text_tokens": 276
+    },
+    "prompt_tokens_details": {
+      "text_tokens": 2945,
+      "cached_tokens": 128
+    }
+  },
+  "elapsed_seconds": 7.2343295000027865,
+  "decision": {
+    "summary": "A sustained multi-axis descent begins around index 690 and persists through the end of the allowed context (729), with no recovery observed. The motion is coherent across N, E, and U, but lacks a clear return, preventing confirmation of a temporary offset. The optional numerical jump at index 684 does not align with the observed gradual onset and is disregarded.",
+    "intervals": [
+      {
+        "start": 690,
+        "end": 729,
+        "status": "uncertain",
+        "observation": "N/E/U show a steep, sustained descent beginning near index 690: N drops from ~2.0 to ~-7.0, E from ~-1.0 to ~-11.0, U rises from ~-1.0 to ~13.0. The motion is coherent across axes and continues to the end of record (index 729) with no observed return or reversal. A candidate jump at index 684 is inconsistent with the gradual onset observed in the data; the actual shift initiates later (~690–692), and the interior shows smooth, multi-sample descent—not a step. Return is unobserved; status is uncertain."
+      }
+    ]
+  }
+}

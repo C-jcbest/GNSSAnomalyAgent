@@ -1,0 +1,39 @@
+{
+  "status": "success",
+  "requested_model": "qwen3-vl-plus",
+  "request_count": 1,
+  "retry_count": 0,
+  "http_status": 200,
+  "served_model": "qwen3-vl-plus",
+  "usage": {
+    "prompt_tokens": 2961,
+    "completion_tokens": 360,
+    "total_tokens": 3321,
+    "completion_tokens_details": {
+      "text_tokens": 360
+    },
+    "prompt_tokens_details": {
+      "image_tokens": 1906,
+      "text_tokens": 1055,
+      "cached_tokens": 128
+    }
+  },
+  "elapsed_seconds": 10.25923349999357,
+  "decision": {
+    "summary": "A confirmed temporary offset occurs 529–532 with coherent multi-axis transient (N↓, E↓then↑, U↑then↓). A second candidate interval 545–555 shows correlated N/U step-down without clear return; status uncertain. Optional jump at 539 aligns with interior of first event but does not define its boundaries; jump at 553 appears to be a partial rebound but lacks full recovery on N/U, supporting uncertainty.",
+    "intervals": [
+      {
+        "start": 529,
+        "end": 532,
+        "status": "confirmed",
+        "observation": "N drops sharply from ~+2 to ~−8 MAD over 3–4 samples (529–532), E dips ~−3 MAD (529–531) then rebounds, U spikes to +18 MAD at 530 then collapses by 532; all axes show coherent multi-sample transient with clear onset (≈529) and return by 532. Confirmed temporary offset."
+      },
+      {
+        "start": 545,
+        "end": 555,
+        "status": "uncertain",
+        "observation": "N and U step down together around 545–547 (N: −6→−12 MAD; U: +5→−1 MAD), while E remains flat; no clear opposing return observed within allowed context (ends at 699, but post-555 behavior shows only noisy fluctuations without recovery to pre-step levels). Return ambiguous; status uncertain."
+      }
+    ]
+  }
+}

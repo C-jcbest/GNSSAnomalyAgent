@@ -1,0 +1,32 @@
+{
+  "status": "success",
+  "requested_model": "qwen3-vl-plus",
+  "request_count": 1,
+  "retry_count": 0,
+  "http_status": 200,
+  "served_model": "qwen3-vl-plus",
+  "usage": {
+    "prompt_tokens": 3057,
+    "completion_tokens": 303,
+    "total_tokens": 3360,
+    "completion_tokens_details": {
+      "text_tokens": 303
+    },
+    "prompt_tokens_details": {
+      "text_tokens": 3057,
+      "cached_tokens": 128
+    }
+  },
+  "elapsed_seconds": 7.867934400012018,
+  "decision": {
+    "summary": "A correlated multi-sample drop in N and U occurs from index 495 to ~504, with U recovering quickly by 505 while N lags and does not fully return by 508; E dips shallowly and recovers only partially. The recovery is asymmetric and lacks a clean, simultaneous return across all axes within the allowed context [460,545], so the interval is classified as uncertain.",
+    "intervals": [
+      {
+        "start": 495,
+        "end": 508,
+        "status": "uncertain",
+        "observation": "N and U drop together from index 495 to ~504 (N: 1.95→-0.14, U: 0.89→0.67), then U rebounds sharply by 505 (U: 0.67→1.62) while N remains low until ~508; E shows a shallow dip (−2.24→−3.49) peaking at 500–501, then recovers partially but not fully by 508 (E: −3.49→−2.36). Return is asymmetric and incomplete on N/E; no clear opposing return observed on all axes before end of allowed context. Status: uncertain."
+      }
+    ]
+  }
+}

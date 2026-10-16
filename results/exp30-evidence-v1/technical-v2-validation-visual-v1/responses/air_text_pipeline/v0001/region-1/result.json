@@ -1,0 +1,32 @@
+{
+  "status": "success",
+  "requested_model": "qwen3-vl-plus",
+  "request_count": 1,
+  "retry_count": 0,
+  "http_status": 200,
+  "served_model": "qwen3-vl-plus",
+  "usage": {
+    "prompt_tokens": 2719,
+    "completion_tokens": 459,
+    "total_tokens": 3178,
+    "completion_tokens_details": {
+      "text_tokens": 459
+    },
+    "prompt_tokens_details": {
+      "text_tokens": 2719,
+      "cached_tokens": 128
+    }
+  },
+  "elapsed_seconds": 13.263861899991753,
+  "decision": {
+    "summary": "A multi-sample coherent displacement occurs at index 613: N drops ~0.39, E rises ~0.55, U rises ~1.94 (in MAD units), sustained over indices 613–614, followed by a gradual partial return through index 620. No full reversal is observed within allowed context [578,652]; return is ongoing but incomplete, so interval status is uncertain. No other temporary offsets detected in this region.",
+    "intervals": [
+      {
+        "start": 613,
+        "end": 620,
+        "status": "uncertain",
+        "observation": "N drops from -1.56164 (idx 612) to -1.95386 (idx 613), then remains near -1.95 through idx 614 (-1.95386), before recovering toward -1.56 by idx 620 (-1.37411). E rises from -4.71074 (idx 612) to -4.15934 (idx 613), stays near -4.16 at idx 614, then drifts back toward -4.7 by idx 620 (-3.31817). U rises sharply from -2.01789 (idx 612) to -0.07704 (idx 613), stays near 0 at idx 614 (-0.05563), then declines toward -2.5 by idx 620. The onset is coherent across axes at idx 613, interior (613–614) is sustained, and return begins at idx 615 and continues through idx 620 without full reversal; the return is incomplete within allowed context (ends at 652, but no full recovery observed by 620). Status: uncertain due to unobserved full return."
+      }
+    ]
+  }
+}

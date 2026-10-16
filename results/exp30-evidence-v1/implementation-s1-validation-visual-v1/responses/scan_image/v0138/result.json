@@ -1,0 +1,37 @@
+{
+  "status": "success",
+  "requested_model": "qwen3-vl-plus",
+  "request_count": 1,
+  "retry_count": 0,
+  "http_status": 200,
+  "served_model": "qwen3-vl-plus",
+  "usage": {
+    "prompt_tokens": 4218,
+    "completion_tokens": 289,
+    "total_tokens": 4507,
+    "completion_tokens_details": {
+      "text_tokens": 289
+    },
+    "prompt_tokens_details": {
+      "image_tokens": 3702,
+      "text_tokens": 516,
+      "cached_tokens": 0
+    }
+  },
+  "elapsed_seconds": 9.534882300009485,
+  "decision": {
+    "summary": "Two regions stand out: (1) a sustained multi-axis offset from ~490–520 with possible asymmetric return, and (2) a sharp multi-sample drop at ~625–635 with incomplete recovery in E. No other segments show clear platforms, opposing returns, or superposed changes beyond ordinary variability.",
+    "regions": [
+      {
+        "start": 490,
+        "end": 520,
+        "observation": "N and E components show a sustained ~1–2 MAD upward shift beginning near index 490, persisting through ~520; U component shows a concurrent but smaller offset (~0.5 MAD) with possible opposing return starting around 515. The cross-axis shape suggests a temporary platform-like displacement with ambiguous recovery."
+      },
+      {
+        "start": 625,
+        "end": 635,
+        "observation": "At index ~625–635, all three axes exhibit a sharp multi-sample drop (N: ~2 MAD, E: ~2.5 MAD, U: ~1.5 MAD), followed by an immediate partial rebound in N and U but not E—suggesting a transient offset or jump with incomplete or asymmetric recovery. Surroundings show otherwise typical noise, highlighting the abruptness."
+      }
+    ]
+  }
+}

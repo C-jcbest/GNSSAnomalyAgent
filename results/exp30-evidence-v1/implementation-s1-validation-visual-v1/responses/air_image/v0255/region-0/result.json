@@ -1,0 +1,33 @@
+{
+  "status": "success",
+  "requested_model": "qwen3-vl-plus",
+  "request_count": 1,
+  "retry_count": 0,
+  "http_status": 200,
+  "served_model": "qwen3-vl-plus",
+  "usage": {
+    "prompt_tokens": 2646,
+    "completion_tokens": 290,
+    "total_tokens": 2936,
+    "completion_tokens_details": {
+      "text_tokens": 290
+    },
+    "prompt_tokens_details": {
+      "image_tokens": 1738,
+      "text_tokens": 908,
+      "cached_tokens": 128
+    }
+  },
+  "elapsed_seconds": 7.697049600013997,
+  "decision": {
+    "summary": "A coherent multi-axis offset initiates at index 482 (N↑, E↓, U↓) with sustained displacement in N through 530 and only partial recovery in E/U. No opposing return is observed before index 570 (end of allowed context); thus the interval is uncertain. The candidate jump at 531 is not a clean return: E and U show opposite-signed shifts but N does not revert, and the pattern lacks symmetry or closure—likely noise or secondary transient rather than true reversal. No other temporary offsets confirmed within [445,570].",
+    "intervals": [
+      {
+        "start": 482,
+        "end": 530,
+        "status": "uncertain",
+        "observation": "N: sharp +12-unit jump at index 482, sustained elevated level through 530; E: concurrent ~-15-unit step at 482, partial recovery begins ~510 but not back to pre-event level by 530; U: ~-10-unit drop at 482, gradual recovery ongoing at 530. Return not observed on E or U within allowed context; N shows no return. Cross-axis coherence supports single multi-component offset, but return is incomplete/ambiguous."
+      }
+    ]
+  }
+}

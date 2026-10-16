@@ -1,0 +1,37 @@
+{
+  "status": "success",
+  "requested_model": "qwen3-vl-plus",
+  "request_count": 1,
+  "retry_count": 0,
+  "http_status": 200,
+  "served_model": "qwen3-vl-plus",
+  "usage": {
+    "prompt_tokens": 5462,
+    "completion_tokens": 284,
+    "total_tokens": 5746,
+    "completion_tokens_details": {
+      "text_tokens": 284
+    },
+    "prompt_tokens_details": {
+      "image_tokens": 4936,
+      "text_tokens": 526,
+      "cached_tokens": 256
+    }
+  },
+  "elapsed_seconds": 8.607953400001861,
+  "decision": {
+    "summary": "Two regions stand out: (1) a multi-sample cross-axis shift with partial recovery around indices 435–544, and (2) a coherent, sustained linear displacement beginning near index 725 through 729. Other intervals exhibit typical noise or smooth motion without ambiguous superposed changes.",
+    "regions": [
+      {
+        "start": 435,
+        "end": 544,
+        "observation": "Cross-axis shape shows a multi-sample downward shift in N and E around index 440–450, followed by a partial but not full return; U shows a concurrent sharp negative spike at ~445. The pattern suggests a possible temporary offset or opposing motion component, with ambiguity about whether the E/N recovery is complete by 544."
+      },
+      {
+        "start": 720,
+        "end": 729,
+        "observation": "From ~725 onward, all three axes show a clear, sustained linear trend: N rises steadily, E declines steadily, and U rises steadily—forming a coherent platform-like displacement without reversal. This contrasts sharply with prior high-frequency noise and suggests a persistent motion onset; the abruptness at 725 (last window) warrants inclusion of surrounding indices to assess initiation."
+      }
+    ]
+  }
+}

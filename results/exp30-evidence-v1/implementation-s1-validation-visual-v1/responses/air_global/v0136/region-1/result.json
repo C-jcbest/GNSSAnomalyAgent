@@ -1,0 +1,39 @@
+{
+  "status": "success",
+  "requested_model": "qwen3-vl-plus",
+  "request_count": 1,
+  "retry_count": 0,
+  "http_status": 200,
+  "served_model": "qwen3-vl-plus",
+  "usage": {
+    "prompt_tokens": 2704,
+    "completion_tokens": 281,
+    "total_tokens": 2985,
+    "completion_tokens_details": {
+      "text_tokens": 281
+    },
+    "prompt_tokens_details": {
+      "image_tokens": 1906,
+      "text_tokens": 798,
+      "cached_tokens": 128
+    }
+  },
+  "elapsed_seconds": 8.050419600011082,
+  "decision": {
+    "summary": "No confirmed temporary offset intervals. E and N show coherent opposite-signed trends from ~490 onward, but no opposing return is observed within allowed context [455,699]; the apparent plateau (550–600) is not a stable offset on both axes (N keeps declining). U remains noisy and uncoupled. All candidate intervals lack a clear onset–sustained–return structure required for confirmation.",
+    "intervals": [
+      {
+        "start": 490,
+        "end": 549,
+        "status": "uncertain",
+        "observation": "E rises monotonically from ~490 to 549; N declines steadily over same span. No opposing return observed within allowed context; U shows no coherent step. Sustained opposite-signed motion without reversal → uncertain temporary offset."
+      },
+      {
+        "start": 550,
+        "end": 600,
+        "status": "uncertain",
+        "observation": "E plateaus 550–600 after rise; N continues slow decline, not flat—no true platform. Interior lacks stable offset relative to pre-490 baseline; no return observed. Motion appears continuous rather than stepped → no confirmed temporary offset."
+      }
+    ]
+  }
+}

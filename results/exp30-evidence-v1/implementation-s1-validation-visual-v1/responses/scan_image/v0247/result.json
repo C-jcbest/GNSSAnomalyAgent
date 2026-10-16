@@ -1,0 +1,37 @@
+{
+  "status": "success",
+  "requested_model": "qwen3-vl-plus",
+  "request_count": 1,
+  "retry_count": 0,
+  "http_status": 200,
+  "served_model": "qwen3-vl-plus",
+  "usage": {
+    "prompt_tokens": 4218,
+    "completion_tokens": 272,
+    "total_tokens": 4490,
+    "completion_tokens_details": {
+      "text_tokens": 272
+    },
+    "prompt_tokens_details": {
+      "image_tokens": 3702,
+      "text_tokens": 516,
+      "cached_tokens": 0
+    }
+  },
+  "elapsed_seconds": 8.163914700009627,
+  "decision": {
+    "summary": "Two regions stand out: (1) a sharp, multi-axis negative transient near index 520 with incomplete recovery, and (2) a coordinated upward step across all axes beginning near 608, especially pronounced in U, possibly indicating a temporary offset or platform. Other segments show typical noise or smooth motion.",
+    "regions": [
+      {
+        "start": 515,
+        "end": 525,
+        "observation": "Sharp multi-sample negative excursion in N and E (≈−6 MAD) centered near index 520, with partial recovery by 525; U shows a shallower, delayed dip. The shape suggests a transient offset or jump with ambiguous return—surroundings show no prior similar event."
+      },
+      {
+        "start": 608,
+        "end": 615,
+        "observation": "Abrupt ~3–4 MAD upward shift in U starting at ~608, accompanied by correlated positive steps in N and E (~1–2 MAD) over 608–612; the U component then plateaus briefly before resuming trend. No clear opposing return within window; possible platform-like behavior from 610–615."
+      }
+    ]
+  }
+}

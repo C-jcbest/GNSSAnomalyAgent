@@ -1,0 +1,37 @@
+{
+  "status": "success",
+  "requested_model": "qwen3-vl-plus",
+  "request_count": 1,
+  "retry_count": 0,
+  "http_status": 200,
+  "served_model": "qwen3-vl-plus",
+  "usage": {
+    "prompt_tokens": 5462,
+    "completion_tokens": 289,
+    "total_tokens": 5751,
+    "completion_tokens_details": {
+      "text_tokens": 289
+    },
+    "prompt_tokens_details": {
+      "image_tokens": 4936,
+      "text_tokens": 526,
+      "cached_tokens": 256
+    }
+  },
+  "elapsed_seconds": 8.222151899972232,
+  "decision": {
+    "summary": "Two regions stand out: (1) a sharp transient anomaly around index 425 with multi-axis spikes and ambiguous recovery, and (2) a coherent large-scale step-like trend beginning at index 725 affecting all components simultaneously. Other intervals show typical noise or smooth motion without clear morphological anomalies.",
+    "regions": [
+      {
+        "start": 420,
+        "end": 430,
+        "observation": "Sharp multi-sample negative spike in N and E (≈−2 to −6 MAD) centered near index 425, followed by a rapid return; U shows a smaller concurrent dip. The shape suggests a transient offset or jump with ambiguous recovery—possibly opposing returns in E vs N not fully resolved at this sampling."
+      },
+      {
+        "start": 725,
+        "end": 729,
+        "observation": "Large linear trend in all axes from ~725 onward: N rises sharply (~+1 to +4 MAD), E drops steeply (~−4.5 to −6 MAD), U falls (~−1.25 to −2.5 MAD). The coherent, monotonic change across axes over just 5 samples suggests a possible permanent shift or instrumental step; the abrupt onset at 725 is unresolved but clearly distinct from prior noise."
+      }
+    ]
+  }
+}

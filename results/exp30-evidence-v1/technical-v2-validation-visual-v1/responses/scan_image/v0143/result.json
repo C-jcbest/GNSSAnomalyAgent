@@ -1,0 +1,37 @@
+{
+  "status": "success",
+  "requested_model": "qwen3-vl-plus",
+  "request_count": 1,
+  "retry_count": 0,
+  "http_status": 200,
+  "served_model": "qwen3-vl-plus",
+  "usage": {
+    "prompt_tokens": 5462,
+    "completion_tokens": 313,
+    "total_tokens": 5775,
+    "completion_tokens_details": {
+      "text_tokens": 313
+    },
+    "prompt_tokens_details": {
+      "image_tokens": 4936,
+      "text_tokens": 526,
+      "cached_tokens": 256
+    }
+  },
+  "elapsed_seconds": 10.359201999992365,
+  "decision": {
+    "summary": "Two regions stand out: (1) a sharp multi-axis offset near indices 595–604 with apparent partial recovery in U, and (2) a coherent slow trend beginning at index 725 across all components. Other intervals show typical noise or smooth motion without ambiguous superposed changes.",
+    "regions": [
+      {
+        "start": 595,
+        "end": 604,
+        "observation": "Sharp, multi-sample upward jump in N and E (≈+3 to +5 MAD) near index 595–598, followed by a sustained elevated platform through ~604; U shows a concurrent large negative offset (~−15 MAD) starting at ~597 with possible partial return around 602–604 but not fully reverting. Cross-axis coherence suggests a physical displacement event rather than noise."
+      },
+      {
+        "start": 725,
+        "end": 729,
+        "observation": "Broad, slow-sloping trend across all axes from ~725 onward: N declines steadily (~−1.5 MAD), E rises slightly then flattens, U drops sharply (~−2.5 MAD) over ~4 samples (725–729). The shape is non-noise-like and coherent across axes; the abrupt onset at 725 (last window) warrants inspection despite limited post-event data."
+      }
+    ]
+  }
+}

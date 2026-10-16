@@ -1,0 +1,33 @@
+{
+  "status": "success",
+  "requested_model": "qwen3-vl-plus",
+  "request_count": 1,
+  "retry_count": 0,
+  "http_status": 200,
+  "served_model": "qwen3-vl-plus",
+  "usage": {
+    "prompt_tokens": 2528,
+    "completion_tokens": 263,
+    "total_tokens": 2791,
+    "completion_tokens_details": {
+      "text_tokens": 263
+    },
+    "prompt_tokens_details": {
+      "image_tokens": 1738,
+      "text_tokens": 790,
+      "cached_tokens": 128
+    }
+  },
+  "elapsed_seconds": 7.573522699996829,
+  "decision": {
+    "summary": "A temporary offset is evident in U (and coherently in N) beginning at index 596, with a rapid descent over ~20 samples and a sustained low plateau through 619; the return phase is incomplete and ambiguous within allowed context [560,660], as U does not revert to pre-offset levels by index 620 and continues fluctuating without clear opposing edge. No confirmed full-cycle temporary interval; status is uncertain due to unobserved or incomplete return.",
+    "intervals": [
+      {
+        "start": 596,
+        "end": 619,
+        "status": "uncertain",
+        "observation": "U-component shows abrupt multi-sample descent from ~−5 to −15 MAD starting at index 596, sustained through 619; N declines modestly (~−3 MAD) over same span; E remains near zero with minor fluctuations. Return not observed by index 620 (last sample before opposing motion), and subsequent U values show only partial recovery (e.g., −14 at 621, −13 at 622), insufficient to confirm full reversal within allowed context."
+      }
+    ]
+  }
+}

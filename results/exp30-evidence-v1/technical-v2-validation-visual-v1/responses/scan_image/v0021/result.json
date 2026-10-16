@@ -1,0 +1,37 @@
+{
+  "status": "success",
+  "requested_model": "qwen3-vl-plus",
+  "request_count": 1,
+  "retry_count": 0,
+  "http_status": 200,
+  "served_model": "qwen3-vl-plus",
+  "usage": {
+    "prompt_tokens": 5462,
+    "completion_tokens": 320,
+    "total_tokens": 5782,
+    "completion_tokens_details": {
+      "text_tokens": 320
+    },
+    "prompt_tokens_details": {
+      "image_tokens": 4936,
+      "text_tokens": 526,
+      "cached_tokens": 256
+    }
+  },
+  "elapsed_seconds": 9.809872799989535,
+  "decision": {
+    "summary": "Two regions merit closer look: (1) a sharp, multi-sample drop in E and U near index 600–610 with incomplete recovery, and (2) a coherent, rapid linear trend across all axes starting at index 725. Both show cross-axis consistency and abruptness inconsistent with typical noise. Other intervals display ordinary variability or smooth drifts without clear anomalous morphology.",
+    "regions": [
+      {
+        "start": 595,
+        "end": 615,
+        "observation": "Sharp multi-sample drop in E and U components around index 600–610, with E falling ~4 MAD units and U dropping ~2.5 MAD units; N shows a smaller concurrent dip. The E component does not fully recover within the window, suggesting a possible permanent offset or slow return. Surrounding noise is typical; the event stands out due to abruptness and cross-axis coherence."
+      },
+      {
+        "start": 725,
+        "end": 729,
+        "observation": "Sustained linear trend in all three components from ~725 onward: N declines steadily (~0.8 MAD), E drops sharply (~1.5 MAD) then continues downward, U falls ~2.5 MAD over ~4 samples. The coherent multi-axis monotonic shift over just a few samples suggests a possible instrumental step or localized motion; the linearity and synchrony across axes warrant closer inspection despite short duration."
+      }
+    ]
+  }
+}

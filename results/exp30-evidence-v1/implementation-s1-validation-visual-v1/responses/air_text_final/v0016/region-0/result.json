@@ -1,0 +1,32 @@
+{
+  "status": "success",
+  "requested_model": "qwen3-vl-plus",
+  "request_count": 1,
+  "retry_count": 0,
+  "http_status": 200,
+  "served_model": "qwen3-vl-plus",
+  "usage": {
+    "prompt_tokens": 3538,
+    "completion_tokens": 211,
+    "total_tokens": 3749,
+    "completion_tokens_details": {
+      "text_tokens": 211
+    },
+    "prompt_tokens_details": {
+      "text_tokens": 3538,
+      "cached_tokens": 128
+    }
+  },
+  "elapsed_seconds": 5.947542100009741,
+  "decision": {
+    "summary": "A sustained horizontal ramp in N (up) and E (down) from index 470 to 505 is evident in original samples, with no clear vertical counterpart. The motion persists beyond 505 through the end of allowed context (540), and no opposing return is observed—hence status is uncertain. No other temporary offsets are supported within allowed_context [435,540].",
+    "intervals": [
+      {
+        "start": 470,
+        "end": 505,
+        "status": "uncertain",
+        "observation": "N-component rises steadily from ~470 to 505; E-component declines steadily over same interval; U shows no coherent trend, only increased noise. Onset at ~470 is gradual, interior sustained, but return not observed within allowed context (ends at 540, with N/E still trending). Return ambiguous → uncertain."
+      }
+    ]
+  }
+}

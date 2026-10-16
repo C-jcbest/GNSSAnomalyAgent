@@ -1,0 +1,32 @@
+{
+  "status": "success",
+  "requested_model": "qwen3-vl-plus",
+  "request_count": 1,
+  "retry_count": 0,
+  "http_status": 200,
+  "served_model": "qwen3-vl-plus",
+  "usage": {
+    "prompt_tokens": 2805,
+    "completion_tokens": 350,
+    "total_tokens": 3155,
+    "completion_tokens_details": {
+      "text_tokens": 350
+    },
+    "prompt_tokens_details": {
+      "text_tokens": 2805,
+      "cached_tokens": 128
+    }
+  },
+  "elapsed_seconds": 9.708562099986011,
+  "decision": {
+    "summary": "Only one candidate temporary offset lies within allowed_context [583,660]: a sharp multi-sample U-down/N-up spike at indices 622–624 with no clear return observed before context ends. The U axis drops sharply (e.g., from ~-2.8 to -8.0 at 622), then partially recovers to -2.4 at 623, but remains offset relative to pre-event levels; N spikes to 11.08 then drops to 1.17 by 623—still elevated. Since the return phase is unobserved and ambiguous, status is uncertain. No other intervals meet criteria for confirmed temporary offsets.",
+    "intervals": [
+      {
+        "start": 622,
+        "end": 624,
+        "status": "uncertain",
+        "observation": "Multi-sample U-down (e.g., -8.03 at 622, -2.40 at 623) and N-up (11.08 at 622) spike centered at index 622; E also perturbed. No recovery observed within allowed context (ends at 624), and next valid sample at 625 shows U = -2.40 (still elevated relative to pre-622 baseline ~-2.6 to -3.5), N = 1.17 (down from 11.08 but still above pre-spike ~0.2–2.8). Return not observed before context ends → uncertain."
+      }
+    ]
+  }
+}

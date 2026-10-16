@@ -1,0 +1,36 @@
+{
+  "status": "success",
+  "requested_model": "qwen3-vl-plus",
+  "request_count": 1,
+  "retry_count": 0,
+  "http_status": 200,
+  "served_model": "qwen3-vl-plus",
+  "usage": {
+    "prompt_tokens": 13387,
+    "completion_tokens": 328,
+    "total_tokens": 13715,
+    "completion_tokens_details": {
+      "text_tokens": 328
+    },
+    "prompt_tokens_details": {
+      "text_tokens": 13387,
+      "cached_tokens": 0
+    }
+  },
+  "elapsed_seconds": 10.970077199977823,
+  "decision": {
+    "summary": "Two regions stand out: (1) a sharp multi-sample offset in N/E/U around indices 487–489 within the overlapping window [485,664], possibly indicating a transient platform or unresolved opposing motion; (2) an abrupt multi-axis jump near indices 607–609 in the [605,729] window, with sustained deviation and ambiguous recovery. Both involve overlapping windows and lack clean reversals, warranting closer inspection.",
+    "regions": [
+      {
+        "start": 485,
+        "end": 495,
+        "observation": "Sharp multi-sample drop in N and E (N from ~-0.2 to -2.1, E from ~-6.3 to -6.8) around index 487–489, followed by a sustained offset; U shows a concurrent rise then dip—suggests possible platform or opposing return not fully resolved."
+      },
+      {
+        "start": 605,
+        "end": 625,
+        "observation": "Abrupt shift in all axes near index 607–609: N jumps from ~0.06 to ~0.74, E drops sharply (~-7.27 to -8.65), U rises (~-2.14 to -0.73); later samples show complex superposition of drift and possible partial return, with high variability through 625."
+      }
+    ]
+  }
+}

@@ -1,0 +1,38 @@
+{
+  "status": "success",
+  "requested_model": "qwen3-vl-plus",
+  "request_count": 1,
+  "retry_count": 0,
+  "http_status": 200,
+  "served_model": "qwen3-vl-plus",
+  "usage": {
+    "prompt_tokens": 5015,
+    "completion_tokens": 359,
+    "total_tokens": 5374,
+    "completion_tokens_details": {
+      "text_tokens": 359
+    },
+    "prompt_tokens_details": {
+      "text_tokens": 5015,
+      "cached_tokens": 128
+    }
+  },
+  "elapsed_seconds": 10.055880500003695,
+  "decision": {
+    "summary": "Within allowed context [570,729], the screened region (605–729) shows multi-axis changes starting at ~605: U spikes upward then drops, while N declines and E rises—suggesting superposed motion rather than a clean temporary offset. No unambiguous onset-return pair is observed on any single axis; interior segments lack coherent stability across N/E/U. All candidate intervals remain uncertain due to ambiguous return behavior and cross-axis inconsistency.",
+    "intervals": [
+      {
+        "start": 605,
+        "end": 608,
+        "status": "uncertain",
+        "observation": "U rises sharply (5.38→6.24→3.64→5.86→5.26) over indices 570–608; N and E show opposing trends: N drops from -2.14 to -4.03, E rises from 0.14 to -0.43 then to -0.90, inconsistent with a single coherent offset. No clear return observed by index 608."
+      },
+      {
+        "start": 610,
+        "end": 620,
+        "status": "uncertain",
+        "observation": "Indices 610–620 show relatively flat U (~4.5–5.9), but N continues fluctuating (-2.89 to -5.59), E varies (-0.43 to -2.44); no sustained plateau across all axes. Return not evident; interior not stable enough for confirmed temporary offset."
+      }
+    ]
+  }
+}

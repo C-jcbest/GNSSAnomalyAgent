@@ -1,0 +1,32 @@
+{
+  "status": "success",
+  "requested_model": "qwen3-vl-plus",
+  "request_count": 1,
+  "retry_count": 0,
+  "http_status": 200,
+  "served_model": "qwen3-vl-plus",
+  "usage": {
+    "prompt_tokens": 3128,
+    "completion_tokens": 358,
+    "total_tokens": 3486,
+    "completion_tokens_details": {
+      "text_tokens": 358
+    },
+    "prompt_tokens_details": {
+      "text_tokens": 3128,
+      "cached_tokens": 128
+    }
+  },
+  "elapsed_seconds": 9.399933999986388,
+  "decision": {
+    "summary": "A sustained cross-axis displacement initiates around index 538: N increases by ~4.5 MAD, E decreases by ~2.2 MAD, and U drops sharply (~-18 MAD) over 6–7 samples (538–544). The offset persists through index 567; U shows partial recovery only at index 579 (outside the sustained interior), while N/E remain displaced. No clear opposing return is observed within allowed context [503,579]; thus, the interval is classified as uncertain. The optional jump at index 551 (small N/E shift, large U jump) lies within this sustained offset and does not mark a new event.",
+    "intervals": [
+      {
+        "start": 538,
+        "end": 567,
+        "status": "uncertain",
+        "observation": "N and E show a sustained multi-sample offset beginning near index 538 (N rises from ~8.5 to ~13.0, E drops from ~-10.6 to ~-12.8), with U shifting downward from ~1.6 to ~-16.5 over indices 538–544; the offset persists through index 567 without clear reversal—U begins recovering only after index 567 (e.g., U = -17.096 at 578, then +0.47 at 579), but N/E remain elevated. Return is ambiguous/unobserved within allowed context [503,579], so status is uncertain."
+      }
+    ]
+  }
+}

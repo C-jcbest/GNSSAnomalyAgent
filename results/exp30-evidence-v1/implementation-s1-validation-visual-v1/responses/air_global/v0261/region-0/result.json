@@ -1,0 +1,39 @@
+{
+  "status": "success",
+  "requested_model": "qwen3-vl-plus",
+  "request_count": 1,
+  "retry_count": 0,
+  "http_status": 200,
+  "served_model": "qwen3-vl-plus",
+  "usage": {
+    "prompt_tokens": 2832,
+    "completion_tokens": 405,
+    "total_tokens": 3237,
+    "completion_tokens_details": {
+      "text_tokens": 405
+    },
+    "prompt_tokens_details": {
+      "image_tokens": 1906,
+      "text_tokens": 926,
+      "cached_tokens": 128
+    }
+  },
+  "elapsed_seconds": 11.475415699998848,
+  "decision": {
+    "summary": "Two temporally adjacent, coherent multi-axis events are observed: (1) a sharp onset offset starting ~557 with sustained platform until 607, and (2) a rapid reversal beginning ~608 that partially restores levels. Neither event exhibits a fully confirmed opposing return within the allowed context [520,645]; the return in (2) is incomplete (U not fully back to pre-557 baseline by 611), and no post-611 data confirms stabilization. Hence both intervals are marked uncertain.",
+    "intervals": [
+      {
+        "start": 557,
+        "end": 607,
+        "status": "uncertain",
+        "observation": "Coherent multi-axis drop (N↓~4, E↑~15, U↑~20 MAD) beginning sharply near index 557–558, sustained as a platform through index 607; no opposing return observed within allowed context. N shows only partial recovery after 605, but E and U remain offset. Return edge at 608 is outside the interval end and not part of this offset’s closure."
+      },
+      {
+        "start": 608,
+        "end": 611,
+        "status": "uncertain",
+        "observation": "Abrupt multi-sample reversal (N↑~7.5, E↓~15.8, U↓~19.6 MAD) centered at index 608–609, restoring all three components toward pre-offset levels; interior (608–611) shows coherent recovery with no sustained platform—suggests return phase of prior offset. However, full restoration not confirmed beyond 611 (U still slightly elevated), and allowed context ends at 645 without further observation of stability."
+      }
+    ]
+  }
+}

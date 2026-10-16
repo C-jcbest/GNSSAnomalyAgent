@@ -1,0 +1,33 @@
+{
+  "status": "success",
+  "requested_model": "qwen3-vl-plus",
+  "request_count": 1,
+  "retry_count": 0,
+  "http_status": 200,
+  "served_model": "qwen3-vl-plus",
+  "usage": {
+    "prompt_tokens": 2519,
+    "completion_tokens": 215,
+    "total_tokens": 2734,
+    "completion_tokens_details": {
+      "text_tokens": 215
+    },
+    "prompt_tokens_details": {
+      "image_tokens": 1738,
+      "text_tokens": 781,
+      "cached_tokens": 128
+    }
+  },
+  "elapsed_seconds": 6.281539499992505,
+  "decision": {
+    "summary": "A single temporary offset candidate in U (with minor N coherence) begins abruptly at index 595, persists through a plateau until ~620, and shows only partial recovery thereafter; full return is unobserved within allowed context [560,660], hence uncertain status. No other temporary intervals meet criteria inside allowed context.",
+    "intervals": [
+      {
+        "start": 595,
+        "end": 620,
+        "status": "uncertain",
+        "observation": "U-component shows abrupt multi-sample descent from ~−5 to −15 MAD starting at index 595, sustained plateau until 620; N declines modestly (~−3 MAD) during same interval; E remains near zero with no coherent offset. Return after 620 is incomplete and ambiguous (U recovers only partially by 625, no clear reversion to pre-595 level), so status is uncertain."
+      }
+    ]
+  }
+}

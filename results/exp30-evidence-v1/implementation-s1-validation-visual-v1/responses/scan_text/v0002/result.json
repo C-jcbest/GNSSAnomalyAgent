@@ -1,0 +1,36 @@
+{
+  "status": "success",
+  "requested_model": "qwen3-vl-plus",
+  "request_count": 1,
+  "retry_count": 0,
+  "http_status": 200,
+  "served_model": "qwen3-vl-plus",
+  "usage": {
+    "prompt_tokens": 13404,
+    "completion_tokens": 327,
+    "total_tokens": 13731,
+    "completion_tokens_details": {
+      "text_tokens": 327
+    },
+    "prompt_tokens_details": {
+      "text_tokens": 13404,
+      "cached_tokens": 0
+    }
+  },
+  "elapsed_seconds": 10.670197100000223,
+  "decision": {
+    "summary": "Two regions warrant closer inspection: (1) early window (365–544) with abrupt N jump and complex cross-axis oscillations, possibly superposed temporary offset and motion; (2) late window (605–729) showing a sharp, multi-sample jump into a stable high-amplitude platform across all axes, consistent with a permanent displacement event.",
+    "regions": [
+      {
+        "start": 365,
+        "end": 544,
+        "observation": "Cross-axis shape shows a multi-sample abrupt upward shift in N (from ~0.5 to ~2.1) around index 370–372, followed by oscillatory behavior with large E excursions (e.g., +3.77 at index 468) and U swings; no clear return to prior baseline, suggesting possible superposed temporary offset and ongoing motion."
+      },
+      {
+        "start": 605,
+        "end": 729,
+        "observation": "A sustained high-amplitude platform emerges from index ~610 onward: N jumps sharply to ~10–13, E drops to ~-4 to -7, U stabilizes near 3–5, with minor fluctuations but no reversal—suggesting a permanent jump or long-term deformation onset; the transition is abrupt over 2–3 samples (indices ~608–610), and the region includes the full post-jump plateau through last sample."
+      }
+    ]
+  }
+}

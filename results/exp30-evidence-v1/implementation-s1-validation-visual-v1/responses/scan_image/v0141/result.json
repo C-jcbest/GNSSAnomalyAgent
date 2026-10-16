@@ -1,0 +1,37 @@
+{
+  "status": "success",
+  "requested_model": "qwen3-vl-plus",
+  "request_count": 1,
+  "retry_count": 0,
+  "http_status": 200,
+  "served_model": "qwen3-vl-plus",
+  "usage": {
+    "prompt_tokens": 4218,
+    "completion_tokens": 305,
+    "total_tokens": 4523,
+    "completion_tokens_details": {
+      "text_tokens": 305
+    },
+    "prompt_tokens_details": {
+      "image_tokens": 3702,
+      "text_tokens": 516,
+      "cached_tokens": 0
+    }
+  },
+  "elapsed_seconds": 8.994350799999665,
+  "decision": {
+    "summary": "Two regions merit closer inspection: (1) an abrupt, multi-axis drop in E and U near indices 545–555 with incomplete recovery by 560; (2) a sustained E-component platform from ~665–690 lacking clear counter-motion, possibly indicating a temporary offset or superposed change.",
+    "regions": [
+      {
+        "start": 545,
+        "end": 560,
+        "observation": "Sharp multi-sample drop in E and U components around index 545–555, with E falling ~7.5 MAD and U ~4 MAD; N shows a concurrent smaller dip (~2 MAD). The drop appears abrupt and sustained for ~10 samples before partial recovery—suggests a possible temporary offset or platform-like behavior with ambiguous return onset near 555–560."
+      },
+      {
+        "start": 665,
+        "end": 695,
+        "observation": "Broad apparent platform in E component from ~665 to 690 (centered at 675), where E remains ~2–3 MAD below prior baseline while N and U show no matching coherent shift; the E level then rises sharply near 690–695. Surrounding noise is typical, but the E plateau lacks clear opposing return within window, making boundary uncertain."
+      }
+    ]
+  }
+}

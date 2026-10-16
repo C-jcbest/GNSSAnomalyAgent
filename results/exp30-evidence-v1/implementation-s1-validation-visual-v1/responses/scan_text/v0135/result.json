@@ -1,0 +1,36 @@
+{
+  "status": "success",
+  "requested_model": "qwen3-vl-plus",
+  "request_count": 1,
+  "retry_count": 0,
+  "http_status": 200,
+  "served_model": "qwen3-vl-plus",
+  "usage": {
+    "prompt_tokens": 13272,
+    "completion_tokens": 275,
+    "total_tokens": 13547,
+    "completion_tokens_details": {
+      "text_tokens": 275
+    },
+    "prompt_tokens_details": {
+      "text_tokens": 13272,
+      "cached_tokens": 256
+    }
+  },
+  "elapsed_seconds": 8.39492930000415,
+  "decision": {
+    "summary": "Two regions show abrupt multi-sample shifts with coherent cross-axis behavior: one near index 485–490 with large displacement likely indicating a step change, and another near 605–615 with a sharp onset and uncertain return. Both warrant closer inspection for morphology of possible offsets or platform transitions.",
+    "regions": [
+      {
+        "start": 485,
+        "end": 490,
+        "observation": "Sharp multi-sample drop in N and E (from ~4 to ~-3.6) with large U shift (~-21 to ~-0.9), suggesting a possible permanent offset or platform-like transition; cross-axis coherence suggests physical motion rather than noise."
+      },
+      {
+        "start": 605,
+        "end": 615,
+        "observation": "Abrupt jump in N/E/U around index 605–607 (e.g., N from -2.7 to -3.5, E from 1.1 to 0.7, U from -2.6 to -1.8), followed by sustained deviation and later partial return; ambiguous whether full reversal occurs due to coarse sampling, but shape hints at temporary offset with possible opposing recovery."
+      }
+    ]
+  }
+}

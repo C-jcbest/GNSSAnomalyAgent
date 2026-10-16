@@ -1,0 +1,36 @@
+{
+  "status": "success",
+  "requested_model": "qwen3-vl-plus",
+  "request_count": 1,
+  "retry_count": 0,
+  "http_status": 200,
+  "served_model": "qwen3-vl-plus",
+  "usage": {
+    "prompt_tokens": 13450,
+    "completion_tokens": 275,
+    "total_tokens": 13725,
+    "completion_tokens_details": {
+      "text_tokens": 275
+    },
+    "prompt_tokens_details": {
+      "text_tokens": 13450,
+      "cached_tokens": 0
+    }
+  },
+  "elapsed_seconds": 9.560412200022256,
+  "decision": {
+    "summary": "Two regions stand out: (1) a sharp multi-sample offset near index 489–492 across all axes, possibly a temporary displacement or jump; (2) a prolonged accelerating drift with superimposed jumps from index 605 to end, lacking any clear reversal or platform phase. Other intervals show noisy but ordinary motion.",
+    "regions": [
+      {
+        "start": 485,
+        "end": 492,
+        "observation": "Sharp multi-sample drop in N and E components around index 489–492, with U showing a concurrent rise; appears as an abrupt offset rather than smooth motion. Preceded by relatively stable behavior and followed by continued drift—suggests possible temporary offset or jump."
+      },
+      {
+        "start": 605,
+        "end": 729,
+        "observation": "Sustained accelerating trend in N (positive), E (negative), and U (negative) from ~index 605 onward, with increasing amplitude and no clear return; includes several large jumps (e.g., at 610, 620, 630) superimposed on monotonic drift—ambiguous whether platform-like or cumulative permanent shifts."
+      }
+    ]
+  }
+}

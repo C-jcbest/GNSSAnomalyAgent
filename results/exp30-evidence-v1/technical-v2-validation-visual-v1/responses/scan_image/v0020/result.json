@@ -1,0 +1,37 @@
+{
+  "status": "success",
+  "requested_model": "qwen3-vl-plus",
+  "request_count": 1,
+  "retry_count": 0,
+  "http_status": 200,
+  "served_model": "qwen3-vl-plus",
+  "usage": {
+    "prompt_tokens": 5462,
+    "completion_tokens": 310,
+    "total_tokens": 5772,
+    "completion_tokens_details": {
+      "text_tokens": 310
+    },
+    "prompt_tokens_details": {
+      "image_tokens": 4936,
+      "text_tokens": 526,
+      "cached_tokens": 256
+    }
+  },
+  "elapsed_seconds": 9.30752110001049,
+  "decision": {
+    "summary": "Two regions stand out: (1) a sudden, large-magnitude step-like displacement affecting all axes near index 440, with no evident return in the available data; (2) a coordinated trend reversal in the final segment (720–729) where N and U decline while E flattens, possibly indicating a platform termination or counter-motion. Other segments show typical noise or smooth variability without ambiguous superposed changes.",
+    "regions": [
+      {
+        "start": 435,
+        "end": 445,
+        "observation": "Sharp, near-simultaneous upward jumps in N, E, and U (≈20–25 MAD units) around index 440–445, followed by sustained elevated levels; no clear opposing return within the window, though minor fluctuations occur. The jump is abrupt across all axes and persists through the next overlapping window."
+      },
+      {
+        "start": 720,
+        "end": 729,
+        "observation": "Broad, multi-sample linear trend reversal in all three axes between ~720–729: N declines sharply after a peak near 725, E shows a gentle inflection from rising to flat/declining, and U drops steeply after a plateau—suggesting a possible platform ending or opposing motion onset. The change spans several samples and is visible across the final overlapping windows."
+      }
+    ]
+  }
+}

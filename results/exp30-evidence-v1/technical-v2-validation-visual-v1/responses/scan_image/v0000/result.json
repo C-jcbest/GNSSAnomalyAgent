@@ -1,0 +1,37 @@
+{
+  "status": "success",
+  "requested_model": "qwen3-vl-plus",
+  "request_count": 1,
+  "retry_count": 0,
+  "http_status": 200,
+  "served_model": "qwen3-vl-plus",
+  "usage": {
+    "prompt_tokens": 5462,
+    "completion_tokens": 320,
+    "total_tokens": 5782,
+    "completion_tokens_details": {
+      "text_tokens": 320
+    },
+    "prompt_tokens_details": {
+      "image_tokens": 4936,
+      "text_tokens": 526,
+      "cached_tokens": 0
+    }
+  },
+  "elapsed_seconds": 9.15354989998741,
+  "decision": {
+    "summary": "Two regions warrant closer inspection: (1) a multi-sample ramp in E/U/N starting at index 605 with possible reversal near 615, and (2) a sharp, coherent linear trend across all axes from index 725 to 729. No other intervals show unambiguous superposed or opposing changes beyond typical noise.",
+    "regions": [
+      {
+        "start": 605,
+        "end": 615,
+        "observation": "Cross-axis shape: E and U components show a coherent, multi-sample downward ramp beginning ~index 605, with N also declining but less steeply; the ramp appears to plateau or reverse slightly near 615, suggesting a possible transient offset or onset of recovery. Surroundings show prior noise-level variability, making the ramp stand out."
+      },
+      {
+        "start": 725,
+        "end": 729,
+        "observation": "Cross-axis shape: All three components (N/E/U) exhibit a pronounced, roughly linear trend over indices 725–729, with N decreasing sharply (~−2.0 to −2.4), E rising (~6.5 to 7.2), and U rising (~3.8 to 4.2); the tight alignment across axes suggests a common-mode shift rather than independent noise. The abrupt onset at 725 is visible in all panels, and the trend continues to the end."
+      }
+    ]
+  }
+}

@@ -1,0 +1,39 @@
+{
+  "status": "success",
+  "requested_model": "qwen3-vl-plus",
+  "request_count": 1,
+  "retry_count": 0,
+  "http_status": 200,
+  "served_model": "qwen3-vl-plus",
+  "usage": {
+    "prompt_tokens": 2531,
+    "completion_tokens": 318,
+    "total_tokens": 2849,
+    "completion_tokens_details": {
+      "text_tokens": 318
+    },
+    "prompt_tokens_details": {
+      "image_tokens": 1738,
+      "text_tokens": 793,
+      "cached_tokens": 128
+    }
+  },
+  "elapsed_seconds": 9.885690900002373,
+  "decision": {
+    "summary": "The screened region (615–665) contains two adjacent E-axis features: a prolonged low platform (620–659) lacking cross-axis confirmation, and a sharp drop (660–664) without return or counterpart. Neither satisfies full criteria for a confirmed temporary offset due to missing return behavior and absence of corroborating N/U edges. Both are classified uncertain.",
+    "intervals": [
+      {
+        "start": 620,
+        "end": 659,
+        "status": "uncertain",
+        "observation": "E axis shows a sustained low platform from index ~620 to 659 (centered at ~−4.5 MAD), with N and U continuing normal variability; no clear onset step in N/U, and interior shows no opposing trend—consistent with a temporary offset in E only. Return not observed before index 660, where E drops further."
+      },
+      {
+        "start": 660,
+        "end": 664,
+        "status": "uncertain",
+        "observation": "E drops sharply from ~−4.5 to ~−6.5 MAD between indices 660–664; N and U show no matching step or transient. No return observed within allowed context (ends at 700), and the drop may be part of a new offset or continuation—insufficient evidence for a closed temporary interval."
+      }
+    ]
+  }
+}

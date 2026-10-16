@@ -1,0 +1,36 @@
+{
+  "status": "success",
+  "requested_model": "qwen3-vl-plus",
+  "request_count": 1,
+  "retry_count": 0,
+  "http_status": 200,
+  "served_model": "qwen3-vl-plus",
+  "usage": {
+    "prompt_tokens": 13459,
+    "completion_tokens": 297,
+    "total_tokens": 13756,
+    "completion_tokens_details": {
+      "text_tokens": 297
+    },
+    "prompt_tokens_details": {
+      "text_tokens": 13459,
+      "cached_tokens": 256
+    }
+  },
+  "elapsed_seconds": 9.26838660001522,
+  "decision": {
+    "summary": "Two regions stand out: (1) a multi-sample offset in N/E/U around indices 485–544 with partial opposing return in N; (2) an abrupt jump in U with concurrent large N/E shifts near indices 605–664, possibly indicating a platform or unresolved return. Both involve overlapping motion types and missing samples that limit resolution of counterpart changes.",
+    "regions": [
+      {
+        "start": 485,
+        "end": 544,
+        "observation": "Cross-axis shape shows a multi-sample drop in N and E around index 490–495, followed by a sustained offset in E (positive) and U (negative), with possible opposing return in N starting near index 520 but not fully resolved; the change is abrupt and spans several samples."
+      },
+      {
+        "start": 605,
+        "end": 664,
+        "observation": "A sharp, multi-sample jump in U (upward) at index ~610–613 coincides with large negative shifts in N and E; the U component then plateaus at elevated level while N/E show complex superposed motion—possible platform or opposing return beginning near index 630 but ambiguous due to noise and missing samples at 647 and 658."
+      }
+    ]
+  }
+}

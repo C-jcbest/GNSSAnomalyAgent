@@ -1,0 +1,37 @@
+{
+  "status": "success",
+  "requested_model": "qwen3-vl-plus",
+  "request_count": 1,
+  "retry_count": 0,
+  "http_status": 200,
+  "served_model": "qwen3-vl-plus",
+  "usage": {
+    "prompt_tokens": 5462,
+    "completion_tokens": 292,
+    "total_tokens": 5754,
+    "completion_tokens_details": {
+      "text_tokens": 292
+    },
+    "prompt_tokens_details": {
+      "image_tokens": 4936,
+      "text_tokens": 526,
+      "cached_tokens": 256
+    }
+  },
+  "elapsed_seconds": 9.047077999974135,
+  "decision": {
+    "summary": "Two regions stand out: (1) a sharp, multi-axis drop around index 615–618 with incomplete recovery, and (2) an abrupt onset of coherent linear trends across all axes starting at index 725. Both show morphology inconsistent with ordinary noise or smooth motion.",
+    "regions": [
+      {
+        "start": 610,
+        "end": 620,
+        "observation": "Sharp multi-sample drop in all three axes (N, E, U) centered near index 615–618, with N and E showing a ~4–5 MAD step down and U dropping ~6 MAD; the drop appears abrupt and sustained over several samples, followed by a possible partial return in E/U but not N, suggesting a complex offset or transient event."
+      },
+      {
+        "start": 725,
+        "end": 729,
+        "observation": "Broad, coherent linear trend across all axes from ~725 onward: N rises steadily (~+3 MAD), E declines steadily (~−2 MAD), U rises sharply (~+1.5 MAD); the onset is abrupt at 725 (visible in last window), with no prior plateau—suggests a persistent shift rather than noise, possibly a platform-like change beginning at the very end of the record."
+      }
+    ]
+  }
+}

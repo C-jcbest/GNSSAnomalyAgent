@@ -1,0 +1,44 @@
+{
+  "status": "success",
+  "requested_model": "qwen3-vl-plus",
+  "request_count": 1,
+  "retry_count": 0,
+  "http_status": 200,
+  "served_model": "qwen3-vl-plus",
+  "usage": {
+    "prompt_tokens": 5364,
+    "completion_tokens": 546,
+    "total_tokens": 5910,
+    "completion_tokens_details": {
+      "text_tokens": 546
+    },
+    "prompt_tokens_details": {
+      "text_tokens": 5364,
+      "cached_tokens": 128
+    }
+  },
+  "elapsed_seconds": 14.406061999994563,
+  "decision": {
+    "summary": "Within allowed context [570,729], the screened region (605–729) shows a prolonged accelerating E rise and divergent U descent, but no clean temporary offset with confirmed opposing return on any axis. Several candidate intervals (645–659, 660–670, 671–685) exhibit transient E behavior without matching U/N reversals; all are classified uncertain due to superposed trends and ambiguous returns. No confirmed temporary offset intervals exist.",
+    "intervals": [
+      {
+        "start": 645,
+        "end": 659,
+        "status": "uncertain",
+        "observation": "E rises sharply from ~60.5 (idx 645) to ~66.0 (idx 659), while U drops from ~-16.8 to ~-17.2; N shows no coherent opposing return. After idx 659, E plateaus or slightly declines (e.g., 66.26 at 660 → 64.80 at 662), but U continues descending (to -17.7 by 662), indicating superposed trends rather than a clean reversal. No confirmed return on E or U within allowed context."
+      },
+      {
+        "start": 660,
+        "end": 670,
+        "status": "uncertain",
+        "observation": "E peaks near 66.26 (idx 660) then drops to 64.80 (idx 662) and further to 64.17 (idx 668); U continues descending to -18.5 by idx 668. A transient E dip occurs without matching U recovery—no axis shows opposing return. The multi-sample jump at idx 660 is part of accelerating motion, not an isolated offset."
+      },
+      {
+        "start": 671,
+        "end": 685,
+        "status": "uncertain",
+        "observation": "E fluctuates between ~64.2 and 67.0 (e.g., 64.23 at 682, 67.00 at 685), U descends steadily to ~-18.6; no sustained reversal observed. N remains noisy but uncorrelated. No evidence of a temporary offset with clear onset/return pairing."
+      }
+    ]
+  }
+}

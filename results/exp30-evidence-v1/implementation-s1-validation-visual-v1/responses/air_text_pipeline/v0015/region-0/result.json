@@ -1,0 +1,32 @@
+{
+  "status": "success",
+  "requested_model": "qwen3-vl-plus",
+  "request_count": 1,
+  "retry_count": 0,
+  "http_status": 200,
+  "served_model": "qwen3-vl-plus",
+  "usage": {
+    "prompt_tokens": 3324,
+    "completion_tokens": 203,
+    "total_tokens": 3527,
+    "completion_tokens_details": {
+      "text_tokens": 203
+    },
+    "prompt_tokens_details": {
+      "text_tokens": 3324,
+      "cached_tokens": 128
+    }
+  },
+  "elapsed_seconds": 6.16570350000984,
+  "decision": {
+    "summary": "A rapid multi-sample displacement occurs in E and U components starting at index 520, peaking around 523–524, with no reversal observed before the end of the allowed context (579). N shows a smaller but coherent shift. The absence of a clear return prevents confirmation of a temporary offset; status is uncertain. No other temporary offsets are supported within [483,579].",
+    "intervals": [
+      {
+        "start": 520,
+        "end": 524,
+        "status": "uncertain",
+        "observation": "Multi-sample drop in E (~17 MAD) and U (~11 MAD) from index 520–524, with coherent smaller shift in N; no return observed within allowed context [483,579]; onset of possible temporary offset or jump, but recovery not confirmed."
+      }
+    ]
+  }
+}

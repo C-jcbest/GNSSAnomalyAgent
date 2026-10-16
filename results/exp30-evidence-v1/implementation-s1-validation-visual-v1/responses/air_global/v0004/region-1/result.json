@@ -1,0 +1,33 @@
+{
+  "status": "success",
+  "requested_model": "qwen3-vl-plus",
+  "request_count": 1,
+  "retry_count": 0,
+  "http_status": 200,
+  "served_model": "qwen3-vl-plus",
+  "usage": {
+    "prompt_tokens": 2682,
+    "completion_tokens": 227,
+    "total_tokens": 2909,
+    "completion_tokens_details": {
+      "text_tokens": 227
+    },
+    "prompt_tokens_details": {
+      "image_tokens": 1906,
+      "text_tokens": 776,
+      "cached_tokens": 128
+    }
+  },
+  "elapsed_seconds": 6.860003000008874,
+  "decision": {
+    "summary": "In the allowed context [570,670], a sharp U drop begins near index 605, reaches minimum near 615, and recovers partially by 634 but does not return to pre-event baseline; E shows a weak opposing transient, N lacks a matching step. No full return observed before 670, so the interval is classified as uncertain.",
+    "intervals": [
+      {
+        "start": 605,
+        "end": 634,
+        "status": "uncertain",
+        "observation": "U shows a sharp multi-sample drop from ~−3 to −6 MAD centered at ~615, with partial recovery by 634 but no return to pre-event level; E exhibits a smaller positive shift (~+1 MAD) during the same window, while N shows only a brief plateau without clear onset/return structure. Return is unobserved and ambiguous beyond 634 within allowed context (≤670), so status is uncertain."
+      }
+    ]
+  }
+}

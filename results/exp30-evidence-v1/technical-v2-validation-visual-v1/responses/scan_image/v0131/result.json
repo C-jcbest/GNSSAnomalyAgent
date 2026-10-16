@@ -1,0 +1,37 @@
+{
+  "status": "success",
+  "requested_model": "qwen3-vl-plus",
+  "request_count": 1,
+  "retry_count": 0,
+  "http_status": 200,
+  "served_model": "qwen3-vl-plus",
+  "usage": {
+    "prompt_tokens": 5462,
+    "completion_tokens": 246,
+    "total_tokens": 5708,
+    "completion_tokens_details": {
+      "text_tokens": 246
+    },
+    "prompt_tokens_details": {
+      "image_tokens": 4936,
+      "text_tokens": 526,
+      "cached_tokens": 256
+    }
+  },
+  "elapsed_seconds": 7.3034490999998525,
+  "decision": {
+    "summary": "Two regions warrant closer inspection: (1) a sharp E-component offset near index 490 with partial recovery and cross-axis correlation, and (2) a coherent linear trend onset at index 725 across all axes, distinct from prior noise or motion.",
+    "regions": [
+      {
+        "start": 485,
+        "end": 495,
+        "observation": "Sharp ~10 MAD downward step in E-component at index ~490, followed by noisy recovery; N and U show correlated transient offsets but no clear platform. The step is abrupt (multi-sample) and not fully reversed within the window."
+      },
+      {
+        "start": 725,
+        "end": 729,
+        "observation": "Linear trend in all three components from ~725 onward: N rises steadily, E drops steadily, U rises steadily—suggesting a possible sustained motion or systematic bias onset. The change begins abruptly at 725 and persists to end of record; surrounding samples (720–724) show no such trend, supporting a discrete onset."
+      }
+    ]
+  }
+}

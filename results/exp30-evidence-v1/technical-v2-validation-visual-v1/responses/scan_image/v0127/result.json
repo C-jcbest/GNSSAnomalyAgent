@@ -1,0 +1,37 @@
+{
+  "status": "success",
+  "requested_model": "qwen3-vl-plus",
+  "request_count": 1,
+  "retry_count": 0,
+  "http_status": 200,
+  "served_model": "qwen3-vl-plus",
+  "usage": {
+    "prompt_tokens": 5462,
+    "completion_tokens": 292,
+    "total_tokens": 5754,
+    "completion_tokens_details": {
+      "text_tokens": 292
+    },
+    "prompt_tokens_details": {
+      "image_tokens": 4936,
+      "text_tokens": 526,
+      "cached_tokens": 256
+    }
+  },
+  "elapsed_seconds": 11.341039199993247,
+  "decision": {
+    "summary": "Two regions warrant closer inspection: (1) a multi-sample transient around indices 608–615 with apparent opposing motion in E and possible partial return, and (2) a coherent, smooth multi-axis shift from index 725 to 729 suggesting a step or platform. Other intervals show typical noise or gradual drift without clear morphological anomalies.",
+    "regions": [
+      {
+        "start": 608,
+        "end": 615,
+        "observation": "E-component shows a sustained ~2 MAD downward shift beginning near index 608, with a possible opposing partial return starting around 612–614; N and U show concurrent but less pronounced changes, including a sharp N spike at 610 and U dip at 611—suggesting a multi-axis transient event with ambiguous recovery."
+      },
+      {
+        "start": 725,
+        "end": 729,
+        "observation": "From index 725 onward, all three components (N/E/U) exhibit smooth, monotonic trends over just 5 samples: N rises steadily, E declines linearly, and U drops sharply—forming a coherent cross-axis platform-like behavior inconsistent with typical noise; the abrupt onset at 725 suggests a possible permanent offset or instrumental step."
+      }
+    ]
+  }
+}

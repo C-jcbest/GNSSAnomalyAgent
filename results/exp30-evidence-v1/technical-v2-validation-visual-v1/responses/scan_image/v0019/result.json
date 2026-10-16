@@ -1,0 +1,37 @@
+{
+  "status": "success",
+  "requested_model": "qwen3-vl-plus",
+  "request_count": 1,
+  "retry_count": 0,
+  "http_status": 200,
+  "served_model": "qwen3-vl-plus",
+  "usage": {
+    "prompt_tokens": 5462,
+    "completion_tokens": 289,
+    "total_tokens": 5751,
+    "completion_tokens_details": {
+      "text_tokens": 289
+    },
+    "prompt_tokens_details": {
+      "image_tokens": 4936,
+      "text_tokens": 526,
+      "cached_tokens": 0
+    }
+  },
+  "elapsed_seconds": 9.1249347999983,
+  "decision": {
+    "summary": "Two regions stand out: (1) a sharp, multi-sample step-like change near index 605–610 affecting all axes coherently, and (2) a strong linear ramp across all axes starting at index 725 through 729. Other intervals show typical GNSS noise or smooth motion without ambiguous superposed changes.",
+    "regions": [
+      {
+        "start": 605,
+        "end": 610,
+        "observation": "N/E/U components show a coherent, multi-sample downward shift in U (up) and upward shift in N (north) around index 605–610, with E (east) exhibiting a concurrent but less pronounced rise; the change is abrupt and sustained over ~5 samples, not clearly reversed within the window."
+      },
+      {
+        "start": 725,
+        "end": 729,
+        "observation": "From index ~725 onward, all three axes display a clear linear trend: N rises sharply (~3.75→4.5), E drops sharply (~4.0→2.5), and U drops sharply (~-3.5→-4.25); this appears as a coordinated offset or ramp, distinct from prior noise, and persists to the end of data."
+      }
+    ]
+  }
+}

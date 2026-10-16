@@ -1,0 +1,36 @@
+{
+  "status": "success",
+  "requested_model": "qwen3-vl-plus",
+  "request_count": 1,
+  "retry_count": 0,
+  "http_status": 200,
+  "served_model": "qwen3-vl-plus",
+  "usage": {
+    "prompt_tokens": 13503,
+    "completion_tokens": 312,
+    "total_tokens": 13815,
+    "completion_tokens_details": {
+      "text_tokens": 312
+    },
+    "prompt_tokens_details": {
+      "text_tokens": 13503,
+      "cached_tokens": 256
+    }
+  },
+  "elapsed_seconds": 9.621412799984682,
+  "decision": {
+    "summary": "Two regions merit closer inspection: (1) a sharp multi-sample offset in E/U around indices 618–622 with persistent post-event drift, and (2) the final 5-sample segment (725–729) showing a large, abrupt displacement in N and U without clear recovery. Both exhibit ambiguous superposition of steps and drift; no clean return observed.",
+    "regions": [
+      {
+        "start": 610,
+        "end": 624,
+        "observation": "Sharp multi-sample drop in E and U components around index 618–622, with N showing a smaller but coherent step; appears as a possible abrupt offset or platform onset, followed by continued drift. Surrounding samples (610–630) show elevated variability and no clear return to prior trend."
+      },
+      {
+        "start": 725,
+        "end": 729,
+        "observation": "Large, sustained displacement beginning near index 725: N jumps from ~-5.8 to -7.3, E shifts from ~-10.0 to -10.0 (minor), U drops sharply from ~9.1 to ~7.1 over 5 samples; this coincides with the final window and may represent a major event or data artifact—ambiguous whether it's a single jump or multi-step change due to coarse sampling."
+      }
+    ]
+  }
+}

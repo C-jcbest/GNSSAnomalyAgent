@@ -1,0 +1,33 @@
+{
+  "status": "success",
+  "requested_model": "qwen3-vl-plus",
+  "request_count": 1,
+  "retry_count": 0,
+  "http_status": 200,
+  "served_model": "qwen3-vl-plus",
+  "usage": {
+    "prompt_tokens": 2687,
+    "completion_tokens": 247,
+    "total_tokens": 2934,
+    "completion_tokens_details": {
+      "text_tokens": 247
+    },
+    "prompt_tokens_details": {
+      "image_tokens": 1906,
+      "text_tokens": 781,
+      "cached_tokens": 128
+    }
+  },
+  "elapsed_seconds": 7.207434799987823,
+  "decision": {
+    "summary": "Within allowed_context [455, 545], a single candidate temporary offset is observed: a correlated abrupt drop in N and U (~495–509) with incomplete recovery. The onset is multi-sample and coherent across axes; the return is ambiguous—partial recovery occurs but baseline is not reattained by end of context. No confirmed full-cycle temporary offset. E shows compensating rise but no clear reversal. No other intervals in this context meet criteria for confirmed or uncertain temporary offset.",
+    "intervals": [
+      {
+        "start": 495,
+        "end": 509,
+        "status": "uncertain",
+        "observation": "N and U show correlated multi-sample drop (2–3 samples) starting ~495, with N decreasing ~-2 to -4 MAD and U ~-2 to -3 MAD; E rises slightly. Interior sustained through ~505–508. Return is partial but not full by index 509 (last observed within allowed_context); no opposing recovery observed before context ends at 545. Status: uncertain."
+      }
+    ]
+  }
+}

@@ -1,0 +1,36 @@
+{
+  "status": "success",
+  "requested_model": "qwen3-vl-plus",
+  "request_count": 1,
+  "retry_count": 0,
+  "http_status": 200,
+  "served_model": "qwen3-vl-plus",
+  "usage": {
+    "prompt_tokens": 13248,
+    "completion_tokens": 315,
+    "total_tokens": 13563,
+    "completion_tokens_details": {
+      "text_tokens": 315
+    },
+    "prompt_tokens_details": {
+      "text_tokens": 13248,
+      "cached_tokens": 0
+    }
+  },
+  "elapsed_seconds": 9.699283699999796,
+  "decision": {
+    "summary": "Two regions stand out: (1) a rapid multi-sample offset near index 488–491 in the overlapping window, with coordinated N/E/U shifts suggesting a possible jump or abrupt motion onset; (2) a high-variability segment starting at index 605, featuring large N excursion and complex cross-axis morphology that may indicate superposed or partially reversing changes. Other segments show noisy but monotonic or oscillatory trends without clear morphological anomalies.",
+    "regions": [
+      {
+        "start": 488,
+        "end": 492,
+        "observation": "Sharp multi-sample rise in N (from ~5.8 to ~7.8) and E (from ~-2.3 to ~-1.5) over 3–4 samples around index 488–491, with U also increasing; appears as a rapid offset rather than smooth motion, possibly a jump or transient platform onset."
+      },
+      {
+        "start": 605,
+        "end": 620,
+        "observation": "Sustained high-amplitude N/E/U variability from ~605 onward, including a prominent N spike to ~10.5 at index 608–609 followed by a drop to ~7.2, with E and U showing correlated but non-symmetric behavior; ambiguous whether this reflects superposed opposing changes or a complex platform with partial return."
+      }
+    ]
+  }
+}

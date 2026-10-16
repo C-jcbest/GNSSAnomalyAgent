@@ -1,0 +1,37 @@
+{
+  "status": "success",
+  "requested_model": "qwen3-vl-plus",
+  "request_count": 1,
+  "retry_count": 0,
+  "http_status": 200,
+  "served_model": "qwen3-vl-plus",
+  "usage": {
+    "prompt_tokens": 4218,
+    "completion_tokens": 274,
+    "total_tokens": 4492,
+    "completion_tokens_details": {
+      "text_tokens": 274
+    },
+    "prompt_tokens_details": {
+      "image_tokens": 3702,
+      "text_tokens": 516,
+      "cached_tokens": 0
+    }
+  },
+  "elapsed_seconds": 8.587606899993261,
+  "decision": {
+    "summary": "Two regions stand out: (1) a large, persistent E-component offset starting near index 428 with incomplete recovery, and (2) a sharp, transient U-component drop near index 608–610 with rapid rebound. Both show cross-axis coupling but differ in duration and recovery behavior. Other intervals exhibit ordinary noise or smooth motion.",
+    "regions": [
+      {
+        "start": 425,
+        "end": 435,
+        "observation": "Sharp ~7.5 MAD downward step in E-component (centered) at ~index 428, followed by sustained offset and noisy recovery; N and U show correlated transient dip but no persistent shift. Ambiguous whether E returns fully—recovery appears partial and noisy through index 435."
+      },
+      {
+        "start": 605,
+        "end": 615,
+        "observation": "Multi-sample abrupt drop (~3 MAD) in U-component at ~index 608–610, coincident with smaller opposing dip in E and neutral N; U recovers rapidly by index 613 but leaves a subtle platform until ~615. Cross-axis shape suggests brief vertical offset with possible elastic rebound signature."
+      }
+    ]
+  }
+}

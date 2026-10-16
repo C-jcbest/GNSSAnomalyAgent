@@ -1,0 +1,32 @@
+{
+  "status": "success",
+  "requested_model": "qwen3-vl-plus",
+  "request_count": 1,
+  "retry_count": 0,
+  "http_status": 200,
+  "served_model": "qwen3-vl-plus",
+  "usage": {
+    "prompt_tokens": 2831,
+    "completion_tokens": 296,
+    "total_tokens": 3127,
+    "completion_tokens_details": {
+      "text_tokens": 296
+    },
+    "prompt_tokens_details": {
+      "text_tokens": 2831,
+      "cached_tokens": 128
+    }
+  },
+  "elapsed_seconds": 8.221784699999262,
+  "decision": {
+    "summary": "A transient 3D perturbation centered at indices 522–523 is evident: U drops sharply (~−2.9 MAD), N and E rise concurrently. U shows partial recovery by index 525 but remains offset; no clear opposing return observed within allowed context [485,560]. No other temporary offsets confirmed in this region. The candidate jump at index 495 is not supported by adjacent samples (N/E/U show smooth variation across 494–496); it is rejected as noise or artifact.",
+    "intervals": [
+      {
+        "start": 521,
+        "end": 525,
+        "status": "uncertain",
+        "observation": "U shows a sharp negative dip (from ~-1.9 at 521 to ~-4.8 at 523), with concurrent positive spikes in N (from ~9.1 to ~10.5) and E (from ~11.8 to ~12.4) at 522–523; U begins recovering by 524 (~-2.2) but does not return to pre-event level by 525 (~-2.1). Return is incomplete and ambiguous; cross-axis coupling supports transient nature, but full recovery unobserved."
+      }
+    ]
+  }
+}

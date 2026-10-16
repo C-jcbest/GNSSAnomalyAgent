@@ -1,0 +1,37 @@
+{
+  "status": "success",
+  "requested_model": "qwen3-vl-plus",
+  "request_count": 1,
+  "retry_count": 0,
+  "http_status": 200,
+  "served_model": "qwen3-vl-plus",
+  "usage": {
+    "prompt_tokens": 5462,
+    "completion_tokens": 268,
+    "total_tokens": 5730,
+    "completion_tokens_details": {
+      "text_tokens": 268
+    },
+    "prompt_tokens_details": {
+      "image_tokens": 4936,
+      "text_tokens": 526,
+      "cached_tokens": 256
+    }
+  },
+  "elapsed_seconds": 9.02488679997623,
+  "decision": {
+    "summary": "Two regions merit closer inspection: (1) a multi-sample U-axis drop near index 622–625 with partial cross-axis coupling and ambiguous recovery, and (2) a coherent linear trend across N/E/U beginning at index 725, spanning the final window and showing structured displacement without high-frequency noise.",
+    "regions": [
+      {
+        "start": 615,
+        "end": 625,
+        "observation": "Abrupt multi-sample drop in U (down ~2.5 MAD) at ~622–625, accompanied by a smaller opposing E shift and a delayed N dip; the U drop appears sustained over several samples with no clear immediate return, suggesting a possible temporary offset or onset of a step."
+      },
+      {
+        "start": 725,
+        "end": 729,
+        "observation": "Smooth, coherent linear trend across all three axes from ~725 onward: N rises steadily, E declines gently, U drops sharply (~1.5 MAD), forming a consistent triangular pattern—suggestive of a platform-like motion or systematic bias change rather than noise; includes the final overlapping window [725,729]."
+      }
+    ]
+  }
+}

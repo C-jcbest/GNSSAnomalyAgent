@@ -1,0 +1,36 @@
+{
+  "status": "success",
+  "requested_model": "qwen3-vl-plus",
+  "request_count": 1,
+  "retry_count": 0,
+  "http_status": 200,
+  "served_model": "qwen3-vl-plus",
+  "usage": {
+    "prompt_tokens": 13700,
+    "completion_tokens": 303,
+    "total_tokens": 14003,
+    "completion_tokens_details": {
+      "text_tokens": 303
+    },
+    "prompt_tokens_details": {
+      "text_tokens": 13700,
+      "cached_tokens": 0
+    }
+  },
+  "elapsed_seconds": 9.48244509997312,
+  "decision": {
+    "summary": "Two regions merit closer inspection: (1) an abrupt multi-axis shift near indices 490–500 in the first overlapping window, and (2) a sustained E-component ramp starting around index 610 with no clear reversal observed in the available data.",
+    "regions": [
+      {
+        "start": 485,
+        "end": 544,
+        "observation": "N/E/U show a multi-sample shift around index ~490–500: N drops from ~1.5 to ~-0.5, E shifts from ~-0.5 to ~-2.5, U rises from ~-0.5 to ~1.5; followed by noisy but roughly stable behavior until end of window. The change is abrupt over 2–3 samples and not clearly reversed within the window."
+      },
+      {
+        "start": 605,
+        "end": 664,
+        "observation": "From ~610 onward, E shows a sustained upward trend (from ~19 to ~22), while N remains relatively stable (~-10 to -9) and U fluctuates moderately (1.5–3.5). A possible platform or slow ramp appears between ~620–650 in E, with no clear opposing return yet visible; the trend continues into the next overlapping window."
+      }
+    ]
+  }
+}

@@ -1,0 +1,32 @@
+{
+  "status": "success",
+  "requested_model": "qwen3-vl-plus",
+  "request_count": 1,
+  "retry_count": 0,
+  "http_status": 200,
+  "served_model": "qwen3-vl-plus",
+  "usage": {
+    "prompt_tokens": 2899,
+    "completion_tokens": 209,
+    "total_tokens": 3108,
+    "completion_tokens_details": {
+      "text_tokens": 209
+    },
+    "prompt_tokens_details": {
+      "text_tokens": 2899,
+      "cached_tokens": 128
+    }
+  },
+  "elapsed_seconds": 6.02340410000761,
+  "decision": {
+    "summary": "Within allowed context [590,670], a sharp multi-sample drop occurs at index 625 across all axes. N and U partially rebound by 634, but E shows no recovery, violating the requirement for a clear opposing return on all affected axes. Thus, no confirmed temporary offset interval; one uncertain interval is identified.",
+    "intervals": [
+      {
+        "start": 625,
+        "end": 634,
+        "status": "uncertain",
+        "observation": "N and U show a multi-sample drop starting at index 625, with partial rebound by 634; E drops sharply at 625 but remains low through 634 without recovery—suggesting an asymmetric or incomplete return. The onset is abrupt (≥2 MAD), interior sustained for ≥9 samples, but return is absent in E and only partial in N/U, so status is uncertain."
+      }
+    ]
+  }
+}

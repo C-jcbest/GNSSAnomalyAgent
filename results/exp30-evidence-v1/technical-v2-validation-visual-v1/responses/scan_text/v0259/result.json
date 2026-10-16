@@ -1,0 +1,36 @@
+{
+  "status": "success",
+  "requested_model": "qwen3-vl-plus",
+  "request_count": 1,
+  "retry_count": 0,
+  "http_status": 200,
+  "served_model": "qwen3-vl-plus",
+  "usage": {
+    "prompt_tokens": 13173,
+    "completion_tokens": 304,
+    "total_tokens": 13477,
+    "completion_tokens_details": {
+      "text_tokens": 304
+    },
+    "prompt_tokens_details": {
+      "text_tokens": 13173,
+      "cached_tokens": 256
+    }
+  },
+  "elapsed_seconds": 8.854808600008255,
+  "decision": {
+    "summary": "Two regions stand out: (1) a sharp multi-sample drop in N/E with concurrent U rise near index 538–540, lacking clear reversal; (2) an extreme U spike at index 608 with correlated N/E shifts and incomplete return, suggesting a transient or compound anomaly. Other segments show noisy but morphologically ordinary behavior.",
+    "regions": [
+      {
+        "start": 535,
+        "end": 544,
+        "observation": "N/E/U show a multi-sample abrupt drop in N and E around index 538–540, with U rising sharply; the change is not clearly reversed within the window, suggesting a possible permanent offset or onset of sustained motion. The surrounding samples (535–544) show a distinct kink rather than smooth noise."
+      },
+      {
+        "start": 605,
+        "end": 612,
+        "observation": "A large, isolated spike in U (to ~6.64) at index 608, preceded by moderate U values (~2.7–3.2) and followed by a rapid return toward ~2.6–3.8 over next 3–4 samples; N and E also shift abruptly at same index, indicating a likely transient event with ambiguous recovery—possibly a jump with partial return or superposed motion."
+      }
+    ]
+  }
+}

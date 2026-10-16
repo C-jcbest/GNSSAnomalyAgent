@@ -1,0 +1,37 @@
+{
+  "status": "success",
+  "requested_model": "qwen3-vl-plus",
+  "request_count": 1,
+  "retry_count": 0,
+  "http_status": 200,
+  "served_model": "qwen3-vl-plus",
+  "usage": {
+    "prompt_tokens": 5462,
+    "completion_tokens": 306,
+    "total_tokens": 5768,
+    "completion_tokens_details": {
+      "text_tokens": 306
+    },
+    "prompt_tokens_details": {
+      "image_tokens": 4936,
+      "text_tokens": 526,
+      "cached_tokens": 0
+    }
+  },
+  "elapsed_seconds": 11.106811500008916,
+  "decision": {
+    "summary": "Two regions warrant closer inspection: (1) a sustained N-component acceleration starting ~420 with no clear counter-motion in E/U; (2) a sharp multi-sample step event near the end (725–729) affecting all axes, with ambiguous partial return in U. Other intervals show typical noise or smooth trends without morphological anomalies.",
+    "regions": [
+      {
+        "start": 420,
+        "end": 460,
+        "observation": "N-component shows a sustained, accelerating upward trend beginning around index 420, with no clear opposing return in E or U; E and U remain noisy but without matching coherent offset. The onset is gradual but distinct from prior quasi-stable behavior (365–410), suggesting a possible permanent shift or long-term deformation onset."
+      },
+      {
+        "start": 725,
+        "end": 729,
+        "observation": "From ~725 onward, all three components (N/E/U) exhibit abrupt, multi-sample step-like changes: N jumps up sharply, E drops then recovers partially, U drops steeply. The co-occurrence and multi-sample nature suggest a non-noise event (e.g., jump or transient offset); the U-component shows a possible opposing return starting at 727, but resolution is coarse—boundaries are uncertain and require closer inspection."
+      }
+    ]
+  }
+}

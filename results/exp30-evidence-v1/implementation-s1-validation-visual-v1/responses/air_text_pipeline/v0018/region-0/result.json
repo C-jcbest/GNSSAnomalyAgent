@@ -1,0 +1,32 @@
+{
+  "status": "success",
+  "requested_model": "qwen3-vl-plus",
+  "request_count": 1,
+  "retry_count": 0,
+  "http_status": 200,
+  "served_model": "qwen3-vl-plus",
+  "usage": {
+    "prompt_tokens": 3901,
+    "completion_tokens": 272,
+    "total_tokens": 4173,
+    "completion_tokens_details": {
+      "text_tokens": 272
+    },
+    "prompt_tokens_details": {
+      "text_tokens": 3901,
+      "cached_tokens": 128
+    }
+  },
+  "elapsed_seconds": 7.755319700023392,
+  "decision": {
+    "summary": "A multi-sample displacement begins around index 461 (first non-null after start of context), with N decreasing sharply (~1.34 → -1.29), E increasing (~0.59 → 2.22), and U rising then falling—consistent with asymmetric cross-axis behavior. The offset remains sustained through the screened region (up to idx 544), but no opposing return is observed within the allowed context [460,579]; thus status is uncertain. No other temporary offsets are confirmed in this window.",
+    "intervals": [
+      {
+        "start": 461,
+        "end": 544,
+        "status": "uncertain",
+        "observation": "N drops from ~1.34 (idx 461) to ~-1.29 (idx 470), E rises from ~0.59 (idx 461) to ~2.22 (idx 480), U shows concurrent rise then drop; no clear opposing return observed before idx 544. Sustained offset persists through idx 544, but return is unobserved within allowed context [460,579]."
+      }
+    ]
+  }
+}

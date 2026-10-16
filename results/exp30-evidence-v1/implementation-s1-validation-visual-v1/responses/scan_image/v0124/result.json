@@ -1,0 +1,37 @@
+{
+  "status": "success",
+  "requested_model": "qwen3-vl-plus",
+  "request_count": 1,
+  "retry_count": 0,
+  "http_status": 200,
+  "served_model": "qwen3-vl-plus",
+  "usage": {
+    "prompt_tokens": 4218,
+    "completion_tokens": 295,
+    "total_tokens": 4513,
+    "completion_tokens_details": {
+      "text_tokens": 295
+    },
+    "prompt_tokens_details": {
+      "image_tokens": 3702,
+      "text_tokens": 516,
+      "cached_tokens": 0
+    }
+  },
+  "elapsed_seconds": 9.520550199988065,
+  "decision": {
+    "summary": "Two regions stand out: (1) a sustained multi-axis downward trend starting ~490 and continuing past 580, and (2) an abrupt multi-sample offset near 665–670 with ambiguous partial recovery. Cross-axis coherence supports physical motion over noise; no other segments show comparable morphology.",
+    "regions": [
+      {
+        "start": 490,
+        "end": 580,
+        "observation": "Clear multi-axis coherent downward trend beginning ~index 490 in N, E, and U (E and U drop ~5–6 MAD units by 580), with superposed high-frequency noise; no obvious return within window, suggesting a sustained offset or slow slip. The onset is gradual but distinct from prior variability."
+      },
+      {
+        "start": 660,
+        "end": 720,
+        "observation": "Abrupt multi-sample negative jump in all three components around index 665–670 (U drops ~3 MAD, E ~2 MAD, N ~1 MAD), followed by apparent platform-like behavior until ~685, then continued noisy decline. A possible opposing partial return appears near 695–700 in U and E, but not fully resolved; the region includes ambiguity about whether the offset is temporary or permanent."
+      }
+    ]
+  }
+}

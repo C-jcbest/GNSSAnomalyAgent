@@ -1,0 +1,32 @@
+{
+  "status": "success",
+  "requested_model": "qwen3-vl-plus",
+  "request_count": 1,
+  "retry_count": 0,
+  "http_status": 200,
+  "served_model": "qwen3-vl-plus",
+  "usage": {
+    "prompt_tokens": 2860,
+    "completion_tokens": 303,
+    "total_tokens": 3163,
+    "completion_tokens_details": {
+      "text_tokens": 303
+    },
+    "prompt_tokens_details": {
+      "text_tokens": 2860,
+      "cached_tokens": 128
+    }
+  },
+  "elapsed_seconds": 7.779564799973741,
+  "decision": {
+    "summary": "Within allowed context [575,653], a multi-axis displacement begins around idx 579 (U drop to -7.59), with correlated N/E changes. The signal does not return to pre-event baseline by idx 653; sustained deviation and internal variability prevent confirmation of a temporary offset. No isolated spike or clean return observed—status uncertain.",
+    "intervals": [
+      {
+        "start": 579,
+        "end": 620,
+        "status": "uncertain",
+        "observation": "U drops sharply from -4.73 (idx 575) to -7.59 (idx 579), then fluctuates between -7.15 and -4.17 through idx 618; N and E also show multi-sample coordinated shifts (e.g., N from -3.35 to -1.63 at idx 577, E from -4.73 to -4.60). No clear return to pre-event levels observed within allowed context (up to idx 653); the offset persists through last available sample (idx 653: U=-4.81, N=-1.16, E=-4.81), but interior variability prevents confirmation of a clean temporary offset. Return is unobserved/ambiguous → uncertain."
+      }
+    ]
+  }
+}

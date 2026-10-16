@@ -1,0 +1,38 @@
+{
+  "status": "success",
+  "requested_model": "qwen3-vl-plus",
+  "request_count": 1,
+  "retry_count": 0,
+  "http_status": 200,
+  "served_model": "qwen3-vl-plus",
+  "usage": {
+    "prompt_tokens": 3226,
+    "completion_tokens": 360,
+    "total_tokens": 3586,
+    "completion_tokens_details": {
+      "text_tokens": 360
+    },
+    "prompt_tokens_details": {
+      "text_tokens": 3226,
+      "cached_tokens": 128
+    }
+  },
+  "elapsed_seconds": 9.003388699988136,
+  "decision": {
+    "summary": "A sharp multi-axis offset begins at index 588: N and E jump upward (~7.6 and ~7.2 MAD), U drops sharply (~-18.1 MAD); the offset persists through 594 with no return observed in any axis. From 595 onward, U partially recovers but N/E remain elevated and no full opposing return is observed within allowed context [545,630]. The candidate jump at index 590 aligns with the observed abrupt change. A second interval (595–630) is uncertain due to incomplete return evidence.",
+    "intervals": [
+      {
+        "start": 588,
+        "end": 594,
+        "status": "confirmed",
+        "observation": "N and E rise sharply from ~588–590 (N: ~0.5→8.1, E: ~2.2→9.4), U drops sharply (~-0.5→-18.6) over same 2–3 samples; sustained plateau through 594 with no return observed in N/E/U within allowed context."
+      },
+      {
+        "start": 595,
+        "end": 630,
+        "status": "uncertain",
+        "observation": "U shows partial recovery from -18.6 to ~-16.3 between 595–630, but N/E remain elevated without clear opposing return; onset at 588 not fully resolved for U before drop, and return is incomplete/ambiguous beyond 630 (outside allowed context)."
+      }
+    ]
+  }
+}

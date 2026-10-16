@@ -1,0 +1,36 @@
+{
+  "status": "success",
+  "requested_model": "qwen3-vl-plus",
+  "request_count": 1,
+  "retry_count": 0,
+  "http_status": 200,
+  "served_model": "qwen3-vl-plus",
+  "usage": {
+    "prompt_tokens": 13918,
+    "completion_tokens": 331,
+    "total_tokens": 14249,
+    "completion_tokens_details": {
+      "text_tokens": 331
+    },
+    "prompt_tokens_details": {
+      "text_tokens": 13918,
+      "cached_tokens": 256
+    }
+  },
+  "elapsed_seconds": 9.455803199991351,
+  "decision": {
+    "summary": "Two regions warrant closer inspection: (1) a sharp, sustained cross-axis displacement near the end of the first window (indices 538–544), and (2) an ambiguous multi-sample drop within a high-amplitude oscillatory platform in the final window (indices 705–729). Both show complex morphology with possible superposed or incomplete returns.",
+    "regions": [
+      {
+        "start": 538,
+        "end": 544,
+        "observation": "Cross-axis shape shows a multi-sample abrupt shift in N and E around index 538–540, with N jumping from ~1.2 to ~6.7 and E from ~-1.8 to ~-9.9, while U shifts from ~-1.4 to ~1.0; the change is sustained over several samples and not clearly reversed within the window."
+      },
+      {
+        "start": 705,
+        "end": 729,
+        "observation": "From index ~680 onward, N and E exhibit a prolonged platform-like behavior with high-amplitude oscillations (N ~13–17, E ~-12 to -16), but around index 705–710 there is an ambiguous multi-sample drop in N (~17→13) and E (~-13→-16) that may represent a partial return or superposed offset; the surrounding context suggests possible opposing changes without clear resolution."
+      }
+    ]
+  }
+}

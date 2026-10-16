@@ -1,0 +1,38 @@
+{
+  "status": "success",
+  "requested_model": "qwen3-vl-plus",
+  "request_count": 1,
+  "retry_count": 0,
+  "http_status": 200,
+  "served_model": "qwen3-vl-plus",
+  "usage": {
+    "prompt_tokens": 6855,
+    "completion_tokens": 545,
+    "total_tokens": 7400,
+    "completion_tokens_details": {
+      "text_tokens": 545
+    },
+    "prompt_tokens_details": {
+      "text_tokens": 6855,
+      "cached_tokens": 128
+    }
+  },
+  "elapsed_seconds": 15.417255200009095,
+  "decision": {
+    "summary": "Two candidate step-like events occur at indices 538 and 553, with a third at 581. The first (538) shows a clear multi-axis jump and sustained offset through 552, but no return before 553—instead, a new large jump occurs. The second (553) initiates another offset, but the subsequent behavior (through 580) does not revert toward pre-538 levels; the 581 jump is large and opposite but likely a separate event. No interval exhibits a complete onset–sustained–return pattern within allowed context [500,699]. All candidate temporary offsets remain uncertain due to missing or ambiguous returns.",
+    "intervals": [
+      {
+        "start": 538,
+        "end": 552,
+        "status": "uncertain",
+        "observation": "U drops sharply (~−14.36) and E jumps upward (~+28.23) at index 538, with N rising modestly (~+0.94); interior (539–552) shows sustained offset: U remains ~−14 to −17, E stays elevated (~30–32), N stabilizes near 3.8–5.3. Return not observed before index 553; at 553 a large opposing jump occurs in all axes (N +16.5, E −12.86, U +4.7), but this is a new event, not a recovery of the first offset. Thus, the first step lacks a return within allowed context."
+      },
+      {
+        "start": 553,
+        "end": 580,
+        "status": "uncertain",
+        "observation": "At index 581, a second opposing jump occurs (N −16.63, E +13.98, U −5.30), following a period (553–580) where U remained low (~−12 to −17), E high (~30–32), N elevated (~12–29). However, the pre-581 trend shows no clear reversal toward pre-538 baseline; instead, motion appears cumulative or multi-step. No clean return to original level before 581, and the 581 jump may be independent. Hence, no confirmed temporary interval for the second event."
+      }
+    ]
+  }
+}

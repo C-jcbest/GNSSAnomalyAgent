@@ -1,0 +1,38 @@
+{
+  "status": "success",
+  "requested_model": "qwen3-vl-plus",
+  "request_count": 1,
+  "retry_count": 0,
+  "http_status": 200,
+  "served_model": "qwen3-vl-plus",
+  "usage": {
+    "prompt_tokens": 4387,
+    "completion_tokens": 396,
+    "total_tokens": 4783,
+    "completion_tokens_details": {
+      "text_tokens": 396
+    },
+    "prompt_tokens_details": {
+      "text_tokens": 4387,
+      "cached_tokens": 128
+    }
+  },
+  "elapsed_seconds": 10.093536000000313,
+  "decision": {
+    "summary": "Two temporally adjacent multi-axis events are observed: (1) a sharp onset offset starting at index 557 with sustained platform until 607, lacking a full return within the window—hence uncertain; (2) a coherent reversal from 608 to 612 that restores all three components toward prior levels, confirmed as a temporary offset interval. The reversal aligns with the optional jump at 608 and shows clear opposing motion on all axes.",
+    "intervals": [
+      {
+        "start": 557,
+        "end": 607,
+        "status": "uncertain",
+        "observation": "Sharp multi-axis drop in N/E/U beginning ~557 (N: -5.3→-6.2, E: 19.0→18.1, U: 21.5→24.5 MAD), sustained platform through ~607 with coherent offset (N ~ -5 to -7, E ~16–19, U ~20–24). No opposing return observed within allowed context; partial N recovery starts at 608 but not full reversal."
+      },
+      {
+        "start": 608,
+        "end": 612,
+        "status": "confirmed",
+        "observation": "Abrupt multi-sample reversal near 608–612: N jumps +7.5 (−6.1→−0.2), E −15.8 (17.9→1.4), U −19.6 (22.9→3.3), restoring components toward pre-offset levels. Return is coherent across axes and completes by index 612, though U remains slightly elevated (~3.8 vs prior ~2.8)."
+      }
+    ]
+  }
+}

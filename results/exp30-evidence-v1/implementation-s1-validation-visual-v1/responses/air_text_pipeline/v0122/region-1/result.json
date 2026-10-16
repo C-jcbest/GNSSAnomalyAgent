@@ -1,0 +1,32 @@
+{
+  "status": "success",
+  "requested_model": "qwen3-vl-plus",
+  "request_count": 1,
+  "retry_count": 0,
+  "http_status": 200,
+  "served_model": "qwen3-vl-plus",
+  "usage": {
+    "prompt_tokens": 3454,
+    "completion_tokens": 211,
+    "total_tokens": 3665,
+    "completion_tokens_details": {
+      "text_tokens": 211
+    },
+    "prompt_tokens_details": {
+      "text_tokens": 3454,
+      "cached_tokens": 128
+    }
+  },
+  "elapsed_seconds": 6.025507699989248,
+  "decision": {
+    "summary": "A multi-sample coupled E-N shift occurs at indices 610–612: E decreases sharply (~1.5 MAD units), N increases sharply (~2.1 MAD units). The change is sustained through the end of the allowed context (index 667) with no return to prior baseline, so a temporary offset cannot be confirmed; status is uncertain pending observation beyond 667. No other temporary offsets are evident in the allowed context.",
+    "intervals": [
+      {
+        "start": 610,
+        "end": 612,
+        "status": "uncertain",
+        "observation": "E drops ~1.5 units (from -9.76 to -11.13) and N rises sharply (from ~3.1 to ~5.2) over indices 610–612; no reversal observed within allowed context, baseline shifts persist through index 667"
+      }
+    ]
+  }
+}

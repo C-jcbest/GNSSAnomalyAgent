@@ -1,0 +1,37 @@
+{
+  "status": "success",
+  "requested_model": "qwen3-vl-plus",
+  "request_count": 1,
+  "retry_count": 0,
+  "http_status": 200,
+  "served_model": "qwen3-vl-plus",
+  "usage": {
+    "prompt_tokens": 5462,
+    "completion_tokens": 278,
+    "total_tokens": 5740,
+    "completion_tokens_details": {
+      "text_tokens": 278
+    },
+    "prompt_tokens_details": {
+      "image_tokens": 4936,
+      "text_tokens": 526,
+      "cached_tokens": 256
+    }
+  },
+  "elapsed_seconds": 8.713675599981798,
+  "decision": {
+    "summary": "Two regions warrant closer inspection: (1) a multi-sample step-like event near indices 425–440 with partial cross-axis recovery, and (2) a coherent monotonic decline across all axes from index 725 to 729. Other intervals show typical noise or smooth motion without ambiguous superposed changes.",
+    "regions": [
+      {
+        "start": 425,
+        "end": 544,
+        "observation": "Cross-axis shape: N and E components show correlated multi-sample downward steps around index 430–440, followed by a partial recovery in E but not N; U shows a concurrent sharp drop (~2 MAD) then slow rebound. Suggests possible transient offset or platform-like behavior with ambiguous return in N."
+      },
+      {
+        "start": 725,
+        "end": 729,
+        "observation": "Cross-axis shape: From ~725 onward, all three components (N/E/U) exhibit a coherent, smooth, monotonic decline over ~4 samples—N drops ~0.8 MAD, E ~1.5 MAD, U ~2.5 MAD—with no sign of reversal within the window; appears as a sustained shift rather than noise or spike."
+      }
+    ]
+  }
+}

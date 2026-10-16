@@ -1,0 +1,37 @@
+{
+  "status": "success",
+  "requested_model": "qwen3-vl-plus",
+  "request_count": 1,
+  "retry_count": 0,
+  "http_status": 200,
+  "served_model": "qwen3-vl-plus",
+  "usage": {
+    "prompt_tokens": 5462,
+    "completion_tokens": 274,
+    "total_tokens": 5736,
+    "completion_tokens_details": {
+      "text_tokens": 274
+    },
+    "prompt_tokens_details": {
+      "image_tokens": 4936,
+      "text_tokens": 526,
+      "cached_tokens": 256
+    }
+  },
+  "elapsed_seconds": 8.245318200002657,
+  "decision": {
+    "summary": "Two regions stand out: (1) a prolonged E-decline with a sharp drop near 650–655, and (2) a prominent U-step near 685 with associated cross-axis responses. Both involve multi-sample transitions and lack clear recovery, warranting closer inspection. Other intervals show typical noise or smooth trends.",
+    "regions": [
+      {
+        "start": 550,
+        "end": 664,
+        "observation": "E-component shows a sustained, accelerating downward trend from ~index 550 onward, with a sharp multi-sample drop near 650–655 that appears unrecovered; N and U show correlated but less pronounced changes, suggesting a possible permanent offset or ramp superposed on noise."
+      },
+      {
+        "start": 680,
+        "end": 729,
+        "observation": "U-component exhibits a large, abrupt step-down near index 685 (spanning ~3–4 samples), followed by a plateau and then a second steep decline after 720; E and N show concurrent but smaller opposing shifts around 685–690, hinting at a complex multi-axis transient possibly involving platform shift or local deformation."
+      }
+    ]
+  }
+}

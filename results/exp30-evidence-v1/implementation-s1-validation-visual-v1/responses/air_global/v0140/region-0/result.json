@@ -1,0 +1,33 @@
+{
+  "status": "success",
+  "requested_model": "qwen3-vl-plus",
+  "request_count": 1,
+  "retry_count": 0,
+  "http_status": 200,
+  "served_model": "qwen3-vl-plus",
+  "usage": {
+    "prompt_tokens": 2709,
+    "completion_tokens": 225,
+    "total_tokens": 2934,
+    "completion_tokens_details": {
+      "text_tokens": 225
+    },
+    "prompt_tokens_details": {
+      "image_tokens": 1906,
+      "text_tokens": 803,
+      "cached_tokens": 128
+    }
+  },
+  "elapsed_seconds": 6.935565699997824,
+  "decision": {
+    "summary": "Within allowed context [410,495], only one candidate temporary offset is present: a multi-sample transient in N centered at ~455, with correlated but smaller E/U responses. The offset lacks an observed opposing return before index 495; N stabilizes at a higher level afterward, making the interval incomplete. No other temporary offsets are supported by axis-coherent onset/sustained/return morphology in this window.",
+    "intervals": [
+      {
+        "start": 452,
+        "end": 460,
+        "status": "uncertain",
+        "observation": "N shows a multi-sample upward shift (~+6 MAD) beginning near index 452, peaking around 455–457; E and U exhibit smaller correlated transients (E negative, U positive). No opposing return observed within allowed context [410,495]; N remains elevated after 460, suggesting incomplete recovery. Return status unobserved → uncertain."
+      }
+    ]
+  }
+}

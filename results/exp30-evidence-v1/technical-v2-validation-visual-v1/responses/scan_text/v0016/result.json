@@ -1,0 +1,36 @@
+{
+  "status": "success",
+  "requested_model": "qwen3-vl-plus",
+  "request_count": 1,
+  "retry_count": 0,
+  "http_status": 200,
+  "served_model": "qwen3-vl-plus",
+  "usage": {
+    "prompt_tokens": 14074,
+    "completion_tokens": 356,
+    "total_tokens": 14430,
+    "completion_tokens_details": {
+      "text_tokens": 356
+    },
+    "prompt_tokens_details": {
+      "text_tokens": 14074,
+      "cached_tokens": 0
+    }
+  },
+  "elapsed_seconds": 10.763459699985106,
+  "decision": {
+    "summary": "Two regions stand out: (1) an abrupt cross-axis shift near index 490–500 with coordinated N increase and E decrease, possibly a step or platform; (2) a later interval (~605–729) with sustained drift, a sharp E drop near 660, and ambiguous partial recovery—suggesting overlapping permanent drift and temporary offset.",
+    "regions": [
+      {
+        "start": 485,
+        "end": 544,
+        "observation": "N/E/U show a multi-sample shift around index ~490–500: N jumps from ~1–2 to ~8–9, E drops sharply from ~0 to ~-2.8, U shifts from ~-0.5 to ~-0.5 (minor), then continues with noisy but coherent motion. The transition is abrupt over 2–3 samples and not clearly reversed; possible platform or step-like offset."
+      },
+      {
+        "start": 605,
+        "end": 729,
+        "observation": "From ~610 onward, N and E exhibit sustained drift with intermittent spikes (e.g., N jumps to ~28–30 at ~660–670, E drops to ~-14–-16). A notable multi-sample drop in E (~-12 to -14) occurs near index 660, followed by apparent opposing return toward -12 by ~680, though not fully reversing. U remains noisy but shows no clear counterpart. Ambiguous superposition of drift and possible temporary offset."
+      }
+    ]
+  }
+}

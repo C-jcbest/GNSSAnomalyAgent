@@ -1,0 +1,36 @@
+{
+  "status": "success",
+  "requested_model": "qwen3-vl-plus",
+  "request_count": 1,
+  "retry_count": 0,
+  "http_status": 200,
+  "served_model": "qwen3-vl-plus",
+  "usage": {
+    "prompt_tokens": 13457,
+    "completion_tokens": 345,
+    "total_tokens": 13802,
+    "completion_tokens_details": {
+      "text_tokens": 345
+    },
+    "prompt_tokens_details": {
+      "text_tokens": 13457,
+      "cached_tokens": 256
+    }
+  },
+  "elapsed_seconds": 9.676829800009727,
+  "decision": {
+    "summary": "Two regions merit closer look: (1) a sharp multi-sample cross-axis shift in N/E around indices 485–544 without full recovery, and (2) a prolonged accelerating displacement trend across all axes from index 605 onward, with possible inflection points near 680 and 710.",
+    "regions": [
+      {
+        "start": 485,
+        "end": 544,
+        "observation": "Cross-axis shape shows a multi-sample abrupt shift in N and E around index 490–495, with N jumping from ~-0.1 to +0.9 and E dropping sharply from ~0.5 to -0.2, followed by sustained elevated N and variable E; U remains relatively stable but dips slightly. The change is not fully reversed within the window, suggesting a possible permanent offset or platform onset."
+      },
+      {
+        "start": 605,
+        "end": 729,
+        "observation": "From ~index 630 onward, all three components (N, E, U) show a sustained, accelerating trend: N increases steadily from ~5.9 to >37, E rises from ~4.2 to >24, and U drops from ~-4.6 to <-26. The motion appears coherent across axes, possibly indicating long-term deformation or drift; no clear opposing return or platform is evident, but the rate changes subtly around index 680 and again near 710, warranting closer inspection of those sub-regions."
+      }
+    ]
+  }
+}

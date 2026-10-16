@@ -1,0 +1,36 @@
+{
+  "status": "success",
+  "requested_model": "qwen3-vl-plus",
+  "request_count": 1,
+  "retry_count": 0,
+  "http_status": 200,
+  "served_model": "qwen3-vl-plus",
+  "usage": {
+    "prompt_tokens": 14104,
+    "completion_tokens": 298,
+    "total_tokens": 14402,
+    "completion_tokens_details": {
+      "text_tokens": 298
+    },
+    "prompt_tokens_details": {
+      "text_tokens": 14104,
+      "cached_tokens": 0
+    }
+  },
+  "elapsed_seconds": 10.076504099997692,
+  "decision": {
+    "summary": "Two regions merit closer inspection: (1) an abrupt multi-sample shift near index 618–620 in E/U with supporting N change, and (2) a prolonged high-amplitude fluctuating segment from ~680 onward with no obvious reversal, possibly indicating complex superposed motion or data anomaly.",
+    "regions": [
+      {
+        "start": 615,
+        "end": 624,
+        "observation": "Sharp multi-sample jump in E and U components around index 618–620, with E increasing from ~30 to ~32 and U dropping from ~-17 to ~-19; N shows a smaller concurrent rise. The change is abrupt and sustained, not clearly reversed within the window."
+      },
+      {
+        "start": 680,
+        "end": 729,
+        "observation": "Extended region (starting ~680) showing persistent high-amplitude oscillation in E (~30–36) and U (~-20 to -24), with N fluctuating between ~13–18; includes a notable spike at index 700 (E=35.7, U=-21.5) and later gradual drift. No clear platform or return, but morphology suggests superposed motion or data artifact rather than simple offset."
+      }
+    ]
+  }
+}

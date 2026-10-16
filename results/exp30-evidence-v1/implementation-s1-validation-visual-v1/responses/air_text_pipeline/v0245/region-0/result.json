@@ -1,0 +1,32 @@
+{
+  "status": "success",
+  "requested_model": "qwen3-vl-plus",
+  "request_count": 1,
+  "retry_count": 0,
+  "http_status": 200,
+  "served_model": "qwen3-vl-plus",
+  "usage": {
+    "prompt_tokens": 3161,
+    "completion_tokens": 263,
+    "total_tokens": 3424,
+    "completion_tokens_details": {
+      "text_tokens": 263
+    },
+    "prompt_tokens_details": {
+      "text_tokens": 3161,
+      "cached_tokens": 128
+    }
+  },
+  "elapsed_seconds": 7.258662899985211,
+  "decision": {
+    "summary": "A multi-sample cross-axis shift begins at index 529: E increases abruptly (~1.9→3.8), U decreases (~0.2→-0.5), N rises moderately (~1.1→2.8); the offset persists through index 543. No opposing return is observed within allowed context [495,579]; later samples remain offset, so interval is uncertain. The candidate jump at index 529 aligns with onset but does not confirm a complete temporary offset due to missing reversal.",
+    "intervals": [
+      {
+        "start": 529,
+        "end": 543,
+        "status": "uncertain",
+        "observation": "E rises sharply from ~1.9 to ~3.8 over indices 529–532, U drops from ~0.2 to ~-0.5 over same span; N shows modest rise (~1.1 to ~2.8). Change sustains through index 543 without reversal. Return not observed within allowed context (ends at 579), and later samples show continued elevated E/U offset with no clear reversion—status uncertain."
+      }
+    ]
+  }
+}

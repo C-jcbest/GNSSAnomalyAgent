@@ -1,0 +1,39 @@
+{
+  "status": "success",
+  "requested_model": "qwen3-vl-plus",
+  "request_count": 1,
+  "retry_count": 0,
+  "http_status": 200,
+  "served_model": "qwen3-vl-plus",
+  "usage": {
+    "prompt_tokens": 2663,
+    "completion_tokens": 348,
+    "total_tokens": 3011,
+    "completion_tokens_details": {
+      "text_tokens": 348
+    },
+    "prompt_tokens_details": {
+      "image_tokens": 1738,
+      "text_tokens": 925,
+      "cached_tokens": 128
+    }
+  },
+  "elapsed_seconds": 9.575687900010962,
+  "decision": {
+    "summary": "No confirmed temporary offsets. Two candidate intervals are identified: (1) a prolonged unidirectional E/U descent (500–683) lacking reversal; (2) a sharp multi-axis jump at 684–690 with no return observed within allowed context. Both lack opposing returns and thus remain uncertain. N-component stability throughout supports absence of transient recovery.",
+    "intervals": [
+      {
+        "start": 500,
+        "end": 683,
+        "status": "uncertain",
+        "observation": "E-component shows sustained monotonic descent from ~−2.5 to ~−13 MAD between indices 500–660, continuing gradually to ~−14.5 by index 683; U-component declines steadily over same interval with superposed fluctuations; N remains stable. No opposing return observed within allowed context (up to 699), and the trend persists through 683 without reversal—thus not a temporary offset."
+      },
+      {
+        "start": 684,
+        "end": 690,
+        "status": "uncertain",
+        "observation": "At index 684: sharp multi-axis displacement—E drops ~−11 MAD, U jumps +6.8 MAD, N rises +26.2 MAD—followed by immediate stabilization into a new plateau by index 690. Return to pre-event levels is absent; motion appears permanent or long-lasting. No opposing return observed before index 699, so status uncertain despite clear onset and interior stability."
+      }
+    ]
+  }
+}

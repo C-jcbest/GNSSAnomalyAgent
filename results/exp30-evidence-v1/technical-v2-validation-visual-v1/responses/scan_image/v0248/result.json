@@ -1,0 +1,37 @@
+{
+  "status": "success",
+  "requested_model": "qwen3-vl-plus",
+  "request_count": 1,
+  "retry_count": 0,
+  "http_status": 200,
+  "served_model": "qwen3-vl-plus",
+  "usage": {
+    "prompt_tokens": 5462,
+    "completion_tokens": 324,
+    "total_tokens": 5786,
+    "completion_tokens_details": {
+      "text_tokens": 324
+    },
+    "prompt_tokens_details": {
+      "image_tokens": 4936,
+      "text_tokens": 526,
+      "cached_tokens": 256
+    }
+  },
+  "elapsed_seconds": 10.301537200022722,
+  "decision": {
+    "summary": "Two regions stand out: (1) a sharp, multi-axis step near index 478 affecting E and U strongly with N support, lacking an obvious return; (2) a brief but highly coherent linear trend across all axes starting at index 725, likely non-geophysical. Other segments show typical noise or smooth drift without ambiguous superposed changes.",
+    "regions": [
+      {
+        "start": 475,
+        "end": 480,
+        "observation": "Sharp ~10 MAD upward step in E (from ~0 to ~10) and simultaneous ~15 MAD downward step in U (from ~0 to ~-15) around index 478–479, with N showing a smaller concurrent drop (~2 MAD). The E and U steps appear coherent and abrupt across multiple samples; no clear opposing return is visible within the window, though E shows slight relaxation afterward."
+      },
+      {
+        "start": 725,
+        "end": 729,
+        "observation": "From ~725 onward, all three components show large, correlated linear trends: N drops steadily (~1.2 MAD), E rises (~1.5 MAD), and U drops (~0.6 MAD) over just 5 indices. The lines are nearly straight and parallel in slope, suggesting a possible instrumental or processing artifact rather than physical motion; the abrupt onset at 725 (last window) warrants inspection despite minimal surrounding context."
+      }
+    ]
+  }
+}

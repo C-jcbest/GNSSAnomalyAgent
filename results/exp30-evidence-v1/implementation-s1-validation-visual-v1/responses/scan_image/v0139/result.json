@@ -1,0 +1,37 @@
+{
+  "status": "success",
+  "requested_model": "qwen3-vl-plus",
+  "request_count": 1,
+  "retry_count": 0,
+  "http_status": 200,
+  "served_model": "qwen3-vl-plus",
+  "usage": {
+    "prompt_tokens": 4218,
+    "completion_tokens": 295,
+    "total_tokens": 4513,
+    "completion_tokens_details": {
+      "text_tokens": 295
+    },
+    "prompt_tokens_details": {
+      "image_tokens": 3702,
+      "text_tokens": 516,
+      "cached_tokens": 0
+    }
+  },
+  "elapsed_seconds": 9.096588199987309,
+  "decision": {
+    "summary": "Two regions stand out: (1) a correlated transient drop in N/U around 495–510 with ambiguous E response and possible opposing return, and (2) a sustained E-axis platform from 615–660 lacking clear counterparts in N/U, bounded by sharp transitions. Other intervals show ordinary noise or smooth motion.",
+    "regions": [
+      {
+        "start": 495,
+        "end": 510,
+        "observation": "N/E/U components show a correlated multi-sample drop (~3–5 samples) around index 500–508, with N and U decreasing together while E shows a shallower dip; the recovery is asymmetric—U rebounds quickly, N lags, and E exhibits a possible opposing return starting near 508, suggesting a transient offset or superposed motion."
+      },
+      {
+        "start": 615,
+        "end": 660,
+        "observation": "A broad platform-like behavior appears in E (centered ~−4 to −5 MAD) from ~620 to 655, while N and U remain noisy but without matching sustained shift; the E plateau is flanked by abrupt multi-sample transitions at both ends, and a partial opposing return may begin near 655, though not fully resolved within window."
+      }
+    ]
+  }
+}

@@ -1,0 +1,37 @@
+{
+  "status": "success",
+  "requested_model": "qwen3-vl-plus",
+  "request_count": 1,
+  "retry_count": 0,
+  "http_status": 200,
+  "served_model": "qwen3-vl-plus",
+  "usage": {
+    "prompt_tokens": 4218,
+    "completion_tokens": 289,
+    "total_tokens": 4507,
+    "completion_tokens_details": {
+      "text_tokens": 289
+    },
+    "prompt_tokens_details": {
+      "image_tokens": 3702,
+      "text_tokens": 516,
+      "cached_tokens": 0
+    }
+  },
+  "elapsed_seconds": 8.521091000002343,
+  "decision": {
+    "summary": "Two regions stand out: (1) 485–544 where N and E jointly dip but diverge in recovery, and (2) 545–664 where E drops steadily while N rises oppositely, suggesting non-uniform deformation or measurement artifact. No single-edge events qualify as complete temporary offsets; both regions include sufficient context for change and possible return.",
+    "regions": [
+      {
+        "start": 485,
+        "end": 544,
+        "observation": "Cross-axis shape: N and E components show correlated multi-sample downward shift starting near index 490, with E continuing a gradual descent while N partially recovers after ~510; U shows no clear counterpart. Suggests possible transient offset or platform-like behavior in N/E with ambiguous return."
+      },
+      {
+        "start": 545,
+        "end": 664,
+        "observation": "Cross-axis shape: E component exhibits a sustained ~2 MAD drop from ~550 to ~610, while N shows a smaller opposing rise (~+1 MAD) over same interval; U remains noisy but without coherent trend. The E drop appears to plateau then partially recover after 610, with N returning toward baseline—possible opposing motion or superposed changes."
+      }
+    ]
+  }
+}

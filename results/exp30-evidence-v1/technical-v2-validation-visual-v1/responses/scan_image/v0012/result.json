@@ -1,0 +1,37 @@
+{
+  "status": "success",
+  "requested_model": "qwen3-vl-plus",
+  "request_count": 1,
+  "retry_count": 0,
+  "http_status": 200,
+  "served_model": "qwen3-vl-plus",
+  "usage": {
+    "prompt_tokens": 5462,
+    "completion_tokens": 273,
+    "total_tokens": 5735,
+    "completion_tokens_details": {
+      "text_tokens": 273
+    },
+    "prompt_tokens_details": {
+      "image_tokens": 4936,
+      "text_tokens": 526,
+      "cached_tokens": 0
+    }
+  },
+  "elapsed_seconds": 7.931023200013442,
+  "decision": {
+    "summary": "Two regions stand out: (1) a multi-sample step-like displacement in N/E around index 418–425 with partial opposing U response, and (2) a coherent linear ramp across all axes from index 725 to 729. Other intervals show typical noise or smooth motion without ambiguous superposed changes.",
+    "regions": [
+      {
+        "start": 415,
+        "end": 425,
+        "observation": "Cross-axis shape shows a multi-sample downward shift in N and E (starting ~418), followed by a partial opposing return in U (~420–425) while N/E remain depressed; the change is abrupt and spans several samples, with surrounding noise not masking the step-like morphology."
+      },
+      {
+        "start": 725,
+        "end": 729,
+        "observation": "From ~725 onward, all three axes show a coherent, sustained linear trend over just 5 samples: N rises ~1.0, E rises ~1.3, U drops ~1.5—suggesting a possible platform or ramp-like offset; the tight correlation across axes and absence of prior similar behavior warrants closer inspection despite short duration."
+      }
+    ]
+  }
+}

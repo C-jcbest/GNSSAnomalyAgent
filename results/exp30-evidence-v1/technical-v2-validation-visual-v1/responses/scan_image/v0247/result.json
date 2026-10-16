@@ -1,0 +1,37 @@
+{
+  "status": "success",
+  "requested_model": "qwen3-vl-plus",
+  "request_count": 1,
+  "retry_count": 0,
+  "http_status": 200,
+  "served_model": "qwen3-vl-plus",
+  "usage": {
+    "prompt_tokens": 5462,
+    "completion_tokens": 291,
+    "total_tokens": 5753,
+    "completion_tokens_details": {
+      "text_tokens": 291
+    },
+    "prompt_tokens_details": {
+      "image_tokens": 4936,
+      "text_tokens": 526,
+      "cached_tokens": 256
+    }
+  },
+  "elapsed_seconds": 8.88379000002169,
+  "decision": {
+    "summary": "Two regions warrant closer inspection: (1) an abrupt, large-magnitude negative spike in N/E around index 520–525 with incomplete recovery, and (2) a clear onset of coherent linear trends in all axes starting at index 725, persisting to the end of record. Other features appear consistent with noise or smooth secular motion.",
+    "regions": [
+      {
+        "start": 515,
+        "end": 525,
+        "observation": "Sharp multi-sample negative spike in N and E (≈−6 MAD) at index ~520–525, followed by a rapid recovery; U shows a smaller concurrent dip. The event is abrupt and isolated, with no clear opposing return in the immediate aftermath—only gradual reversion toward baseline noise level."
+      },
+      {
+        "start": 725,
+        "end": 729,
+        "observation": "Sustained linear trend in all three axes from ~725 onward: N drops steadily (~−0.2 MAD/day), E rises (~+0.15 MAD/day), U drops sharply (~−0.8 MAD/day). The onset is abrupt at index 725 (visible across overlapping windows), suggesting a possible step or onset of new motion regime; no return observed within window."
+      }
+    ]
+  }
+}

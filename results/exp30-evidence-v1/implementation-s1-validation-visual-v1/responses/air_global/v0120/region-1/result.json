@@ -1,0 +1,39 @@
+{
+  "status": "success",
+  "requested_model": "qwen3-vl-plus",
+  "request_count": 1,
+  "retry_count": 0,
+  "http_status": 200,
+  "served_model": "qwen3-vl-plus",
+  "usage": {
+    "prompt_tokens": 2681,
+    "completion_tokens": 302,
+    "total_tokens": 2983,
+    "completion_tokens_details": {
+      "text_tokens": 302
+    },
+    "prompt_tokens_details": {
+      "image_tokens": 1906,
+      "text_tokens": 775,
+      "cached_tokens": 128
+    }
+  },
+  "elapsed_seconds": 8.667836900014663,
+  "decision": {
+    "summary": "Two overlapping candidate temporary offsets in allowed context [475,699]: (1) N-dominated shift 510–544 with correlated E/U transients, lacking unambiguous return; (2) U-dominated double-dip event 520–568 with incomplete recovery. No confirmed return on any axis within context; both intervals remain uncertain.",
+    "intervals": [
+      {
+        "start": 510,
+        "end": 544,
+        "status": "uncertain",
+        "observation": "N-component shows sustained negative offset from ~510 to 544; E and U show correlated transients (U dip near 520, E transient ~515–525), but return is not clearly observed before 544—interior shows slow rebound in U but no full recovery in N/E. Status: uncertain."
+      },
+      {
+        "start": 520,
+        "end": 568,
+        "status": "uncertain",
+        "observation": "U-component exhibits sharp multi-sample drop near 520 (~-2), followed by partial rebound; second abrupt dip near 550, then gradual rise through 568 without clear return to pre-event level. N/E show weaker co-transients but no definitive opposing return. Status: uncertain."
+      }
+    ]
+  }
+}

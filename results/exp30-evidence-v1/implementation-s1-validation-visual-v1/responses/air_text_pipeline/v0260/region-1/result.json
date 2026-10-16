@@ -1,0 +1,32 @@
+{
+  "status": "success",
+  "requested_model": "qwen3-vl-plus",
+  "request_count": 1,
+  "retry_count": 0,
+  "http_status": 200,
+  "served_model": "qwen3-vl-plus",
+  "usage": {
+    "prompt_tokens": 5277,
+    "completion_tokens": 243,
+    "total_tokens": 5520,
+    "completion_tokens_details": {
+      "text_tokens": 243
+    },
+    "prompt_tokens_details": {
+      "text_tokens": 5277,
+      "cached_tokens": 128
+    }
+  },
+  "elapsed_seconds": 6.895802399987588,
+  "decision": {
+    "summary": "A single sustained multi-axis displacement begins abruptly at index 605 and persists without recovery through the end of the allowed context (729). All axes (N, E, U) exhibit coherent, large-magnitude shifts consistent with a permanent step or large-scale motion; however, absence of an opposing return prevents confirmation of a temporary offset. No other candidate temporary intervals meet criteria within allowed context.",
+    "intervals": [
+      {
+        "start": 605,
+        "end": 729,
+        "status": "uncertain",
+        "observation": "N/E/U all show abrupt, multi-sample upward shift beginning at index 605 (e.g., N jumps from ~1.6 to >8, E from ~5 to >9, U drops sharply from ~-2.7 to <-18), forming a sustained platform with no opposing return observed through end of allowed context (index 729). Onset spans indices 605–606; interior shows variability but remains offset relative to pre-605 baseline. Return not observed → status uncertain."
+      }
+    ]
+  }
+}

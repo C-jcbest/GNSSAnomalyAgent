@@ -1,0 +1,32 @@
+{
+  "status": "success",
+  "requested_model": "qwen3-vl-plus",
+  "request_count": 1,
+  "retry_count": 0,
+  "http_status": 200,
+  "served_model": "qwen3-vl-plus",
+  "usage": {
+    "prompt_tokens": 3334,
+    "completion_tokens": 258,
+    "total_tokens": 3592,
+    "completion_tokens_details": {
+      "text_tokens": 258
+    },
+    "prompt_tokens_details": {
+      "text_tokens": 3334,
+      "cached_tokens": 128
+    }
+  },
+  "elapsed_seconds": 8.81797689999803,
+  "decision": {
+    "summary": "A multi-sample abrupt shift in N, E, and U occurs starting at index 520: N rises sharply (~0.2→~3.0), E falls rapidly (~-0.5→~-2.8), and U drops (~-1.6→~-2.9) within 2–3 samples and remains offset through index 544. No opposing return is observed before the end of allowed context (579), so the interval is uncertain. The change is not symmetric across axes and lacks reversal evidence.",
+    "intervals": [
+      {
+        "start": 520,
+        "end": 544,
+        "status": "uncertain",
+        "observation": "N jumps from ~0.2 to ~3.0 at index 520 (sample 35), E drops from ~-0.5 to ~-2.8 over indices 520–522, U drops sharply from ~-1.6 to ~-2.9 by index 521 and remains low through 544; no return observed within allowed context [485,579]."
+      }
+    ]
+  }
+}

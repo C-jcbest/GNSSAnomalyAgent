@@ -1,0 +1,37 @@
+{
+  "status": "success",
+  "requested_model": "qwen3-vl-plus",
+  "request_count": 1,
+  "retry_count": 0,
+  "http_status": 200,
+  "served_model": "qwen3-vl-plus",
+  "usage": {
+    "prompt_tokens": 4218,
+    "completion_tokens": 334,
+    "total_tokens": 4552,
+    "completion_tokens_details": {
+      "text_tokens": 334
+    },
+    "prompt_tokens_details": {
+      "image_tokens": 3702,
+      "text_tokens": 516,
+      "cached_tokens": 0
+    }
+  },
+  "elapsed_seconds": 9.971277999982703,
+  "decision": {
+    "summary": "Two regions stand out: (1) a prolonged N trend with correlated E/U offsets between indices 420–544, hinting at superposed or opposing transient behavior; (2) a sharp multi-axis negative spike near 615–625 with asymmetric recovery, possibly a temporary offset with incomplete return. Elsewhere, motion appears noisy but consistent with typical GNSS variability.",
+    "regions": [
+      {
+        "start": 420,
+        "end": 544,
+        "observation": "N-component shows a sustained upward trend from ~index 420 to 544, with E and U exhibiting correlated multi-sample offsets around 460–480 (E drops ~1.5 MAD, U drops ~2 MAD) and again near 510–525 (E rises ~1 MAD, U rises ~1.5 MAD); the cross-axis shape suggests possible superposed temporary offsets or opposing returns rather than smooth motion."
+      },
+      {
+        "start": 610,
+        "end": 664,
+        "observation": "Around index 615–625, all three components show a sharp, multi-sample negative excursion in U (~−4 MAD), coincident with a smaller negative dip in E (~−1.5 MAD) and a transient N drop (~−1 MAD); the recovery is asymmetric—U rebounds sharply by 630 while E/N lag, suggesting a possible temporary offset with partial return or complex superposition."
+      }
+    ]
+  }
+}

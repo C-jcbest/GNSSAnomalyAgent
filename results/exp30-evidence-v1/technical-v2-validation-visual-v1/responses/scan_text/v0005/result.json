@@ -1,0 +1,36 @@
+{
+  "status": "success",
+  "requested_model": "qwen3-vl-plus",
+  "request_count": 1,
+  "retry_count": 0,
+  "http_status": 200,
+  "served_model": "qwen3-vl-plus",
+  "usage": {
+    "prompt_tokens": 14279,
+    "completion_tokens": 336,
+    "total_tokens": 14615,
+    "completion_tokens_details": {
+      "text_tokens": 336
+    },
+    "prompt_tokens_details": {
+      "text_tokens": 14279,
+      "cached_tokens": 0
+    }
+  },
+  "elapsed_seconds": 9.686965699977009,
+  "decision": {
+    "summary": "Two regions merit closer inspection: (1) a multi-sample step-like displacement in all axes around indices 615–624, and (2) a large transient spike at ~678 followed by ambiguous recovery and sustained elevated motion through the end of the series. Cross-axis shapes show non-uniform responses, with E and U most affected in the first region, and all axes involved in the second.",
+    "regions": [
+      {
+        "start": 615,
+        "end": 624,
+        "observation": "Abrupt multi-sample jump in E and U components around index 618–622, with E increasing from ~30 to ~32 and U dropping sharply from ~-20 to ~-22; N shows a concurrent step-like increase. The change is sustained over several samples and not clearly reversed within the window."
+      },
+      {
+        "start": 675,
+        "end": 729,
+        "observation": "Sustained high-amplitude motion in E (30–35) and N (12–16) with U near -20 to -22 from ~index 680 onward; preceded by a large transient spike at index 678 (E~31.9, N~3.8, U~-14.4) followed by rapid return to baseline levels—suggesting possible temporary offset or data artifact rather than physical motion. The region includes the ambiguous recovery phase and surrounding stable segment for context."
+      }
+    ]
+  }
+}

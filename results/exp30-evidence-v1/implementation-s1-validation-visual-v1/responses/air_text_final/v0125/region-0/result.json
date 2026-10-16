@@ -1,0 +1,32 @@
+{
+  "status": "success",
+  "requested_model": "qwen3-vl-plus",
+  "request_count": 1,
+  "retry_count": 0,
+  "http_status": 200,
+  "served_model": "qwen3-vl-plus",
+  "usage": {
+    "prompt_tokens": 3034,
+    "completion_tokens": 323,
+    "total_tokens": 3357,
+    "completion_tokens_details": {
+      "text_tokens": 323
+    },
+    "prompt_tokens_details": {
+      "text_tokens": 3034,
+      "cached_tokens": 128
+    }
+  },
+  "elapsed_seconds": 9.082436200027587,
+  "decision": {
+    "summary": "A multi-axis step-like event begins near index 439: N and U rise sharply (~+10 MAD) and remain elevated through 444; E drops ~−5 MAD starting ~440 and stays low. The onset is multi-sample and coherent across N/U, but the return is unobserved within allowed context (ends at 480, last sample at 479 is still elevated in N/U and depressed in E). No opposing return detected; thus interval is classified as uncertain. A large outlier at index 440 (12.8, −6.0, 12.8) appears to be part of this transient offset, not a separate permanent step—its magnitude aligns with the jump vector at 439 and persists for several samples before gradual decay. No evidence of recovery before end of window.",
+    "intervals": [
+      {
+        "start": 439,
+        "end": 444,
+        "status": "uncertain",
+        "observation": "N and U show a sharp multi-sample upward shift starting near index 439 (coincident with candidate jump at 439), sustained through 444; E shows a delayed downward offset beginning ~440, persisting through 444. No return observed within allowed context [400,480]; interior is elevated/sustained on N/U, depressed on E. Return not confirmed; status uncertain."
+      }
+    ]
+  }
+}

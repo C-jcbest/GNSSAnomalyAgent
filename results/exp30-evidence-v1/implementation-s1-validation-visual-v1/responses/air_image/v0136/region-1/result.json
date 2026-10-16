@@ -1,0 +1,39 @@
+{
+  "status": "success",
+  "requested_model": "qwen3-vl-plus",
+  "request_count": 1,
+  "retry_count": 0,
+  "http_status": 200,
+  "served_model": "qwen3-vl-plus",
+  "usage": {
+    "prompt_tokens": 2536,
+    "completion_tokens": 258,
+    "total_tokens": 2794,
+    "completion_tokens_details": {
+      "text_tokens": 258
+    },
+    "prompt_tokens_details": {
+      "image_tokens": 1738,
+      "text_tokens": 798,
+      "cached_tokens": 128
+    }
+  },
+  "elapsed_seconds": 7.298307000019122,
+  "decision": {
+    "summary": "No confirmed temporary offset intervals: both candidate windows (490–549 and 550–600) show coherent but unidirectional or sustained motion without an opposing return within the allowed context [455,699]. U-component remains noisy and uncoupled; no evidence of a closed transient on any axis.",
+    "intervals": [
+      {
+        "start": 490,
+        "end": 549,
+        "status": "uncertain",
+        "observation": "E rises monotonically from ~490 to 549; N declines steadily over same span. No opposing return observed within allowed context; motion continues beyond 549 without reversal."
+      },
+      {
+        "start": 550,
+        "end": 600,
+        "status": "uncertain",
+        "observation": "E plateaus ~550–600; N also stabilizes (less steep decline) during same window. However, neither axis shows a clear opposing return after 600—N resumes decline, E resumes rise after 600. No confirmed closure of offset."
+      }
+    ]
+  }
+}

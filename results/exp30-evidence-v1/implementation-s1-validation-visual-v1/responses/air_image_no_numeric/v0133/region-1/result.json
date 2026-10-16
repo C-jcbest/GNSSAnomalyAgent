@@ -1,0 +1,33 @@
+{
+  "status": "success",
+  "requested_model": "qwen3-vl-plus",
+  "request_count": 1,
+  "retry_count": 0,
+  "http_status": 200,
+  "served_model": "qwen3-vl-plus",
+  "usage": {
+    "prompt_tokens": 2489,
+    "completion_tokens": 214,
+    "total_tokens": 2703,
+    "completion_tokens_details": {
+      "text_tokens": 214
+    },
+    "prompt_tokens_details": {
+      "image_tokens": 1738,
+      "text_tokens": 751,
+      "cached_tokens": 128
+    }
+  },
+  "elapsed_seconds": 6.5235531000071205,
+  "decision": {
+    "summary": "Only one candidate temporary offset in allowed context [593,670]: E-axis depression from index 630 to 634, with partial but not full return observed by 635; N and U show only transient spikes without sustained offsets. No confirmed opposing return within context, hence uncertain status.",
+    "intervals": [
+      {
+        "start": 630,
+        "end": 634,
+        "status": "uncertain",
+        "observation": "E-axis shows abrupt drop starting at index 630, sustained through 634 (5 samples), with partial recovery beginning at 635; N shows a smaller negative spike at 630–631 but no sustained offset; U shows modest dip at 630–631 without sustained deviation. Return is incomplete and ambiguous beyond 635 within allowed context (ends at 670), so status is uncertain."
+      }
+    ]
+  }
+}

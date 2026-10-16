@@ -1,0 +1,32 @@
+{
+  "status": "success",
+  "requested_model": "qwen3-vl-plus",
+  "request_count": 1,
+  "retry_count": 0,
+  "http_status": 200,
+  "served_model": "qwen3-vl-plus",
+  "usage": {
+    "prompt_tokens": 2897,
+    "completion_tokens": 198,
+    "total_tokens": 3095,
+    "completion_tokens_details": {
+      "text_tokens": 198
+    },
+    "prompt_tokens_details": {
+      "text_tokens": 2897,
+      "cached_tokens": 128
+    }
+  },
+  "elapsed_seconds": 6.013280899991514,
+  "decision": {
+    "summary": "Within allowed context [450,530], only one candidate temporary offset is observed: a sustained N-positive excursion starting at index 485, with correlated E and U motion. The onset is multi-sample abrupt, but the return is not observed before index 530, making the interval uncertain. No other temporary offsets are confirmed in this window; missing observation at index 26 does not affect this assessment.",
+    "intervals": [
+      {
+        "start": 485,
+        "end": 495,
+        "status": "uncertain",
+        "observation": "N-component shows a sustained positive offset (~+2 to +4 MAD) beginning around index 485, with correlated E/U excursions; onset is abrupt over ~5 samples, but no return observed within allowed context (450–530), so status is uncertain."
+      }
+    ]
+  }
+}

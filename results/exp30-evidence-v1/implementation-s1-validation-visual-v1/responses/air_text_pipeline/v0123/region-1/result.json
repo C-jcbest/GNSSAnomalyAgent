@@ -1,0 +1,38 @@
+{
+  "status": "success",
+  "requested_model": "qwen3-vl-plus",
+  "request_count": 1,
+  "retry_count": 0,
+  "http_status": 200,
+  "served_model": "qwen3-vl-plus",
+  "usage": {
+    "prompt_tokens": 4619,
+    "completion_tokens": 310,
+    "total_tokens": 4929,
+    "completion_tokens_details": {
+      "text_tokens": 310
+    },
+    "prompt_tokens_details": {
+      "text_tokens": 4619,
+      "cached_tokens": 128
+    }
+  },
+  "elapsed_seconds": 9.014833900000667,
+  "decision": {
+    "summary": "No confirmed temporary offset intervals. Two uncertain candidates identified: (1) a sharp U drop at 620–624 without clear return or compensating N/E motion; (2) a prolonged 590–664 interval with complex cross-axis trends lacking a definable offset onset-return pair. Missing observations at indices 665, 683, 692 prevent confirmation of returns. Original data show no isolated step with symmetric recovery across axes.",
+    "intervals": [
+      {
+        "start": 620,
+        "end": 624,
+        "status": "uncertain",
+        "observation": "U drops sharply (~-2.7 to -4.4) over indices 620–624; N and E show divergent trends (N becomes more negative, E rises), but no clear opposing return in U or coordinated reversal in N/E within allowed context. Return not observed before index 699."
+      },
+      {
+        "start": 590,
+        "end": 664,
+        "status": "uncertain",
+        "observation": "Extended cross-axis behavior from ~590–664: U declines overall, N shows transient negative excursion then partial recovery, E rises steadily. No coherent multi-axis offset signature with defined onset/return; motion appears superposed or smooth rather than a discrete temporary offset."
+      }
+    ]
+  }
+}

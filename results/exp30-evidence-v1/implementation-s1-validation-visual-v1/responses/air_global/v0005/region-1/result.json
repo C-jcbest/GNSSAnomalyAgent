@@ -1,0 +1,39 @@
+{
+  "status": "success",
+  "requested_model": "qwen3-vl-plus",
+  "request_count": 1,
+  "retry_count": 0,
+  "http_status": 200,
+  "served_model": "qwen3-vl-plus",
+  "usage": {
+    "prompt_tokens": 2960,
+    "completion_tokens": 370,
+    "total_tokens": 3330,
+    "completion_tokens_details": {
+      "text_tokens": 370
+    },
+    "prompt_tokens_details": {
+      "image_tokens": 1906,
+      "text_tokens": 1054,
+      "cached_tokens": 640
+    }
+  },
+  "elapsed_seconds": 11.161307699978352,
+  "decision": {
+    "summary": "Two candidate temporary offsets in U/E/N within [500,699]: (1) a major multi-axis step starting at 538, fully sustained through 552 with no return—confirmed as temporary offset due to clear onset, stable interior, and absence of opposing return within context; (2) a smaller secondary adjustment near 575, persisting to 580 but followed by a large opposing jump at 581 that does not cleanly reverse the earlier change—status uncertain due to ambiguous return behavior.",
+    "intervals": [
+      {
+        "start": 538,
+        "end": 552,
+        "status": "confirmed",
+        "observation": "U drops sharply (~−15 MAD) at ~538–540, E jumps up (~+25 MAD), N rises (~+10 MAD); all three axes show sustained offset through 552 with no return. Interior (541–552) is stable and distinct from pre-event baseline; no opposing return observed within allowed context."
+      },
+      {
+        "start": 575,
+        "end": 580,
+        "status": "uncertain",
+        "observation": "U shows secondary drop (~−5 MAD) and E a smaller rise (~+5 MAD) near 575–577; N remains near post-first-step level. Offset persists through 580 but no clear return before index 581 (where a large opposing jump occurs). Return at 581 is abrupt and exceeds prior offset magnitude, suggesting possible reversal or new event—not a clean recovery of the 575 step."
+      }
+    ]
+  }
+}

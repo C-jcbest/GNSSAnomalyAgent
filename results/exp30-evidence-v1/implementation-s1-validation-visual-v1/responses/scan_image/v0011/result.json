@@ -1,0 +1,37 @@
+{
+  "status": "success",
+  "requested_model": "qwen3-vl-plus",
+  "request_count": 1,
+  "retry_count": 0,
+  "http_status": 200,
+  "served_model": "qwen3-vl-plus",
+  "usage": {
+    "prompt_tokens": 4218,
+    "completion_tokens": 294,
+    "total_tokens": 4512,
+    "completion_tokens_details": {
+      "text_tokens": 294
+    },
+    "prompt_tokens_details": {
+      "image_tokens": 3702,
+      "text_tokens": 516,
+      "cached_tokens": 0
+    }
+  },
+  "elapsed_seconds": 8.574357400008012,
+  "decision": {
+    "summary": "Two regions stand out: (1) a transient multi-axis offset centered near index 560 with partial recovery, and (2) a sharp, likely permanent step event starting near index 600 with axis-asynchronous onset. Both show clear cross-axis structure beyond noise; no other intervals warrant closer inspection.",
+    "regions": [
+      {
+        "start": 550,
+        "end": 595,
+        "observation": "Sharp multi-sample drop in N and E (≈−8 to −12 MAD) around index 560–570, followed by a slower recovery; U shows a coincident but smaller drop (~−5 MAD) and partial rebound. The cross-axis shape suggests a transient offset or platform shift with possible incomplete return, visible across overlapping windows."
+      },
+      {
+        "start": 595,
+        "end": 635,
+        "observation": "Abrupt ~−10 MAD step in N at ~600, mirrored by a delayed ~−5 MAD step in E at ~605–610, while U drops sharply (~−6 MAD) then stabilizes near new level. The three axes show a coherent but non-simultaneous step-like change, possibly a permanent jump with residual adjustment; surrounding noise does not obscure the onset or initial plateau."
+      }
+    ]
+  }
+}

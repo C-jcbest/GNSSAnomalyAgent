@@ -1,0 +1,33 @@
+{
+  "status": "success",
+  "requested_model": "qwen3-vl-plus",
+  "request_count": 1,
+  "retry_count": 0,
+  "http_status": 200,
+  "served_model": "qwen3-vl-plus",
+  "usage": {
+    "prompt_tokens": 2485,
+    "completion_tokens": 192,
+    "total_tokens": 2677,
+    "completion_tokens_details": {
+      "text_tokens": 192
+    },
+    "prompt_tokens_details": {
+      "image_tokens": 1738,
+      "text_tokens": 747,
+      "cached_tokens": 128
+    }
+  },
+  "elapsed_seconds": 6.213627999997698,
+  "decision": {
+    "summary": "A coherent upward step-like shift across N/E/U begins near index 622 within allowed context [580,665]. The offset is sustained through the final observed index (665) with no return evident; thus status is uncertain. A prior large downward event near index 575 lies outside allowed_context and is excluded.",
+    "intervals": [
+      {
+        "start": 622,
+        "end": 665,
+        "status": "uncertain",
+        "observation": "Upward multi-axis offset beginning near index 622 (U: ~+6 MAD, E: ~+4 MAD, N: ~+2.5 MAD), sustained through end of allowed context (665) with no opposing return observed; interior shows stable elevated levels and typical noise—no evidence of reversal or recovery."
+      }
+    ]
+  }
+}

@@ -1,0 +1,36 @@
+{
+  "status": "success",
+  "requested_model": "qwen3-vl-plus",
+  "request_count": 1,
+  "retry_count": 0,
+  "http_status": 200,
+  "served_model": "qwen3-vl-plus",
+  "usage": {
+    "prompt_tokens": 13306,
+    "completion_tokens": 251,
+    "total_tokens": 13557,
+    "completion_tokens_details": {
+      "text_tokens": 251
+    },
+    "prompt_tokens_details": {
+      "text_tokens": 13306,
+      "cached_tokens": 0
+    }
+  },
+  "elapsed_seconds": 8.481824599992251,
+  "decision": {
+    "summary": "Two regions stand out: (1) a sudden multi-sample shift near index 490 in the overlapping window [485,664], involving coordinated N/E drop and U rise; (2) a longer interval starting at index 605 where vertical motion diverges from horizontal trends, hinting at superposed or opposing behavior. Both warrant closer inspection for platform-like or offset morphology.",
+    "regions": [
+      {
+        "start": 488,
+        "end": 495,
+        "observation": "Sharp multi-sample drop in N and E components around index 490–493, with U showing a concurrent rise; appears as a possible abrupt offset or platform onset, not fully resolved in coarse view but distinct from surrounding noise."
+      },
+      {
+        "start": 605,
+        "end": 625,
+        "observation": "Extended region (605–625) where N/E/U all trend downward together, then U shows a sharp rebound while N/E continue descending—suggesting superposed motion: possible opposing return in U against ongoing drift in horizontal components."
+      }
+    ]
+  }
+}

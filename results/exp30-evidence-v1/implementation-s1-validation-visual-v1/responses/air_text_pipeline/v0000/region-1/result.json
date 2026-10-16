@@ -1,0 +1,44 @@
+{
+  "status": "success",
+  "requested_model": "qwen3-vl-plus",
+  "request_count": 1,
+  "retry_count": 0,
+  "http_status": 200,
+  "served_model": "qwen3-vl-plus",
+  "usage": {
+    "prompt_tokens": 4913,
+    "completion_tokens": 451,
+    "total_tokens": 5364,
+    "completion_tokens_details": {
+      "text_tokens": 451
+    },
+    "prompt_tokens_details": {
+      "text_tokens": 4913,
+      "cached_tokens": 0
+    }
+  },
+  "elapsed_seconds": 12.248503399983747,
+  "decision": {
+    "summary": "No confirmed temporary offset intervals within [570,729]. Observed features include sustained non-linear trends in E/U and high-amplitude N variability, with isolated spikes (e.g., at 680, 705) lacking paired onset-return structure. All candidate intervals lack a clear opposing return on the affected axes within the allowed window, so all are marked uncertain.",
+    "intervals": [
+      {
+        "start": 675,
+        "end": 680,
+        "status": "uncertain",
+        "observation": "N drops sharply from ~-0.9 to ~-3.1 between indices 675–678, sustained at low values until ~680; E rises steadily from ~4.5 to ~6.8 over same span; U increases from ~2.0 to ~3.7. Return not observed before 680, and interior shows monotonic trend without reversal — insufficient evidence for full temporary offset."
+      },
+      {
+        "start": 705,
+        "end": 705,
+        "status": "uncertain",
+        "observation": "At index 705, N spikes upward from ~-2.8 to ~-0.5 (one-point), while E and U continue rising (E: ~7.4→7.8, U: ~4.0→4.5). No sustained plateau or return on any axis; spike is isolated and not mirrored in E/U — not a complete temporary offset."
+      },
+      {
+        "start": 630,
+        "end": 729,
+        "status": "uncertain",
+        "observation": "From ~630 onward, E and U show sustained non-linear rise (E: ~4.5→>9.0, U: ~2.0→>5.0); N remains highly variable with large negative excursions (~-3.5 to -2.8) but no clear onset/return pairing. No opposing return observed within allowed context — status uncertain."
+      }
+    ]
+  }
+}

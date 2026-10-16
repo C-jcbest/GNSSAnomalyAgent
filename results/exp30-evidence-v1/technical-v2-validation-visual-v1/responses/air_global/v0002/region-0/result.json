@@ -1,0 +1,33 @@
+{
+  "status": "success",
+  "requested_model": "qwen3-vl-plus",
+  "request_count": 1,
+  "retry_count": 0,
+  "http_status": 200,
+  "served_model": "qwen3-vl-plus",
+  "usage": {
+    "prompt_tokens": 2761,
+    "completion_tokens": 198,
+    "total_tokens": 2959,
+    "completion_tokens_details": {
+      "text_tokens": 198
+    },
+    "prompt_tokens_details": {
+      "image_tokens": 1906,
+      "text_tokens": 855,
+      "cached_tokens": 128
+    }
+  },
+  "elapsed_seconds": 6.254070299997693,
+  "decision": {
+    "summary": "A correlated multi-axis step begins near index 598 (N↑, E↓, U↑), with N and E offsets persisting to the end of the allowed context (639) without observed reversal; U change is smaller and less clearly sustained. Return not observed within [560,639], so status is uncertain.",
+    "intervals": [
+      {
+        "start": 598,
+        "end": 639,
+        "status": "uncertain",
+        "observation": "N shows a sharp multi-sample upward offset starting near index 598, sustained through end of allowed context (639); E shows a simultaneous downward step near 598–602 and remains offset; U shows a smaller upward step but with less clear persistence. No opposing return observed within allowed_context [560,639]."
+      }
+    ]
+  }
+}

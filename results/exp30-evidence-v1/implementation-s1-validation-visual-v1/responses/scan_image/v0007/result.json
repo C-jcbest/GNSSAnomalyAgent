@@ -1,0 +1,37 @@
+{
+  "status": "success",
+  "requested_model": "qwen3-vl-plus",
+  "request_count": 1,
+  "retry_count": 0,
+  "http_status": 200,
+  "served_model": "qwen3-vl-plus",
+  "usage": {
+    "prompt_tokens": 4218,
+    "completion_tokens": 285,
+    "total_tokens": 4503,
+    "completion_tokens_details": {
+      "text_tokens": 285
+    },
+    "prompt_tokens_details": {
+      "image_tokens": 3702,
+      "text_tokens": 516,
+      "cached_tokens": 0
+    }
+  },
+  "elapsed_seconds": 9.369409900013125,
+  "decision": {
+    "summary": "Two regions stand out: (1) an abrupt multi-sample negative excursion in N/E around index 470 with partial U response, lacking clear recovery; (2) a sustained ~10-sample plateau/offset in U centered at 610, accompanied by correlated subtle shifts in N/E. Both show morphology inconsistent with ordinary noise or smooth motion, warranting closer inspection.",
+    "regions": [
+      {
+        "start": 465,
+        "end": 475,
+        "observation": "Sharp multi-sample negative excursion in N and E (peaking ~470–475), with U showing a delayed, smaller negative dip; the N/E drop appears abrupt and possibly non-recoverable within this window, though U recovers partially. Surrounding noise is typical; no clear opposing return visible yet."
+      },
+      {
+        "start": 605,
+        "end": 615,
+        "observation": "Broad apparent platform or slow shift in U (indices ~605–615) coinciding with subtle but sustained offset in E and N; U drops ~1.5 MAD units and holds for ~10 samples before resuming trend. The change is not spike-like and lacks immediate reversal—suggests possible temporary offset or onset of drift."
+      }
+    ]
+  }
+}

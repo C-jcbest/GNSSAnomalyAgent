@@ -1,0 +1,39 @@
+{
+  "status": "success",
+  "requested_model": "qwen3-vl-plus",
+  "request_count": 1,
+  "retry_count": 0,
+  "http_status": 200,
+  "served_model": "qwen3-vl-plus",
+  "usage": {
+    "prompt_tokens": 2517,
+    "completion_tokens": 305,
+    "total_tokens": 2822,
+    "completion_tokens_details": {
+      "text_tokens": 305
+    },
+    "prompt_tokens_details": {
+      "image_tokens": 1738,
+      "text_tokens": 779,
+      "cached_tokens": 128
+    }
+  },
+  "elapsed_seconds": 8.250161899981322,
+  "decision": {
+    "summary": "Two transient features in the screened region: (1) a sharp multi-axis shift at 608–612 with U dominant and correlated N/E changes, lacking observed return; (2) a later rebound-like U spike at 660–670 with divergent cross-axis behavior and no confirmed restoration of pre-event levels. Neither satisfies criteria for a confirmed temporary offset due to ambiguous or incomplete return within allowed context [570,729].",
+    "intervals": [
+      {
+        "start": 608,
+        "end": 612,
+        "status": "uncertain",
+        "observation": "U drops sharply (~10 MAD) at 608–612; N and E show smaller correlated transients (N down ~2, E up ~2). Return not observed within allowed context; rebound begins later (~660) but full recovery not confirmed before 729."
+      },
+      {
+        "start": 660,
+        "end": 670,
+        "status": "uncertain",
+        "observation": "U rebounds sharply starting ~660; N/E show opposing small offsets during 660–670, but no clear return to pre-event baseline on any axis by 670. Interior behavior inconsistent with a clean temporary offset; coexisting motion or artifact likely."
+      }
+    ]
+  }
+}

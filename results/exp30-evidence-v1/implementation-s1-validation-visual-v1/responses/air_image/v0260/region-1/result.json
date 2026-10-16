@@ -1,0 +1,33 @@
+{
+  "status": "success",
+  "requested_model": "qwen3-vl-plus",
+  "request_count": 1,
+  "retry_count": 0,
+  "http_status": 200,
+  "served_model": "qwen3-vl-plus",
+  "usage": {
+    "prompt_tokens": 2601,
+    "completion_tokens": 261,
+    "total_tokens": 2862,
+    "completion_tokens_details": {
+      "text_tokens": 261
+    },
+    "prompt_tokens_details": {
+      "image_tokens": 1738,
+      "text_tokens": 863,
+      "cached_tokens": 128
+    }
+  },
+  "elapsed_seconds": 7.0850748999801,
+  "decision": {
+    "summary": "A multi-axis temporary offset is evident: U drops sharply (~−15 MAD) near index 590, accompanied by smaller upward steps in N (~+7.6 MAD) and E (~+4.8 MAD); all three axes remain offset through index 629. No opposing return is observed before index 630, and the U component does not recover within the allowed context [553,670]; thus the interval is uncertain. The onset aligns with the numerical jump candidate at index 590, and the sustained interior (590–629) is clearly distinct from background noise.",
+    "intervals": [
+      {
+        "start": 589,
+        "end": 629,
+        "status": "uncertain",
+        "observation": "U shows abrupt drop starting at ~589–590 (coincident with N/E upward steps), sustained plateau until ~629; N and E show correlated upward steps beginning ~588–590, persisting through plateau. Return not observed within allowed context (U remains depressed at 630+; N/E do not revert)."
+      }
+    ]
+  }
+}

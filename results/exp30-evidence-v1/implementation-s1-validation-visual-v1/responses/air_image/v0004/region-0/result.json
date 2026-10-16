@@ -1,0 +1,39 @@
+{
+  "status": "success",
+  "requested_model": "qwen3-vl-plus",
+  "request_count": 1,
+  "retry_count": 0,
+  "http_status": 200,
+  "served_model": "qwen3-vl-plus",
+  "usage": {
+    "prompt_tokens": 2486,
+    "completion_tokens": 312,
+    "total_tokens": 2798,
+    "completion_tokens_details": {
+      "text_tokens": 312
+    },
+    "prompt_tokens_details": {
+      "image_tokens": 1738,
+      "text_tokens": 748,
+      "cached_tokens": 128
+    }
+  },
+  "elapsed_seconds": 8.524035600014031,
+  "decision": {
+    "summary": "A confirmed temporary offset exists in E and U between indices 430–440: E spikes positive, U dips negative, both partially recover by 440. The N-component’s sustained rise from 420 onward lacks a return within the allowed context (up to 500), so its putative offset remains uncertain. No other temporary intervals are supported by cross-axis consistency and return evidence.",
+    "intervals": [
+      {
+        "start": 430,
+        "end": 440,
+        "status": "confirmed",
+        "observation": "E-component shows a positive transient spike peaking near index 432–435, with U-component showing a concurrent negative dip (minimum near 434–436); both return toward pre-event levels by ~440. N-component continues its monotonic rise uninterrupted through this interval, indicating the E/U transients are decoupled from the sustained N trend."
+      },
+      {
+        "start": 420,
+        "end": 465,
+        "status": "uncertain",
+        "observation": "N-component exhibits a sustained monotonic increase from ~420 onward, with no reversal or plateau observed within allowed context; interior behavior is smooth and persistent, lacking a return phase. No paired offset in E/U coincides with the full N rise, so no temporary offset can be confirmed for N."
+      }
+    ]
+  }
+}

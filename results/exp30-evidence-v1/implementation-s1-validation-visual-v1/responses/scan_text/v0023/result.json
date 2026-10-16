@@ -1,0 +1,36 @@
+{
+  "status": "success",
+  "requested_model": "qwen3-vl-plus",
+  "request_count": 1,
+  "retry_count": 0,
+  "http_status": 200,
+  "served_model": "qwen3-vl-plus",
+  "usage": {
+    "prompt_tokens": 13603,
+    "completion_tokens": 345,
+    "total_tokens": 13948,
+    "completion_tokens_details": {
+      "text_tokens": 345
+    },
+    "prompt_tokens_details": {
+      "text_tokens": 13603,
+      "cached_tokens": 256
+    }
+  },
+  "elapsed_seconds": 9.536522099981084,
+  "decision": {
+    "summary": "Two regions stand out: (1) a sharp multi-sample offset in N/E/U around indices 520–525 with no apparent reversal; (2) a major sustained displacement starting near index 658–660 involving large opposing changes in N and E and a deep U drop, persisting to the end. Both show ambiguous superposition of rapid change and possible platform behavior.",
+    "regions": [
+      {
+        "start": 520,
+        "end": 544,
+        "observation": "Cross-axis shape shows a multi-sample abrupt shift in N and E around index 520–525, with N jumping from ~0.2 to ~3.1 and E from ~-0.4 to ~-2.5, followed by sustained offset; U also drops sharply (~-0.8 to ~-2.0) and remains low. The change is not symmetric across axes and lacks clear return within the window."
+      },
+      {
+        "start": 658,
+        "end": 729,
+        "observation": "A large, sustained displacement begins near index 660 (within overlapping windows), where N drops from ~-4.8 to ~-16.7, E rises from ~-6.9 to ~2.2, and U plunges from ~-2.8 to ~-24.6 over ~5 samples—suggesting a possible permanent jump or rapid motion event. The post-event values remain at new levels with minor fluctuations; no return observed through end of record."
+      }
+    ]
+  }
+}

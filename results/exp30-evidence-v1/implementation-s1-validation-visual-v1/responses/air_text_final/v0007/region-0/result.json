@@ -1,0 +1,32 @@
+{
+  "status": "success",
+  "requested_model": "qwen3-vl-plus",
+  "request_count": 1,
+  "retry_count": 0,
+  "http_status": 200,
+  "served_model": "qwen3-vl-plus",
+  "usage": {
+    "prompt_tokens": 2931,
+    "completion_tokens": 245,
+    "total_tokens": 3176,
+    "completion_tokens_details": {
+      "text_tokens": 245
+    },
+    "prompt_tokens_details": {
+      "text_tokens": 2931,
+      "cached_tokens": 128
+    }
+  },
+  "elapsed_seconds": 7.169736600015312,
+  "decision": {
+    "summary": "A single candidate temporary offset is identified in N/E axes starting at index 470, with correlated U response. The onset is abrupt and multi-sample, interior is sustained (~5 samples), but no opposing return is observed within the allowed context [430,510]; thus status is uncertain. No other temporary offsets are supported by the original daily samples in this window.",
+    "intervals": [
+      {
+        "start": 470,
+        "end": 475,
+        "status": "uncertain",
+        "observation": "N and E show a sharp multi-sample negative excursion peaking ~470–475; U shows a delayed smaller dip but no clear opposing return within allowed context [430,510]. Onset is abrupt (e.g. N drops from ~0.26 at idx 469 to -1.29 at 470; E from ~0.70 to -0.77), interior sustained over ~5 samples, but recovery not observed before end of context. Status: uncertain due to missing return."
+      }
+    ]
+  }
+}

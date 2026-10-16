@@ -1,0 +1,32 @@
+{
+  "status": "success",
+  "requested_model": "qwen3-vl-plus",
+  "request_count": 1,
+  "retry_count": 0,
+  "http_status": 200,
+  "served_model": "qwen3-vl-plus",
+  "usage": {
+    "prompt_tokens": 2992,
+    "completion_tokens": 275,
+    "total_tokens": 3267,
+    "completion_tokens_details": {
+      "text_tokens": 275
+    },
+    "prompt_tokens_details": {
+      "text_tokens": 2992,
+      "cached_tokens": 128
+    }
+  },
+  "elapsed_seconds": 8.527667999995174,
+  "decision": {
+    "summary": "A sharp multi-sample displacement occurs at indices 487–488: N and E show abrupt shifts without a clear, opposing return within the allowed context [450,530]. The E component exhibits a steep rebound at index 488 rather than recovery, and both components remain offset afterward. No confirmed temporary interval due to ambiguous return; status is uncertain.",
+    "intervals": [
+      {
+        "start": 487,
+        "end": 488,
+        "status": "uncertain",
+        "observation": "N drops sharply from -0.36 (index 486) to -3.20 (index 487); E drops from -0.94 (486) to -0.17 (487), then rebounds steeply to -3.41 at index 488 — inconsistent with a symmetric return; U shows no clear offset. Return not observed within allowed context; N recovers partially by index 489 (-0.99), but E remains low (-3.41 at 488, -3.73 at 489). No sustained interior plateau; onset and return are multi-sample and asymmetric."
+      }
+    ]
+  }
+}

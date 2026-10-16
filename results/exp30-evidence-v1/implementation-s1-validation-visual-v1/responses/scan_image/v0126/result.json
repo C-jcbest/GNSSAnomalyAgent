@@ -1,0 +1,37 @@
+{
+  "status": "success",
+  "requested_model": "qwen3-vl-plus",
+  "request_count": 1,
+  "retry_count": 0,
+  "http_status": 200,
+  "served_model": "qwen3-vl-plus",
+  "usage": {
+    "prompt_tokens": 4218,
+    "completion_tokens": 258,
+    "total_tokens": 4476,
+    "completion_tokens_details": {
+      "text_tokens": 258
+    },
+    "prompt_tokens_details": {
+      "image_tokens": 3702,
+      "text_tokens": 516,
+      "cached_tokens": 0
+    }
+  },
+  "elapsed_seconds": 8.238821900013136,
+  "decision": {
+    "summary": "Two regions stand out: (1) a transient multi-sample offset around index 420–435 with asymmetric N/E response and U spike; (2) a prolonged E descent (~610–660) with divergent N/U behavior and an abrupt E reversal near 660. Both show cross-axis shape complexity beyond noise or smooth drift.",
+    "regions": [
+      {
+        "start": 420,
+        "end": 435,
+        "observation": "Multi-sample downward shift in N and E (≈2–3 MAD), followed by a partial return in E but not N; U shows a concurrent sharp dip then recovery—suggests possible transient offset or platform with asymmetric cross-axis behavior."
+      },
+      {
+        "start": 610,
+        "end": 675,
+        "observation": "Broad, slow descent in E (≈4 MAD) from ~610 to ~660, accompanied by modest N decline and U rise; after ~660, E reverses sharply upward while N continues drifting down—ambiguous superposition of opposing trends, possibly indicating complex motion or multi-phase event."
+      }
+    ]
+  }
+}

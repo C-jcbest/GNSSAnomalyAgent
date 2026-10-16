@@ -1,0 +1,39 @@
+{
+  "status": "success",
+  "requested_model": "qwen3-vl-plus",
+  "request_count": 1,
+  "retry_count": 0,
+  "http_status": 200,
+  "served_model": "qwen3-vl-plus",
+  "usage": {
+    "prompt_tokens": 2982,
+    "completion_tokens": 446,
+    "total_tokens": 3428,
+    "completion_tokens_details": {
+      "text_tokens": 446
+    },
+    "prompt_tokens_details": {
+      "image_tokens": 1906,
+      "text_tokens": 1076,
+      "cached_tokens": 128
+    }
+  },
+  "elapsed_seconds": 11.38790840000729,
+  "decision": {
+    "summary": "Two overlapping transient-offset candidates are observed in the allowed context [365,579]: (1) a multi-sample deformation-like event at 525–538 affecting all axes asymmetrically (N/E down, U spike+drop), with incomplete recovery; (2) a sharp jump at 539 followed by sustained offset through 552, with potential return at 553 outside the interval. Neither interval shows a clear opposing return within allowed context, so both are marked uncertain. No confirmed temporary offset intervals.",
+    "intervals": [
+      {
+        "start": 525,
+        "end": 538,
+        "status": "uncertain",
+        "observation": "N rises steadily from ~400, E declines steadily, U shows step at ~468; all three axes exhibit a multi-sample transient dip/spike centered at 525–530 (N drops ~10 MAD, E drops ~5 MAD, U spikes then drops sharply). The return to pre-transient trend is incomplete by index 538: N remains ~5 MAD below its pre-525 trajectory, E remains ~3 MAD below, and U recovers only partially. No opposing return observed within allowed context (≤579), so status uncertain."
+      },
+      {
+        "start": 539,
+        "end": 552,
+        "status": "uncertain",
+        "observation": "After the 525–538 transient, N and E continue offset downward relative to prior trend; U stabilizes near post-spike level. At index 539, a large negative jump in N/E and positive in U occurs (per optional jump), but no sustained reversal or recovery follows before index 552. A subsequent positive jump at 553 (outside interval) suggests possible return, but the return itself lies beyond end=552 and is not observed within this interval. Thus, the offset initiated at 539 lacks confirmed return within allowed context."
+      }
+    ]
+  }
+}

@@ -1,0 +1,33 @@
+{
+  "status": "success",
+  "requested_model": "qwen3-vl-plus",
+  "request_count": 1,
+  "retry_count": 0,
+  "http_status": 200,
+  "served_model": "qwen3-vl-plus",
+  "usage": {
+    "prompt_tokens": 2463,
+    "completion_tokens": 250,
+    "total_tokens": 2713,
+    "completion_tokens_details": {
+      "text_tokens": 250
+    },
+    "prompt_tokens_details": {
+      "image_tokens": 1738,
+      "text_tokens": 725,
+      "cached_tokens": 128
+    }
+  },
+  "elapsed_seconds": 7.525634199992055,
+  "decision": {
+    "summary": "A multi-sample triaxial offset initiates near index 629–630 (N↓, E↓, U↑), persists through 637, and shows only partial, non-opposing recovery in U by 638; N and E remain offset at end of allowed context. Return is unobserved/ambiguous, so status is uncertain. The earlier region near 545 lies outside allowed_context [590,670] and is excluded.",
+    "intervals": [
+      {
+        "start": 629,
+        "end": 638,
+        "status": "uncertain",
+        "observation": "Triaxial shift onset at ~629–630: N drops ~2 MAD, E drops ~1.5 MAD, U rises ~1.5 MAD; interior (631–637) shows sustained offset with noisy fluctuations but no return to pre-event level; recovery ambiguous—U begins descending after 637 but N/E remain depressed through 638 (last index in allowed context). No opposing return observed within allowed_context."
+      }
+    ]
+  }
+}

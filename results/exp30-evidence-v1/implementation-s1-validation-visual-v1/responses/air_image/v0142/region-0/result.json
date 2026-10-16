@@ -1,0 +1,39 @@
+{
+  "status": "success",
+  "requested_model": "qwen3-vl-plus",
+  "request_count": 1,
+  "retry_count": 0,
+  "http_status": 200,
+  "served_model": "qwen3-vl-plus",
+  "usage": {
+    "prompt_tokens": 2538,
+    "completion_tokens": 266,
+    "total_tokens": 2804,
+    "completion_tokens_details": {
+      "text_tokens": 266
+    },
+    "prompt_tokens_details": {
+      "image_tokens": 1738,
+      "text_tokens": 800,
+      "cached_tokens": 128
+    }
+  },
+  "elapsed_seconds": 8.042276899999706,
+  "decision": {
+    "summary": "Two candidate temporary offset intervals in N/E/U (365–375 and 410–415) show multi-sample drops with correlated transients in E and U, but neither exhibits a clear opposing return within the allowed context [365,579]. The interior behavior is not consistently sustained, and recovery is partial or absent; thus both intervals are classified as uncertain. No confirmed temporary offsets identified.",
+    "intervals": [
+      {
+        "start": 365,
+        "end": 375,
+        "status": "uncertain",
+        "observation": "N shows a multi-sample drop (365–375); E and U exhibit correlated transient offsets but no clear return within allowed context; interior not sustained, return ambiguous → uncertain"
+      },
+      {
+        "start": 410,
+        "end": 415,
+        "status": "uncertain",
+        "observation": "N shows second abrupt drop (410–415) with partial recovery; E/U show correlated transients but no opposing return observed before 415; sustained plateau ends at ~410, not a clean offset interval → uncertain"
+      }
+    ]
+  }
+}

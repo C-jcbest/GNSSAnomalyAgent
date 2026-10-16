@@ -1,0 +1,37 @@
+{
+  "status": "success",
+  "requested_model": "qwen3-vl-plus",
+  "request_count": 1,
+  "retry_count": 0,
+  "http_status": 200,
+  "served_model": "qwen3-vl-plus",
+  "usage": {
+    "prompt_tokens": 4218,
+    "completion_tokens": 313,
+    "total_tokens": 4531,
+    "completion_tokens_details": {
+      "text_tokens": 313
+    },
+    "prompt_tokens_details": {
+      "image_tokens": 3702,
+      "text_tokens": 516,
+      "cached_tokens": 0
+    }
+  },
+  "elapsed_seconds": 10.673066300019855,
+  "decision": {
+    "summary": "Two regions stand out: (1) a sharp, multi-axis transient offset with incomplete recovery around indices 440–475; (2) a broader, correlated platform-like deformation in all three components from ~655–695, with hints of an opposing return in U. Other intervals show typical noise or smooth motion without clear morphological anomalies.",
+    "regions": [
+      {
+        "start": 440,
+        "end": 475,
+        "observation": "Sharp multi-sample upward jump in N and E (≈+4–5 MAD), followed by a rapid drop back near baseline around index 470–475; U shows a delayed, smaller upward offset peaking near 465 then returning. The cross-axis shape suggests a transient displacement with possible partial recovery, but the return is not symmetric and timing differs across axes."
+      },
+      {
+        "start": 655,
+        "end": 695,
+        "observation": "Broad platform-like elevation in E (≈+2–3 MAD) from ~660 to 690, coinciding with a modest sustained rise in N and a dip in U (~−2 MAD) around 670–685; all three components show correlated structure suggesting a slow deformation episode rather than isolated noise. A possible opposing return begins near 690 in U but is ambiguous in N/E."
+      }
+    ]
+  }
+}

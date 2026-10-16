@@ -1,0 +1,38 @@
+{
+  "status": "success",
+  "requested_model": "qwen3-vl-plus",
+  "request_count": 1,
+  "retry_count": 0,
+  "http_status": 200,
+  "served_model": "qwen3-vl-plus",
+  "usage": {
+    "prompt_tokens": 3337,
+    "completion_tokens": 411,
+    "total_tokens": 3748,
+    "completion_tokens_details": {
+      "text_tokens": 411
+    },
+    "prompt_tokens_details": {
+      "text_tokens": 3337,
+      "cached_tokens": 128
+    }
+  },
+  "elapsed_seconds": 10.337652599991998,
+  "decision": {
+    "summary": "A single strong 3D discontinuity centered at indices 595–598 is evident: N jumps up and sustains, E jumps up then partially recovers, U drops sharply and recovers slowly. No full return observed in any axis by index 604 (end of allowed context for this event), so the offset remains uncertain as temporary; permanent component possible. A later jump at 625 is isolated and unreturned within context, thus not confirmed as temporary.",
+    "intervals": [
+      {
+        "start": 595,
+        "end": 604,
+        "status": "uncertain",
+        "observation": "N shows a sharp multi-sample upward jump (~+12 MAD) starting ~595, sustained through 604 with no return; E jumps up (~+5 MAD) around 595–598 then partially recovers by 604 but remains elevated relative to pre-event level; U drops sharply (~−15 MAD) at ~595 and recovers only slowly (still ~−10 MAD at 604). Return not observed in N or fully in E/U within allowed context. Cross-axis coherence suggests a single 3D offset event, but recovery is incomplete → uncertain temporary offset."
+      },
+      {
+        "start": 625,
+        "end": 625,
+        "status": "uncertain",
+        "observation": "At index 625, N/E/U show a second coherent jump (+11.9, +5.7, +7.0 MAD), but this occurs after the prior event and outside the screened region. Within allowed context [555,639], no clear opposing return follows it before 639; thus cannot confirm temporary nature. Not included as interval due to lack of return evidence and separation from primary discontinuity."
+      }
+    ]
+  }
+}

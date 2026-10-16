@@ -1,0 +1,36 @@
+{
+  "status": "success",
+  "requested_model": "qwen3-vl-plus",
+  "request_count": 1,
+  "retry_count": 0,
+  "http_status": 200,
+  "served_model": "qwen3-vl-plus",
+  "usage": {
+    "prompt_tokens": 13403,
+    "completion_tokens": 282,
+    "total_tokens": 13685,
+    "completion_tokens_details": {
+      "text_tokens": 282
+    },
+    "prompt_tokens_details": {
+      "text_tokens": 13403,
+      "cached_tokens": 0
+    }
+  },
+  "elapsed_seconds": 8.554747199988924,
+  "decision": {
+    "summary": "Two regions merit closer inspection: (1) a complex offset in the 485–544 window with ambiguous recovery, and (2) a large, abrupt multi-axis jump near 610–613 that establishes a new platform without clear reversal in the observed span.",
+    "regions": [
+      {
+        "start": 485,
+        "end": 544,
+        "observation": "Cross-axis shape shows a multi-sample drop in N and E around index 490–495, followed by a sustained offset in E (more negative) and U (more positive) through ~520; the return is ambiguous—E remains low while N recovers partially, suggesting possible superposed changes or incomplete reversal."
+      },
+      {
+        "start": 605,
+        "end": 664,
+        "observation": "A sharp, multi-sample jump in all axes occurs near index 610–613: N drops ~12 units, E rises ~1.5 units, U drops ~1 unit, forming a clear platform from ~613 to ~630 before gradual drift resumes; the abruptness and scale suggest a permanent offset or major transient event, with no clear opposing return within the window."
+      }
+    ]
+  }
+}

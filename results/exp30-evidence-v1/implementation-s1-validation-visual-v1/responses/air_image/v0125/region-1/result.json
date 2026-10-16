@@ -1,0 +1,33 @@
+{
+  "status": "success",
+  "requested_model": "qwen3-vl-plus",
+  "request_count": 1,
+  "retry_count": 0,
+  "http_status": 200,
+  "served_model": "qwen3-vl-plus",
+  "usage": {
+    "prompt_tokens": 2650,
+    "completion_tokens": 249,
+    "total_tokens": 2899,
+    "completion_tokens_details": {
+      "text_tokens": 249
+    },
+    "prompt_tokens_details": {
+      "image_tokens": 1738,
+      "text_tokens": 912,
+      "cached_tokens": 128
+    }
+  },
+  "elapsed_seconds": 7.198252799978945,
+  "decision": {
+    "summary": "A sharp, multi-axis drop in E and U occurs at index 532, persisting through the end of the allowed context (569). The E and U offsets are large and coherent, while N remains stable aside from a small transient dip. No opposing return is observed within [532, 569], so the interval is classified as uncertain. The earlier candidate jump at 496 lies outside the screened region and is not supported by clear sustained offset or return evidence in the original series.",
+    "intervals": [
+      {
+        "start": 532,
+        "end": 569,
+        "status": "uncertain",
+        "observation": "Sharp E and U co-drop beginning at index 532 (E: ~−14.6 MAD, U: ~−10.3 MAD), with sustained offset through end of allowed context (570). N shows no matching step; only minor dip near 532. No return observed within [532, 569]; recovery ambiguous beyond window. Status: uncertain due to unobserved return."
+      }
+    ]
+  }
+}

@@ -1,0 +1,39 @@
+{
+  "status": "success",
+  "requested_model": "qwen3-vl-plus",
+  "request_count": 1,
+  "retry_count": 0,
+  "http_status": 200,
+  "served_model": "qwen3-vl-plus",
+  "usage": {
+    "prompt_tokens": 2506,
+    "completion_tokens": 269,
+    "total_tokens": 2775,
+    "completion_tokens_details": {
+      "text_tokens": 269
+    },
+    "prompt_tokens_details": {
+      "image_tokens": 1738,
+      "text_tokens": 768,
+      "cached_tokens": 128
+    }
+  },
+  "elapsed_seconds": 8.221118899993598,
+  "decision": {
+    "summary": "A confirmed temporary offset occurs in N/E/U from index 370 to 385 (coherent multi-axis drop). A subsequent ambiguous rebound interval (400–410) shows opposing E/U behavior without full recovery; status uncertain due to incomplete return and possible superposed motion. No other temporary offsets are confirmed within allowed context [365, 545].",
+    "intervals": [
+      {
+        "start": 370,
+        "end": 385,
+        "status": "confirmed",
+        "observation": "N/E/U show a correlated multi-sample drop (370–385), with coherent negative excursion across all axes; onset is gradual over ~5 samples, interior sustained for ~10 samples, no opposing return observed within this sub-interval."
+      },
+      {
+        "start": 400,
+        "end": 410,
+        "status": "uncertain",
+        "observation": "E and U exhibit opposing rebounds (400–410) while N remains depressed; the recovery is noisy and incomplete, and no clear return to pre-event baseline is observed on any axis. Return phase ambiguous; superposed motion likely."
+      }
+    ]
+  }
+}

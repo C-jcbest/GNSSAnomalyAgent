@@ -1,0 +1,37 @@
+{
+  "status": "success",
+  "requested_model": "qwen3-vl-plus",
+  "request_count": 1,
+  "retry_count": 0,
+  "http_status": 200,
+  "served_model": "qwen3-vl-plus",
+  "usage": {
+    "prompt_tokens": 4218,
+    "completion_tokens": 335,
+    "total_tokens": 4553,
+    "completion_tokens_details": {
+      "text_tokens": 335
+    },
+    "prompt_tokens_details": {
+      "image_tokens": 3702,
+      "text_tokens": 516,
+      "cached_tokens": 0
+    }
+  },
+  "elapsed_seconds": 10.057916600024328,
+  "decision": {
+    "summary": "Two regions stand out: (1) a gradual multi-axis downward shift in N/E from ~490 to 530 with no clear return, and (2) a sharp, coherent multi-component drop at ~615–620 with partial recovery in E/U but not N. Both show cross-axis consistency suggestive of physical motion rather than isolated noise or spike.",
+    "regions": [
+      {
+        "start": 490,
+        "end": 530,
+        "observation": "N and E components show a broad, multi-sample downward shift beginning near index 490, with N dropping ~1.5 MAD and E ~2 MAD; U shows a weaker but correlated dip. The change is not abrupt but sustained over ~40 samples, without clear reversal in this window. Surrounding noise is typical; the shape suggests a possible slow offset or platform rather than transient spike."
+      },
+      {
+        "start": 615,
+        "end": 625,
+        "observation": "At index ~615–620, all three components (N, E, U) exhibit a sharp, multi-sample drop: N falls ~2 MAD, E ~2.5 MAD, U ~3 MAD over 3–4 samples, followed by a partial recovery in E and U but not N. The cross-axis coherence and steepness suggest a possible jump or rapid deformation event; the lack of symmetric return in N makes the full nature ambiguous—could be permanent offset with incomplete rebound in other axes."
+      }
+    ]
+  }
+}

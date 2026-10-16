@@ -1,0 +1,37 @@
+{
+  "status": "success",
+  "requested_model": "qwen3-vl-plus",
+  "request_count": 1,
+  "retry_count": 0,
+  "http_status": 200,
+  "served_model": "qwen3-vl-plus",
+  "usage": {
+    "prompt_tokens": 5462,
+    "completion_tokens": 318,
+    "total_tokens": 5780,
+    "completion_tokens_details": {
+      "text_tokens": 318
+    },
+    "prompt_tokens_details": {
+      "image_tokens": 4936,
+      "text_tokens": 526,
+      "cached_tokens": 0
+    }
+  },
+  "elapsed_seconds": 9.737965999986045,
+  "decision": {
+    "summary": "Two regions warrant closer inspection: (1) a sharp multi-axis offset around index 440 with partial recovery in U but not E, and (2) a tightly bounded, coordinated triangular kink in all axes at the very end (725–729). Other sections show typical noise or smooth trends without ambiguous superposed changes.",
+    "regions": [
+      {
+        "start": 435,
+        "end": 450,
+        "observation": "Sharp ~12 MAD downward step in E and U components centered near index 440, with E dropping from ~-5 to ~-15 and U from ~0 to ~-10; N shows no corresponding step but exhibits increased noise. A possible partial return begins around 445 in U, but E remains offset—suggesting a temporary offset or incomplete recovery."
+      },
+      {
+        "start": 725,
+        "end": 729,
+        "observation": "Linear trend reversal in all three components between indices 725–729: N drops sharply (~0.6 MAD), E rises (~1.4 MAD), and U falls (~1.6 MAD) over just 5 samples, forming a tight triangular kink. The abruptness and coordinated multi-axis change suggest a possible instrumental artifact or very rapid motion; the surrounding region (720–729) shows otherwise smooth behavior, highlighting this as anomalous."
+      }
+    ]
+  }
+}

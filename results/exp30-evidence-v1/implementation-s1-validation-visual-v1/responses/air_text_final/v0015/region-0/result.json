@@ -1,0 +1,32 @@
+{
+  "status": "success",
+  "requested_model": "qwen3-vl-plus",
+  "request_count": 1,
+  "retry_count": 0,
+  "http_status": 200,
+  "served_model": "qwen3-vl-plus",
+  "usage": {
+    "prompt_tokens": 3224,
+    "completion_tokens": 273,
+    "total_tokens": 3497,
+    "completion_tokens_details": {
+      "text_tokens": 273
+    },
+    "prompt_tokens_details": {
+      "text_tokens": 3224,
+      "cached_tokens": 128
+    }
+  },
+  "elapsed_seconds": 8.75417989998823,
+  "decision": {
+    "summary": "A clear multi-sample downward shift in E and U begins around index 434, sustained through index 450 (and beyond), with no return observed within the allowed context [400, 485]. The onset is abrupt (E drops >15 MAD over 2 samples), interior is flat/slowly varying, but the absence of a confirmed opposing return prevents confirmation as a temporary offset. N shows only minor fluctuations, inconsistent with a rigid-body motion interpretation. Numerical jump candidates at 433 and 450 align with onset and continuation but do not resolve return ambiguity.",
+    "intervals": [
+      {
+        "start": 434,
+        "end": 450,
+        "status": "uncertain",
+        "observation": "Sustained downward offset in E and U beginning near index 434–435, with E dropping ~−16 to −18 MAD and U dropping ~−10 to −13 MAD over ~10 samples; N remains noisy but shows no coherent step. Return not observed within allowed context (ends at 485); the offset persists through index 450 and beyond, with no opposing reversal evident before end of window."
+      }
+    ]
+  }
+}

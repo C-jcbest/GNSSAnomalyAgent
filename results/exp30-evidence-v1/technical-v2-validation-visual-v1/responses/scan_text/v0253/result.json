@@ -1,0 +1,36 @@
+{
+  "status": "success",
+  "requested_model": "qwen3-vl-plus",
+  "request_count": 1,
+  "retry_count": 0,
+  "http_status": 200,
+  "served_model": "qwen3-vl-plus",
+  "usage": {
+    "prompt_tokens": 13378,
+    "completion_tokens": 321,
+    "total_tokens": 13699,
+    "completion_tokens_details": {
+      "text_tokens": 321
+    },
+    "prompt_tokens_details": {
+      "text_tokens": 13378,
+      "cached_tokens": 256
+    }
+  },
+  "elapsed_seconds": 10.506437200005166,
+  "decision": {
+    "summary": "Two regions warrant closer inspection: (1) an abrupt multi-axis shift near index 490–495 with no clear reversal, and (2) a single extreme spike at index 637 with rapid recovery. Other variations appear consistent with noise or gradual drift.",
+    "regions": [
+      {
+        "start": 485,
+        "end": 544,
+        "observation": "N/E/U show a multi-sample shift around index ~490–495: N jumps from ~-0.5 to +1.4, E drops sharply from ~-4.4 to ~-1.9, U drops from ~-4.2 to ~-1.5; the change is abrupt over 2–3 samples and not clearly reversed in the window, suggesting a possible permanent offset or rapid transient event."
+      },
+      {
+        "start": 635,
+        "end": 664,
+        "observation": "A prominent outlier at index 637 (original index 637 = window index 152 in [485,664]): N=11.48, E=17.82, U=-18.64 — extreme spike across all axes, clearly non-physical and likely a data anomaly; surrounding samples (e.g., 636, 638) return toward baseline levels, indicating a transient spike rather than sustained motion."
+      }
+    ]
+  }
+}

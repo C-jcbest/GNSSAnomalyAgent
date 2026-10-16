@@ -1,0 +1,38 @@
+{
+  "status": "success",
+  "requested_model": "qwen3-vl-plus",
+  "request_count": 1,
+  "retry_count": 0,
+  "http_status": 200,
+  "served_model": "qwen3-vl-plus",
+  "usage": {
+    "prompt_tokens": 5399,
+    "completion_tokens": 352,
+    "total_tokens": 5751,
+    "completion_tokens_details": {
+      "text_tokens": 352
+    },
+    "prompt_tokens_details": {
+      "text_tokens": 5399,
+      "cached_tokens": 128
+    }
+  },
+  "elapsed_seconds": 10.560847000015201,
+  "decision": {
+    "summary": "A multi-sample co-shift in N and E occurs near index 620 (N ↑~2.0, E slight ↓), persisting through index 624 with no clear opposing return observed within allowed context. Subsequent drift (625–650) shows partial counter-motion but not full reversal; status remains uncertain due to ambiguous recovery. No confirmed temporary offset interval meets onset-sustained-return criteria.",
+    "intervals": [
+      {
+        "start": 620,
+        "end": 624,
+        "status": "uncertain",
+        "observation": "N jumps from ~27.5 to ~29.5 (Δ≈2.0) and E shifts from ~-13.5 to ~-13.6 (small Δ), both sustained over 4–5 samples (indices 620–624); U shows no coherent step. Return not observed before index 624; later N/E continue drifting but without clear reversal of the jump magnitude."
+      },
+      {
+        "start": 625,
+        "end": 650,
+        "status": "uncertain",
+        "observation": "From ~625 to 650, N declines slightly (~29.5→27.0) while E rebounds (~-13.6→-11.1), suggesting partial opposing motion; however, this does not constitute a clean return to pre-jump levels (N remains >27, E remains >-12). No axis shows full recovery to pre-620 state."
+      }
+    ]
+  }
+}

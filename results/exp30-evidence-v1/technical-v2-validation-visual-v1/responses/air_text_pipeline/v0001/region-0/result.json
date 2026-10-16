@@ -1,0 +1,32 @@
+{
+  "status": "success",
+  "requested_model": "qwen3-vl-plus",
+  "request_count": 1,
+  "retry_count": 0,
+  "http_status": 200,
+  "served_model": "qwen3-vl-plus",
+  "usage": {
+    "prompt_tokens": 2846,
+    "completion_tokens": 368,
+    "total_tokens": 3214,
+    "completion_tokens_details": {
+      "text_tokens": 368
+    },
+    "prompt_tokens_details": {
+      "text_tokens": 2846,
+      "cached_tokens": 128
+    }
+  },
+  "elapsed_seconds": 10.85477350000292,
+  "decision": {
+    "summary": "A single strong multi-axis transient occurs at index 477: N drops ~11.2, E spikes +14.4, U drops ~16.5 (all in station MAD units). The event is abrupt and coherent across axes, but the return is only partial and not reversed within the allowed context [451,527]; thus the interval is classified as uncertain. No other temporary offsets are supported by sustained interior and clear opposing return within the context.",
+    "intervals": [
+      {
+        "start": 477,
+        "end": 491,
+        "status": "uncertain",
+        "observation": "N drops sharply from -0.084 (idx 468) to -11.334 (idx 477), then recovers to -1.309 (idx 478); E jumps from -0.618 (idx 468) to +13.128 (idx 477), then back to -1.300 (idx 478); U falls from -2.180 (idx 468) to -18.667 (idx 477), then rises to -4.727 (idx 478). The multi-axis coherent jump at idx 477 is abrupt, sustained over one sample, and followed by a partial but not full return within the context. Return is incomplete (N/E/U do not revert to pre-jump levels by idx 491), and no opposing reversal is observed before end of allowed context (527). Status: uncertain."
+      }
+    ]
+  }
+}

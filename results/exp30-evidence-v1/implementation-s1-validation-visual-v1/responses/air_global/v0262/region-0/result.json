@@ -1,0 +1,39 @@
+{
+  "status": "success",
+  "requested_model": "qwen3-vl-plus",
+  "request_count": 1,
+  "retry_count": 0,
+  "http_status": 200,
+  "served_model": "qwen3-vl-plus",
+  "usage": {
+    "prompt_tokens": 2674,
+    "completion_tokens": 255,
+    "total_tokens": 2929,
+    "completion_tokens_details": {
+      "text_tokens": 255
+    },
+    "prompt_tokens_details": {
+      "image_tokens": 1906,
+      "text_tokens": 768,
+      "cached_tokens": 128
+    }
+  },
+  "elapsed_seconds": 7.137580600014189,
+  "decision": {
+    "summary": "A confirmed temporary offset occurs in N/E/U from index 370 to 385 with a coherent multi-axis drop. A subsequent uncertain interval (400–410) shows axis-divergent rebounds in E and U without full return, indicating possible superposed motion or incomplete offset recovery. No other temporary offsets are supported within allowed_context [365, 545].",
+    "intervals": [
+      {
+        "start": 370,
+        "end": 385,
+        "status": "confirmed",
+        "observation": "N/E/U show correlated multi-sample drop (370–385), consistent across axes; onset sharp, interior sustained, no opposing return observed within allowed context."
+      },
+      {
+        "start": 400,
+        "end": 410,
+        "status": "uncertain",
+        "observation": "E and U exhibit opposing rebounds (400–410) after initial drop; N remains depressed. Return not completed by 410 and no clear reversion to pre-event baseline; ambiguous recovery suggests superposed motion or incomplete offset."
+      }
+    ]
+  }
+}

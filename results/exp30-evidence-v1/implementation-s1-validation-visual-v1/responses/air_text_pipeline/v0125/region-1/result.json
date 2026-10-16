@@ -1,0 +1,32 @@
+{
+  "status": "success",
+  "requested_model": "qwen3-vl-plus",
+  "request_count": 1,
+  "retry_count": 0,
+  "http_status": 200,
+  "served_model": "qwen3-vl-plus",
+  "usage": {
+    "prompt_tokens": 2951,
+    "completion_tokens": 193,
+    "total_tokens": 3144,
+    "completion_tokens_details": {
+      "text_tokens": 193
+    },
+    "prompt_tokens_details": {
+      "text_tokens": 2951,
+      "cached_tokens": 128
+    }
+  },
+  "elapsed_seconds": 5.759135399974184,
+  "decision": {
+    "summary": "Within allowed context [650,729], a coherent drift begins at index 685 in N and E (and U), persisting to the end of the window without observed reversal. The motion is gradual and sustained over ~45 samples, distinct from prior noise level, but lacks a confirmed return; thus classified as uncertain temporary offset. No other temporary intervals meet criteria inside the context.",
+    "intervals": [
+      {
+        "start": 685,
+        "end": 729,
+        "status": "uncertain",
+        "observation": "Sustained coherent drift in N (≈28→30) and E (≈6→8) from index 685 onward, with concurrent slow U decline; no reversal observed within allowed context [650,729]. Return not confirmed; status uncertain."
+      }
+    ]
+  }
+}

@@ -1,0 +1,37 @@
+{
+  "status": "success",
+  "requested_model": "qwen3-vl-plus",
+  "request_count": 1,
+  "retry_count": 0,
+  "http_status": 200,
+  "served_model": "qwen3-vl-plus",
+  "usage": {
+    "prompt_tokens": 5462,
+    "completion_tokens": 245,
+    "total_tokens": 5707,
+    "completion_tokens_details": {
+      "text_tokens": 245
+    },
+    "prompt_tokens_details": {
+      "image_tokens": 4936,
+      "text_tokens": 526,
+      "cached_tokens": 256
+    }
+  },
+  "elapsed_seconds": 7.968793300009565,
+  "decision": {
+    "summary": "Two regions stand out: (1) a persistent N-downward shift from ~490 onward with correlated E/U noise, and (2) a sharp U-drop near 605–610 possibly initiating a new trend. Other segments show typical noise or smooth trends without ambiguous superposed changes.",
+    "regions": [
+      {
+        "start": 485,
+        "end": 505,
+        "observation": "N-component shows a sustained ~2.5 MAD downward shift beginning near index 490, with E and U showing correlated but noisier responses; the N drop appears abrupt over ~5 samples and persists without clear return in this window."
+      },
+      {
+        "start": 595,
+        "end": 615,
+        "observation": "U-component exhibits a sharp multi-sample drop (~4 MAD) around index 605–610, coinciding with a smaller opposing N dip and E fluctuation; the U offset does not recover within the window and may be part of a longer trend starting earlier (index ~590)."
+      }
+    ]
+  }
+}

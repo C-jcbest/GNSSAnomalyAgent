@@ -1,0 +1,33 @@
+{
+  "status": "success",
+  "requested_model": "qwen3-vl-plus",
+  "request_count": 1,
+  "retry_count": 0,
+  "http_status": 200,
+  "served_model": "qwen3-vl-plus",
+  "usage": {
+    "prompt_tokens": 2518,
+    "completion_tokens": 233,
+    "total_tokens": 2751,
+    "completion_tokens_details": {
+      "text_tokens": 233
+    },
+    "prompt_tokens_details": {
+      "image_tokens": 1738,
+      "text_tokens": 780,
+      "cached_tokens": 128
+    }
+  },
+  "elapsed_seconds": 6.53497890001745,
+  "decision": {
+    "summary": "Within allowed context [535,665], the screened region (570–630) shows a sustained multi-axis trend onset (N/E up, U down) beginning at index 570. No opposing return to baseline is observed before index 665; the transient near 620–624 is partial and unidirectional on N/E, thus not confirming a temporary offset. All axes remain in net motion through end of context. No confirmed temporary offset intervals.",
+    "intervals": [
+      {
+        "start": 570,
+        "end": 624,
+        "status": "uncertain",
+        "observation": "Sustained monotonic rise in N and E (indices ~570–624), concurrent with steady U decline; no return observed within allowed context. A brief U flattening/rise at ~620–624 opposes the dominant trend but does not reverse it, and N/E continue upward—insufficient evidence for a closed temporary offset interval."
+      }
+    ]
+  }
+}

@@ -1,0 +1,37 @@
+{
+  "status": "success",
+  "requested_model": "qwen3-vl-plus",
+  "request_count": 1,
+  "retry_count": 0,
+  "http_status": 200,
+  "served_model": "qwen3-vl-plus",
+  "usage": {
+    "prompt_tokens": 5462,
+    "completion_tokens": 238,
+    "total_tokens": 5700,
+    "completion_tokens_details": {
+      "text_tokens": 238
+    },
+    "prompt_tokens_details": {
+      "image_tokens": 4936,
+      "text_tokens": 526,
+      "cached_tokens": 0
+    }
+  },
+  "elapsed_seconds": 7.446449599985499,
+  "decision": {
+    "summary": "Two regions warrant closer inspection: (1) a sharp, multi-sample transient around index 480 affecting N/U/E with asymmetric recovery, and (2) an abrupt onset of coherent linear trends in all axes starting at index 725 through the end. No other intervals show compelling morphology beyond typical noise or smooth motion.",
+    "regions": [
+      {
+        "start": 478,
+        "end": 484,
+        "observation": "Sharp multi-sample negative spike in N and U components near index 480, with apparent partial recovery in U but not N; E shows a smaller concurrent dip. The event spans ~5 samples and is isolated from surrounding noise."
+      },
+      {
+        "start": 725,
+        "end": 729,
+        "observation": "Sustained linear trend across all three axes from ~725 onward: N rises steadily, E declines steadily, U rises steadily—suggesting possible platform-like motion or systematic bias onset; the change begins abruptly at 725 and continues to end of record."
+      }
+    ]
+  }
+}

@@ -1,0 +1,32 @@
+{
+  "status": "success",
+  "requested_model": "qwen3-vl-plus",
+  "request_count": 1,
+  "retry_count": 0,
+  "http_status": 200,
+  "served_model": "qwen3-vl-plus",
+  "usage": {
+    "prompt_tokens": 5245,
+    "completion_tokens": 341,
+    "total_tokens": 5586,
+    "completion_tokens_details": {
+      "text_tokens": 341
+    },
+    "prompt_tokens_details": {
+      "text_tokens": 5245,
+      "cached_tokens": 128
+    }
+  },
+  "elapsed_seconds": 9.417716299998574,
+  "decision": {
+    "summary": "A sharp multi-axis offset begins between indices 576–578 (N jumps +9–10, E drops −6 to −8, U rises +4–5), followed by a stable plateau through index 729. The transition is not a single-point spike but spans ≥3 samples and sustains for >150 samples without reversal. Since no return is observed within allowed context [570,729], the interval is classified as uncertain—consistent with either a temporary offset with unobserved return or a permanent displacement onset.",
+    "intervals": [
+      {
+        "start": 577,
+        "end": 729,
+        "status": "uncertain",
+        "observation": "N rises sharply from ~1–2 to ~10–13 over indices 570–577 (peaking at index 577: N=11.04), E drops from ~0–2 to ~-5 to -8 over same span (min at index 578: E=-7.85), U rises from ~0–2 to ~3–5 (peak at index 578: U=4.93). After index 578, all axes remain in a stable high-amplitude plateau with minor fluctuations but no reversal through end of allowed context (index 729). No return observed; onset is multi-sample (≥3 points), interior is sustained (>100 samples), but absence of opposing return prevents confirmation of temporary nature."
+      }
+    ]
+  }
+}

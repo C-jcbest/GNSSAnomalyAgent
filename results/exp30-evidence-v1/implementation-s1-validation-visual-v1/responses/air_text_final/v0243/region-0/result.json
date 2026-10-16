@@ -1,0 +1,32 @@
+{
+  "status": "success",
+  "requested_model": "qwen3-vl-plus",
+  "request_count": 1,
+  "retry_count": 0,
+  "http_status": 200,
+  "served_model": "qwen3-vl-plus",
+  "usage": {
+    "prompt_tokens": 3185,
+    "completion_tokens": 206,
+    "total_tokens": 3391,
+    "completion_tokens_details": {
+      "text_tokens": 206
+    },
+    "prompt_tokens_details": {
+      "text_tokens": 3185,
+      "cached_tokens": 128
+    }
+  },
+  "elapsed_seconds": 5.447401499986881,
+  "decision": {
+    "summary": "A clear multi-sample downward step occurs at index 576 across all axes (N/E/U), consistent with the screened region and numerical jump candidate. The offset persists to the end of the allowed context (615) without any opposing return or recovery observed. No other temporary offsets are evident within [530,615].",
+    "intervals": [
+      {
+        "start": 576,
+        "end": 615,
+        "status": "uncertain",
+        "observation": "Multi-axis downward step centered near index 576 (N/E/U ~ -8.1, -6.4, -8.1 MAD), sustained through end of allowed context (index 615) with no opposing return observed; U shows largest offset magnitude, N and E coherent but smaller. Return not observed within allowed_context [530,615], so status is uncertain."
+      }
+    ]
+  }
+}

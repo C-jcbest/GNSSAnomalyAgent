@@ -1,0 +1,37 @@
+{
+  "status": "success",
+  "requested_model": "qwen3-vl-plus",
+  "request_count": 1,
+  "retry_count": 0,
+  "http_status": 200,
+  "served_model": "qwen3-vl-plus",
+  "usage": {
+    "prompt_tokens": 5462,
+    "completion_tokens": 239,
+    "total_tokens": 5701,
+    "completion_tokens_details": {
+      "text_tokens": 239
+    },
+    "prompt_tokens_details": {
+      "image_tokens": 4936,
+      "text_tokens": 526,
+      "cached_tokens": 256
+    }
+  },
+  "elapsed_seconds": 8.362871899997117,
+  "decision": {
+    "summary": "Two regions warrant closer inspection: (1) a sharp, multi-sample vertical offset near index 488 with brief horizontal coupling, and (2) a smooth, coherent linear trend beginning at index 725 across all axes. Other features appear consistent with noise or gradual motion.",
+    "regions": [
+      {
+        "start": 485,
+        "end": 490,
+        "observation": "Sharp multi-sample drop in U (≈−20 MAD) at index ~488, preceded by a smaller N/E dip; U remains offset for ~2 samples before partial recovery—suggests a transient vertical offset with possible coupled horizontal response."
+      },
+      {
+        "start": 725,
+        "end": 729,
+        "observation": "Smooth, sustained linear trend across all axes from ~725 onward: N rises ~1.5 MAD, E rises ~1.2 MAD, U falls ~1.5 MAD—appears as a coherent platform-like motion without abrupt edges, possibly indicating onset of slow deformation or systematic bias."
+      }
+    ]
+  }
+}

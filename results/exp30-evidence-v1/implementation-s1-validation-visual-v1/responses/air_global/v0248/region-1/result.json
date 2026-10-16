@@ -1,0 +1,33 @@
+{
+  "status": "success",
+  "requested_model": "qwen3-vl-plus",
+  "request_count": 1,
+  "retry_count": 0,
+  "http_status": 200,
+  "served_model": "qwen3-vl-plus",
+  "usage": {
+    "prompt_tokens": 2681,
+    "completion_tokens": 234,
+    "total_tokens": 2915,
+    "completion_tokens_details": {
+      "text_tokens": 234
+    },
+    "prompt_tokens_details": {
+      "image_tokens": 1906,
+      "text_tokens": 775,
+      "cached_tokens": 128
+    }
+  },
+  "elapsed_seconds": 6.673666999995476,
+  "decision": {
+    "summary": "Within allowed context [580,660], a multi-axis transient begins ~615: E increases steadily, U drops sharply near 618, N dips shallowly. The E trend plateaus or slightly reverses after 622 but no definitive return to pre-event baseline is observed before index 660; U and N also lack clear recovery. Hence, the interval 615–622 is a candidate temporary offset with uncertain status due to incomplete return evidence.",
+    "intervals": [
+      {
+        "start": 615,
+        "end": 622,
+        "status": "uncertain",
+        "observation": "E rises steadily (~2 MAD) from index 615 to 622; U drops sharply near 618 (~3 MAD); N shows shallow dip peaking ~620. Return not observed within allowed context (ends at 660), and E shows only slight plateau/reversal after 622 without clear reversal to pre-event level."
+      }
+    ]
+  }
+}

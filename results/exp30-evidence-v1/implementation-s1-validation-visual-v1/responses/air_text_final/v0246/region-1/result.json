@@ -1,0 +1,32 @@
+{
+  "status": "success",
+  "requested_model": "qwen3-vl-plus",
+  "request_count": 1,
+  "retry_count": 0,
+  "http_status": 200,
+  "served_model": "qwen3-vl-plus",
+  "usage": {
+    "prompt_tokens": 3084,
+    "completion_tokens": 235,
+    "total_tokens": 3319,
+    "completion_tokens_details": {
+      "text_tokens": 235
+    },
+    "prompt_tokens_details": {
+      "text_tokens": 3084,
+      "cached_tokens": 128
+    }
+  },
+  "elapsed_seconds": 6.381819300004281,
+  "decision": {
+    "summary": "Within allowed context [565,650], the only candidate temporary offset is a divergent response starting ~605: N/E/U all drop over 2–3 samples, but only N and U partially rebound; E remains offset through 614 with no observed return. The absence of a clear opposing edge or full recovery in E prevents confirmation. No other temporary offsets are supported by axis-coherent onset/sustained/return evidence.",
+    "intervals": [
+      {
+        "start": 605,
+        "end": 614,
+        "status": "uncertain",
+        "observation": "E component shows a sustained negative offset from index 605 to 614 (inclusive), while N and U exhibit a rapid multi-sample drop (~605–610) followed by partial rebound; E does not recover, creating a divergent recovery pattern. Return to pre-drop levels is unobserved in E within allowed context (ends at 650), and no opposing edge is evident. Status: uncertain."
+      }
+    ]
+  }
+}

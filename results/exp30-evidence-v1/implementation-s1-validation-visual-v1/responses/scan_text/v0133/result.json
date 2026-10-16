@@ -1,0 +1,36 @@
+{
+  "status": "success",
+  "requested_model": "qwen3-vl-plus",
+  "request_count": 1,
+  "retry_count": 0,
+  "http_status": 200,
+  "served_model": "qwen3-vl-plus",
+  "usage": {
+    "prompt_tokens": 13307,
+    "completion_tokens": 326,
+    "total_tokens": 13633,
+    "completion_tokens_details": {
+      "text_tokens": 326
+    },
+    "prompt_tokens_details": {
+      "text_tokens": 13307,
+      "cached_tokens": 0
+    }
+  },
+  "elapsed_seconds": 9.97989720001351,
+  "decision": {
+    "summary": "Two regions stand out: (1) a sharp multi-sample displacement in N/E around indices 489–492 within the overlapping window [485,664], possibly indicating a transient offset or jump with ambiguous recovery; (2) a very abrupt, large cross-axis shift at indices 607–608 in the [605,729] window, followed by a plateau and potential partial reversal—warranting closer inspection due to its magnitude and timing relative to missing samples.",
+    "regions": [
+      {
+        "start": 485,
+        "end": 495,
+        "observation": "Sharp multi-sample jump in N and E (N from ~0.5 to ~2.2, E from ~-1.8 to ~-0.9) around index 489–492, followed by a sustained offset; U shows less coherent change but a possible opposing return starting near 493."
+      },
+      {
+        "start": 605,
+        "end": 625,
+        "observation": "Abrupt large shift in E (~-2.8 to ~0.1) and N (~-1.3 to ~0.1) at index 607–608, with missing samples at 609–610; subsequent samples show a platform-like behavior in E/N until ~620, then a possible partial return or new offset."
+      }
+    ]
+  }
+}

@@ -1,0 +1,38 @@
+{
+  "status": "success",
+  "requested_model": "qwen3-vl-plus",
+  "request_count": 1,
+  "retry_count": 0,
+  "http_status": 200,
+  "served_model": "qwen3-vl-plus",
+  "usage": {
+    "prompt_tokens": 4199,
+    "completion_tokens": 342,
+    "total_tokens": 4541,
+    "completion_tokens_details": {
+      "text_tokens": 342
+    },
+    "prompt_tokens_details": {
+      "text_tokens": 4199,
+      "cached_tokens": 128
+    }
+  },
+  "elapsed_seconds": 9.654769399989164,
+  "decision": {
+    "summary": "Two candidate temporary offsets identified within allowed context [450,579]: (1) N-negative offset starting ~490, sustained through 530, with correlated E/U dips 510–525 but no unambiguous return; (2) U-dip beginning ~520, possibly extending to 550, with partial or ambiguous recovery. Both lack confirmed opposing returns before 579; status marked uncertain. No isolated permanent steps confirmed.",
+    "intervals": [
+      {
+        "start": 490,
+        "end": 530,
+        "status": "uncertain",
+        "observation": "N-component shows a sustained negative offset from index 490 to 530; E and U exhibit correlated multi-sample dips around 510–525, but no clear opposing return is observed before index 530. Return phase ambiguous beyond 530 due to missing data at 572 and continued variability."
+      },
+      {
+        "start": 520,
+        "end": 550,
+        "status": "uncertain",
+        "observation": "U-component shows a sharp dip near index 520 (e.g., -2.10469 at 528) and another near 550 (e.g., -1.47716 at 549), but recovery is incomplete and overlapping with ongoing N/E transients; no confirmed return before end of allowed context (579)."
+      }
+    ]
+  }
+}

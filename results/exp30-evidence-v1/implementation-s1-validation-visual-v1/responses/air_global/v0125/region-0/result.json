@@ -1,0 +1,33 @@
+{
+  "status": "success",
+  "requested_model": "qwen3-vl-plus",
+  "request_count": 1,
+  "retry_count": 0,
+  "http_status": 200,
+  "served_model": "qwen3-vl-plus",
+  "usage": {
+    "prompt_tokens": 2738,
+    "completion_tokens": 239,
+    "total_tokens": 2977,
+    "completion_tokens_details": {
+      "text_tokens": 239
+    },
+    "prompt_tokens_details": {
+      "image_tokens": 1906,
+      "text_tokens": 832,
+      "cached_tokens": 128
+    }
+  },
+  "elapsed_seconds": 6.654520000010962,
+  "decision": {
+    "summary": "A multi-axis offset initiates near index 435: N and U rise sharply over several samples and remain elevated; E lags by ~5 indices with a smaller downward step. The offset persists through the end of the allowed context (index 480) with no observed return on any axis, so status is uncertain. The candidate jump at index 439 aligns with onset but does not define interval boundaries; the sustained plateau and lack of recovery prevent confirmation as temporary.",
+    "intervals": [
+      {
+        "start": 435,
+        "end": 452,
+        "status": "uncertain",
+        "observation": "N and U show a multi-sample upward shift starting near index 435, sustained through ~452; E shows a delayed downward offset beginning ~440, persisting without clear return within allowed context [400,480]. Return not observed before index 480; interior is elevated and stable on N/U, with E remaining offset. No opposing reversal observed in any axis within allowed window."
+      }
+    ]
+  }
+}

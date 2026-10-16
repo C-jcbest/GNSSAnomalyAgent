@@ -1,0 +1,37 @@
+{
+  "status": "success",
+  "requested_model": "qwen3-vl-plus",
+  "request_count": 1,
+  "retry_count": 0,
+  "http_status": 200,
+  "served_model": "qwen3-vl-plus",
+  "usage": {
+    "prompt_tokens": 5462,
+    "completion_tokens": 268,
+    "total_tokens": 5730,
+    "completion_tokens_details": {
+      "text_tokens": 268
+    },
+    "prompt_tokens_details": {
+      "image_tokens": 4936,
+      "text_tokens": 526,
+      "cached_tokens": 0
+    }
+  },
+  "elapsed_seconds": 8.604885000007926,
+  "decision": {
+    "summary": "Two regions stand out: (1) a transient multi-axis excursion near index 430 with N dropping sharply and E/U responding oppositely; (2) a coherent step-like shift in E (down), U (up), and N (slight down) centered at index 610, persisting without reversal in the available window. Other intervals show typical noise or smooth trends.",
+    "regions": [
+      {
+        "start": 425,
+        "end": 435,
+        "observation": "N-component shows a sharp multi-sample drop (~1.5 MAD units) around index 430–435, followed by a partial recovery; E and U show correlated but smaller opposing excursions—suggests a transient offset or local disturbance rather than smooth motion."
+      },
+      {
+        "start": 605,
+        "end": 615,
+        "observation": "E-component exhibits a sustained ~2 MAD-step downward shift between indices ~605–615, with U showing a concurrent upward step and N a subtle dip; the change appears abrupt and persistent over ~10 samples, with no clear return in the window—possible permanent jump or prolonged offset."
+      }
+    ]
+  }
+}

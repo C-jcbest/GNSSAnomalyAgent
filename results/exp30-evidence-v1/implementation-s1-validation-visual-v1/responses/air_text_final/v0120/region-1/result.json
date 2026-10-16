@@ -1,0 +1,38 @@
+{
+  "status": "success",
+  "requested_model": "qwen3-vl-plus",
+  "request_count": 1,
+  "retry_count": 0,
+  "http_status": 200,
+  "served_model": "qwen3-vl-plus",
+  "usage": {
+    "prompt_tokens": 6694,
+    "completion_tokens": 289,
+    "total_tokens": 6983,
+    "completion_tokens_details": {
+      "text_tokens": 289
+    },
+    "prompt_tokens_details": {
+      "text_tokens": 6694,
+      "cached_tokens": 128
+    }
+  },
+  "elapsed_seconds": 8.165598599996883,
+  "decision": {
+    "summary": "Two overlapping U-dominated transient features observed: (1) sharp drop at ~520 with slow rebound, no clear return before 532; (2) second dip near 550 with incomplete recovery by 558. Both lack unambiguous opposing return within allowed context [475,699]; N/E show supporting but less distinct co-transients. No confirmed temporary offset intervals due to ambiguous returns.",
+    "intervals": [
+      {
+        "start": 520,
+        "end": 532,
+        "status": "uncertain",
+        "observation": "U drops sharply from ~1.7 to ~-2.1 over indices 520–522, with N and E showing correlated transients; U remains depressed until ~532, then begins gradual recovery. Return not yet observed within allowed context."
+      },
+      {
+        "start": 550,
+        "end": 558,
+        "status": "uncertain",
+        "observation": "U shows second abrupt dip near index 550 (from ~0.6 to ~-1.5), concurrent with modest N/E shifts; U recovers partially by 558 but does not return to pre-dip level. Return ambiguous; interior not fully sustained."
+      }
+    ]
+  }
+}

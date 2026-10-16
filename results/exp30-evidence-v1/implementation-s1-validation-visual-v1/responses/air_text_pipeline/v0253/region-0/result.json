@@ -1,0 +1,32 @@
+{
+  "status": "success",
+  "requested_model": "qwen3-vl-plus",
+  "request_count": 1,
+  "retry_count": 0,
+  "http_status": 200,
+  "served_model": "qwen3-vl-plus",
+  "usage": {
+    "prompt_tokens": 2931,
+    "completion_tokens": 269,
+    "total_tokens": 3200,
+    "completion_tokens_details": {
+      "text_tokens": 269
+    },
+    "prompt_tokens_details": {
+      "text_tokens": 2931,
+      "cached_tokens": 128
+    }
+  },
+  "elapsed_seconds": 7.113057799986564,
+  "decision": {
+    "summary": "A multi-axis transient begins at index 485 with sharp drops in E and U (multi-sample, not single-point), accompanied by a modest N rise. The offset persists through index 495 without clear reversal within the allowed context; thus status is uncertain. No evidence of a complete temporary interval (onset + sustained interior + opposing return) is confirmed.",
+    "intervals": [
+      {
+        "start": 485,
+        "end": 495,
+        "status": "uncertain",
+        "observation": "E drops sharply from ~-2.1 (index 485) to ~-4.4 (index 487), then fluctuates but remains low (~-4.0 to -4.9) through index 495; U drops from ~-0.7 (485) to ~-4.2 (487) and stays depressed (~-3.0 to -5.5) until 495; N shows modest rise (from ~-0.5 to ~1.4) but no clear return. No opposing recovery observed within allowed context [450,530]; return is unobserved/ambiguous."
+      }
+    ]
+  }
+}

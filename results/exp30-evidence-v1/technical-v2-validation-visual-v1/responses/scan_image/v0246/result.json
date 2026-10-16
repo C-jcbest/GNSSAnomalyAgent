@@ -1,0 +1,37 @@
+{
+  "status": "success",
+  "requested_model": "qwen3-vl-plus",
+  "request_count": 1,
+  "retry_count": 0,
+  "http_status": 200,
+  "served_model": "qwen3-vl-plus",
+  "usage": {
+    "prompt_tokens": 5462,
+    "completion_tokens": 288,
+    "total_tokens": 5750,
+    "completion_tokens_details": {
+      "text_tokens": 288
+    },
+    "prompt_tokens_details": {
+      "image_tokens": 4936,
+      "text_tokens": 526,
+      "cached_tokens": 256
+    }
+  },
+  "elapsed_seconds": 10.869372899993323,
+  "decision": {
+    "summary": "Two regions stand out: (1) a correlated abrupt drop in N and U near index 475–480 without clear recovery, and (2) a coherent multi-axis linear trend beginning at index 725 and continuing to 729, distinct from prior variability. Other intervals show typical GNSS noise or smooth motion without compelling morphological anomalies.",
+    "regions": [
+      {
+        "start": 470,
+        "end": 484,
+        "observation": "Cross-axis shape shows a multi-sample drop in N and U around index 475–480, with E showing a shallower, delayed dip; the N and U drops appear abrupt and possibly correlated, lacking clear immediate return within the window—suggests a candidate offset or transient motion."
+      },
+      {
+        "start": 725,
+        "end": 729,
+        "observation": "From ~725 onward, all three axes (N/E/U) exhibit a coherent, sustained linear trend over just 5 samples: N declines steadily, E flattens then dips, U drops sharply—this is atypical compared to earlier noise-dominated behavior and may indicate a platform shift or data artifact; the abrupt onset at 725 and monotonic evolution through 729 warrants inspection."
+      }
+    ]
+  }
+}

@@ -1,0 +1,32 @@
+{
+  "status": "success",
+  "requested_model": "qwen3-vl-plus",
+  "request_count": 1,
+  "retry_count": 0,
+  "http_status": 200,
+  "served_model": "qwen3-vl-plus",
+  "usage": {
+    "prompt_tokens": 2865,
+    "completion_tokens": 212,
+    "total_tokens": 3077,
+    "completion_tokens_details": {
+      "text_tokens": 212
+    },
+    "prompt_tokens_details": {
+      "text_tokens": 2865,
+      "cached_tokens": 128
+    }
+  },
+  "elapsed_seconds": 6.220517500012647,
+  "decision": {
+    "summary": "A multi-sample abrupt drop in E and U occurs around indices 569–572, with correlated N shift. The offset persists through the end of the allowed context (609) without observed return, so status is uncertain. No other temporary offsets are evident within [530,609].",
+    "intervals": [
+      {
+        "start": 569,
+        "end": 573,
+        "status": "uncertain",
+        "observation": "E drops sharply from ~3.1 to ~-0.8 over indices 569–572; U dips from ~2.3 to ~1.2 over same span; N shows smaller correlated shift (~-0.9 to ~-2.9). No return observed within allowed context (ends at 609); sustained low-E platform continues through index 573, but no opposing reversal is seen before window ends."
+      }
+    ]
+  }
+}

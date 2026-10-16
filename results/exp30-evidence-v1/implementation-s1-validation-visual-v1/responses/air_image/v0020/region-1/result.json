@@ -1,0 +1,33 @@
+{
+  "status": "success",
+  "requested_model": "qwen3-vl-plus",
+  "request_count": 1,
+  "retry_count": 0,
+  "http_status": 200,
+  "served_model": "qwen3-vl-plus",
+  "usage": {
+    "prompt_tokens": 2523,
+    "completion_tokens": 263,
+    "total_tokens": 2786,
+    "completion_tokens_details": {
+      "text_tokens": 263
+    },
+    "prompt_tokens_details": {
+      "image_tokens": 1738,
+      "text_tokens": 785,
+      "cached_tokens": 128
+    }
+  },
+  "elapsed_seconds": 8.876019099989207,
+  "decision": {
+    "summary": "Within allowed context [555,650], a multi-axis transient is observed from index 590: N decreases, E increases, and U shows a brief dip near 600. The reversal of N and E trends initiates around 608–610, but the full return (i.e., re-establishment of pre-590 trend/level) is not confirmed before index 650. No isolated step or permanent offset dominates; morphology suggests a single evolving event rather than disjoint offsets, but absence of complete return prevents confirmation.",
+    "intervals": [
+      {
+        "start": 590,
+        "end": 608,
+        "status": "uncertain",
+        "observation": "N declines steadily from ~590 to ~608 while E rises; U dips transiently near 600, coinciding with inflection in N/E. Return of both N and E begins around 608–610 but is incomplete within allowed context (ends at 650); U recovers by ~612. Sustained interior behavior present, but opposing return not fully observed before context ends."
+      }
+    ]
+  }
+}

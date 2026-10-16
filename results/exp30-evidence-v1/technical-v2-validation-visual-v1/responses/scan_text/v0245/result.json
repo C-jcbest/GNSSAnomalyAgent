@@ -1,0 +1,36 @@
+{
+  "status": "success",
+  "requested_model": "qwen3-vl-plus",
+  "request_count": 1,
+  "retry_count": 0,
+  "http_status": 200,
+  "served_model": "qwen3-vl-plus",
+  "usage": {
+    "prompt_tokens": 13852,
+    "completion_tokens": 332,
+    "total_tokens": 14184,
+    "completion_tokens_details": {
+      "text_tokens": 332
+    },
+    "prompt_tokens_details": {
+      "text_tokens": 13852,
+      "cached_tokens": 256
+    }
+  },
+  "elapsed_seconds": 9.826687199994922,
+  "decision": {
+    "summary": "Two regions merit closer inspection: (1) a sharp multi-sample step in E/U around indices 530–535 within the first window, and (2) a prolonged high-amplitude platform from ~680 onward ending with an ambiguous abrupt change near the final samples (725–729). No single-edge events are reported; both regions include sufficient context to assess potential returns or superposed changes.",
+    "regions": [
+      {
+        "start": 530,
+        "end": 544,
+        "observation": "Cross-axis shape shows a multi-sample abrupt shift in E and U around index 530–535, with E jumping from ~2–3 to ~10–11 and U dropping sharply from ~-1 to ~-11; N also shifts but less dramatically. The change is sustained over several samples without clear return, suggesting a possible permanent offset or step-like event."
+      },
+      {
+        "start": 680,
+        "end": 729,
+        "observation": "From index ~680 onward, all axes show a sustained platform-like behavior with large-amplitude noise: E remains high (~10–16), U stays deeply negative (~-11 to -16), and N fluctuates between -4 and -8. A sharp multi-sample drop in E and U occurs near index 725 (last few samples), possibly indicating an opposing return or new offset—ambiguous due to limited post-event samples."
+      }
+    ]
+  }
+}

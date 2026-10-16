@@ -1,0 +1,32 @@
+{
+  "status": "success",
+  "requested_model": "qwen3-vl-plus",
+  "request_count": 1,
+  "retry_count": 0,
+  "http_status": 200,
+  "served_model": "qwen3-vl-plus",
+  "usage": {
+    "prompt_tokens": 2876,
+    "completion_tokens": 330,
+    "total_tokens": 3206,
+    "completion_tokens_details": {
+      "text_tokens": 330
+    },
+    "prompt_tokens_details": {
+      "text_tokens": 2876,
+      "cached_tokens": 128
+    }
+  },
+  "elapsed_seconds": 9.561839000001783,
+  "decision": {
+    "summary": "The screened region (idx 488–492) shows no evidence of a sharp multi-sample offset; N/E/U vary smoothly within typical noise bounds. The only notable candidate—a jump at idx 457—is isolated, lacks a return phase, and does not form a closed temporary interval within allowed context [453,527]. No confirmed temporary offsets detected.",
+    "intervals": [
+      {
+        "start": 457,
+        "end": 491,
+        "status": "uncertain",
+        "observation": "Rapid multi-sample rise in N (from ~6.5 at idx 456 to ~10.5 at idx 457, then fluctuating), E (from ~-1.3 to ~-2.3 then back), and U (from ~1.5 to ~0.2 then up) around idx 457; however, the screened region (488–492) shows no such sharp change—N/E/U are stable (~7.4–8.2, ~-2.7 to -1.8, ~0.1–0.8) with only modest noise. The candidate jump at idx 457 is isolated and not followed by a clear return or sustained offset; no opposing return observed within allowed context. Axis behavior inconsistent with a temporary offset: N jumps up at 457 but does not revert; E and U show no coherent transient shape. Status: uncertain."
+      }
+    ]
+  }
+}

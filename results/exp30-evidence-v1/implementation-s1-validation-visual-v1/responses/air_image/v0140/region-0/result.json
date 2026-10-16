@@ -1,0 +1,33 @@
+{
+  "status": "success",
+  "requested_model": "qwen3-vl-plus",
+  "request_count": 1,
+  "retry_count": 0,
+  "http_status": 200,
+  "served_model": "qwen3-vl-plus",
+  "usage": {
+    "prompt_tokens": 2541,
+    "completion_tokens": 197,
+    "total_tokens": 2738,
+    "completion_tokens_details": {
+      "text_tokens": 197
+    },
+    "prompt_tokens_details": {
+      "image_tokens": 1738,
+      "text_tokens": 803,
+      "cached_tokens": 128
+    }
+  },
+  "elapsed_seconds": 5.827591299981577,
+  "decision": {
+    "summary": "A single temporary offset candidate in N (and weakly in E/U) begins near index 455 with a multi-sample jump and persists without observed return through the end of the allowed context (495). The absence of a return edge prevents confirmation; status is uncertain. No other temporary intervals are supported within [410,495].",
+    "intervals": [
+      {
+        "start": 455,
+        "end": 495,
+        "status": "uncertain",
+        "observation": "N shows a sharp multi-sample upward shift (~+6 MAD) beginning near index 455, sustained through the end of allowed context (495); E and U exhibit smaller correlated transients but no clear opposing return in N within [410,495]. The offset remains elevated with no observed reversal, so status is uncertain."
+      }
+    ]
+  }
+}

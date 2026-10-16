@@ -1,0 +1,38 @@
+{
+  "status": "success",
+  "requested_model": "qwen3-vl-plus",
+  "request_count": 1,
+  "retry_count": 0,
+  "http_status": 200,
+  "served_model": "qwen3-vl-plus",
+  "usage": {
+    "prompt_tokens": 4231,
+    "completion_tokens": 424,
+    "total_tokens": 4655,
+    "completion_tokens_details": {
+      "text_tokens": 424
+    },
+    "prompt_tokens_details": {
+      "text_tokens": 4231,
+      "cached_tokens": 128
+    }
+  },
+  "elapsed_seconds": 12.273706499981927,
+  "decision": {
+    "summary": "The screened region (485–544) contains an abrupt multi-axis shift starting around idx 487: N drops ~1.5 MAD, E dips ~2.4 MAD then recovers partially, and U trends downward continuously without reversal. No full opposing return is observed on N or U within allowed context [450,579]; E’s partial recovery alone does not confirm a temporary offset. All candidate intervals are uncertain due to lack of coherent multi-axis return.",
+    "intervals": [
+      {
+        "start": 487,
+        "end": 512,
+        "status": "uncertain",
+        "observation": "N drops sharply from ~-0.43 (idx 450) to ~-1.89 (idx 487), then stabilizes near -1.8 to -2.3 through idx 512; E shows a dip from ~5.25 (idx 456) to ~2.9 (idx 487), then recovers partially to ~3.8 by idx 512; U declines steadily from ~-1.5 (idx 450) to ~-6.3 (idx 512), with no clear opposing return in N or U, and only partial E recovery — insufficient for confirmed temporary offset."
+      },
+      {
+        "start": 487,
+        "end": 520,
+        "status": "uncertain",
+        "observation": "E shows a local minimum at idx 487 (~2.89), then rises to ~4.46 by idx 505 and continues to ~5.18 by idx 512, suggesting a possible opposing return in E between idx 487–512; however, N remains depressed and U continues downward, so the multi-axis coherence required for a confirmed temporary offset is not met."
+      }
+    ]
+  }
+}

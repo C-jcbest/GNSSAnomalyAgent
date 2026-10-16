@@ -1,0 +1,36 @@
+{
+  "status": "success",
+  "requested_model": "qwen3-vl-plus",
+  "request_count": 1,
+  "retry_count": 0,
+  "http_status": 200,
+  "served_model": "qwen3-vl-plus",
+  "usage": {
+    "prompt_tokens": 13617,
+    "completion_tokens": 296,
+    "total_tokens": 13913,
+    "completion_tokens_details": {
+      "text_tokens": 296
+    },
+    "prompt_tokens_details": {
+      "text_tokens": 13617,
+      "cached_tokens": 256
+    }
+  },
+  "elapsed_seconds": 9.214773599989712,
+  "decision": {
+    "summary": "Two regions merit closer inspection: (1) a sharp multi-sample displacement around indices 488–495 in the overlapping window starting at 485, involving coordinated N/E drops and U rise; (2) a prolonged monotonic trend in N and E from index 605 onward, continuing through 625, with no reversal evident. Both show morphology inconsistent with ordinary noise or smooth motion.",
+    "regions": [
+      {
+        "start": 488,
+        "end": 495,
+        "observation": "Abrupt multi-sample drop in N and E components around index 490–493, with U showing a concurrent rise; the change is not fully reversed within the window, suggesting a possible permanent offset or onset of sustained motion. Surrounding samples show noisy but relatively stable behavior before and after."
+      },
+      {
+        "start": 605,
+        "end": 625,
+        "observation": "Sustained monotonic increase in N (from ~5 to ~17) and E (from ~-1.3 to ~-6) across indices 605–625, with U fluctuating but trending downward; the slope appears consistent over ~20 samples, indicating persistent motion rather than transient noise. No clear return or platform observed within this span."
+      }
+    ]
+  }
+}

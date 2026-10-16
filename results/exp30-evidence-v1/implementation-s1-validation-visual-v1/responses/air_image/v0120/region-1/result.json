@@ -1,0 +1,45 @@
+{
+  "status": "success",
+  "requested_model": "qwen3-vl-plus",
+  "request_count": 1,
+  "retry_count": 0,
+  "http_status": 200,
+  "served_model": "qwen3-vl-plus",
+  "usage": {
+    "prompt_tokens": 2513,
+    "completion_tokens": 387,
+    "total_tokens": 2900,
+    "completion_tokens_details": {
+      "text_tokens": 387
+    },
+    "prompt_tokens_details": {
+      "image_tokens": 1738,
+      "text_tokens": 775,
+      "cached_tokens": 128
+    }
+  },
+  "elapsed_seconds": 10.939059099997394,
+  "decision": {
+    "summary": "Three candidate temporary offsets identified in allowed context [475,699]: (1) confirmed U-dip 520–524 with clear onset and sustained interior; (2) uncertain second U-dip 550–552 with ambiguous return; (3) uncertain N-shift 510–543 overlapping first U event, with incomplete return. No full opposing return observed for any interval; co-occurring transients in N/E support multi-axis nature but do not confirm closure.",
+    "intervals": [
+      {
+        "start": 520,
+        "end": 524,
+        "status": "confirmed",
+        "observation": "U drops sharply from ~0 to ~-2 over 3–4 samples (520–523), with N and E showing concurrent negative transients; interior sustained at offset level through 524, no return observed before 525."
+      },
+      {
+        "start": 550,
+        "end": 552,
+        "status": "uncertain",
+        "observation": "U exhibits second abrupt dip near 550 (~-1.8), preceded by partial rebound; N/E show correlated minor dips; interior offset persists through 552, but recovery begins immediately after—return not fully completed within allowed context."
+      },
+      {
+        "start": 510,
+        "end": 543,
+        "status": "uncertain",
+        "observation": "N shows sustained negative shift from ~510 to ~543 (≈−1 MAD), coincident with first U dip; E shows weaker transient; return begins at 544 but is incomplete/overlapped by next event."
+      }
+    ]
+  }
+}

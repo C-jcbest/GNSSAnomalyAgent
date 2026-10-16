@@ -1,0 +1,36 @@
+{
+  "status": "success",
+  "requested_model": "qwen3-vl-plus",
+  "request_count": 1,
+  "retry_count": 0,
+  "http_status": 200,
+  "served_model": "qwen3-vl-plus",
+  "usage": {
+    "prompt_tokens": 13775,
+    "completion_tokens": 297,
+    "total_tokens": 14072,
+    "completion_tokens_details": {
+      "text_tokens": 297
+    },
+    "prompt_tokens_details": {
+      "text_tokens": 13775,
+      "cached_tokens": 0
+    }
+  },
+  "elapsed_seconds": 9.037385500007076,
+  "decision": {
+    "summary": "Two regions warrant closer inspection: (1) a sharp transient in N/E/U around indices 485–490 with ambiguous recovery, and (2) a major sustained displacement starting near index 605 involving all axes, featuring a platform-like segment and no clear return within the window.",
+    "regions": [
+      {
+        "start": 485,
+        "end": 544,
+        "observation": "Cross-axis shape shows a multi-sample abrupt shift in N and E around index 485–490, with N jumping from ~0.2 to ~-0.03 and E dropping sharply; U exhibits a large negative spike (~-3.0) at index 486 followed by recovery—suggestive of a possible temporary offset or jump with ambiguous return."
+      },
+      {
+        "start": 605,
+        "end": 729,
+        "observation": "Strong, sustained multi-axis displacement beginning near index 605: N/E/U all drop sharply (e.g., N from ~-4.8 to ~-16.7 over ~20 samples), then remain at low levels with oscillatory behavior; includes a prominent platform-like segment (indices ~625–650) before further drift—possible permanent offset or prolonged deformation event with unclear reversal boundary."
+      }
+    ]
+  }
+}

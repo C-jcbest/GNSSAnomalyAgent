@@ -1,0 +1,32 @@
+{
+  "status": "success",
+  "requested_model": "qwen3-vl-plus",
+  "request_count": 1,
+  "retry_count": 0,
+  "http_status": 200,
+  "served_model": "qwen3-vl-plus",
+  "usage": {
+    "prompt_tokens": 3082,
+    "completion_tokens": 270,
+    "total_tokens": 3352,
+    "completion_tokens_details": {
+      "text_tokens": 270
+    },
+    "prompt_tokens_details": {
+      "text_tokens": 3082,
+      "cached_tokens": 128
+    }
+  },
+  "elapsed_seconds": 7.840290099993581,
+  "decision": {
+    "summary": "A sharp co-occurring E-up/U-down excursion begins near index 605, with E increasing ~7.4 MAD and U decreasing ~2.3 MAD over ~5 samples, sustained through index 614. The offset persists without clear reversal within the allowed context (570–650); thus status is uncertain. No matching N-step or return edge observed. The optional jump at index 600 is inconsistent with the observed onset at 605 and is disregarded.",
+    "intervals": [
+      {
+        "start": 605,
+        "end": 614,
+        "status": "uncertain",
+        "observation": "E-component rises sharply from ~5.5 to ~12.9 over indices 605–610, sustained through 614; U drops from ~-4.8 to ~-2.5 over same span, then recovers partially but not fully by index 614. N shows no coherent step. Return to pre-event levels is not observed within allowed context (ends at 650), and interior trend remains elevated in E and depressed in U. No opposing return edge detected before 650."
+      }
+    ]
+  }
+}

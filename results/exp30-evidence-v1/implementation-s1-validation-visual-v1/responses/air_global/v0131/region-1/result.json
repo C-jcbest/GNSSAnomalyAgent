@@ -1,0 +1,33 @@
+{
+  "status": "success",
+  "requested_model": "qwen3-vl-plus",
+  "request_count": 1,
+  "retry_count": 0,
+  "http_status": 200,
+  "served_model": "qwen3-vl-plus",
+  "usage": {
+    "prompt_tokens": 2855,
+    "completion_tokens": 254,
+    "total_tokens": 3109,
+    "completion_tokens_details": {
+      "text_tokens": 254
+    },
+    "prompt_tokens_details": {
+      "image_tokens": 1906,
+      "text_tokens": 949,
+      "cached_tokens": 128
+    }
+  },
+  "elapsed_seconds": 7.310205100016901,
+  "decision": {
+    "summary": "Within allowed context [510, 595], a single candidate temporary offset is identified in U (and secondarily E) starting near index 550. The onset is abrupt across 3–4 samples, interior shows sustained depression with slow partial recovery, but no clear opposing return is observed before index 595. The lack of symmetric rebound and unobserved return precludes confirmation; status is uncertain. The optional jump at index 568 lies outside the screened region and does not correspond to a return in U within the context—its timing and sign suggest a later unrelated event.",
+    "intervals": [
+      {
+        "start": 550,
+        "end": 560,
+        "status": "uncertain",
+        "observation": "U drops ~15 MAD units over ~3–4 samples near index 550, with smaller concurrent E drop (~5 MAD); U shows slow, incomplete recovery through 560, no opposing return observed; E remains depressed. N continues upward trend throughout. Return not observed within allowed context (510–595), and recovery is asymmetric and partial."
+      }
+    ]
+  }
+}

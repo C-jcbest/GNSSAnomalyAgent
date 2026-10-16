@@ -1,0 +1,32 @@
+{
+  "status": "success",
+  "requested_model": "qwen3-vl-plus",
+  "request_count": 1,
+  "retry_count": 0,
+  "http_status": 200,
+  "served_model": "qwen3-vl-plus",
+  "usage": {
+    "prompt_tokens": 3096,
+    "completion_tokens": 266,
+    "total_tokens": 3362,
+    "completion_tokens_details": {
+      "text_tokens": 266
+    },
+    "prompt_tokens_details": {
+      "text_tokens": 3096,
+      "cached_tokens": 128
+    }
+  },
+  "elapsed_seconds": 7.538071600021794,
+  "decision": {
+    "summary": "A coherent abrupt drop in E and U (and minor N) begins at index 600, persists through 614, with partial but incomplete recovery by end of allowed context. The onset is sharp and cross-axis consistent, but the return is ambiguous—no opposing shift observed before index 650. Numerical jump candidates at 600 and 614 suggest transient offset, but lack of full reversal prevents confirmation. No other temporary offsets detected in allowed context.",
+    "intervals": [
+      {
+        "start": 600,
+        "end": 614,
+        "status": "uncertain",
+        "observation": "E and U show a sharp multi-sample drop starting near index 600 (E: -4.41→-7.01, U: 1.21→0.47), with N also dipping slightly; E recovers partially by 614 but remains offset (~-5.6 vs pre-event ~-4.4), U shows incomplete return (0.47 vs pre-event ~1.2–2.4); no clear opposing return observed within allowed context [565,650]."
+      }
+    ]
+  }
+}

@@ -1,0 +1,37 @@
+{
+  "status": "success",
+  "requested_model": "qwen3-vl-plus",
+  "request_count": 1,
+  "retry_count": 0,
+  "http_status": 200,
+  "served_model": "qwen3-vl-plus",
+  "usage": {
+    "prompt_tokens": 4218,
+    "completion_tokens": 312,
+    "total_tokens": 4530,
+    "completion_tokens_details": {
+      "text_tokens": 312
+    },
+    "prompt_tokens_details": {
+      "image_tokens": 3702,
+      "text_tokens": 516,
+      "cached_tokens": 0
+    }
+  },
+  "elapsed_seconds": 9.63391119998414,
+  "decision": {
+    "summary": "Two regions stand out: (1) 480–544, where N and E begin coherent opposite-signed trends without return; (2) 490–664, where E rises then plateaus while N declines, forming a temporary platform (~550–600) that may indicate a pause in motion or onset of new regime. No unambiguous opposing returns are visible; U remains noisy but not clearly coupled.",
+    "regions": [
+      {
+        "start": 480,
+        "end": 544,
+        "observation": "N-component shows a sustained downward trend beginning around index 480, with a possible inflection near 510; E-component remains near zero until ~500 then begins a gentle upward ramp; U-component exhibits intermittent spikes but no coherent shift. The cross-axis shape suggests a coupled N-down/E-up motion emerging mid-window, without clear opposing return."
+      },
+      {
+        "start": 490,
+        "end": 664,
+        "observation": "E-component displays a clear monotonic rise from ~index 490 to 550, then plateaus; N-component declines steadily through the same interval, forming an apparent platform between 550–600 where both axes stabilize before resuming drift. U-component shows elevated noise but no matching step—suggesting possible superposed transient or local effect."
+      }
+    ]
+  }
+}

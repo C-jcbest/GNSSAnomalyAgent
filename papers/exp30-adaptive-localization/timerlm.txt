@@ -1,0 +1,5064 @@
+TimeRLM: Recursive Language Models Enable Precise Anomaly Localization in Long-Context Time-Series
+// Restore the saved color scheme preference, or
+  // enact the browser preference if "automatic", 
+  // without expecting DOM load to have completed.
+  //
+  // Also restore any saved readingmode and ToC display preferences.
+  function initializeReadingPreferences() {
+    let saved_theme = localStorage.getItem("ar5iv_theme") || "automatic";
+    if (saved_theme === "automatic") {
+      if (window.matchMedia("(prefers-color-scheme: dark)").matches) {
+        saved_theme = "dark";
+      }
+    }
+    if (saved_theme == "dark") {
+      document.documentElement.setAttribute("data-theme", "dark");
+    } else {
+      document.documentElement.setAttribute("data-theme", "light");
+    }
+
+    const tocDisplay = localStorage.getItem('arxiv_html_paper_toc_display');
+    if (tocDisplay) {
+      document.documentElement.setAttribute("data-toc-display", tocDisplay);
+    }
+    const readingMode = localStorage.getItem('arxiv_html_paper_reading_mode');
+    if (readingMode) {
+      document.documentElement.setAttribute("data-reading-mode", readingMode);
+    }
+    // Pre-apply spinout-banner dismissal here, before the banner paints, so it
+    // never flashes in only to be hidden later by the deferred arxiv-header.js.
+    // Key matches arxiv-header.js: "arxiv-banner-dismissed:" + data-banner-name.
+    if (localStorage.getItem('arxiv-banner-dismissed:spinout-nonprofit')) {
+      document.documentElement.setAttribute("data-banner-dismissed", "");
+    }
+  }
+  // Run as soon as JS starts, to minimize repainting
+  initializeReadingPreferences();
+/* Banner pre-dismissal (set above before paint -> no flash-then-hide) and
+     reading-mode chrome hiding. */
+  html[data-banner-dismissed] .ds-announcement { display: none; }
+  html[data-reading-mode="enabled"] .ds-announcement,
+  html[data-reading-mode="enabled"] .ds-site-footer { display: none; }
+  /* Print keeps the reader header's logo, not its controls: the theme's own print rule
+     (header, nav { display: none }) sits in a layer that its header layer outranks. */
+  @media print { .arxiv-html-header .html-header-nav { display: none; } }
+  /* Keep the announcement text dark on the Open-Blue band in both colour themes
+     (otherwise it inherits the paper's warm-wash text in dark mode and washes out). */
+  .ds-announcement-text { color: var(--arxiv-ink, #1c1a17); }
+Report GitHub Issue
+×
+Title:
+Content selection saved. Describe the issue below:
+Description:
+Submit without GitHub
+Submit in GitHub
+arXiv is now an independent nonprofit!
+Learn more
+×
+Back to arXiv
+Why HTML?
+Report Issue
+Back to Abstract
+Download PDF
+Abstract
+1
+Introduction
+2
+Related Work
+Time-Series Language and Foundation Models.
+Anomaly Detection and Short-Context Prediction.
+Recursive Language Models and Long-Context Agents.
+3
+Methods
+3.1
+TimeRLM Formulation
+Anomaly Localization as a Decision Process.
+3.2
+The AnomalyXL Benchmark
+Two formulations.
+4
+Experiments
+4.1
+Evaluation on AnomalyXL
+Baselines
+Improving performance via Reinforcement Learning on AnomalyXL.
+4.2
+Evaluation on ARFBench Tier 2
+4.3
+Evaluating generalization to unseen data
+4.4
+Results
+AnomalyXL
+ARFBench
+Generalization set (ECG + sleep).
+5
+Discussion and Conclusion
+Multiple choice questions limit retrieval measurement.
+Recursion increases anomaly localization capabilities.
+On-policy learning and out-of-distribution transfer.
+Limitations and Future Work.
+References
+A
+TimeRLM Details
+Results by category and context length.
+Prompts.
+Turn budget.
+Sandbox and packages.
+B
+Classical Baseline Details
+Feature extraction.
+Task heads.
+Decoding and evaluation.
+C
+TSLM Fine-Tuning Configurations
+Hyperparameter configurations.
+LoRA adaptation.
+Data and scoring.
+D
+AnomalyXL Construction Details
+D.1
+Templated JSON response examples
+D.2
+Scene synthesis.
+D.3
+Anomaly injection.
+D.4
+Channel topologies and sampling grid.
+D.5
+Coarse projection.
+E
+AnomalyXL scoring and metrics
+E.1
+Temporal overlap.
+E.2
+Localize (
+r
+loc
+r_{\text{loc}}
+).
+E.3
+Classify with evidence (
+r
+cls
+r_{\text{cls}}
+).
+E.4
+Measure magnitude (
+r
+mag
+r_{\text{mag}}
+).
+E.5
+All channels (
+r
+ac
+r_{\text{ac}}
+).
+E.6
+Lead–lag (
+r
+ll
+r_{\text{ll}}
+).
+E.7
+MCQ tasks.
+E.8
+Aggregation.
+F
+Generalization Set Details
+Worked examples: LTAF ECG.
+Worked examples: Sleep-PSG.
+Window construction.
+Unified detect-and-classify prompt.
+License: CC BY 4.0
+arXiv:2608.03391v2 [cs.LG] 06 Sep 2026
+TimeRLM: Recursive Language Models Enable Precise Anomaly Localization in Long-Context Time-Series
+Nicolas Zumarraga
+Lorenzo Steno
+Ning Wang
+Max Rosenblattl
+Thomas Kaar
+Maxwell A. Xu
+Kevin O’Sullivan
+Markus Kreft
+Elgar Fleisch
+Paul Schmiedmayer
+Patrick Langer
+Robert Jakob
+2
+2
+footnotemark:
+2
+†
+†
+thanks:
+Corresponding author – nzumarraga@ethz.ch
+†
+†
+thanks:
+Equal contribution as senior authors.
+Abstract
+Precise anomaly localization over long-context time-series is a crucial task in monitoring applications across clinical care, industrial operations, financial services, and logistics, where brief evidence may hide inside long spans of high-frequency data.
+Time Series Language Models (TSLMs) are able to ingest time series data and verbalize findings on anomalies in natural language; however recent benchmarks report a decrease in retrieval performance at long time horizons, mirroring failure modes for long-context retrieval in text, vision, and audio.
+In the text domain, Recursive Language Models (RLMs) can recover much of this lost performance by keeping context external to the Large Language Model (LLM) rather than placing it in the input prompt, allowing the model to query and manipulate it through code.
+We present
+TimeRLM
+, an RLM formulation for time-series that sequentially manipulates the signal using code and vision capabilities.
+To assess performance, we further introduce
+AnomalyXL
+, a synthetic long-context anomaly localization benchmark with programmatically injected anomalies that require precise retrieval. We implement five different task categories and two variants; AnomalyXL-MCQ and AnomalyXL-Localize.
+TimeRLM outperforms every evaluated TSLM and frontier single-pass model on four of the five AnomalyXL-Localize tasks, reaching
+0.682
+0.682
+Intersection over Union (IoU) on localization and
+0.745
+0.745
+on classify-with-evidence, compared with at most
+0.329
+0.329
+and
+0.072
+0.072
+across all baselines.
+To further improve performance, we train TimeRLM using reinforcement learning and re-evaluate it on the same datasets. The resulting model further improves performance and outperforms TSLMs on precise retrieval tasks while using an LLM backbone up to eight times smaller. It also requires approximately one-third as many agent interaction turns as the untrained base model to produce a final answer. When evaluated on previously unseen real-world Electrocardiogram (ECG), sleep and software observability recordings, the post-trained TimeRLM retains or improves performance, surpassing TSLMs despite being trained exclusively on synthetic data.
+Our findings suggest recursive interaction with time-series as an effective approach for long-horizon temporal reasoning and retrieval.
+1
+Agentic Systems Lab, ETH Zürich
+2
+Stanford University
+3
+Seldon Technologies
+4
+University of Illinois Urbana-Champaign
+5
+Google
+6
+Centre for Digital Health Interventions, ETH Zürich
+7
+Centre for Digital Health Interventions, University of St. Gallen
+—
+https://github.com/OpenTSLM/TimeRLM
+1
+Introduction
+In healthcare, manufacturing, software operations, financial services, and logistics, sensors routinely produce long continuous data streams
+(
+Yèche et al. 2021
+;
+Yuan et al. 2024
+)
+. These streams may span hours of intensive-care vital signs
+(
+Yèche et al. 2021
+)
+, days of wearable activity
+(
+Yuan et al. 2024
+;
+Chan et al. 2024
+)
+, or years of energy telemetry
+(
+Kelly and Knottenbelt 2015
+)
+. Yet the events that matter within this data are often brief anomalies—such as a few abnormal beats, a transient arousal, or a short latency spike—buried in otherwise conventional signals.
+Identifying these events requires models that can efficiently scan long time-series, localize relevant intervals, and explain why they are unusual
+(
+Su et al. 2024
+)
+. Early work applied Large Language Models (LLMs) to anomaly detection and reasoning, but LLMs struggle to interpret time-series data
+(
+Langer et al. 2026
+)
+. Recent advances in multimodal modeling have enabled Time Series Language Models (TSLMs) to process raw time-series as a native modality, making them a promising approach for detecting anomalies and describing their characteristics in natural language
+(
+Zumarraga et al. 2026
+;
+Wang et al. 2025a
+;
+Langer et al. 2026
+)
+.
+Figure 1:
+TimeRLM interacts with time-series through code.
+The orchestrator reasons in natural language and emits Python into a sandboxed REPL
+(right), where the signal is an environment variable. Sub-RLMs can be invoked.
+Different TSLM architectures have been proposed to fuse time-series, for example using full-resolution patch
+adapters
+(
+Wang et al. 2025a
+;
+Xie et al. 2025
+)
+, compression of time-series into fixed latent vectors
+(
+Langer et al. 2026
+;
+Wang et al. 2025b
+)
+, and time-series–vision hybrids using rendered
+plots
+(
+Xie et al. 2026
+)
+. While architecturally different, all ingest time-series into context and answer in a single forward pass: the recording is encoded once, at fixed or compressed size, and the model answers from this single view.
+In evaluation, time-series question-answering benchmarks have measured model performance on short context anomaly classification, or reduced long horizon localization tasks to multiple-choice questions
+(
+Cai et al. 2024
+;
+Xie et al. 2026
+)
+, side-stepping the precise temporal retrieval that long, real-world signals require.
+Recent evaluations on long-context TSLM retrieval have exposed performance limitations of single-pass TSLMs, where precise retrieval performance collapses
+at increased time-series lengths, leading to TSLMs missing fine-grained events or anomalies
+(
+Zumarraga et al. 2026
+)
+.
+This finding aligns with similar long-context retrieval failure modes in text
+(
+Kamradt 2023
+;
+Liu et al. 2024
+;
+Kuratov et al. 2024
+)
+, vision
+(
+Wang et al. 2024a
+;
+Dingjie et al. 2024
+)
+, and audio
+(
+He et al. 2025
+)
+.
+Recent agentic search paradigms employ tool use
+(
+Yao et al. 2023
+;
+Wang et al. 2024b
+)
+and RL-trained search
+(
+Jin et al. 2025
+;
+Chen et al. 2026
+)
+to improve performance by letting
+the model interact with the input over multiple turns instead of ingesting context in a single pass.
+To that end, Recursive Language Models (RLMs) store the full content as a variable rather than placing it in the model’s context window, allowing it to query and manipulate it through code
+(
+Zhang et al. 2026
+)
+.
+Recent work in agentic time-series reasoning has proposed analyzing signals through similar approaches, using tool calls and learned segment selection
+(
+Zhao et al. 2025
+;
+Messica et al. 2026
+)
+,
+showcasing the potential of avoiding full context ingestion for time-series reasoning.
+However, a general, training-free
+formulation with direct access to the raw signal that works over long-context data is yet to be proposed for time-series reasoning.
+We therefore introduce
+TimeRLM
+, an RLM formulation that enables manipulating time-series signals as external context, querying them over multiple turns in a sandboxed Python environment, and
+reasoning through code and vision to submit a structured answer grounded in the underlying signal.
+To evaluate TimeRLM, we additionally introduce
+AnomalyXL
+, an open-source benchmark measuring precise anomaly localization in long horizon time-series spanning two evaluation corpora,
+AnomalyXL-MCQ
+and
+AnomalyXL-Localize
+.
+AnomalyXL is, to our knowledge, the first synthetic long-context anomaly benchmark released together with code implementations for the generator and Reinforcement Learning (RL) environment. We provide configurable difficulty for generating training and evaluation data and tasks.
+In addition to evaluating on AnomalyXL, we further evaluate TimeRLM performance on the anomaly-property tier of ARFBench
+(
+Xie et al. 2026
+)
+, a multiple-choice benchmark built from real production telemetry. We also assess zero-shot transfer to a generalization set built from real Electrocardiogram (ECG) (LTAF dataset)
+(
+Petrutiu et al. 2007
+)
+and sleep
+(
+Ghassemi et al. 2018
+)
+recordings (Sleep-PSG), and explore post-training TimeRLM. On average, TimeRLM improves upon all evaluated TSLM baselines on all evaluated benchmarks, and transfers zero-shot to unseen clinical domains where post-training on synthetic data retains the model’s capabilities. We release all code and data for both TimeRLM and AnomalyXL fully open-source.
+Figure 2:
+AnomalyXL: evidence-grounded anomaly localization.
+Five task families (localize, classify, measure magnitude, localize in all channels, lead-lag)
+in two formulations over the
+same
+signal: AnomalyXL-MCQ and AnomalyXL-Localize.
+2
+Related Work
+In the following we explore related work to TimeRLM among TSLMs, anomaly detection benchmarks, and agentic methods for long context retrieval.
+Time-Series Language and Foundation Models.
+TSLMs are multimodal LLMs that incorporate time-series as a native
+modality
+(
+Langer et al. 2026
+)
+. TSLMs differ in
+how each model processes time-series of length
+L
+L
+.
+Full-resolution adapters
+pass raw tokens or
+N
+=
+L
+/
+P
+N\,{=}\,L/P
+patch embeddings directly
+to the LLM, preserving signal fidelity but leading to quadratic compute and memory growth due to
+𝒪
+⁡
+(
+N
+2
+)
+\mathcal{O}(N^{2})
+cost of self-attention
+(
+Wang et al. 2025a
+;
+Xie et al. 2025
+;
+Vaswani et al. 2017
+)
+.
+A different approach based on
+fixed-latent compression
+places a module between the encoder and the LLM that distills the signal into a constant number of tokens. ITFormer’s summary tokens
+(
+Wang et al. 2025b
+)
+and OpenTSLM-Flamingo’s Perceiver Resampler
+(
+Langer et al. 2026
+;
+Jaegle et al. 2021
+)
+allow computational cost to remain almost constant at the LLM level; however the compression ratio grows with longer time-series, compressing more data into the same number of fixed latent tokens.
+A more recent line of work pairs inputs from a frozen time-series foundation model and rendered time-series plots with a Vision Language Model (VLM) backbone, using both modality tokens to reason over the time-series signal
+(
+Xie et al. 2026
+)
+.
+Anomaly Detection and Short-Context Prediction.
+Time-series anomaly detection is traditionally formulated as identifying anomalous points or subsequences, often by assigning anomaly scores to sliding-window segments
+(
+Boniol et al. 2024
+)
+.
+With the advent of LLMs, a new paradigm of reasoning over signals in natural language to explain why specific segments are anomalous has emerged
+(
+Su et al. 2024
+)
+.
+Benchmarks in this field typically evaluate anomaly detection accuracy over short, pre-segmented recordings, using semantic labels
+(
+Oh et al. 2023
+)
+and Multiple Choice Question (MCQ) answering formats
+(
+Xie et al. 2026
+)
+.
+Recursive Language Models and Long-Context Agents.
+Agentic frameworks decompose complex tasks into a series of LLM reasoning steps and actions, leveraging tool use
+(
+Yao et al. 2023
+)
+and iterative retrieval
+(
+Wang et al. 2024b
+)
+.
+RLMs take this concept further by treating context as an environment variable that a
+root
+LLM queries through code and which can recursively spawn
+sub-RLMs
+on segments of this context, rather than ingesting it directly
+(
+Zhang et al. 2026
+)
+.
+In time-series, recent work shows how LLMs are capable of time-series analysis using code
+(
+Xu et al. 2026
+)
+. TimeSeriesScientist and ARTS orchestrate specialized forecasting and classification tools respectively, decoupling task-specific proficiency from global reasoning
+(
+Zhao et al. 2025
+;
+Zumarraga et al. 2026
+)
+. ARTIST learns segment selection and time-series reasoning with reinforcement learning
+(
+Messica et al. 2026
+)
+.
+3
+Methods
+In the following, we present details on TimeRLM in Section
+3.1
+and AnomalyXL in Section
+3.2
+. TimeRLM is an RLM formulation that enables reasoning over uncompressed multivariate time-series using code, whereas AnomalyXL is a synthetic long-context time-series benchmark. We additionally introduce a generalization set, sampled from real ECG and Sleep clinical recordings and explore post-training for the RLM formulation.
+3.1
+TimeRLM Formulation
+We formulate TimeRLM as a Recursive Language Model
+(
+Zhang et al. 2026
+)
+where the time-series is queryable from a context file.
+We start with a text-only RLM. Over multiple
+turns
+(i.e., RLM agent actions), the model can emit Python into a code sandbox (i.e., REPL) with access to standard python data science libraries, receiving each execution’s REPL output in its context. A JSON object containing the time-series is pre-defined as a variable. This setup allows the model to operate over the full recording directly through code (Fig.
+1
+).
+We also explore a second RLM setup in which the sandbox also provides access to python vision libraries, allowing the model to render time-series as a plot and perceive it visually.
+In a third setup, we allow the model to recursively call instances of itself (
+sub-RLMs
+) on the whole or a fraction of the time-series.
+Anomaly Localization as a Decision Process.
+We formalize precise anomaly localization as a finite-horizon sequential decision process. Given
+a recording
+𝐗
+∈
+ℝ
+C
+×
+L
+\mathbf{X}\in\mathbb{R}^{C\times L}
+over
+C
+C
+channels of length
+L
+L
+and a
+question
+q
+q
+, an LLM denoted as policy
+π
+θ
+\pi_{\theta}
+(the root LLM) produces an answer
+y
+^
+\hat{y}
+over a horizon of
+N
+N
+interactions (
+t
+=
+1
+,
+…
+,
+N
+t=1,\dots,N
+).
+At step
+t
+t
+the state
+s
+t
+=
+(
+𝐗
+,
+q
+,
+h
+t
+)
+s_{t}=(\mathbf{X},q,h_{t})
+pairs the recording with the
+interaction history
+h
+t
+=
+(
+o
+0
+,
+a
+1
+,
+o
+1
+,
+…
+,
+a
+t
+−
+1
+,
+o
+t
+−
+1
+)
+h_{t}=(o_{0},a_{1},o_{1},\dots,a_{t-1},o_{t-1})
+, where
+o
+0
+o_{0}
+is the initial observation the
+environment exposes before any action is taken (the question, and, optionally, the recording itself) and the policy selects an action from
+𝒜
+=
+𝒞
+∪
+{
+𝙵𝙸𝙽𝙰𝙻
+⁡
+(
+y
+^
+)
+}
+,
+\mathcal{A}=\mathcal{C}\;\cup\;\{\,\mathtt{FINAL}(\hat{y})\,\},
+either executing code
+c
+∈
+𝒞
+c\in\mathcal{C}
+in the sandbox or committing a structured answer
+that terminates the episode.
+Executing code returns an observation
+o
+t
+=
+exec
+⁡
+(
+c
+t
+,
+s
+t
+)
+o_{t}=\mathrm{exec}(c_{t},s_{t})
+for
+t
+≥
+1
+t\geq 1
+appended to the history, and the episode terminates with a single verifiable reward
+r
+⁡
+(
+y
+^
+,
+y
+)
+∈
+[
+0
+,
+1
+]
+r(\hat{y},y)\in[0,1]
+.
+The Single-pass prediction is the special case
+N
+=
+1
+N=1
+in which
+𝒜
+=
+{
+𝙵𝙸𝙽𝙰𝙻
+⁡
+(
+y
+^
+)
+}
+\mathcal{A}=\{\mathtt{FINAL}(\hat{y})\}
+and
+o
+0
+o_{0}
+already contains the signal, so the policy responds
+directly from this observation, differing from
+the recursive case in both the action space and the content of the initial observation.
+3.2
+The AnomalyXL Benchmark
+AnomalyXL is a long-context, multi-channel benchmark for evidence-grounded anomaly
+localization: every answer requires precise retrieval of a time span, channel, or magnitude
+(Fig.
+2
+). We generate samples from a stochastic
+noise process with optional periodic/trend components, z-normalized per channel
+(
+x
+←
+(
+x
+−
+μ
+x
+)
+/
+σ
+x
+x\leftarrow(x-\mu_{x})/\sigma_{x}
+) so injected anomalies keep consistent scale across
+heterogeneous base signals. Contexts span 16k–131k points and up to 16 channels.
+Two formulations.
+Generated samples are posed in two answer formats.
+AnomalyXL-MCQ
+asks each
+question against a fixed label set and is scored by
+F
+1
+F_{1}
+over six categories:
+presence, onset before or after a given timestamp, type, magnitude range, affected
+channel, and lead versus lag (§
+E.7
+).
+AnomalyXL-Localize
+instead asks for a structured JSON summary of every
+detected anomaly (see Appendix
+D.1
+), scored by task-specific
+continuous metrics in
+[
+0
+,
+1
+]
+[0,1]
+across five tasks:
+•
+Localize
+(1 channel) — detect the presence of an anomaly and return the window, scored
+by Intersection over Union (IoU) (Appendix
+E.2
+).
+•
+Classify
+(1) — return the anomaly type, scored
+𝟏
+{
+k
+^
+=
+k
+}
+⋅
+IoU
+\mathbf{1}\{\hat{k}=k\}\cdot\mathrm{IoU}
+, so a wrong type scores zero (Appendix
+E.3
+).
+•
+Magnitude
+(1) — report
+m
+m
+, with credit decaying linearly in relative
+error and reaching zero at
+50
+%
+50\%
+(Appendix
+E.4
+).
+•
+All channels
+(16) — return every anomalous channel and window, scored
+by set-matched
+F
+1
+F_{1}
+over events, where a prediction matches when both the
+channel and an overlapping window are correct
+(Appendix
+E.5
+).
+•
+Lead–lag
+(2) — return the direction and lag, with credit only for
+the correct direction, then decaying with relative error in the reported offset
+(Appendix
+E.6
+).
+Temporal-overlap calculations (see
+E.1
+),
+aggregation procedures, and the task–metric correspondence
+(Table
+E.8
+) are given in
+Appendix
+D
+. Anomalies are injected by applying a localized transformation to a window
+x
+s
+:
+e
+x_{s:e}
+,
+scaled by a magnitude
+m
+m
+(in normalized channel units) drawn uniformly from
+[
+2
+,
+6
+]
+[2,6]
+,
+or log-uniformly from
+[
+1,100
+]
+[1,100]
+for the magnitude task. A
+level shift
+adds a
+signed offset
+±
+m
+\pm m
+over
+x
+s
+:
+e
+x_{s:e}
+; a
+transient spike
+adds a triangular pulse
+peaking at
+±
+m
+\pm m
+; a
+seasonality
+anomaly adds a sinusoid of amplitude
+m
+m
+; a
+variance
+anomaly adds noise
+ϵ
+t
+∼
+𝒩
+⁡
+(
+0
+,
+m
+2
+)
+\epsilon_{t}\sim\mathcal{N}(0,m^{2})
+; and a
+trend
+anomaly adds a ramp from
+0
+0
+to
+±
+m
+\pm m
+that then persists. Localize and
+all-channels include first-class no-anomaly cases (19.5% and 23% of rows; 7.8% of
+the test split).
+4
+Experiments
+In the following, we describe our experiments for evaluating TimeRLM. In Section
+4.1
+, we evaluate TimeRLM on both AnomalyXL-MCQ and AnomalyXL-Localize, compare it against TSLM and classical baselines, and describe an experiment for improving performance using reinforcement learning. Section
+4.2
+describes the evaluation on ARFBench, while Section
+4.3
+shows how we assess zero-shot performance on an unseen holdout set from the clinical domain.
+4.1
+Evaluation on AnomalyXL
+We evaluate four inference-time configurations on AnomalyXL: single-pass LLMs and TimeRLM, each in both text and image variants. Unless explicitly stated, all are evaluated without any training, using Qwen3.5-4B
+(
+Qwen 2026
+)
+, GPT-4.1-mini
+(
+OpenAI and others 2023
+)
+and GPT-5.5
+(
+Singh and others 2025
+)
+as progressively more powerful backbones.
+We disable sub-agent recursion for RLMs by default unless explicitly mentioned (marked as “depth=1”).
+The single-pass text variant serializes raw values into the prompt, uniformly subsampling at a fixed stride on long recordings when needed to fit the context window, following prior time-series question-answering protocols
+(
+Xie et al. 2026
+)
+. For the image variant, the single-pass formulation receives a rendered plot of the signal instead of the serialized raw values (see Section
+3.1
+for details).
+Baselines
+We compare against three purpose-built TSLMs using the same Qwen3.5-4B backbone: ChatTS
+(
+Xie et al. 2025
+)
+(full resolution text), OpenTSLM-Flamingo
+(
+Langer et al. 2026
+)
+(compressed latents), and ITFormer
+(
+Wang et al. 2025b
+)
+(compressed tokens). We instantiate all three architectures with a frozen pretrained Chronos-2 time-series encoder
+(
+Ansari et al. 2025
+)
+and a LoRA-adapted Qwen3.5-4B LLM backbone
+(
+Hu et al. 2022
+)
+. We further benchmark
+Toto-1.0-QA-Experimental
+, a Time Series Foundation Model (TSFM)–VLM hybrid introduced with ARFBench
+(
+Xie et al. 2026
+;
+Cohen et al. 2026
+)
+, which processes both the time-series and pre-rendered plots. It uses a Qwen3-VL-32B LLM backbone and a frozen Toto time-series encoder
+(
+Cohen et al. 2026
+)
+. We fine-tune separate variants for AnomalyXL-MCQ and AnomalyXL-Localize, allowing each adapter to learn the corresponding answer format. Each variant is trained on
+≈
+5,000
+\approx 5{,}000
+generated examples for
+5
+5
+epochs, with early stopping based on validation loss. We also evaluate Toto without SFT (denoted ’No SFT’) using the open-source checkpoint, as it was trained for anomaly localization
+(
+Xie et al. 2026
+)
+. All supervised baselines use the same LoRA configuration, with hyperparameter details provided in Appendix
+C
+.
+We also include a classical baseline with no language model on the same AnomalyXL train/validation splits used for the TSLMs. We pair standard anomaly-detection features (robust-
+z
+z
+exceedance geometry, half-series level and variance contrasts, rolling-variance and spectral change, PELT change points
+(
+Killick et al. 2012
+)
+, and matrix-profile discords
+(
+Yeh et al. 2016
+)
+) with one gradient-boosted head each for AnomalyXL-MCQ and AnomalyXL-Localize
+(
+Chen and Guestrin 2016
+)
+(Appendix
+B
+).
+Improving performance via Reinforcement Learning on AnomalyXL.
+Since detecting and localizing anomalies yields verifiable rewards, we
+investigate whether reinforcement learning can further improve performance. We post-train
+TimeRLM with a Qwen3.5-4B RLM backbone using Group Relative Policy Optimization (GRPO)
+(
+Shao et al. 2024
+)
+on
+AnomalyXL-Localize, with full-parameter tuning and no supervised warm start. Rather than
+relying on a fixed training set, we integrate the generator directly into the training
+loop: every step synthesizes a fresh batch of recordings, so no sample repeats within a run. Formally, for a task with evidence label
+y
+y
+, each rollout
+i
+i
+commits an answer
+y
+^
+i
+\hat{y}_{i}
+and receives a score
+s
+i
+=
+r
+⁡
+(
+y
+^
+i
+,
+y
+)
+∈
+[
+0
+,
+1
+]
+,
+s_{i}=r(\hat{y}_{i},y)\in[0,1],
+where
+r
+r
+is the outcome of the decision process, computed with the same AnomalyXL-Localize
+parser and per-category metric. We train on the penalized rollout reward
+R
+i
+=
+s
+i
+−
+λ
+tok
+​
+s
+i
+​
+κ
+i
+−
+λ
+fail
+​
+1
+​
+{
+forced final
+i
+}
+,
+R_{i}=s_{i}-\lambda_{\mathrm{tok}}\,s_{i}\,\kappa_{i}-\lambda_{\mathrm{fail}}\,\mathbf{1}\{\text{forced final}_{i}\},
+where
+κ
+i
+∈
+[
+0
+,
+1
+]
+\kappa_{i}\in[0,1]
+is the group-normalized token cost of rollout
+i
+i
+and
+λ
+tok
+,
+λ
+fail
+\lambda_{\mathrm{tok}},\lambda_{\mathrm{fail}}
+weight the two cost penalties. Letting
+T
+i
+T_{i}
+denote the number of tokens generated by rollout
+i
+i
+(across all turns of the episode,
+excluding sandbox observations), we normalize within the group of
+G
+G
+rollouts on
+the same task,
+κ
+i
+=
+T
+i
+max
+j
+≤
+G
+⁡
+T
+j
+,
+\kappa_{i}=\frac{T_{i}}{\max_{j\leq G}T_{j}},
+so that cost is measured relative to the most verbose rollout of the same task rather than
+against an absolute budget, leaving exploration on harder tasks unpenalized. For the same
+reason, the token-cost term applies only to rollouts with nonzero task reward (
+s
+i
+>
+0
+s_{i}>0
+).
+For each sampled task we draw a group of
+G
+G
+rollouts and compute Dr. GRPO advantages from
+the penalized rewards,
+A
+i
+=
+R
+i
+−
+1
+G
+​
+∑
+j
+=
+1
+G
+R
+j
+A_{i}=R_{i}-\frac{1}{G}\sum_{j=1}^{G}R_{j}
+without group-standard-deviation normalization
+(
+Liu et al. 2025
+)
+. Groups with
+zero reward variance yield
+A
+i
+=
+0
+A_{i}=0
+for every rollout and are dropped
+(
+Yu et al. 2026
+)
+.
+We train for
+300
+300
+steps with group size
+G
+=
+8
+G=8
+, batch size
+128
+128
+, and a 64k-token training
+sequence length. Rollouts follow the TimeRLM text variant environment with a budget of 15
+agent turns, a token-cost coefficient
+λ
+tok
+=
+0.1
+\lambda_{\mathrm{tok}}=0.1
+, and a flat forced-final
+penalty
+λ
+fail
+=
+0.25
+\lambda_{\mathrm{fail}}=0.25
+. We report final checkpoint performances. Anomaly-free cases are
+withheld for the first 220 steps and reintroduced thereafter, preventing early rollouts from
+over-using the “no anomaly” answer before the policy has reinforced anomaly-localization
+behavior.
+4.2
+Evaluation on ARFBench Tier 2
+Beyond AnomalyXL, we evaluate TimeRLM on the Tier 2 tasks of ARFBench
+(
+Xie et al. 2026
+)
+. This includes 306 questions that ask for the properties of an anomaly (identification, start, end, magnitude, and categorization) in multiple-choice form over real telemetry data, comparable to AnomalyXL-MCQ. We instantiate TimeRLM using Qwen3.5-4B zero-shot with and without RL on AnomalyXL-Localize and GPT-5.5 on its text and image variants. As baselines, we use GPT-5.5 in the same text and image variants as detailed in Section
+4.1
+. Additionally, we explore Toto-1.0-Qwen3 32B as TSLM and Toto-1.0-QA-Experimental 32B as TSVLM, one reported from the paper’s results as no checkpoint is provided and the other using the checkpoint provided by the authors
+(
+Xie et al. 2026
+)
+.
+4.3
+Evaluating generalization to unseen data
+To evaluate generalization to unseen tasks, we construct holdout test sets from clinical domains by sampling 250 windows from the Long-Term Atrial Fibrillation (LTAF) ECG dataset
+(
+Petrutiu et al. 2007
+)
+and 250 from the Sleep Polysomnography (PSG) corpus
+(
+Ghassemi et al. 2018
+)
+. The LTAF windows contain two channels, each with 7.7k–130k samples, while the Sleep-PSG windows contain four respiratory channels, each with 12k–128k samples. We formulate each window as a “classify-with-evidence” task, following AnomalyXL-Localize, and report macro-F1 for classification and intersection over union (IoU) for localization (Appendix
+F
+). Recordings are derived from windows of one to seventeen minutes, each containing at most one annotated anomaly, such as an ectopic beat in an ECG signal or a respiratory arousal in a sleep recording. Windows are selected so that no neighboring annotated anomaly is present, while 20% of the windows are anomaly-free to provide challenging negative examples. The median anomaly occupies 0.5% of an LTAF window and 5.7% of a Sleep-PSG window. As baselines, we evaluate the same TSLMs used for AnomalyXL (Section
+4.1
+). None of the models are trained on these datasets.
+4.4
+Results
+Model
+AnomalyXL-MCQ
+AnomalyXL-Localize
+Pres(F1)
+ST(F1)
+Cat(F1)
+Mag(F1)
+Id(F1)
+Ind(F1)
+Loc(IoU)
+C+E(cls
+⋅
+\cdot
+IoU)
+MMag(err)
+LAC(F1)
+LL(cls
+⋅
+\cdot
+err)
+Samples
+(40)
+(40)
+(42)
+(42)
+(42)
+(42)
+(200)
+(200)
+(200)
+(100)
+(100)
+Classical
+Features + GBT heads
+0.861
+0.981
+0.643
+0.945
+0.739
+0.521
+0.160
+0.022
+0.685
+0.549
+0.108
+TSLM
+ChatTS Qwen3.5-4B
+0.467
+0.144
+0.137
+0.118
+OOM
+*
+0.175
+0.003
+0.000
+0.092
+OOM
+*
+0.350
+OpenTSLM Qwen3.5-4B
+0.467
+0.127
+0.101
+0.118
+0.010
+0.167
+0.008
+0.000
+0.079
+0.230
+0.350
+ITFormer Qwen3.5-4B
+0.467
+0.014
+0.146
+0.183
+0.333
+0.254
+0.004
+0.001
+0.078
+0.230
+0.333
+Toto Qwen3-VL 32B (no SFT)
+0.804
+0.591
+0.226
+0.362
+0.098
+0.391
+0.026
+0.001
+0.285
+0.220
+0.328
+Toto Qwen3-VL 32B
+0.812
+0.921
+0.728
+0.944
+0.303
+0.367
+0.323
+0.072
+0.822
+0.224
+0.557
+Single-pass
+GPT-4.1-mini (text)
+0.640
+0.194
+0.215
+0.120
+0.219
+0.167
+0.005
+0.000
+0.154
+0.000
+0.139
+GPT-5.5 (text)
+0.886
+0.620
+0.420
+0.774
+0.803
+0.476
+0.096
+0.001
+0.506
+0.170
+0.212
+Qwen3.5-4B (text)
+0.729
+0.163
+0.258
+0.476
+0.000
+0.199
+0.035
+0.001
+0.034
+0.000
+0.122
+GPT-4.1-mini (image)
+0.902
+0.685
+0.174
+0.140
+0.143
+0.280
+0.139
+0.009
+0.197
+0.100
+0.191
+GPT-5.5 (image)
+1.000
+0.929
+0.189
+0.671
+0.520
+0.784
+0.329
+0.043
+0.440
+0.120
+0.753
+Qwen3.5-4B (image)
+0.886
+0.897
+0.191
+0.123
+0.251
+0.668
+0.105
+0.012
+0.051
+0.065
+0.348
+TimeRLM
+text
+(ours)
+GPT-4.1-mini
+0.631
+0.594
+0.270
+0.154
+0.374
+0.529
+0.273
+0.075
+0.352
+0.088
+0.291
+GPT-5.5
+0.640
+0.916
+0.567
+0.793
+0.845
+0.952
+0.677
+0.717
+0.496
+0.461
+0.958
+GPT-5.5 (depth-1)
+0.937
+0.895
+0.585
+0.846
+0.921
+0.976
+0.656
+0.745
+0.554
+0.551
+0.978
+Qwen3.5-4B
+0.687
+0.673
+0.325
+0.445
+0.253
+0.684
+0.205
+0.119
+0.272
+0.003
+0.398
+Qwen3.5-4B (RL)
+0.739
+0.712
+0.252
+0.505
+0.354
+0.815
+0.538
+0.364
+0.510
+0.244
+0.687
+TimeRLM
+image
+(ours)
+GPT-4.1-mini
+0.657
+0.785
+0.240
+0.133
+0.330
+0.553
+0.369
+0.126
+0.389
+0.076
+0.350
+GPT-5.5
+0.765
+0.933
+0.432
+0.801
+0.886
+0.976
+0.682
+0.693
+0.480
+0.537
+0.988
+Qwen3.5-4B
+0.664
+0.793
+0.307
+0.505
+0.381
+0.675
+0.208
+0.109
+0.176
+0.004
+0.345
+Table 1:
+AnomalyXL results.
+For metrics see Table
+9
+. Number of samples listed below each task. LLMs/RLMs are zero-shot, TSLMs are fine-tuned.
+Bold
+/
+underline
+marks best/second-best.
+MCQ:
+Pres = presence, ST = start time, Cat = categorization,
+Mag = magnitude, Id = identification, Ind = indicator.
+Localize:
+Loc = localize, C+E = classify + evidence,
+MMag = measure magnitude, LAC = localize all channels, LL = lead/lag + magnitude.
+* OOM: Out of Memory.
+In the following we highlight results and findings based on the experiments introduced in Sections
+4.1
+to
+4.3
+.
+AnomalyXL
+Table
+1
+provides an overview of the results on AnomalyXL. On AnomalyXL-MCQ, TimeRLM with a GPT-5.5 backbone with images and GPT-5.5 with text and depth recursion lead on identification and indicator,
+reaching
+0.921
+0.921
+and
+0.976
+0.976
+, against
+0.803
+0.803
+and
+0.784
+0.784
+for the best single-pass
+configuration. Across the remaining tasks spanning presence, start time, categorization, and magnitude, the fine-tuned 32B Toto
+wins categorization (
+0.728
+0.728
+), and single-pass GPT-5.5 (image) wins on the presence
+(
+1.000
+1.000
+) task (Table
+1
+).
+The three TSLMs (ChatTS, OpenTSLM, and ITFormer) all score
+0.467
+0.467
+on presence, and achieve
+0.144
+0.144
+,
+0.127
+0.127
+and
+0.014
+0.014
+on start time. The Qwen3.5-4B single-pass image baseline reaches
+0.897
+0.897
+on start time. The image variant improves over its text counterpart on presence and start
+time for all three backbones, while text remains better on magnitude (
+0.476
+0.476
+vs.
+0.123
+0.123
+for
+Qwen3.5-4B).
+On AnomalyXL-Localize the gap widens on the tasks scored with IoU. TimeRLM (image, GPT-5.5) leads on localization with
+0.682
+0.682
+IoU, against
+0.329
+0.329
+for the best single-pass variant and
+0.323
+0.323
+for fine-tuned 32B Toto. On classify-with-evidence every baseline stays below
+0.08
+0.08
+while
+TimeRLM reaches
+0.745
+0.745
+. TimeRLM with recursion depth-1 gives small gains on tasks requiring precise segment localization (C+E
+0.717
+0.717
+to
+0.745
+0.745
+, LAC
+0.461
+0.461
+to
+0.551
+0.551
+) using an average of
+1.14
+1.14
+sub-RLM calls per task.
+TimeRLM on a Qwen3.5-4B improves localization from
+0.035
+0.035
+to
+0.205
+0.205
+IoU compared to the single-pass text variant, and to
+0.538
+0.538
+after RL post-training on AnomalyXL, above both the 32B Toto
+(
+0.323
+0.323
+) and single-pass GPT-5.5 (
+0.329
+0.329
+). Classify-with-evidence rises from
+0.001
+0.001
+to
+0.364
+0.364
+for the same configuration.
+On measure magnitude (MMag), the task requiring a single scalar answer, Toto achieves
+0.822
+0.822
+and the classical
+baseline
+0.685
+0.685
+. The best TimeRLM variant based on GPT-5.5 with image modalities achieves (
+0.551
+0.551
+).
+ARFBench
+Iden.
+Start
+End
+Magn.
+Categ.
+Total
+n
+(38)
+(56)
+(32)
+(76)
+(104)
+(306)
+GPT-5.5 text
+47.4
+37.5
+65.6
+48.7
+58.7
+51.6
+GPT-5.5 image
+34.2
+51.8
+71.9
+63.2
+66.3
+59.5
+Toto (TSLM)
+*
+10.5
+35.7
+34.4
+47.4
+71.2
+47.4
+Toto (TSVLM)
+†
+50.0
+23.2
+46.9
+59.2
+64.4
+52.0
+TimeRLM-text (Qwen3.5 4B)
+31.6
+30.4
+46.9
+36.8
+31.7
+34.3
+TimeRLM-text (Qwen3.5 4B - RL)
+65.8
+26.8
+40.6
+48.7
+33.7
+40.8
+TimeRLM-text (GPT 5.5)
+42.1
+50.0
+65.6
+51.3
+60.6
+54.6
+Accuracy
+TimeRLM-image (GPT 5.5)
+60.5
+50.0
+65.6
+64.5
+64.4
+61.4
+GPT-5.5 text
+49.1
+36.3
+51.8
+46.7
+53.0
+47.8
+GPT-5.5 image
+32.4
+51.6
+56.1
+59.4
+64.0
+55.8
+Toto (TSLM)
+*
+17.5
+41.3
+23.0
+35.9
+66.2
+43.6
+Toto (TSVLM)
+†
+50.0
+18.9
+36.2
+48.9
+56.2
+44.7
+TimeRLM-text (Qwen3.5 4B)
+44.5
+42.7
+41.3
+46.2
+24.0
+37.3
+TimeRLM-text (Qwen3.5 4B - RL)
+74.5
+41.1
+42.2
+68.3
+29.0
+48.0
+TimeRLM-text (GPT 5.5)
+42.5
+49.4
+51.6
+44.3
+53.4
+48.9
+Macro-F1
+TimeRLM-image (GPT 5.5)
+58.7
+49.4
+52.8
+60.3
+61.9
+57.9
+*
+Toto-1.0-Qwen3 32B (TSFM–LLM), numbers taken from the ARFBench paper
+†
+Toto-1.0-QA-Experimental 32B (TSFM–VLM), reproduced (our local rerun)
+Table 2:
+ARFBench Tier 2 results
+. Accuracy and Macro-F1 as defined in Table
+9
+.
+Bold
+/
+underline
+: best/second.
+On ARFBench Tier 2, TimeRLM leads both metrics: the image variant reaches
+61.4
+%
+61.4\%
+accuracy and
+57.9
+%
+57.9\%
+macro-F1, ahead of single-pass GPT-5.5 (
+59.5
+%
+59.5\%
+,
+55.8
+%
+55.8\%
+) and both Toto variants (Table
+2
+).
+This pattern is consistent with AnomalyXL-MCQ, where TimeRLM on a GPT-5.5 backbone leads among the LLM-based methods, with Toto Qwen3-VL 32B (SFT) close in performance.
+Generalization set (ECG + sleep).
+On zero-shot evaluation, TimeRLM leads both sets on classification and localization (Table
+3
+).
+TSLMs retain some ability to classify, but no TSLM exceeds an IoU of
+0.004
+0.004
+. This includes Toto, whose fine-tuned version outperforms some TimeRLM configurations on localization in AnomalyXL-Localize.
+TimeRLM with recursion spawns an average of
+2.6
+2.6
+sub-agents per task, compared to
+1.14
+1.14
+in AnomalyXL-Localize, and increases performance overall.
+Model
+LTAF (ECG)
+Sleep-PSG
+F1
+IoU
+F1
+IoU
+ChatTS
+0.000
+0.000
+OOM
+*
+OOM
+*
+OpenTSLM
+0.000
+0.000
+0.083
+0.004
+ITFormer
+0.331
+0.000
+0.330
+0.000
+Toto (No SFT)
+†
+0.000
+0.000
+0.027
+0.000
+TSLMs
+Toto (SFT)
+‡
+0.000
+0.000
+0.000
+0.000
+GPT-4.1-mini
+0.457
+0.025
+0.255
+0.031
+GPT-5.5
+0.724
+0.165
+0.262
+0.147
+GPT-5.5 (depth-1)
+0.798
+0.271
+0.348
+0.270
+Qwen3.5-4B
+0.357
+0.012
+0.174
+0.011
+TimeRLM-
+text (Ours)
+Qwen3.5-4B (RL)
+0.446
+0.016
+0.340
+0.002
+GPT-4.1-mini
+0.414
+0.052
+0.201
+0.063
+GPT-5.5
+0.780
+0.192
+0.314
+0.220
+TimeRLM-
+image (Ours)
+Qwen3.5-4B
+0.278
+0.009
+0.168
+0.004
+*
+Out of memory |
+†
+Toto-1.0-QA-Experimental 32B |
+‡
+SFT on AnomalyXL-Localize
+Table 3:
+Zero-shot results
+. Performance on unseen LTAF and Sleep sets.
+Bold
+/
+underline
+: best/second per column.
+The TimeRLM variant trained using reinforcement learning on AnomalyXL maintains good performance with F1 rising from
+0.36
+0.36
+to
+0.45
+0.45
+on LTAF and from
+0.17
+0.17
+to
+0.34
+0.34
+on Sleep-PSG. However, performance on localization stays near zero (Table
+3
+).
+5
+Discussion and Conclusion
+Our work investigated whether recursive LLMs that can query time-series data through code can improve performance on precise anomaly localization by (1) introducing a TimeRLM formulation, (2) introducing AnomalyXL as a new benchmark, and (3) evaluating performance across AnomalyXL, ARFBench, and an unseen holdout set. Our results support three readings: using RLMs is most advantageous on AnomalyXL-Localize and stems from the fact that the model is able to query the signal multiple times. The RLM approach boosts performance across both text and vision variants. Post-training a small open model on the RLM approach helps to maintain capabilities on zero-shot transfer to real out-of-domain signals.
+Multiple choice questions limit retrieval measurement.
+Classical baselines, i.e., specialized models for anomaly detection, reach the highest weighted average (
+0.81
+0.81
+) on AnomalyXL-MCQ, above every LLM, TSLM, and RLM we evaluated.
+The same baseline models however, do not outperform TimeRLM under precise scoring, indicating that what they do not recover is the location of an anomaly itself.
+These results show that MCQ tasks such as presence, start-time ranges, and magnitude bands are often solvable from aggregate signal statistics, allowing systems to score well without precise localization.
+AnomalyXL-MCQ closely matches related works in anomaly localization tasks
+(
+Cai et al. 2024
+;
+Xie et al. 2026
+)
+. AnomalyXL-MCQ is comparable to ARFBench tier 2
+(
+Xie et al. 2026
+)
+, and we find that the relative performances of each model, i.e., Toto vs. TimeRLM, are comparable across both benchmarks indicating similarity.
+These findings suggest that the multiple-choice format commonly utilized in existing TSLM anomaly detection benchmarks over-reports and under-investigates the retrieval abilities of TSLM anomaly localization architectures.
+Recursion increases anomaly localization capabilities.
+On AnomalyXL-MCQ, frontier backbones perform strongly in the single-pass setting: GPT-5.5 image reaches
+1.000
+1.000
+on presence and
+0.929
+0.929
+on start time. TimeRLM redistributes performance across metrics, trading presence (
+1.000
+1.000
+to
+0.765
+0.765
+) for gains in identification (
+0.520
+0.520
+to
+0.886
+0.886
+) and categorization (
+0.189
+0.189
+to
+0.432
+0.432
+). On AnomalyXL-Localize, however, TimeRLM variants improve on all five tasks (Table
+1
+).
+The largest gains occur on tasks requiring citing specific segments, including classify-with-evidence (
+0.043
+0.043
+to
+0.693
+0.693
+) and localization (
+0.329
+0.329
+to
+0.682
+0.682
+). Measured magnitude, which requires a scalar answer, is the exception and remains nearly flat (
+0.440
+0.440
+to
+0.480
+0.480
+for image and
+0.506
+0.506
+to
+0.496
+0.496
+for text).
+Rendering the signal as an image helps in the MCQ single-pass setting: for GPT-5.5, it raises start time from
+0.620
+0.620
+to
+0.929
+0.929
+and localization from
+0.096
+0.096
+to
+0.329
+0.329
+. This advantage does not carry over to TimeRLM. Text and image variants score within
+0.03
+0.03
+IoU on localization (
+0.677
+0.677
+vs.
+0.682
+0.682
+) and within
+0.03
+0.03
+on classify-with-evidence (
+0.717
+0.717
+vs.
+0.693
+0.693
+), while the image variant uses
+3.1
+3.1
+more agent turns on average.
+TimeRLM performs best when allowed to spawn sub-agents that examine individual signal segments in depth, reaching
+0.745
+0.745
+on classify-with-evidence,
+0.551
+0.551
+on localize-all-channels, and
+0.978
+0.978
+on lead/lag, while recovering presence to
+0.937
+0.937
+. These gains align with prior work on agentic search in other modalities
+(
+Zhang et al. 2026
+;
+Wang et al. 2024b
+)
+and motivate further work on scaling inference-time search for TSLMs and using coding agents for long-context time-series retrieval.
+On-policy learning and out-of-distribution transfer.
+Fine-tuned on AnomalyXL, TSLMs collapse on the unseen LTAF and Sleep-PSG generalization sets, with no model exceeding an IoU of
+0.004
+0.004
+. ITFormer reaches
+0.331
+0.331
+F1 on LTAF and
+0.330
+0.330
+on Sleep-PSG.
+By contrast, reinforcement learning on the AnomalyXL generator improves TimeRLM with Qwen3.5-4B on clinical signal classification, AnomalyXL-MCQ and ARFBench.
+These results suggest that post-training on synthetic data preserves capabilities on unseen datasets while substantially improving out-of-domain transfer.
+We hypothesize that reasoning in code provides a signal-agnostic learning environment: the action space remains invariant across signal distributions, allowing the model to learn general procedures for time-series anomaly localization. Related work similarly suggests that on-policy learning can reduce train–test mismatch and preserve prior capabilities better than standard off-policy Supervised Fine-Tuning (SFT)
+(
+Shenfeld et al. 2026
+)
+. For this reason, clean ablations separating code access and SFT-matched post-training remain necessary.
+Limitations and Future Work.
+To our knowledge, AnomalyXL is the first synthetic long-context anomaly benchmark released with its generator, enabling configurable difficulty. Its programmatic construction, however, limits the diversity of anomaly morphologies: injected events are parametric, whereas real anomalies may be ambiguous and context-dependent. AnomalyXL therefore primarily evaluates precise retrieval of numerical deviations rather than the full range of semantically meaningful anomalies. Although our generalization set partly addresses this limitation, future work should study long-context time-series localization on real-world data and beyond the clinical domains considered here. Direct comparisons between Toto and the other TSLMs should also be interpreted cautiously. Toto uses a time-series encoder pretrained on real observability data, is already post-trained for anomaly localization on real telemetry, and employs a 32B VLM, whereas the general-purpose TSLMs share a 4B backbone.
+Acknowledgments
+We thank Prime Intellect for providing open-source infrastructure for
+RL environments and recursive language models, compute resources, and technical guidance that
+supported this work.
+References
+Ansari
+et al.
+(2025)
+A. F. Ansari, O. Shchur, J. Küken, A. Auer, B. Han, P. Mercado, S. S. Rangapuram, H. Shen, L. Stella, X. Zhang,
+et al.
+Chronos-2: from univariate to universal forecasting
+.
+arXiv Preprints
+.
+External Links:
+Document
+Cited by:
+Appendix C
+,
+§4.1
+.
+Boniol
+et al.
+(2024)
+P. Boniol, Q. Liu, M. Huang, T. Palpanas, and J. Paparrizos
+Dive into time-series anomaly detection: a decade review
+.
+External Links:
+2412.20512
+,
+Link
+Cited by:
+§2
+.
+Cai
+et al.
+(2024)
+Y. Cai, A. Choudhry, M. Goswami, and A. Dubrawski
+TimeSeriesExam: a time series understanding exam
+.
+In
+NeurIPS Workshop on Time Series in the Age of Large Models
+,
+External Links:
+Link
+Cited by:
+§1
+,
+§5
+.
+Chan
+et al.
+(2024)
+S. Chan, H. Yuan, C. Tong, A. Acquah, A. Schonfeldt, J. Gershuny, and A. Doherty
+CAPTURE-24: a large dataset of wrist-worn activity tracker data collected in the wild for human activity recognition
+.
+Scientific Data
+11
+(
+1
+),
+pp. 1135
+.
+External Links:
+Document
+Cited by:
+§1
+.
+Chen
+et al.
+(2026)
+M. Chen, L. Sun, T. Li, sunhaoze, ZhouYijie, C. Zhu, H. Wang, J. Z. Pan, W. Zhang, H. Chen, F. Yang, Z. Zhou, and W. Chen
+ReSearch: learning to reason with search for LLMs via reinforcement learning
+.
+In
+The Thirty-ninth Annual Conference on Neural Information Processing Systems
+,
+External Links:
+Link
+Cited by:
+§1
+.
+Chen and Guestrin (2016)
+T. Chen and C. Guestrin
+XGBoost: a scalable tree boosting system
+.
+In
+Proceedings of the 22nd ACM SIGKDD International Conference on Knowledge Discovery and Data Mining
+,
+pp. 785–794
+.
+External Links:
+Document
+Cited by:
+§4.1
+.
+Cohen
+et al.
+(2026)
+B. Cohen, E. Khwaja, Y. Doubli, S. Lemaachi, C. Lettieri, C. Masson, H. Miccinilli, E. Ramé, Q. Ren, A. Rostamizadeh, J. O. du Terrail, A. Toon, K. Wang, S. Xie, Z. Xu, V. Zhukova, D. Asker, A. Talwalkar, and O. Abou-Amal
+This time is different: an observability perspective on time series foundation models
+.
+In
+The Thirty-ninth Annual Conference on Neural Information Processing Systems
+,
+External Links:
+Link
+Cited by:
+Appendix C
+,
+§4.1
+.
+Dingjie
+et al.
+(2024)
+S. Dingjie, S. Chen, G. H. Chen, F. Yu, X. Wan, and B. Wang
+MileBench: benchmarking MLLMs in long context
+.
+In
+First Conference on Language Modeling
+,
+External Links:
+Link
+Cited by:
+§1
+.
+Ghassemi
+et al.
+(2018)
+M. M. Ghassemi, B. Moody, L. Lehman, C. Song, Q. Li, H. Sun, M. Westover, and G. D. Clifford
+You snooze, you win: the PhysioNet/computing in cardiology challenge 2018
+.
+In
+2018 Computing in Cardiology Conference (CinC)
+,
+pp. 1–4
+.
+External Links:
+Document
+Cited by:
+Appendix F
+,
+§1
+,
+§4.3
+.
+He
+et al.
+(2025)
+P. He, Z. Wen, Y. Wang, Y. Wang, X. Liu, J. Huang, Z. Lei, Z. Gu, X. Jin, J. Yang,
+et al.
+Audiomarathon: a comprehensive benchmark for long-context audio understanding and efficiency in audio llms
+.
+arXiv Preprints
+.
+External Links:
+Document
+Cited by:
+§1
+.
+Hu
+et al.
+(2022)
+E. J. Hu, Y. Shen, P. Wallis, Z. Allen-Zhu, Y. Li, S. Wang, L. Wang, and W. Chen
+LoRA: low-rank adaptation of large language models
+.
+In
+International Conference on Learning Representations (ICLR)
+,
+External Links:
+Link
+Cited by:
+Appendix C
+,
+§4.1
+.
+Jaegle
+et al.
+(2021)
+A. Jaegle, F. Gimeno, A. Brock, A. Zisserman, O. Vinyals, and J. Carreira
+Perceiver: general perception with iterative attention
+.
+In
+International Conference on Machine Learning (ICML)
+,
+pp. 4651–4664
+.
+External Links:
+Link
+Cited by:
+§2
+.
+Jin
+et al.
+(2025)
+B. Jin, H. Zeng, Z. Yue, J. Yoon, S. O. Arik, D. Wang, H. Zamani, and J. Han
+Search-r1: training LLMs to reason and leverage search engines with reinforcement learning
+.
+In
+Second Conference on Language Modeling
+,
+External Links:
+Link
+Cited by:
+§1
+.
+Kamradt (2023)
+G. Kamradt
+Needle in a haystack - pressure testing LLMs
+.
+Note:
+GitHub:
+https://github.com/gkamradt/LLMTest˙NeedleInAHaystack
+Accessed: 2025
+Cited by:
+§1
+.
+Kelly and Knottenbelt (2015)
+J. Kelly and W. Knottenbelt
+The UK-DALE dataset, domestic appliance-level electricity demand and whole-house demand from five UK homes
+.
+Scientific Data
+2
+(
+1
+),
+pp. 150007
+.
+External Links:
+Document
+Cited by:
+§1
+.
+Killick
+et al.
+(2012)
+R. Killick, P. Fearnhead, and I. A. Eckley
+Optimal detection of changepoints with a linear computational cost
+.
+Journal of the American Statistical Association
+107
+(
+500
+),
+pp. 1590–1598
+.
+External Links:
+Document
+Cited by:
+§4.1
+.
+Kuratov
+et al.
+(2024)
+Y. Kuratov, A. Bulatov, P. Anokhin, I. Rodkin, D. Sorokin, A. Sorokin, and M. Burtsev
+Babilong: testing the limits of llms with long context reasoning-in-a-haystack
+.
+Advances in Neural Information Processing Systems (NeurIPS)
+37
+,
+pp. 106519–106554
+.
+External Links:
+Document
+Cited by:
+§1
+.
+Langer
+et al.
+(2026)
+P. Langer, T. Kaar, M. Rosenblattl, M. A. Xu, W. Chow, M. Maritsch, R. Jakob, N. Wang, J. Liu, A. Verma, B. Han, D. S. Kim, H. Chubb, S. R. Ceresnak, A. Zahedivash, A. T. Sandhu, F. Rodriguez, D. McDuff, E. Fleisch, O. O. Aalami, F. Barata, and P. Schmiedmayer
+OpenTSLM: time-series language models for reasoning over multivariate medical text- and time-series data
+.
+In
+Forty-third International Conference on Machine Learning
+,
+External Links:
+Link
+Cited by:
+Appendix C
+,
+§1
+,
+§1
+,
+§2
+,
+§4.1
+.
+Liu
+et al.
+(2024)
+N. F. Liu, K. Lin, J. Hewitt, A. Paranjape, M. Bevilacqua, F. Petroni, and P. Liang
+Lost in the middle: how language models use long contexts
+.
+Transactions of the Association for Computational Linguistics (TACL)
+12
+,
+pp. 157–173
+.
+External Links:
+Document
+Cited by:
+§1
+.
+Liu
+et al.
+(2025)
+Z. Liu, C. Chen, W. Li, P. Qi, T. Pang, C. Du, W. S. Lee, and M. Lin
+Understanding r1-zero-like training: a critical perspective
+.
+In
+Second Conference on Language Modeling
+,
+External Links:
+Link
+Cited by:
+§4.1
+.
+Messica
+et al.
+(2026)
+S. Messica, J. Zhang, K. Li, T. Tsiligkaridis, and M. Zitnik
+Adaptive time series reasoning via segment selection
+.
+In
+Forty-third International Conference on Machine Learning
+,
+External Links:
+Link
+Cited by:
+§1
+,
+§2
+.
+Oh
+et al.
+(2023)
+J. Oh, G. Lee, S. Bae, J. Kwon, and E. Choi
+Ecg-qa: a comprehensive question answering dataset combined with electrocardiogram
+.
+In
+Advances in Neural Information Processing Systems (NeurIPS)
+,
+Vol.
+36
+,
+pp. 66277–66288
+.
+Cited by:
+§2
+.
+OpenAI
+et al.
+(2023)
+OpenAI
+et al.
+GPT-4 technical report
+.
+arXiv Preprints
+.
+External Links:
+Document
+Cited by:
+§4.1
+.
+Petrutiu
+et al.
+(2007)
+S. Petrutiu, A. V. Sahakian, and S. Swiryn
+Abrupt changes in fibrillatory wave characteristics at the termination of paroxysmal atrial fibrillation in humans
+.
+Europace
+9
+(
+7
+),
+pp. 466–470
+.
+External Links:
+Document
+Cited by:
+Appendix F
+,
+§1
+,
+§4.3
+.
+Qwen (2026)
+T. Qwen
+Qwen3.5-omni technical report
+.
+External Links:
+2604.15804
+,
+Link
+Cited by:
+Appendix C
+,
+§4.1
+.
+Shao
+et al.
+(2024)
+Z. Shao, P. Wang, Q. Zhu, R. Xu, J. Song, M. Zhang, Y.K. Li, Y. Wu, and D. Guo
+DeepSeekMath: pushing the limits of mathematical reasoning in open language models
+.
+Vol.
+abs/2402.03300
+.
+External Links:
+Link
+Cited by:
+§4.1
+.
+Shenfeld
+et al.
+(2026)
+I. Shenfeld, M. Damani, J. Hübotter, and P. Agrawal
+Self-distillation enables continual learning
+.
+In
+Forty-third International Conference on Machine Learning
+,
+External Links:
+Link
+Cited by:
+§5
+.
+Singh
+et al.
+(2025)
+A. Singh
+et al.
+Openai gpt-5 system card
+.
+arXiv Preprints
+.
+External Links:
+Document
+Cited by:
+§4.1
+.
+Su
+et al.
+(2024)
+J. Su, C. Jiang, X. Jin, Y. Qiao, T. Xiao, H. Ma, R. Wei, Z. Jing, J. Xu, and J. Lin
+Large language models for forecasting and anomaly detection: a systematic literature review
+.
+ArXiv
+abs/2402.10350
+.
+External Links:
+Link
+Cited by:
+§1
+,
+§2
+.
+Vaswani
+et al.
+(2017)
+A. Vaswani, N. Shazeer, N. Parmar, J. Uszkoreit, L. Jones, A. N. Gomez, Ł. Kaiser, and I. Polosukhin
+Attention is all you need
+.
+In
+Advances in Neural Information Processing Systems (NeurIPS)
+,
+External Links:
+Link
+Cited by:
+§2
+.
+Wang
+et al.
+(2025a)
+C. Wang, Q. Qi, J. Wang, H. Sun, Z. Zhuang, J. Wu, L. Zhang, and J. Liao
+Chattime: a unified multimodal time series foundation model bridging numerical and textual data
+.
+In
+Proceedings of the AAAI Conference on Artificial Intelligence
+,
+Vol.
+39
+,
+pp. 12694–12702
+.
+External Links:
+Document
+Cited by:
+§1
+,
+§1
+,
+§2
+.
+Wang
+et al.
+(2024a)
+W. Wang, S. Zhang, Y. Ren, Y. Duan, T. Li, S. Liu, M. Hu, Z. Chen, K. Zhang, L. Lu, X. Zhu, P. Luo, Y. Qiao, J. Dai, W. Shao, and W. Wang
+Needle in a multimodal haystack
+.
+In
+The Thirty-eight Conference on Neural Information Processing Systems Datasets and Benchmarks Track
+,
+External Links:
+Link
+Cited by:
+§1
+.
+Wang
+et al.
+(2024b)
+X. Wang, Y. Zhang, O. Zohar, and S. Yeung-Levy
+VideoAgent: long-form video understanding with large language model as agent
+.
+In
+ECCV (80)
+,
+pp. 58–76
+.
+External Links:
+Link
+Cited by:
+§1
+,
+§2
+,
+§5
+.
+Wang
+et al.
+(2025b)
+Y. Wang, P. Lei, J. Song, Y. Hao, T. Chen, Y. Zhang, L. JIA, Y. Li, and zhongyu wei
+ITFormer: bridging time series and natural language for multi-modal QA with large-scale multitask dataset
+.
+In
+Forty-second International Conference on Machine Learning
+,
+External Links:
+Link
+Cited by:
+Appendix C
+,
+§1
+,
+§2
+,
+§4.1
+.
+Xie
+et al.
+(2026)
+S. Xie, B. Cohen, M. Goswami, J. Shen, E. Khwaja, C. Liu, D. Asker, O. Abou-Amal, and A. Talwalkar
+ARFBench: benchmarking multimodal time series reasoning for software incident response
+.
+In
+1st ICLR Workshop on Time Series in the Age of Large Models
+,
+External Links:
+Link
+Cited by:
+Appendix C
+,
+§1
+,
+§1
+,
+§2
+,
+§2
+,
+§4.1
+,
+§4.1
+,
+§4.2
+,
+§5
+.
+Xie
+et al.
+(2025)
+Z. Xie, Z. Li, X. He, L. Xu, X. Wen, T. Zhang, J. Chen, R. Shi, and D. Pei
+ChatTS: aligning time series with llms via synthetic data for enhanced understanding and reasoning
+.
+Proceedings of the VLDB Endowment
+18
+(
+8
+),
+pp. 2385–2398
+.
+External Links:
+ISSN 2150-8097
+,
+Document
+Cited by:
+Appendix C
+,
+§1
+,
+§2
+,
+§4.1
+.
+Xu
+et al.
+(2026)
+M. A. Xu, H. Haresamudram, C. W. Liu, P. Langer, J. Pradeepkumar, W. Mao, S. J. Ferns, A. Verma, J. Sun, P. Schmiedmayer, X. Liu, D. McDuff, E. B. Fox, and J. M. Rehg
+How well do multimodal models reason on ecg signals?
+.
+External Links:
+2603.00312
+,
+Link
+Cited by:
+§2
+.
+Yao
+et al.
+(2023)
+S. Yao, J. Zhao, D. Yu, N. Du, I. Shafran, K. R. Narasimhan, and Y. Cao
+ReAct: synergizing reasoning and acting in language models
+.
+In
+The Eleventh International Conference on Learning Representations
+,
+External Links:
+Link
+Cited by:
+§1
+,
+§2
+.
+Yèche
+et al.
+(2021)
+H. Yèche, R. Kuznetsova, M. Zimmermann, M. Hüser, X. Lyu, M. Faltys, and G. Rätsch
+HiRID-icu-benchmark – a comprehensive machine learning benchmark on high-resolution icu data
+.
+In
+Thirty-fifth Conference on Neural Information Processing Systems Datasets and Benchmarks Track
+,
+External Links:
+Link
+Cited by:
+§1
+.
+Yeh
+et al.
+(2016)
+C. M. Yeh, Y. Zhu, L. Ulanova, N. Begum, Y. Ding, H. A. Dau, D. F. Silva, A. Mueen, and E. Keogh
+Matrix profile i: all pairs similarity joins for time series: a unifying view that includes motifs, discords and shapelets
+.
+In
+2016 IEEE 16th International Conference on Data Mining (ICDM)
+,
+pp. 1317–1322
+.
+External Links:
+Document
+Cited by:
+§4.1
+.
+Yu
+et al.
+(2026)
+Q. Yu, Z. Zhang, R. Zhu, and e. al. Yufeng Yuan
+DAPO: an open-source LLM reinforcement learning system at scale
+.
+In
+The Thirty-ninth Annual Conference on Neural Information Processing Systems
+,
+External Links:
+Link
+Cited by:
+§4.1
+.
+Yuan
+et al.
+(2024)
+H. Yuan, S. Chan, A. P. Creagh, C. Tong, A. Acquah, D. A. Clifton, and A. Doherty
+Self-supervised learning for human activity recognition using 700,000 person-days of wearable data
+.
+NPJ Digital Medicine
+7
+(
+1
+),
+pp. 91
+.
+External Links:
+Document
+Cited by:
+§1
+.
+Zhang
+et al.
+(2026)
+A. L. Zhang, T. Kraska, and O. Khattab
+Recursive language models
+.
+External Links:
+2512.24601
+,
+Link
+Cited by:
+§1
+,
+§2
+,
+§3.1
+,
+§5
+.
+Zhao
+et al.
+(2025)
+H. Zhao, X. Zhang, J. Wei, Y. Xu, Y. He, S. Sun, and C. You
+TimeSeriesScientist: a general-purpose ai agent for time series analysis
+.
+External Links:
+2510.01538
+,
+Link
+Cited by:
+§1
+,
+§2
+.
+Zumarraga
+et al.
+(2026)
+N. Zumarraga, T. Kaar, N. Wang, W. Tennien, A. Hasanli, M. Rosenblattl, F. Wu, K. Riehl, M. A. Xu, M. Kreft, K. O’Sullivan, E. Fleisch, P. Schmiedmayer, R. Jakob, and P. Langer
+TS-haystack: a multi-task retrieval benchmark for long-context time-series reasoning
+.
+External Links:
+2602.14200
+,
+Link
+Cited by:
+§1
+,
+§1
+,
+§2
+.
+Appendix A
+TimeRLM Details
+This section further discusses the per task and context length performance of the best performing RLM configuration in AnomalyXL-Localize, GPT-5.5.
+We additionally document the exact agent loop underlying TimeRLM during training and evaluation, Prime
+Intellect’s v1
+rlm-harness
+protocol. The harness is a
+persistent IPython agent run as a subprocess per rollout, instantiating the decision
+process of the Methods section: a persistent code sandbox, a terminal structured answer, and a single
+verifiable reward.
+Results by category and context length.
+The per-category averages in Table
+1
+show that TimeRLM’s precise gains concentrate on
+evidence-pointing tasks, but they collapse away the length axis. Fig.
+3
+breaks
+GPT-5.5’s precise score down by category
+and
+context length for all four inference-time
+configurations, and two patterns emerge that the averaged column hides. First,
+classify-with-evidence is at or near zero for both single-pass variants at
+every
+length (text:
+≤
+0.003
+\leq 0.003
+; image:
+0.11
+→
+0.00
+0.11\to 0.00
+as
+L
+L
+grows), while the RLM holds
+0.62
+0.62
+–
+0.76
+0.76
+at every length
+regardless of modality. The collapse is uniform across the length range, not driven by the longest
+contexts alone. Second, single-pass image localization degrades steadily with length, from
+0.48
+0.48
+at
+L
+=
+16
+L=16
+k to
+0.16
+0.16
+at
+L
+=
+131
+L=131
+k, while the RLM’s localize score stays within a narrow
+0.61
+0.61
+–
+0.79
+0.79
+band
+over the same range. With the exception for Measure Magnitude (a scalar answer not requiring precise retrieval scored with IoU) and the Localize task for single pass text, results indicate the relative single-pass/RLM gap widens with context length and degrades further in absolute terms from
+L
+=
+32
+L=32
+k to
+L
+=
+131
+L=131
+k, consistent with scanning 16 channels by eye or by serialized text becoming harder, not easier, as the series lengthens.
+Figure 3:
+GPT-5.5 precise reward by category and context length
+, for all four inference-time
+configurations (verified against Table
+1
+to three decimals). Each cell shows the mean reward
+(bold) and its change in percentage points relative to that category’s shortest sampled length;
+color encodes this delta (green = improves with length, red = degrades).
+Fig.
+4
+aggregates the three categories swept across all four lengths (localize,
+classify-with-evidence, measure-magnitude) into a single accuracy-versus-length curve per configuration.
+Averaged this way, single-pass image score drops by roughly
+46
+%
+46\%
+from the shortest to the longest
+context (
+0.35
+→
+0.19
+0.35\to 0.19
+), while single-pass text stays flat but low throughout (
+0.18
+0.18
+–
+0.23
+0.23
+); both RLM
+curves remain within a tight
+0.56
+0.56
+–
+0.69
+0.69
+band across the same length range, well above either
+single-pass curve at every length and with no comparable widening or narrowing trend.
+Figure 4:
+GPT-5.5 accuracy versus context length
+, averaged over the three length-swept precise
+categories (localize, classify-with-evidence, measure-magnitude) for each inference-time configuration.
+Prompts.
+The system prompt states a generic context, with task-specific instruction and answer options carried in the per-task prompt:
+System prompt
+You are a specialized time-series agent that uses code to solve tasks. You solve tasks by breaking down
+problems into sub-tasks, writing and executing code, observing results, and iterating one step at a time.
+When you are done, stop calling tools and state your final answer.
+Precise prompt
+This is a critical application: when relevant, precisely locate the anomaly’s start and end using
+statistical thresholds --- be precise… Analyze it with numpy and scipy in the IPython tool. When you
+are done, stop calling the tool and state your final answer as a single JSON object matching the question’s
+schema exactly (e.g. {"start": 12, "end": 87}), with no prose and no markdown fences. Format failures
+score zero.
+Turn budget.
+During RL, the episode is capped at 15 turns to maintain manageable memory budgets and speed during training; on the final turn, tools are withdrawn and a
+“FINAL TURN: your turn budget is exhausted and tools are disabled. State your final answer NOW…”
+notice is injected, including a
+−
+0.25
+-0.25
+exhausted-budget penalty used at training time. The episode otherwise ends as soon as the model stops calling tools and states its final answer
+directly.
+Sandbox and packages.
+The agent executes in an isolated Python sandbox backed by a real Jupyter kernel, pre-seeded with
+numpy
+and
+scipy
+. Tool output returned to the model is truncated at 8192 characters
+per turn (
+RLM_MAX_OUTPUT
+).
+Recursive
+sub_rlm()
+calls are implemented but disabled (depth 0) throughout, as stated in
+the Methods section. The answer is extracted by locating a balanced-brace JSON object containing the
+schema’s required keys, tolerating surrounding prose or markdown fences; a response from which no such
+object can be recovered scores zero.
+Appendix B
+Classical Baseline Details
+The classical baseline pairs a deterministic, untrained feature extractor with small
+supervised task heads. No language model is involved at any stage.
+Feature extraction.
+Series are decimated to at most 16,384 points by stride subsampling, and index-valued
+predictions are mapped back through the stride. 25 features are computed per
+channel:
+•
+Robust-
+z
+z
+statistics.
+Global median/MAD
+z
+z
+-scores:
+max
+⁡
+|
+z
+|
+\max|z|
+and its
+position, the fraction of points beyond
+4
+​
+σ
+4\sigma
+and
+8
+​
+σ
+8\sigma
+, exceedance-run
+geometry at
+|
+z
+|
+>
+4
+|z|>4
+(first and last exceedance, longest-run start, end and length,
+run count), and peak width at
+|
+z
+|
+>
+6
+|z|>6
+.
+•
+Half-series contrasts.
+Mean shift between halves (level shift), log
+variance ratio (variance change), and global linear slope (trend).
+•
+Rolling-variance localization.
+Maximum and argmax of the robust-
+z
+z
+of a
+rolling standard deviation with window
+L
+/
+64
+L/64
+, capturing variance-change onset.
+•
+Spectral change.
+Dominant-frequency power ratio and frequency shift
+between halves, via the real FFT, capturing seasonality change.
+•
+Change points.
+PELT with an
+ℓ
+2
+\ell_{2}
+cost on a 2,048-point grid:
+breakpoint count, first breakpoint, and the largest inter-segment mean jump with its
+location.
+•
+Matrix profile.
+Maximum discord value and its location, on a
+4,096-point grid with window
+L
+/
+64
+L/64
+.
+•
+Series length.
+log
+2
+\log_{2}
+of the raw, un-decimated recording length.
+Each question is then described by 56 values: the worst channel’s full feature vector (25),
+the channel-mean of every feature (25), the channel count (1), and five cross-correlation
+features between the two groups—best-lag correlation, lag as a fraction of length,
+zero-lag correlation, and each group’s own
+max
+⁡
+|
+z
+|
+\max|z|
+—always present but zero-filled
+outside the lead–lag and indicator tasks (
+25
++
+25
++
+1
++
+5
+=
+56
+25+25+1+5=56
+).
+Task heads.
+Heads are gradient-boosted trees, one per question category (Table
+4
+).
+They are trained on
+exactly
+the data used by the TSLM baselines—the AnomalyXL
+train and validation splits—with an independent set of heads fitted per regime, mirroring
+the per-regime TSLM and Toto fine-tunes; only the untrained, deterministic feature
+extractor is shared between them.
+Category
+Head
+Target
+Coarse
+Presence
+classifier
+Yes / No
+Start time
+classifier
+start bin
+Categorization
+classifier
+anomaly kind
+Magnitude
+classifier
+σ
+\sigma
+band
+Identification
+per-channel binary
+channel in gold set
+Indicator
+classifier (paired)
+5 relations
+Precise
+Localize
+presence clf. + span regr.
+start
+,
+end
+Classify + ev.
+kind clf. + span regr.
+kind,
+start
+,
+end
+Measure magn.
+regressor on
+log
+⁡
+(
+1
++
+σ
+)
+\log(1+\sigma)
+magnitude_s
+Localize all ch.
+per-channel clf.
+anomaly list
+Lead–lag
+direction clf. + lag regr.
+direction,
+lag
+Table 4:
+One head per AnomalyXL category.
+Span regressors predict start and end as
+fractions of the recording length; intervals for localize-all-channels are read off the
+longest positive run.
+Decoding and evaluation.
+Head predictions are mapped deterministically into the benchmark’s answer space: coarse heads
+emit one of the row’s option strings, and precise heads emit the structured JSON objects the
+benchmark defines. Evaluation is a single pass over the same held-out test sets and the same
+scorers used for every other row in Table
+1
+.
+Because the feature design encodes the task knowledge and the heads learn only thresholds and
+combinations, this baseline receives, in effect, the information the language-model systems are
+given in their prompts—the question and its category definition—but supplied to it by
+construction rather than read from text.
+Appendix C
+TSLM Fine-Tuning Configurations
+In the following, we present details on the training configurations of all TSLM baseline results displayed in the paper.
+All finetuned TSLM baselines share the same training configuration detailed below unless explicitly differentiated, and are separately finetuned on AnomalyXL-MCQ and AnomalyXL-Localize to allow each model variant to learn the answer schema required by each separate task, yielding a total of
+8
+8
+finetuning runs. An overview of the finetuned model variants is presented in Table
+5
+.
+Model row
+Signal interface
+Fine-tuned regimes
+ChatTS Qwen3.5-4B
+full-resolution patch adapter
+coarse, precise
+Flamingo Qwen3.5-4B
+Perceiver-Resampler fixed-latent compressor
+coarse, precise
+ITFormer Qwen3.5-4B
+fixed summary-token aggregation
+coarse, precise
+Toto Qwen3-VL 32B
+frozen Toto encoder with Qwen3-VL
+coarse, precise
+Table 5:
+Supervised baseline fine-tuning runs.
+The model names match the rows in Table
+1
+. Each supervised baseline is trained once for the coarse answer format and once for the precise answer format.
+ChatTS
+(
+Xie et al. 2025
+)
+, OpenTSLM-Flamingo
+(
+Langer et al. 2026
+)
+and ITFormer
+(
+Wang et al. 2025b
+)
+use a frozen Chronos-2 time-series encoder
+(
+Ansari et al. 2025
+)
+and a Qwen3.5-4B
+(
+Qwen 2026
+)
+backbone adapted with LoRA
+(
+Hu et al. 2022
+)
+.
+Toto-1.0-QA-Experimental
+(
+Xie et al. 2026
+)
+uses a pretrained Toto encoder
+(
+Cohen et al. 2026
+)
+attached to a Qwen3-VL-32B backbone, taken directly from the supplied ARFBench paper checkpoint in its base version, and further finetuned when mentioned, under the same conditions of all other TSLMs.
+Hyperparameter configurations.
+All supervised fine-tunes use batch size 1, 5 epochs, an AdamW optimizer with learning rate
+1
+​
+e
+−
+4
+1e^{-4}
+, weight decay 0.01, gradient clipping at norm 1.0, and a 0.03 warmup ratio. Early stopping monitors validation loss with patience 3. Validation is run after each epoch on 500 samples from each AnomalyXL-MCQ and AnomalyXL-Localize validation set, scored with the same AnomalyXL scoring rules used in the test set reported Table
+1
+. The checkpoint achieving highest validation primary metric is selected as the evaluated baseline on the test set
+LoRA adaptation.
+All fine-tuned language backbones are adapted with LoRA rather than full-model finetuning, set with rank 16,
+α
+=
+32
+\alpha=32
+, dropout 0.05, no bias terms, and attention projection targets
+q_proj
+and
+v_proj
+while the time-series encoder remains frozen. For ChatTS, OpenTSLM-Flamingo, and ITFormer, LoRA is applied to the shared Qwen3.5-4B backbone and the architecture-specific time-series projection or fusion parameters are trainable. Toto follows the same optimization hyperparameters and LoRA settings, but applies them to its Qwen3-VL-32B text decoder. Its Toto encoder and projection modules remain frozen.
+Data and scoring.
+The precise regime is trained on approximately 5,000 generated AnomalyXL examples using the same generator configuration as the evaluation set. Coarse models are finetuned to emit one of the multiple-choice options, and precise models to emit a structured JSON answer required by the task. The final reported numbers are computed with the benchmark’s standard scorers: multiple-choice question accuracy for coarse tasks and the continuous evidence-grounded primary score for precise tasks.
+Appendix D
+AnomalyXL Construction Details
+AnomalyXL signals are used both for precise, open-ended questions
+answered in strict JSON, and for coarse multiple-choice
+questions scored by choice accuracy. Table
+6
+gives the answer schema, metric,
+and option set for each of the five tasks.
+Task
+Precise answer (JSON)
+Metric
+Coarse choices (MCQ)
+Localize
+{”present”: true, ”start”: 48210, ”end”: 48533}
+IoU
+Presence: Yes / No; Start Bin: Before / Early / Medium / Late
+Classify
+{”kind”: ”Trend”, ”start”: 71040, ”end”: 73219}
+kind
+×
+\times
+IoU
+Kind: Spike / Shift / Trend / Variance / Seasonal
+Magnitude
+{”magnitude_sigma”: 12.4}
+rel. error
+Band: 1–3 / 3–10 / 10–30 / 30–100
+σ
+\sigma
+All channels
+{”anomalies”: [{”channel”: 4, ”start”: 9000, ”end”: 9220}, …]}
+set-matched F1
+Count: None / 1 / 2 / 3 of the named channels
+Lead–lag
+{”direction”: ”lead”, ”lag_samples”: 512}
+dir.+lag
+Indicator: Leading / Lagging / Correlated / Uncorrelated
+Table 6:
+The five AnomalyXL tasks, precise versus coarse.
+Precise answers are strict JSON, scored
+by the listed continuous metric in
+[
+0
+,
+1
+]
+[0,1]
+; coarse answers are scored by choice accuracy. Magnitude’s
+relative error is converted to a score via
+max
+⁡
+(
+0
+,
+1
+−
+rel_err
+/
+0.5
+)
+\max(0,\,1-\text{rel\_err}/0.5)
+, a linear ramp from full
+credit at an exact match to zero at
+50
+%
+50\%
+relative error. The localize
+no-anomaly case is answered with {”present”: false}. See Fig.
+2
+for a schematic and
+Fig.
+5
+for worked examples drawn from the released data.
+D.1
+Templated JSON response examples
+Fig.
+5
+shows six sampled rows from the released
+AnomalyXL-Localize
+shard at full resolution (thin gray), with
+the gold window shaded and, except for the no-anomaly case, a zoomed inset. Panel 1 (Localize,
+L
+=
+131,072
+L=131{,}072
+) asks whether an anomaly is present and where; gold
+{"present": true, "start":
+103194, "end": 103352}
+. Panel 2 (Classify-with-Evidence,
+L
+=
+65,536
+L=65{,}536
+) asks for the anomaly’s kind and
+window; gold
+{"kind": "Change in Trend", "start": 55469, "end": 55642}
+. Panel 3 (Measure
+Magnitude,
+L
+=
+32,768
+L=32{,}768
+) asks for the peak deviation in
+σ
+\sigma
+; gold
+{"magnitude_sigma":
+13.62}
+. Panel 4 (All-Channels,
+C
+=
+16
+C{=}16
+,
+L
+=
+131,072
+L=131{,}072
+) asks for every anomalous channel and its window;
+gold anomalies fall on
+ch_02
+,
+ch_06
+, and
+ch_12
+(widths 78–233 samples),
+spread across the full series. Panel 5 (Lead–Lag,
+L
+=
+131,072
+L=131{,}072
+) asks whether A leads or lags B and by
+how many samples; gold
+{"direction": "lead", "lag_samples": 2051}
+. Panel 6 (Localize,
+no-anomaly case,
+L
+=
+16,384
+L=16{,}384
+) is one of the first-class negatives; gold
+{"present": false}
+.
+The exact question text for Classify-with-Evidence, from the released dataset, reads:
+Classify-with-Evidence prompt (verbatim,
+L
+=
+65,536
+L=65{,}536
+)
+Identify the anomaly in the time series and its window. Respond with exactly one JSON object on a single
+line, no other text: {"kind": <label>, "start": <int>, "end": <int>}. kind must be one of:
+"Level Shift", "Transient Spike", "Change in Seasonality", "Change in Variance", "Change in Trend".
+start is inclusive, end is exclusive. Each kind is defined as follows: a Level Shift is a
+sustained step in mean… (Here L = 65536.)
+Figure 5:
+Six worked AnomalyXL-Localize examples
+, sampled from the released dataset. Full-resolution
+signal in gray with the gold window shaded; zoomed insets show the injected transform up close. Questions
+and gold answers are given in the text above.
+D.2
+Scene synthesis.
+Every sample starts from a
+scene
+:
+C
+C
+independent channels, each built as one base noise process
+(white noise, a rescaled random-walk “red” noise, or an AR(1) process with
+ϕ
+=
+0.7
+\phi=0.7
+, drawn with equal
+probability) plus an optional periodic component (probability 0.4; sine, square, or sawtooth with period
+in
+[
+16,256
+]
+[16,256]
+samples) and an optional trend component (probability 0.3; linear, exponential, or
+logarithmic drift, or a constant offset). Each channel is then z-normalized to unit std, so an anomaly
+expressed in
+σ
+\sigma
+-units has a comparable visual scale regardless of which base processes were drawn.
+Channels are anonymized (
+ch_00
+,
+ch_01
+, …, or
+A_
+/
+B_
+-prefixed for
+the paired lead–lag task) so the model cannot exploit channel-name priors.
+D.3
+Anomaly injection.
+An anomaly is one of five transforms applied to a contiguous window
+[
+t
+start
+,
+t
+end
+)
+[t_{\text{start}},t_{\text{end}})
+of a
+single target channel,
+after
+z-normalization. A
+level shift
+is a signed, sustained step of
+magnitude
+×
+σ
+\text{magnitude}\times\sigma
+). A
+transient spike
+is a triangular pulse peaking at
+magnitude
+×
+σ
+\text{magnitude}\times\sigma
+at the window’s center, with zero at its edges. A
+change in seasonality
+is a new sinusoid of period in
+[
+4
+,
+width
+/
+2
+]
+[4,\text{width}/2]
+samples, short enough that at least two cycles fit
+inside the window, and added over the window). A
+change in variance
+is extra Gaussian noise of std
+magnitude
+×
+σ
+\text{magnitude}\times\sigma
+added sample-by-sample over the window, with a width floor raised to 64
+samples so the change is a sustained regime rather than indistinguishable from a couple of spikes.
+On the paired lead–lag task, this minimum is set to 11 samples. Finally, a
+change in trend
+is
+a piecewise-linear ramp that reaches
+±
+magnitude
+×
+σ
+\pm\text{magnitude}\times\sigma
+by the
+window’s end and then carries its terminal level forward, so it reads as a lasting slope change rather than
+a transient pulse. Magnitude is drawn uniformly in
+[
+2
+,
+6
+]
+​
+σ
+[2,6]\,\sigma
+for localize, classify, all-channels,
+and lead–lag, and log-uniformly in
+[
+1,100
+]
+​
+σ
+[1,100]\,\sigma
+for measure-magnitude, so that task alone stresses
+both near-floor and extreme deviations. Window width is an
+absolute
+sample count in
+[
+8,256
+]
+[8,256]
+regardless of
+L
+L
+— not a fraction of the series — which is the design choice that makes long context
+hard: at
+L
+=
+131,072
+L=131{,}072
+an anomaly can occupy as little as
+0.006
+%
+0.006\%
+of the series, indistinguishable from
+noise in a full-resolution plot unless the reader zooms in, exactly as Fig.
+5
+shows.
+D.4
+Channel topologies and sampling grid.
+Localize, classify-with-evidence, and measure-magnitude are single-channel (
+C
+=
+1
+C=1
+) tasks swept over all
+four context lengths,
+L
+∈
+{
+16384
+,
+32768
+,
+65536
+,
+131072
+}
+L\in\{16384,32768,65536,131072\}
+. Localize-all-channels fixes
+C
+=
+16
+C=16
+and injects
+K
+∼
+𝒰
+​
+{
+0
+,
+…
+,
+3
+}
+K\sim\mathcal{U}\{0,\dots,3\}
+anomalies on
+K
+K
+distinct channels with non-overlapping windows (channels
+outside the injected set carry no anomaly), swept over
+L
+∈
+{
+32768
+,
+131072
+}
+L\in\{32768,131072\}
+. Lead–lag-with-magnitude
+splits
+C
+=
+2
+C=2
+channels into single-channel sub-scenes A and B and samples a temporal relation —
+lead
+(A’s anomaly precedes B’s),
+lag
+(A follows B), or
+independent
+(disjoint, unrelated windows)
+— each with prior
+1
+/
+3
+1/3
+; for lead/lag the offset is uniform in
+[
+1
+,
+L
+/
+4
+]
+[1,L/4]
+samples, so it never exceeds a
+quarter of the series. Every
+(
+L
+,
+category
+)
+(L,\text{category})
+cell draws 50 rows from a seed derived deterministically, so extending the grid later does not reshuffle existing rows. Table
+7
+summarizes the resulting 800-row precise shard. Fig.
+6
+plots the
+classify-with-evidence anomaly-kind distribution.
+Category
+C
+C
+L
+L
+(samples)
+Rows
+Composition
+Localize
+1
+16k–131k
+200
+161 present / 39 absent
+Classify-w-Evidence
+1
+16k–131k
+200
+Variance 51, Spike 43, Seasonality 37, Trend 37, Shift 32
+Measure Magnitude
+1
+16k–131k
+200
+σ
+∈
+[
+1.0
+,
+99.8
+]
+\sigma\in[1.0,99.8]
+, median
+12.6
+12.6
+All-Channels
+16
+32k, 131k
+100
+K
+=
+0
+:
+23
+,
+1
+:
+27
+,
+2
+:
+25
+,
+3
+:
+25
+K{=}0{:}23,\ 1{:}27,\ 2{:}25,\ 3{:}25
+Lead–Lag
+2
+32k, 131k
+100
+lead 33 / lag 32 / independent 35
+Total (precise)
+16k–131k
+800
+Table 7:
+AnomalyXL-Localize composition
+(released
+AnomalyXL-Localize
+shard, seed 42).
+Window widths are 8–256 samples throughout, independent of
+L
+L
+; magnitude is in channel-
+σ
+\sigma
+units.
+Figure 6:
+AnomalyXL-Localize dataset composition.
+Anomaly-kind distribution within
+classify-with-evidence.
+D.5
+Coarse projection.
+Rather than synthesizing a second, independent set of scenes, every coarse row is
+projected
+from a
+sampled precise row over the identical signal, with the source row’s channels, injections, and coupling
+copied, and only the question, options, and gold label rewritten into the corresponding MCQ
+template (Table
+8
+). This is what lets the paired precise/coarse design isolate the scoring axis, as the two regimes never differ in the underlying recording. The resulting shard has 248 rows.
+Precise source
+MCQ template(s)
+Rows
+Option set
+Localize
+Presence + Start-Time
+40
+×
+\times
+2
+Yes/No; 4 quartile bins + No Anomaly
+Classify-w-Evidence
+Categorization
+42
+4 of 5 kind labels (1 dropped at random) + No Anomaly
+Measure Magnitude
+Magnitude
+42
+4
+σ
+\sigma
+-bins + No Anomaly
+All-Channels
+Identification
+42
+2 singletons + 1 pair + triplet + None, over 3 named channels
+Lead–Lag
+Indicator
+42
+5 fixed options (Leading / Lagging / Correlated / Uncorrelated / No anomaly)
+Total (coarse)
+248
+Table 8:
+Coarse projection rules
+(
+AnomalyXL-MCQ
+, projected from
+AnomalyXL-Localize
+with seed 42). Localize yields two coarse rows per sampled precise row (presence and start-time); every
+other category yields one.
+Appendix E
+AnomalyXL scoring and metrics
+Task
+Required output, and quantity parsed from it
+Score in
+[
+0
+,
+1
+]
+[0,1]
+Defined in
+AnomalyXL-Localize
+— the first schema-valid JSON object in the final message is parsed; a row scores
+0
+0
+if none can be recovered
+Localize
+{"present": bool, "start": int, "end": int}
+→
+\rightarrow
+presence flag
+p
+^
+\hat{p}
+, and window
+w
+^
+=
+[
+s
+^
+,
+e
+^
+)
+\hat{w}=[\hat{s},\hat{e})
+when
+p
+^
+=
+1
+\hat{p}=1
+1
+1
+if
+p
+=
+p
+^
+=
+0
+p=\hat{p}=0
+;
+IoU
+⁡
+(
+w
+^
+,
+w
+)
+\mathrm{IoU}(\hat{w},w)
+if
+p
+=
+p
+^
+=
+1
+p=\hat{p}=1
+;
+0
+0
+on presence mismatch or missing window
+Section
+E.2
+, Eq. (
+2
+)
+Classify
+{"kind": str, "start": int, "end": int}
+→
+\rightarrow
+label
+k
+^
+\hat{k}
+, matched by exact string equality against the five prompt options, and window
+w
+^
+\hat{w}
+𝟏
+[
+k
+^
+=
+k
+]
+⋅
+IoU
+(
+w
+^
+,
+w
+)
+\mathbf{1}[\hat{k}=k]\cdot\mathrm{IoU}(\hat{w},w)
+; the label gates the window, so a wrong kind scores
+0
+0
+however well localized
+Section
+E.3
+, Eq. (
+3
+)
+Magnitude
+{"magnitude_sigma": float}
+→
+\rightarrow
+estimate
+m
+^
+\hat{m}
+, reduced to relative error
+ρ
+=
+|
+m
+^
+−
+m
+|
+/
+m
+\rho=|\hat{m}-m|/m
+; absent or non-numeric sets
+ρ
+=
+1
+\rho=1
+max
+⁡
+(
+0
+,
+1
+−
+ρ
+/
+τ
+)
+\max(0,\,1-\rho/\tau)
+with
+τ
+=
+0.5
+\tau=0.5
+: a linear ramp from full credit at an exact match to zero at
+50
+%
+50\%
+relative error
+Section
+E.4
+, Eq. (
+4
+)
+All channels
+{"anomalies": [{"channel": int, "start": int, "end": int}, …]}
+→
+\rightarrow
+event set
+P
+P
+, greedily matched to the gold set
+G
+G
+(highest IoU first, same channel,
+IoU
+>
+0.3
+\mathrm{IoU}>0.3
+, each event used once)
+2
+​
+TP
+/
+(
+2
+​
+TP
++
+FP
++
+FN
+)
+2\,\mathrm{TP}/(2\,\mathrm{TP}+\mathrm{FP}+\mathrm{FN})
+over the matched events; an empty list scores
+1
+1
+on an anomaly-free row and
+0
+0
+otherwise
+Section
+E.5
+, Eq. (
+5
+)
+Lead–lag
+{"direction": str, "lag_samples": int}
+→
+\rightarrow
+relation
+d
+^
+∈
+{
+lead
+,
+lag
+,
+independent
+}
+\hat{d}\in\{\text{lead},\text{lag},\text{independent}\}
+and offset
+ℓ
+^
+\hat{\ell}
+, reduced to
+δ
+=
+|
+ℓ
+^
+−
+ℓ
+|
+/
+L
+\delta=|\hat{\ell}-\ell|/L
+𝟏
+[
+d
+^
+=
+d
+]
+⋅
+max
+(
+0
+,
+1
+−
+δ
+/
+τ
+ℓ
+)
+\mathbf{1}[\hat{d}=d]\cdot\max(0,\,1-\delta/\tau_{\ell})
+with
+τ
+ℓ
+=
+0.05
+\tau_{\ell}=0.05
+; the independent case has no gold offset and reduces to three-way classification
+Section
+E.6
+, Eq. (
+6
+)
+AnomalyXL-MCQ
+— the raw final message, a
+{"answer": "…"}
+object, or a trailing
+answer:
+Presence
+Yes / No
+→
+\rightarrow
+selected option
+a
+^
+\hat{a}
+, by exact string match against the gold option text
+𝟏
+[
+a
+^
+=
+a
+]
+∈
+{
+0
+,
+1
+}
+\mathbf{1}[\hat{a}=a]\in\{0,1\}
+Section
+E.7
+Start time
+Before / Early / Medium / Late, plus No Anomaly
+→
+\rightarrow
+a
+^
+\hat{a}
+𝟏
+[
+a
+^
+=
+a
+]
+∈
+{
+0
+,
+1
+}
+\mathbf{1}[\hat{a}=a]\in\{0,1\}
+Section
+E.7
+Categorization
+Level Shift / Transient Spike / Change in Seasonality / Change in Variance / Change in Trend / No Anomaly. Four of the five kind labels (one dropped at random), plus No Anomaly
+→
+\rightarrow
+a
+^
+\hat{a}
+𝟏
+[
+a
+^
+=
+a
+]
+∈
+{
+0
+,
+1
+}
+\mathbf{1}[\hat{a}=a]\in\{0,1\}
+Section
+E.7
+Magnitude band
+1–3 / 3–10 / 10–30 / 30–100
+σ
+\sigma
+, plus No Anomaly
+→
+\rightarrow
+a
+^
+\hat{a}
+𝟏
+[
+a
+^
+=
+a
+]
+∈
+{
+0
+,
+1
+}
+\mathbf{1}[\hat{a}=a]\in\{0,1\}
+Section
+E.7
+Identification
+Options for anomalous channels are two singletons, one pair, a triplet, and None, over three named channels
+→
+\rightarrow
+a
+^
+\hat{a}
+𝟏
+[
+a
+^
+=
+a
+]
+∈
+{
+0
+,
+1
+}
+\mathbf{1}[\hat{a}=a]\in\{0,1\}
+Section
+E.7
+Indicator
+Leading / Lagging / Correlated / Uncorrelated / No anomaly
+→
+\rightarrow
+a
+^
+\hat{a}
+𝟏
+[
+a
+^
+=
+a
+]
+∈
+{
+0
+,
+1
+}
+\mathbf{1}[\hat{a}=a]\in\{0,1\}
+Section
+E.7
+Table 9:
+AnomalyXL metrics across both benchmark formulations.
+For each task, the output the model
+is required to produce, the quantity recovered from it by the parser, and the resulting score.
+Windows are half-open index intervals and
+IoU
+\mathrm{IoU}
+is defined in
+Section
+E.1
+, Eq. (
+1
+). Gold quantities are unhatted, predictions hatted;
+L
+L
+is the recording length. The two regimes are posed over the
+same
+underlying
+recordings, so the only difference between them is the scoring function in the third column:
+continuous and evidence-grounded above, a
+{
+0
+,
+1
+}
+\{0,1\}
+choice indicator below. Per-category
+numbers are unweighted row means (Section
+E.8
+).
+Each precise row is scored by a deterministic function of the model’s final message
+that returns a value in
+[
+0
+,
+1
+]
+[0,1]
+. The same value is used as the evaluation score and,
+during RL, as the reward.
+E.1
+Temporal overlap.
+Windows are defined as half-open index intervals
+w
+=
+[
+s
+,
+e
+)
+w=[s,e)
+. For a predicted window
+w
+^
+=
+[
+s
+^
+,
+e
+^
+)
+\hat{w}=[\hat{s},\hat{e})
+and a gold window
+w
+=
+[
+s
+,
+e
+)
+w=[s,e)
+,
+IoU
+⁡
+(
+w
+^
+,
+w
+)
+=
+I
+(
+e
+^
+−
+s
+^
+)
++
+(
+e
+−
+s
+)
+−
+I
+,
+\mathrm{IoU}(\hat{w},w)\;=\;\frac{I}{(\hat{e}-\hat{s})+(e-s)-I},
+(1)
+where
+I
+=
+max
+⁡
+(
+0
+,
+min
+⁡
+(
+e
+^
+,
+e
+)
+−
+max
+⁡
+(
+s
+^
+,
+s
+)
+)
+I=\max\bigl(0,\,\min(\hat{e},e)-\max(\hat{s},s)\bigr)
+is the length of the
+overlap. We set
+IoU
+=
+0
+\mathrm{IoU}=0
+if the two intervals are disjoint or if either is
+degenerate (
+s
+^
+≥
+e
+^
+\hat{s}\geq\hat{e}
+or
+s
+≥
+e
+s\geq e
+). Every window-based task below uses this
+definition.
+E.2
+Localize (
+r
+loc
+r_{\text{loc}}
+).
+Let
+p
+,
+p
+^
+∈
+{
+0
+,
+1
+}
+p,\hat{p}\in\{0,1\}
+be the gold and predicted presence flags.
+r
+loc
+=
+{
+1
+,
+p
+=
+p
+^
+=
+0
+,
+IoU
+⁡
+(
+w
+^
+,
+w
+)
+,
+p
+=
+p
+^
+=
+1
+,
+0
+,
+otherwise.
+r_{\text{loc}}=\begin{cases}1,&p=\hat{p}=0,\\[2.0pt]
+\mathrm{IoU}(\hat{w},w),&p=\hat{p}=1,\\[2.0pt]
+0,&\text{otherwise.}\end{cases}
+(2)
+The second case requires a well-formed predicted window: a
+present: true
+answer
+that omits
+start
+or
+end
+scores
+0
+0
+. A presence mismatch in either
+direction scores
+0
+0
+.
+E.3
+Classify with evidence (
+r
+cls
+r_{\text{cls}}
+).
+The score is the product of a label term and a localization term,
+r
+cls
+=
+[
+k
+^
+=
+k
+]
+⋅
+IoU
+(
+w
+^
+,
+w
+)
+,
+r_{\text{cls}}=\mathbf{1}\!\left[\hat{k}=k\right]\cdot\mathrm{IoU}(\hat{w},w),
+(3)
+so a correct label earns credit only when it is paired with a window and the label acts as a scoring gate for the segment localization to score at all. The label
+k
+∅
+=
+k_{\varnothing}=
+“No anomaly” carries no window and
+set
+r
+cls
+=
+𝟏
+[
+k
+^
+=
+k
+=
+k
+∅
+]
+r_{\text{cls}}=\mathbf{1}[\hat{k}=k=k_{\varnothing}]
+. Labels are compared by exact
+string equality against the five options given in the prompt.
+E.4
+Measure magnitude (
+r
+mag
+r_{\text{mag}}
+).
+For gold peak deviation
+m
+>
+0
+m>0
+and prediction
+m
+^
+\hat{m}
+, let
+ρ
+=
+|
+m
+^
+−
+m
+|
+/
+m
+\rho=|\hat{m}-m|/m
+.
+The score is a linear ramp,
+r
+mag
+=
+max
+⁡
+(
+0
+,
+1
+−
+ρ
+τ
+)
+,
+τ
+=
+0.5
+,
+r_{\text{mag}}=\max\!\left(0,\;1-\frac{\rho}{\tau}\right),\qquad\tau=0.5,
+(4)
+which is
+1
+1
+at an exact match and
+0
+0
+at
+50
+%
+50\%
+relative error. A non-numeric or absent
+magnitude_sigma
+sets
+ρ
+=
+1
+\rho=1
+and hence
+r
+mag
+=
+0
+r_{\text{mag}}=0
+. Because
+ρ
+\rho
+is a
+relative error and gold magnitudes are drawn log-uniformly in
+[
+1,100
+]
+​
+σ
+[1,100]\,\sigma
+, errors at the
+low and high ends of that range are weighted equally.
+E.5
+All channels (
+r
+ac
+r_{\text{ac}}
+).
+This is the only task whose answer is a
+list
+of events rather than a single window, so
+the score compares two sets. Each event is a (channel, window) pair: the gold set
+G
+G
+has
+n
+g
+n_{g}
+of them and the predicted set
+P
+P
+has
+n
+p
+n_{p}
+.
+We first decide which predictions found which gold events. A prediction counts as finding a
+gold event if it names the same channel and its window has
+IoU
+>
+θ
+\mathrm{IoU}>\theta
+with the
+gold window, with
+θ
+=
+0.3
+\theta=0.3
+. Pairs are formed greedily, highest IoU first, and each gold
+event and each prediction is used at most once. Every pair formed this way is a true positive.
+Predictions left unpaired are false positives, and gold events left unpaired are false
+negatives. The score is the
+F
+1
+F_{1}
+of those three counts,
+r
+ac
+=
+2
+​
+TP
+2
+​
+TP
++
+FP
++
+FN
+,
+r_{\text{ac}}\;=\;\frac{2\,\mathrm{TP}}{2\,\mathrm{TP}+\mathrm{FP}+\mathrm{FN}},
+(5)
+so a model is penalised both for missing events and for inventing them. On a row that
+contains no anomalies at all,
+r
+ac
+=
+1
+r_{\text{ac}}=1
+if the model returns an empty list and
+0
+0
+otherwise.
+E.6
+Lead–lag (
+r
+ll
+r_{\text{ll}}
+).
+Let
+d
+,
+d
+^
+∈
+{
+lead
+,
+lag
+,
+independent
+}
+d,\hat{d}\in\{\text{lead},\text{lag},\text{independent}\}
+and let
+ℓ
+,
+ℓ
+^
+\ell,\hat{\ell}
+be
+the gold and predicted offsets in samples. The offset earns credit only if the relation is
+correct:
+r
+ll
+=
+[
+d
+^
+=
+d
+]
+⋅
+{
+1
+,
+d
+=
+independent
+,
+max
+⁡
+(
+0
+,
+1
+−
+δ
+τ
+ℓ
+)
+,
+otherwise,
+r_{\text{ll}}=\mathbf{1}\!\left[\hat{d}=d\right]\cdot\begin{cases}1,&d=\text{independent},\\[4.0pt]
+\max\!\left(0,\,1-\dfrac{\delta}{\tau_{\ell}}\right),&\text{otherwise,}\end{cases}
+(6)
+where
+δ
+=
+|
+ℓ
+^
+−
+ℓ
+|
+/
+L
+\delta=|\hat{\ell}-\ell|/L
+and
+τ
+ℓ
+=
+0.05
+\tau_{\ell}=0.05
+. The independent case has no
+ground-truth offset, so it reduces to three-way classification. For the directional cases the
+tolerance is a fraction of
+L
+L
+, which keeps the task equally hard at every context length given
+that gold offsets are drawn uniformly in
+[
+1
+,
+L
+/
+4
+]
+[1,L/4]
+.
+E.7
+MCQ tasks.
+Coarse (MCQ) rows are scored by exact string match of the extracted answer against the gold
+option text, giving
+r
+∈
+{
+0
+,
+1
+}
+r\in\{0,1\}
+. Extraction accepts the raw final message, a JSON object
+of the form
+{"answer": "…"}
+, or a trailing
+answer:
+line, in each case
+after stripping any reasoning block. The paired design means the same recording is scored by
+a continuous, evidence-grounded metric in the precise regime and by a
+{
+0
+,
+1
+}
+\{0,1\}
+choice
+indicator in the coarse one, with nothing else differing between the two.
+E.8
+Aggregation.
+Per-category numbers are the unweighted mean of the per-row score over the rows of that
+category, and per-configuration numbers average those rows without reweighting by category
+size. The all-channels column is therefore a macro average of Eq. (
+5
+) over rows,
+not a micro-F1 pooled over global
+TP
+/
+FP
+/
+FN
+\mathrm{TP}/\mathrm{FP}/\mathrm{FN}
+counts, and a
+K
+=
+1
+K{=}1
+row carries the same weight as a
+K
+=
+3
+K{=}3
+row.
+Appendix F
+Generalization Set Details
+The generalization set samples from real clinical recordings—the Long-Term ECG atrial-fibrillation
+database
+(
+Petrutiu et al. 2007
+)
+and the Sleep-PSG polysomnography
+corpus
+(
+Ghassemi et al. 2018
+)
+—and are cast into the AnomalyXL-Localize
+classify-with-evidence
+schema, so the same parser and scorers used throughout the benchmark apply unchanged. Each subset holds 250 windows: 200
+carrying exactly one anomaly and 50 anomaly-free (Table
+10
+).
+LTAF (ECG)
+Sleep-PSG
+Rate, channels
+128 Hz, 2
+200 Hz, 4
+Windows
+250 (200 / 50)
+250 (200 / 50)
+Anomaly kinds
+PVC, APC
+Central / Obstr. apnea,
+hypopnea, RERA
+Anomaly
+one premature beat
+one arousal bout
+Gold window
+RR bracket
+native bout range
+Length (s)
+60–1017 (med. 332)
+60–640 (med. 313)
+Length (samples)
+7.7k–130k
+12k–128k
+Gold span (med.)
+≈
+\approx
+1.7 s
+≈
+\approx
+17.7 s
+Source records
+9 LTAFDB
+150 PSG participants
+Table 10:
+Generalization set composition.
+Window counts are given as
+(anomalous / anomaly-free). Both subsets are balanced across anomaly kinds; channels are
+z-normalized per channel.
+Worked examples: LTAF ECG.
+Fig.
+7
+plots sampled rows from the released LTAF subset at full resolution (thin
+gray, both channels stacked) with the gold window highlighted and a zoomed inset. The PVC example
+(
+L
+=
+7,931
+L=7{,}931
+, 62 s) has gold
+{"kind": "Premature Ventricular Contraction (PVC)", "start": 2127,
+"end": 2290}
+; the APC example (
+L
+=
+7,718
+L=7{,}718
+, 60 s) has gold
+{"kind": "Premature Atrial
+Contraction (APC)", "start": 6396, "end": 6568}
+; the no-anomaly example (
+L
+=
+9,630
+L=9{,}630
+, 75 s) has gold
+{"kind": "No anomaly"}
+. As in AnomalyXL itself, the gold span is a small fraction of the
+window, so the full-resolution view is dominated by normal sinus rhythm and the ectopic beat only becomes
+legible once the inset zooms in.
+Figure 7:
+LTAF ECG examples
+(both channels,
+ECG_0
+/
+ECG_1
+, stacked): a PVC
+beat, an APC beat, and a no-anomaly window, sampled from the released
+ltaf-anomaly-v2
+dataset.
+Gold windows and exact values are given in the text above.
+Worked examples: Sleep-PSG.
+Fig.
+8
+plots one sampled row per respiratory-arousal kind from the released
+Sleep-PSG subset, at full resolution (thin gray, all four channels stacked) with the gold window
+highlighted and a zoomed inset, each with its gold
+[start, end)
+bout window: Central Apnea
+(
+L
+=
+12,396
+L=12{,}396
+, gold
+start
+=7080,
+end
+=9880), Obstructive Apnea (
+L
+=
+12,299
+L=12{,}299
+,
+start
+=5470,
+end
+=10490), Hypopnea (
+L
+=
+15,299
+L=15{,}299
+,
+start
+=1300,
+end
+=6340), RERA (
+L
+=
+12,128
+L=12{,}128
+,
+start
+=1209,
+end
+=4509), and a no-anomaly example
+(
+L
+=
+15,140
+L=15{,}140
+).
+Figure 8:
+Sleep-PSG examples
+(four channels,
+AIRFLOW
+/
+CHEST
+/
+ABD
+/
+SaO2
+,
+stacked): one window per respiratory-arousal kind plus a no-anomaly window, sampled from the released
+sleep-anomaly-v2
+dataset. Gold windows and exact values are given in the text above.
+Window construction.
+Each positive window is drawn inside a corridor clipped at the nearest neighbouring event, which
+guarantees that exactly one anomaly falls inside it. For LTAF this is a single premature beat—a
+premature ventricular (PVC) or atrial (APC) contraction—inside a normal-sinus-rhythm bout containing no
+other abnormal beat; negatives are clean sinus-rhythm spans. For Sleep-PSG it is a single respiratory
+arousal—central apnea, obstructive apnea, hypopnea, or a respiratory-effort-related arousal—with no
+other arousal in the window; negatives are arousal-free, non-wake spans. Within each corridor, the window
+length itself is drawn uniformly across the full supported range: 60 s up to
+≈
+\approx
+17 min for LTAF,
+60 s up to
+≈
+\approx
+11 min for Sleep-PSG, capped at
+≈
+\approx
+131k samples. Positive windows are drawn under a fixed per-kind quota (LTAF: PVC and APC each
+≈
+\approx
+100 rows; Sleep-PSG: 50 rows per one of the four arousal kinds) via a round-robin scheduler that
+alternates across kinds until each quota is met (Table
+10
+). Negative windows are drawn
+independently from clean gaps of the same length range. The released windows come from two seeded passes
+(42 for the base draw, 43 for a subsequent long-context extension) for reproducibility.
+Fig.
+9
+gives the resulting class balance and
+context-length distribution: both length histograms are visibly bimodal — a cluster of shorter windows
+near the 60 s floor and a broad tail of long-context windows reaching the
+≈
+\approx
+131k-sample cap — so
+short and long contexts are both well represented rather than concentrated near the median.
+Figure 9:
+Generalization-set class and context-length distributions
+, computed directly from the
+released
+ltaf-anomaly-v2
+and
+sleep-anomaly-v2
+parquet files. Dashed line marks the
+median window length.
+Unified detect-and-classify prompt.
+A single prompt template is used for both positive and negative windows, so detection and localization are
+measured under one task rather than a separate present/absent question. The LTAF instantiation reads,
+verbatim from the released dataset:
+LTAF unified detect-and-classify prompt (verbatim,
+L
+=
+7,931
+L=7{,}931
+)
+Determine whether the time series contains an anomaly and, if so, identify it and its window. Respond with
+exactly one JSON object on a single line, no other text: {"kind": <label>, "start": <int>, "end": <int>}.
+kind must be one of: "Premature Ventricular Contraction (PVC)", "Premature Atrial Contraction
+(APC)", or "No anomaly" if the series contains no anomaly. start is inclusive, end is
+exclusive; if "No anomaly", omit them. Each anomaly kind is defined as follows: a Premature Ventricular
+Contraction (PVC) is an early, wide and bizarre QRS complex arising from the ventricles… (Here L =
+7931.)
+The Sleep-PSG instantiation is identical in structure, substituting the four respiratory-arousal kind labels
+and their clinical definitions (central apnea, obstructive apnea, hypopnea, RERA) for the ECG beat
+kinds. Scoring is
+kind_x_iou
+: kind-match times temporal IoU against the gold window, with a
+correctly predicted
+No anomaly
+credited in full on negatives.
+Experimental support, please
+view the build logs
+for errors. Generated by
+L
+A
+T
+E
+xml
+.
+Instructions for reporting errors
+We are continuing to improve HTML versions of papers, and your feedback helps enhance accessibility and mobile
+      support. To report errors in the HTML that will help us improve conversion and rendering, choose any of the
+      methods listed below:
+Click the "Report Issue"
+(
+)
+button, located in the page header.
+Tip:
+You can select the relevant text first, to include it in your report.
+Our team has already identified
+the following issues
+. We appreciate your time reviewing and reporting rendering errors we
+      may not have found yet. Your efforts will help us improve the HTML versions for all readers, because disability
+      should not be a barrier to accessing research. Thank you for your continued support in championing open access for
+      all.
+Have a free development cycle? Help support accessibility at arXiv! Our collaborators at LaTeXML maintain a
+list of packages that need conversion
+, and welcome
+developer contributions
+.
+We gratefully acknowledge support from
+        our
+major funders
+,
+member institutions
+,
+,
+        and all contributors.
+About
+·
+Help
+·
+Contact
+·
+Subscribe
+·
+Copyright
+·
+Privacy
+·
+Accessibility
+·
+Operational Status
+(opens in new tab)
+Major funding support from

@@ -1,0 +1,32 @@
+{
+  "status": "success",
+  "requested_model": "qwen3-vl-plus",
+  "request_count": 1,
+  "retry_count": 0,
+  "http_status": 200,
+  "served_model": "qwen3-vl-plus",
+  "usage": {
+    "prompt_tokens": 3117,
+    "completion_tokens": 232,
+    "total_tokens": 3349,
+    "completion_tokens_details": {
+      "text_tokens": 232
+    },
+    "prompt_tokens_details": {
+      "text_tokens": 3117,
+      "cached_tokens": 128
+    }
+  },
+  "elapsed_seconds": 6.364199800009374,
+  "decision": {
+    "summary": "A correlated multi-sample drop in N and U begins abruptly near index 495, persists through ~505, and shows only partial recovery by index 508; no definitive opposing return observed before context ends at 545, so status is uncertain. No other temporary offset intervals meet criteria within allowed_context [455,545].",
+    "intervals": [
+      {
+        "start": 495,
+        "end": 508,
+        "status": "uncertain",
+        "observation": "N and U drop abruptly (~2–3 samples) around index 495–497 (e.g., N from ~-1.4 to -5.5, U from ~-3.2 to -2.7), sustained through ~505, with partial recovery in N/U by 508 but not full return to pre-drop levels; E shows modest rise but no clear opposing behavior. Return is incomplete/ambiguous within allowed context (ends at 545)."
+      }
+    ]
+  }
+}

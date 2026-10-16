@@ -1,0 +1,37 @@
+{
+  "status": "success",
+  "requested_model": "qwen3-vl-plus",
+  "request_count": 1,
+  "retry_count": 0,
+  "http_status": 200,
+  "served_model": "qwen3-vl-plus",
+  "usage": {
+    "prompt_tokens": 4218,
+    "completion_tokens": 327,
+    "total_tokens": 4545,
+    "completion_tokens_details": {
+      "text_tokens": 327
+    },
+    "prompt_tokens_details": {
+      "image_tokens": 3702,
+      "text_tokens": 516,
+      "cached_tokens": 0
+    }
+  },
+  "elapsed_seconds": 10.576255799998762,
+  "decision": {
+    "summary": "Two regions warrant closer inspection: (1) a sustained upward offset in N/U starting ~480–490 with partial recovery near 530–540, and (2) a sharp multi-sample drop near 710–715 with incomplete or ambiguous cross-axis recovery through the end of the record. Both show coherent behavior across axes and are not explainable by ordinary noise.",
+    "regions": [
+      {
+        "start": 480,
+        "end": 544,
+        "observation": "N/E/U components show a multi-sample upward shift beginning near index 480–490, with N and U rising together while E lags slightly; the offset persists through ~520 before a possible partial return or plateau around 530–540. The shape suggests a transient platform rather than a single jump, with cross-axis coherence supporting a real motion event."
+      },
+      {
+        "start": 705,
+        "end": 729,
+        "observation": "A sharp multi-sample drop in all three components occurs near index 710–715 (U drops ~2 MAD, N and E ~1–1.5 MAD), followed by an ambiguous recovery: U rebounds quickly but incompletely, while N and E remain depressed or show only weak opposing returns through 729. The abruptness and cross-axis alignment indicate a likely physical perturbation, though the return is unresolved within the window."
+      }
+    ]
+  }
+}

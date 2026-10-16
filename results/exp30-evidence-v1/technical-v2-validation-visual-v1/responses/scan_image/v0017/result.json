@@ -1,0 +1,37 @@
+{
+  "status": "success",
+  "requested_model": "qwen3-vl-plus",
+  "request_count": 1,
+  "retry_count": 0,
+  "http_status": 200,
+  "served_model": "qwen3-vl-plus",
+  "usage": {
+    "prompt_tokens": 5462,
+    "completion_tokens": 290,
+    "total_tokens": 5752,
+    "completion_tokens_details": {
+      "text_tokens": 290
+    },
+    "prompt_tokens_details": {
+      "image_tokens": 4936,
+      "text_tokens": 526,
+      "cached_tokens": 0
+    }
+  },
+  "elapsed_seconds": 8.692691600008402,
+  "decision": {
+    "summary": "Two regions warrant closer inspection: (1) a complex multi-axis step-and-decay event centered near index 440–445 with a later isolated U-spike near 520–525; (2) the onset of coherent linear trends across N/E/U starting at index 725, indicating a possible sustained offset or platform.",
+    "regions": [
+      {
+        "start": 435,
+        "end": 525,
+        "observation": "Sharp multi-sample upward jump in N and E (≈+10 MAD) near index 440–445, followed by a slower decay and partial return; U shows a concurrent smaller upward step then gradual decline. A second abrupt negative spike in U at ~520–525 with no clear counterpart in N/E suggests possible local disturbance or measurement artifact."
+      },
+      {
+        "start": 725,
+        "end": 729,
+        "observation": "From ~725 onward, all three components show coherent linear trends: N rises steadily, E declines steadily, U rises steadily—suggesting a sustained platform-like motion or systematic bias shift. The transition from noisy fluctuation to smooth monotonic behavior begins around index 725 and is fully evident by 729."
+      }
+    ]
+  }
+}

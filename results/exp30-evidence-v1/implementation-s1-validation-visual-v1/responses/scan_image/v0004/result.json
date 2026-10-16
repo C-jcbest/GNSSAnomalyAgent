@@ -1,0 +1,37 @@
+{
+  "status": "success",
+  "requested_model": "qwen3-vl-plus",
+  "request_count": 1,
+  "retry_count": 0,
+  "http_status": 200,
+  "served_model": "qwen3-vl-plus",
+  "usage": {
+    "prompt_tokens": 4218,
+    "completion_tokens": 280,
+    "total_tokens": 4498,
+    "completion_tokens_details": {
+      "text_tokens": 280
+    },
+    "prompt_tokens_details": {
+      "image_tokens": 3702,
+      "text_tokens": 516,
+      "cached_tokens": 0
+    }
+  },
+  "elapsed_seconds": 8.632048899977235,
+  "decision": {
+    "summary": "Two regions merit closer inspection: (1) a sustained N uplift starting ~420 with correlated E/U transients around 430–440, and (2) a sharp U drop at ~615 with partial recovery and asymmetric cross-axis behavior. Other intervals show typical noise or smooth trends without ambiguous superposed changes.",
+    "regions": [
+      {
+        "start": 420,
+        "end": 465,
+        "observation": "N-component shows a sustained monotonic rise beginning near index 420, with E and U exhibiting correlated transient offsets around 430–440 (E positive spike, U negative dip) followed by partial return; the N trend continues upward through 465 without clear reversal."
+      },
+      {
+        "start": 605,
+        "end": 635,
+        "observation": "Abrupt multi-sample drop in U (≈−3 to −6) centered at ~615, accompanied by a smaller opposing E shift (positive) and a brief plateau in N; U recovers partially but not fully by 635, leaving a possible residual offset. The change is sharp and not mirrored symmetrically in E/N, suggesting a localized transient or step-like event."
+      }
+    ]
+  }
+}

@@ -1,0 +1,37 @@
+{
+  "status": "success",
+  "requested_model": "qwen3-vl-plus",
+  "request_count": 1,
+  "retry_count": 0,
+  "http_status": 200,
+  "served_model": "qwen3-vl-plus",
+  "usage": {
+    "prompt_tokens": 5462,
+    "completion_tokens": 298,
+    "total_tokens": 5760,
+    "completion_tokens_details": {
+      "text_tokens": 298
+    },
+    "prompt_tokens_details": {
+      "image_tokens": 4936,
+      "text_tokens": 526,
+      "cached_tokens": 256
+    }
+  },
+  "elapsed_seconds": 9.426182800001698,
+  "decision": {
+    "summary": "Two regions stand out: (1) a multi-axis transient offset centered near index 490 with partial recovery, and (2) a sharp, coherent multi-axis jump at the very end (index 725–729). Other intervals show typical noise or smooth trends without ambiguous superposed changes.",
+    "regions": [
+      {
+        "start": 485,
+        "end": 544,
+        "observation": "N/E/U show correlated multi-sample drop in E (~-10 MAD) and U (~-5 MAD) around index 485–495, with N rising slightly; E recovers partially by ~505 but remains offset, while U shows a delayed partial return. The shape suggests a transient offset or opposing motion superposed on background noise."
+      },
+      {
+        "start": 725,
+        "end": 729,
+        "observation": "From ~725 onward, all three components (N, E, U) exhibit abrupt, near-simultaneous multi-sample jumps: N rises sharply (~+2 MAD), E drops sharply (~-2 MAD), U rises sharply (~+2 MAD). The change is coherent across axes and persists through the final sample; surrounding context (720–724) shows no precursor, suggesting a possible permanent step or rapid transient."
+      }
+    ]
+  }
+}

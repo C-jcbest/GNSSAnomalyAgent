@@ -1,0 +1,37 @@
+{
+  "status": "success",
+  "requested_model": "qwen3-vl-plus",
+  "request_count": 1,
+  "retry_count": 0,
+  "http_status": 200,
+  "served_model": "qwen3-vl-plus",
+  "usage": {
+    "prompt_tokens": 4218,
+    "completion_tokens": 322,
+    "total_tokens": 4540,
+    "completion_tokens_details": {
+      "text_tokens": 322
+    },
+    "prompt_tokens_details": {
+      "image_tokens": 3702,
+      "text_tokens": 516,
+      "cached_tokens": 0
+    }
+  },
+  "elapsed_seconds": 8.97010279999813,
+  "decision": {
+    "summary": "Two coherent multi-axis events stand out: (1) a large, sustained offset beginning ~560 with sharp onset and persistent platform through ~605, and (2) an abrupt multi-sample reversal near 608–612 that restores components toward prior levels. Both involve correlated N/E/U motion and warrant closer inspection for physical or processing origin.",
+    "regions": [
+      {
+        "start": 555,
+        "end": 610,
+        "observation": "Sharp, multi-sample drop in N, E, and U components centered near index 560–570, followed by a sustained offset (platform) until ~605; U shows the largest magnitude (~20 MAD units), E ~15, N ~4. The drop is abrupt and coherent across axes, with no clear opposing return within the window—only a partial recovery in N after 605."
+      },
+      {
+        "start": 605,
+        "end": 625,
+        "observation": "Abrupt upward jump in all three components near index 608–612 (U: ~20→5, E: ~17→3, N: ~-6→-2), appearing as a rapid reversal of the prior offset; the transition spans ~4 samples and is coherent across axes, suggesting a possible correction or step change rather than noise. Surroundings show stable pre- and post-jump behavior."
+      }
+    ]
+  }
+}

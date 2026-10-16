@@ -1,0 +1,39 @@
+{
+  "status": "success",
+  "requested_model": "qwen3-vl-plus",
+  "request_count": 1,
+  "retry_count": 0,
+  "http_status": 200,
+  "served_model": "qwen3-vl-plus",
+  "usage": {
+    "prompt_tokens": 2517,
+    "completion_tokens": 317,
+    "total_tokens": 2834,
+    "completion_tokens_details": {
+      "text_tokens": 317
+    },
+    "prompt_tokens_details": {
+      "image_tokens": 1738,
+      "text_tokens": 779,
+      "cached_tokens": 128
+    }
+  },
+  "elapsed_seconds": 8.879563599999528,
+  "decision": {
+    "summary": "In the screened region (545–664), E exhibits a sustained drop (~2 MAD) from ~550 to ~610, with N showing a smaller opposing rise. After 610, E partially recovers and N returns toward baseline, but neither axis shows a clean, opposing return to pre-event levels within the allowed context (≤699). The onset and interior are coherent, but the return phase is ambiguous or incomplete; thus, no confirmed temporary offset interval can be declared. Both candidate intervals remain uncertain due to lack of definitive opposing return.",
+    "intervals": [
+      {
+        "start": 550,
+        "end": 610,
+        "status": "uncertain",
+        "observation": "E shows sustained drop (~2 MAD) from ~550 to 610; N rises oppositely (~+1 MAD) over same interval. U noisy, no coherent trend. Return not yet observed by 610 — interior is sustained, but no opposing return confirmed."
+      },
+      {
+        "start": 611,
+        "end": 664,
+        "status": "uncertain",
+        "observation": "E partially recovers after 610 but remains offset; N declines toward baseline. However, the recovery is incomplete and non-monotonic; no clear opposing return on E or N before 664. U still noisy without coherent motion."
+      }
+    ]
+  }
+}

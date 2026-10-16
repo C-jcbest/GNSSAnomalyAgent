@@ -1,0 +1,36 @@
+{
+  "status": "success",
+  "requested_model": "qwen3-vl-plus",
+  "request_count": 1,
+  "retry_count": 0,
+  "http_status": 200,
+  "served_model": "qwen3-vl-plus",
+  "usage": {
+    "prompt_tokens": 13627,
+    "completion_tokens": 349,
+    "total_tokens": 13976,
+    "completion_tokens_details": {
+      "text_tokens": 349
+    },
+    "prompt_tokens_details": {
+      "text_tokens": 13627,
+      "cached_tokens": 256
+    }
+  },
+  "elapsed_seconds": 10.47393129998818,
+  "decision": {
+    "summary": "Two regions merit closer inspection: (1) a sharp multi-sample displacement at indices 618–624 involving all axes, likely a permanent jump or rapid slip; (2) the subsequent extended interval (625–729) exhibiting sustained offset, possible platform segments, and ambiguous superposed motion—particularly in cross-axis trends—suggesting complex deformation or overlapping signals.",
+    "regions": [
+      {
+        "start": 618,
+        "end": 624,
+        "observation": "Abrupt multi-sample jump in all axes around index 620–623: N shifts from ~1.5 to ~12, E from ~-4 to ~0.7, U from ~-21 to ~-13.8; appears as a permanent offset with no clear return within the window, though surrounding samples show high variability and possible superposed motion."
+      },
+      {
+        "start": 625,
+        "end": 729,
+        "observation": "Extended region (625–729) showing sustained elevated N/E/U values with complex morphology: after the jump, N remains >12, E fluctuates between 0–4, U stays near -14 to -18; includes apparent platform-like behavior (e.g., 630–645), possible opposing returns (e.g., U dips then recovers), and ambiguous superposed changes—especially around 660–670 and 690–700 where E and U show opposing trends without clear resolution."
+      }
+    ]
+  }
+}

@@ -1,0 +1,37 @@
+{
+  "status": "success",
+  "requested_model": "qwen3-vl-plus",
+  "request_count": 1,
+  "retry_count": 0,
+  "http_status": 200,
+  "served_model": "qwen3-vl-plus",
+  "usage": {
+    "prompt_tokens": 5462,
+    "completion_tokens": 296,
+    "total_tokens": 5758,
+    "completion_tokens_details": {
+      "text_tokens": 296
+    },
+    "prompt_tokens_details": {
+      "image_tokens": 4936,
+      "text_tokens": 526,
+      "cached_tokens": 256
+    }
+  },
+  "elapsed_seconds": 9.192688799987081,
+  "decision": {
+    "summary": "Two regions stand out: (1) a transient vertical dip at ~500 with weak cross-axis correlation, and (2) a coherent multi-axis monotonic drift beginning near 605, likely indicating a significant displacement event. Other intervals show typical noise or smooth motion without ambiguous superposed changes.",
+    "regions": [
+      {
+        "start": 490,
+        "end": 510,
+        "observation": "Cross-axis shape: N and E show correlated positive excursions around index 495–505, while U drops sharply (~−3 MAD) at ~500; the U dip is not mirrored in N/E, suggesting a possible temporary vertical offset or local disturbance. Surroundings show otherwise noisy but uncorrelated behavior before and after."
+      },
+      {
+        "start": 605,
+        "end": 625,
+        "observation": "Cross-axis shape: Starting near index 605, N, E, and U all enter a sustained monotonic trend (N ↑, E ↑, U ↓), with U declining steeply (~−15 MAD over ~20 samples) while N/E rise more gradually. The coherent multi-axis drift suggests a possible permanent shift or prolonged deformation event; the transition from prior noise to this trend is abrupt around 605–610."
+      }
+    ]
+  }
+}

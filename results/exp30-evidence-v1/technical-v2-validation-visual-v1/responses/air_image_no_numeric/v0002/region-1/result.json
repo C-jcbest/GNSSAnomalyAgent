@@ -1,0 +1,33 @@
+{
+  "status": "success",
+  "requested_model": "qwen3-vl-plus",
+  "request_count": 1,
+  "retry_count": 0,
+  "http_status": 200,
+  "served_model": "qwen3-vl-plus",
+  "usage": {
+    "prompt_tokens": 2509,
+    "completion_tokens": 264,
+    "total_tokens": 2773,
+    "completion_tokens_details": {
+      "text_tokens": 264
+    },
+    "prompt_tokens_details": {
+      "image_tokens": 1738,
+      "text_tokens": 771,
+      "cached_tokens": 0
+    }
+  },
+  "elapsed_seconds": 8.109793699986767,
+  "decision": {
+    "summary": "In the allowed context [690,729], only the final segment (725–728) shows a multi-axis coherent trend reversal: N declines, E rises after a local dip, and U rises steeply over 4 consecutive samples. No opposing return is observed within the allowed context (ends at 729), and the behavior does not meet criteria for a confirmed temporary offset due to missing post-728 data. The earlier candidate at ~598–602 lies outside allowed_context and is excluded.",
+    "intervals": [
+      {
+        "start": 725,
+        "end": 728,
+        "status": "uncertain",
+        "observation": "N shows a sustained decline from index 725 to 728; E rises sharply after a dip at 725, then continues upward through 728; U rises steeply from 725 to 728. All three axes exhibit coherent directional change over ≥4 samples with no opposing return observed before index 729 (end of allowed context). Return is unobserved and ambiguous beyond 728, so status is uncertain."
+      }
+    ]
+  }
+}

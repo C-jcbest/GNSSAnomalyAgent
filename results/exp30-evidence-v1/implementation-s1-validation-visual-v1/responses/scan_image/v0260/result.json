@@ -1,0 +1,37 @@
+{
+  "status": "success",
+  "requested_model": "qwen3-vl-plus",
+  "request_count": 1,
+  "retry_count": 0,
+  "http_status": 200,
+  "served_model": "qwen3-vl-plus",
+  "usage": {
+    "prompt_tokens": 4218,
+    "completion_tokens": 339,
+    "total_tokens": 4557,
+    "completion_tokens_details": {
+      "text_tokens": 339
+    },
+    "prompt_tokens_details": {
+      "image_tokens": 3702,
+      "text_tokens": 516,
+      "cached_tokens": 0
+    }
+  },
+  "elapsed_seconds": 9.55326439999044,
+  "decision": {
+    "summary": "Two overlapping multi-axis displacement events are evident: one centered near indices 588–594 involving simultaneous N/E uplift and U subsidence, and a second broader region (580–635) capturing the onset, plateau, and early recovery of the U offset with supporting N/E shifts. No other regions show unambiguous platform-like or opposing return structures beyond ordinary noise.",
+    "regions": [
+      {
+        "start": 580,
+        "end": 595,
+        "observation": "N and E components show a sustained upward shift beginning near index 580–585, with N rising ~3–4 MAD units and E rising ~2–3 MAD units; U shows a concurrent sharp drop (~5 MAD) around 585–590, forming a multi-axis step-like feature. The change is abrupt over 2–3 samples and persists through ~595 before possible partial return in U (but not fully resolved in this window)."
+      },
+      {
+        "start": 588,
+        "end": 635,
+        "observation": "U component exhibits a large, abrupt downward offset (~15 MAD) centered at index 592–594, followed by a plateau until ~630, then a slow partial recovery. N and E show correlated upward steps starting slightly earlier (~588–592), suggesting a coherent multi-axis event; the U drop is sharper and larger than typical noise, and the subsequent plateau is distinct from background variability."
+      }
+    ]
+  }
+}

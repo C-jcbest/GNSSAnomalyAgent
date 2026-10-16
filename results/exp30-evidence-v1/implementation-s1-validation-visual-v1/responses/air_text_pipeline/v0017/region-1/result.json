@@ -1,0 +1,38 @@
+{
+  "status": "success",
+  "requested_model": "qwen3-vl-plus",
+  "request_count": 1,
+  "retry_count": 0,
+  "http_status": 200,
+  "served_model": "qwen3-vl-plus",
+  "usage": {
+    "prompt_tokens": 4359,
+    "completion_tokens": 340,
+    "total_tokens": 4699,
+    "completion_tokens_details": {
+      "text_tokens": 340
+    },
+    "prompt_tokens_details": {
+      "text_tokens": 4359,
+      "cached_tokens": 128
+    }
+  },
+  "elapsed_seconds": 9.393211200018413,
+  "decision": {
+    "summary": "Two candidate temporary offset intervals within allowed context [575,699] are identified based on original N/E/U samples: (1) a platform-like segment 620–635 with elevated N/E but inconclusive U behavior and missing data preventing return confirmation; (2) a broader elevated-variability interval 610–664 lacking coherent cross-axis onset/return structure. Neither meets confirmed status due to ambiguous return dynamics and absence of opposing trend on all axes. No other temporary offsets are supported.",
+    "intervals": [
+      {
+        "start": 620,
+        "end": 635,
+        "status": "uncertain",
+        "observation": "N/E elevated (~12–14) and relatively stable from ~620 to 635, while U fluctuates between -3 and -5; shape consistent with a platform-like temporary offset on N/E, but return not observed due to missing data at 636–641. U shows no clear sustained shift matching N/E, weakening confidence in full 3D offset."
+      },
+      {
+        "start": 610,
+        "end": 664,
+        "status": "uncertain",
+        "observation": "Elevated variability persists through 664, but without coherent cross-axis morphology: N/E show intermittent spikes and drifts, U remains noisy without sustained deviation. No clear onset/return pair; ambiguous superposition of drift and noise. Return behavior obscured by gaps and lack of opposing trend."
+      }
+    ]
+  }
+}

@@ -1,0 +1,36 @@
+{
+  "status": "success",
+  "requested_model": "qwen3-vl-plus",
+  "request_count": 1,
+  "retry_count": 0,
+  "http_status": 200,
+  "served_model": "qwen3-vl-plus",
+  "usage": {
+    "prompt_tokens": 13482,
+    "completion_tokens": 342,
+    "total_tokens": 13824,
+    "completion_tokens_details": {
+      "text_tokens": 342
+    },
+    "prompt_tokens_details": {
+      "text_tokens": 13482,
+      "cached_tokens": 256
+    }
+  },
+  "elapsed_seconds": 9.367357499984792,
+  "decision": {
+    "summary": "Two regions stand out: (1) a sharp cross-axis shift in N/E around indices 485–544 with unclear U counterpart, and (2) a sustained platform in N/E from ~605–664 with ambiguous return onset. Both show multi-sample abrupt changes and possible superposition; no clean temporary offsets are evident.",
+    "regions": [
+      {
+        "start": 485,
+        "end": 544,
+        "observation": "Cross-axis shape shows a multi-sample shift in N and E around index 490–495, with N dropping sharply from ~0.3 to ~-1.4 and E rising from ~0.3 to ~1.7, followed by sustained elevated E (~1.7–2.8) and variable N; U shows no clear counterpart, suggesting possible opposing or superposed motion. A possible return begins near index 520 but remains ambiguous due to coarse sampling."
+      },
+      {
+        "start": 605,
+        "end": 664,
+        "observation": "A pronounced platform-like behavior in E (2.0–2.8) and N (~-1.2 to -2.7) from ~610 to 640, with U fluctuating widely (−1.9 to +2.4); the onset at ~605 is abrupt over 2–3 samples, and a possible opposing return starts near 645 but is unresolved—suggesting superposed or ambiguous offset/return structure."
+      }
+    ]
+  }
+}

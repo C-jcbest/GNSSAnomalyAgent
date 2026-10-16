@@ -1,0 +1,39 @@
+{
+  "status": "success",
+  "requested_model": "qwen3-vl-plus",
+  "request_count": 1,
+  "retry_count": 0,
+  "http_status": 200,
+  "served_model": "qwen3-vl-plus",
+  "usage": {
+    "prompt_tokens": 2510,
+    "completion_tokens": 301,
+    "total_tokens": 2811,
+    "completion_tokens_details": {
+      "text_tokens": 301
+    },
+    "prompt_tokens_details": {
+      "image_tokens": 1738,
+      "text_tokens": 772,
+      "cached_tokens": 128
+    }
+  },
+  "elapsed_seconds": 8.639525400009006,
+  "decision": {
+    "summary": "No confirmed temporary offset interval meets full criteria (clear onset, sustained interior, and unambiguous opposing return). The N-component offset (490–530) lacks a confirmed return within allowed context; E/U transients (510–525) are too short and non-plateaued to qualify as independent temporary offsets. All candidate intervals remain uncertain due to ambiguous recovery and superposition with other motion.",
+    "intervals": [
+      {
+        "start": 490,
+        "end": 530,
+        "status": "uncertain",
+        "observation": "N-component shows a sustained negative offset from index 490, with interior values consistently below pre-onset baseline; E and U show transient multi-sample dips (510–525) that do not fully reverse the N-offset, and no clear opposing return observed in N before index 530."
+      },
+      {
+        "start": 510,
+        "end": 525,
+        "status": "uncertain",
+        "observation": "E and U exhibit correlated multi-sample dips centered ~515–525, but these lack a clear onset edge or sustained interior plateau; the dips are superposed on ongoing N-offset and recover partially within the same window—no definitive return to pre-dip level observed, and axis coherence is incomplete."
+      }
+    ]
+  }
+}

@@ -1,0 +1,32 @@
+{
+  "status": "success",
+  "requested_model": "qwen3-vl-plus",
+  "request_count": 1,
+  "retry_count": 0,
+  "http_status": 200,
+  "served_model": "qwen3-vl-plus",
+  "usage": {
+    "prompt_tokens": 2948,
+    "completion_tokens": 283,
+    "total_tokens": 3231,
+    "completion_tokens_details": {
+      "text_tokens": 283
+    },
+    "prompt_tokens_details": {
+      "text_tokens": 2948,
+      "cached_tokens": 128
+    }
+  },
+  "elapsed_seconds": 9.3517523999908,
+  "decision": {
+    "summary": "A coherent multi-axis drop begins around index 618, with large negative shifts in all components (N, E, U) persisting through index 625. The onset is abrupt over 2–3 samples, and the offset remains sustained without evidence of return within the allowed context [580,660]. Due to absence of observed return, the interval is classified as uncertain. No other temporary offsets are confirmed within the allowed context.",
+    "intervals": [
+      {
+        "start": 618,
+        "end": 625,
+        "status": "uncertain",
+        "observation": "Multi-axis coherent drop (N, E, U) beginning ~618–620, with sustained offset through 625; no return observed within allowed context [580,660]. N drops from ~1.7 to ~-5.2 (Δ≈−6.9), E from ~4.4 to ~-1.6 (Δ≈−6.0), U from ~7.3 to ~−0.5 (Δ≈−7.8). Drop spans ≥3 samples and is followed by a plateau at lower levels until index 625. Return not observed before end of window; status uncertain."
+      }
+    ]
+  }
+}

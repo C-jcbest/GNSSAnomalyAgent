@@ -1,0 +1,32 @@
+{
+  "status": "success",
+  "requested_model": "qwen3-vl-plus",
+  "request_count": 1,
+  "retry_count": 0,
+  "http_status": 200,
+  "served_model": "qwen3-vl-plus",
+  "usage": {
+    "prompt_tokens": 2807,
+    "completion_tokens": 328,
+    "total_tokens": 3135,
+    "completion_tokens_details": {
+      "text_tokens": 328
+    },
+    "prompt_tokens_details": {
+      "text_tokens": 2807,
+      "cached_tokens": 128
+    }
+  },
+  "elapsed_seconds": 8.954053599998588,
+  "decision": {
+    "summary": "A single extreme multi-component excursion occurs at index 487: N drops ~7.6 MAD, E reverses sign (+1.84 from -3.44), U rises ~3.6 MAD. The change spans ≥2 samples and is not reversed within the allowed context [452,527]; indices 488–490 show partial recovery but no clear opposing return. Given the magnitude, direction reversal in E, and missing data later, the event is likely a measurement anomaly or large platform motion rather than a clean temporary offset; thus only one uncertain interval is reported.",
+    "intervals": [
+      {
+        "start": 487,
+        "end": 490,
+        "status": "uncertain",
+        "observation": "N drops sharply from ~0.12 (idx 486) to -7.52 (idx 487), E jumps from ~-3.44 (idx 486) to +1.84 (idx 487), U rises from ~1.25 (idx 486) to 4.82 (idx 487); this is a multi-sample, non-smooth, extreme excursion inconsistent with typical transient offsets; no opposing return observed before idx 490, and subsequent samples (488–490) show recovery toward baseline but not full reversal; status uncertain due to ambiguous return and possible measurement anomaly or platform motion."
+      }
+    ]
+  }
+}

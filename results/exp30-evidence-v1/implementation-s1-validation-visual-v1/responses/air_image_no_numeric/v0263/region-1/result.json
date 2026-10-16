@@ -1,0 +1,39 @@
+{
+  "status": "success",
+  "requested_model": "qwen3-vl-plus",
+  "request_count": 1,
+  "retry_count": 0,
+  "http_status": 200,
+  "served_model": "qwen3-vl-plus",
+  "usage": {
+    "prompt_tokens": 2514,
+    "completion_tokens": 335,
+    "total_tokens": 2849,
+    "completion_tokens_details": {
+      "text_tokens": 335
+    },
+    "prompt_tokens_details": {
+      "image_tokens": 1738,
+      "text_tokens": 776,
+      "cached_tokens": 128
+    }
+  },
+  "elapsed_seconds": 9.169507600017823,
+  "decision": {
+    "summary": "Two candidate temporary offsets in E/U/N: (1) a confirmed multi-axis step at 542–574 with coherent N↑/E↓/U↑ motion; (2) a second E-dominant offset from 575 onward lacking clear return or full cross-axis consistency, thus uncertain. No evidence of reversal before index 664 for either; the second interval ends at screened_region end due to unobserved recovery.",
+    "intervals": [
+      {
+        "start": 542,
+        "end": 574,
+        "status": "confirmed",
+        "observation": "Sharp negative step in E (≈−6 to −8 MAD) and upward step in U (≈+4 to +6 MAD) at indices 542–544, sustained through 574; N shows a concurrent positive step (~+4 MAD) at 542–544, remaining elevated. No return observed before 575; interior is stable with minor noise."
+      },
+      {
+        "start": 575,
+        "end": 664,
+        "status": "uncertain",
+        "observation": "Second distinct negative offset in E beginning ~575 (drop ≈−2 MAD), accompanied by small transient dip in U (~−1 MAD) but no clear N response; E remains offset through 664 without recovery. Return not observed within allowed context; onset is multi-sample but interior lacks full cross-axis coherence of first event."
+      }
+    ]
+  }
+}

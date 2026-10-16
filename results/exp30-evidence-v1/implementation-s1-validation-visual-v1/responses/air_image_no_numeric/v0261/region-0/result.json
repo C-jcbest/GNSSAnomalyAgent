@@ -1,0 +1,39 @@
+{
+  "status": "success",
+  "requested_model": "qwen3-vl-plus",
+  "request_count": 1,
+  "retry_count": 0,
+  "http_status": 200,
+  "served_model": "qwen3-vl-plus",
+  "usage": {
+    "prompt_tokens": 2514,
+    "completion_tokens": 357,
+    "total_tokens": 2871,
+    "completion_tokens_details": {
+      "text_tokens": 357
+    },
+    "prompt_tokens_details": {
+      "image_tokens": 1738,
+      "text_tokens": 776,
+      "cached_tokens": 128
+    }
+  },
+  "elapsed_seconds": 9.687764100002823,
+  "decision": {
+    "summary": "Two temporally adjacent multi-axis events: (1) a sharp onset offset (~558–605) with sustained platform and only partial recovery in N; (2) a rapid reversal (~608–612) that partially restores components but does not reach original baseline. Neither event exhibits a clean, opposing return within the allowed context [520,645]; both are classified uncertain. No confirmed temporary offset interval.",
+    "intervals": [
+      {
+        "start": 558,
+        "end": 605,
+        "status": "uncertain",
+        "observation": "Coherent multi-axis drop (N ~−4, E ~−15, U ~−20 MAD) beginning sharply at index 558–560, sustained as a platform through 605; no opposing return observed within allowed context. N shows partial recovery after 605 but not full reversal; E and U remain offset. Return edge ambiguous/unobserved → uncertain."
+      },
+      {
+        "start": 608,
+        "end": 612,
+        "status": "uncertain",
+        "observation": "Abrupt multi-sample reversal in all axes (N rising ~+3, E +12, U +15 MAD) from 608 to 612, restoring toward pre-offset levels; interior of reversal is coherent and multi-sample, but final level does not fully match pre-558 baseline (e.g., U remains ~−5 MAD at 612). Opposing return incomplete; status uncertain due to unconfirmed full restoration."
+      }
+    ]
+  }
+}

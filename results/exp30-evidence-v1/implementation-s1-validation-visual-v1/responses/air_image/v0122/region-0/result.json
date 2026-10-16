@@ -1,0 +1,33 @@
+{
+  "status": "success",
+  "requested_model": "qwen3-vl-plus",
+  "request_count": 1,
+  "retry_count": 0,
+  "http_status": 200,
+  "served_model": "qwen3-vl-plus",
+  "usage": {
+    "prompt_tokens": 2585,
+    "completion_tokens": 205,
+    "total_tokens": 2790,
+    "completion_tokens_details": {
+      "text_tokens": 205
+    },
+    "prompt_tokens_details": {
+      "image_tokens": 1738,
+      "text_tokens": 847,
+      "cached_tokens": 128
+    }
+  },
+  "elapsed_seconds": 6.476352899975609,
+  "decision": {
+    "summary": "A multi-sample E-axis offset begins abruptly around index 442, with sustained depression through 447 (~6 samples), accompanied by smaller coherent N/U transients. Recovery initiates near 448 but remains incomplete within allowed context (ends at 485); no clear opposing return observed before context end, hence status uncertain. The optional jump at 440 is inconsistent with the observed onset timing and magnitude progression, and is rejected.",
+    "intervals": [
+      {
+        "start": 442,
+        "end": 447,
+        "status": "uncertain",
+        "observation": "E-axis shows a sustained downward offset beginning sharply near index 442, persisting through 447; N and U show smaller concurrent transients. Return is not yet observed by index 448 (partial recovery visible but interior still displaced), so interval ends before opposing return."
+      }
+    ]
+  }
+}

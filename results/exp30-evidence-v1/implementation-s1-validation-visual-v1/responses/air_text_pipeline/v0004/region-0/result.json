@@ -1,0 +1,32 @@
+{
+  "status": "success",
+  "requested_model": "qwen3-vl-plus",
+  "request_count": 1,
+  "retry_count": 0,
+  "http_status": 200,
+  "served_model": "qwen3-vl-plus",
+  "usage": {
+    "prompt_tokens": 2883,
+    "completion_tokens": 235,
+    "total_tokens": 3118,
+    "completion_tokens_details": {
+      "text_tokens": 235
+    },
+    "prompt_tokens_details": {
+      "text_tokens": 2883,
+      "cached_tokens": 128
+    }
+  },
+  "elapsed_seconds": 6.738878400006797,
+  "decision": {
+    "summary": "A multi-sample abrupt shift in N/E/U begins at index 488, peaks around 490–493, and sustains elevated N (~18–20), depressed E (~-2.4), and depressed U through index 495. No return is observed within the allowed context (up to 530), so status is uncertain. The event matches the screened region but lacks a confirmed opposing return; interior behavior is plateau-like but not monotonic, and U shows partial recovery without full reversal.",
+    "intervals": [
+      {
+        "start": 488,
+        "end": 495,
+        "status": "uncertain",
+        "observation": "N rises sharply from ~4.8 to ~18–20 over indices 488–493, E drops from ~-2 to ~-2.4 over same span, U drops then partially recovers; offset sustained through 495 with no return observed within allowed context [453,530]."
+      }
+    ]
+  }
+}

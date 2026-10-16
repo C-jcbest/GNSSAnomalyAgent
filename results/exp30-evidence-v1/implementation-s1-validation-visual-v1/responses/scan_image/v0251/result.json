@@ -1,0 +1,37 @@
+{
+  "status": "success",
+  "requested_model": "qwen3-vl-plus",
+  "request_count": 1,
+  "retry_count": 0,
+  "http_status": 200,
+  "served_model": "qwen3-vl-plus",
+  "usage": {
+    "prompt_tokens": 4218,
+    "completion_tokens": 407,
+    "total_tokens": 4625,
+    "completion_tokens_details": {
+      "text_tokens": 407
+    },
+    "prompt_tokens_details": {
+      "image_tokens": 3702,
+      "text_tokens": 516,
+      "cached_tokens": 0
+    }
+  },
+  "elapsed_seconds": 12.805332999996608,
+  "decision": {
+    "summary": "Two regions merit closer inspection: (1) indices 365–544, where N/E/U display divergent trends with a prominent multi-sample reversal around 525–530; and (2) indices 485–664, centered on a coherent, high-amplitude multi-axis transient near 525–530 with possible secondary offset/return features. No other intervals show similarly ambiguous or superposed morphologies.",
+    "regions": [
+      {
+        "start": 365,
+        "end": 544,
+        "observation": "N component shows a sustained upward trend from ~index 400 onward, punctuated by a sharp multi-sample drop (~525–530) that partially reverses the prior gain; E component declines steadily over the same interval with a notable dip near 525–530; U component exhibits a step-like rise at ~468 followed by a sharp spike and drop near 525–530—suggesting superposed motion or offset. The cross-axis shape is non-symmetric: N rises while E falls, and U spikes transiently, indicating possible complex deformation or instrumental artifact."
+      },
+      {
+        "start": 485,
+        "end": 664,
+        "observation": "At ~525–530, all three components show abrupt, multi-sample excursions: N drops sharply then recovers, E dips then rebounds, and U spikes dramatically (~18 MAD units) before collapsing—this coherent multi-axis event stands out against otherwise noisy but trend-dominated behavior. Later (~545–555), N and U show a correlated step-down, while E remains relatively flat; this may indicate a secondary offset or return. The region includes sufficient context to see both the main anomaly and its possible partial reversal."
+      }
+    ]
+  }
+}

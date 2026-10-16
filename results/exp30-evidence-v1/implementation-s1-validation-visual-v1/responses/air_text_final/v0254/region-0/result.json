@@ -1,0 +1,32 @@
+{
+  "status": "success",
+  "requested_model": "qwen3-vl-plus",
+  "request_count": 1,
+  "retry_count": 0,
+  "http_status": 200,
+  "served_model": "qwen3-vl-plus",
+  "usage": {
+    "prompt_tokens": 3022,
+    "completion_tokens": 248,
+    "total_tokens": 3270,
+    "completion_tokens_details": {
+      "text_tokens": 248
+    },
+    "prompt_tokens_details": {
+      "text_tokens": 3022,
+      "cached_tokens": 128
+    }
+  },
+  "elapsed_seconds": 6.613959499984048,
+  "decision": {
+    "summary": "Within allowed context [510,595], U and E show sustained upward shifts beginning near 545–555 with no observed return; U jumps ~+9 MAD by index 556 and stays high, E rises gradually (~+2–3 MAD). No opposing return or recovery observed in either axis; thus temporary offset status is uncertain. N shows no coherent step. The optional jump at index 565 aligns with the U/E uplift but does not confirm a discrete step—motion appears ramp-like or permanent. No confirmed temporary offset interval.",
+    "intervals": [
+      {
+        "start": 545,
+        "end": 595,
+        "status": "uncertain",
+        "observation": "U-component rises sharply from ~index 555 (from ~-1.8 to +7–9 MAD) and remains elevated through end of allowed context; E-component shows sustained upward shift from ~545, but no opposing return observed in either axis within [510,595]. N remains noisy without coherent step. Return not observed → uncertain."
+      }
+    ]
+  }
+}

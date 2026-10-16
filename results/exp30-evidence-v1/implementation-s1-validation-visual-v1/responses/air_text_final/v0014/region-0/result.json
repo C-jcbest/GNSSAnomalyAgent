@@ -1,0 +1,32 @@
+{
+  "status": "success",
+  "requested_model": "qwen3-vl-plus",
+  "request_count": 1,
+  "retry_count": 0,
+  "http_status": 200,
+  "served_model": "qwen3-vl-plus",
+  "usage": {
+    "prompt_tokens": 3023,
+    "completion_tokens": 240,
+    "total_tokens": 3263,
+    "completion_tokens_details": {
+      "text_tokens": 240
+    },
+    "prompt_tokens_details": {
+      "text_tokens": 3023,
+      "cached_tokens": 128
+    }
+  },
+  "elapsed_seconds": 6.622569800005294,
+  "decision": {
+    "summary": "A sharp, multi-sample downward offset in U begins at index 606 (coincident with candidate jump at 606), persists through index 614, and remains unrecovered within the allowed context [570,650]. E and N show transient co-movements but lack a matching step or return. The absence of an opposing return within the window prevents confirmation of a temporary offset; status is uncertain.",
+    "intervals": [
+      {
+        "start": 606,
+        "end": 614,
+        "status": "uncertain",
+        "observation": "U-component drops sharply from ~-2.7 to ~-10.3 between indices 605–606 (ΔU ≈ -7.6 MAD), sustained near -10 to -11 through index 614; E and N show correlated transients but no matching step. No opposing return observed within allowed context (up to 650); recovery is absent or delayed beyond window. Status: uncertain due to unobserved return."
+      }
+    ]
+  }
+}

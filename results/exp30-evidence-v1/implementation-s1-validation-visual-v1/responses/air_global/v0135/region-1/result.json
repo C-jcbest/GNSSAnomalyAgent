@@ -1,0 +1,33 @@
+{
+  "status": "success",
+  "requested_model": "qwen3-vl-plus",
+  "request_count": 1,
+  "retry_count": 0,
+  "http_status": 200,
+  "served_model": "qwen3-vl-plus",
+  "usage": {
+    "prompt_tokens": 2684,
+    "completion_tokens": 228,
+    "total_tokens": 2912,
+    "completion_tokens_details": {
+      "text_tokens": 228
+    },
+    "prompt_tokens_details": {
+      "image_tokens": 1906,
+      "text_tokens": 778,
+      "cached_tokens": 128
+    }
+  },
+  "elapsed_seconds": 8.12044669999159,
+  "decision": {
+    "summary": "Within allowed context [570,647], a multi-axis transient begins at index 608: U drops sharply over 3–4 samples and remains depressed through 611; N and E show smaller concurrent shifts. No definitive return is observed before index 647; the onset is clear, interior is sustained, but the return is ambiguous—hence status uncertain. No other temporary offsets are confirmed in this window.",
+    "intervals": [
+      {
+        "start": 608,
+        "end": 611,
+        "status": "uncertain",
+        "observation": "U shows a sharp multi-sample drop starting at index 608, sustained through 611; N drops ~1–2 MAD units over same span; E shows minor co-variation (~0.5 MAD). Return is not observed within allowed context (ends at 647), and recovery beginning at 612 is slow and incomplete—no clear opposing return to define end of temporary offset."
+      }
+    ]
+  }
+}

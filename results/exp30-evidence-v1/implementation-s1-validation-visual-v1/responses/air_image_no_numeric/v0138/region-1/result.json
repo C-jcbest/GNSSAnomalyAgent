@@ -1,0 +1,33 @@
+{
+  "status": "success",
+  "requested_model": "qwen3-vl-plus",
+  "request_count": 1,
+  "retry_count": 0,
+  "http_status": 200,
+  "served_model": "qwen3-vl-plus",
+  "usage": {
+    "prompt_tokens": 2505,
+    "completion_tokens": 216,
+    "total_tokens": 2721,
+    "completion_tokens_details": {
+      "text_tokens": 216
+    },
+    "prompt_tokens_details": {
+      "image_tokens": 1738,
+      "text_tokens": 767,
+      "cached_tokens": 128
+    }
+  },
+  "elapsed_seconds": 6.205437099997653,
+  "decision": {
+    "summary": "A sharp multi-sample drop begins at index 625 across N/E/U. N and U partially rebound by 632, but E remains offset without clear recovery within the allowed context. No opposing return is observed for E, and the interior behavior differs per axis; thus the interval is classified as uncertain.",
+    "intervals": [
+      {
+        "start": 625,
+        "end": 632,
+        "status": "uncertain",
+        "observation": "N and U show a sharp multi-sample drop starting ~625, followed by partial rebound by ~632; E drops sharply at ~625 but remains depressed with no clear return by 632. The onset is coherent across axes, interior shows sustained offset (especially in E), but the return is incomplete/ambiguous on E and only partial on N/U. Within allowed context [590,670], no opposing return observed for E; thus status uncertain."
+      }
+    ]
+  }
+}

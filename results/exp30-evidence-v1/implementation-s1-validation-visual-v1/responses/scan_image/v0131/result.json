@@ -1,0 +1,37 @@
+{
+  "status": "success",
+  "requested_model": "qwen3-vl-plus",
+  "request_count": 1,
+  "retry_count": 0,
+  "http_status": 200,
+  "served_model": "qwen3-vl-plus",
+  "usage": {
+    "prompt_tokens": 4218,
+    "completion_tokens": 323,
+    "total_tokens": 4541,
+    "completion_tokens_details": {
+      "text_tokens": 323
+    },
+    "prompt_tokens_details": {
+      "image_tokens": 3702,
+      "text_tokens": 516,
+      "cached_tokens": 0
+    }
+  },
+  "elapsed_seconds": 9.461182300001383,
+  "decision": {
+    "summary": "Two regions stand out: (1) a sharp E/U drop near 490–495 with partial E recovery, and (2) a larger U drop near 550 with slow recovery and persistent offset. Both show asymmetric cross-axis behavior—N trending upward while horizontal/vertical components shift downward—suggesting non-rigid or localized effects. No clear opposing returns are fully resolved, but ambiguity exists at boundaries due to coarse sampling.",
+    "regions": [
+      {
+        "start": 485,
+        "end": 495,
+        "observation": "Sharp ~10-unit drop in E and U components around index 490–495, with N rising steadily; E shows a possible partial return starting near 495 but not fully recovering within the window. The cross-axis shape is asymmetric: E/U drop sharply while N continues upward trend, suggesting a transient offset or local disturbance rather than pure rigid motion."
+      },
+      {
+        "start": 545,
+        "end": 560,
+        "observation": "U component drops ~15 units abruptly near index 550, coinciding with a smaller (~5-unit) E drop and continued N rise; U then shows a slow, incomplete recovery through 560, while E remains depressed. The multi-sample step in U (spanning ~3–4 samples) and lack of symmetric rebound suggest a possible temporary platform or partial recovery—not a clean jump-and-return."
+      }
+    ]
+  }
+}

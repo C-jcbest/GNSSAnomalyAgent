@@ -1,0 +1,37 @@
+{
+  "status": "success",
+  "requested_model": "qwen3-vl-plus",
+  "request_count": 1,
+  "retry_count": 0,
+  "http_status": 200,
+  "served_model": "qwen3-vl-plus",
+  "usage": {
+    "prompt_tokens": 4218,
+    "completion_tokens": 340,
+    "total_tokens": 4558,
+    "completion_tokens_details": {
+      "text_tokens": 340
+    },
+    "prompt_tokens_details": {
+      "image_tokens": 3702,
+      "text_tokens": 516,
+      "cached_tokens": 0
+    }
+  },
+  "elapsed_seconds": 10.200914899993222,
+  "decision": {
+    "summary": "Two overlapping regions centered on indices ~595–605 show strong, multi-axis discontinuities: a large 3D offset with partial recovery in E/U, and a sharp U drop with delayed N response. Cross-axis shapes indicate possible permanent jumps or temporary offsets with ambiguous returns; no smooth motion or ordinary noise dominates these intervals.",
+    "regions": [
+      {
+        "start": 590,
+        "end": 604,
+        "observation": "Sharp, multi-sample upward jump in N (≈+12 MAD) and E (≈+5 MAD) around index 595–598, followed by a sustained platform in N and a partial return in E; U shows a concurrent large negative step (≈−15 MAD) with slow recovery. The cross-axis shape suggests a coherent 3D offset, possibly permanent or long-lasting, with ambiguous recovery in E/U."
+      },
+      {
+        "start": 595,
+        "end": 635,
+        "observation": "Abrupt, near-simultaneous drop in U (≈−15 MAD) at index 600–602, preceded by a smaller N/E rise; U remains depressed through ~630 before a rapid rebound. N shows a delayed, smaller step up (~+3 MAD) around 605–610, while E exhibits a complex, non-monotonic response—suggesting superposed motion or measurement artifact. Boundaries uncertain due to coarse sampling; include surroundings to assess possible opposing return."
+      }
+    ]
+  }
+}

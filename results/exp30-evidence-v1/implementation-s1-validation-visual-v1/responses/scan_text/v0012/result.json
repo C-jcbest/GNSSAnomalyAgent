@@ -1,0 +1,36 @@
+{
+  "status": "success",
+  "requested_model": "qwen3-vl-plus",
+  "request_count": 1,
+  "retry_count": 0,
+  "http_status": 200,
+  "served_model": "qwen3-vl-plus",
+  "usage": {
+    "prompt_tokens": 13230,
+    "completion_tokens": 328,
+    "total_tokens": 13558,
+    "completion_tokens_details": {
+      "text_tokens": 328
+    },
+    "prompt_tokens_details": {
+      "text_tokens": 13230,
+      "cached_tokens": 256
+    }
+  },
+  "elapsed_seconds": 10.322331499977736,
+  "decision": {
+    "summary": "Two regions stand out: (1) an abrupt multi-sample shift near index 486–487 with sustained offset in all axes, and (2) a sharp N/E/U excursion starting at index 608 with ambiguous return behavior through 612. Both show superposed changes and lack clear reversal within the observed windows.",
+    "regions": [
+      {
+        "start": 485,
+        "end": 492,
+        "observation": "Sharp multi-sample shift in N and E (N from ~-1.2 to +1.0, E from ~-2.35 to -2.48) at index 486–487, followed by a sustained offset; U shows a concurrent drop (~-3.5 to -0.9). The change is abrupt and not clearly reversed within the window."
+      },
+      {
+        "start": 605,
+        "end": 622,
+        "observation": "Complex cross-axis behavior: N jumps from ~0.98 to 3.19 at index 608, while E rises from ~0.60 to 1.32 and U shifts from -0.43 to +0.55; then N drops sharply to 1.38 at 609 with E and U also changing direction. A possible platform or opposing return begins around 610–612 but remains ambiguous due to overlapping motion across axes."
+      }
+    ]
+  }
+}

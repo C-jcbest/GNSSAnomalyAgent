@@ -1,0 +1,36 @@
+{
+  "status": "success",
+  "requested_model": "qwen3-vl-plus",
+  "request_count": 1,
+  "retry_count": 0,
+  "http_status": 200,
+  "served_model": "qwen3-vl-plus",
+  "usage": {
+    "prompt_tokens": 13828,
+    "completion_tokens": 345,
+    "total_tokens": 14173,
+    "completion_tokens_details": {
+      "text_tokens": 345
+    },
+    "prompt_tokens_details": {
+      "text_tokens": 13828,
+      "cached_tokens": 256
+    }
+  },
+  "elapsed_seconds": 11.20736100000795,
+  "decision": {
+    "summary": "Two regions stand out: (1) an abrupt multi-sample step-up in all axes near index 485–490, likely a permanent jump or rapid transient; (2) a complex interval ~605–620 with strong cross-axis coupling—steep N rise, large E oscillation, and sharp U drop—suggesting superposed motion components or ambiguous return behavior. Other intervals show smoother trends or noise.",
+    "regions": [
+      {
+        "start": 485,
+        "end": 544,
+        "observation": "N/E/U show a multi-sample step-up around index 485–490 (within window [365,544]), with N rising from ~1.5 to ~18, E shifting from ~-1.5 to ~-1.7, and U dropping sharply from ~-0.5 to ~-5; the change is abrupt over 2–3 samples and not clearly reversed in this window."
+      },
+      {
+        "start": 605,
+        "end": 664,
+        "observation": "From ~index 605 to 620, N increases steadily (~71→75), E shows oscillatory behavior with large swings (e.g., -0.7→2.8→-0.7), and U drops sharply (~-5.7→-7.9) then recovers partially; ambiguous superposition of trend, possible opposing returns, and a multi-sample offset near 615–620."
+      }
+    ]
+  }
+}

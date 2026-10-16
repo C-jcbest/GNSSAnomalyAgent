@@ -1,0 +1,33 @@
+{
+  "status": "success",
+  "requested_model": "qwen3-vl-plus",
+  "request_count": 1,
+  "retry_count": 0,
+  "http_status": 200,
+  "served_model": "qwen3-vl-plus",
+  "usage": {
+    "prompt_tokens": 2590,
+    "completion_tokens": 210,
+    "total_tokens": 2800,
+    "completion_tokens_details": {
+      "text_tokens": 210
+    },
+    "prompt_tokens_details": {
+      "image_tokens": 1738,
+      "text_tokens": 852,
+      "cached_tokens": 128
+    }
+  },
+  "elapsed_seconds": 6.798700400016969,
+  "decision": {
+    "summary": "A co-occurring E-up/U-down excursion begins near index 605 and persists through 614 without reversal in the allowed context [570,650]; the absence of a clear return prevents confirmation as a temporary offset. The optional jump at index 600 is inconsistent with the observed onset (E jumps positive at 600 but rises only from 605 onward) and thus rejected.",
+    "intervals": [
+      {
+        "start": 605,
+        "end": 614,
+        "status": "uncertain",
+        "observation": "E-component shows a sustained step-like rise from ~index 605 to 614 (≈+2 MAD), while U-component drops sharply (~−4 MAD) over the same span; N remains noisy with no coherent counterpart. No return to pre-event levels is observed within allowed context (up to 650)."
+      }
+    ]
+  }
+}

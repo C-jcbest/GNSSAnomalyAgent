@@ -1,0 +1,38 @@
+{
+  "status": "success",
+  "requested_model": "qwen3-vl-plus",
+  "request_count": 1,
+  "retry_count": 0,
+  "http_status": 200,
+  "served_model": "qwen3-vl-plus",
+  "usage": {
+    "prompt_tokens": 3060,
+    "completion_tokens": 416,
+    "total_tokens": 3476,
+    "completion_tokens_details": {
+      "text_tokens": 416
+    },
+    "prompt_tokens_details": {
+      "text_tokens": 3060,
+      "cached_tokens": 128
+    }
+  },
+  "elapsed_seconds": 11.401508099981584,
+  "decision": {
+    "summary": "Two candidate temporary offsets identified: (1) a multi-component jump starting ~538 (N↑, U↑, E↓) sustained through 543 with no return observed in context; (2) an isolated E step at 576 without clear sustained interior or return. Both lack confirmed opposing returns within allowed context [501,579], so both are marked uncertain. No interval meets full confirmation criteria (clear onset, sustained interior, and unambiguous opposing return on affected axes).",
+    "intervals": [
+      {
+        "start": 538,
+        "end": 543,
+        "status": "uncertain",
+        "observation": "N and U rise sharply across indices 538–543 (e.g., N jumps from ~2.1 to ~9.2, U from ~-3.9 to ~7.6), E drops concurrently (from ~-9.1 to ~-2.3). The change is multi-sample, sustained over ≥5 samples, and cross-axis coherent. No opposing return observed within allowed context [501,579]; the signal remains elevated through index 543 and beyond. Return not observed before context end → status uncertain."
+      },
+      {
+        "start": 576,
+        "end": 578,
+        "status": "uncertain",
+        "observation": "At index 576, E shows a sharp downward step (~+4.1 in N, -7.2 in E, +1.4 in U), but N and U do not show a matching sustained offset; instead, N/E/U are already in a new regime since ~544. The E step at 576 lacks a clear opposing return within context and is isolated—no sustained platform or recovery observed. Status uncertain due to ambiguous onset/return pairing and coexistence with prior motion."
+      }
+    ]
+  }
+}

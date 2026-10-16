@@ -1,0 +1,33 @@
+{
+  "status": "success",
+  "requested_model": "qwen3-vl-plus",
+  "request_count": 1,
+  "retry_count": 0,
+  "http_status": 200,
+  "served_model": "qwen3-vl-plus",
+  "usage": {
+    "prompt_tokens": 2647,
+    "completion_tokens": 218,
+    "total_tokens": 2865,
+    "completion_tokens_details": {
+      "text_tokens": 218
+    },
+    "prompt_tokens_details": {
+      "image_tokens": 1906,
+      "text_tokens": 741,
+      "cached_tokens": 128
+    }
+  },
+  "elapsed_seconds": 7.308789200003957,
+  "decision": {
+    "summary": "A sustained, correlated horizontal ramp in N (up) and E (down) from index 470 to 505 is evident. No opposing return is observed before index 540 (end of allowed_context); both axes continue monotonic motion beyond 505. U-component lacks a coherent offset, only increased noise. Without observed reversal, the interval cannot be confirmed as temporary.",
+    "intervals": [
+      {
+        "start": 470,
+        "end": 505,
+        "status": "uncertain",
+        "observation": "N-component rises steadily from index 470 to 505; E-component declines steadily over the same interval; U-component shows no coherent trend, only elevated noise. Return to pre-ramp behavior is not observed within allowed_context (ends at 540), and post-505 N/E continue trending (N still rising, E still falling) without reversal—thus return is unobserved."
+      }
+    ]
+  }
+}

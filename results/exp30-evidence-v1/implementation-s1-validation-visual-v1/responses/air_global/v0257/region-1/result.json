@@ -1,0 +1,33 @@
+{
+  "status": "success",
+  "requested_model": "qwen3-vl-plus",
+  "request_count": 1,
+  "retry_count": 0,
+  "http_status": 200,
+  "served_model": "qwen3-vl-plus",
+  "usage": {
+    "prompt_tokens": 2847,
+    "completion_tokens": 261,
+    "total_tokens": 3108,
+    "completion_tokens_details": {
+      "text_tokens": 261
+    },
+    "prompt_tokens_details": {
+      "image_tokens": 1906,
+      "text_tokens": 941,
+      "cached_tokens": 128
+    }
+  },
+  "elapsed_seconds": 7.950377500004834,
+  "decision": {
+    "summary": "A multi-axis transient displacement initiates near index 685 (U↑, E↓, N↓ delayed), with sustained offset in U and partial E recovery through 729; no opposing return observed within allowed context [645,729], so status is uncertain. The candidate jump at index 684 is inconsistent with visual onset (U jumps *after* 684, around 685–686); the 649 jump lies outside screened region and is unrelated to this event.",
+    "intervals": [
+      {
+        "start": 685,
+        "end": 729,
+        "status": "uncertain",
+        "observation": "U-component shows a sharp upward jump near index 685 (~+10 MAD), sustained plateau at ~+5 MAD through 729; E-component shows concurrent sharp drop (~−5 MAD) near 685, then partial recovery but not to pre-event level; N-component shows smaller delayed dip (~−4 MAD) peaking near 690, with no clear return observed. Return phase unobserved/ambiguous on all axes within allowed context."
+      }
+    ]
+  }
+}

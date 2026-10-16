@@ -1,0 +1,39 @@
+{
+  "status": "success",
+  "requested_model": "qwen3-vl-plus",
+  "request_count": 1,
+  "retry_count": 0,
+  "http_status": 200,
+  "served_model": "qwen3-vl-plus",
+  "usage": {
+    "prompt_tokens": 2685,
+    "completion_tokens": 265,
+    "total_tokens": 2950,
+    "completion_tokens_details": {
+      "text_tokens": 265
+    },
+    "prompt_tokens_details": {
+      "image_tokens": 1906,
+      "text_tokens": 779,
+      "cached_tokens": 128
+    }
+  },
+  "elapsed_seconds": 7.446504499996081,
+  "decision": {
+    "summary": "Within allowed context [570,729], a transient multi-axis shift begins at index 608 (U drop dominant), but no full return is observed. A later rebound in U (~660–662) lacks coordinated cross-axis recovery and does not restore prior levels; both intervals remain uncertain due to ambiguous or absent return phases.",
+    "intervals": [
+      {
+        "start": 608,
+        "end": 612,
+        "status": "uncertain",
+        "observation": "U drops sharply (~10 MAD) at index 608, with smaller correlated N down (~2 MAD) and E up (~2 MAD); interior (609–611) shows sustained offset without recovery; return not observed within allowed context."
+      },
+      {
+        "start": 660,
+        "end": 670,
+        "status": "uncertain",
+        "observation": "U rebounds sharply near 660–662, while N/E show small opposing offsets (N up, E down) — inconsistent with a coherent return; no reversion to pre-608 baseline observed by 729."
+      }
+    ]
+  }
+}

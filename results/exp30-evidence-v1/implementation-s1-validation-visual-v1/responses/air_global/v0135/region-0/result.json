@@ -1,0 +1,33 @@
+{
+  "status": "success",
+  "requested_model": "qwen3-vl-plus",
+  "request_count": 1,
+  "retry_count": 0,
+  "http_status": 200,
+  "served_model": "qwen3-vl-plus",
+  "usage": {
+    "prompt_tokens": 2828,
+    "completion_tokens": 251,
+    "total_tokens": 3079,
+    "completion_tokens_details": {
+      "text_tokens": 251
+    },
+    "prompt_tokens_details": {
+      "image_tokens": 1906,
+      "text_tokens": 922,
+      "cached_tokens": 128
+    }
+  },
+  "elapsed_seconds": 7.5300158000027295,
+  "decision": {
+    "summary": "A coherent multi-axis displacement begins at index 488–489 (U down, N/E up), persists through 492, and shows no confirmed return within the allowed context [450,527]. The onset is abrupt over 2–3 samples, interior is sustained, but the return is unobserved—hence status uncertain. The candidate jump at index 489 aligns with onset but does not define interval boundaries; index 453 jump lies outside screened region and lacks supporting sustained offset evidence.",
+    "intervals": [
+      {
+        "start": 488,
+        "end": 492,
+        "status": "uncertain",
+        "observation": "Multi-axis offset: U drops sharply (~19 MAD) starting at index 488–489, sustained through 492; N and E show concurrent upward steps (~7 MAD each), also sustained. Return not observed within allowed context (ends at 527); post-492 U remains low, N/E remain elevated but no clear reversal edge is visible before 527."
+      }
+    ]
+  }
+}

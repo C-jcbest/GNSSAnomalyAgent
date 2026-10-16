@@ -1,0 +1,37 @@
+{
+  "status": "success",
+  "requested_model": "qwen3-vl-plus",
+  "request_count": 1,
+  "retry_count": 0,
+  "http_status": 200,
+  "served_model": "qwen3-vl-plus",
+  "usage": {
+    "prompt_tokens": 4218,
+    "completion_tokens": 262,
+    "total_tokens": 4480,
+    "completion_tokens_details": {
+      "text_tokens": 262
+    },
+    "prompt_tokens_details": {
+      "image_tokens": 3702,
+      "text_tokens": 516,
+      "cached_tokens": 0
+    }
+  },
+  "elapsed_seconds": 7.858787700009998,
+  "decision": {
+    "summary": "Two regions stand out: (1) a transient multi-axis offset around indices 415–430 with incomplete recovery, and (2) a sustained E-component rise from 640–675 with ambiguous return onset. Other intervals show typical noise or smooth motion without clear morphological anomalies.",
+    "regions": [
+      {
+        "start": 415,
+        "end": 430,
+        "observation": "N-component shows a multi-sample downward shift (~1.5 MAD) around index 420–425, followed by a partial but incomplete return over ~10 samples; E and U show correlated transient offsets in same interval, suggesting a possible temporary platform or opposing motion superposed on noise."
+      },
+      {
+        "start": 640,
+        "end": 675,
+        "observation": "E-component exhibits a sustained upward trend from ~index 640 to 670 (≈3 MAD increase), with U showing a concurrent but smaller rise and N remaining relatively flat; the trend appears to plateau near 670, with ambiguous early signs of reversal—possible platform or slow offset with uncertain recovery boundary."
+      }
+    ]
+  }
+}

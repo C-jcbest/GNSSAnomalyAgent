@@ -1,0 +1,33 @@
+{
+  "status": "success",
+  "requested_model": "qwen3-vl-plus",
+  "request_count": 1,
+  "retry_count": 0,
+  "http_status": 200,
+  "served_model": "qwen3-vl-plus",
+  "usage": {
+    "prompt_tokens": 2473,
+    "completion_tokens": 183,
+    "total_tokens": 2656,
+    "completion_tokens_details": {
+      "text_tokens": 183
+    },
+    "prompt_tokens_details": {
+      "image_tokens": 1738,
+      "text_tokens": 735,
+      "cached_tokens": 0
+    }
+  },
+  "elapsed_seconds": 5.952898699993966,
+  "decision": {
+    "summary": "Only one candidate temporary offset lies within allowed context [690,729]: a coherent multi-axis linear trend beginning abruptly at index 725 and persisting to the end. No opposing return is observed, so the interval is classified as uncertain. The earlier transient near index 480 falls outside allowed context and is excluded.",
+    "intervals": [
+      {
+        "start": 725,
+        "end": 729,
+        "status": "uncertain",
+        "observation": "Coherent linear trend across N, E, U from index 725 onward: N increases, E decreases, U increases; onset is abrupt at 725, but no return or opposing motion observed within allowed context (690–729). Return not confirmed; status uncertain."
+      }
+    ]
+  }
+}

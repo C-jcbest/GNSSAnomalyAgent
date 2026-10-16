@@ -1,0 +1,37 @@
+{
+  "status": "success",
+  "requested_model": "qwen3-vl-plus",
+  "request_count": 1,
+  "retry_count": 0,
+  "http_status": 200,
+  "served_model": "qwen3-vl-plus",
+  "usage": {
+    "prompt_tokens": 4218,
+    "completion_tokens": 297,
+    "total_tokens": 4515,
+    "completion_tokens_details": {
+      "text_tokens": 297
+    },
+    "prompt_tokens_details": {
+      "image_tokens": 3702,
+      "text_tokens": 516,
+      "cached_tokens": 0
+    }
+  },
+  "elapsed_seconds": 8.818568299990147,
+  "decision": {
+    "summary": "Two regions merit closer inspection: (1) an abrupt multi-sample drop in E/U around indices 600–615 with partial recovery, and (2) a broad platform-like deviation in N/E from ~520–550 lacking a clear return. Both show coherent cross-axis behavior distinct from background noise.",
+    "regions": [
+      {
+        "start": 600,
+        "end": 615,
+        "observation": "Sharp multi-sample drop in E and U components around index 600–610, with E falling ~4 MAD units and U dropping ~3 MAD units; N shows a smaller concurrent dip. The E component does not fully recover by 615, suggesting a possible offset or incomplete return. Surrounding noise is typical; the event stands out due to abruptness and cross-axis coherence."
+      },
+      {
+        "start": 520,
+        "end": 550,
+        "observation": "Broad, asymmetric platform-like feature in N and E between ~520–550: N rises gradually then flattens near +1 MAD, while E dips steadily to ~−3 MAD and holds for ~15 samples before resuming trend. U shows a modest correlated dip. The shape suggests a temporary offset or slow slip, with no clear opposing return within the window."
+      }
+    ]
+  }
+}

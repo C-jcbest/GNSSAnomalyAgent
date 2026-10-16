@@ -1,0 +1,39 @@
+{
+  "status": "success",
+  "requested_model": "qwen3-vl-plus",
+  "request_count": 1,
+  "retry_count": 0,
+  "http_status": 200,
+  "served_model": "qwen3-vl-plus",
+  "usage": {
+    "prompt_tokens": 2814,
+    "completion_tokens": 483,
+    "total_tokens": 3297,
+    "completion_tokens_details": {
+      "text_tokens": 483
+    },
+    "prompt_tokens_details": {
+      "image_tokens": 1738,
+      "text_tokens": 1076,
+      "cached_tokens": 128
+    }
+  },
+  "elapsed_seconds": 12.37386050002533,
+  "decision": {
+    "summary": "Two candidate temporary offsets identified within allowed context [365,579]. The first (468–538) involves a step-like U rise and correlated N/E trends with a transient dip near 525–530, but lacks a clear opposing return—status uncertain. The second (539–552) shows a coherent multi-axis offset with unambiguous onset at 539, sustained interior, and opposing return at 553—status confirmed. No other temporary intervals meet criteria.",
+    "intervals": [
+      {
+        "start": 468,
+        "end": 538,
+        "status": "uncertain",
+        "observation": "N rises steadily from ~400; E declines steadily; U shows step at ~468 then sharp spike/drop near 525–530. Multi-sample drop in N (525–530) and dip in E coincide with U spike, but return is incomplete: N remains elevated above pre-400 level, E does not recover to prior trend, U settles ~+2 MAD above pre-468 baseline. No clear opposing return on any axis before index 539; the candidate jump at 539 is a large negative offset, not a return to prior state. Thus, temporary offset cannot be confirmed."
+      },
+      {
+        "start": 539,
+        "end": 552,
+        "status": "confirmed",
+        "observation": "At index 539, all axes show large abrupt shifts (N↓10, E↓4.2, U↑5.5); followed by sustained deviation through 552, then reversal at 553 (N↑12.6, E↑4.6, U↓4.1). The 539–552 segment shows coherent multi-axis offset with clear onset (539), interior (540–552), and opposing return (553). N and E return beyond original pre-539 levels, U returns below pre-539 level, but direction and timing are consistent with a temporary offset. Confirmed."
+      }
+    ]
+  }
+}

@@ -1,0 +1,32 @@
+{
+  "status": "success",
+  "requested_model": "qwen3-vl-plus",
+  "request_count": 1,
+  "retry_count": 0,
+  "http_status": 200,
+  "served_model": "qwen3-vl-plus",
+  "usage": {
+    "prompt_tokens": 6402,
+    "completion_tokens": 198,
+    "total_tokens": 6600,
+    "completion_tokens_details": {
+      "text_tokens": 198
+    },
+    "prompt_tokens_details": {
+      "text_tokens": 6402,
+      "cached_tokens": 0
+    }
+  },
+  "elapsed_seconds": 5.605963800015161,
+  "decision": {
+    "summary": "A single candidate temporary offset is identified on the N-axis starting at index 365, with a multi-sample drop ending around index 372. No clear opposing return is observed within the allowed context [365, 579]; E and U axes lack coherent platform or recovery behavior. The event remains uncertain due to ambiguous recovery.",
+    "intervals": [
+      {
+        "start": 365,
+        "end": 372,
+        "status": "uncertain",
+        "observation": "N-axis shows abrupt multi-sample drop from ~-0.12 to ~-1.98 over indices 365–372 (samples 0–7), sustained for ≥3 samples without reversal; E and U show no coherent platform or return, and no opposing recovery observed within allowed context. Return not observed before index 579."
+      }
+    ]
+  }
+}

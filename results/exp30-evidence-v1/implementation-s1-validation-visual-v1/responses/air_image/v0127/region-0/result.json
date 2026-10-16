@@ -1,0 +1,33 @@
+{
+  "status": "success",
+  "requested_model": "qwen3-vl-plus",
+  "request_count": 1,
+  "retry_count": 0,
+  "http_status": 200,
+  "served_model": "qwen3-vl-plus",
+  "usage": {
+    "prompt_tokens": 2498,
+    "completion_tokens": 179,
+    "total_tokens": 2677,
+    "completion_tokens_details": {
+      "text_tokens": 179
+    },
+    "prompt_tokens_details": {
+      "image_tokens": 1738,
+      "text_tokens": 760,
+      "cached_tokens": 128
+    }
+  },
+  "elapsed_seconds": 4.963505800027633,
+  "decision": {
+    "summary": "Only one candidate temporary offset interval identified: N/E correlated downward shift from index 490 to 510, with divergent post-510 behavior (N recovers, E keeps descending) and no clear opposing return within allowed context [450,579]. U remains unaffected. No confirmed temporary offset due to ambiguous or absent return.",
+    "intervals": [
+      {
+        "start": 490,
+        "end": 510,
+        "status": "uncertain",
+        "observation": "N and E jointly shift downward starting ~490; N begins partial recovery after 510 while E continues descending, indicating incomplete return. U shows no matching feature. Return not observed before end of allowed context (579), so status uncertain."
+      }
+    ]
+  }
+}

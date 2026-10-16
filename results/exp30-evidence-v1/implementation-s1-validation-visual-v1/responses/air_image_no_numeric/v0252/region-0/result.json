@@ -1,0 +1,39 @@
+{
+  "status": "success",
+  "requested_model": "qwen3-vl-plus",
+  "request_count": 1,
+  "retry_count": 0,
+  "http_status": 200,
+  "served_model": "qwen3-vl-plus",
+  "usage": {
+    "prompt_tokens": 2533,
+    "completion_tokens": 299,
+    "total_tokens": 2832,
+    "completion_tokens_details": {
+      "text_tokens": 299
+    },
+    "prompt_tokens_details": {
+      "image_tokens": 1738,
+      "text_tokens": 795,
+      "cached_tokens": 128
+    }
+  },
+  "elapsed_seconds": 7.893523000006098,
+  "decision": {
+    "summary": "Within allowed context [385,579], two multi-axis offset candidates (460–480 and 510–525) show correlated E/U deviations with no matching N step or observed return; both lack confirmed opposing recovery, so status is uncertain. The sustained N trend (420–544) is not itself a temporary offset. No confirmed temporary intervals identified.",
+    "intervals": [
+      {
+        "start": 460,
+        "end": 480,
+        "status": "uncertain",
+        "observation": "E drops ~1.5 MAD and U drops ~2 MAD over multi-sample span 460–480; N shows no matching step but continues upward trend. Return not observed before index 481, and E/U do not recover to pre-460 levels by 480. Status: uncertain."
+      },
+      {
+        "start": 510,
+        "end": 525,
+        "status": "uncertain",
+        "observation": "E rises ~1 MAD and U rises ~1.5 MAD over 510–525; N continues upward trend without reversal. No clear opposing return observed before 526; E/U remain elevated relative to pre-510 baseline. Status: uncertain."
+      }
+    ]
+  }
+}

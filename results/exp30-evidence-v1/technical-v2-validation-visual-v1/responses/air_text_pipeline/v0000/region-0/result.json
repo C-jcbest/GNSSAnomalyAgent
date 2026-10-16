@@ -1,0 +1,38 @@
+{
+  "status": "success",
+  "requested_model": "qwen3-vl-plus",
+  "request_count": 1,
+  "retry_count": 0,
+  "http_status": 200,
+  "served_model": "qwen3-vl-plus",
+  "usage": {
+    "prompt_tokens": 4252,
+    "completion_tokens": 357,
+    "total_tokens": 4609,
+    "completion_tokens_details": {
+      "text_tokens": 357
+    },
+    "prompt_tokens_details": {
+      "text_tokens": 4252,
+      "cached_tokens": 0
+    }
+  },
+  "elapsed_seconds": 9.081358099996578,
+  "decision": {
+    "summary": "A multi-sample cross-axis shift initiates at index 490 (N sharply down, E sharply up), persisting through the screened region (485–544). No unambiguous opposing return is observed within allowed context [450,579]; later samples show noisy baseline with elevated E and depressed N, but no clean reversal. The event is classified as uncertain due to unresolved recovery.",
+    "intervals": [
+      {
+        "start": 490,
+        "end": 495,
+        "status": "uncertain",
+        "observation": "N drops from ~-0.07 (index 489) to -2.15 (index 490), E rises from ~2.18 (489) to 3.80 (490); sustained offset persists through index 495 with N ~-2.80, E ~3.80; no opposing return observed within allowed context [450,579]."
+      },
+      {
+        "start": 490,
+        "end": 544,
+        "status": "uncertain",
+        "observation": "E remains elevated (~2.0–3.8) and N stays depressed (~-0.6 to -2.8) from index 490 onward; no clear reversal before index 544. A possible partial recovery in N begins near 540 (N: -2.57→-1.33 at 543), but E remains high and U shows no coherent return—ambiguous recovery."
+      }
+    ]
+  }
+}

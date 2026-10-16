@@ -1,0 +1,33 @@
+{
+  "status": "success",
+  "requested_model": "qwen3-vl-plus",
+  "request_count": 1,
+  "retry_count": 0,
+  "http_status": 200,
+  "served_model": "qwen3-vl-plus",
+  "usage": {
+    "prompt_tokens": 2676,
+    "completion_tokens": 210,
+    "total_tokens": 2886,
+    "completion_tokens_details": {
+      "text_tokens": 210
+    },
+    "prompt_tokens_details": {
+      "image_tokens": 1906,
+      "text_tokens": 770,
+      "cached_tokens": 0
+    }
+  },
+  "elapsed_seconds": 6.929384699993534,
+  "decision": {
+    "summary": "Within allowed context [380, 460], only the screened region around indices 418–424 shows evidence of a temporary offset: N/E exhibit a sustained downward shift without full recovery, and U shows a coincident spike with slow recovery. The return phase is incomplete and unconfirmed before index 460, so status is uncertain. No other temporary offsets are supported in this interval.",
+    "intervals": [
+      {
+        "start": 418,
+        "end": 424,
+        "status": "uncertain",
+        "observation": "N and E show a multi-sample downward shift (≈1–1.5 MAD) beginning ~418, sustained through ~422–423, with incomplete return by index 424; U exhibits a sharp negative spike at ~420 and slower recovery, lacking full reversal within allowed context. Return not observed or ambiguous."
+      }
+    ]
+  }
+}

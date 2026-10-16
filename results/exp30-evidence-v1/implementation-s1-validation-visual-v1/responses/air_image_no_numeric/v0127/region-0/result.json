@@ -1,0 +1,33 @@
+{
+  "status": "success",
+  "requested_model": "qwen3-vl-plus",
+  "request_count": 1,
+  "retry_count": 0,
+  "http_status": 200,
+  "served_model": "qwen3-vl-plus",
+  "usage": {
+    "prompt_tokens": 2489,
+    "completion_tokens": 221,
+    "total_tokens": 2710,
+    "completion_tokens_details": {
+      "text_tokens": 221
+    },
+    "prompt_tokens_details": {
+      "image_tokens": 1738,
+      "text_tokens": 751,
+      "cached_tokens": 128
+    }
+  },
+  "elapsed_seconds": 5.9913319000042975,
+  "decision": {
+    "summary": "Only one candidate temporary offset interval is identifiable within allowed context [450,579]: N/E jointly shift down from ~490, but N begins partial recovery by ~510 while E keeps descending; no opposing return observed for either axis before index 579. U remains uncorrelated. Due to incomplete or ambiguous return and cross-axis divergence, status is uncertain. The second region (545–664) lies outside allowed_context and is excluded.",
+    "intervals": [
+      {
+        "start": 490,
+        "end": 512,
+        "status": "uncertain",
+        "observation": "N component shows a multi-sample downward shift starting ~490, with partial recovery beginning ~510; E component also dips but continues descending beyond 512 without clear return in allowed context. U shows no coherent counterpart. Return not observed before end of allowed context (579), and interior behavior diverges between axes."
+      }
+    ]
+  }
+}

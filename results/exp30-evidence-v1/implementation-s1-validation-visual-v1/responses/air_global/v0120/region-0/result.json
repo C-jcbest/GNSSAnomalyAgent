@@ -1,0 +1,39 @@
+{
+  "status": "success",
+  "requested_model": "qwen3-vl-plus",
+  "request_count": 1,
+  "retry_count": 0,
+  "http_status": 200,
+  "served_model": "qwen3-vl-plus",
+  "usage": {
+    "prompt_tokens": 2678,
+    "completion_tokens": 316,
+    "total_tokens": 2994,
+    "completion_tokens_details": {
+      "text_tokens": 316
+    },
+    "prompt_tokens_details": {
+      "image_tokens": 1906,
+      "text_tokens": 772,
+      "cached_tokens": 128
+    }
+  },
+  "elapsed_seconds": 9.480146899993997,
+  "decision": {
+    "summary": "Within allowed context [450,579], the only plausible temporary offset is a sustained negative shift in N from ~490 to 530, lacking a confirmed opposing return before index 579. The E/U dips around 510–525 are temporally aligned but do not form a closed interval with distinct onset and return on their axes; they may reflect superposed transients rather than independent offsets. No confirmed temporary intervals meet full onset–sustained–return criteria.",
+    "intervals": [
+      {
+        "start": 490,
+        "end": 530,
+        "status": "uncertain",
+        "observation": "N-component shows a sustained negative offset from index 490, with interior values consistently below pre-event baseline; E and U exhibit correlated multi-sample dips (510–525) but no clear opposing return in N before 530. Return phase is incomplete within allowed context."
+      },
+      {
+        "start": 510,
+        "end": 525,
+        "status": "uncertain",
+        "observation": "E and U show concurrent multi-sample dips centered ~515–520, coinciding with the N offset interior; however, no clear onset/return pairing on E or U alone, and N does not reverse during this sub-interval. Likely superposed transient, not an independent temporary offset."
+      }
+    ]
+  }
+}

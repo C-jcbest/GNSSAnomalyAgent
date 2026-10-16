@@ -1,0 +1,33 @@
+{
+  "status": "success",
+  "requested_model": "qwen3-vl-plus",
+  "request_count": 1,
+  "retry_count": 0,
+  "http_status": 200,
+  "served_model": "qwen3-vl-plus",
+  "usage": {
+    "prompt_tokens": 2679,
+    "completion_tokens": 293,
+    "total_tokens": 2972,
+    "completion_tokens_details": {
+      "text_tokens": 293
+    },
+    "prompt_tokens_details": {
+      "image_tokens": 1738,
+      "text_tokens": 941,
+      "cached_tokens": 128
+    }
+  },
+  "elapsed_seconds": 7.662433799996506,
+  "decision": {
+    "summary": "A multi-axis transient displacement initiates at index 685: U jumps +15 MAD, E drops ~4 MAD, N dips ~4 MAD with delay. U and E remain offset through 729 without reversal; N recovers by ~695. The absence of a clear opposing return in U/E within allowed context prevents confirmation of a temporary offset; the event is classified as uncertain. The earlier candidate jump at 649 is inconsistent with visual trend and rejected.",
+    "intervals": [
+      {
+        "start": 685,
+        "end": 729,
+        "status": "uncertain",
+        "observation": "U-component shows a sharp upward step at index 685 (from ~−10 to ~+5 MAD), sustained plateau through 729 with no return; E-component drops sharply at 685 (~−12 to −16 MAD) then recovers partially to ~−13 MAD by 690 and remains elevated relative to pre-685 baseline, but does not fully return; N-component dips delayed (~−4 MAD) near 690 and recovers by ~695. No opposing return observed on U or E within allowed context; interior is sustained, not smooth motion. Status: uncertain due to unobserved return."
+      }
+    ]
+  }
+}

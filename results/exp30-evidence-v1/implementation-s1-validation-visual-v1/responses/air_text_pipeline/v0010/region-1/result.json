@@ -1,0 +1,32 @@
+{
+  "status": "success",
+  "requested_model": "qwen3-vl-plus",
+  "request_count": 1,
+  "retry_count": 0,
+  "http_status": 200,
+  "served_model": "qwen3-vl-plus",
+  "usage": {
+    "prompt_tokens": 3184,
+    "completion_tokens": 359,
+    "total_tokens": 3543,
+    "completion_tokens_details": {
+      "text_tokens": 359
+    },
+    "prompt_tokens_details": {
+      "text_tokens": 3184,
+      "cached_tokens": 128
+    }
+  },
+  "elapsed_seconds": 9.19214450000436,
+  "decision": {
+    "summary": "Within allowed context [570,660], only one candidate temporary offset is identified: a multi-sample upward rebound in U (indices 620–624) against ongoing downward drift in N and E. The rebound is coherent across 3–4 samples and distinct from horizontal behavior, but the full return phase is not observed before index 660, and no compensating reversal occurs in N/E. No other intervals meet criteria for confirmed temporary offset. The screened region (605–625) includes this rebound but also earlier monotonic descent without evidence of offset onset or return—thus only the rebound segment qualifies as a candidate, albeit with uncertain status.",
+    "intervals": [
+      {
+        "start": 620,
+        "end": 624,
+        "status": "uncertain",
+        "observation": "U shows a sharp rebound starting around index 620–621 (from ~-11.06 at 620 to ~-9.64 at 623), while N and E continue a gradual descent (N: -2.84→-3.52, E: -3.77→-5.38). The rebound in U is multi-sample and distinct from horizontal trends, but the return to pre-offset levels is not observed within allowed context (ends at 660, U remains ~-8.17 at 660, still below earlier values). No clear opposing return in N/E; sustained drift continues. Status: uncertain due to unobserved full return in U and no matching reversal in horizontals."
+      }
+    ]
+  }
+}

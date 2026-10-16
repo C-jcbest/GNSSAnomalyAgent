@@ -1,0 +1,37 @@
+{
+  "status": "success",
+  "requested_model": "qwen3-vl-plus",
+  "request_count": 1,
+  "retry_count": 0,
+  "http_status": 200,
+  "served_model": "qwen3-vl-plus",
+  "usage": {
+    "prompt_tokens": 4218,
+    "completion_tokens": 293,
+    "total_tokens": 4511,
+    "completion_tokens_details": {
+      "text_tokens": 293
+    },
+    "prompt_tokens_details": {
+      "image_tokens": 3702,
+      "text_tokens": 516,
+      "cached_tokens": 0
+    }
+  },
+  "elapsed_seconds": 8.867201499990188,
+  "decision": {
+    "summary": "Two prominent multi-sample downward steps in the U-component stand out: one near index 530 and another near index 630, both abrupt, sustained, and not fully reversed within the window. Cross-axis behavior is inconsistent—E shows modest correlated changes, N shows only transient features—indicating ambiguous superposition rather than clean platform-like offsets. No other regions show compelling temporary platforms or opposing returns.",
+    "regions": [
+      {
+        "start": 525,
+        "end": 535,
+        "observation": "U-component shows a sharp, multi-sample drop (~10 MAD) near index 530–535, with no clear opposing return in the immediate aftermath; N and E show modest correlated fluctuations but no comparable step. The drop is abrupt and sustained over several samples, distinct from background noise."
+      },
+      {
+        "start": 625,
+        "end": 635,
+        "observation": "U-component exhibits a large negative step (~12 MAD) centered at index 630–635, preceded by a plateau and followed by a slow partial recovery over ~10 samples; E shows a concurrent smaller step (~3 MAD) upward, while N shows a transient spike at ~628 but no persistent offset—suggesting possible superposed motion or local disturbance."
+      }
+    ]
+  }
+}

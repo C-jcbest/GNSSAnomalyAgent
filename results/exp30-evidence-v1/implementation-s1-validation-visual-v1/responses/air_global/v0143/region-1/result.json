@@ -1,0 +1,45 @@
+{
+  "status": "success",
+  "requested_model": "qwen3-vl-plus",
+  "request_count": 1,
+  "retry_count": 0,
+  "http_status": 200,
+  "served_model": "qwen3-vl-plus",
+  "usage": {
+    "prompt_tokens": 2929,
+    "completion_tokens": 447,
+    "total_tokens": 3376,
+    "completion_tokens_details": {
+      "text_tokens": 447
+    },
+    "prompt_tokens_details": {
+      "image_tokens": 1906,
+      "text_tokens": 1023,
+      "cached_tokens": 128
+    }
+  },
+  "elapsed_seconds": 11.91386390000116,
+  "decision": {
+    "summary": "Only one plausible temporary offset interval is identified: a U-dominated depression from index 600 to 629, with delayed N response and ambiguous recovery. The rebound starting at ~630 is observed but not completed within allowed context (ends at 670), and no opposing return is confirmed on N or E. All candidate intervals remain uncertain due to incomplete return evidence or superposed motion.",
+    "intervals": [
+      {
+        "start": 600,
+        "end": 629,
+        "status": "uncertain",
+        "observation": "U shows a sharp drop (~−15 MAD) at indices 600–602, sustained through ~629; N exhibits a delayed step up (~+3 MAD) around 605–610; E shows non-monotonic behavior without clear opposing return. Return in U begins at ~630 but is not fully completed within allowed context (ends at 670), and no clear opposing edge observed on N/E before 670. Hence status uncertain."
+      },
+      {
+        "start": 593,
+        "end": 624,
+        "status": "uncertain",
+        "observation": "A smaller, earlier offset candidate near index 593 (N↑, U↓) lacks clear sustained interior or return; U does not show distinct depression before 600, and N/E do not confirm a coherent temporary interval. No confirmed onset–return pair. Excluded due to insufficient evidence."
+      },
+      {
+        "start": 625,
+        "end": 669,
+        "status": "uncertain",
+        "observation": "At index 625, U rebounds sharply (+7 MAD), N/E rise (+12, +6 MAD); however, this coincides with the tail of the prior U depression and no clear opposing return to the earlier drop is observed—U remains elevated after 625, suggesting possible permanent offset or incomplete recovery. Return not confirmed; status uncertain."
+      }
+    ]
+  }
+}

@@ -1,0 +1,33 @@
+{
+  "status": "success",
+  "requested_model": "qwen3-vl-plus",
+  "request_count": 1,
+  "retry_count": 0,
+  "http_status": 200,
+  "served_model": "qwen3-vl-plus",
+  "usage": {
+    "prompt_tokens": 2482,
+    "completion_tokens": 200,
+    "total_tokens": 2682,
+    "completion_tokens_details": {
+      "text_tokens": 200
+    },
+    "prompt_tokens_details": {
+      "image_tokens": 1738,
+      "text_tokens": 744,
+      "cached_tokens": 128
+    }
+  },
+  "elapsed_seconds": 5.606124299985822,
+  "decision": {
+    "summary": "Only one candidate temporary offset lies fully within allowed_context [390,470]: an E-component step onset at ~428 with sustained offset through 435, but no confirmed return. N and U exhibit only transient coupling without persistent offset. The recovery is noisy and incomplete within the context, so status is uncertain. No other temporary intervals are supported in this window.",
+    "intervals": [
+      {
+        "start": 428,
+        "end": 435,
+        "status": "uncertain",
+        "observation": "E-component shows a sharp downward step near index 428 (~7.5 MAD), followed by sustained negative offset through 435; recovery is noisy and incomplete within allowed context. N and U show transient correlated dips but no persistent shift. Return to pre-event level not observed before index 436 (outside allowed context)."
+      }
+    ]
+  }
+}

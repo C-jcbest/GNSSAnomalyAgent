@@ -1,0 +1,33 @@
+{
+  "status": "success",
+  "requested_model": "qwen3-vl-plus",
+  "request_count": 1,
+  "retry_count": 0,
+  "http_status": 200,
+  "served_model": "qwen3-vl-plus",
+  "usage": {
+    "prompt_tokens": 2758,
+    "completion_tokens": 245,
+    "total_tokens": 3003,
+    "completion_tokens_details": {
+      "text_tokens": 245
+    },
+    "prompt_tokens_details": {
+      "image_tokens": 1906,
+      "text_tokens": 852,
+      "cached_tokens": 128
+    }
+  },
+  "elapsed_seconds": 7.798041800007923,
+  "decision": {
+    "summary": "Within allowed_context [570,650], only one candidate temporary offset is present: a co-occurring E-up / U-down shift beginning at index 605. The event lacks a confirmed return before index 650, and the sustained nature without reversal makes its temporary status uncertain. The optional jump at index 600 is inconsistent with the observed onset (which begins later, ~605) and is rejected as misleading. No other temporary offsets are supported by the original observations in this context.",
+    "intervals": [
+      {
+        "start": 605,
+        "end": 614,
+        "status": "uncertain",
+        "observation": "E-component shows a sustained step-like rise starting near index 605; U-component exhibits a correlated sharp drop (~4 MAD) over the same interval. No return to pre-event levels is observed within allowed_context (up to 650), and the offset persists beyond the screened region. N-component shows no clear counterpart. The onset is abrupt, interior is sustained, but return is unobserved → uncertain."
+      }
+    ]
+  }
+}

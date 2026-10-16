@@ -1,0 +1,33 @@
+{
+  "status": "success",
+  "requested_model": "qwen3-vl-plus",
+  "request_count": 1,
+  "retry_count": 0,
+  "http_status": 200,
+  "served_model": "qwen3-vl-plus",
+  "usage": {
+    "prompt_tokens": 2547,
+    "completion_tokens": 230,
+    "total_tokens": 2777,
+    "completion_tokens_details": {
+      "text_tokens": 230
+    },
+    "prompt_tokens_details": {
+      "image_tokens": 1738,
+      "text_tokens": 809,
+      "cached_tokens": 128
+    }
+  },
+  "elapsed_seconds": 6.344935399974929,
+  "decision": {
+    "summary": "A coherent multi-axis drop occurs at indices 615–618 (N/E/U), with sustained offset in N and partial recovery in E/U through 623. No opposing return is observed in N within allowed context [580,660]; E/U recovery is incomplete and not symmetric. Thus, the interval is classified as uncertain—consistent with a temporary offset lacking full return, or a permanent step with partial elastic rebound in E/U.",
+    "intervals": [
+      {
+        "start": 615,
+        "end": 623,
+        "status": "uncertain",
+        "observation": "N drops sharply ~2 MAD from index 615 to 618 and remains offset; E drops ~2.5 MAD over same span and recovers partially by 623; U drops ~3 MAD and recovers partially by 623. Return in N is absent within allowed context, while E/U show incomplete rebound—no opposing return observed before index 660."
+      }
+    ]
+  }
+}

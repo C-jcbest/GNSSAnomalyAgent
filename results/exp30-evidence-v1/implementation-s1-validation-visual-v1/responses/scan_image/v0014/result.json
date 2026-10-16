@@ -1,0 +1,37 @@
+{
+  "status": "success",
+  "requested_model": "qwen3-vl-plus",
+  "request_count": 1,
+  "retry_count": 0,
+  "http_status": 200,
+  "served_model": "qwen3-vl-plus",
+  "usage": {
+    "prompt_tokens": 4218,
+    "completion_tokens": 261,
+    "total_tokens": 4479,
+    "completion_tokens_details": {
+      "text_tokens": 261
+    },
+    "prompt_tokens_details": {
+      "image_tokens": 3702,
+      "text_tokens": 516,
+      "cached_tokens": 0
+    }
+  },
+  "elapsed_seconds": 8.030201899993699,
+  "decision": {
+    "summary": "Two regions merit closer inspection: (1) a sharp U-component step near index 610 with ambiguous recovery, and (2) a broad E-component platform from ~495–535 with unclear return behavior. Other segments show typical noise or smooth motion without compelling morphological anomalies.",
+    "regions": [
+      {
+        "start": 605,
+        "end": 615,
+        "observation": "Sharp, multi-sample downward step in U-component (~8 MAD units) centered near index 610, with no clear opposing return in the following ~5 samples; E and N show modest correlated transients but no matching step. The abruptness and amplitude suggest a possible permanent offset or large temporary displacement."
+      },
+      {
+        "start": 495,
+        "end": 545,
+        "observation": "Broad, asymmetric platform-like feature in E-component from ~495 to 535: gradual rise followed by slower decay, superposed on background noise; N and U show weaker, less coherent co-variation. No clean opposing return observed, and the shape is inconsistent with simple noise—suggests a slow transient or partial recovery."
+      }
+    ]
+  }
+}

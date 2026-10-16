@@ -1,0 +1,38 @@
+{
+  "status": "success",
+  "requested_model": "qwen3-vl-plus",
+  "request_count": 1,
+  "retry_count": 0,
+  "http_status": 200,
+  "served_model": "qwen3-vl-plus",
+  "usage": {
+    "prompt_tokens": 7330,
+    "completion_tokens": 363,
+    "total_tokens": 7693,
+    "completion_tokens_details": {
+      "text_tokens": 363
+    },
+    "prompt_tokens_details": {
+      "text_tokens": 7330,
+      "cached_tokens": 128
+    }
+  },
+  "elapsed_seconds": 9.849099400016712,
+  "decision": {
+    "summary": "Two candidate temporary offsets are identified within [450,699]: (1) a multi-axis jump at index 490 with large N/E/U excursions and persistent oscillatory behavior without confirmed return; (2) a partial reversal near index 500 with opposing N/E changes but incomplete recovery and ambiguous U behavior. Neither interval shows a clean onset–sustained–return structure on all axes; both lack unambiguous opposing return within allowed context. No confirmed temporary offset intervals meet full criteria.",
+    "intervals": [
+      {
+        "start": 490,
+        "end": 498,
+        "status": "uncertain",
+        "observation": "N rises from ~2.9 (index 489) to ~5.1 (index 490), E drops sharply from ~-0.9 to ~-2.4, U spikes from ~1.2 to ~3.5; subsequent samples (491–498) show high-amplitude oscillations without return to pre-jump levels; no opposing return observed before index 499."
+      },
+      {
+        "start": 500,
+        "end": 502,
+        "status": "uncertain",
+        "observation": "At index 500, N drops from ~5.1 to ~2.9 and E rebounds from ~-2.4 to ~-1.0, suggesting partial recovery or superposed offset; however, U remains elevated (~3.5→~2.7) and motion continues irregularly; no clear sustained platform or return to original baseline by index 502."
+      }
+    ]
+  }
+}

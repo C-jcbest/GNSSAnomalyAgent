@@ -1,0 +1,33 @@
+{
+  "status": "success",
+  "requested_model": "qwen3-vl-plus",
+  "request_count": 1,
+  "retry_count": 0,
+  "http_status": 200,
+  "served_model": "qwen3-vl-plus",
+  "usage": {
+    "prompt_tokens": 2870,
+    "completion_tokens": 241,
+    "total_tokens": 3111,
+    "completion_tokens_details": {
+      "text_tokens": 241
+    },
+    "prompt_tokens_details": {
+      "image_tokens": 1906,
+      "text_tokens": 964,
+      "cached_tokens": 128
+    }
+  },
+  "elapsed_seconds": 6.756372399977408,
+  "decision": {
+    "summary": "A multi-component offset begins ~540: N and U rise sharply and remain elevated, E drops concurrently. The change is sustained over ≥40 samples within allowed_context [501,579], but no return is observed before index 579, preventing confirmation of temporariness. Candidate jumps at 538 and 543 align with onset but do not define interval boundaries; the persistent plateau suggests either a long temporary offset or an early permanent step—hence uncertain status.",
+    "intervals": [
+      {
+        "start": 540,
+        "end": 579,
+        "status": "uncertain",
+        "observation": "N and U show a sustained upward offset beginning near index 540, with E showing a concurrent downward step; the offset persists through the allowed context (501–579) without observed return. The onset is multi-sample (538–543), interior is stable (544–579), but no opposing return is observed within allowed_context, so status is uncertain."
+      }
+    ]
+  }
+}

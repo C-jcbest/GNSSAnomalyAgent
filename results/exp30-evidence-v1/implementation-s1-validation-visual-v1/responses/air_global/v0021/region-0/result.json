@@ -1,0 +1,33 @@
+{
+  "status": "success",
+  "requested_model": "qwen3-vl-plus",
+  "request_count": 1,
+  "retry_count": 0,
+  "http_status": 200,
+  "served_model": "qwen3-vl-plus",
+  "usage": {
+    "prompt_tokens": 2816,
+    "completion_tokens": 272,
+    "total_tokens": 3088,
+    "completion_tokens_details": {
+      "text_tokens": 272
+    },
+    "prompt_tokens_details": {
+      "image_tokens": 1906,
+      "text_tokens": 910,
+      "cached_tokens": 128
+    }
+  },
+  "elapsed_seconds": 8.560888700012583,
+  "decision": {
+    "summary": "A coherent abrupt drop in E and U (with smaller N dip) begins near index 600 and persists through 614. E does not recover to pre-event level by 614, and no clear opposing return is observed within allowed context [565,650]; thus the interval is uncertain. The candidate jumps at 600 and 614 are inconsistent in sign/magnitude across axes and do not define a closed temporary offset. No other temporary offsets confirmed in allowed context.",
+    "intervals": [
+      {
+        "start": 600,
+        "end": 614,
+        "status": "uncertain",
+        "observation": "E and U show a sharp multi-sample drop starting near index 600, with E falling ~4 MAD and U ~3 MAD; N shows a smaller concurrent dip. The E component does not fully recover by index 614, and the return is incomplete/ambiguous (E remains offset, U partially recovers but not to pre-event level). A candidate jump at 614 suggests partial reversal, but the sustained interior lacks clear recovery on E and N, and no opposing return is observed before end of allowed context (650)."
+      }
+    ]
+  }
+}

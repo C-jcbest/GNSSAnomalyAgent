@@ -1,0 +1,33 @@
+{
+  "status": "success",
+  "requested_model": "qwen3-vl-plus",
+  "request_count": 1,
+  "retry_count": 0,
+  "http_status": 200,
+  "served_model": "qwen3-vl-plus",
+  "usage": {
+    "prompt_tokens": 2511,
+    "completion_tokens": 244,
+    "total_tokens": 2755,
+    "completion_tokens_details": {
+      "text_tokens": 244
+    },
+    "prompt_tokens_details": {
+      "image_tokens": 1738,
+      "text_tokens": 773,
+      "cached_tokens": 128
+    }
+  },
+  "elapsed_seconds": 7.976538700022502,
+  "decision": {
+    "summary": "A co-occurring abrupt shift in E (up) and U (down) begins at index 605, persists through 614, and lacks a clear opposing return within the allowed context [570,650]. The sustained offset on both axes meets criteria for a temporary interval but cannot be confirmed as closed; thus status is uncertain. No other temporary offsets are supported by onset-sustained-return evidence in this window.",
+    "intervals": [
+      {
+        "start": 605,
+        "end": 614,
+        "status": "uncertain",
+        "observation": "E-component rises sharply from ~5.8 to ~7.8 MAD over indices 605–608, then sustains elevated level through 614; U-component drops sharply from ~−4.5 to ~−7.0 MAD over same onset (605–607), remains low until 614 with no return observed within allowed context. N shows no coherent step. Return not observed before index 650, so status uncertain."
+      }
+    ]
+  }
+}

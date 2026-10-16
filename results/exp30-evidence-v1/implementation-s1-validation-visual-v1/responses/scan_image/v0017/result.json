@@ -1,0 +1,37 @@
+{
+  "status": "success",
+  "requested_model": "qwen3-vl-plus",
+  "request_count": 1,
+  "retry_count": 0,
+  "http_status": 200,
+  "served_model": "qwen3-vl-plus",
+  "usage": {
+    "prompt_tokens": 4218,
+    "completion_tokens": 275,
+    "total_tokens": 4493,
+    "completion_tokens_details": {
+      "text_tokens": 275
+    },
+    "prompt_tokens_details": {
+      "image_tokens": 3702,
+      "text_tokens": 516,
+      "cached_tokens": 0
+    }
+  },
+  "elapsed_seconds": 8.754835400002776,
+  "decision": {
+    "summary": "Two regions stand out: (1) a coherent step-like displacement in N/E around index 440–445 with sustained offset, and (2) a sharp transient 3D spike centered at index 522–523, most prominent in U but with clear cross-axis coupling. Other features appear as typical noise or smooth trends.",
+    "regions": [
+      {
+        "start": 435,
+        "end": 450,
+        "observation": "Sharp step-up in N and E (≈+10 MAD) near index 440–445, followed by a plateau; U shows a smaller concurrent rise then gradual decline. Cross-axis coherence suggests a permanent offset or sustained motion onset, not isolated noise."
+      },
+      {
+        "start": 520,
+        "end": 525,
+        "observation": "Large negative spike in U (≈−10 MAD) at index 522–523, coincident with a sharp positive spike in N and a smaller positive excursion in E—suggesting a transient 3D perturbation. The U dip is abrupt and non-symmetric; possible partial return visible in U by 525 but not fully resolved."
+      }
+    ]
+  }
+}

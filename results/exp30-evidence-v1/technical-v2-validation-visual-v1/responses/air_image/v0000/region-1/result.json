@@ -1,0 +1,33 @@
+{
+  "status": "success",
+  "requested_model": "qwen3-vl-plus",
+  "request_count": 1,
+  "retry_count": 0,
+  "http_status": 200,
+  "served_model": "qwen3-vl-plus",
+  "usage": {
+    "prompt_tokens": 2541,
+    "completion_tokens": 220,
+    "total_tokens": 2761,
+    "completion_tokens_details": {
+      "text_tokens": 220
+    },
+    "prompt_tokens_details": {
+      "image_tokens": 1738,
+      "text_tokens": 803,
+      "cached_tokens": 0
+    }
+  },
+  "elapsed_seconds": 6.495637199986959,
+  "decision": {
+    "summary": "A coherent multi-axis linear trend begins abruptly at index 725 and persists through the end of the allowed context (729) without any sign of reversal or return. All three components (N, E, U) show consistent directional change, suggesting a common-mode offset, but absence of a return prevents confirmation of temporariness. No other temporary offsets detected in the allowed context.",
+    "intervals": [
+      {
+        "start": 725,
+        "end": 729,
+        "status": "uncertain",
+        "observation": "Coherent linear trend across N/E/U from index 725 onward: N decreases (~−2.0 to −2.4), E increases (~6.5 to 7.2), U increases (~3.8 to 4.2). Onset is abrupt at 725, but no return or opposing motion observed within allowed context (ends at 729). Return phase unobserved; status uncertain."
+      }
+    ]
+  }
+}

@@ -1,0 +1,36 @@
+{
+  "status": "success",
+  "requested_model": "qwen3-vl-plus",
+  "request_count": 1,
+  "retry_count": 0,
+  "http_status": 200,
+  "served_model": "qwen3-vl-plus",
+  "usage": {
+    "prompt_tokens": 13540,
+    "completion_tokens": 301,
+    "total_tokens": 13841,
+    "completion_tokens_details": {
+      "text_tokens": 301
+    },
+    "prompt_tokens_details": {
+      "text_tokens": 13540,
+      "cached_tokens": 0
+    }
+  },
+  "elapsed_seconds": 8.271841300011147,
+  "decision": {
+    "summary": "Two regions merit closer inspection: (1) an abrupt multi-component jump near index 483–484, and (2) a post-jump segment starting at index 605 showing superposed cross-axis changes with ambiguous return characteristics.",
+    "regions": [
+      {
+        "start": 483,
+        "end": 484,
+        "observation": "Cross-axis shape shows a multi-sample abrupt shift in all components around index 483–484: N jumps from ~-2.5 to +11.8, E from ~-4.1 to -16.2, U from ~2.2 to -12.5 — a large, coherent offset with no clear return within the window; likely a permanent jump or major temporary displacement."
+      },
+      {
+        "start": 605,
+        "end": 729,
+        "observation": "After the large jump (starting ~484), the series settles into a noisy but relatively stable regime until ~605, then exhibits a complex superposition: U rises sharply (~index 605–608) while N and E show opposing trends (N drops, E rises), followed by a possible platform-like segment (610–620) before further fluctuations; ambiguous return behavior suggests overlapping temporary offsets or slow creep."
+      }
+    ]
+  }
+}

@@ -1,0 +1,34 @@
+{
+  "status": "success",
+  "requested_model": "qwen3-vl-plus",
+  "request_count": 0,
+  "retry_count": 0,
+  "http_status": 200,
+  "served_model": "qwen3-vl-plus",
+  "usage": {
+    "prompt_tokens": 2521,
+    "completion_tokens": 171,
+    "total_tokens": 2692,
+    "completion_tokens_details": {
+      "text_tokens": 171
+    },
+    "prompt_tokens_details": {
+      "image_tokens": 1906,
+      "text_tokens": 615,
+      "cached_tokens": 0
+    }
+  },
+  "elapsed_seconds": 5.875141399999848,
+  "decision": {
+    "intervals": [
+      {
+        "start": 546,
+        "end": 559
+      }
+    ],
+    "evidence": "A clear temporary offset appears in all three components (N, E, U) between indices 546 and 559: at index 546, N drops ~10 MAD, E drops ~12 MAD, and U drops ~8 MAD; the trajectory remains level (within noise) through index 559, then recovers abruptly at index 560 back toward prior trend. The offset is sustained over 14 samples (546–559 inclusive), with coherent behavior across axes, and no underlying physical motion (slope unchanged before/after). No other sustained multi-sample offsets are observed."
+  },
+  "reused_original_request_count": 1,
+  "reused_original_work": "D:\\CodeWorkSpace\\AgentWorkspace\\GNSSAnomalyAgent-sim\\artifacts\\exp30\\technical-v2\\validation-visual-v1\\predictions\\vrc_image\\v0251",
+  "reused_receipt_sha256": "be213abae463de73fe7239ae8e8c45b801ebfcb0d0355a62f7dfc154f5d99c8e"
+}

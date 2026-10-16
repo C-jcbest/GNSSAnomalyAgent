@@ -1,0 +1,38 @@
+{
+  "status": "success",
+  "requested_model": "qwen3-vl-plus",
+  "request_count": 1,
+  "retry_count": 0,
+  "http_status": 200,
+  "served_model": "qwen3-vl-plus",
+  "usage": {
+    "prompt_tokens": 6365,
+    "completion_tokens": 379,
+    "total_tokens": 6744,
+    "completion_tokens_details": {
+      "text_tokens": 379
+    },
+    "prompt_tokens_details": {
+      "text_tokens": 6365,
+      "cached_tokens": 128
+    }
+  },
+  "elapsed_seconds": 11.357096699997783,
+  "decision": {
+    "summary": "Two candidate temporary offset intervals identified in the screened region (365–544): (1) early multi-sample drop in N (365–374) with correlated E/U transients but no confirmed return; (2) second abrupt drop in N (410–414) with co-occurring E/U shifts and only partial recovery observed before idx 544. Both lack definitive opposing return within allowed context [365,579], so status is uncertain. No other temporary offsets confirmed.",
+    "intervals": [
+      {
+        "start": 365,
+        "end": 374,
+        "status": "uncertain",
+        "observation": "N drops sharply from -0.87 (idx 365) to -1.17 (idx 373), then rebounds; E and U show correlated transient offsets (E: 0.44→-0.83, U: 0.33→0.98), but no clear return by idx 374 — onset and interior sustained, return ambiguous"
+      },
+      {
+        "start": 410,
+        "end": 414,
+        "status": "uncertain",
+        "observation": "N drops again sharply at idx 410–414 (from ~-0.5 to -1.9), with E and U showing concurrent transients (E: -0.09→-1.04, U: 1.71→-0.64); partial recovery in N/E/U begins after idx 414 but full return not observed within allowed context — interior sustained, return unobserved"
+      }
+    ]
+  }
+}

@@ -1,0 +1,33 @@
+{
+  "status": "success",
+  "requested_model": "qwen3-vl-plus",
+  "request_count": 1,
+  "retry_count": 0,
+  "http_status": 200,
+  "served_model": "qwen3-vl-plus",
+  "usage": {
+    "prompt_tokens": 2489,
+    "completion_tokens": 254,
+    "total_tokens": 2743,
+    "completion_tokens_details": {
+      "text_tokens": 254
+    },
+    "prompt_tokens_details": {
+      "image_tokens": 1738,
+      "text_tokens": 751,
+      "cached_tokens": 128
+    }
+  },
+  "elapsed_seconds": 7.0194194999930914,
+  "decision": {
+    "summary": "Only one candidate temporary offset lies within allowed_context [570,650]: a sharp U-drop beginning at index 605 with correlated N/E transients. The offset does not fully recover by index 614, and the return phase is unobserved/ambiguous through 650; thus status is uncertain. No other temporary offsets are supported in this window—other features (e.g., sustained N-positive trend starting earlier) fall outside allowed_context or lack opposing return evidence.",
+    "intervals": [
+      {
+        "start": 605,
+        "end": 614,
+        "status": "uncertain",
+        "observation": "U-component shows a multi-sample drop starting at index 605, reaching ~−3 MAD by 607–609; N shows a transient negative excursion (−1 to −2 MAD) and E a small negative shift (~−0.5 MAD) coincident with onset. U recovers partially by 614 but remains ~1.5 MAD below pre-event level; no clear opposing return observed within allowed context (up to 650)."
+      }
+    ]
+  }
+}

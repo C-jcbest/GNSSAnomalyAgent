@@ -1,0 +1,36 @@
+{
+  "status": "success",
+  "requested_model": "qwen3-vl-plus",
+  "request_count": 1,
+  "retry_count": 0,
+  "http_status": 200,
+  "served_model": "qwen3-vl-plus",
+  "usage": {
+    "prompt_tokens": 13337,
+    "completion_tokens": 345,
+    "total_tokens": 13682,
+    "completion_tokens_details": {
+      "text_tokens": 345
+    },
+    "prompt_tokens_details": {
+      "text_tokens": 13337,
+      "cached_tokens": 256
+    }
+  },
+  "elapsed_seconds": 11.236046300007729,
+  "decision": {
+    "summary": "Two regions stand out: (1) a sharp cross-axis shift in N/E around indices 520–525 within the first overlapping window, with persistent post-shift levels; (2) a steep, sustained multi-component descent starting near index 690 and continuing to the end of record, involving large coherent changes in all axes without recovery.",
+    "regions": [
+      {
+        "start": 520,
+        "end": 544,
+        "observation": "Cross-axis shape shows a multi-sample abrupt shift in N and E around index 520–525, with N jumping from ~1.5 to ~3.9 and E dropping from ~1.0 to ~-0.8, followed by sustained elevated N and depressed E values; U also shifts upward but less coherently. The change is not fully reversed within the window, suggesting a possible permanent offset or prolonged transient."
+      },
+      {
+        "start": 690,
+        "end": 729,
+        "observation": "From index ~680 onward, all three components (N/E/U) enter a steep, sustained descent: N drops from ~2.0 to ~-7.0, E from ~-1.0 to ~-11.0, and U from ~-1.0 to ~13.0, culminating in large-magnitude, coherent motion. A sharp multi-sample drop begins near index 690 and continues through the end, with no clear return—possibly a major displacement event or data artifact requiring closer inspection."
+      }
+    ]
+  }
+}

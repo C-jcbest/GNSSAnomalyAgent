@@ -1,0 +1,32 @@
+{
+  "status": "success",
+  "requested_model": "qwen3-vl-plus",
+  "request_count": 1,
+  "retry_count": 0,
+  "http_status": 200,
+  "served_model": "qwen3-vl-plus",
+  "usage": {
+    "prompt_tokens": 2692,
+    "completion_tokens": 353,
+    "total_tokens": 3045,
+    "completion_tokens_details": {
+      "text_tokens": 353
+    },
+    "prompt_tokens_details": {
+      "text_tokens": 2692,
+      "cached_tokens": 128
+    }
+  },
+  "elapsed_seconds": 10.172400399984326,
+  "decision": {
+    "summary": "A multi-sample drop across all axes occurs at indices 492–494, with N and U showing clear downward shifts and E reversing sign. A platform-like offset persists through index 498, but no definitive opposing return is observed within allowed context [455,530]; subsequent behavior is noisy and interrupted by missing samples (indices 499–502, 507–510), preventing confirmation of a complete temporary interval. No other candidate intervals meet criteria.",
+    "intervals": [
+      {
+        "start": 492,
+        "end": 498,
+        "status": "uncertain",
+        "observation": "Multi-sample drop in N, E, and U from index 492 to 494 (N: -2.25654 → -2.25207 → -2.1247; E: 0.78493 → 0.85735 → -0.33964; U: -2.07432 → -2.02711 → -2.44165), followed by sustained offset through index 498 (e.g., N remains ~-1.37 to -2.66, E ~0.22 to 0.58, U ~-3.23 to -1.26) without clear return to pre-drop trend; recovery ambiguous beyond 498 due to noise and missing data at 499–502."
+      }
+    ]
+  }
+}

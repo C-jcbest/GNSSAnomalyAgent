@@ -1,0 +1,39 @@
+{
+  "status": "success",
+  "requested_model": "qwen3-vl-plus",
+  "request_count": 1,
+  "retry_count": 0,
+  "http_status": 200,
+  "served_model": "qwen3-vl-plus",
+  "usage": {
+    "prompt_tokens": 2542,
+    "completion_tokens": 316,
+    "total_tokens": 2858,
+    "completion_tokens_details": {
+      "text_tokens": 316
+    },
+    "prompt_tokens_details": {
+      "image_tokens": 1738,
+      "text_tokens": 804,
+      "cached_tokens": 128
+    }
+  },
+  "elapsed_seconds": 7.856223799986765,
+  "decision": {
+    "summary": "Two multi-axis offset candidates within screened region: (1) E/U negative offset 460–480 with no observed return; (2) E/U positive offset 510–525 with no observed return. N-component shows continuous trend throughout, inconsistent with isolated temporary offsets alone. Neither interval exhibits a clear opposing return before index 579; both classified as uncertain.",
+    "intervals": [
+      {
+        "start": 460,
+        "end": 480,
+        "status": "uncertain",
+        "observation": "E drops ~1.5 MAD and U drops ~2 MAD over multi-sample interval 460–480; N shows sustained upward trend but no matching step—return not observed before index 480, and E/U do not recover to pre-460 baseline by 480. Onset clear, interior sustained, return ambiguous → uncertain."
+      },
+      {
+        "start": 510,
+        "end": 525,
+        "status": "uncertain",
+        "observation": "E rises ~1 MAD and U rises ~1.5 MAD over 510–525; N continues upward trend without reversal; E/U do not return to pre-510 levels by 525, and no opposing offset observed afterward within allowed context. Onset and interior evident, return unobserved → uncertain."
+      }
+    ]
+  }
+}

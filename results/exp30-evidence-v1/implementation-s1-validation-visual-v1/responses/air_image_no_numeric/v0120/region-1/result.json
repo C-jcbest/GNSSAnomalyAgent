@@ -1,0 +1,39 @@
+{
+  "status": "success",
+  "requested_model": "qwen3-vl-plus",
+  "request_count": 1,
+  "retry_count": 0,
+  "http_status": 200,
+  "served_model": "qwen3-vl-plus",
+  "usage": {
+    "prompt_tokens": 2504,
+    "completion_tokens": 290,
+    "total_tokens": 2794,
+    "completion_tokens_details": {
+      "text_tokens": 290
+    },
+    "prompt_tokens_details": {
+      "image_tokens": 1738,
+      "text_tokens": 766,
+      "cached_tokens": 128
+    }
+  },
+  "elapsed_seconds": 8.509590400004527,
+  "decision": {
+    "summary": "Two overlapping transient offsets in U (and correlated N/E) occur within allowed context: first onset ~518 with sharp drop and incomplete recovery, second onset ~548 with secondary dip. Neither shows a confirmed opposing return before their respective ends; both classified uncertain due to ambiguous or absent return phases.",
+    "intervals": [
+      {
+        "start": 518,
+        "end": 542,
+        "status": "uncertain",
+        "observation": "U drops sharply from ~0 to ~-2 over 3–4 samples near 520, with N and E showing correlated negative transients (N: ~-1.5, E: ~-0.5) peaking 518–522; interior shows slow rebound but no return to pre-event baseline by 542; opposing motion not observed before end of interval"
+      },
+      {
+        "start": 548,
+        "end": 562,
+        "status": "uncertain",
+        "observation": "Second U dip near 550 (~-1.8), preceded by partial recovery from first event; N/E show weaker co-transients; interior (552–558) remains offset below prior baseline; no clear opposing return observed before 562"
+      }
+    ]
+  }
+}

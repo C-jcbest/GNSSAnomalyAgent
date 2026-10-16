@@ -1,0 +1,36 @@
+{
+  "status": "success",
+  "requested_model": "qwen3-vl-plus",
+  "request_count": 1,
+  "retry_count": 0,
+  "http_status": 200,
+  "served_model": "qwen3-vl-plus",
+  "usage": {
+    "prompt_tokens": 13046,
+    "completion_tokens": 336,
+    "total_tokens": 13382,
+    "completion_tokens_details": {
+      "text_tokens": 336
+    },
+    "prompt_tokens_details": {
+      "text_tokens": 13046,
+      "cached_tokens": 0
+    }
+  },
+  "elapsed_seconds": 10.202461000008043,
+  "decision": {
+    "summary": "Two regions merit closer inspection: (1) a sudden large jump in all axes near the end of the first window (indices 539–544), and (2) a prolonged segment starting ~610 with a U-axis rise, N-axis decline, and ambiguous E behavior—possibly indicating superposed motion or platform with unresolved return.",
+    "regions": [
+      {
+        "start": 539,
+        "end": 544,
+        "observation": "Sharp multi-sample jump in N and E (N from ~-0.2 to +5.8, E from ~0.8 to +9.0) at index 539–541, followed by sustained high-amplitude displacement; U also jumps downward (~-1.5 to -4.3). The abrupt onset and large magnitude suggest a possible permanent offset or transient event with incomplete return."
+      },
+      {
+        "start": 610,
+        "end": 729,
+        "observation": "Extended region of complex cross-axis behavior: after a plateau around indices 610–620 (U ~3.2–3.9), U rises sharply to ~5.3 by index 660, while N and E show opposing trends—N drops steadily from ~-0.5 to -6.2, E fluctuates but ends near -0.3. A possible platform-like segment (610–625) precedes ambiguous superposed changes; no clear return observed within window."
+      }
+    ]
+  }
+}

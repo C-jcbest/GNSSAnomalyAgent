@@ -1,0 +1,39 @@
+{
+  "status": "success",
+  "requested_model": "qwen3-vl-plus",
+  "request_count": 1,
+  "retry_count": 0,
+  "http_status": 200,
+  "served_model": "qwen3-vl-plus",
+  "usage": {
+    "prompt_tokens": 2529,
+    "completion_tokens": 286,
+    "total_tokens": 2815,
+    "completion_tokens_details": {
+      "text_tokens": 286
+    },
+    "prompt_tokens_details": {
+      "image_tokens": 1738,
+      "text_tokens": 791,
+      "cached_tokens": 128
+    }
+  },
+  "elapsed_seconds": 8.371005699998932,
+  "decision": {
+    "summary": "Two candidate temporary offset intervals identified in N/E/U: (365–375) and (410–415), both showing multi-axis transient offsets without confirmed full returns within allowed context [365,579]. Neither exhibits a sustained flat interior nor a clean opposing return; recoveries are partial and noisy. No other intervals meet criteria for confirmed temporary offset.",
+    "intervals": [
+      {
+        "start": 365,
+        "end": 375,
+        "status": "uncertain",
+        "observation": "N shows a multi-sample drop (365–375); E and U exhibit correlated transient offsets in same window; no clear return observed before 376, and interior is not sustained flat—only a brief dip with noisy recovery. Return ambiguous."
+      },
+      {
+        "start": 410,
+        "end": 415,
+        "status": "uncertain",
+        "observation": "N shows second abrupt drop (410–415) after plateau; E and U show concurrent transient offsets; partial recovery begins after 415 but does not reach pre-drop level by 420, and no full return observed within allowed context. Sustained interior absent; return unconfirmed."
+      }
+    ]
+  }
+}

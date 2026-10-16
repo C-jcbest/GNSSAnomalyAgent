@@ -1,0 +1,32 @@
+{
+  "status": "success",
+  "requested_model": "qwen3-vl-plus",
+  "request_count": 1,
+  "retry_count": 0,
+  "http_status": 200,
+  "served_model": "qwen3-vl-plus",
+  "usage": {
+    "prompt_tokens": 2890,
+    "completion_tokens": 241,
+    "total_tokens": 3131,
+    "completion_tokens_details": {
+      "text_tokens": 241
+    },
+    "prompt_tokens_details": {
+      "text_tokens": 2890,
+      "cached_tokens": 128
+    }
+  },
+  "elapsed_seconds": 6.5301521999936085,
+  "decision": {
+    "summary": "Within allowed context [580,659], a sharp multi-sample displacement occurs around indices 618–623, most pronounced in E (jump of ~2.8 MAD units over 5 samples), with concurrent but less structured changes in N/U; the offset does not clearly reverse before index 624, and the return phase is unobserved or ambiguous within the window. No confirmed temporary interval can be established due to missing recovery evidence; status is uncertain.",
+    "intervals": [
+      {
+        "start": 618,
+        "end": 623,
+        "status": "uncertain",
+        "observation": "E-component shows abrupt multi-sample positive jump starting ~618 (E from -2.8876 to -0.0506 at index 623), N and U show less coherent but concurrent shifts; recovery is incomplete and ambiguous—E does not return to pre-jump level by index 623, and no clear opposing edge observed within allowed context [580,659]."
+      }
+    ]
+  }
+}

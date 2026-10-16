@@ -1,0 +1,33 @@
+{
+  "status": "success",
+  "requested_model": "qwen3-vl-plus",
+  "request_count": 1,
+  "retry_count": 0,
+  "http_status": 200,
+  "served_model": "qwen3-vl-plus",
+  "usage": {
+    "prompt_tokens": 2505,
+    "completion_tokens": 235,
+    "total_tokens": 2740,
+    "completion_tokens_details": {
+      "text_tokens": 235
+    },
+    "prompt_tokens_details": {
+      "image_tokens": 1738,
+      "text_tokens": 767,
+      "cached_tokens": 128
+    }
+  },
+  "elapsed_seconds": 6.918492400000105,
+  "decision": {
+    "summary": "A multi-axis downward shift initiates abruptly at index 495 across N/E/U, with sustained offset in N and incomplete recovery in E/U through index 507. No clear opposing return is observed within the allowed context [455,545]; thus the interval is classified as uncertain. No other temporary offsets are confirmed in this region.",
+    "intervals": [
+      {
+        "start": 495,
+        "end": 507,
+        "status": "uncertain",
+        "observation": "N drops abruptly ~2 MAD at index 495, sustains offset through 507; E drops ~3 MAD at 495–496, recovers partially by 507 but not to pre-event level; U drops ~2 MAD at 495–496 and shows incomplete recovery by 507. Return is unobserved within allowed context (ends at 545), and N remains offset—no opposing return on any axis observed before 545."
+      }
+    ]
+  }
+}

@@ -1,0 +1,36 @@
+{
+  "status": "success",
+  "requested_model": "qwen3-vl-plus",
+  "request_count": 1,
+  "retry_count": 0,
+  "http_status": 200,
+  "served_model": "qwen3-vl-plus",
+  "usage": {
+    "prompt_tokens": 13796,
+    "completion_tokens": 287,
+    "total_tokens": 14083,
+    "completion_tokens_details": {
+      "text_tokens": 287
+    },
+    "prompt_tokens_details": {
+      "text_tokens": 13796,
+      "cached_tokens": 256
+    }
+  },
+  "elapsed_seconds": 8.874413299985463,
+  "decision": {
+    "summary": "Two regions merit closer inspection: (1) a sharp multi-sample jump around indices 618–624 indicating a likely permanent displacement, and (2) a prolonged high-magnitude phase from ~690 to 729 with complex cross-axis morphology suggesting superposed or ambiguous motion. No other windows show similarly distinctive morphological features.",
+    "regions": [
+      {
+        "start": 618,
+        "end": 624,
+        "observation": "Abrupt multi-sample shift in all axes around index 620–624: N jumps from ~1.5 to ~12, E from ~-3.6 to ~0.7, U from ~-21.6 to ~-13.8; appears as a permanent offset with no clear return within the window."
+      },
+      {
+        "start": 690,
+        "end": 729,
+        "observation": "Sustained high-amplitude motion in N/E/U from ~index 690 onward, with large scatter and apparent platform-like behavior in U (stabilizing near -17 to -18), while N and E show irregular but bounded variation; possible opposing or superposed changes visible in overlapping windows near 700–720."
+      }
+    ]
+  }
+}

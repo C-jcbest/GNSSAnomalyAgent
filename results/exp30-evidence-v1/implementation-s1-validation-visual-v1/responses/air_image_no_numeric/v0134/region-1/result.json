@@ -1,0 +1,33 @@
+{
+  "status": "success",
+  "requested_model": "qwen3-vl-plus",
+  "request_count": 1,
+  "retry_count": 0,
+  "http_status": 200,
+  "served_model": "qwen3-vl-plus",
+  "usage": {
+    "prompt_tokens": 2464,
+    "completion_tokens": 199,
+    "total_tokens": 2663,
+    "completion_tokens_details": {
+      "text_tokens": 199
+    },
+    "prompt_tokens_details": {
+      "image_tokens": 1738,
+      "text_tokens": 726,
+      "cached_tokens": 128
+    }
+  },
+  "elapsed_seconds": 6.054674199986039,
+  "decision": {
+    "summary": "Only one candidate temporary offset lies within allowed context [570,705]: a multi-axis perturbation centered on E, starting ~615, sustained through 655, with incomplete/ambiguous return. No clear opposing return observed on E before index 705; thus status is uncertain. N and U show correlated fluctuations but no independent sustained offsets meeting criteria.",
+    "intervals": [
+      {
+        "start": 615,
+        "end": 655,
+        "status": "uncertain",
+        "observation": "E-component shows a sustained downward shift beginning near index 615, with coherent but weaker U dip and N fluctuation; the offset persists through 655 without full return. Return phase is ambiguous (partial recovery ~660–665) and not confirmed by opposing motion on E axis before end of allowed context."
+      }
+    ]
+  }
+}

@@ -1,0 +1,37 @@
+{
+  "status": "success",
+  "requested_model": "qwen3-vl-plus",
+  "request_count": 1,
+  "retry_count": 0,
+  "http_status": 200,
+  "served_model": "qwen3-vl-plus",
+  "usage": {
+    "prompt_tokens": 5462,
+    "completion_tokens": 277,
+    "total_tokens": 5739,
+    "completion_tokens_details": {
+      "text_tokens": 277
+    },
+    "prompt_tokens_details": {
+      "image_tokens": 4936,
+      "text_tokens": 526,
+      "cached_tokens": 0
+    }
+  },
+  "elapsed_seconds": 8.485925799992401,
+  "decision": {
+    "summary": "Two regions stand out: (1) a coherent ramp-like motion in N/E from ~470 to 544, and (2) a complex multi-axis transient between ~610 and 729 involving opposing shifts and a prominent U-spike. Other intervals show typical noise or smooth trends without compelling morphological anomalies.",
+    "regions": [
+      {
+        "start": 470,
+        "end": 544,
+        "observation": "N-component shows a sustained upward ramp beginning near index 470, with E-component concurrently descending in a roughly linear fashion; U-component remains noisy but exhibits a subtle downward trend over the same interval. The cross-axis shape suggests a coherent motion event rather than isolated noise."
+      },
+      {
+        "start": 610,
+        "end": 729,
+        "observation": "From ~610 onward, N and E components display opposing multi-sample shifts: N rises sharply around 630–640 then plateaus, while E drops sharply at ~630 and recovers partially by 650; U shows a large negative spike near 665 followed by a slow rebound. The overlapping timing and directionality suggest superposed or coupled transient behavior."
+      }
+    ]
+  }
+}

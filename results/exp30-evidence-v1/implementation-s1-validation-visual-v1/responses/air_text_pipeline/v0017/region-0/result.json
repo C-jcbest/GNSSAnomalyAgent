@@ -1,0 +1,32 @@
+{
+  "status": "success",
+  "requested_model": "qwen3-vl-plus",
+  "request_count": 1,
+  "retry_count": 0,
+  "http_status": 200,
+  "served_model": "qwen3-vl-plus",
+  "usage": {
+    "prompt_tokens": 2788,
+    "completion_tokens": 310,
+    "total_tokens": 3098,
+    "completion_tokens_details": {
+      "text_tokens": 310
+    },
+    "prompt_tokens_details": {
+      "text_tokens": 2788,
+      "cached_tokens": 128
+    }
+  },
+  "elapsed_seconds": 9.201851699996041,
+  "decision": {
+    "summary": "A sharp multi-sample displacement occurs at index 540: N rises from ~7.96 to 21.32, E from ~10.83 to 20.78, U drops from ~-1.92 to -10.08. The new level is sustained through index 542, with no opposing return observed within the allowed context [504,579]. Pre-jump samples (504–539) show moderate variability but no trend toward this magnitude. Due to absence of return, the interval is classified as uncertain temporary offset; permanent step cannot be ruled out.",
+    "intervals": [
+      {
+        "start": 540,
+        "end": 542,
+        "status": "uncertain",
+        "observation": "N jumps from ~7.96 (idx 522) to 21.32 (idx 540), E from ~10.83 to 20.78, U from ~-1.92 to -10.08; sustained offset persists through idx 542, but no return observed within allowed context [504,579]; interior (540–542) shows stable elevated levels, suggesting a step-like onset rather than smooth motion. Return not observed before end of context → uncertain."
+      }
+    ]
+  }
+}

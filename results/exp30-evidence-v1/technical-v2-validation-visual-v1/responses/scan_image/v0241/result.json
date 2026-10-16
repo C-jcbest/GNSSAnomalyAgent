@@ -1,0 +1,37 @@
+{
+  "status": "success",
+  "requested_model": "qwen3-vl-plus",
+  "request_count": 1,
+  "retry_count": 0,
+  "http_status": 200,
+  "served_model": "qwen3-vl-plus",
+  "usage": {
+    "prompt_tokens": 5462,
+    "completion_tokens": 283,
+    "total_tokens": 5745,
+    "completion_tokens_details": {
+      "text_tokens": 283
+    },
+    "prompt_tokens_details": {
+      "image_tokens": 4936,
+      "text_tokens": 526,
+      "cached_tokens": 256
+    }
+  },
+  "elapsed_seconds": 12.240125799988164,
+  "decision": {
+    "summary": "Two regions warrant closer inspection: (1) a sharp transient event near index 440 with multi-axis spikes and ambiguous recovery, and (2) a coherent triaxial linear trend beginning at index 725, possibly indicating a step or onset of sustained motion. Other intervals show typical noise or smooth variability without distinctive morphology.",
+    "regions": [
+      {
+        "start": 435,
+        "end": 445,
+        "observation": "Sharp multi-sample negative spike in N and E (≈−6 MAD), followed by a rapid recovery; U shows a concurrent positive spike then return. The shape suggests a transient offset or jump with ambiguous return timing—recovery appears incomplete in N/E by index 445, though U settles earlier."
+      },
+      {
+        "start": 725,
+        "end": 729,
+        "observation": "Sustained linear trend across all axes from ~725 onward: N declines steadily (~−1.25 to −2.75 MAD), E drops sharply (~−3 to −5 MAD), U rises (~2 to 3.5 MAD). The coherent triaxial motion over 4–5 samples suggests a possible permanent shift or platform-like onset; no clear opposing return observed within window."
+      }
+    ]
+  }
+}

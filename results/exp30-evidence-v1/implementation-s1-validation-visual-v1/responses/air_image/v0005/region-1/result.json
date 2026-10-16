@@ -1,0 +1,39 @@
+{
+  "status": "success",
+  "requested_model": "qwen3-vl-plus",
+  "request_count": 1,
+  "retry_count": 0,
+  "http_status": 200,
+  "served_model": "qwen3-vl-plus",
+  "usage": {
+    "prompt_tokens": 2792,
+    "completion_tokens": 418,
+    "total_tokens": 3210,
+    "completion_tokens_details": {
+      "text_tokens": 418
+    },
+    "prompt_tokens_details": {
+      "image_tokens": 1738,
+      "text_tokens": 1054,
+      "cached_tokens": 0
+    }
+  },
+  "elapsed_seconds": 14.453628500021296,
+  "decision": {
+    "summary": "Two candidate temporary offsets in allowed context [500,699]: (1) a major multi-axis step beginning at index 538 (U↓~15, E↑~25, N↑~10), sustained through 580 with no return—confirmed as temporary offset pending later recovery; (2) a secondary perturbation near 575 (U↓~5, E↑~5), superimposed on the first offset, with no observed return by index 664—status uncertain. Axes show coupled but non-uniform responses; no evidence of full reversal within allowed window.",
+    "intervals": [
+      {
+        "start": 538,
+        "end": 580,
+        "status": "confirmed",
+        "observation": "U drops sharply ~15 units between 538–542, E jumps +25 units and N rises ~10 units over same interval; all three axes show sustained offset through ~580 with no return. The step at 538 (per optional jump) aligns with onset of multi-axis shift. No opposing return observed before 580; interior shows stable offset level. Status: confirmed temporary offset (pending return beyond allowed context)."
+      },
+      {
+        "start": 575,
+        "end": 664,
+        "status": "uncertain",
+        "observation": "After initial offset, U shows secondary drop ~−5 around 575–578, coinciding with smaller E +5 and N +~2 adjustments; this appears as a second transient perturbation superimposed on prior offset. No clear return to pre-575 level observed within allowed context (ends at 664); U remains depressed relative to 542–574 plateau. Status: uncertain—onset clear, but return unobserved/ambiguous."
+      }
+    ]
+  }
+}

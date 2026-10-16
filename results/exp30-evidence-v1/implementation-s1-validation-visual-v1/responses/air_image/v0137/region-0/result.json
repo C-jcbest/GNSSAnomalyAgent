@@ -1,0 +1,39 @@
+{
+  "status": "success",
+  "requested_model": "qwen3-vl-plus",
+  "request_count": 1,
+  "retry_count": 0,
+  "http_status": 200,
+  "served_model": "qwen3-vl-plus",
+  "usage": {
+    "prompt_tokens": 2659,
+    "completion_tokens": 351,
+    "total_tokens": 3010,
+    "completion_tokens_details": {
+      "text_tokens": 351
+    },
+    "prompt_tokens_details": {
+      "image_tokens": 1738,
+      "text_tokens": 921,
+      "cached_tokens": 128
+    }
+  },
+  "elapsed_seconds": 9.930105900013587,
+  "decision": {
+    "summary": "A multi-axis displacement initiates near index 629–630: E jumps up and sustains offset until ~640; U jumps up then decays slowly, with a sharp downward step at 641 that does not restore pre-event levels. No full return is observed in E or U within allowed context [590,670]; N shows only gradual trend. Thus, no confirmed temporary offset interval; both candidate intervals are uncertain due to missing or asymmetric returns.",
+    "intervals": [
+      {
+        "start": 629,
+        "end": 640,
+        "status": "uncertain",
+        "observation": "E shows a sharp multi-sample upward jump starting ~629–630, sustained plateau until ~640; U rises sharply ~629–632 then declines gradually until ~640, with no opposing return before 641; N exhibits concurrent gradual decline without reversal. Return not observed within allowed context (ends at 670), and the U drop at 641 is a separate downward step, not a symmetric return to pre-jump level."
+      },
+      {
+        "start": 641,
+        "end": 641,
+        "status": "uncertain",
+        "observation": "U drops sharply at index 641 (≈−9.6 MAD), following prior uplift; however, E remains elevated and does not revert, and N continues declining—no coordinated multi-axis return. The 641 step appears independent, not a reversal of the earlier offset."
+      }
+    ]
+  }
+}

@@ -1,0 +1,32 @@
+{
+  "status": "success",
+  "requested_model": "qwen3-vl-plus",
+  "request_count": 1,
+  "retry_count": 0,
+  "http_status": 200,
+  "served_model": "qwen3-vl-plus",
+  "usage": {
+    "prompt_tokens": 3051,
+    "completion_tokens": 306,
+    "total_tokens": 3357,
+    "completion_tokens_details": {
+      "text_tokens": 306
+    },
+    "prompt_tokens_details": {
+      "text_tokens": 3051,
+      "cached_tokens": 128
+    }
+  },
+  "elapsed_seconds": 8.425983299996005,
+  "decision": {
+    "summary": "Within allowed context [503,579], a multi-axis abrupt shift begins at index 538 with coherent N/E/U changes (e.g., U rises from ~21.9 to >24 within 2 samples), persisting through index 543 with oscillatory fluctuations but no observed return to pre-jump baseline. A missing sample at index 520 (index 520 corresponds to original index 16) does not affect this interval. Due to absence of an opposing return before end of context, the interval is classified as uncertain—not confirmed temporary offset.",
+    "intervals": [
+      {
+        "start": 538,
+        "end": 543,
+        "status": "uncertain",
+        "observation": "N/E/U all show abrupt multi-sample jump starting at index 538 (N: ~22.9→20.4→22.4; E: ~18.5→20.5→17.6; U: ~21.9→24.0→25.2), followed by sustained elevated levels and oscillatory behavior through index 543. No clear opposing return observed within allowed context [503,579]; the jump is large in magnitude and multi-axis coherent, but without a confirmed reversal before 579, status remains uncertain."
+      }
+    ]
+  }
+}

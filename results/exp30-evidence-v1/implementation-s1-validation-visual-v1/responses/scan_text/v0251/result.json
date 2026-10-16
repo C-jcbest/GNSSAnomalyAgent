@@ -1,0 +1,36 @@
+{
+  "status": "success",
+  "requested_model": "qwen3-vl-plus",
+  "request_count": 1,
+  "retry_count": 0,
+  "http_status": 200,
+  "served_model": "qwen3-vl-plus",
+  "usage": {
+    "prompt_tokens": 13920,
+    "completion_tokens": 331,
+    "total_tokens": 14251,
+    "completion_tokens_details": {
+      "text_tokens": 331
+    },
+    "prompt_tokens_details": {
+      "text_tokens": 13920,
+      "cached_tokens": 0
+    }
+  },
+  "elapsed_seconds": 10.809541300026467,
+  "decision": {
+    "summary": "Two regions stand out: (1) a sharp multi-sample displacement and partial reversal in the 485–492 window, possibly a transient offset with ambiguous recovery; (2) a clear step-like shift starting at 605 that persists through 612, indicating a likely permanent change or platform onset. Other segments show noisy but smooth trends without compelling morphology for closer inspection.",
+    "regions": [
+      {
+        "start": 485,
+        "end": 492,
+        "observation": "Sharp multi-sample jump in N and E (N from ~5.4 to 9.1, E from -0.5 to 1.2) at index 486–487, followed by a rapid reversal in E (to -1.48) and drop in U (10.3→8.5) at index 488; ambiguous whether this is a transient offset or opposing motion with incomplete return."
+      },
+      {
+        "start": 605,
+        "end": 612,
+        "observation": "Abrupt large-scale shift in all components around index 605–606: N jumps from ~20.9 to 21.9, E from -10.9 to -9.3, U from 8.0 to 6.7; followed by sustained elevated N/E and lower U through index 612, suggesting a possible permanent step or platform onset rather than noise."
+      }
+    ]
+  }
+}

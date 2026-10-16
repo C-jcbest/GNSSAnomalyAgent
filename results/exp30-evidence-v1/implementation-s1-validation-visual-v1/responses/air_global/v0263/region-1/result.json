@@ -1,0 +1,39 @@
+{
+  "status": "success",
+  "requested_model": "qwen3-vl-plus",
+  "request_count": 1,
+  "retry_count": 0,
+  "http_status": 200,
+  "served_model": "qwen3-vl-plus",
+  "usage": {
+    "prompt_tokens": 2898,
+    "completion_tokens": 281,
+    "total_tokens": 3179,
+    "completion_tokens_details": {
+      "text_tokens": 281
+    },
+    "prompt_tokens_details": {
+      "image_tokens": 1906,
+      "text_tokens": 992,
+      "cached_tokens": 128
+    }
+  },
+  "elapsed_seconds": 7.946863800025312,
+  "decision": {
+    "summary": "Two multi-sample, cross-axis coherent offsets in E/N/U are evident: (1) a sharp step at ~543 with sustained deviation through 574, and (2) a second E-dominated offset starting ~576 that persists to the end of allowed context. Neither shows a clear opposing return within [503,699]; both are classified uncertain due to unobserved recovery.",
+    "intervals": [
+      {
+        "start": 543,
+        "end": 574,
+        "status": "uncertain",
+        "observation": "Sharp negative E step (≈−4.5 MAD) and positive N/U steps (≈+7–10 MAD) centered at index 543, sustained through ~574 with coherent multi-axis behavior; no return observed within allowed context."
+      },
+      {
+        "start": 576,
+        "end": 699,
+        "status": "uncertain",
+        "observation": "Secondary negative E offset beginning near 576 (≈−7 MAD), accompanied by smaller transient U dip (~+1.4 MAD) and N shift (~+4 MAD); interior shows sustained offset without observed return in allowed context [503,699]."
+      }
+    ]
+  }
+}

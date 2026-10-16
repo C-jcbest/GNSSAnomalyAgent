@@ -1,0 +1,38 @@
+{
+  "status": "success",
+  "requested_model": "qwen3-vl-plus",
+  "request_count": 1,
+  "retry_count": 0,
+  "http_status": 200,
+  "served_model": "qwen3-vl-plus",
+  "usage": {
+    "prompt_tokens": 3043,
+    "completion_tokens": 566,
+    "total_tokens": 3609,
+    "completion_tokens_details": {
+      "text_tokens": 566
+    },
+    "prompt_tokens_details": {
+      "text_tokens": 3043,
+      "cached_tokens": 128
+    }
+  },
+  "elapsed_seconds": 16.855517499992857,
+  "decision": {
+    "summary": "Two multi-sample offsets are evident in the allowed context [570,655]: one at 570–572 (N/E/U drop), another at 577–579 (N/E/U shift), both lacking confirmed opposing returns. The screened region (605–620) contains a data gap at 608 and no unambiguous return after any candidate onset; thus no temporary offset can be confirmed. All candidate intervals remain uncertain due to incomplete return observation.",
+    "intervals": [
+      {
+        "start": 570,
+        "end": 607,
+        "status": "uncertain",
+        "observation": "Multi-sample descent in E (e.g., -6.09852 → -7.07811 → -6.35457), U (-2.52228 → -4.74209 → -3.89544), and N (-3.12165 → -4.61598 → -5.28156) from index 570 to 572 (i.e., samples 0–2 of original array, corresponding to absolute indices 570–572). This is a rapid multi-point shift without opposing return observed within allowed context; later values remain offset but show variability—no clear reversal before gap at 608. Status: uncertain due to missing immediate aftermath and no confirmed return."
+      },
+      {
+        "start": 577,
+        "end": 607,
+        "status": "uncertain",
+        "observation": "Apparent step-like drop in E (e.g., -6.73288 → -5.44928 → -6.19565), U (-3.81781 → -4.26444 → -3.80854), and N (-4.06347 → -5.66915 → -4.25003) between indices 577–579 (absolute 577–579), followed by continued variability without clear opposing return. The screened region (605–620) includes a gap at 608 and no return signal; the shift at 577–579 is more coherent than the later ambiguous activity near 605–607. Status: uncertain — onset and interior observed, but return not confirmed within allowed context."
+      }
+    ]
+  }
+}

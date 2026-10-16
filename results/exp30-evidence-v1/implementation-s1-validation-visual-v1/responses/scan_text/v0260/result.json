@@ -1,0 +1,36 @@
+{
+  "status": "success",
+  "requested_model": "qwen3-vl-plus",
+  "request_count": 1,
+  "retry_count": 0,
+  "http_status": 200,
+  "served_model": "qwen3-vl-plus",
+  "usage": {
+    "prompt_tokens": 13571,
+    "completion_tokens": 313,
+    "total_tokens": 13884,
+    "completion_tokens_details": {
+      "text_tokens": 313
+    },
+    "prompt_tokens_details": {
+      "text_tokens": 13571,
+      "cached_tokens": 0
+    }
+  },
+  "elapsed_seconds": 9.247224799997639,
+  "decision": {
+    "summary": "Two regions warrant closer inspection: (1) an early abrupt N-axis drop near start of first window with unclear recovery, and (2) a major sustained displacement beginning at index 605 across all axes, forming a persistent platform. No clean opposing returns observed; both involve multi-sample changes that exceed typical noise.",
+    "regions": [
+      {
+        "start": 365,
+        "end": 544,
+        "observation": "Cross-axis shape shows a multi-sample drop in N (from ~-0.1 to ~-2.0) around index 370–372, followed by irregular oscillations; E and U show no coherent platform or return, but the N drop is abrupt and sustained over several samples without immediate reversal—suggests possible offset or jump with ambiguous recovery."
+      },
+      {
+        "start": 605,
+        "end": 729,
+        "observation": "Strong, sustained displacement begins near index 605: N/E/U all shift dramatically upward (e.g., N from ~-1.5 to >5, E from ~1–3 to >7–8, U from ~-1 to <-16), forming a clear platform-like structure through the rest of the window; the onset is abrupt (~index 605–607) and persists without return, though internal variability remains—likely a permanent jump or large-scale motion event."
+      }
+    ]
+  }
+}

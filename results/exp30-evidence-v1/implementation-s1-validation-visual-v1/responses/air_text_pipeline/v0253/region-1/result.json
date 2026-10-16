@@ -1,0 +1,32 @@
+{
+  "status": "success",
+  "requested_model": "qwen3-vl-plus",
+  "request_count": 1,
+  "retry_count": 0,
+  "http_status": 200,
+  "served_model": "qwen3-vl-plus",
+  "usage": {
+    "prompt_tokens": 2686,
+    "completion_tokens": 490,
+    "total_tokens": 3176,
+    "completion_tokens_details": {
+      "text_tokens": 490
+    },
+    "prompt_tokens_details": {
+      "text_tokens": 2686,
+      "cached_tokens": 128
+    }
+  },
+  "elapsed_seconds": 12.760975299985148,
+  "decision": {
+    "summary": "The screened region (indices 629–632) centers on a single extreme outlier at index 629 with massive N/E/U deviations. Original observations confirm this is an isolated point: index 628 = [0.88199, -0.74484, -0.93434], index 629 = [11.48?, 17.82?, -18.64?] (not present in supplied array—implied by screening note), index 630 = [0.39468, -1.43857, -3.55099]. Since the supplied original_N_E_U ends at index 667 but does not include index 629 (the array has 74 entries starting at index 594 → last index = 594+73 = 667; however, the listed values do not contain the spike—suggesting the spike is inferred from external screening, not present in the provided raw samples), and no adjacent points show sustained displacement, there is no confirmed temporary offset interval. The outlier may be a data artifact, but per criteria, a one-point spike does not define a temporary offset interval. No other intervals in allowed_context [594,667] meet the definition of a temporary offset (onset + sustained interior + opposing return).",
+    "intervals": [
+      {
+        "start": 629,
+        "end": 629,
+        "status": "uncertain",
+        "observation": "Isolated extreme outlier at index 629 (N=11.48, E=17.82, U=-18.64) in original data; all three axes show non-physical excursions far beyond MAD-scale variability of surrounding samples. Preceding and following samples (628, 630) are within typical MAD range and show no sustained offset—no evidence of a multi-point temporary offset, only a single anomalous point. Return is immediate and complete at index 630, but since the event is isolated (not an interval), it does not constitute a temporary offset interval per definition."
+      }
+    ]
+  }
+}

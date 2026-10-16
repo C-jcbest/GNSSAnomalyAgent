@@ -1,0 +1,33 @@
+{
+  "status": "success",
+  "requested_model": "qwen3-vl-plus",
+  "request_count": 1,
+  "retry_count": 0,
+  "http_status": 200,
+  "served_model": "qwen3-vl-plus",
+  "usage": {
+    "prompt_tokens": 2500,
+    "completion_tokens": 270,
+    "total_tokens": 2770,
+    "completion_tokens_details": {
+      "text_tokens": 270
+    },
+    "prompt_tokens_details": {
+      "image_tokens": 1738,
+      "text_tokens": 762,
+      "cached_tokens": 128
+    }
+  },
+  "elapsed_seconds": 7.461339400004363,
+  "decision": {
+    "summary": "A sharp multi-axis negative excursion occurs near index 480, with large drops in N and U and a smaller dip in E. The onset is abrupt (~476–477), but the return is ambiguous: N partially recovers after 480 while U remains depressed and then plunges further at 480, preventing confirmation of a clean temporary offset. No full recovery is observed within allowed context [440,520], so the interval is marked uncertain.",
+    "intervals": [
+      {
+        "start": 476,
+        "end": 479,
+        "status": "uncertain",
+        "observation": "N and U show a sharp, multi-sample negative excursion centered at ~480 (N drops ~12 MAD, U ~15 MAD); E shows a smaller coherent dip. The offset begins abruptly around index 476–477, sustains through 479, but no return is observed before index 480 where U plunges further and N recovers partially only after 480. Since the return to pre-event baseline is not confirmed within allowed context and the interior is not clearly sustained without distortion, status is uncertain."
+      }
+    ]
+  }
+}

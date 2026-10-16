@@ -1,0 +1,32 @@
+{
+  "status": "success",
+  "requested_model": "qwen3-vl-plus",
+  "request_count": 1,
+  "retry_count": 0,
+  "http_status": 200,
+  "served_model": "qwen3-vl-plus",
+  "usage": {
+    "prompt_tokens": 3092,
+    "completion_tokens": 241,
+    "total_tokens": 3333,
+    "completion_tokens_details": {
+      "text_tokens": 241
+    },
+    "prompt_tokens_details": {
+      "text_tokens": 3092,
+      "cached_tokens": 128
+    }
+  },
+  "elapsed_seconds": 6.022134900005767,
+  "decision": {
+    "summary": "A transient offset candidate is observed in N (and weakly in E/U) starting near index 453, peaking around 457, and persisting through 460 without reversal within the allowed context. The onset is multi-sample and sustained, but the return is unobserved—hence status is uncertain. No other temporary offsets are evident in the original daily samples within [410,495].",
+    "intervals": [
+      {
+        "start": 453,
+        "end": 460,
+        "status": "uncertain",
+        "observation": "N shows a sharp multi-sample rise beginning around index 453–455 (e.g., from ~2.5 at 452 to ~10.5 at 457), with E and U showing smaller correlated transients (E drops ~1–2 MAD, U rises ~1–2 MAD). N remains elevated through 460 without clear return; no opposing shift observed within allowed_context [410,495]."
+      }
+    ]
+  }
+}

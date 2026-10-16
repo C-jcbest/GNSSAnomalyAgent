@@ -1,0 +1,36 @@
+{
+  "status": "success",
+  "requested_model": "qwen3-vl-plus",
+  "request_count": 1,
+  "retry_count": 0,
+  "http_status": 200,
+  "served_model": "qwen3-vl-plus",
+  "usage": {
+    "prompt_tokens": 13260,
+    "completion_tokens": 275,
+    "total_tokens": 13535,
+    "completion_tokens_details": {
+      "text_tokens": 275
+    },
+    "prompt_tokens_details": {
+      "text_tokens": 13260,
+      "cached_tokens": 0
+    }
+  },
+  "elapsed_seconds": 8.524221300001955,
+  "decision": {
+    "summary": "Two regions stand out: (1) an abrupt U-offset starting near index 490 with persistent low U and correlated N/E motion; (2) a large, rapid uplift event in U (~+9 units) centered near index 612, with strong cross-axis coupling and no full return observed in the window.",
+    "regions": [
+      {
+        "start": 485,
+        "end": 544,
+        "observation": "Cross-axis shape shows a multi-sample abrupt shift in U (downward) around index ~490, followed by a sustained platform in U at lower values; N and E show correlated but noisier fluctuations without clear opposing return. The shift is abrupt over 2–3 samples and persists through the window end."
+      },
+      {
+        "start": 605,
+        "end": 664,
+        "observation": "Strong, coherent upward jump in U (from ~-2 to ~+7) between indices ~610–615, accompanied by large simultaneous shifts in N and E; the new level holds for ~30 samples before possible subtle drift. No clear return observed within window, though later samples suggest possible partial reversal beginning near index ~650."
+      }
+    ]
+  }
+}

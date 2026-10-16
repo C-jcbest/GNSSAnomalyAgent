@@ -1,0 +1,39 @@
+{
+  "status": "success",
+  "requested_model": "qwen3-vl-plus",
+  "request_count": 1,
+  "retry_count": 0,
+  "http_status": 200,
+  "served_model": "qwen3-vl-plus",
+  "usage": {
+    "prompt_tokens": 2508,
+    "completion_tokens": 331,
+    "total_tokens": 2839,
+    "completion_tokens_details": {
+      "text_tokens": 331
+    },
+    "prompt_tokens_details": {
+      "image_tokens": 1738,
+      "text_tokens": 770,
+      "cached_tokens": 128
+    }
+  },
+  "elapsed_seconds": 8.792030799988424,
+  "decision": {
+    "summary": "In the screened region (545–664), E shows a sustained drop (~2 MAD) beginning ~550, accompanied by an opposing N rise (~+1 MAD); both axes exhibit partial but incomplete recovery by 664. No clear opposing return is observed on either axis within allowed context (510–699), and U lacks coherent offset behavior. Thus, no confirmed temporary offset interval can be established; two uncertain intervals reflect onset (550–610) and partial recovery (611–664) phases.",
+    "intervals": [
+      {
+        "start": 550,
+        "end": 610,
+        "status": "uncertain",
+        "observation": "E drops ~2 MAD from ~550 to ~610; N rises ~+1 MAD over same interval; U noisy, no coherent trend. Onset at ~550 is gradual but sustained; interior shows plateau-like behavior; return not yet observed by 610."
+      },
+      {
+        "start": 611,
+        "end": 664,
+        "status": "uncertain",
+        "observation": "E remains depressed relative to pre-550 baseline through 664, with partial recovery starting ~610–620; N declines back toward baseline after ~610 but does not fully return by 664. Return phase incomplete/ambiguous; U still noisy without coherent offset signature."
+      }
+    ]
+  }
+}

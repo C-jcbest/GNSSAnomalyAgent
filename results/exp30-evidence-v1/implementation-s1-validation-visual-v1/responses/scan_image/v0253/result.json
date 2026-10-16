@@ -1,0 +1,37 @@
+{
+  "status": "success",
+  "requested_model": "qwen3-vl-plus",
+  "request_count": 1,
+  "retry_count": 0,
+  "http_status": 200,
+  "served_model": "qwen3-vl-plus",
+  "usage": {
+    "prompt_tokens": 4218,
+    "completion_tokens": 285,
+    "total_tokens": 4503,
+    "completion_tokens_details": {
+      "text_tokens": 285
+    },
+    "prompt_tokens_details": {
+      "image_tokens": 3702,
+      "text_tokens": 516,
+      "cached_tokens": 0
+    }
+  },
+  "elapsed_seconds": 9.485831800004235,
+  "decision": {
+    "summary": "Two regions warrant closer inspection: (1) a large, abrupt U-axis spike near index 580 with correlated cross-axis responses and incomplete recovery; (2) a sustained multi-axis offset/platform from ~610–635 with coherent N/E/U behavior and no clear return within the window. Other segments show typical noise or smooth motion.",
+    "regions": [
+      {
+        "start": 575,
+        "end": 585,
+        "observation": "Sharp, multi-sample negative spike in U (downward ~17 MAD) at index ~580–585, with correlated smaller negative excursions in N and E; no clear opposing return within the window, though U begins recovering after 585. The event is abrupt and isolated, distinct from surrounding noise."
+      },
+      {
+        "start": 610,
+        "end": 635,
+        "observation": "Broad apparent platform or slow offset in E (centered ~−4 to −5 MAD) from ~615 to 635, accompanied by a subtle but sustained negative shift in N (~−1 to −2 MAD) and U (~−3 to −4 MAD); all three axes show coherent behavior without immediate reversal, suggesting possible temporary deformation or instrumental bias."
+      }
+    ]
+  }
+}

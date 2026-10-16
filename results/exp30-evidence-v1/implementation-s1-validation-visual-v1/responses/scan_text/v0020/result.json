@@ -1,0 +1,36 @@
+{
+  "status": "success",
+  "requested_model": "qwen3-vl-plus",
+  "request_count": 1,
+  "retry_count": 0,
+  "http_status": 200,
+  "served_model": "qwen3-vl-plus",
+  "usage": {
+    "prompt_tokens": 14273,
+    "completion_tokens": 285,
+    "total_tokens": 14558,
+    "completion_tokens_details": {
+      "text_tokens": 285
+    },
+    "prompt_tokens_details": {
+      "text_tokens": 14273,
+      "cached_tokens": 0
+    }
+  },
+  "elapsed_seconds": 9.028438899986213,
+  "decision": {
+    "summary": "Two regions warrant closer inspection: (1) a sudden large-magnitude multi-axis jump near the end of the first window (indices 538–544), and (2) a prolonged interval (605–729) with ambiguous superposed changes—particularly a possible opposing U-axis return amid continuing N/E trends.",
+    "regions": [
+      {
+        "start": 538,
+        "end": 544,
+        "observation": "Sharp multi-sample jump in all axes around index 538–540 (N from ~-2 to +24, E from ~1.3 to ~17.8, U from ~-0.5 to ~23), followed by sustained high-amplitude oscillation; the abrupt onset and scale suggest a permanent offset or major event rather than noise."
+      },
+      {
+        "start": 605,
+        "end": 729,
+        "observation": "Extended region (605–729) showing complex cross-axis behavior: N/E/U exhibit slow drifts with superposed irregular fluctuations; notable is a possible opposing return in U (~22→25→22) while N and E continue rising, suggesting ambiguous superposition of trends or partial recovery after earlier shift."
+      }
+    ]
+  }
+}

@@ -1,0 +1,32 @@
+{
+  "status": "success",
+  "requested_model": "qwen3-vl-plus",
+  "request_count": 1,
+  "retry_count": 0,
+  "http_status": 200,
+  "served_model": "qwen3-vl-plus",
+  "usage": {
+    "prompt_tokens": 4279,
+    "completion_tokens": 239,
+    "total_tokens": 4518,
+    "completion_tokens_details": {
+      "text_tokens": 239
+    },
+    "prompt_tokens_details": {
+      "text_tokens": 4279,
+      "cached_tokens": 128
+    }
+  },
+  "elapsed_seconds": 6.438584799994715,
+  "decision": {
+    "summary": "A multi-sample abrupt shift in N and E occurs at indices 490–494: N jumps upward (~0.2→~1.7), E drops sharply (~-2.6→~-4.2), and U rises. The offset persists through the remainder of the allowed context (to index 579) with no observed return to pre-shift levels; thus the interval is classified as uncertain due to ambiguous reversal.",
+    "intervals": [
+      {
+        "start": 490,
+        "end": 494,
+        "status": "uncertain",
+        "observation": "N rises sharply from ~0.2 to ~1.7 and E drops from ~-2.6 to ~-4.2 over indices 490–494; U also increases. No clear opposing return observed within allowed context (up to 579); post-494 values remain offset (e.g., N ~1.0–2.5, E ~-3.5 to -5.8), suggesting incomplete reversal."
+      }
+    ]
+  }
+}
