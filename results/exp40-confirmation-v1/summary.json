@@ -1,0 +1,964 @@
+{
+  "experiment_id": "GNSS-VLM-EXP40-CONFIRMATION",
+  "stations": 54,
+  "methods": {
+    "rf_split_temporal": {
+      "original": {
+        "types": {
+          "spike": {
+            "daily_micro": {
+              "tp": 14,
+              "fp": 0,
+              "fn": 4,
+              "precision": 1.0,
+              "recall": 0.7777777777777778,
+              "f1": 0.875
+            }
+          },
+          "step": {
+            "daily_micro": {
+              "tp": 1,
+              "fp": 1,
+              "fn": 17,
+              "precision": 0.5,
+              "recall": 0.05555555555555555,
+              "f1": 0.1
+            }
+          },
+          "transient": {
+            "daily_micro": {
+              "tp": 302,
+              "fp": 1628,
+              "fn": 394,
+              "precision": 0.15647668393782382,
+              "recall": 0.4339080459770115,
+              "f1": 0.23000761614623
+            }
+          },
+          "deformation": {
+            "daily_micro": {
+              "tp": 1324,
+              "fp": 899,
+              "fn": 733,
+              "precision": 0.595591542959964,
+              "recall": 0.6436558094312105,
+              "f1": 0.6186915887850467
+            }
+          }
+        }
+      },
+      "range": {
+        "transient": {
+          "affiliation": {
+            "positive_stations": 18,
+            "precision": 0.3781429501212198,
+            "recall": 0.3919761924276579,
+            "station_macro_f1": 0.3660137235272926,
+            "harmonic_of_macro_pr": 0.3849353316716708,
+            "defined_author_precision_mean": 0.7562859002424396,
+            "empty_prediction_stations": 9
+          },
+          "negative_stations": 36,
+          "negative_station_fp_days": 880,
+          "negative_station_fp_runs": 15
+        },
+        "deformation": {
+          "affiliation": {
+            "positive_stations": 18,
+            "precision": 0.6918575699484482,
+            "recall": 0.5503856235520815,
+            "station_macro_f1": 0.5895424964827582,
+            "harmonic_of_macro_pr": 0.613065882812007,
+            "defined_author_precision_mean": 0.9579566353132359,
+            "empty_prediction_stations": 5
+          },
+          "negative_stations": 36,
+          "negative_station_fp_days": 698,
+          "negative_station_fp_runs": 25
+        }
+      }
+    },
+    "segment_numeric": {
+      "original": {
+        "types": {
+          "spike": {
+            "daily_micro": {
+              "tp": 14,
+              "fp": 0,
+              "fn": 4,
+              "precision": 1.0,
+              "recall": 0.7777777777777778,
+              "f1": 0.875
+            }
+          },
+          "step": {
+            "daily_micro": {
+              "tp": 17,
+              "fp": 9,
+              "fn": 1,
+              "precision": 0.6538461538461539,
+              "recall": 0.9444444444444444,
+              "f1": 0.7727272727272727
+            }
+          },
+          "transient": {
+            "daily_micro": {
+              "tp": 561,
+              "fp": 1,
+              "fn": 135,
+              "precision": 0.998220640569395,
+              "recall": 0.8060344827586207,
+              "f1": 0.8918918918918919
+            }
+          },
+          "deformation": {
+            "daily_micro": {
+              "tp": 1710,
+              "fp": 199,
+              "fn": 347,
+              "precision": 0.8957569408067051,
+              "recall": 0.8313077297034517,
+              "f1": 0.8623298033282905
+            }
+          }
+        }
+      },
+      "range": {
+        "transient": {
+          "affiliation": {
+            "positive_stations": 18,
+            "precision": 0.8332163944482784,
+            "recall": 0.8333333333333334,
+            "station_macro_f1": 0.8332748022898112,
+            "harmonic_of_macro_pr": 0.8332748597881072,
+            "defined_author_precision_mean": 0.9998596733379341,
+            "empty_prediction_stations": 3
+          },
+          "negative_stations": 36,
+          "negative_station_fp_days": 0,
+          "negative_station_fp_runs": 0
+        },
+        "deformation": {
+          "affiliation": {
+            "positive_stations": 18,
+            "precision": 0.9394577602737996,
+            "recall": 0.8810224406448209,
+            "station_macro_f1": 0.8990146623558698,
+            "harmonic_of_macro_pr": 0.909302247199929,
+            "defined_author_precision_mean": 0.994719981466376,
+            "empty_prediction_stations": 1
+          },
+          "negative_stations": 36,
+          "negative_station_fp_days": 162,
+          "negative_station_fp_runs": 5
+        }
+      }
+    },
+    "random_forest": {
+      "original": {
+        "types": {
+          "spike": {
+            "daily_micro": {
+              "tp": 8,
+              "fp": 0,
+              "fn": 10,
+              "precision": 1.0,
+              "recall": 0.4444444444444444,
+              "f1": 0.6153846153846154
+            }
+          },
+          "step": {
+            "daily_micro": {
+              "tp": 0,
+              "fp": 0,
+              "fn": 18,
+              "precision": 0.0,
+              "recall": 0.0,
+              "f1": 0.0
+            }
+          },
+          "transient": {
+            "daily_micro": {
+              "tp": 200,
+              "fp": 956,
+              "fn": 496,
+              "precision": 0.17301038062283736,
+              "recall": 0.28735632183908044,
+              "f1": 0.2159827213822894
+            }
+          },
+          "deformation": {
+            "daily_micro": {
+              "tp": 917,
+              "fp": 238,
+              "fn": 1140,
+              "precision": 0.793939393939394,
+              "recall": 0.4457948468643656,
+              "f1": 0.5709838107098381
+            }
+          }
+        }
+      },
+      "range": {
+        "transient": {
+          "affiliation": {
+            "positive_stations": 18,
+            "precision": 0.4860583914823484,
+            "recall": 0.47661272496884016,
+            "station_macro_f1": 0.45192894806709305,
+            "harmonic_of_macro_pr": 0.4812892180922093,
+            "defined_author_precision_mean": 0.7953682769711157,
+            "empty_prediction_stations": 7
+          },
+          "negative_stations": 36,
+          "negative_station_fp_days": 576,
+          "negative_station_fp_runs": 45
+        },
+        "deformation": {
+          "affiliation": {
+            "positive_stations": 18,
+            "precision": 0.8317978242090983,
+            "recall": 0.6308173677508454,
+            "station_macro_f1": 0.6994788691366929,
+            "harmonic_of_macro_pr": 0.7174990617529892,
+            "defined_author_precision_mean": 0.9357725522352355,
+            "empty_prediction_stations": 2
+          },
+          "negative_stations": 36,
+          "negative_station_fp_days": 179,
+          "negative_station_fp_runs": 42
+        }
+      }
+    },
+    "rf_balanced": {
+      "original": {
+        "types": {
+          "spike": {
+            "daily_micro": {
+              "tp": 13,
+              "fp": 0,
+              "fn": 5,
+              "precision": 1.0,
+              "recall": 0.7222222222222222,
+              "f1": 0.8387096774193549
+            }
+          },
+          "step": {
+            "daily_micro": {
+              "tp": 0,
+              "fp": 1,
+              "fn": 18,
+              "precision": 0.0,
+              "recall": 0.0,
+              "f1": 0.0
+            }
+          },
+          "transient": {
+            "daily_micro": {
+              "tp": 360,
+              "fp": 1745,
+              "fn": 336,
+              "precision": 0.171021377672209,
+              "recall": 0.5172413793103449,
+              "f1": 0.25705105319528737
+            }
+          },
+          "deformation": {
+            "daily_micro": {
+              "tp": 1333,
+              "fp": 1303,
+              "fn": 724,
+              "precision": 0.5056904400606981,
+              "recall": 0.648031113271755,
+              "f1": 0.5680801193266567
+            }
+          }
+        }
+      },
+      "range": {
+        "transient": {
+          "affiliation": {
+            "positive_stations": 18,
+            "precision": 0.871540174768698,
+            "recall": 0.8853311436053746,
+            "station_macro_f1": 0.8532799575826604,
+            "harmonic_of_macro_pr": 0.8783815314830135,
+            "defined_author_precision_mean": 0.871540174768698,
+            "empty_prediction_stations": 0
+          },
+          "negative_stations": 36,
+          "negative_station_fp_days": 1011,
+          "negative_station_fp_runs": 102
+        },
+        "deformation": {
+          "affiliation": {
+            "positive_stations": 18,
+            "precision": 0.8177224987311646,
+            "recall": 0.8327664685460485,
+            "station_macro_f1": 0.8105883543749094,
+            "harmonic_of_macro_pr": 0.8251759218268411,
+            "defined_author_precision_mean": 0.8177224987311646,
+            "empty_prediction_stations": 0
+          },
+          "negative_stations": 36,
+          "negative_station_fp_days": 929,
+          "negative_station_fp_runs": 299
+        }
+      }
+    },
+    "extra_trees": {
+      "original": {
+        "types": {
+          "spike": {
+            "daily_micro": {
+              "tp": 8,
+              "fp": 0,
+              "fn": 10,
+              "precision": 1.0,
+              "recall": 0.4444444444444444,
+              "f1": 0.6153846153846154
+            }
+          },
+          "step": {
+            "daily_micro": {
+              "tp": 0,
+              "fp": 0,
+              "fn": 18,
+              "precision": 0.0,
+              "recall": 0.0,
+              "f1": 0.0
+            }
+          },
+          "transient": {
+            "daily_micro": {
+              "tp": 110,
+              "fp": 802,
+              "fn": 586,
+              "precision": 0.1206140350877193,
+              "recall": 0.15804597701149425,
+              "f1": 0.13681592039800994
+            }
+          },
+          "deformation": {
+            "daily_micro": {
+              "tp": 843,
+              "fp": 217,
+              "fn": 1214,
+              "precision": 0.7952830188679245,
+              "recall": 0.4098201263976665,
+              "f1": 0.5409047160731473
+            }
+          }
+        }
+      },
+      "range": {
+        "transient": {
+          "affiliation": {
+            "positive_stations": 18,
+            "precision": 0.38626549620178535,
+            "recall": 0.34433884890296285,
+            "station_macro_f1": 0.3365952509234444,
+            "harmonic_of_macro_pr": 0.3640991659144463,
+            "defined_author_precision_mean": 0.7725309924035706,
+            "empty_prediction_stations": 9
+          },
+          "negative_stations": 36,
+          "negative_station_fp_days": 563,
+          "negative_station_fp_runs": 36
+        },
+        "deformation": {
+          "affiliation": {
+            "positive_stations": 18,
+            "precision": 0.8434476227147031,
+            "recall": 0.604684419132751,
+            "station_macro_f1": 0.6857546701415933,
+            "harmonic_of_macro_pr": 0.7043827787409254,
+            "defined_author_precision_mean": 0.948878575554041,
+            "empty_prediction_stations": 2
+          },
+          "negative_stations": 36,
+          "negative_station_fp_days": 173,
+          "negative_station_fp_runs": 45
+        }
+      }
+    },
+    "isolation_forest": {
+      "original": {
+        "types": null,
+        "generic_daily_micro": {
+          "tp": 1805,
+          "fp": 4782,
+          "fn": 677,
+          "precision": 0.27402459389707,
+          "recall": 0.7272360999194198,
+          "f1": 0.3980593229683537
+        }
+      },
+      "range": null
+    },
+    "vector_nearest": {
+      "original": {
+        "types": {
+          "spike": {
+            "daily_micro": {
+              "tp": 14,
+              "fp": 0,
+              "fn": 4,
+              "precision": 1.0,
+              "recall": 0.7777777777777778,
+              "f1": 0.875
+            }
+          },
+          "step": {
+            "daily_micro": {
+              "tp": 17,
+              "fp": 3,
+              "fn": 1,
+              "precision": 0.85,
+              "recall": 0.9444444444444444,
+              "f1": 0.8947368421052632
+            }
+          },
+          "transient": {
+            "daily_micro": {
+              "tp": 696,
+              "fp": 1,
+              "fn": 0,
+              "precision": 0.9985652797704447,
+              "recall": 1.0,
+              "f1": 0.9992821249102656
+            }
+          },
+          "deformation": {
+            "daily_micro": {
+              "tp": 1710,
+              "fp": 199,
+              "fn": 347,
+              "precision": 0.8957569408067051,
+              "recall": 0.8313077297034517,
+              "f1": 0.8623298033282905
+            }
+          }
+        }
+      },
+      "range": {
+        "transient": {
+          "affiliation": {
+            "positive_stations": 18,
+            "precision": 0.9998830611149452,
+            "recall": 1.0,
+            "station_macro_f1": 0.999941468956478,
+            "harmonic_of_macro_pr": 0.999941527138597,
+            "defined_author_precision_mean": 0.9998830611149452,
+            "empty_prediction_stations": 0
+          },
+          "negative_stations": 36,
+          "negative_station_fp_days": 0,
+          "negative_station_fp_runs": 0
+        },
+        "deformation": {
+          "affiliation": {
+            "positive_stations": 18,
+            "precision": 0.9394577602737996,
+            "recall": 0.8810224406448209,
+            "station_macro_f1": 0.8990146623558698,
+            "harmonic_of_macro_pr": 0.909302247199929,
+            "defined_author_precision_mean": 0.994719981466376,
+            "empty_prediction_stations": 1
+          },
+          "negative_stations": 36,
+          "negative_station_fp_days": 162,
+          "negative_station_fp_runs": 5
+        }
+      }
+    },
+    "owv_skip_overlap": {
+      "original": {
+        "types": {
+          "spike": {
+            "daily_micro": {
+              "tp": 14,
+              "fp": 0,
+              "fn": 4,
+              "precision": 1.0,
+              "recall": 0.7777777777777778,
+              "f1": 0.875
+            }
+          },
+          "step": {
+            "daily_micro": {
+              "tp": 17,
+              "fp": 3,
+              "fn": 1,
+              "precision": 0.85,
+              "recall": 0.9444444444444444,
+              "f1": 0.8947368421052632
+            }
+          },
+          "transient": {
+            "daily_micro": {
+              "tp": 696,
+              "fp": 1921,
+              "fn": 0,
+              "precision": 0.26595338173481087,
+              "recall": 1.0,
+              "f1": 0.4201629942650166
+            }
+          },
+          "deformation": {
+            "daily_micro": {
+              "tp": 1710,
+              "fp": 199,
+              "fn": 347,
+              "precision": 0.8957569408067051,
+              "recall": 0.8313077297034517,
+              "f1": 0.8623298033282905
+            }
+          }
+        }
+      },
+      "range": {
+        "transient": {
+          "affiliation": {
+            "positive_stations": 18,
+            "precision": 0.9947269099053349,
+            "recall": 1.0,
+            "station_macro_f1": 0.9973018493905812,
+            "harmonic_of_macro_pr": 0.997356485206832,
+            "defined_author_precision_mean": 0.9947269099053349,
+            "empty_prediction_stations": 0
+          },
+          "negative_stations": 36,
+          "negative_station_fp_days": 1894,
+          "negative_station_fp_runs": 64
+        },
+        "deformation": {
+          "affiliation": {
+            "positive_stations": 18,
+            "precision": 0.9394577602737996,
+            "recall": 0.8810224406448209,
+            "station_macro_f1": 0.8990146623558698,
+            "harmonic_of_macro_pr": 0.909302247199929,
+            "defined_author_precision_mean": 0.994719981466376,
+            "empty_prediction_stations": 1
+          },
+          "negative_stations": 36,
+          "negative_station_fp_days": 162,
+          "negative_station_fp_runs": 5
+        }
+      }
+    },
+    "owv_union": {
+      "original": {
+        "types": {
+          "spike": {
+            "daily_micro": {
+              "tp": 14,
+              "fp": 0,
+              "fn": 4,
+              "precision": 1.0,
+              "recall": 0.7777777777777778,
+              "f1": 0.875
+            }
+          },
+          "step": {
+            "daily_micro": {
+              "tp": 17,
+              "fp": 3,
+              "fn": 1,
+              "precision": 0.85,
+              "recall": 0.9444444444444444,
+              "f1": 0.8947368421052632
+            }
+          },
+          "transient": {
+            "daily_micro": {
+              "tp": 696,
+              "fp": 1972,
+              "fn": 0,
+              "precision": 0.2608695652173913,
+              "recall": 1.0,
+              "f1": 0.41379310344827586
+            }
+          },
+          "deformation": {
+            "daily_micro": {
+              "tp": 1710,
+              "fp": 199,
+              "fn": 347,
+              "precision": 0.8957569408067051,
+              "recall": 0.8313077297034517,
+              "f1": 0.8623298033282905
+            }
+          }
+        }
+      },
+      "range": {
+        "transient": {
+          "affiliation": {
+            "positive_stations": 18,
+            "precision": 0.9883181903013953,
+            "recall": 1.0,
+            "station_macro_f1": 0.9940319634379134,
+            "harmonic_of_macro_pr": 0.9941247785411882,
+            "defined_author_precision_mean": 0.9883181903013953,
+            "empty_prediction_stations": 0
+          },
+          "negative_stations": 36,
+          "negative_station_fp_days": 1894,
+          "negative_station_fp_runs": 64
+        },
+        "deformation": {
+          "affiliation": {
+            "positive_stations": 18,
+            "precision": 0.9394577602737996,
+            "recall": 0.8810224406448209,
+            "station_macro_f1": 0.8990146623558698,
+            "harmonic_of_macro_pr": 0.909302247199929,
+            "defined_author_precision_mean": 0.994719981466376,
+            "empty_prediction_stations": 1
+          },
+          "negative_stations": 36,
+          "negative_station_fp_days": 162,
+          "negative_station_fp_runs": 5
+        }
+      }
+    },
+    "tlv_image": {
+      "original": {
+        "types": {
+          "spike": {
+            "daily_micro": {
+              "tp": 14,
+              "fp": 0,
+              "fn": 4,
+              "precision": 1.0,
+              "recall": 0.7777777777777778,
+              "f1": 0.875
+            }
+          },
+          "step": {
+            "daily_micro": {
+              "tp": 17,
+              "fp": 3,
+              "fn": 1,
+              "precision": 0.85,
+              "recall": 0.9444444444444444,
+              "f1": 0.8947368421052632
+            }
+          },
+          "transient": {
+            "daily_micro": {
+              "tp": 696,
+              "fp": 307,
+              "fn": 0,
+              "precision": 0.6939182452642074,
+              "recall": 1.0,
+              "f1": 0.8193054738081225
+            }
+          },
+          "deformation": {
+            "daily_micro": {
+              "tp": 1710,
+              "fp": 199,
+              "fn": 347,
+              "precision": 0.8957569408067051,
+              "recall": 0.8313077297034517,
+              "f1": 0.8623298033282905
+            }
+          }
+        }
+      },
+      "range": {
+        "transient": {
+          "affiliation": {
+            "positive_stations": 18,
+            "precision": 0.9983006075715734,
+            "recall": 1.0,
+            "station_macro_f1": 0.9991473107968036,
+            "harmonic_of_macro_pr": 0.9991495811881417,
+            "defined_author_precision_mean": 0.9983006075715734,
+            "empty_prediction_stations": 0
+          },
+          "negative_stations": 36,
+          "negative_station_fp_days": 294,
+          "negative_station_fp_runs": 4
+        },
+        "deformation": {
+          "affiliation": {
+            "positive_stations": 18,
+            "precision": 0.9394577602737996,
+            "recall": 0.8810224406448209,
+            "station_macro_f1": 0.8990146623558698,
+            "harmonic_of_macro_pr": 0.909302247199929,
+            "defined_author_precision_mean": 0.994719981466376,
+            "empty_prediction_stations": 1
+          },
+          "negative_stations": 36,
+          "negative_station_fp_days": 162,
+          "negative_station_fp_runs": 5
+        }
+      }
+    },
+    "tlv_text": {
+      "original": {
+        "types": {
+          "spike": {
+            "daily_micro": {
+              "tp": 14,
+              "fp": 0,
+              "fn": 4,
+              "precision": 1.0,
+              "recall": 0.7777777777777778,
+              "f1": 0.875
+            }
+          },
+          "step": {
+            "daily_micro": {
+              "tp": 17,
+              "fp": 3,
+              "fn": 1,
+              "precision": 0.85,
+              "recall": 0.9444444444444444,
+              "f1": 0.8947368421052632
+            }
+          },
+          "transient": {
+            "daily_micro": {
+              "tp": 696,
+              "fp": 923,
+              "fn": 0,
+              "precision": 0.4298949969116739,
+              "recall": 1.0,
+              "f1": 0.6012958963282937
+            }
+          },
+          "deformation": {
+            "daily_micro": {
+              "tp": 1710,
+              "fp": 199,
+              "fn": 347,
+              "precision": 0.8957569408067051,
+              "recall": 0.8313077297034517,
+              "f1": 0.8623298033282905
+            }
+          }
+        }
+      },
+      "range": {
+        "transient": {
+          "affiliation": {
+            "positive_stations": 18,
+            "precision": 0.9842670313313993,
+            "recall": 1.0,
+            "station_macro_f1": 0.9914230541499598,
+            "harmonic_of_macro_pr": 0.9920711434397798,
+            "defined_author_precision_mean": 0.9842670313313993,
+            "empty_prediction_stations": 0
+          },
+          "negative_stations": 36,
+          "negative_station_fp_days": 828,
+          "negative_station_fp_runs": 18
+        },
+        "deformation": {
+          "affiliation": {
+            "positive_stations": 18,
+            "precision": 0.9394577602737996,
+            "recall": 0.8810224406448209,
+            "station_macro_f1": 0.8990146623558698,
+            "harmonic_of_macro_pr": 0.909302247199929,
+            "defined_author_precision_mean": 0.994719981466376,
+            "empty_prediction_stations": 1
+          },
+          "negative_stations": 36,
+          "negative_station_fp_days": 162,
+          "negative_station_fp_runs": 5
+        }
+      }
+    },
+    "tlv_image_vision": {
+      "original": {
+        "types": {
+          "spike": {
+            "daily_micro": {
+              "tp": 0,
+              "fp": 0,
+              "fn": 18,
+              "precision": 0.0,
+              "recall": 0.0,
+              "f1": 0.0
+            }
+          },
+          "step": {
+            "daily_micro": {
+              "tp": 0,
+              "fp": 0,
+              "fn": 18,
+              "precision": 0.0,
+              "recall": 0.0,
+              "f1": 0.0
+            }
+          },
+          "transient": {
+            "daily_micro": {
+              "tp": 512,
+              "fp": 307,
+              "fn": 184,
+              "precision": 0.6251526251526252,
+              "recall": 0.735632183908046,
+              "f1": 0.6759075907590759
+            }
+          },
+          "deformation": {
+            "daily_micro": {
+              "tp": 0,
+              "fp": 0,
+              "fn": 2057,
+              "precision": 0.0,
+              "recall": 0.0,
+              "f1": 0.0
+            }
+          }
+        }
+      },
+      "range": {
+        "transient": {
+          "affiliation": {
+            "positive_stations": 18,
+            "precision": 0.7759645266053553,
+            "recall": 0.7772725311279486,
+            "station_macro_f1": 0.776615390286081,
+            "harmonic_of_macro_pr": 0.7766179781214123,
+            "defined_author_precision_mean": 0.9976686770640281,
+            "empty_prediction_stations": 4
+          },
+          "negative_stations": 36,
+          "negative_station_fp_days": 294,
+          "negative_station_fp_runs": 4
+        },
+        "deformation": {
+          "affiliation": {
+            "positive_stations": 18,
+            "precision": 0.0,
+            "recall": 0.0,
+            "station_macro_f1": 0.0,
+            "harmonic_of_macro_pr": 0.0,
+            "defined_author_precision_mean": null,
+            "empty_prediction_stations": 18
+          },
+          "negative_stations": 36,
+          "negative_station_fp_days": 0,
+          "negative_station_fp_runs": 0
+        }
+      }
+    },
+    "tlv_text_vision": {
+      "original": {
+        "types": {
+          "spike": {
+            "daily_micro": {
+              "tp": 0,
+              "fp": 0,
+              "fn": 18,
+              "precision": 0.0,
+              "recall": 0.0,
+              "f1": 0.0
+            }
+          },
+          "step": {
+            "daily_micro": {
+              "tp": 0,
+              "fp": 0,
+              "fn": 18,
+              "precision": 0.0,
+              "recall": 0.0,
+              "f1": 0.0
+            }
+          },
+          "transient": {
+            "daily_micro": {
+              "tp": 415,
+              "fp": 922,
+              "fn": 281,
+              "precision": 0.31039640987284967,
+              "recall": 0.5962643678160919,
+              "f1": 0.40826364977865226
+            }
+          },
+          "deformation": {
+            "daily_micro": {
+              "tp": 0,
+              "fp": 0,
+              "fn": 2057,
+              "precision": 0.0,
+              "recall": 0.0,
+              "f1": 0.0
+            }
+          }
+        }
+      },
+      "range": {
+        "transient": {
+          "affiliation": {
+            "positive_stations": 18,
+            "precision": 0.701930049664083,
+            "recall": 0.689305968811078,
+            "station_macro_f1": 0.6898013021230366,
+            "harmonic_of_macro_pr": 0.695560733759061,
+            "defined_author_precision_mean": 0.9719031456887303,
+            "empty_prediction_stations": 5
+          },
+          "negative_stations": 36,
+          "negative_station_fp_days": 828,
+          "negative_station_fp_runs": 18
+        },
+        "deformation": {
+          "affiliation": {
+            "positive_stations": 18,
+            "precision": 0.0,
+            "recall": 0.0,
+            "station_macro_f1": 0.0,
+            "harmonic_of_macro_pr": 0.0,
+            "defined_author_precision_mean": null,
+            "empty_prediction_stations": 18
+          },
+          "negative_stations": 36,
+          "negative_station_fp_days": 0,
+          "negative_station_fp_runs": 0
+        }
+      }
+    }
+  },
+  "review_costs": {
+    "requests": 108,
+    "failed_requests": 3,
+    "http_200": 108,
+    "output_validation_failed": 3,
+    "transport_or_http_failed": 0,
+    "retry_count": 0,
+    "prompt_tokens": 2228936,
+    "completion_tokens": 24756,
+    "missing_token_receipts": 0,
+    "median_request_seconds": 5.004766399986693
+  },
+  "new_requests": 162,
+  "scan_costs": {
+    "requests": 54,
+    "failed_requests": 1,
+    "http_200": 54,
+    "output_validation_failed": 1,
+    "transport_or_http_failed": 0,
+    "retry_count": 0,
+    "prompt_tokens": 173610,
+    "completion_tokens": 11608,
+    "missing_token_receipts": 0,
+    "median_request_seconds": 4.179271249988233
+  },
+  "ablation_scope": "review stage only; visual scan proposals shared",
+  "type_owners": {
+    "spike": "numerical",
+    "step": "numerical",
+    "transient": "numerical union visual review",
+    "deformation": "numerical, no new visual contribution"
+  }
+}
