@@ -24,7 +24,9 @@ def archive(target):
             for item in paths:
                 if item.is_file():
                     files[item.as_posix()] = item
-    for name in ('AGENTS.md', 'README.md', 'pyproject.toml', 'uv.lock', 'docs/evaluation-policy.md'):
+    for name in ('AGENTS.md', 'README.md', '.gitattributes', '.gitignore',
+                 'pyproject.toml', 'uv.lock', 'docs/evaluation-policy.md',
+                 'docs/exp36-37-verification.json'):
         files[name] = Path(name)
     for name in ('models.joblib', 'training.json'):
         path = Path('runs/exp28-shared-training-v1') / name
@@ -58,7 +60,8 @@ def archive(target):
         if package.testzip() is not None:
             raise ValueError('archive CRC failed')
     receipt = {'archive': str(target.resolve()), 'sha256': sha256(target),
-        'bytes': target.stat().st_size, 'files': len(files), 'crc_verified': True,
+        'bytes': target.stat().st_size, 'source_files': len(files),
+        'archive_members': len(files) + 1, 'crc_verified': True,
         'credentials_included': False, 'manifest': manifest}
     write_json(Path('docs/exp36-37-backup.json'), receipt)
     print({key: value for key, value in receipt.items() if key != 'manifest'})
