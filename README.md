@@ -1,5 +1,14 @@
 # GNSS 视觉大模型异常识别研究
 
+2026-10-17 **EXP37 OWV-GNSS通过54新开发站确认，360站固定独立测试进行中**。
+单张全窗图、去数值候选、可观测范围的Flash融合暂态Aff-F1=.9530，
+高于文字.8526与近邻.8320；纯图.9456高于纯文.6670，多245TP/14FP。
+融合只新增10TP却新增1953FP日，其他三类仍来自数值，不称领域SOTA。
+EXP36示例图＋硬验证未取得增益，停止集成；18站EXP37诊断与54新站确认分开报告。
+[最新评估](docs/exp37-assessment.md)、[54站全部逐类结果](results/exp37-fresh-confirmation-v1/per-type/results.md)、
+[固定360站协议](docs/experiment-exp37-test.md)、[文献与适配](docs/exp36-reading-notes.md)。
+本轮已用完EXP30全部360开发站，测试不再调参；以下为历史状态。
+
 当前实际研究工作树：`D:/CodeWorkSpace/CodexWorktrees/gnss-vlm-research/GNSSAnomalyAgent-sim`。
 2026-10-16已从C盘迁移，代码、模型、配置校验及测试通过，旧C盘副本已归档移除。
 后续工作树仅使用D盘；[迁移与历史路径说明](docs/worktree-migration-20261016.md)。

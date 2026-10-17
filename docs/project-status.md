@@ -1,5 +1,24 @@
 # 新分支研究状态
 
+## 2026-10-17 EXP36失败、EXP37通过新开发确认，固定独立测试进行中
+
+- 当前分支`codex/exp36-contrastive-evidence`，实际工作树仍为D盘迁移目录。
+- EXP35稳定标签及Git bundle已保存并验证；不改生产源码/96站数值模型。
+- EXP36示例约束＋数值验证：18此前未预测开发站、27方法/读出、90请求。
+  主暂态Aff=.6664，与文字和近邻相同，没有真实TP增益，不通过、不扩量。
+- EXP37 OWV-GNSS：根据漏检改变单图全窗展示、可观测范围提示并去数值候选/示例。
+  先在同18站诊断，72请求；纯图Aff=.8200高于纯文.6097，但融合低于文字且误报高。
+- 另54新开发站确认：108请求，103成功、1输出失败、4传输/HTTP失败，0重试。
+  主融合暂态Aff=.9530，文字.8526，近邻.8320；纯图/文=.9456/.6670，多245TP/14FP。
+  融合对近邻多10TP/1953FP，2/3种子Aff正向、1个相同；预定确认全部通过。
+  单点/阶跃日F1=.6154/.8947，形变Aff=.8621均来自数值；平衡RF形变Aff=.8852更高。
+- EXP30全部360开发站现均已使用；已固定360test、720图文请求协议并启动，禁止测试寻优。
+  54站的误报限制、仅部分内段恢复、Aff改善却无新增TP的反例全部保留。
+- AnomaMind最新正文代码库与此前库同提交；VLM4TS、GNSS TimesNet未执行完整作者方法，
+  不填分、不称已经战胜这些方法或领域SOTA；领域检索范围和代码适配边界单独记录。
+- [最新评估](exp37-assessment.md)、[54站逐类结果](../results/exp37-fresh-confirmation-v1/per-type/results.md)、
+  [360站协议](experiment-exp37-test.md)、[EXP36负结果](exp36-assessment.md)、[领域调研](exp37-domain-reading.md)。
+
 ## 2026-10-16 当前研究工作树已迁移D盘
 
 - 用户将应用工作树根目录设为`D:/CodeWorkSpace/CodexWorktrees`并授权迁移。当前代码/Git目录为`D:/CodeWorkSpace/CodexWorktrees/gnss-vlm-research/GNSSAnomalyAgent-sim`，分支仍为codex/exp35-granularity-fusion。
