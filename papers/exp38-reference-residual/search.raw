@@ -1,0 +1,219 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<feed xmlns:opensearch="http://a9.com/-/spec/opensearch/1.1/" xmlns:arxiv="http://arxiv.org/schemas/atom" xmlns="http://www.w3.org/2005/Atom">
+  <id>https://arxiv.org/api/ZHVtTXxCPNV/QnHWOxCQ0Uh2ex4</id>
+  <title>arXiv Query: search_query=all:"time series" AND all:"anomaly" AND (all:"vision" OR all:"multimodal")&amp;id_list=&amp;start=0&amp;max_results=8</title>
+  <updated>2026-10-17T10:17:49Z</updated>
+  <link href="https://arxiv.org/api/query?search_query=all:%22time+series%22+AND+(all:%22anomaly%22+AND+(all:%22vision%22+OR+all:%22multimodal%22))&amp;start=0&amp;max_results=8&amp;id_list=" type="application/atom+xml"/>
+  <opensearch:itemsPerPage>8</opensearch:itemsPerPage>
+  <opensearch:totalResults>133</opensearch:totalResults>
+  <opensearch:startIndex>0</opensearch:startIndex>
+  <entry>
+    <id>http://arxiv.org/abs/2610.02255v1</id>
+    <title>MACTS-EM: Multi-Agent Collaborative Time Series Forecasting with Emergent Memory</title>
+    <updated>2026-09-30T19:30:32Z</updated>
+    <link href="https://arxiv.org/abs/2610.02255v1" rel="alternate" type="text/html"/>
+    <link href="https://arxiv.org/pdf/2610.02255v1" rel="related" type="application/pdf" title="pdf"/>
+    <summary>Time series forecasting remains a critical challenge across numerous domains. Despite significant advancements, existing approaches struggle with complex phenomena such as regime shifts, cross-domain knowledge transfer, and multimodal data integration. This paper introduces Multi-Agent Collaborative Time Series Forecasting with Emergent Memory (MACTS-EM), a novel framework where specialised agents collaborate to achieve superior forecasting performance. The MACTS-EM architecture integrates: (1) domain-specialised forecasting agents for pattern recognition, anomaly detection, causal inference, and uncertainty quantification; (2) a meta-cognitive layer for dynamic agent allocation; (3) an emergent memory mechanism enabling cross-domain pattern transfer; (4) multimodal contextual integration; and (5) adversarial robustness components. Evaluation across financial markets, climate patterns, energy consumption, and pandemic propagation demonstrates that MACTS-EM outperforms existing approaches in most scenarios, with 8-12% improvement in forecasting accuracy, 22-27% better zero-shot transfer capability, 16-21% enhanced resilience during regime shifts, and 15-18% faster recovery after distribution shifts. Our findings suggest that collaborative, agentic approaches to time series forecasting represent a promising direction beyond traditional architectures, particularly for complex real-world scenarios requiring multi-resolution temporal understanding and contextual adaptation.</summary>
+    <category term="cs.LG" scheme="http://arxiv.org/schemas/atom"/>
+    <category term="cs.MA" scheme="http://arxiv.org/schemas/atom"/>
+    <published>2026-09-30T19:30:32Z</published>
+    <arxiv:comment>16 pages, 3 figures, 5 tables</arxiv:comment>
+    <arxiv:primary_category term="cs.LG"/>
+    <author>
+      <name>Ahmad Shahi</name>
+    </author>
+    <author>
+      <name>Mamehgol Yousefi</name>
+    </author>
+  </entry>
+  <entry>
+    <id>http://arxiv.org/abs/2609.39337v1</id>
+    <title>WinoTS: Wavelet-based Self-Distillation for Time Series Models</title>
+    <updated>2026-09-30T09:06:05Z</updated>
+    <link href="https://arxiv.org/abs/2609.39337v1" rel="alternate" type="text/html"/>
+    <link href="https://arxiv.org/pdf/2609.39337v1" rel="related" type="application/pdf" title="pdf"/>
+    <summary>Self-supervised pre-training of time series models is currently dominated by next-token prediction and reconstruction objectives. In continuous-valued domains, these paradigms often waste model capacity on high-frequency, point-wise noise at the expense of learning invariant structure. While invariance-based self-distillation has proven highly effective in computer vision, its application to temporal data remains largely underexplored. Effectively adapting such methods to time series requires carefully designed augmentations: spatial operations like cropping can shift the timing of repeating cycles or distort the signal, while basic jittering may provide limited variation. We introduce Wavelet-based self-distillation for time series (WinoTS), an invariance-based pre-training paradigm designed specifically for temporal signals. At its core, WinoTS leverages time-frequency augmentations to construct multi-scale structural views without distorting underlying signal dynamics. Across extensive evaluations, WinoTS outperforms state-of-the-art baselines in long-term forecasting, cross-domain zero-shot transfer, and unsupervised anomaly detection. Notably, linear probing on frozen WinoTS representations frequently surpasses fully supervised models trained from scratch. Systematic ablations demonstrate that WinoTS is a flexible, architecture-agnostic framework yielding gains across time series backbones, and establish that time-frequency transformations provide a principled alternative to vision-style spatial augmentations.</summary>
+    <category term="cs.LG" scheme="http://arxiv.org/schemas/atom"/>
+    <category term="cs.AI" scheme="http://arxiv.org/schemas/atom"/>
+    <published>2026-09-30T09:06:05Z</published>
+    <arxiv:primary_category term="cs.LG"/>
+    <author>
+      <name>Noam Major</name>
+    </author>
+    <author>
+      <name>Kathy Razmadze</name>
+    </author>
+    <author>
+      <name>Yoli Shavit</name>
+    </author>
+  </entry>
+  <entry>
+    <id>http://arxiv.org/abs/2609.38789v1</id>
+    <title>LEARN-TS: LLM-Enhanced Alignment and Reconstruction with Normality Guidance for Multivariate Time-Series Anomaly Detection</title>
+    <updated>2026-09-30T02:19:41Z</updated>
+    <link href="https://arxiv.org/abs/2609.38789v1" rel="alternate" type="text/html"/>
+    <link href="https://arxiv.org/pdf/2609.38789v1" rel="related" type="application/pdf" title="pdf"/>
+    <summary>Reconstruction errors in multivariate time-series anomaly detection may not reliably distinguish abnormal behavior from benign deviations. Language-derived semantics offer complementary context, but existing multimodal approaches may rely on time-associated paired textual information that is difficult to obtain consistently and is not provided by standard multivariate time-series anomaly detection benchmarks. This setting poses two challenges: (1) conditioning masked reconstruction on window-specific semantics without exposing exact numerical targets or anomaly-specific cues, and (2) using a window-independent concept of normality as a complementary semantic reference rather than an independent anomaly detector. We propose LLM-Enhanced Alignment and Reconstruction with Normality Guidance for Time Series (LEARN-TS), which uses a frozen language model to construct two role-separated semantic representations without requiring temporally paired external text. Window-specific observation semantics encode temporal and cross-variable context without exact numerical values to guide channel-shared patch-masked reconstruction. A fixed, dataset-agnostic normality prompt provides a window-independent semantic reference for aligning normal representations and estimating normality discrepancy. At inference, masking each temporal patch once yields timestamp-level reconstruction evidence, conditionally modulated by discrepancy from a separate unmasked view. Across four benchmarks, LEARN-TS achieves the highest mean performance in 13 of 16 dataset-metric comparisons. Controlled ablations examine observation conditioning, joint normality alignment and scoring, and reference content, showing dataset-dependent ranking benefits and modest average gains from semantic over random references.</summary>
+    <category term="cs.LG" scheme="http://arxiv.org/schemas/atom"/>
+    <published>2026-09-30T02:19:41Z</published>
+    <arxiv:comment>24 pages, 7 figures, 13 tables</arxiv:comment>
+    <arxiv:primary_category term="cs.LG"/>
+    <author>
+      <name>Jahyeob Koo</name>
+    </author>
+    <author>
+      <name>Kio Yun</name>
+    </author>
+    <author>
+      <name>Byoungmo Koo</name>
+    </author>
+    <author>
+      <name>Jun-Geol Baek</name>
+    </author>
+  </entry>
+  <entry>
+    <id>http://arxiv.org/abs/2609.33610v1</id>
+    <title>Supervision Recovery for Time Series Anomaly Detection via Context-Anchored Pairing</title>
+    <updated>2026-09-27T14:26:55Z</updated>
+    <link href="https://arxiv.org/abs/2609.33610v1" rel="alternate" type="text/html"/>
+    <link href="https://arxiv.org/pdf/2609.33610v1" rel="related" type="application/pdf" title="pdf"/>
+    <summary>Time series anomaly detection (TSAD) remains challenging not only because anomaly labels are scarce, but also because temporal anomalies are highly context-dependent. Existing methods often rely on unsupervised objectives or surrogate abnormal patterns, providing limited supervision for context-dependent normal--anomalous distinctions. We propose Context-Anchored Pair Supervision (CAPS), a supervision-recovery framework for TSAD. CAPS views ideal anomaly supervision as a matched comparison between normal and anomalous outcomes under the same temporal context, and seeks to recover such supervision without target-domain anomaly labels. Using simulated normal--anomalous pairs, CAPS learns structure and anomaly-semantic representations through reconstruction, background consistency, and within-pair counterfactual recombination. The resulting anomaly representations form a continuous semantic space with coarse modes and induce a sampleable multimodal prior. CAPS conditionally realizes sampled semantics as residual-form effects on target reference trajectories. The resulting context-anchored normal--anomalous counterparts provide temporal supervision for discriminative detector learning. Experiments on nine datasets show that CAPS achieves the strongest aggregate performance across all four evaluation metrics among the compared methods, while complementary ablations and transfer analyses support the roles of context anchoring, semantic disentanglement, and conditional realization.</summary>
+    <category term="cs.AI" scheme="http://arxiv.org/schemas/atom"/>
+    <published>2026-09-27T14:26:55Z</published>
+    <arxiv:primary_category term="cs.AI"/>
+    <author>
+      <name>Yifei Gao</name>
+    </author>
+    <author>
+      <name>Tian Lan</name>
+    </author>
+    <author>
+      <name>Yimeng Lu</name>
+    </author>
+    <author>
+      <name>Xuming An</name>
+    </author>
+    <author>
+      <name>Meng Wang</name>
+    </author>
+    <author>
+      <name>Wenjun He</name>
+    </author>
+    <author>
+      <name>Yijie Li</name>
+    </author>
+    <author>
+      <name>Chen Zhang</name>
+    </author>
+  </entry>
+  <entry>
+    <id>http://arxiv.org/abs/2609.21801v1</id>
+    <title>LLM-Generated Feature Pools for Time Series Anomaly Detection</title>
+    <updated>2026-09-18T14:14:21Z</updated>
+    <link href="https://arxiv.org/abs/2609.21801v1" rel="alternate" type="text/html"/>
+    <link href="https://arxiv.org/pdf/2609.21801v1" rel="related" type="application/pdf" title="pdf"/>
+    <summary>We study how far a simple statistical pipeline can go on univariate time series anomaly detection under a strict selection protocol. The method extracts a small pool of statistics over sliding windows, scores each window with a transductive robust (MAD) model, and selects a feature subset per domain on a held-out tuning split. On TSB-AD-U it reaches $0.529$ per-series VUS-PR, above the best neural ($0.45$) and statistical ($0.44$) entries on the public leaderboard and within $0.06$ of the strongest pretrained foundation model, several of which use more supervision than ours. Ablations locate the cause: across three selection strategies and a hindsight oracle the score moves by $0.031$, and across the aggregation grid by $0.096$, while changing the candidate pool moves it by $0.226$. The candidate pool sets the ceiling; the search over it is second-order. We therefore generate a pool per domain by prompting a multimodal LLM with in-context example windows from that domain. The generated pools match the hand-crafted one under matched selection, and the two cover different domains: selecting over their union improves on the generated pool in all twelve generator-seed pairs and lifts the pipeline to $0.588$, matching the performance of the best entry on the leaderboard.</summary>
+    <category term="cs.AI" scheme="http://arxiv.org/schemas/atom"/>
+    <published>2026-09-18T14:14:21Z</published>
+    <arxiv:primary_category term="cs.AI"/>
+    <author>
+      <name>Youssef Attia El Hili</name>
+    </author>
+    <author>
+      <name>Malik Tiomoko</name>
+    </author>
+    <author>
+      <name>Corinne Ancourt</name>
+    </author>
+  </entry>
+  <entry>
+    <id>http://arxiv.org/abs/2609.20662v1</id>
+    <title>Earth Surface Immune System for Rapid Monitoring of Unknown Anomalies</title>
+    <updated>2026-09-17T16:39:26Z</updated>
+    <link href="https://arxiv.org/abs/2609.20662v1" rel="alternate" type="text/html"/>
+    <link href="https://arxiv.org/pdf/2609.20662v1" rel="related" type="application/pdf" title="pdf"/>
+    <summary>Earth surface anomalies, driven by escalating climate change, and expanding human activities, are increasing in both frequency and diversity, yet their limited historical data and unpredictability make them fundamentally different from conventional remote sensing targets. Existing methods address specific anomaly categories or stop at localization, leaving a gap between detection and actionable information. Here we present ESIA, an Earth Surface Immune System whose architecture is constrained by three principles from the biological immune system, refined over millions of years against equally diverse and uncertain threats. A non-specific innate immune stage treats anomalies as unobserved changes in time-series satellite imagery, generating binary localization maps at 14.51 km2/s without assuming any anomaly category, surpassing the strongest general baseline by 37% in F1. A specific adaptive immune stage applies negative selection to filter text prompts and matches surviving prompts with localized image patches through a multi-modal foundation model, enabling open-vocabulary recognition of unknown anomaly attributes including category, affected area, and damage severity, with recognition F1 exceeding 80%. A mutation mechanism tunes minimal embeddings at test time, adapting to each scene in 3.26s using a single reference image pair. We validate ESIA on a global-scale dataset covering 19,801.60 km2 across six anomaly categories, comparing against 22 models, and further apply it to quantify degraded farmland in the Dnipro Delta following the Kakhovka Dam collapse and assess burn severity from 2025 Palisades Fire in Los Angeles. This unprecedented flexibility in handling unknown anomalies opens new avenues for real-time disaster response and environmental surveillance.</summary>
+    <category term="cs.CV" scheme="http://arxiv.org/schemas/atom"/>
+    <published>2026-09-17T16:39:26Z</published>
+    <arxiv:comment>51 pages</arxiv:comment>
+    <arxiv:primary_category term="cs.CV"/>
+    <author>
+      <name>Jingtao Li</name>
+    </author>
+    <author>
+      <name>Qian Zhu</name>
+    </author>
+    <author>
+      <name>Xinyu Wang</name>
+    </author>
+    <author>
+      <name>Deren Li</name>
+    </author>
+    <author>
+      <name>Liangpei Zhang</name>
+    </author>
+    <author>
+      <name>Yanfei Zhong</name>
+    </author>
+  </entry>
+  <entry>
+    <id>http://arxiv.org/abs/2609.16314v1</id>
+    <title>Robust Fault Detection in Mechanical Multimodal Time Series via Self-Supervised Cross-Modal Reconstruction</title>
+    <updated>2026-09-14T20:24:53Z</updated>
+    <link href="https://arxiv.org/abs/2609.16314v1" rel="alternate" type="text/html"/>
+    <link href="https://arxiv.org/pdf/2609.16314v1" rel="related" type="application/pdf" title="pdf"/>
+    <summary>Fault detection is essential in industrial systems, enabling early identification of abnormal behaviour and improving safety, reliability, and operational efficiency. Modern systems increasingly rely on heterogeneous sensing modalities that capture complementary aspects of the underlying physical process. However, existing data-driven anomaly detection methods often process each modality independently or use simple feature-level fusion, limiting their ability to exploit cross-modal relationships that characterize normal system behaviour. Their performance also commonly assumes similar training and deployment distributions, whereas real-world operation is affected by changing operating conditions, environmental influences, and system degradation that induce distribution shifts and reduce detection performance, especially in unseen regimes.
+  In this work, we propose a multimodal anomaly detection framework based on cross-modal reconstruction of heterogeneous time-series sensor data. Rather than modeling each modality independently, the framework learns system dynamics by reconstructing each modality from the others, thereby exploiting complementary information across modalities. This integrates information across sensing channels without requiring explicit temporal alignment or identical sampling rates, while improving robustness to sensor noise, missing measurements, and modality-specific disturbances. To address distribution shifts during real-world deployment, anomalies are identified using cross-modal reconstruction error and an adaptive test-time thresholding mechanism that adjusts to changing operating conditions. Experiments on three industrial case studies show strong fault detection performance and substantially improved robustness under out-of-distribution conditions, with the largest gains observed in the most challenging operating regimes.</summary>
+    <category term="cs.LG" scheme="http://arxiv.org/schemas/atom"/>
+    <category term="stat.AP" scheme="http://arxiv.org/schemas/atom"/>
+    <published>2026-09-14T20:24:53Z</published>
+    <arxiv:comment>Submitted to Reliability Engineering &amp; System Safety</arxiv:comment>
+    <arxiv:primary_category term="cs.LG"/>
+    <author>
+      <name>Magnus Munk Jensen</name>
+    </author>
+    <author>
+      <name>Dorte Hammershøi</name>
+    </author>
+    <author>
+      <name>Rafał Wiśniewski</name>
+    </author>
+    <author>
+      <name>Olga Fink</name>
+    </author>
+  </entry>
+  <entry>
+    <id>http://arxiv.org/abs/2609.16155v1</id>
+    <title>LLMs as Master Forgers: Generating Synthetic Time Series Data for Manufacturing</title>
+    <updated>2026-09-14T18:01:29Z</updated>
+    <link href="https://arxiv.org/abs/2609.16155v1" rel="alternate" type="text/html"/>
+    <link href="https://arxiv.org/pdf/2609.16155v1" rel="related" type="application/pdf" title="pdf"/>
+    <summary>This paper presents a novel framework leveraging Large Language Models (LLMs) to generate synthetic time series data for manufacturing processes. Motivated by the scarcity of labeled time-series data in real-world manufacturing settings, which hinders the development of robust machine learning models, we explore the potential of LLMs to learn complex temporal dependencies and generate realistic synthetic data. Our approach involves fine-tuning pre-trained LLMs on manufacturing process instructions and employing a Retrieval Augmented Generation (RAG) technique to enhance data diversity and realism. We evaluate our method against traditional time series modeling techniques like ARIMA and LSTMs, using quantitative metrics, PCA analysis, and downstream task performance (anomaly detection). Results demonstrate that our LLM-driven framework outperforms these baselines, generating high-quality synthetic time series data that effectively captures temporal dependencies and statistical properties of real manufacturing data, leading to improvements in downstream task performance.</summary>
+    <category term="cs.LG" scheme="http://arxiv.org/schemas/atom"/>
+    <category term="cs.AI" scheme="http://arxiv.org/schemas/atom"/>
+    <published>2026-09-14T18:01:29Z</published>
+    <arxiv:comment>7 pages, 4 figures. Published in the 2024 International Conference on Image Processing, Computer Vision and Machine Learning (ICICML)</arxiv:comment>
+    <arxiv:primary_category term="cs.LG"/>
+    <arxiv:journal_ref>2024 International Conference on Image Processing, Computer Vision and Machine Learning (ICICML), pp. 2053-2059, IEEE, 2024</arxiv:journal_ref>
+    <author>
+      <name>Mantek Singh</name>
+    </author>
+    <author>
+      <name>Jeshwanth Challagundla</name>
+    </author>
+    <author>
+      <name>Prateek Karnal</name>
+    </author>
+    <author>
+      <name>Gagan Ganapathy</name>
+    </author>
+    <author>
+      <name>Vineet Shah</name>
+    </author>
+    <author>
+      <name>Ridam Arora</name>
+    </author>
+    <arxiv:doi>10.1109/ICICML63543.2024.10958017</arxiv:doi>
+    <link rel="related" href="https://doi.org/10.1109/ICICML63543.2024.10958017" title="doi"/>
+  </entry>
+</feed>
