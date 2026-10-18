@@ -1,0 +1,15 @@
+# 面向GNSS多类型异常识别的视觉数值分工方法
+
+## 摘要
+
+全球导航卫星系统（Global Navigation Satellite System，GNSS）位移序列中的单点异常、永久阶跃、暂态偏移与持续形变具有不同的时间支撑和判别依据。将这些变化交给统一检测规则，容易混淆短时观测偏移、持续位移活动及活动停止后的平台。针对这一问题，本文提出按异常粒度组织的视觉数值分工方法。数值组件利用站点正常历史估计背景与噪声尺度，完成单点定位、位移结构分解及持续活动识别；视觉语言模型读取三分量重叠时间窗图像，在不提供目标数值候选的条件下提出可观测暂态范围，再通过固定类型融合补充数值漏检。评价中，单点和阶跃分别采用发生日日级F1，暂态和持续形变分别采用Affiliation F1，并报告日级精确率、召回率及阴性测站误报。360个独立模拟测站的结果表明，图像数值联合的暂态Affiliation F1为0.9853，高于同信息文字联合的0.9253；图像独立输出为0.9385，高于文字独立输出的0.6941。联合方法在11站补回339个数值未检出的真异常观测日，表明视觉输出提供了实际范围识别信息。其全站暂态日F1为0.4095，阴性测站误报为11402日，说明范围发现收益仍伴随明显误报代价。另在108个新开发确认站进行形变补充实验，视觉数值择优与数值版本的形变Affiliation F1均为0.9802、日F1均为0.9324，最终未发生视觉边界替换。结果支持在当前GNSS仿真条件下，以视觉补充暂态范围、以数值保持点定位和形变性能的职责分工；相关结论尚需通过实测数据和更完整的作者方法对照检验。
+
+关键词：GNSS位移序列；视觉语言模型；暂态异常；持续形变；Affiliation评价；多类型异常识别
+
+## Visual and Numerical Task Allocation for Multi Type Anomaly Detection in GNSS Displacement Series
+
+## Abstract
+
+Point outliers, permanent steps, temporary offsets, and sustained deformation have different temporal supports and decision requirements in Global Navigation Satellite System (GNSS) displacement series. We propose a task allocation framework that combines numerical displacement analysis with vision language models. The numerical component estimates station specific background and noise scales from normal history and retains responsibility for point localization and sustained activity. The visual component examines aligned three component plots over overlapping windows, proposes observable temporary offset intervals without numerical target proposals, and supplements numerical detections through a fixed fusion rule. Point outliers and step dates are evaluated separately using daily F1; temporary offsets and deformation are evaluated separately using Affiliation F1, together with daily precision, recall, and false positives at stations without the target anomaly. On 360 independent simulated stations, visual numerical fusion achieves a temporary offset Affiliation F1 of 0.9853, compared with 0.9253 for fusion with the same samples presented as text. Standalone visual and textual interval outputs score 0.9385 and 0.6941, respectively. Visual fusion recovers 339 additional true anomaly days at 11 stations. However, its overall temporary offset daily F1 is 0.4095, with 11402 false positive days at negative stations, indicating a substantial precision cost. In a separate confirmation experiment on 108 new development stations, optional visual deformation boundaries preserve the numerical Affiliation F1 of 0.9802 and daily F1 of 0.9324; no visual boundary is ultimately selected. These findings support using visual information to supplement temporary interval discovery while retaining numerical responsibility for point events and deformation under the evaluated simulation conditions. Field validation and complete author implementation comparisons remain necessary.
+
+Keywords: GNSS displacement; vision language model; temporary offset; sustained deformation; affiliation metrics; anomaly detection

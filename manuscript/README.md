@@ -1,43 +1,44 @@
-# SDR-VLM论文实验更新版
+# GNSS视觉数值分工论文草稿
 
-[25页Word实验更新稿](GNSS多类型异常识别论文初稿_SDR-VLM实验更新版.docx)：《融合位移结构分解与视觉语义修复的GNSS多类型异常识别方法》。2026-10-14完成，包含中英文摘要、六章正文、5幅图、10张表、13组编号公式和17条实际引用。当前分支codex/paper-sdr-vlm。
+当前主稿为[26页Word范围视觉与形变更新版](GNSS多类型异常识别论文初稿_范围视觉与形变更新版.docx)，题为《面向GNSS多类型异常识别的视觉数值分工方法》。2026-10-18更新，含中英文摘要、六章正文、7幅图、10张表、11组可编辑编号公式及16条引用。分支为`codex/exp45-deformation-parity`。
 
-论文已由EXP04形态分工方案改为当前保留的 **GNSS-VLM-EXP06-v1：GNSS位移结构分解与视觉语义核验实验**。主方法SDR-VLM，对应pair_focus_repair；主实验48站四类等权日F1为0.8652，无视觉结构分解为0.8323。总体改进以数值结构为主体，视觉增加3.30个百分点，配对区间下界为零。
+## 实验与结论的对应关系
 
-EXP07、EXP08原版SDR-VLM的两批各48站复核另表列示，未将未采纳方案写成生产方法，也未合并为原预登记144站。较低的EXP08结果及种子1412视觉负增量一并保留。原作者PELT与GNSS适配在独立边缘任务中比较，前期MF-VLM和定位融合明确标作本研究前期方案。
+- 主比较及暂态视觉消融对应**EXP37的360站独立模拟测试**。单点、阶跃分别报严格发生日日F1；暂态与形变分别报Affiliation指标，并保留日P/R/F1和误报。图像联合暂态Aff-F1为0.9853，文字联合为0.9253，去视觉完整数值组件为0.9046；同时披露联合暂态日F1为0.4095及阴性站11402误报日。
+- 形变补充对应**EXP45的108站新开发确认**，不与360站拼接为同批综合成绩。联合形变Aff-F1为0.9802、日F1为0.9324，与数值版持平；最终视觉修边0站，成绩归属数值。
+- 去视觉消融保留局部位移向量配对，不把内部数值近邻另列为外部论文方法。不声称已执行TAMA、TSAD-Agents、VLM4TS等完整作者流程，也不声称领域SOTA。
 
-六章正文文字占比依次约为15.0%、17.8%、24.5%、30.9%、9.3%、2.6%；统计口径沿用此前篇幅调研。没有独立实验设置章，必要条件融入方法与结果。
+## 正文及证据入口
 
-## 内容与证据
+- `revisions/range-20261018/chapters/`：本次逐章正文；不覆盖旧`chapters/`。
+- `revisions/range-20261018/figures/`：由冻结结果及原始观测生成的7幅图。
+- `revisions/range-20261018/working/revision-review.md`：逐章文献风格依据、方法代码映射、内容与逐页检查记录。
+- 同目录`tables.json`、`evidence-sources.json`和`build-manifest.json`：图表数据、输入哈希和构建记录。
+- 同目录`current-citation-check.json`：本轮9条Crossref元数据复核；其余引用沿用已有来源记录。元数据核验不等于重读全文。
+- [EXP37评估](../docs/exp37-assessment.md)、[EXP45评估](../docs/exp45-assessment.md)：完整实验来源。
 
-- chapters/：新版逐章正文。
-- figures/exp06/、prepare_sdr_figures.py：由冻结结果和原始观测绘制5图，旧EXP04图保留。
-- working/exp06-evidence-audit.md与.json：重算672份主实验输出、192份扩展输出及bootstrap、活动误差、PELT边缘结果。
-- working/exp06-method-source-map.md：方法与冻结代码映射，明确均值填补和平衡RF。
-- working/exp06-literature-check.md、extra-references.json：新增文献、正式版本和实际阅读范围。
-- working/sdr-final-check.md：全稿内容、图表及25页视觉检查。
-- working/section-allocation-sdr.json：实际章节文字和版面占比。
-- working/build-manifest-sdr.json、final-integrity-sdr.json：图表公式编号、文件哈希、历史稿保留检查。
-- supplement/reproducibility.md：EXP06条件及方法键映射；reproducibility-exp04.md保留历史说明。
-
-第4章表3为主比较，表4为各类指标，表5为核心消融，表6为活动边界，表7为作者PELT边缘对照，表8和表9为跨种子与描述性区间，表10为扩展验证。图4同时展示暂态恢复和真实阶跃损失，图5展示原始位移活动与停止平台。
+表3为逐类主比较，表4为点类及形变的辅助日指标，表5和表6为暂态消融，表7为开发确认，表8和表9为种子与场景分层，表10为形变补充。图5和图6同时给出补检正例和永久阶跃误报反例。
 
 ## 历史版本
 
-[24页语言润色稿](GNSS多类型异常识别论文初稿_语言润色版.docx)、[26页结构优化稿](GNSS多类型异常识别论文初稿_结构优化版.docx)和[29页最初稿](GNSS多类型异常识别论文初稿.docx)全部保留，文件与本轮开始时逐字节一致。历史稿对应EXP04；各自审阅记录仍保存在working中，不能作为新版检查凭据。
+[25页SDR-VLM实验更新稿](GNSS多类型异常识别论文初稿_SDR-VLM实验更新版.docx)对应EXP06；[语言润色稿](GNSS多类型异常识别论文初稿_语言润色版.docx)、[结构优化稿](GNSS多类型异常识别论文初稿_结构优化版.docx)及[最初稿](GNSS多类型异常识别论文初稿.docx)对应更早研究。四个文件均与本轮开始时逐字节一致，不作为当前结果依据。旧`chapters/`、`build_manuscript.py`和`supplement/reproducibility.md`仍属历史EXP06材料。
 
 ## 本机重建
 
-使用Codex bundled Python、python-docx、lxml、Pillow、numpy及本机Office的MML2OMML.XSL。任务临时依赖目录为 %TEMP%/gnss-paper-authoring-deps；当前使用latex2mathml 3.81.1、matplotlib 3.10.8及其绘图依赖。目录失效时先安装，再依次运行：
+依赖使用Codex工作区加载器提供的bundled Python。新增绘图及公式依赖在D盘任务临时目录，本机已具备Microsoft Word。病例原始数据只读自旧共享目录`D:/CodeWorkSpace/AgentWorkspace/GNSSAnomalyAgent-sim/artifacts/exp30/data`，研究代码及Git操作仍在D盘当前工作树。
 
 ```powershell
-& 'C:/Users/JC/.cache/codex-runtimes/codex-primary-runtime/dependencies/python/python.exe' -m pip install --target "$env:TEMP/gnss-paper-authoring-deps" 'latex2mathml==3.81.1' 'matplotlib==3.10.8'
-& 'C:/Users/JC/.cache/codex-runtimes/codex-primary-runtime/dependencies/python/python.exe' manuscript/build_manuscript.py
-& ./manuscript/render_word.ps1
-& 'C:/Users/JC/.cache/codex-runtimes/codex-primary-runtime/dependencies/python/python.exe' manuscript/render_pages.py
-& 'C:/Users/JC/.cache/codex-runtimes/codex-primary-runtime/dependencies/python/python.exe' manuscript/working/measure_sdr.py
+$env:PYTHONIOENCODING='utf-8'
+$env:PYTHONPATH='D:/CodeWorkSpace/CodexWorktrees/.artifact-runtime/gnss-paper-20261018/gnss-paper-authoring-deps'
+$env:MPLCONFIGDIR='D:/CodeWorkSpace/CodexWorktrees/.artifact-runtime/gnss-paper-20261018/mpl'
+& 'C:/Users/JC/.cache/codex-runtimes/codex-primary-runtime/dependencies/python/python.exe' manuscript/prepare_range_evidence.py
+& 'C:/Users/JC/.cache/codex-runtimes/codex-primary-runtime/dependencies/python/python.exe' manuscript/build_range_revision.py
+$env:TEMP='D:/CodeWorkSpace/CodexWorktrees/.artifact-runtime/gnss-paper-20261018'
+$env:TMP=$env:TEMP
+./manuscript/render_word.ps1 -DocumentPath './manuscript/GNSS多类型异常识别论文初稿_范围视觉与形变更新版.docx' -OutputDirectory './manuscript/working/render-range-20261018'
+& 'C:/Users/JC/.cache/codex-runtimes/codex-primary-runtime/dependencies/python/python.exe' manuscript/render_range_revision.py
 ```
 
-生成图表需要本地data/exp06-*和runs/exp06-*材料。公式为可编辑OMML。渲染用独立隐藏Word实例导出PDF，再调用文档技能栅格化组件生成120 dpi逐页PNG；转换路径与本机安装绑定。PDF与PNG仅供内部检查，交付文件为Word。重新构建后须重新审阅受影响页面，原检查记录与哈希绑定。
+新脚本只读取保存的实验，不发起模型请求。渲染先用隐藏Word实例导出PDF，再调用文档技能的栅格化器；本机无LibreOffice，诊断和转换方式记在内部渲染目录。PDF、PNG均用于内部检查，不作为交付件；重新构建后必须重新检查受影响页面。
 
-投稿时按目标刊物模板填写作者、单位与公开材料入口；正文保持作者视角及当前实验的真实证据范围。
+本稿是可继续修改的研究草稿。投稿模板、作者单位、资助与贡献等须由作者按实际情况及目标刊物要求补全，不能虚构。

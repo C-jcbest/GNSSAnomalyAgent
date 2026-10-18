@@ -250,12 +250,11 @@ uv run gnss-research run --run runs/reproduce-exp06-1405 --env-file .env
 
 ## 当前论文稿
 
-已完成[25页SDR-VLM实验更新稿](manuscript/GNSS多类型异常识别论文初稿_SDR-VLM实验更新版.docx)，
-题为《融合位移结构分解与视觉语义修复的GNSS多类型异常识别方法》。
-当前论文对应GNSS-VLM-EXP06-v1，主方法pair_focus_repair；48站主指标0.8652，
-无视觉结构分解0.8323。六章正文、5图、10表、13组公式、17条引用均已更新。
-EXP07/08原版SDR的扩展复核单列，未采纳的候选改动不写入主方法；主实验统计范围不变。
-[论文材料与检查](manuscript/README.md)、[复现与方法键映射](manuscript/supplement/reproducibility.md)。
+已完成[26页范围视觉与形变更新稿](manuscript/GNSS多类型异常识别论文初稿_范围视觉与形变更新版.docx)，
+题为《面向GNSS多类型异常识别的视觉数值分工方法》。主结果对应EXP37的360站独立模拟测试，
+另列EXP45的108站形变开发确认，不跨批拼接。按类型报告点类日F1、范围类Affiliation及辅助日指标。
+六章正文、7图、10表、11组公式、16条引用已更新，保留暂态误报及形变零修边的证据边界。
+旧EXP06等四份Word保留，当前材料、重建及检查入口见[论文说明](manuscript/README.md)。
 
 ## EXP04历史论文与证据
 
